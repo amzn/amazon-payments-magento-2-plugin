@@ -12,13 +12,13 @@ Requirements
 --------------------------
 The `Login with Amazon` button appears in several places in the shop:
 
-* on the customer login page,
-* on the customer registration page.
+* on the customer login page
+* on the customer registration page
 
 .. image:: /images/register.png
 
-Pressing the `Login with Amazon` button launches the Amazon authentication window, where the customer is asked for his Amazon account e-mail address and password.
+Pressing the `Login with Amazon` button launches the Amazon authentication window, where the customer is asked for their Amazon account e-mail address and password.
 
 .. image:: /images/sign-in.png
 
-After a successful login the customer is redirected to the user area in your shop.
+After a successful login the customer is redirected to the `My Account` section.
