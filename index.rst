@@ -14,5 +14,6 @@ Login and Pay with Amazon extension for Magento 2
    configuration
    login
    flow
+   customisation
    testing
    troubleshooting
