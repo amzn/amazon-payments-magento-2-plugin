@@ -136,6 +136,6 @@ Configuration required in Seller Central
 
 If you're planning to use IPN for the post-payment processing you need to enter a Merchant URL (IPN endpoint URL) in Seller Central. 
 
-You can do this at :menuselection:` Settings --> Integration Settings`, then click the `Edit` button at `Instant Notification Settings`.
+You can do this at :menuselection:`Settings --> Integration Settings`, then click the `Edit` button at `Instant Notification Settings`.
 
-* Your IPN endpoint URL can be obtained from Magento admin at :menuselection:`Stores --> Configuration --> Sales --> Payment Methods --> Amazon Payments --> General --> Credentials --> IPN URL`.
+Your IPN endpoint URL can be obtained from Magento admin at :menuselection:`Stores --> Configuration --> Sales --> Payment Methods --> Amazon Payments --> General --> Credentials --> IPN URL`.
