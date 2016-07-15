@@ -65,6 +65,9 @@ Orders placed when in `Charge on Order` mode will automatically be captured. For
 
 .. warning:: It is vital that `Capture Online` is selected as otherwise Amazon Payments will not be instructed to capture the payment, resulting in you not receiving any funds.
 
+In case there is a problem taking the payment, a notification will be added to Magento 2 to make you aware there has been a problem.
+
+
 Payment refund
 --------------
 The order, which payment has been captured for, can be refunded either fully or partially. Refunds are made against invoices and thus having a paid invoice assigned to the order is a necessary condition that has to be met to refund any order item. 
