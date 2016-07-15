@@ -57,7 +57,7 @@ Registering an Amazon Payments Account
 Entering identity data in Seller Central
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To get the verification process started, please log in to Seller Central: https://sellercentral-europe.amazon.com/gp/homepage.html
+To get the verification process started, please log in to Seller Central.
 
 For a combined account (**Login and Pay with Amazon** added to an existing account), please make sure that you have selected the `Amazon Payments – Production View` in the drop down menu on the top.
 
@@ -135,5 +135,7 @@ Configuration required in Seller Central
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you're planning to use IPN for the post-payment processing you need to enter a Merchant URL (IPN endpoint URL) in Seller Central. 
-You can do this at :menuselection:` Settings --> Integration Settings`, then click the `Edit` button at `Instant Notification Settings`. 
+
+You can do this at :menuselection:` Settings --> Integration Settings`, then click the `Edit` button at `Instant Notification Settings`.
+
 * Your IPN endpoint URL can be obtained from Magento admin at :menuselection:`Stores --> Configuration --> Sales --> Payment Methods --> Amazon Payments --> General --> Credentials --> IPN URL`.
