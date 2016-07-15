@@ -24,13 +24,13 @@ Registering an Amazon Payments Account
 
   * DE merchants: `https://payments.amazon.de/preregistration/lpa <https://payments.amazon.de/preregistration/lpa?ld=SPEXDEAPAMagento>`_
   * UK merchants: `https://payments.amazon.co.uk/preregistration/lpa <https://payments.amazon.co.uk/preregistration/lpa?ld=SPEXUKAPAMagento>`_
-
+  * US merchants: `https://payments.amazon.com/signup <https://payments.amazon.com/signup?ld=SPEXUKAPAMagento2>`_
 * Click :menuselection:`Sign Up --> I'm a merchant`
 
 .. image:: /images/seller-central/prerequisites_screenshot_1.png
 
 * Go through the questionnaire to find out if you qualify for using Amazon Payments, then click `Sign up now`
-* At the moment you cannot add your **Login and Pay with Amazon** account to an existing Amazon merchant account. You have to register a new account specifically for the Advanced Payments APIs.
+* At the moment you cannot add your **Login and Pay with Amazon** account to an existing Amazon merchant account. You have to register a new account specifically for Amazon Payments.
 * Start registering a new account:
 
   * If you see the link `Would you like to create a new account using a different e-mail address? Click here`, please do so.
@@ -40,67 +40,38 @@ Registering an Amazon Payments Account
 
 .. image:: /images/seller-central/prerequisites_screenshot_2.png
 
-* Please fill in all requested information about your seller account, your contact information and your bank account or credit card data.
+* Please fill in all requested information about your merchant account.
 * Please be careful to provide exact and correct data. All information you provide will be verified by Amazon Payments, and incorrect information will delay the verification process.
 
 .. image:: /images/seller-central/prerequisites_screenshot_3.png
 
-* After providing all information there will be an identity check on the phone, where you will be asked to enter a PIN.
+* Please provide charge information to finish the registration
 
 .. image:: /images/seller-central/prerequisites_screenshot_4.png
 
-* Afterwards you can complete your registration
-
-.. image:: /images/seller-central/prerequisites_screenshot_5.png
-
 * After your account is registered you will be forwarded to your Seller Central account.
 * Please be aware that you cannot fully use your account yet. First you have to provide your identity data, and then the account has to go through the verification process.
+* It may take some time until your sandbox is ready to use.
 
 
 Entering identity data in Seller Central
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To get the verification process started, please log in to Seller Central: https://sellercentral-europe.amazon.com/gp/homepage.html
+To get the verification process started, please log in to Seller Central.
 
 For a combined account (**Login and Pay with Amazon** added to an existing account), please make sure that you have selected the `Amazon Payments – Production View` in the drop down menu on the top.
 
-.. image:: /images/seller-central/prerequisites_screenshot_6.png
+.. image:: /images/seller-central/prerequisites_screenshot_5.png
 
 At :menuselection:`Settings --> Account Info` please provide the requested missing information. Especially it is crucial to provide the ID information for all relevant persons.
 
-.. image:: /images/seller-central/prerequisites_screenshot_7.png
+.. image:: /images/seller-central/prerequisites_screenshot_6.png
 
 
 Verification Process / Verification of all given information by Amazon Payments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After successful registration of the Amazon Payments seller account and entering the ID information Amazon Payments will check all information provided. Depending on the information provided Amazon Payments may request more information.
-
-
-Creating MWS access keys
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can generate your MWS access keys in Seller Central. Please go to :menuselection:`Integration --> MWS Access Key`
-
-.. image:: /images/seller-central/prerequisites_screenshot_8.png
-.. image:: /images/seller-central/prerequisites_screenshot_9.png
-
-Log in again with your Amazon Payments account credentials
-
-.. image:: /images/seller-central/prerequisites_screenshot_10.png
-
-Make sure that you register the MWS Access Key for your own account.
-
-.. image:: /images/seller-central/prerequisites_screenshot_11.png
-
-Please read and accept the license agreement.
-
-.. image:: /images/seller-central/prerequisites_screenshot_12.png
-
-The AWS Access Key and the Secret Key among with the Merchant ID, will be presented to you on the next page. You can always review the key information in Seller Central on the :menuselection:`Integration --> MWS Access Key` page.
-
-.. image:: /images/seller-central/prerequisites_screenshot_13.png
-
 
 .. _prerequisites-registering-application-for-login-with-amazon:
 
@@ -109,11 +80,11 @@ Registering application for Login with Amazon service
 
 Login and Pay with Amazon work together to provide a great buyer experience. To use **Login with Amazon** you have to register the application (Magento extension) that will be allowed to access buyers accounts through your Amazon Payments seller account. **Login with Amazon** configuration settings can be accessed through `Login with Amazon` Seller Central page.
 
-.. image:: /images/seller-central/prerequisites_screenshot_19.png
+.. image:: /images/seller-central/prerequisites_screenshot_7.png
 
 In the App Console register a new application by clicking the `Register new Application` button. The `Register Your Application` form will appear.
 
-.. image:: /images/seller-central/prerequisites_screenshot_20.png
+.. image:: /images/seller-central/prerequisites_screenshot_8.png
 
 In the application details page, add basic details about your web site. These details will be used on your website and mobile apps (if applicable).
 
@@ -130,7 +101,7 @@ Add a Website to your Application
 
 * From the Application screen, click `Web Settings`. You will automatically be assigned values for Client ID, which identifies your website.
 
-.. image:: /images/seller-central/prerequisites_screenshot_16.png
+.. image:: /images/seller-central/prerequisites_screenshot_9.png
 
 * To add Allowed JavaScript Origins to your application, click `Edit`.
 
@@ -138,24 +109,33 @@ An origin is the combination of protocol, your Magento shop domain name and port
 
 Adding your domain here allows the SDK for JavaScript to communicate with your Magento shop directly during the login process. Web browsers normally block cross-origin communication between scripts unless the script specifically allows it.
 
-.. image:: /images/seller-central/prerequisites_screenshot_17.png
+.. image:: /images/seller-central/prerequisites_screenshot_10.png
 
 To add more than one origin (in case you are running domain based multi-store Magento installation and all stores are using the same Amazon Payments seller account), click `Add Another`.
 
-.. note:: To use Login with Amazon with your Magento shop, you **MUST** specify an allowed JavaScript origin.
+.. note:: To use Login with Amazon with your Magento 2 shop, you **MUST** specify at least one allowed JavaScript origin.
+.. note:: Please add all allowed JavaScript Origins and Allowed Redirect URLs your Amazon Payments configuration section of your Magento 2 shop asks you to add.
 
 .. _prerequisites-where-to-find-the-required-credentials:
 
 Where to find the required credentials to configure the Magento 2 extension
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+All credentials are listed in your Seller Central account :menuselection:`Integration --> MWS Access Key`.
+
+.. image:: /images/seller-central/prerequisites_screenshot_11.png
+
 Magento 2 extension requires you to enter information about your Amazon Payments account. This can be copied as a json string and pasted into Magento.
 
-You can find this information in your Amazon Payments seller account in `Seller Central <https://sellercentral-europe.amazon.com/hz/me/integration/details>`_.
+You can find this information in your Amazon Payments seller account at :menuselection:`Integration --> MWS Access Key`.
 
 .. image:: /images/copy-your-keys.png
 
 Configuration required in Seller Central
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you're planning to use IPN for the post-payment processing you need to enter a Merchant URL (IPN endpoint URL) in Seller Central. You can do this at :menuselection:` --> `, then click the `Edit` button at `Instant Notification Settings`. IPN endpoint URL can be obtained from Magento admin at :menuselection:`Stores --> Configuration --> Sales --> Payment Methods --> Amazon Payments --> General --> Credentials --> IPN URL`.
+If you're planning to use IPN for the post-payment processing you need to enter a Merchant URL (IPN endpoint URL) in Seller Central. 
+
+You can do this at :menuselection:`Settings --> Integration Settings`, then click the `Edit` button at `Instant Notification Settings`.
+
+Your IPN endpoint URL can be obtained from Magento admin at :menuselection:`Stores --> Configuration --> Sales --> Payment Methods --> Amazon Payments --> General --> Credentials --> IPN URL`.
