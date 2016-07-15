@@ -8,19 +8,24 @@ General
 Credentials
 '''''''''''
 
-Merchant Id, Access Key Id, Secret Access Key, Client Id, Client Secret
-.......................................................................
-Amazon Payments seller credentials. They can be found in Amazon Seller Central.
-
 Credentials JSON
 ................
-JSON string of all Amazon Payments seller credentials, You can retrieve them via the copy your keys button in Amazon Seller Central.
+JSON string of all Amazon Payments seller credentials, You can retrieve them via the copy your keys button in Amazon Seller Central at :menuselection:`Integration --> MWS Access Key`.
 
 .. note:: The values supplied in Credentials JSON will actually be used to set values for Merchant Id, Access Key Id, Secret Access Key, Client Id and Client Secret this value will be cleared on save.
 
+
+Merchant Id, Access Key Id, Secret Access Key, Client Id, Client Secret
+.......................................................................
+Using the credentials JSON is the preferred and easiest way to supply your credentials. Manual configuration is possible as well.
+
+The credentials can be found in Seller Central at :menuselection:`Integration --> MWS Access Key`.
+
+.. image:: /images/seller-central/configuration_screenshot_1.png
+
 Payment Region
 ..............
-Select the region where you registered your seller account from the provided list. If you're unsure about this information consult your Amazon Integration Assistant.
+Select the region where you registered your seller account from the provided list. If you're unsure about this information, please consult the Amazon Payments merchant support.
 
 Sandbox
 .......
@@ -28,7 +33,12 @@ Sandbox mode has been designed to test the **Pay with Amazon** service. In sandb
 
 Javascript Origin, Redirect URL, IPN URL
 ........................................
-Used to display the URLs within Magento 2 that are required by Amazon Payments these can be added to Amazon Seller Central.
+Used to display the URLs within Magento 2 that are required by Amazon Payments. Please add this information to your Seller Central account.
+
+* `Javascript Origin, Redirect URL` - Please add this information to your Login with Amazon section of the Seller Central
+* `IPN URL` - Please add this information to the field **Merchant URL** at :menuselection:`Settings --> Integration Settings` of the Seller Central
+
+.. note:: The IPN URL settings for the Sandbox - and Production View differ. Please add the correct value to the environment you are currently transacting on.
 
 Options
 '''''''
@@ -45,19 +55,23 @@ By switching this option you can toggle **Login with Amazon**. When enabled this
 
 Payment Action
 ..............
-* `Charge on shipment` (default) - order reference creation is followed by automatic authorization request. Capture must be requested manually by creating an invoice and selecting `Capture online`
-* `Charge on order` - order reference creation is followed by automatic authorization and capture request. It is mandatory that you get white-listed for this feature by Amazon Payments first. Do not activate this option without contacting Amazon Payments first.
+* `Charge on shipment` (default) - Payments are authorized when an order is placed automatically. Captures must be requested manually by creating an invoice and selecting `Capture online`
+* `Charge on order` - Payments are immediately authorized and captured. This feature needs explicit approval by Amazon Payments first. Do not activate this option without contacting Amazon Payments first.
 
 Authorization Mode
 ..................
-* `Synchronous` (default) - Authorization is processed immediately customer will get instant feedback if it is declined
-* `Asynchronous` - Authorization processing is delayed customer will complete checkout straight away and authorization will be updated via IPN or Cron, customer will get email in case of decline
-* `Synchronous if possible` - the same as Synchronous but if an Authorization fails due to timeout an Asynchronous authorization is placed allowing further processing time
+* `Synchronous` (default) - The authorization is processed during the checkout. 
+* `Asynchronous` - The authorization is processed after the checkout was completed.
+* `Synchronous if possible` - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards. 
+
+Independent of the mode you decide for, make sure to only orders which are successfully authorized by Amazon Payments (order state: `Processing`).
+
+.. note:: If you expect high order values, the **asynchronous** authorization might be the best chioce for your business.
 
 Update Mechanism
 ................
-* `Data polling via Cron Job` (default) - Pull based mechanism where Magento 2 periodically checks authorization/capture/refund status with Amazon. This is set to run at 5 minute intervals and requires that Magento 2 cron is setup and running
-* `Instant Payment Notifications` - Push based mechanism where Amazon pushes authorization/capture/refund status updates to Magento. This requires that your site has a valid SSL certificate
+* `Data polling via Cron Job` (default) - Pull based mechanism where Magento 2 periodically checks authorization, capture  and refund status against the Amazon Payments systems. This is set to run at 5 minute intervals and requires that Magento 2 cron is setup and running
+* `Instant Payment Notifications` - Push based mechanism where Amazon Payments pushes authorization, capture and refund status updates to Magento 2. This requires that your site has a valid SSL certificate
 
 Pay with Amazon button is visible on Product Page
 .................................................
@@ -71,22 +85,20 @@ Frontend
 
 Button Display Language
 .......................
-Allows input of a locale string to control button language should be in the format `en-gb`.
+Allows input of a locale string to control button language should be in the format `en-gb`. By default the language of the store view is used.
 
 Button Color
 ............
 Allows selection of button color from a pre determined list.
-
-Button Size
-...........
-Allows selection of button size from a pre determined list.
 
 Sales Options
 '''''''''''''
 
 New Order Status
 ................
-Allows selection of a custom status for orders with a `Processing` state made using the Amazon payment method.
+Allows selection of a custom status for orders with a `Processing` state made using the Amazon payment method. 
+
+.. note:: This status indicates, if a payment for the order was authorized by Amazon Payments
 
 Sales Exclusions
 ''''''''''''''''
@@ -108,10 +120,10 @@ Developer Options
 
 Logging
 .......
-Enabled by default this toggles whether to log all API calls and IPN notifications or not
+Enabled by default. This toggles whether to log all API calls and IPN notifications or not. The log files can be retrieved directly via the Magento 2 admin at :menuselection:`System --> Amazon Logs --> Client`, respectively :menuselection:`System --> Amazon Logs --> IPN`
 
 Allowed IPs
 ...........
-For testing or debugging purposes you can restrict access to **Pay with Amazon** checkout in your shop to certain IP addresses only. **Pay with Amazon** button will be shown only for the visitors coming from allowed IPs. You can set more than one allowed IP separated with commas.
+For testing or debugging purposes you can restrict access to **Pay with Amazon** checkout in your shop to certain IP addresses only. **Pay with Amazon** button will be shown only for the visitors coming from allowed IPs. You can set more than one allowed IP, separated with commas.
 
 .. note:: Due to caching restrictions this setting is not reflected on Product pages, Please  disable `Pay with Amazon button is visible on Product Page` in this instance
