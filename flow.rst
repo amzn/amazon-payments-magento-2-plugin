@@ -41,7 +41,7 @@ The customer will get instant feedback there are 3 possible outcomes
 
 1. `Authorization OK` - Order is placed with a state of `Processing`, Customer is redirected to the standard Magento 2 confirmation screen
 2. `Soft Decline` - Order is not placed and customer is asked to select an alternative payment instrument from the Amazon Payments widget
-3. `Hard Decline` - Order is not placed, the AMazon Payments specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order
+3. `Hard Decline` - Order is not placed, the Amazon Payments specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order
 
 Asynchronous
 ''''''''''''
