@@ -114,6 +114,7 @@ Adding your domain here allows the SDK for JavaScript to communicate with your M
 To add more than one origin (in case you are running domain based multi-store Magento installation and all stores are using the same Amazon Payments seller account), click `Add Another`.
 
 .. note:: To use Login with Amazon with your Magento 2 shop, you **MUST** specify at least one allowed JavaScript origin.
+
 .. note:: Please add all allowed JavaScript Origins and Allowed Redirect URLs your Amazon Payments configuration section of your Magento 2 shop asks you to add.
 
 .. _prerequisites-where-to-find-the-required-credentials:
