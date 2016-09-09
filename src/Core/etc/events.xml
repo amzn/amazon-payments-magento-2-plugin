@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="admin_system_config_changed_section_payment">
+        <observer name="amazon_core_save_payment_config_after" instance="Amazon\Core\Observer\PaymentConfigSaveAfter" />
+    </event>
+    <event name="sales_quote_product_add_after">
+        <observer name="amazon_core_blacklist_category_addition" instance="Amazon\Core\Observer\ExcludedCategoryQuoteItemAddition" />
+    </event>
+</config>

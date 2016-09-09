@@ -1,0 +1,20 @@
+{
+  "name": "amazon/module-login",
+  "description": "Amazon Login module",
+  "type": "magento2-module",
+  "version": "1.0.1",
+  "license": [
+    "Apache-2.0"
+  ],
+  "require": {
+    "amazon/module-core": "^1.0.1",
+    "magento/module-customer": "^100.1.0",
+    "magento/module-checkout": "^100.1.0"
+  },
+  "autoload": {
+    "files": ["registration.php"],
+    "psr-4": {
+      "Amazon\\Login\\": ""
+    }
+  }
+}

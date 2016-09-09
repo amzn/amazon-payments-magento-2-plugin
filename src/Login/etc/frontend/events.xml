@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="amazon_customer_authenticated">
+        <observer name="amazon_login_persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />
+    </event>
+</config>

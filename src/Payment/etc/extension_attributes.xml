@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Quote\Api\Data\CartInterface">
+        <attribute code="amazon_order_reference_id" type="string">
+            <join reference_table="amazon_quote" reference_field="quote_id" join_on_field="entity_id">
+                <field>amazon_order_reference_id</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="amazon_order_reference_id" type="string">
+            <join reference_table="amazon_sales_order" reference_field="order_id" join_on_field="entity_id">
+                <field>amazon_order_reference_id</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+</config>

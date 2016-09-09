@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="amazon_address">
+        <rules>
+            <rule name="amazon_check_blacklisted_terms">
+                <entity_constraints>
+                    <constraint alias="amazon_core_address_data_blacklist_terms_validator" class="Amazon\Core\Model\Validation\AddressBlacklistTermsValidator" />
+                </entity_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="on_select">
+                <uses>
+                    <use rule="amazon_check_blacklisted_terms"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

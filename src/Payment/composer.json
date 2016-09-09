@@ -1,0 +1,24 @@
+{
+  "name": "amazon/module-payment",
+  "description": "Amazon Payment module",
+  "type": "magento2-module",
+  "version": "1.0.1",
+  "license": [
+    "Apache-2.0"
+  ],
+  "require": {
+    "amazon/module-core": "^1.0.1",
+    "amazon/module-login": "^1.0.1",
+    "magento/module-eav": "^100.1.0",
+    "magento/module-sales": "^100.1.0",
+    "magento/module-quote": "^100.1.0",
+    "magento/module-payment": "^100.1.0",
+    "magento/module-backend": "^100.1.0"
+  },
+  "autoload": {
+    "files": ["registration.php"],
+    "psr-4": {
+      "Amazon\\Payment\\": ""
+    }
+  }
+}

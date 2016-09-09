@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="get_amazon_capture_updates" instance="Amazon\Payment\Cron\GetAmazonCaptureUpdates" method="execute">
+            <schedule>*/5 * * * *</schedule>
+        </job>
+        <job name="get_amazon_authorization_updates" instance="Amazon\Payment\Cron\GetAmazonAuthorizationUpdates" method="execute">
+            <schedule>*/5 * * * *</schedule>
+        </job>
+        <job name="amazon_payments_process_queued_refunds" instance="Amazon\Payment\Cron\ProcessAmazonRefunds" method="execute">
+            <schedule>*/5 * * * *</schedule>
+        </job>
+    </group>
+</config>

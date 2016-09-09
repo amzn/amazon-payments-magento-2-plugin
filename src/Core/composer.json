@@ -1,0 +1,23 @@
+{
+  "name": "amazon/module-core",
+  "description": "Shared functionality for Amazon Login and Amazon Payment modules",
+  "type": "magento2-module",
+  "version": "1.0.1",
+  "license": [
+    "Apache-2.0"
+  ],
+  "require": {
+    "magento/framework": "^100.1.0",
+    "magento/module-config": "^100.1.0",
+    "magento/module-store": "^100.1.0",
+    "magento/module-developer": "^100.1.0",
+    "magento/module-quote": "^100.1.0",
+    "amzn/login-and-pay-with-amazon-sdk-php": "dev-psr_logging"
+  },
+  "autoload": {
+    "files": ["registration.php"],
+    "psr-4": {
+      "Amazon\\Core\\": ""
+    }
+  }
+}
