@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="amazon_payments_auth_soft_decline" label="Soft-declined Authorization" file="soft-declined-auth.html" type="html" module="Amazon_Payment" area="frontend"/>
+    <template id="amazon_payments_auth_hard_decline" label="Hard-declined Authorization" file="hard-declined-auth.html" type="html" module="Amazon_Payment" area="frontend"/>
+</config>
