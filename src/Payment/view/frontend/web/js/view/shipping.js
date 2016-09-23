@@ -40,17 +40,24 @@ define(
                 var self = this;
                 this._super();
 
-                quote.shippingMethod.subscribe(function () {
-                    if (this.isAmazonLoggedIn()) {
-                        amazonStorage.isShippingMethodsLoading(false); //remove loader when shippingMethod is set
-                    }
-                }, this);
-
                 //switch form inline based on amazon and customer loggedIn status
                 amazonStorage.isAmazonAccountLoggedIn.subscribe(function (loggedIn) {
                     this.isFormInline = (loggedIn) ? false : (customer.isLoggedIn()) ? (addressList().length === 0) : true;
                 }, this);
 
+            },
+            /**
+             * OnRender for shipping Methods
+             */
+            shippingMethodsOnRender: function() {
+                if (this.isAmazonLoggedIn()) {
+                    shippingService.getShippingRates().subscribe(function() {
+                        if(amazonStorage.isShippingMethodsLoading() === true) {
+                            amazonStorage.isShippingMethodsLoading(false);
+                        }
+                    }, this);
+                    amazonStorage.isShippingMethodsLoading(false); //remove loader when shippingMethod is set
+                }
             },
             validateGuestEmail: function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]';
