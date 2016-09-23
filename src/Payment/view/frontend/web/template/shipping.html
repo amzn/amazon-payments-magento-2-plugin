@@ -21,9 +21,9 @@
          data-role="content">
 
         <!-- ko ifnot: (isAmazonLoggedIn) -->
-            <!-- ko foreach: getRegion('amazon-pay-button') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
+        <!-- ko foreach: getRegion('amazon-pay-button') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <!--/ko-->
 
         <!-- ko if: (!quoteIsVirtual) -->
@@ -33,24 +33,24 @@
         <!--/ko-->
 
         <!-- ko ifnot: (isAmazonLoggedIn) -->
-            <!-- ko foreach: getRegion('address-list') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
+        <!-- ko foreach: getRegion('address-list') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
 
-            <!-- ko foreach: getRegion('address-list-additional-addresses') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
+        <!-- ko foreach: getRegion('address-list-additional-addresses') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
 
-            <!-- Address form pop up -->
-            <!-- ko if: (!isFormInline) -->
-                <button type="button"
-                        data-bind="click: showFormPopUp, visible: !isNewAddressAdded()"
-                        class="action action-show-popup">
-                    <span data-bind="i18n: 'New Address'"></span></button>
-                <div id="opc-new-shipping-address" data-bind="visible: isFormPopUpVisible()">
-                    <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
-                </div>
-            <!-- /ko -->
+        <!-- Address form pop up -->
+        <!-- ko if: (!isFormInline) -->
+        <button type="button"
+                data-bind="click: showFormPopUp, visible: !isNewAddressAdded()"
+                class="action action-show-popup">
+            <span data-bind="i18n: 'New Address'"></span></button>
+        <div id="opc-new-shipping-address" data-bind="visible: isFormPopUpVisible()">
+            <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
+        </div>
+        <!-- /ko -->
 
         <!--/ko-->
 
@@ -60,9 +60,9 @@
 
         <!-- Inline address form -->
         <!-- ko ifnot: (isAmazonLoggedIn) -->
-            <!-- ko if: (isFormInline) -->
-                <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
-            <!-- /ko -->
+        <!-- ko if: (isFormInline) -->
+        <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
+        <!-- /ko -->
         <!-- /ko -->
     </div>
 </li>
@@ -85,7 +85,7 @@
              role="tabpanel"
              aria-hidden="false">
             <!-- ko if: rates().length  -->
-            <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingInformation" novalidate="novalidate">
+            <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingInformation, afterRender: shippingMethodsOnRender" novalidate="novalidate">
                 <div id="checkout-shipping-method-load">
                     <table class="table-checkout-shipping-method">
                         <thead>
