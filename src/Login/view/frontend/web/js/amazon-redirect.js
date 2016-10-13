@@ -41,11 +41,14 @@ define([
             amazonCore.amazonDefined.subscribe(function () {
                 //only set this on the redirect page
                 amazon.Login.setUseCookie(true);
-                amazonCore.verifyAmazonLoggedIn().then(function (loggedIn) {
-                    if (loggedIn) {
-                        self.redirect();
-                    }
-                });
+                //move to bottom of execution queue
+                setTimeout(function() {
+                    amazonCore.verifyAmazonLoggedIn().then(function (loggedIn) {
+                        if (loggedIn) {
+                            self.redirect();
+                        }
+                    });
+                }, 0);
             }, this);
         },
 
