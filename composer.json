@@ -2,7 +2,7 @@
   "name": "amazon/module-login-and-pay",
   "description": "Official Magento2 Plugin to integrate with Amazon Payments",
   "type": "magento2-module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": [
     "Apache-2.0"
   ],
