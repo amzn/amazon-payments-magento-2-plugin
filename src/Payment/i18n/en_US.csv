@@ -1,4 +1,4 @@
-﻿"Amazon authorize invalid state : %1 with reason %2","Unexpected state for the Amazon Payments authoriziation. State: %1, Reason code: %2"
+"Amazon authorize invalid state : %1 with reason %2","Unexpected state for the Amazon Payments authoriziation. State: %1, Reason code: %2"
 "Amazon capture declined : %1","Amazon Payments declined the capture. Reason code: %1"
 "Amazon capture invalid state : %1 with reason %2","Unexpected state for the Amazon Payments capture. State: %1, Reason code: %2"
 "Amazon refund invalid state : %1 with reason %2","Unexpected state for the Amazon Payments refund. State: %1, Reason code: %2"
