@@ -18,7 +18,8 @@ define([
     'amazonCore',
     'amazonPaymentConfig',
     'amazonCsrf',
-    'jquery/ui'
+    'jquery/ui',
+    'mage/cookies'
 ], function ($, amazonCore, amazonPaymentConfig, amazonCsrf) {
     "use strict";
 
@@ -41,13 +42,10 @@ define([
             amazonCore.amazonDefined.subscribe(function () {
                 //only set this on the redirect page
                 amazon.Login.setUseCookie(true);
-                //move to bottom of execution queue
-                setTimeout(function() {
-                    amazonCore.verifyAmazonLoggedIn().then(function (loggedIn) {
-                        if (loggedIn) {
-                            self.redirect();
-                        }
-                    });
+                amazonCore.verifyAmazonLoggedIn().then(function (loggedIn) {
+                    if (loggedIn) {
+                        self.redirect();
+                    }
                 }, 0);
             }, this);
         },
@@ -73,7 +71,7 @@ define([
         setAuthStateCookies: function () {
             var token = this.getURLParameter("access_token", location.hash);
             if (typeof token === 'string' && token.match(/^Atza/)) {
-                $.cookieStorage.set('amazon_Login_accessToken', token);
+                $.mage.cookies.set('amazon_Login_accessToken', token);
             }
             return true;
         },
