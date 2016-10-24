@@ -32,6 +32,7 @@
             <argument name="perCountryAddressHandlers" xsi:type="array">
                 <item name="DE" xsi:type="string">Amazon\Core\Domain\AmazonAddressDe</item>
                 <item name="AT" xsi:type="string">Amazon\Core\Domain\AmazonAddressDe</item>
+                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonAddressJp</item>
             </argument>
         </arguments>
     </type>
