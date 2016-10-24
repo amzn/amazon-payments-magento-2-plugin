@@ -15,47 +15,20 @@
  */
 namespace Amazon\Core\Domain;
 
-class AmazonName
+class AmazonCustomerJp extends AmazonCustomer
 {
     /**
-     * @var string
-     */
-    protected $firstName;
-
-    /**
-     * @var string
-     */
-    protected $lastName;
-
-    /**
-     * AmazonName constructor.
+     * AmazonCustomer constructor.
      *
+     * @param string $id
+     * @param string $email
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct($id, $email, $name)
     {
-        $nameParts       = explode(' ', trim($name), 2);
-        $this->firstName = $nameParts[0];
-        $this->lastName  = isset($nameParts[1]) ? $nameParts[1] : '.';
+        $this->id    = $id;
+        $this->email = $email;
+        $this->name = new AmazonNameJp($name);
     }
 
-    /**
-     * Get first name
-     *
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * Get last name
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
 }

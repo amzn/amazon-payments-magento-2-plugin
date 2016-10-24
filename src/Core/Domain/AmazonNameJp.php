@@ -15,17 +15,8 @@
  */
 namespace Amazon\Core\Domain;
 
-class AmazonName
+class AmazonNameJp extends AmazonName
 {
-    /**
-     * @var string
-     */
-    protected $firstName;
-
-    /**
-     * @var string
-     */
-    protected $lastName;
 
     /**
      * AmazonName constructor.
@@ -34,28 +25,9 @@ class AmazonName
      */
     public function __construct($name)
     {
+        $name      = mb_convert_kana($name, 's', 'utf-8');
         $nameParts       = explode(' ', trim($name), 2);
-        $this->firstName = $nameParts[0];
-        $this->lastName  = isset($nameParts[1]) ? $nameParts[1] : '.';
-    }
-
-    /**
-     * Get first name
-     *
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * Get last name
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
+        $this->firstName = isset($nameParts[1]) ? $nameParts[1] : '.';
+        $this->lastName  = $nameParts[0];
     }
 }
