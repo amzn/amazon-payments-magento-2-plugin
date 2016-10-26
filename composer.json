@@ -19,7 +19,7 @@
     "magento/module-quote": "^100.1.0",
     "magento/module-customer": "^100.1.0",
     "magento/module-store": "^100.1.0",
-    "amzn/login-and-pay-with-amazon-sdk-php": "dev-psr_logging"
+    "amzn/login-and-pay-with-amazon-sdk-php": "^2.1.0"
   },
   "require-dev": {
     "guzzlehttp/guzzle": "^6.2.0",
