@@ -53,19 +53,30 @@
     &._small {
         width: 37px;
         height: 23px;
-        background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-black-@{resolution}-TEMP.png');
-
-        &._grad {
+        & when (@resolution = x1) {
+          background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-black-@{resolution}-TEMP.png');
+          &._grad {
             background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-blackgrad-@{resolution}-TEMP.png');
-        }
-
-        &._white {
-            background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-white-@{resolution}.png-TEMP');
-
+          }
+          &._white {
+            background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-white-@{resolution}-TEMP.png');
             &._grad {
-                background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-whitegrad-@{resolution}-TEMP.png');
+              background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-whitegrad-@{resolution}-TEMP.png');
             }
-        }
+          }       
+        } // end when x1
+        & when (@resolution = x2) {
+          background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-black-@{resolution}.png');
+          &._grad {
+            background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-blackgrad-@{resolution}.png');
+          }
+          &._white {
+            background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-white-@{resolution}.png');
+            &._grad {
+              background-image: url('@{amazon-payments-mark-image-path}@{amazon-payments-mark-small-dimensions}-whitegrad-@{resolution}.png');
+            }
+          }
+        } // end when x2
     }
 }
 
