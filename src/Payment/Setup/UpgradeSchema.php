@@ -174,19 +174,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '1.6.0', '<')) {
             $setup->getConnection()->addForeignKey(
-                $setup->getFkName(QuoteLink::TABLE_NAME, 'quote_id', 'quote', 'entity_id'),
+                $setup->getFkName(QuoteLink::TABLE_NAME, 'quote_id', $setup->getTable('quote'), 'entity_id'),
                 $setup->getTable(QuoteLink::TABLE_NAME),
                 'quote_id',
-                'quote',
+                $setup->getTable('quote'),
                 'entity_id',
                 AdapterInterface::FK_ACTION_CASCADE
             );
 
             $setup->getConnection()->addForeignKey(
-                $setup->getFkName(OrderLink::TABLE_NAME, 'order_id', 'sales_order', 'entity_id'),
+                $setup->getFkName(OrderLink::TABLE_NAME, 'order_id', $setup->getTable('sales_order'), 'entity_id'),
                 $setup->getTable(OrderLink::TABLE_NAME),
                 'order_id',
-                'sales_order',
+                $setup->getTable('sales_order'),
                 'entity_id',
                 AdapterInterface::FK_ACTION_CASCADE
             );
