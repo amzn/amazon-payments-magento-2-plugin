@@ -27,10 +27,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         if (version_compare($context->getVersion(), '1.1.0', '<')) {
             $setup->getConnection()->addForeignKey(
-                $setup->getFkName(CustomerLink::TABLE_NAME, 'customer_id', 'customer_entity', 'entity_id'),
+                $setup->getFkName(CustomerLink::TABLE_NAME, 'customer_id', $setup->getTable('customer_entity'), 'entity_id'),
                 $setup->getTable(CustomerLink::TABLE_NAME),
                 'customer_id',
-                'customer_entity',
+                $setup->getTable('customer_entity'),
                 'entity_id',
                 AdapterInterface::FK_ACTION_CASCADE
             );

@@ -21,7 +21,7 @@ interface AddressManagementInterface
      * @param string $amazonOrderReferenceId
      * @param string $addressConsentToken
      *
-     * @return array
+     * @return mixed
      */
     public function getShippingAddress($amazonOrderReferenceId, $addressConsentToken);
 
@@ -29,7 +29,7 @@ interface AddressManagementInterface
      * @param string $amazonOrderReferenceId
      * @param string $addressConsentToken
      *
-     * @return array
+     * @return mixed
      */
     public function getBillingAddress($amazonOrderReferenceId, $addressConsentToken);
 }
