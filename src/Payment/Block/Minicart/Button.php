@@ -1,7 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 namespace Amazon\Payment\Block\Minicart;
 
@@ -20,8 +30,6 @@ use Magento\Framework\View\Element\Template\Context;
 class Button extends Template implements ShortcutInterface
 {
     const ALIAS_ELEMENT_INDEX = 'alias';
-
-    const BUTTON_ELEMENT_INDEX = 'button_id';
 
     const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
 
@@ -94,14 +102,6 @@ class Button extends Template implements ShortcutInterface
         }
 
         return parent::_toHtml();
-    }
-
-    /**
-     * @return string
-     */
-    public function getContainerId()
-    {
-        return $this->getData(self::BUTTON_ELEMENT_INDEX);
     }
 
     /**
