@@ -42,21 +42,29 @@ class Validator implements ValidatorInterface
     private $_paymentData;
 
     /**
-     * @param \Amazon\Payment\Model\ConfigFactory $amazonConfig
+     * @var \Amazon\Core\Helper\CategoryExclusion
+     */
+    private $_categoryExclusionHelper;
+
+    /**
+     * @param \Amazon\Payment\Model\Config $amazonConfig
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Amazon\Core\Helper\CategoryExclusion $categoryExclusionHelper
      */
     public function __construct(
         \Amazon\Payment\Model\Config $amazonConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
-        \Magento\Payment\Helper\Data $paymentData
+        \Magento\Payment\Helper\Data $paymentData,
+        \Amazon\Core\Helper\CategoryExclusion $categoryExclusionHelper
     ) {
         $this->_amazonConfig = $amazonConfig;
         $this->_registry = $registry;
         $this->_productTypeConfig = $productTypeConfig;
         $this->_paymentData = $paymentData;
+        $this->_categoryExclusionHelper = $categoryExclusionHelper;
     }
 
     /**
@@ -88,6 +96,14 @@ class Validator implements ValidatorInterface
 
         // check visibility on product page
         if ($isInCatalog && $config->getValue('pwa_pp_button_is_visible')) {
+            $currentProduct = $this->_registry->registry('current_product');
+            if ($currentProduct !== null) {
+                if ($this->_categoryExclusionHelper->productHasExcludedCategory($currentProduct))
+                    return false;
+            } else {
+                if ($this->_categoryExclusionHelper->isQuoteDirty())
+                    return false;
+            }
             return true;
         }
         return false;
