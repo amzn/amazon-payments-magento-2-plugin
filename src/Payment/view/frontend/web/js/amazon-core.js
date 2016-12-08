@@ -88,28 +88,24 @@ define([
          * Verify a user is logged into amazon
          */
         verifyAmazonLoggedIn: function () {
-            return new Promise(function (resolve, reject) {
-
-                var loginOptions = {
-                    scope: amazonPaymentConfig.getValue('loginScope'),
-                    popup: true,
-                    interactive: 'never'
-                };
-
-                amazon.Login.authorize(loginOptions, function (response) {
-                    var resolution;
-                    if (response.error) {
-                        resolution = reject(response.error);
-                    } else {
-                        accessToken(response.access_token);
-                        resolution = resolve(!response.error);
-                    }
-                    return resolution;
-                });
-                
-            }).catch(function (e) {
-                console.log('error: ' + e);
+            var defer  = $.Deferred();
+            
+            var loginOptions = {
+                scope: amazonPaymentConfig.getValue('loginScope'),
+                popup: true,
+                interactive: 'never'
+            };
+            
+            amazon.Login.authorize(loginOptions, function (response) {
+                if (response.error) {
+                    defer.reject(response.error);
+                } else {
+                    accessToken(response.access_token);
+                    defer.resolve(!response.error);
+                }
             });
+            
+            return defer.promise();
         },
         /**
          * Log user out of Amazon
