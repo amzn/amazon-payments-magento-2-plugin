@@ -19,27 +19,19 @@ use Amazon\Core\Helper\Data;
 use Amazon\Payment\Model\Method\Amazon;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 
 class CompleteOrderStatus implements ObserverInterface
 {
     /**
-     * @var PaymentMethodManagementInterface
-     */
-    protected $paymentMethodManagement;
-
-    /**
      * @var Data
      */
     protected $coreHelper;
 
     public function __construct(
-        PaymentMethodManagementInterface $paymentMethodManagement,
         Data $coreHelper
     ) {
-        $this->paymentMethodManagement = $paymentMethodManagement;
         $this->coreHelper              = $coreHelper;
     }
 
@@ -49,7 +41,7 @@ class CompleteOrderStatus implements ObserverInterface
          * @var OrderInterface $order
          */
         $order          = $observer->getOrder();
-        $payment        = $this->paymentMethodManagement->get($order->getQuoteId());
+        $payment        = $order->getPayment();
         $newOrderStatus = $this->coreHelper->getNewOrderStatus();
 
         if ($newOrderStatus
