@@ -49,7 +49,8 @@ define(
 
             options: {
                 sellerId: window.amazonPayment.merchantId,
-                paymentWidgetDOMId: 'walletWidgetDiv'
+                paymentWidgetDOMId: 'walletWidgetDiv',
+                widgetScope: window.amazonPayment.loginScope
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
@@ -74,6 +75,7 @@ define(
             renderPaymentWidget: function () {
                 new OffAmazonPayments.Widgets.Wallet({
                     sellerId: self.options.sellerId,
+                    scope: self.options.widgetScope,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
                     onPaymentSelect: function (orderReference) {
                         amazonStorage.isPlaceOrderDisabled(true);
