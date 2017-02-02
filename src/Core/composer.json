@@ -1,8 +1,8 @@
 {
-  "name": "amazon/module-core",
+  "name": "amzn/module-core",
   "description": "Shared functionality for Amazon Login and Amazon Payment modules",
   "type": "magento2-module",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "license": [
     "Apache-2.0"
   ],
