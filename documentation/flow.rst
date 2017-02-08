@@ -1,15 +1,15 @@
 Order & payment workflow
 ========================
 
-`Pay with Amazon` button
+`Amazon Pay button` button
 --------------------------
-The `Pay with Amazon` button appears in several places in the shop
+The `Amazon Pay` button appears in several places in the shop
 
 * on the shipping step of checkout
 * on the cart page
 * on the minibasket
 * on product pages depending on :doc:`configuration`
-Pressing the `Pay with Amazon` button launches the Amazon authentication window, where the customer is asked for their Amazon user account credentials.
+Pressing the `Amazon Pay` button launches the Amazon authentication window, where the customer is asked for their Amazon user account credentials.
 
 .. image:: /images/sign-in.png
 
@@ -17,7 +17,7 @@ After a successful login the customer is redirected to the checkout
 
 Placing an order
 ----------------
-The **Pay with Amazon** checkout uses the standard Magento 2 checkout however it replaces certain forms with widgets that populate the data the forms would have requested.
+The **Amazon Pay** checkout uses the standard Magento 2 checkout however it replaces certain forms with widgets that populate the data the forms would have requested.
 
 On the shipping step of checkout the address form is replaced with a shipping widget
 
@@ -40,19 +40,19 @@ Synchronous
 The customer will get instant feedback there are 3 possible outcomes
 
 1. `Authorization OK` - Order is placed with a state of `Processing`, Customer is redirected to the standard Magento 2 confirmation screen
-2. `Soft Decline` - Order is not placed and customer is asked to select an alternative payment instrument from the Amazon Payments widget
-3. `Hard Decline` - Order is not placed, the Amazon Payments specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order
+2. `Soft Decline` - Order is not placed and customer is asked to select an alternative payment instrument from the Amazon Pay widget
+3. `Hard Decline` - Order is not placed, the Amazon Pay specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order
 
 Asynchronous
 ''''''''''''
 Orders placed when in Asychronous mode should always complete as if authorization was OK however they will be in a `Pending` state with a `Payment Review` status. 
 
-The customer will always be redirected to the standard Magento 2 confirmation screen as authorization state will be processed by Amazon after the order is placed. 
+The customer will always be redirected to the standard Magento 2 confirmation screen as authorization state will be processed by Amazon Pay after the order is placed. 
 
 A status update on the state of the authorization will be delivered by IPN or Cron depending on :doc:`configuration` there are 3 possible outcomes of this process
 
 1. `Authorization OK` - Order moves to state `Processing`
-2. `Soft Decline` - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Payments website. When the customer changes the payment instrument, a new authorization is raised
+2. `Soft Decline` - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised
 3. `Hard Decline` - Authorization is closed, customer is emailed with instructions to contact the merchant
 
 Payment capture
@@ -63,7 +63,7 @@ Orders placed when in `Charge on Order` mode will automatically be captured. For
 2. Open the order for which you want to capture payment and click the `Invoice` link located in the top row. Please make sure that the payment you want to capture has an open authorization transaction and is in the `Processing` state.
 3. Submit the invoice form ensuring the `Capture Online` option above the `Submit Invoice` button is selected
 
-.. warning:: It is vital that `Capture Online` is selected as otherwise Amazon Payments will not be instructed to capture the payment, resulting in you not receiving any funds.
+.. warning:: It is vital that `Capture Online` is selected as otherwise Amazon Pay will not be instructed to capture the payment, resulting in you not receiving any funds.
 
 In case there is a problem taking the payment, a notification will be added to Magento 2 to make you aware there has been a problem.
 
@@ -72,7 +72,7 @@ Payment refund
 --------------
 The order, which payment has been captured for, can be refunded either fully or partially. Refunds are made against invoices and thus having a paid invoice assigned to the order is a necessary condition that has to be met to refund any order item. 
 
-Refunds in Magento 2 are recorded as credit memos, so for requesting a refund with Amazon Payments you should create a credit memo first. To create a credit memo login to the Magento 2 admin, open the order you want refund, click `Invoices` tab on the left, select an invoice you want to refund and click on it.
+Refunds in Magento 2 are recorded as credit memos, so for requesting a refund with Amazon Pay you should create a credit memo first. To create a credit memo login to the Magento 2 admin, open the order you want refund, click `Invoices` tab on the left, select an invoice you want to refund and click on it.
 
 A preview of the selected invoice will appear. Make sure that you are on the single invoice preview page and click the `Credit Memo` button.
 
@@ -80,9 +80,9 @@ A new credit memo form will appear with most of the crucial data (like product q
 
 If you want to refund the invoice partially (i.e. only a part of the invoiced items) adjust the product quantities to be refunded (set 0 for items that shall not be refunded) and click `Update Qty's` button to update refund totals. You can also set the refunded items back to stock by checking `Return to Stock` checkbox. 
 
-Next choose if you want to refund shipping costs or apply any refund adjustments and fill in the appropriate fields. Before submitting the credit memo form, double check that you have `Refund` button available and click it. A credit memo will be created and a refund will be requested with Amazon Payments.
+Next choose if you want to refund shipping costs or apply any refund adjustments and fill in the appropriate fields. Before submitting the credit memo form, double check that you have `Refund` button available and click it. A credit memo will be created and a refund will be requested with Amazon Pay.
 
 Refunds will always be initially accepted as the vast majority of the time there will be no issue. However, if there is a problem after the refund has been issued, a notification will be added to Magento 2 to make you aware there has been a problem refunding the customer.
 
-.. warning:: Always use the `Refund` button available on the new credit memo form invoked from the single invoice preview page. If you click `Credit Memo` button directly on the order page you will be redirected to the new credit memo form with `Refund offline` button only, which will appear to be successful. However it will not notify Amazon Payments and the customer will not receive their refund.
+.. warning:: Always use the `Refund` button available on the new credit memo form invoked from the single invoice preview page. If you click `Credit Memo` button directly on the order page you will be redirected to the new credit memo form with `Refund offline` button only, which will appear to be successful. However it will not notify Amazon Pay and the customer will not receive their refund.
 

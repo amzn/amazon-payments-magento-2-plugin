@@ -2,7 +2,7 @@
    :align: right
 
 ===========================================================================
-Login and Pay with Amazon extension for Magento 2
+Amazon Pay and Login with Amazon extension for Magento 2
 ===========================================================================
 
 .. toctree::

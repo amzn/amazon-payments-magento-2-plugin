@@ -1,6 +1,6 @@
 {
-  "name": "amazon/module-login-and-pay",
-  "description": "Official Magento2 Plugin to integrate with Amazon Payments",
+  "name": "amzn/amazon-pay-magento-2-module",
+  "description": "Official Magento2 Plugin to integrate with Amazon Pay and Login with Amazon",
   "type": "magento2-module",
   "version": "1.0.10",
   "license": [

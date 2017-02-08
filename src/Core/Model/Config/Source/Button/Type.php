@@ -25,9 +25,9 @@ class Type implements ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => 'full', 'label' => __('Login with Amazon / Pay with Amazon')],
+            ['value' => 'full', 'label' => __('Login with Amazon / Amazon Pay')],
             ['value' => 'short', 'label' => __('Login / Pay')],
-            ['value' => 'logo', 'label' => __('Amazon Logo')],
+            ['value' => 'logo', 'label' => __('Amazon Pay Logo')],
         ];
     }
 }

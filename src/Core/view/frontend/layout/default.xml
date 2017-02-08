@@ -18,7 +18,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="before.body.end">
-            <container name="amazon_payments_footer" as="amazon-payments-footer" label="Amazon Payments Footer" htmlTag="div" htmlClass="footer amazon-payments-footer" before="-">
+            <container name="amazon_payments_footer" as="amazon-payments-footer" label="Amazon Pay Footer" htmlTag="div" htmlClass="footer amazon-payments-footer" before="-">
                 <block class="Amazon\Core\Block\Config" name="amazon_payments_mark" template="Amazon_Core::amazon_payments_mark.phtml"/>
             </container>
         </referenceContainer>
