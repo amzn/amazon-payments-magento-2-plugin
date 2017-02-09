@@ -24,10 +24,10 @@ Registering an Amazon Pay Account
 
   * DE merchants: `https://pay.amazon.com/de/signup <https://pay.amazon.com/de/signup>`_
   * UK merchants: `https://pay.amazon.com/uk/signup <https://pay.amazon.com/uk/signup>`_
-  * US merchants: ``https://pay.amazon.com/us/signup <https://pay.amazon.com/us/signup>`_
-  * FR merchants: ``https://pay.amazon.com/fr/signup <https://pay.amazon.com/fr/signup>`_
-  * IT merchants: ``https://pay.amazon.com/it/signup <https://pay.amazon.com/it/signup>`_
-  * ES merchants: ``https://pay.amazon.com/es/signup <https://pay.amazon.com/us/signup>`_
+  * US merchants: `https://pay.amazon.com/us/signup <https://pay.amazon.com/us/signup>`_
+  * FR merchants: `https://pay.amazon.com/fr/signup <https://pay.amazon.com/fr/signup>`_
+  * IT merchants: `https://pay.amazon.com/it/signup <https://pay.amazon.com/it/signup>`_
+  * ES merchants: `https://pay.amazon.com/es/signup <https://pay.amazon.com/us/signup>`_
 * Click :menuselection:`Sign Up --> I'm a merchant`
 
 .. image:: /images/seller-central/prerequisites_screenshot_1.png
