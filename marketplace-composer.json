@@ -2,15 +2,15 @@
   "name": "amzn/amazon-pay-magento-2-module",
   "description": "Official Magento2 Plugin to integrate with Amazon Pay and Login with Amazon",
   "type": "metapackage",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "license": [
     "Apache-2.0"
   ],
   "require": {
     "php": "~5.6.0|7.0.2|~7.0.6",
     "amzn/login-and-pay-with-amazon-sdk-php": "^2.1.0",
-    "amzn/module-core": "^1.0.1",
-    "amzn/login-with-amazon-module": "^1.0.1",
-    "amzn/amazon-pay-module": "^1.0.1"
+    "amzn/amazon-pay-and-login-with-amazon-core-module": "^1.1.0",
+    "amzn/login-with-amazon-module": "^1.1.0",
+    "amzn/amazon-pay-module": "^1.1.0"
   }
 }
