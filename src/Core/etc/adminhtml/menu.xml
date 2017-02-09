@@ -1,7 +1,0 @@
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="Amazon_Core::logs" title="Amazon Logs" module="Amazon_Core" sortOrder="90" parent="Magento_Backend::system" resource="Magento_Backend::system" />
-        <add id="Amazon_Core::client_logs" title="Client" module="Amazon_Core" sortOrder="0" parent="Amazon_Core::logs" action="amazonlogs/download/clientLog" resource="Magento_Backend::system"/>
-        <add id="Amazon_Core::ipn_logs" title="IPN" module="Amazon_Core" sortOrder="0" parent="Amazon_Core::logs" action="amazonlogs/download/ipnLog" resource="Magento_Backend::system"/>
-    </menu>
-</config>

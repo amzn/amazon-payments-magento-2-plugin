@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration &mdash; Amazon Pay for Magento 2 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Amazon Pay for Magento 2 1.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Login with Amazon" href="login.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general">General</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#credentials">Credentials</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#credentials-json">Credentials JSON</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret">Merchant Id, Access Key Id, Secret Access Key, Client Id, Client Secret</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#payment-region">Payment Region</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sandbox">Sandbox</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#javascript-origin-redirect-url-ipn-url">Javascript Origin, Redirect URL, IPN URL</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enable-amazon-pay">Enable Amazon Pay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enable-login-with-amazon">Enable Login with Amazon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#payment-action">Payment Action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#authorization-mode">Authorization Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#update-mechanism">Update Mechanism</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#amazon-pay-button-is-visible-on-product-page">Amazon Pay button is visible on Product Page</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced">Advanced</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#frontend">Frontend</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#button-display-language">Button Display Language</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#button-color">Button Color</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sales-options">Sales Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#new-order-status">New Order Status</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sales-exclusions">Sales Exclusions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#is-packing-stations-terms-validation-enabled">Is Packing Stations Terms Validation Enabled</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#packing-stations-terms">Packing Stations Terms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#excluded-categories">Excluded Categories</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#developer-options">Developer Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#logging">Logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#allowed-ips">Allowed IPs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Amazon Pay for Magento 2</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/configuration.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>After the successful installation you can proceed to the configuration. In Magento 2 admin go to <span class="menuselection">Stores ‣ Configuration ‣ Sales ‣ Payment Methods ‣ Amazon Pay</span></p>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="credentials">
+<h3>Credentials<a class="headerlink" href="#credentials" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="credentials-json">
+<h4>Credentials JSON<a class="headerlink" href="#credentials-json" title="Permalink to this headline">¶</a></h4>
+<p>JSON string of all Amazon Pay seller credentials, You can retrieve them via the copy your keys button in Amazon Seller Central at <span class="menuselection">Integration ‣ MWS Access Key</span>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The values supplied in Credentials JSON will actually be used to set values for Merchant Id, Access Key Id, Secret Access Key, Client Id and Client Secret this value will be cleared on save.</p>
+</div>
+</div>
+<div class="section" id="merchant-id-access-key-id-secret-access-key-client-id-client-secret">
+<h4>Merchant Id, Access Key Id, Secret Access Key, Client Id, Client Secret<a class="headerlink" href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret" title="Permalink to this headline">¶</a></h4>
+<p>Using the credentials JSON is the preferred and easiest way to supply your credentials. Manual configuration is possible as well.</p>
+<p>The credentials can be found in Seller Central at <span class="menuselection">Integration ‣ MWS Access Key</span>.</p>
+<img alt="_images/configuration_screenshot_1.png" src="_images/configuration_screenshot_1.png" />
+</div>
+<div class="section" id="payment-region">
+<h4>Payment Region<a class="headerlink" href="#payment-region" title="Permalink to this headline">¶</a></h4>
+<p>Select the region where you registered your seller account from the provided list. If you&#8217;re unsure about this information, please consult the Amazon Pay merchant support.</p>
+</div>
+<div class="section" id="sandbox">
+<h4>Sandbox<a class="headerlink" href="#sandbox" title="Permalink to this headline">¶</a></h4>
+<p>Sandbox mode has been designed to test the <strong>Amazon Pay</strong> service. In sandbox mode the selected payment method is not charged. Refer to the <strong>Amazon Pay</strong> documentation to get more information about the sandbox environment. In general, sandbox mode should be enabled for development and staging environments for testing and always has to be disabled for production environments. Never show the sandbox buttons and widgets to buyers in your live environment.</p>
+</div>
+<div class="section" id="javascript-origin-redirect-url-ipn-url">
+<h4>Javascript Origin, Redirect URL, IPN URL<a class="headerlink" href="#javascript-origin-redirect-url-ipn-url" title="Permalink to this headline">¶</a></h4>
+<p>Used to display the URLs within Magento 2 that are required by Amazon Pay. Please add this information to your Seller Central account.</p>
+<ul class="simple">
+<li><cite>Javascript Origin, Redirect URL</cite> - Please add this information to your Login with Amazon section of the Seller Central</li>
+<li><cite>IPN URL</cite> - Please add this information to the field <strong>Merchant URL</strong> at <span class="menuselection">Settings ‣ Integration Settings</span> of the Seller Central</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The IPN URL settings for the Sandbox - and Production View differ. Please add the correct value to the environment you are currently transacting on.</p>
+</div>
+</div>
+</div>
+<div class="section" id="options">
+<h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="enable-amazon-pay">
+<h4>Enable Amazon Pay<a class="headerlink" href="#enable-amazon-pay" title="Permalink to this headline">¶</a></h4>
+<p>By switching this option you can enable or disable <strong>Amazon Pay</strong>. This option must be enabled if you want to provide the Amazon Pay service to your customers.</p>
+</div>
+<div class="section" id="enable-login-with-amazon">
+<h4>Enable Login with Amazon<a class="headerlink" href="#enable-login-with-amazon" title="Permalink to this headline">¶</a></h4>
+<p>By switching this option you can toggle <strong>Login with Amazon</strong>. When enabled this will log customers into Magento via their Amazon account.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Login with Amazon requires that Amazon Pay is enabled in order to function.</p>
+</div>
+</div>
+<div class="section" id="payment-action">
+<h4>Payment Action<a class="headerlink" href="#payment-action" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><cite>Charge on shipment</cite> (default) - Payments are authorized when an order is placed automatically. Captures must be requested manually by creating an invoice and selecting <cite>Capture online</cite></li>
+<li><cite>Charge on order</cite> - Payments are immediately authorized and captured.</li>
+</ul>
+</div>
+<div class="section" id="authorization-mode">
+<h4>Authorization Mode<a class="headerlink" href="#authorization-mode" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><cite>Synchronous</cite> (default) - The authorization is processed during the checkout.</li>
+<li><cite>Asynchronous</cite> - The authorization is processed after the checkout was completed.</li>
+<li><cite>Synchronous if possible</cite> - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards.</li>
+</ul>
+<p>Independent of the mode you decide for, make sure to only orders which are successfully authorized by Amazon Pay (order state: <cite>Processing</cite>).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you expect high order values, the <strong>asynchronous</strong> authorization might be the best chioce for your business.</p>
+</div>
+</div>
+<div class="section" id="update-mechanism">
+<h4>Update Mechanism<a class="headerlink" href="#update-mechanism" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><cite>Data polling via Cron Job</cite> (default) - Pull based mechanism where Magento 2 periodically checks authorization, capture  and refund status against the Amazon Pay systems. This is set to run at 5 minute intervals and requires that Magento 2 cron is setup and running</li>
+<li><cite>Instant Payment Notifications</cite> - Push based mechanism where Amazon Pay pushes authorization, capture and refund status updates to Magento 2. This requires that your site has a valid SSL certificate</li>
+</ul>
+</div>
+<div class="section" id="amazon-pay-button-is-visible-on-product-page">
+<h4>Amazon Pay button is visible on Product Page<a class="headerlink" href="#amazon-pay-button-is-visible-on-product-page" title="Permalink to this headline">¶</a></h4>
+<p>toggles whether to show <strong>Amazon Pay</strong> on product pages</p>
+</div>
+</div>
+</div>
+<div class="section" id="advanced">
+<h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="frontend">
+<h3>Frontend<a class="headerlink" href="#frontend" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="button-display-language">
+<h4>Button Display Language<a class="headerlink" href="#button-display-language" title="Permalink to this headline">¶</a></h4>
+<p>Allows input of a locale string to control button language should be in the format <cite>en-gb</cite>. By default the language of the store view is used.</p>
+</div>
+<div class="section" id="button-color">
+<h4>Button Color<a class="headerlink" href="#button-color" title="Permalink to this headline">¶</a></h4>
+<p>Allows selection of button color from a pre determined list.</p>
+</div>
+</div>
+<div class="section" id="sales-options">
+<h3>Sales Options<a class="headerlink" href="#sales-options" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="new-order-status">
+<h4>New Order Status<a class="headerlink" href="#new-order-status" title="Permalink to this headline">¶</a></h4>
+<p>Allows selection of a custom status for orders with a <cite>Processing</cite> state made using the Amazon Pay payment method.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This status indicates, if a payment for the order was authorized by Amazon Pay</p>
+</div>
+</div>
+</div>
+<div class="section" id="sales-exclusions">
+<h3>Sales Exclusions<a class="headerlink" href="#sales-exclusions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="is-packing-stations-terms-validation-enabled">
+<h4>Is Packing Stations Terms Validation Enabled<a class="headerlink" href="#is-packing-stations-terms-validation-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Toggles validation enabled for packing station terms, terms will be shown below when enabled.</p>
+</div>
+<div class="section" id="packing-stations-terms">
+<h4>Packing Stations Terms<a class="headerlink" href="#packing-stations-terms" title="Permalink to this headline">¶</a></h4>
+<p>Comma seperated list of terms that will prevent shipping address selection if they are found in address lines.</p>
+</div>
+<div class="section" id="excluded-categories">
+<h4>Excluded Categories<a class="headerlink" href="#excluded-categories" title="Permalink to this headline">¶</a></h4>
+<p>Allows selection of multiple categories, if a product has one of the assigned categories the <strong>Amazon Pay</strong> buttons will not be shown on the product page and if it&#8217;s in the basket you will not be able to pay with Amazon Pay at checkout and will instead be reverted to the standard Magento 2 checkout.</p>
+</div>
+</div>
+<div class="section" id="developer-options">
+<h3>Developer Options<a class="headerlink" href="#developer-options" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="logging">
+<h4>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h4>
+<p>Enabled by default. This toggles whether to log all API calls and IPN notifications or not. The log files can be retrieved directly via the Magento 2 admin at <span class="menuselection">System ‣ Amazon Pay Logs ‣ Client</span>, respectively <span class="menuselection">System ‣ Amazon Pay Logs ‣ IPN</span></p>
+</div>
+<div class="section" id="allowed-ips">
+<h4>Allowed IPs<a class="headerlink" href="#allowed-ips" title="Permalink to this headline">¶</a></h4>
+<p>For testing or debugging purposes you can restrict access to <strong>Amazon Pay</strong> checkout in your shop to certain IP addresses only. <strong>Amazon Pay</strong> button will be shown only for the visitors coming from allowed IPs. You can set more than one allowed IP, separated with commas.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Due to caching restrictions this setting is not reflected on Product pages, Please  disable <cite>Amazon Pay button is visible on Product Page</cite> in this instance</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="login.html" class="btn btn-neutral float-right" title="Login with Amazon" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Amazon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

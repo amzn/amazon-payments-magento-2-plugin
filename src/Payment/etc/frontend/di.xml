@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="Amazon\Payment\Model\Config" type="Magento\Payment\Gateway\Config\Config">
-        <arguments>
-            <argument name="methodCode" xsi:type="const">Amazon\Payment\Model\Method\Amazon::PAYMENT_METHOD_CODE</argument>
-        </arguments>
-    </virtualType>
-</config>
