@@ -38,8 +38,8 @@ Credentials,Credentials
 "Credentials JSON","Credentials JSON"
 "Payment Region","Payment Region"
 Sandbox,Sandbox
-"Javascript Origin","Javascript Origin"
-"Redirect URL","Redirect URL"
+"Allowed Javascript Origins","Allowed Javascript Origins"
+"Allowed Return URLs","Allowed Return URLs"
 Options,Options
 "Enable Amazon Pay","Enable Amazon Pay"
 "Enable Login with Amazon","Enable Login with Amazon"

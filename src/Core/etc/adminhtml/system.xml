@@ -46,11 +46,11 @@
                             <config_path>payment/amazon_payment/sandbox</config_path>
                         </field>
                         <field id="js_origin" translate="label" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Javascript Origin</label>
+                            <label>Allowed Javascript Origins</label>
                             <frontend_model>Amazon\Core\Block\Adminhtml\Form\Field\JsOrigin</frontend_model>
                         </field>
                         <field id="redirect_url" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Redirect URL</label>
+                            <label>Allowed Return URLs</label>
                             <frontend_model>Amazon\Core\Block\Adminhtml\Form\Field\RedirectUrl</frontend_model>
                         </field>
                         <field id="ipn_url" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
