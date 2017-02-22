@@ -1,7 +1,7 @@
 Frontend Customisation
 ========================
 
-Q: I'd like to add a `Pay with Amazon` or `Login with Amazon` button elsewhere on my site
+Q: I'd like to add a `Amazon Pay` or `Login with Amazon` button elsewhere on my site
 -------------------------
 
 If you are wanting to add one of these buttons to a new location on your site you need to update the **XML** for the page you want to add it to.
@@ -24,9 +24,9 @@ In your theme directory, you would create:
 Here you are referencing the block **category.products** and then simply inserting the `Login with Amazon` button template into this block to be positioned after the block **category.products.list**
 
 
-Pay with Amazon
+Amazon Pay
 
-If you wish to add a `Pay with Amazon` button elsewhere in your store, you can follow the same process above, using a different template, like so.
+If you wish to add a `Amazon Pay` button elsewhere in your store, you can follow the same process above, using a different template, like so.
 
 
 .. code-block:: xml

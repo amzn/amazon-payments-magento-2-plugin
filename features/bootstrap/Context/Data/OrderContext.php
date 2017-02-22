@@ -231,7 +231,7 @@ class OrderContext implements SnippetAcceptingContext
             . $transaction->getTxnId()
             . ' for Order ID '
             . $order->getId()
-            . ' has been declined by Amazon Payments.',
+            . ' has been declined by Amazon Pay.',
             $notification->getDescription()
         );
     }

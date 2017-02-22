@@ -148,7 +148,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     protected function validateCurrency($code)
     {
         if ($this->coreHelper->getCurrencyCode() !== $code) {
-            throw new LocalizedException(__('The currency selected is not supported by Amazon payments'));
+            throw new LocalizedException(__('The currency selected is not supported by Amazon Pay'));
         }
     }
 

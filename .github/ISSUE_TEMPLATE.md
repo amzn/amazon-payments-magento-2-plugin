@@ -16,7 +16,7 @@
 
 * Magento version:
 * Magento Edition: Community / Enterprise / Enterprise Cloud
-* JavaScript Console: Please add a screenshot of the Chrome Javascript console to speed up the process
+* JavaScript Console: Please add a screenshot of the Chrome JavaScript console to speed up the process
 * Shop URL : <!-- if you are willing to share -->
 
 <!--

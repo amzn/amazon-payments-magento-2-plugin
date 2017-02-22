@@ -5,7 +5,7 @@
             <amazon_payment>
                 <active>1</active>
                 <is_gateway>1</is_gateway>
-                <title>Amazon Payments</title>
+                <title>Amazon Pay</title>
                 <sort_order>1</sort_order>
                 <model>Amazon\Payment\Model\Method\Amazon</model>
                 <order_status>pending_payment</order_status>

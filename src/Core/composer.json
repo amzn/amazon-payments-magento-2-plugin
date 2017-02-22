@@ -1,8 +1,8 @@
 {
-  "name": "amazon/module-core",
-  "description": "Shared functionality for Amazon Login and Amazon Payment modules",
+  "name": "amzn/amazon-pay-and-login-with-amazon-core-module",
+  "description": "Shared functionality for Amazon Pay and Login with Amazon modules",
   "type": "magento2-module",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "license": [
     "Apache-2.0"
   ],

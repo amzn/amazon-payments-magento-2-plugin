@@ -92,7 +92,7 @@ class ConfirmOrder implements ObserverInterface
         if ($this->categoryExclusionHelper->isQuoteDirty()) {
             throw new AmazonWebapiException(
                 __(
-                    'Unfortunately it is not possible to pay with Amazon for this order. Please choose another payment method.'
+                    'Unfortunately it is not possible to pay with Amazon Pay for this order. Please choose another payment method.'
                 ),
                 AmazonAuthorizationStatus::CODE_HARD_DECLINE,
                 AmazonWebapiException::HTTP_FORBIDDEN
