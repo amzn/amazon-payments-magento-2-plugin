@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Order &amp; payment workflow &mdash; Amazon Pay for Magento 2 1.0.0 documentation</title>
+  <title>Order &amp; payment workflow &mdash; Amazon Pay and Login with Amazon for Magento 2 1.1.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="Amazon Pay for Magento 2 1.0.0 documentation" href="index.html"/>
+    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 1.1.0 documentation" href="index.html"/>
         <link rel="next" title="Frontend Customisation" href="customisation.html"/>
         <link rel="prev" title="Login with Amazon" href="login.html"/> 
 
@@ -50,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
+            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2
           
 
           
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.1.0
               </div>
             
           
@@ -88,11 +88,12 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Order &amp; payment workflow</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#amazon-pay-button-button"><cite>Amazon Pay button</cite> button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#amazon-pay-button"><cite>Amazon Pay</cite> button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#placing-an-order">Placing an order</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#payment-authorization">Payment authorization</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#synchronous">Synchronous</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#asynchronous">Asynchronous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#synchronous-if-possible">Synchronous if possible</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#payment-capture">Payment capture</a></li>
@@ -115,7 +116,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">Amazon Pay for Magento 2</a>
+        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2</a>
       </nav>
 
 
@@ -148,8 +149,8 @@
             
   <div class="section" id="order-payment-workflow">
 <h1>Order &amp; payment workflow<a class="headerlink" href="#order-payment-workflow" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="amazon-pay-button-button">
-<h2><cite>Amazon Pay button</cite> button<a class="headerlink" href="#amazon-pay-button-button" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="amazon-pay-button">
+<h2><cite>Amazon Pay</cite> button<a class="headerlink" href="#amazon-pay-button" title="Permalink to this headline">¶</a></h2>
 <p>The <cite>Amazon Pay</cite> button appears in several places in the shop</p>
 <ul class="simple">
 <li>on the shipping step of checkout</li>
@@ -157,6 +158,7 @@
 <li>on the minibasket</li>
 <li>on product pages depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a></li>
 </ul>
+<img alt="_images/amazon-pay-button.png" src="_images/amazon-pay-button.png" />
 <p>Pressing the <cite>Amazon Pay</cite> button launches the Amazon authentication window, where the customer is asked for their Amazon user account credentials.</p>
 <img alt="_images/sign-in.png" src="_images/sign-in.png" />
 <p>After a successful login the customer is redirected to the checkout</p>
@@ -196,6 +198,10 @@
 <li><cite>Soft Decline</cite> - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised</li>
 <li><cite>Hard Decline</cite> - Authorization is closed, customer is emailed with instructions to contact the merchant</li>
 </ol>
+</div>
+<div class="section" id="synchronous-if-possible">
+<h3>Synchronous if possible<a class="headerlink" href="#synchronous-if-possible" title="Permalink to this headline">¶</a></h3>
+<p>The customer will get instant feedback for all final states of the authorization like with the synchrnonous authorization while the customer benefits form the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with an asynchronous authorization, the module automatically takes care of the situation.</p>
 </div>
 </div>
 <div class="section" id="payment-capture">
@@ -247,7 +253,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Amazon.
+        &copy; Copyright 2017, Amazon.com Inc or its affiliates.
 
     </p>
   </div>
@@ -269,7 +275,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0.0',
+            VERSION:'1.1.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Prerequisites &mdash; Amazon Pay for Magento 2 1.0.0 documentation</title>
+  <title>Prerequisites &mdash; Amazon Pay and Login with Amazon for Magento 2 1.1.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="Amazon Pay for Magento 2 1.0.0 documentation" href="index.html"/>
+    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 1.1.0 documentation" href="index.html"/>
         <link rel="next" title="Installation" href="installation.html"/>
         <link rel="prev" title="Overview" href="overview.html"/> 
 
@@ -50,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
+            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2
           
 
           
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.1.0
               </div>
             
           
@@ -86,7 +86,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Prerequisites</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#system-requirements">System requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#amazon-pay-and-login-with-amazon-account-setup"><strong>Amazon Pay and Login with Amazon</strong> account setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#registering-an-amazon-pay-account">Registering an Amazon Pay Account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#registering-an-amazon-payments-merchant-account">Registering an Amazon Payments merchant Account</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#entering-identity-data-in-seller-central">Entering identity data in Seller Central</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#verification-process-verification-of-all-given-information-by-amazon-pay">Verification Process / Verification of all given information by Amazon Pay</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#registering-application-for-login-with-amazon-service">Registering application for Login with Amazon service</a><ul>
@@ -119,7 +119,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">Amazon Pay for Magento 2</a>
+        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2</a>
       </nav>
 
 
@@ -154,18 +154,18 @@
 <h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="system-requirements">
 <h2>System requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
-<p><strong>Amazon Pay and Login with Amazon</strong> Magento extension requires you to have a valid <strong>Amazon Pay and Login with Amazon</strong> account (refer to the <a class="reference internal" href="#prerequisites-amazon-account-setup"><span class="std std-ref">Amazon Pay and Login with Amazon account setup</span></a> if you don&#8217;t have one yet) and a webserver running a Magento 2 store instance with following conditions met:</p>
+<p>+The <strong>Amazon Pay and Login with Amazon</strong> Magento 2 extension requires you to have a valid <strong>Amazon Payments</strong> merchant account (refer to the <a class="reference internal" href="#prerequisites-amazon-account-setup"><span class="std std-ref">Amazon Pay and Login with Amazon account setup</span></a> if you don&#8217;t have one yet) and a webserver running a Magento 2 store instance with following conditions met:</p>
 <ul class="simple">
-<li>Magento CE (2.1.0)</li>
+<li>Magento CE (2.1.0 or higher)</li>
 <li>cURL for PHP</li>
 <li>DOM / XML for PHP</li>
-<li>valid SSL certificate (for <strong>Login with Amazon</strong> and / or IPN handling)</li>
+<li>valid SSL certificate</li>
 </ul>
 </div>
 <div class="section" id="amazon-pay-and-login-with-amazon-account-setup">
 <span id="prerequisites-amazon-account-setup"></span><h2><strong>Amazon Pay and Login with Amazon</strong> account setup<a class="headerlink" href="#amazon-pay-and-login-with-amazon-account-setup" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="registering-an-amazon-pay-account">
-<h3>Registering an Amazon Pay Account<a class="headerlink" href="#registering-an-amazon-pay-account" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="registering-an-amazon-payments-merchant-account">
+<h3>Registering an Amazon Payments merchant Account<a class="headerlink" href="#registering-an-amazon-payments-merchant-account" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Go to:<ul>
 <li>DE merchants: <a class="reference external" href="https://pay.amazon.com/de/signup">https://pay.amazon.com/de/signup</a></li>
@@ -176,12 +176,12 @@
 <li>ES merchants: <a class="reference external" href="https://pay.amazon.com/us/signup">https://pay.amazon.com/es/signup</a></li>
 </ul>
 </li>
-<li>Click <span class="menuselection">Sign Up ‣ I&#8217;m a merchant</span></li>
+<li>Fill in the details and click <span class="menuselection">Submit</span></li>
 </ul>
 <img alt="_images/prerequisites_screenshot_1.png" src="_images/prerequisites_screenshot_1.png" />
 <ul class="simple">
 <li>Go through the questionnaire to find out if you qualify for using Amazon Pay, then click <cite>Sign up now</cite></li>
-<li>At the moment you cannot add your <strong>Amazon Pay</strong> account to an existing Amazon merchant account. You have to register a new account specifically for Amazon Pay.</li>
+<li>At the moment you cannot add your <strong>Amazon Payments</strong> merchant account to an existing Amazon seller account. You have to register a new account specifically for Amazon Pay.</li>
 <li>Start registering a new account:<ul>
 <li>If you see the link <cite>Would you like to create a new account using a different e-mail address? Click here</cite>, please do so.</li>
 <li>Enter a name for your business. In case this name is already taken, please choose a different one.</li>
@@ -291,7 +291,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Amazon.
+        &copy; Copyright 2017, Amazon.com Inc or its affiliates.
 
     </p>
   </div>
@@ -313,7 +313,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0.0',
+            VERSION:'1.1.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
