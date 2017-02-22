@@ -1,3 +1,4 @@
 vendor/
 bin/
 auth.json
+docs/_build/
