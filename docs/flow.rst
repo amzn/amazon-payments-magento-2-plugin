@@ -1,7 +1,7 @@
 Order & payment workflow
 ========================
 
-`Amazon Pay button` button
+`Amazon Pay` button
 --------------------------
 The `Amazon Pay` button appears in several places in the shop
 
@@ -9,6 +9,9 @@ The `Amazon Pay` button appears in several places in the shop
 * on the cart page
 * on the minibasket
 * on product pages depending on :doc:`configuration`
+
+.. image:: /images/amazon-pay-button.png
+
 Pressing the `Amazon Pay` button launches the Amazon authentication window, where the customer is asked for their Amazon user account credentials.
 
 .. image:: /images/sign-in.png
@@ -54,6 +57,11 @@ A status update on the state of the authorization will be delivered by IPN or Cr
 1. `Authorization OK` - Order moves to state `Processing`
 2. `Soft Decline` - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised
 3. `Hard Decline` - Authorization is closed, customer is emailed with instructions to contact the merchant
+
+Synchronous if possible 
+'''''''''''''''''''''''
+The customer will get instant feedback for all final states of the authorization like with the synchrnonous authorization while the customer benefits form the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with an asynchronous authorization, the module automatically takes care of the situation.
+
 
 Payment capture
 ---------------
