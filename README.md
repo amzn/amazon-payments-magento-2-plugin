@@ -15,7 +15,7 @@
 * Magento 2.1+
     * [Magento 2 System Requirements](http://devdocs.magento.com/guides/v2.0/install-gde/system-requirements.html)
 * SSL is installed on your site and active on Checkout and Login pages
-* A verified Amazon Pay account
+* A verified Amazon Payments merchant account
 
 ## Installation and Configuration
 
