@@ -23,16 +23,18 @@ class IpnUrl extends BaseField
 {
     protected function _renderValue(AbstractElement $element)
     {
-        $value = '';
-        $store = $this->_storeManager->getStore($this->getRequest()->getParam('store', 0));
+        $stores = $this->_storeManager->getStores();
+        $valueReturn = '';
 
-        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
-
-        if ($baseUrl) {
-            $value = $baseUrl . 'amazonpayments/payment/ipn/';
+        foreach ($stores as $store) {
+            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+            if ($baseUrl) {
+                $value = $baseUrl . 'amazonpayments/payment/ipn/';
+                $valueReturn .= "<div>".$value."</div>";
+            }
         }
 
-        return '<td class="value">' . $value . '</td>';
+        return '<td class="value">' . $valueReturn . '</td>';
     }
 
     protected function _renderInheritCheckbox(AbstractElement $element)
