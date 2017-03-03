@@ -48,7 +48,8 @@ define(
             },
             options: {
                 sellerId: window.amazonPayment.merchantId,
-                addressWidgetDOMId: 'addressBookWidgetDiv'
+                addressWidgetDOMId: 'addressBookWidgetDiv',
+                widgetScope: window.amazonPayment.loginScope
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
@@ -70,6 +71,7 @@ define(
             renderAddressWidget: function () {
                 new OffAmazonPayments.Widgets.AddressBook({
                     sellerId: self.options.sellerId,
+                    scope: self.options.widgetScope,
                     onOrderReferenceCreate: function (orderReference) {
                         var orderid = orderReference.getAmazonOrderReferenceId();
                         amazonStorage.setOrderReference(orderid);

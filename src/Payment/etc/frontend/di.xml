@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="Amazon\Payment\Model\Config" type="Magento\Payment\Gateway\Config\Config">
+    <type name="Amazon\Payment\Block\Minicart\Button">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Amazon\Payment\Model\Method\Amazon::PAYMENT_METHOD_CODE</argument>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Amazon_Payment::minicart-button.phtml</item>
+                <item name="alias" xsi:type="string">amazon.button.mini-cart</item>
+            </argument>
+            <argument name="payment" xsi:type="object">Amazon\Payment\Model\Method\Amazon</argument>
         </arguments>
-    </virtualType>
+    </type>
 </config>

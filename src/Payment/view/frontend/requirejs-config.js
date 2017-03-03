@@ -25,5 +25,12 @@ var config = {
             //this is a fix for Magento 2.1 (ajax / validation fails on add to cart)
             catalogAddToCart: 'Amazon_Payment/js/catalog-add-to-cart'
         }
+    },
+    config: {
+        mixins: {
+            'Amazon_Payment/js/action/place-order': {
+                'Amazon_Payment/js/model/place-order-mixin': true
+            }
+        }
     }
 };

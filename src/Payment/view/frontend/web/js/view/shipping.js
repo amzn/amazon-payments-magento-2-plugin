@@ -65,7 +65,7 @@ define(
                 return $(loginFormSelector + ' input[type=email]').valid();
             },
             /**
-             * New setShipping Action for Amazon payments to bypass validation
+             * New setShipping Action for Amazon Pay to bypass validation
              */
             setShippingInformation: function () {
                 function setShippingInformationAmazon()

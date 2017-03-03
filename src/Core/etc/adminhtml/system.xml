@@ -3,7 +3,7 @@
     <system>
         <section id="payment">
             <group id="amazon_payment" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Amazon Payments</label>
+                <label>Amazon Pay</label>
                 <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>General</label>
                     <group id="credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -46,11 +46,11 @@
                             <config_path>payment/amazon_payment/sandbox</config_path>
                         </field>
                         <field id="js_origin" translate="label" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Javascript Origin</label>
+                            <label>Allowed Javascript Origins</label>
                             <frontend_model>Amazon\Core\Block\Adminhtml\Form\Field\JsOrigin</frontend_model>
                         </field>
                         <field id="redirect_url" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Redirect URL</label>
+                            <label>Allowed Return URLs</label>
                             <frontend_model>Amazon\Core\Block\Adminhtml\Form\Field\RedirectUrl</frontend_model>
                         </field>
                         <field id="ipn_url" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -61,7 +61,7 @@
                     <group id="options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Options</label>
                         <field id="pwa_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Enable Pay with Amazon</label>
+                            <label>Enable Amazon Pay</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/pwa_enabled</config_path>
                         </field>
@@ -86,7 +86,7 @@
                             <config_path>payment/amazon_payment/update_mechanism</config_path>
                         </field>
                         <field id="pwa_pp_button_is_visible" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Pay With Amazon button is visible on Product Page</label>
+                            <label>Amazon Pay button is visible on Product Page</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/pwa_pp_button_is_visible</config_path>
                         </field>
@@ -138,7 +138,7 @@
                         <field id="excluded_categories" translate="label comment" type="Amazon\Core\Block\Adminhtml\Form\Field\CategoryMultiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Excluded Categories</label>
                             <config_path>payment/amazon_payment/excluded_categories</config_path>
-                            <comment><![CDATA[The "Pay with Amazon" button will not be available for products of the selected categories.]]></comment>
+                            <comment><![CDATA[The "Amazon Pay " button will not be available for products of the selected categories.]]></comment>
                         </field>
                     </group>
                     <group id="developer_options" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -150,7 +150,7 @@
                         </field>
                         <field id="allowed_ips" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allowed IPs</label>
-                            <comment><![CDATA[Comma separated. The "Login with Amazon" and "Pay with Amazon" buttons will <em>only</em> be rendered for clients having the above IPs.
+                            <comment><![CDATA[Comma separated. The "Login with Amazon" and "Amazon Pay" buttons will <em>only</em> be rendered for clients having the above IPs.
                             If the field is empty, the buttons will be visible to all clients.]]></comment>
                             <config_path>payment/amazon_payment/allowed_ips</config_path>
                             <backend_model>Magento\Developer\Model\Config\Backend\AllowedIps</backend_model>

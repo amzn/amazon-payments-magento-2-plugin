@@ -128,7 +128,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                     'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
                     'Plugin Version : ' . $this->paymentHelper->getModuleVersion()
                 ,
-                'platform_id'               => $this->coreHelper->getMerchantId(ScopeInterface::SCOPE_STORE, $storeId)
+                'platform_id'               => 'A2ZAYEJU54T1BM'
             ];
 
             $responseParser = $this->clientFactory->create($storeId)->setOrderReferenceDetails($data);
@@ -148,7 +148,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     protected function validateCurrency($code)
     {
         if ($this->coreHelper->getCurrencyCode() !== $code) {
-            throw new LocalizedException(__('The currency selected is not supported by Amazon payments'));
+            throw new LocalizedException(__('The currency selected is not supported by Amazon Pay'));
         }
     }
 

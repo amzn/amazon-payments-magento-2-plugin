@@ -1,5 +1,4 @@
 vendor/
 bin/
 auth.json
-
-.github/*
+docs/_build/

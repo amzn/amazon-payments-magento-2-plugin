@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,11 +13,17 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <body>
-        <referenceContainer name="checkout.cart.methods">
-            <block class="Amazon\Payment\Block\PaymentLink" name="checkout.cart.methods.amazon" after="checkout.cart.methods.onepage.bottom" template="Amazon_Payment::payment-link.phtml" />
-        </referenceContainer>
-    </body>
-</page>
+
+namespace Amazon\Payment\Helper\Shortcut;
+
+interface ValidatorInterface
+{
+    /**
+     * Validates shortcut
+     *
+     * @param string $code
+     * @param bool $isInCatalog
+     * @return bool
+     */
+    public function validate($code, $isInCatalog);
+}

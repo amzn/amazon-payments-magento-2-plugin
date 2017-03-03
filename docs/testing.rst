@@ -5,9 +5,9 @@ After a successful configuration, you should test your installation. Only after 
 
 These tests should cover the different workflows that you encounter while processing orders. Include the standard process like receiving an order, invoicing, shipment and alternative processes like refunding orders. Verify that all objects in your Magento admin are in the expected status and you correctly received all order information including the shipping address, contact details and the billing address (if applicable).
 
-Next you should test also declines. You can use the Sandbox Toolbox to simulate soft and hard declines of authorizations. After your testing verify the log files to make sure no exceptions have occurred.
+Next you should test also declines. You can use the sandbox Toolbox to simulate soft and hard declines of authorizations. After your testing verify the log files to make sure no exceptions have occurred.
 
-To receive the complete testing scenarios contact Amazon Payments.
+To receive the complete testing scenarios contact Amazon Pay.
 
 How to create Sandbox test account
 ----------------------------------
