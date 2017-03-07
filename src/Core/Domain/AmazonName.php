@@ -34,6 +34,7 @@ class AmazonName
      */
     public function __construct($name)
     {
+        $name            = mb_convert_kana($name, 's', 'utf-8');
         $nameParts       = explode(' ', trim($name), 2);
         $this->firstName = $nameParts[0];
         $this->lastName  = isset($nameParts[1]) ? $nameParts[1] : '.';
