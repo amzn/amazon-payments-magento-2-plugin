@@ -610,6 +610,20 @@ class Data extends AbstractHelper
     }
 
     /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
+    public function allowAmLoginLoading($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            'customer/startup/amazon_login_in_popup',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /**
      * @param string      $scope
      * @param null|string $scopeCode
      *

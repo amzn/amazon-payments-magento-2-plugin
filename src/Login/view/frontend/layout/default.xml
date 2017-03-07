@@ -24,7 +24,7 @@
                         <item name="authenticationPopup" xsi:type="array">
                             <item name="children" xsi:type="array">
                                 <item name="amazon-button" xsi:type="array">
-                                    <item name="component" xsi:type="string">Amazon_Login/js/view/login-button</item>
+                                    <item name="component" xsi:type="string">Amazon_Login/js/view/login-button-wrapper</item>
                                     <item name="sortOrder" xsi:type="string">0</item>
                                     <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
                                     <item name="config" xsi:type="array">
