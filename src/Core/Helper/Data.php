@@ -614,6 +614,16 @@ class Data extends AbstractHelper
      * @param null $scopeCode
      * @return bool
      */
+    public function isPayButtonAvailableInMinicart($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->isSetFlag('payment/amazon_payment/minicart_button_is_visible', $scope, $scopeCode);
+    }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
     public function allowAmLoginLoading($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->scopeConfig->isSetFlag(
