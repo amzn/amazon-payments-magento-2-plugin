@@ -14,7 +14,7 @@ System requirements
 .. _prerequisites-amazon-account-setup:
 
 **Amazon Pay and Login with Amazon** account setup
--------------------------------------------
+--------------------------------------------------
 
 
 Registering an Amazon Payments merchant Account
