@@ -18,7 +18,8 @@ define([
     'ko',
     'amazonPaymentConfig',
     'amazonWidgetsLoader',
-    'bluebird'
+    'bluebird',
+    'jquery/jquery-storageapi'
 ], function ($, ko, amazonPaymentConfig) {
     "use strict";
 
