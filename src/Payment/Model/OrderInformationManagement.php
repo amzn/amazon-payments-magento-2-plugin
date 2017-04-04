@@ -118,12 +118,17 @@ class OrderInformationManagement implements OrderInformationManagementInterface
 
             $this->setReservedOrderId($quote);
 
+            $storeName = $this->coreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $storeId);
+            if (!$storeName) {
+                $storeName = $quote->getStore()->getName();
+            }
+
             $data = [
                 'amazon_order_reference_id' => $amazonOrderReferenceId,
                 'amount'                    => $quote->getGrandTotal(),
                 'currency_code'             => $quote->getQuoteCurrencyCode(),
                 'seller_order_id'           => $quote->getReservedOrderId(),
-                'store_name'                => $quote->getStore()->getName(),
+                'store_name'                => $storeName,
                 'custom_information'        =>
                     'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
                     'Plugin Version : ' . $this->paymentHelper->getModuleVersion()
