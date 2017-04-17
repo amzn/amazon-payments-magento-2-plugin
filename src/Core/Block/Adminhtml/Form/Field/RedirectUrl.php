@@ -23,16 +23,24 @@ class RedirectUrl extends BaseField
 {
     protected function _renderValue(AbstractElement $element)
     {
-        $value = '';
-        $store = $this->_storeManager->getStore($this->getRequest()->getParam('store', 0));
+        $stores = $this->_storeManager->getStores();
+        $valueReturn = '';
+        $urlArray = array();
 
-        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
-
-        if ($baseUrl) {
-            $value = $baseUrl . 'amazon/login/processAuthHash/';
+        foreach ($stores as $store) {
+            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+            if ($baseUrl) {
+                $value = $baseUrl . 'amazon/login/processAuthHash/';
+                $urlArray[] = "<div>".$value."</div>";
+            }
         }
 
-        return '<td class="value">' . $value . '</td>';
+        $urlArray = array_unique($urlArray);
+        foreach ($urlArray as $uniqueUrl) {
+            $valueReturn .= "<div>".$uniqueUrl."</div>";
+        }
+
+        return '<td class="value">' . $valueReturn . '</td>';
     }
 
     protected function _renderInheritCheckbox(AbstractElement $element)
