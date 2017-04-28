@@ -143,6 +143,7 @@ class Authorize extends Action
                     'id'    => $userInfo['user_id'],
                     'email' => $userInfo['email'],
                     'name'  => $userInfo['name'],
+                    'country' => $this->amazonCoreHelper->getRegion()
                 ]);
 
                 $processed = $this->processAmazonCustomer($amazonCustomer);
