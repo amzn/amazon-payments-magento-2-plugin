@@ -57,6 +57,7 @@ class CheckoutValidator implements ValidatorInterface
      */
     public function validate($code, $isInCatalog)
     {
+        return false;
         return $this->_shortcutValidator->isContextAvailable($code, $isInCatalog)
             && $this->_shortcutValidator->isPriceOrSetAvailable($isInCatalog)
             && $this->isMethodQuoteAvailable($code, $isInCatalog)
