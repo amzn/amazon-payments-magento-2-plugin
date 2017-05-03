@@ -25,9 +25,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
-        $output .= 'Amazon Core version: ' . $this->getVersion(self::MODULE_AMAZON_CORE) . '<br style="display:inherit;" />';
-        $output .= 'Amazon Login version: ' . $this->getVersion(self::MODULE_AMAZON_LOGIN) . '<br style="display:inherit;"  />';
-        $output .= 'Amazon Payment version: ' . $this->getVersion(self::MODULE_AMAZON_PAYMENT);
+        $output .= 'Extension version: ' . $this->getVersion(self::MODULE_AMAZON_CORE);
         $output .= "</div>";
          return $output;
     }
