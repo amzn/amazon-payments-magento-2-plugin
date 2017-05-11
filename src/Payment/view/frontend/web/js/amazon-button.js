@@ -21,7 +21,7 @@ define([
     'modernizr/modernizr',
     'amazonCore',
     'jquery/ui'
-], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf) {
+], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf, mdrnzr) {
     "use strict";
 
     var _this,
@@ -79,7 +79,7 @@ define([
         },
         usePopUp: function () {
             //always use redirect journey on product page and touch devices
-            return ((window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view')) && !Modernizr.touch);
+            return ((window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view')) && !mdrnzr.touch);
         },
         /**
          * onAmazonPaymentsReady
