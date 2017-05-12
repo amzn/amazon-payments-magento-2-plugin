@@ -77,11 +77,6 @@ class CategoryExclusion extends AbstractHelper
      */
     public function isQuoteDirty()
     {
-        // Quote is 0 or less
-        if ($this->quote->getGrandTotal() <= 0) {
-            return true;
-        }
-
         if (!empty($this->getExcludedCategories())) {
             /** @var \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem */
             foreach ($this->quote->getAllItems() as $quoteItem) {
