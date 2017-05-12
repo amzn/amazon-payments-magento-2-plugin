@@ -77,9 +77,18 @@ define([
         _popupCallback: function () {
             return _this.usePopUp() ? _this.secureHttpsCallback : amazonPaymentConfig.getValue('oAuthHashRedirectUrl');
         },
+        /**
+         * Are touch events available
+         * (Supports both v2 and v3 Modernizr)
+         * @returns {Boolean}
+         * @private
+         */
+        _touchSupported: function () {
+            return Modernizr.touch !== undefined ? Modernizr.touch : Modernizr.touchevents;
+        },
         usePopUp: function () {
             //always use redirect journey on product page and touch devices
-            return ((window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view')) && !Modernizr.touch);
+            return ((window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view')) && !_this._touchSupported());
         },
         /**
          * onAmazonPaymentsReady
