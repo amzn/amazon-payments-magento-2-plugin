@@ -63,7 +63,9 @@ class AmazonAddress
      */
     public function __construct(array $address, AmazonNameFactory $addressNameFactory)
     {
-        $this->name = $addressNameFactory->create(['name' => $address['Name']]);
+        $this->name = $addressNameFactory->create(['name' => $address['Name'],
+                                                   'country' => $address['CountryCode']
+                                                  ]);
 
         $this->lines = [];
 
