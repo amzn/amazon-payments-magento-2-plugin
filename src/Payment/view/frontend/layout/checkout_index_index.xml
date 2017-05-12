@@ -40,6 +40,7 @@
                     <item name="components" xsi:type="array">
                         <item name="checkout" xsi:type="array">
                             <item name="children" xsi:type="array">
+                                <!--
                                 <item name="amazon-payment-notification" xsi:type="array">
                                     <item name="component" xsi:type="string">Amazon_Payment/js/view/notification</item>
                                     <item name="displayArea" xsi:type="string">messages</item>
@@ -47,6 +48,7 @@
                                         <item name="message" xsi:type="string" translate="true">Your card will be charged on completion of this order.</item>
                                     </item>
                                 </item>
+                                -->
                                 <item name="steps" xsi:type="array">
                                     <item name="children" xsi:type="array">
                                         <item name="shipping-step" xsi:type="array">

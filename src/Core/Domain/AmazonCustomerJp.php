@@ -1,4 +1,4 @@
-<!--
+<?php
 /**
  * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13,12 +13,22 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
+namespace Amazon\Core\Domain;
 
-<!-- ko if: (isAmazonAccountLoggedIn) -->
-    <!-- ko if: (chargeOnOrder) -->
-        <!-- ko if: (isEuPaymentRegion) -->
-            <div class="message success"><span data-bind="text: message"></span></div>
-        <!-- /ko -->
-    <!-- /ko -->
-<!-- /ko -->
+class AmazonCustomerJp extends AmazonCustomer
+{
+    /**
+     * AmazonCustomer constructor.
+     *
+     * @param string $id
+     * @param string $email
+     * @param string $name
+     */
+    public function __construct($id, $email, $name)
+    {
+        $this->id    = $id;
+        $this->email = $email;
+        $this->name = new AmazonNameJp($name);
+    }
+
+}

@@ -74,10 +74,17 @@ class Email extends AbstractHelper
             $order->getStoreId()
         );
 
+        $storeName = $this->coreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
+        if (!$storeName) {
+            $storeName = $this->coreHelper->getStoreFrontName($order->getStoreId());
+        }
+
         $vars = [
             'amazonAccountUrl' => $this->amazonCoreHelper
                                        ->getAmazonAccountUrlByPaymentRegion($paymentRegionByOrderStore),
+            'storeName' => $storeName,
         ];
+
         $emailTransportBuilder->setTemplateVars($vars);
 
         $emailTransportBuilder->getTransport()->sendMessage();
@@ -92,6 +99,11 @@ class Email extends AbstractHelper
     {
         $emailTransportBuilder = $this->emailTransportBuilderFactory->create();
 
+        $storeName = $this->coreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
+        if (!$storeName) {
+            $storeName = $this->coreHelper->getStoreFrontName($order->getStoreId());
+        }
+
         $emailTransportBuilder->addTo($order->getCustomerEmail(), $order->getCustomerName());
         $emailTransportBuilder->setFrom('general');
         $emailTransportBuilder->setTemplateIdentifier('amazon_payments_auth_hard_decline');
@@ -101,7 +113,12 @@ class Email extends AbstractHelper
                 'store' => $order->getStoreId()
             ]
         );
-        $emailTransportBuilder->setTemplateVars([]);
+
+        $vars = [
+            'storeName' => $storeName,
+        ];
+
+        $emailTransportBuilder->setTemplateVars($vars);
         $emailTransportBuilder->getTransport()->sendMessage();
     }
 }
