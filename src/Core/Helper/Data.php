@@ -472,6 +472,26 @@ class Data extends AbstractHelper
     /*
      * @return string
      */
+    public function getStoreName($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/storename',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /*
+     * @return string
+     */
+    public function getStoreFrontName($storeId)
+    {
+        return $this->storeManager->getStore($storeId)->getName();
+    }
+
+    /*
+     * @return string
+     */
     public function getRedirectUrl()
     {
         $urlPath = $this->isLwaEnabled() ? 'amazon/login/authorize' : 'amazon/login/guest';

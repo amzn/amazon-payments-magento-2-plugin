@@ -122,6 +122,10 @@
                             <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
                             <config_path>payment/amazon_payment/new_order_status</config_path>
                         </field>
+                        <field id="storename" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
+                            <label>Store Name</label>
+                            <config_path>payment/amazon_payment/storename</config_path>
+                        </field>
                     </group>
                     <group id="sales_exclusions" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sales Exclusions</label>
