@@ -38,7 +38,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
-        $output .= __('Extension version') . ': ' . $this->getVersion(self::MODULE_AMAZON_CORE);
+        $output .= __('Module version') . ': ' . $this->getVersion(self::MODULE_AMAZON_CORE);
         $output .= "</div>";
          return $output;
     }
@@ -53,7 +53,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
         if ($version && isset($version['setup_version'])) {
             return $version['setup_version'];
         } else {
-            return __('Missing!');
+            return __('--');
         }
     }
 }
