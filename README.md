@@ -13,7 +13,7 @@
 
 ## Pre-Requisites
 * Magento 2.1+
-    * [Magento 2 System Requirements](http://devdocs.magento.com/guides/v2.0/install-gde/system-requirements.html)
+    * [Magento 2 System Requirements](http://devdocs.magento.com/magento-system-requirements.html)
 * SSL is installed on your site and active on Checkout and Login pages
 * A verified Amazon Payments merchant account
 
@@ -22,6 +22,21 @@
 Please follow the instructions in the [User Guide] (https://amzn.github.io/amazon-payments-magento-2-plugin)
 
 ## Release Notes
+### v1.1.1 stability
+#### Enhancements:
+        * Display the module version in the admin html
+        * Support for Modernizr 3.x
+        * Added extended support for japanese names
+        * Removed disturbing message for charge on order
+        * Configuration option to supply the store name added
+
+#### Bug Fixes:
+        * Order handling for free orders corrected
+        * Fixed incompatibility on CompleteOrder
+        * Displayed URLs did not take the store-view configured domain into account
+        * Removed unneeded CSS and layout
+        * jQuery storage API not always present
+
 ### v1.1.0 Rebrand
 #### Enhancements:
         * This release does not add any new features
