@@ -51,6 +51,12 @@ class ShippingInformationManagement
         $return = $proceed($cartId, $shippingInformation);
 
         $quote                  = $this->cartRepository->getActive($cartId);
+
+        /* Grand total is 0, skip rest of the plugin */
+        if ($quote->getGrandTotal() <= 0) {
+            return $return;
+        }
+
         $amazonOrderReferenceId = $quote->getExtensionAttributes()->getAmazonOrderReferenceId();
 
         if ($amazonOrderReferenceId) {
