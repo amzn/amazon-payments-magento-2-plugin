@@ -67,3 +67,5 @@ Logging,Logging
 "Comma separated. The ""Login with Amazon"" and ""Amazon Pay"" buttons will <em>only</em> be rendered for clients having the above IPs.
                             If the field is empty, the buttons will be visible to all clients.","Comma separated. The ""Login with Amazon"" and ""Amazon Pay"" buttons will <em>only</em> be rendered for clients having the above IPs.
                             If the field is empty, the buttons will be visible to all clients."
+"Module version","Module version"
+"--","--"

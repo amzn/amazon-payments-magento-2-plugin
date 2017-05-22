@@ -67,3 +67,5 @@
 "Comma separated. The ""Login with Amazon"" and ""Amazon Pay"" buttons will <em>only</em> be rendered for clients having the above IPs.
                             If the field is empty, the buttons will be visible to all clients.","Kommagetrennt. ""Login mit Amazon"" und ""Amazon Pay"" sind <em>nur<em/> für Kunden mit den oben aufgeführten IPs verfügbar.
                             Wenn das Feld leer ist, sind die Schaltflächen für alle Clients sichtbar."
+"Module version","Modulversion"
+"--","--"
