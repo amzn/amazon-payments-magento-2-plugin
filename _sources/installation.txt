@@ -8,7 +8,7 @@ Pre-installation steps
 Installation process
 --------------------
 Currently, the installation via the web setup wizard is the preferred way of installing the extension.
-Please follow this guide_ to learm how this works.
+Please follow this guide_ to learn how this works.
 
 .. _guide: http://docs.magento.com/marketplace/user_guide/quick-tour/install-extension.html
 
