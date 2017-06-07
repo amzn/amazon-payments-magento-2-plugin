@@ -19,7 +19,7 @@
 
 ## Installation and Configuration
 
-Please follow the instructions in the [User Guide] (https://amzn.github.io/amazon-payments-magento-2-plugin)
+Please follow the instructions in the [User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin)
 
 ## Release Notes
 ### v1.1.1 stability
