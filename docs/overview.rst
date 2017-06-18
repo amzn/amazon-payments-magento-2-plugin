@@ -20,6 +20,9 @@ Extension features
 Getting the extension
 ---------------------
 
-TBC
+The extension can be installed using the following methods:
+
+* Preferred Method - From the Magento Marketplace using the Web Setup Wizard
+* Manually using composer from the command line
 
 Refer to the :doc:`installation` section to get more details concerning installation procedure.
