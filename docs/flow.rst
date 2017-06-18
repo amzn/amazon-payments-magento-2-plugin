@@ -60,16 +60,16 @@ A status update on the state of the authorization will be delivered by IPN or Cr
 
 Synchronous if possible 
 '''''''''''''''''''''''
-The customer will get instant feedback for all final states of the authorization like with the synchrnonous authorization while the customer benefits form the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with an asynchronous authorization, the module automatically takes care of the situation.
+The customer will get instant feedback for all final states of the authorization like with the synchronous authorization while the customer benefits from the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with the asynchronous workflow, the module automatically requests an asynchronous authorization and optimistically shows the customer the order confirmation page.
 
 
 Payment capture
 ---------------
-Orders placed when in `Charge on Order` mode will automatically be captured. For orders placed using `Charge on Shipment` you will need to raise an invoice. To do this, the following steps are required:
+Orders placed with `Charge on Order` mode enabled will automatically be captured. For orders placed using `Charge on Shipment` you will need to raise an invoice. To do this, the following steps are required:
 
-1. Login to the Magento 2 admin
+1. Log in to the Magento 2 admin
 2. Open the order for which you want to capture payment and click the `Invoice` link located in the top row. Please make sure that the payment you want to capture has an open authorization transaction and is in the `Processing` state.
-3. Submit the invoice form ensuring the `Capture Online` option above the `Submit Invoice` button is selected
+3. Submit the invoice form ensuring the `Capture Online` option above the `Submit Invoice` button is selected.
 
 .. warning:: It is vital that `Capture Online` is selected as otherwise Amazon Pay will not be instructed to capture the payment, resulting in you not receiving any funds.
 
@@ -80,15 +80,15 @@ Payment refund
 --------------
 The order, which payment has been captured for, can be refunded either fully or partially. Refunds are made against invoices and thus having a paid invoice assigned to the order is a necessary condition that has to be met to refund any order item. 
 
-Refunds in Magento 2 are recorded as credit memos, so for requesting a refund with Amazon Pay you should create a credit memo first. To create a credit memo login to the Magento 2 admin, open the order you want refund, click `Invoices` tab on the left, select an invoice you want to refund and click on it.
+Refunds in Magento 2 are recorded as credit memos. To request a refund with Amazon Pay, you simply need to create a credit memo. To create a credit memo, login to the Magento 2 admin, open the order you want refund, click the `Invoices` tab on the left, select an invoice you want to refund and click on it.
 
 A preview of the selected invoice will appear. Make sure that you are on the single invoice preview page and click the `Credit Memo` button.
 
 A new credit memo form will appear with most of the crucial data (like product quantities to be refunded) already filled in. 
 
-If you want to refund the invoice partially (i.e. only a part of the invoiced items) adjust the product quantities to be refunded (set 0 for items that shall not be refunded) and click `Update Qty's` button to update refund totals. You can also set the refunded items back to stock by checking `Return to Stock` checkbox. 
+If you want to refund the invoice partially (i.e. only a part of the invoiced items) adjust the product quantities to be refunded (set 0 for items that shall not be refunded) and click the `Update Qty's` button to update refund totals. You can also set the refunded items back to stock by checking `Return to Stock` checkbox. 
 
-Next choose if you want to refund shipping costs or apply any refund adjustments and fill in the appropriate fields. Before submitting the credit memo form, double check that you have `Refund` button available and click it. A credit memo will be created and a refund will be requested with Amazon Pay.
+Next choose if you want to refund shipping costs or apply any refund adjustments and fill in the appropriate fields. Before submitting the credit memo form, double check that you have the `Refund` button available and click it. A credit memo will be created and a refund will be requested with Amazon Pay.
 
 Refunds will always be initially accepted as the vast majority of the time there will be no issue. However, if there is a problem after the refund has been issued, a notification will be added to Magento 2 to make you aware there has been a problem refunding the customer.
 
