@@ -201,16 +201,16 @@
 </div>
 <div class="section" id="synchronous-if-possible">
 <h3>Synchronous if possible<a class="headerlink" href="#synchronous-if-possible" title="Permalink to this headline">¶</a></h3>
-<p>The customer will get instant feedback for all final states of the authorization like with the synchrnonous authorization while the customer benefits form the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with an asynchronous authorization, the module automatically takes care of the situation.</p>
+<p>The customer will get instant feedback for all final states of the authorization like with the synchronous authorization while the customer benefits from the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with the asynchronous workflow, the module automatically requests an asynchronous authorization and optimistically shows the customer the order confirmation page.</p>
 </div>
 </div>
 <div class="section" id="payment-capture">
 <h2>Payment capture<a class="headerlink" href="#payment-capture" title="Permalink to this headline">¶</a></h2>
-<p>Orders placed when in <cite>Charge on Order</cite> mode will automatically be captured. For orders placed using <cite>Charge on Shipment</cite> you will need to raise an invoice. To do this, the following steps are required:</p>
+<p>Orders placed with <cite>Charge on Order</cite> mode enabled will automatically be captured. For orders placed using <cite>Charge on Shipment</cite> you will need to raise an invoice. To do this, the following steps are required:</p>
 <ol class="arabic simple">
-<li>Login to the Magento 2 admin</li>
+<li>Log in to the Magento 2 admin</li>
 <li>Open the order for which you want to capture payment and click the <cite>Invoice</cite> link located in the top row. Please make sure that the payment you want to capture has an open authorization transaction and is in the <cite>Processing</cite> state.</li>
-<li>Submit the invoice form ensuring the <cite>Capture Online</cite> option above the <cite>Submit Invoice</cite> button is selected</li>
+<li>Submit the invoice form ensuring the <cite>Capture Online</cite> option above the <cite>Submit Invoice</cite> button is selected.</li>
 </ol>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -221,11 +221,11 @@
 <div class="section" id="payment-refund">
 <h2>Payment refund<a class="headerlink" href="#payment-refund" title="Permalink to this headline">¶</a></h2>
 <p>The order, which payment has been captured for, can be refunded either fully or partially. Refunds are made against invoices and thus having a paid invoice assigned to the order is a necessary condition that has to be met to refund any order item.</p>
-<p>Refunds in Magento 2 are recorded as credit memos, so for requesting a refund with Amazon Pay you should create a credit memo first. To create a credit memo login to the Magento 2 admin, open the order you want refund, click <cite>Invoices</cite> tab on the left, select an invoice you want to refund and click on it.</p>
+<p>Refunds in Magento 2 are recorded as credit memos. To request a refund with Amazon Pay, you simply need to create a credit memo. To create a credit memo, login to the Magento 2 admin, open the order you want refund, click the <cite>Invoices</cite> tab on the left, select an invoice you want to refund and click on it.</p>
 <p>A preview of the selected invoice will appear. Make sure that you are on the single invoice preview page and click the <cite>Credit Memo</cite> button.</p>
 <p>A new credit memo form will appear with most of the crucial data (like product quantities to be refunded) already filled in.</p>
-<p>If you want to refund the invoice partially (i.e. only a part of the invoiced items) adjust the product quantities to be refunded (set 0 for items that shall not be refunded) and click <cite>Update Qty&#8217;s</cite> button to update refund totals. You can also set the refunded items back to stock by checking <cite>Return to Stock</cite> checkbox.</p>
-<p>Next choose if you want to refund shipping costs or apply any refund adjustments and fill in the appropriate fields. Before submitting the credit memo form, double check that you have <cite>Refund</cite> button available and click it. A credit memo will be created and a refund will be requested with Amazon Pay.</p>
+<p>If you want to refund the invoice partially (i.e. only a part of the invoiced items) adjust the product quantities to be refunded (set 0 for items that shall not be refunded) and click the <cite>Update Qty&#8217;s</cite> button to update refund totals. You can also set the refunded items back to stock by checking <cite>Return to Stock</cite> checkbox.</p>
+<p>Next choose if you want to refund shipping costs or apply any refund adjustments and fill in the appropriate fields. Before submitting the credit memo form, double check that you have the <cite>Refund</cite> button available and click it. A credit memo will be created and a refund will be requested with Amazon Pay.</p>
 <p>Refunds will always be initially accepted as the vast majority of the time there will be no issue. However, if there is a problem after the refund has been issued, a notification will be added to Magento 2 to make you aware there has been a problem refunding the customer.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
