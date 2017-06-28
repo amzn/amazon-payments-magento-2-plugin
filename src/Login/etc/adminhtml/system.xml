@@ -17,13 +17,17 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="customer">
-            <group id="startup">
-                <field id="amazon_login_in_popup" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Amazon Login available in Authentication popup</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Disabling this may decrease page load time but will also remove the Amazon Login option from authentication popup.</comment>
-                </field>
+        <section id="payment">
+            <group id="amazon_payment">
+                <group id="general">
+                    <group id="options">
+                        <field id="amazon_login_in_popup" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Amazon Login available in Authentication popup</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/amazon_payment/amazon_login_in_popup</config_path>
+                        </field>
+                    </group>
+                </group>
             </group>
         </section>
     </system>

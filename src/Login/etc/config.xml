@@ -17,10 +17,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <customer>
-            <startup>
+        <payment>
+            <amazon_payment>
                 <amazon_login_in_popup>1</amazon_login_in_popup>
-            </startup>
-        </customer>
+            </amazon_payment>
+        </payment>
     </default>
 </config>
