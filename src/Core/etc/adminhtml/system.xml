@@ -4,6 +4,9 @@
         <section id="payment">
             <group id="amazon_payment" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Amazon Pay</label>
+                <field id="version" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                </field>
                 <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>General</label>
                     <group id="credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -124,6 +127,10 @@
                             <label>New Order Status</label>
                             <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
                             <config_path>payment/amazon_payment/new_order_status</config_path>
+                        </field>
+                        <field id="storename" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
+                            <label>Store Name</label>
+                            <config_path>payment/amazon_payment/storename</config_path>
                         </field>
                     </group>
                     <group id="sales_exclusions" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">

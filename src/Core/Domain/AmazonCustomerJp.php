@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,9 +13,22 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="Magento_Catalog::catalog/category-selector.css"/>
-    </head>
-</page>
+namespace Amazon\Core\Domain;
+
+class AmazonCustomerJp extends AmazonCustomer
+{
+    /**
+     * AmazonCustomer constructor.
+     *
+     * @param string $id
+     * @param string $email
+     * @param string $name
+     */
+    public function __construct($id, $email, $name)
+    {
+        $this->id    = $id;
+        $this->email = $email;
+        $this->name = new AmazonNameJp($name);
+    }
+
+}

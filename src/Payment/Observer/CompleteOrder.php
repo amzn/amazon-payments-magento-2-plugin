@@ -30,30 +30,44 @@ class CompleteOrder implements ObserverInterface
      */
     protected $orderInformationManagement;
 
+    /**
+     * CompleteOrder constructor.
+     * @param OrderInformationManagement $orderInformationManagement
+     */
     public function __construct(
         OrderInformationManagement $orderInformationManagement
     ) {
         $this->orderInformationManagement = $orderInformationManagement;
     }
 
+    /**
+     * @param Observer $observer
+     */
     public function execute(Observer $observer)
     {
         /**
          * @var OrderInterface $order
          */
         $order    = $observer->getOrder();
-        $complete = Order::STATE_COMPLETE;
 
-        if ($order->getState() == $complete && $order->getStoredData()[OrderInterface::STATE] != $complete) {
+        if ($order->getPayment() && $order->getPayment()->getMethod() != Amazon::PAYMENT_METHOD_CODE) {
+            return;
+        }
+
+        if ($order->getState() == Order::STATE_COMPLETE &&
+            $order->getStoredData()[OrderInterface::STATE] != Order::STATE_COMPLETE) {
             $this->closeOrderReference($order);
         }
     }
 
+    /**
+     * @param OrderInterface $order
+     */
     protected function closeOrderReference(OrderInterface $order)
     {
         try {
             $amazonOrderReferenceId = $order->getExtensionAttributes()->getAmazonOrderReferenceId();
-            if ($amazonOrderReferenceId && Amazon::PAYMENT_METHOD_CODE == $order->getPayment()->getMethod()) {
+            if ($amazonOrderReferenceId) {
                 $this->orderInformationManagement->closeOrderReference($amazonOrderReferenceId, $order->getStoreId());
             }
         } catch (Exception $e) {

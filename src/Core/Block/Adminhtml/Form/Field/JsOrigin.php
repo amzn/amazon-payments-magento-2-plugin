@@ -25,17 +25,24 @@ class JsOrigin extends BaseField
 {
     protected function _renderValue(AbstractElement $element)
     {
-        $value = '';
-        $store = $this->_storeManager->getStore($this->getRequest()->getParam('store', 0));
+        $stores = $this->_storeManager->getStores();
+        $valueReturn = '';
+        $urlArray = array();
 
-        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
-
-        if ($baseUrl) {
-            $uri   = UriFactory::factory($baseUrl);
-            $value = $uri->getScheme() . '://' . $uri->getHost();
+        foreach ($stores as $store) {
+            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+            if ($baseUrl) {
+                $uri   = UriFactory::factory($baseUrl);
+                $urlArray[] = $uri->getScheme() . '://' . $uri->getHost();
+            }
         }
 
-        return '<td class="value">' . $value . '</td>';
+        $urlArray = array_unique($urlArray);
+        foreach ($urlArray as $uniqueUrl) {
+            $valueReturn .= "<div>".$uniqueUrl."</div>";
+        }
+
+        return '<td class="value">' . $valueReturn . '</td>';
     }
 
     protected function _renderInheritCheckbox(AbstractElement $element)

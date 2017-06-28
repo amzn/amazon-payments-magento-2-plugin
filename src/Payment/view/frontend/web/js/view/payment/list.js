@@ -42,7 +42,7 @@ define([
                 checkoutDataResolver.resolvePaymentMethod();
                 //remove renderer for "deleted" payment methods
                 _.each(changes, function (change) {
-                    if (amazonStorage.isAmazonAccountLoggedIn() && change.value.method !== 'amazon_payment') {
+                    if (this._shouldRemovePaymentMethod(change.value.method)) {
                         this.removeRenderer(change.value.method);
                         change.status = 'deleted';
                     }
@@ -53,6 +53,15 @@ define([
             this._super();
 
             return this;
+        },
+        /**
+         * Check if a payment method is applicable with Amazon Pay
+         * @param method
+         * @returns {boolean}
+         * @private
+         */
+        _shouldRemovePaymentMethod: function (method) {
+            return amazonStorage.isAmazonAccountLoggedIn() && method !== 'amazon_payment' && method !== 'free';
         },
         /**
          * handle decline codes
@@ -91,7 +100,7 @@ define([
                 //if the payment methods are already set
                 $(document).on('rendered', '#amazon_payment', function () {
                     _.each(paymentMethods(), function (payment) {
-                        if (amazonStorage.isAmazonAccountLoggedIn() && payment.method !== 'amazon_payment') {
+                        if (this._shouldRemovePaymentMethod(payment.method)) {
                             this.removeRenderer(payment.method);
                         }
                     }, self);

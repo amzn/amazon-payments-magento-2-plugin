@@ -67,3 +67,5 @@
 "Comma separated. The ""Login with Amazon"" and ""Amazon Pay"" buttons will <em>only</em> be rendered for clients having the above IPs.
                             If the field is empty, the buttons will be visible to all clients.","Séparée par des virgules. Les boutons Connectez-vous avec Amazon et Amazon Pay seront intégrés <em>uniquement</em> pour les clients aux IP ci-dessus.
                             Si le champ est vide, les boutons seront visibles par tous les clients."
+"Module version","Version du Module"
+"--","--"
