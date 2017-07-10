@@ -1,5 +1,5 @@
 {
-  "name": "beargroup/amazon-pay-and-login-magento-2-module",
+  "name": "jonahellison/amazon-pay-and-login-magento-2-module",
   "description": "Official Magento2 Plugin to integrate with Amazon Pay and Login with Amazon",
   "type": "magento2-module",
   "version": "1.1.1",
