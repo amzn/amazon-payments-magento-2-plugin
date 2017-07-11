@@ -3,7 +3,7 @@
     <system>
         <section id="payment">
             <group id="amazon_payment" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Amazon Pay</label>
+                <label>Amazon Pay TEST</label>
                 <field id="version" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\Version</frontend_model>
                 </field>
