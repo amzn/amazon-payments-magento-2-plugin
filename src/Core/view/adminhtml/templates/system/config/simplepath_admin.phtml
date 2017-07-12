@@ -1,0 +1,176 @@
+<script>
+
+var AmazonSp = <?php echo $this->getAmazonSpJson(); ?>;
+
+require(["prototype"], function(){
+
+    var amazonPollInterval = 1500; // poll every ms for keys
+    var amazonPollTimer = null;
+
+
+    var amazonSimplepath = $("amazon_simplepath");
+    var amazonFields = $$("#payment_us_amazon_payment .form-list");
+    var amazonSpBack = $("amazon_simplepath_back");
+
+
+    if ($("payment_us_amazon_payment_general_credentials_merchant_id") != null) {
+        if (!$("payment_us_amazon_payment_general_credentials_merchant_id").value) {
+            amazonFields.each(Element.hide);
+        } else {
+            amazonSpBack.show();
+            amazonSimplepath.hide();
+
+            if (window.location.hash == "#payment_amazon_payments-head") {
+                showAmazonConfig();
+            }
+        }
+    }
+
+    // Generate form to post to Amazon
+    var form = new Element('form', { method: 'post', action: AmazonSp.amazonUrl, id: 'simplepath_form', target: 'simplepath'});
+    //$$('body')[0].insert(form);
+    amazonSimplepath.wrap(form);
+
+    // Convert formParams JSON to hidden inputs
+    var formInput;
+    for (var key in AmazonSp.formParams) {
+        if (typeof AmazonSp.formParams[key] == 'object' || typeof AmazonSp.formParams[key] == 'array') {
+            for (var i in AmazonSp.formParams[key]) {
+                if (typeof AmazonSp.formParams[key][i] != "function") {
+                    form.insert(new Element('input', { type: 'hidden', name: key, value: AmazonSp.formParams[key][i]}));
+                }
+            }
+        } else {
+            form.insert(new Element('input', { type: 'hidden', name: key, value: AmazonSp.formParams[key]}));
+        }
+    }
+
+    // Get Started clicked
+    $("simplepath_form").observe("submit", function(e) {
+        var heights = [660, 720, 810, 900];
+        var popupHeight = heights[0];
+        for (var i in heights) {
+          popupHeight = (window.innerHeight >= heights[i]) ? heights[i] : popupHeight;
+        }
+
+        window.launchPopup('', 768, popupHeight);
+
+        //amazonFields[1].show();
+        amazonFields.each(Element.show);
+
+        if (!amazonPollTimer) {
+            amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
+        }
+    });
+
+    // User is skipping simplepath
+    amazonSimplepath.select("a")[0].observe("click", function(e) {
+        e.stop();
+        amazonSpBack.show();
+        showAmazonConfig();
+    });
+
+    // User clicked 'Back'
+    $("amazon_simplepath_back").select("a")[0].observe("click", function(e) {
+        e.stop();
+        amazonSpBack.hide();
+        amazonSimplepath.show();
+    });
+
+
+    function showAmazonConfig() {
+        amazonFields.each(Element.show);
+        amazonSimplepath.hide();
+        amazonSpBack.show();
+
+        if (!$('payment_us_amazon_payment_general-head').hasClassName('open')) {
+            $('payment_us_amazon_payment_general-head').click();
+            $('payment_us_amazon_payment_general_credentials-head').click();
+            $('payment_us_amazon_payment_general_options-head').click();
+        }
+    }
+
+
+    function pollForKeys() {
+        new Ajax.Request(AmazonSp.pollUrl, {
+            method:'get',
+            onSuccess: function(transport) {
+                if (transport.responseText == '1') {
+                    $("amazon_reload").show();
+                    document.location.replace(document.location + "#payment_amazon_payments-head");
+                    location.reload();
+                } else {
+                    amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
+                }
+
+            },
+            onFailure: function() {  },
+            // Disable "Please Wait" modal
+            onCreate: function(request) {
+                Ajax.Responders.unregister(varienLoaderHandler.handler);
+            },
+        });
+    }
+
+
+});
+
+// Add Mage validator to fix "Save Config" button from not submitting
+require(["jquery", "jquery/validate"], function($) {
+    $("#simplepath_form").validate();
+});
+
+
+</script>
+
+
+<script>
+// Amazon Pop-up
+(function () {
+    'use strict';
+
+    function launchPopup(url, requestedWidth, requestedHeight) {
+        var leftOffset = getLeftOffset(requestedWidth),
+            topOffset = getTopOffset(requestedHeight),
+            newWindow = window.open(url, 'simplepath', 'scrollbars=yes, width=' + requestedWidth + ', height=' + requestedHeight + ', top=' + topOffset + ', left=' + leftOffset);
+
+        if (window.focus) {
+            newWindow.focus();
+        }
+    }
+
+    function getLeftOffset(requestedWidth) {
+        var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+
+        return ((windowWidth() / 2) - (requestedWidth / 2)) + dualScreenLeft;
+    }
+
+    function getTopOffset(requestedHeight) {
+        var dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
+
+        return ((windowHeight() / 2) - (requestedHeight / 2)) + dualScreenTop;
+    }
+
+    function windowWidth() {
+        if (window.innerWidth) {
+            return window.innerWidth;
+        } else if (document.documentElement.clientWidth) {
+            return document.documentElement.clientWidth;
+        } else {
+            return screen.width;
+        }
+    }
+
+    function windowHeight() {
+        if (window.innerHeight) {
+            return window.innerHeight;
+        } else if (document.documentElement.clientHeight) {
+            return document.documentElement.clientHeight;
+        } else {
+            return screen.height;
+        }
+    }
+
+    window.launchPopup = launchPopup;
+})();
+</script>

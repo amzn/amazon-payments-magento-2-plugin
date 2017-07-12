@@ -1,0 +1,7 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="js">
+            <block class="Amazon\Core\Block\Adminhtml\System\Config\SimplePathAdmin" template="Amazon_Core::system/config/simplepath_admin.phtml" cacheable="false" />
+        </referenceContainer>
+    </body>
+</page>
