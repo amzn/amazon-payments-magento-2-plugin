@@ -32,20 +32,22 @@ class Listener extends \Magento\Framework\App\Action\Action
     public function execute()
     {
 
-        $url = parse_url(\Amazon\Core\Model\Config\SimplePath::API_ENDPOINT_DOWNLOAD_KEYS);
+        $url = parse_url($this->simplepath->getEndpointRegister());
 
         header('Access-Control-Allow-Origin: https://' . $url['host']);
-        header('Access-Control-Allow-Methods: GET, POST');
-        header('Access-Control-Allow-Headers: Content-Type');
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token');
 
         $payload = $this->_request->getParam('payload');
 
         $result = $this->jsonResultFactory->create();
 
-        $return = array('result' => 'error', 'message' => 'Empty response.');
+        $return = array('result' => 'error', 'message' => 'Empty payload');
 
         try {
-            if ($payload && strpos($payload, 'encryptedKey') !== FALSE) {
+            if (strpos($payload, 'encryptedKey') === FALSE) {
+                $return = array('result' => 'error', 'message' => 'Invalid payload: ' . $payload);
+            } else if ($payload) {
 
                 $json = $this->simplepath->decryptPayload($payload, false);
 
@@ -53,13 +55,15 @@ class Listener extends \Magento\Framework\App\Action\Action
                     $return = array('result' => 'success');
                 }
             } else {
-                $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
                 $return = array('result' => 'error', 'message' => 'payload parameter not found.');
             }
 
         } catch (Exception $e) {
-            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
             $return = array('result' => 'error', 'message' => $e->getMessage());
+        }
+
+        if ($this->_request->isPost() && (empty($return['result']) || $return['result'] == 'error')) {
+            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
         }
 
         $result->setData($return);

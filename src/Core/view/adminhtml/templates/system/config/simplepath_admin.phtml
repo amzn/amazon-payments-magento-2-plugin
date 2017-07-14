@@ -2,19 +2,35 @@
 
 var AmazonSp = <?php echo $this->getAmazonSpJson(); ?>;
 
+console.log(AmazonSp);
+
 require(["prototype"], function(){
 
-    var amazonPollInterval = 1500; // poll every ms for keys
+    // Check if SimplePath is supported
+    if (!AmazonSp.region || AmazonSp.region == 'JA') {
+        return;
+    }
+
+    // Country code for ID selectors
+    var co = AmazonSp.co.toLowerCase();
+
+    // Poll every ms for keys
+    var amazonPollInterval = 1500;
     var amazonPollTimer = null;
 
-
     var amazonSimplepath = $("amazon_simplepath");
-    var amazonFields = $$("#payment_us_amazon_payment .form-list");
+    var amazonFields = $$("#payment_"+co+"_amazon_payment .form-list");
     var amazonSpBack = $("amazon_simplepath_back");
 
+    // Set region/currency hint
+    var hint = $("simplepath_hint").innerHTML;
+    hint = hint.replace("[REGION]", AmazonSp.region);
+    hint = hint.replace("[CURRENCY]", AmazonSp.currency);
+    $("simplepath_hint").innerHTML = hint;
 
-    if ($("payment_us_amazon_payment_general_credentials_merchant_id") != null) {
-        if (!$("payment_us_amazon_payment_general_credentials_merchant_id").value) {
+    // Show/hide fields
+    if ($("payment_"+co+"_amazon_payment_general_credentials_merchant_id") != null) {
+        if (!$("payment_"+co+"_amazon_payment_general_credentials_merchant_id").value) {
             amazonFields.each(Element.hide);
         } else {
             amazonSpBack.show();
@@ -28,7 +44,6 @@ require(["prototype"], function(){
 
     // Generate form to post to Amazon
     var form = new Element('form', { method: 'post', action: AmazonSp.amazonUrl, id: 'simplepath_form', target: 'simplepath'});
-    //$$('body')[0].insert(form);
     amazonSimplepath.wrap(form);
 
     // Convert formParams JSON to hidden inputs
@@ -55,7 +70,6 @@ require(["prototype"], function(){
 
         window.launchPopup('', 768, popupHeight);
 
-        //amazonFields[1].show();
         amazonFields.each(Element.show);
 
         if (!amazonPollTimer) {
@@ -64,7 +78,7 @@ require(["prototype"], function(){
     });
 
     // User is skipping simplepath
-    amazonSimplepath.select("a")[0].observe("click", function(e) {
+    amazonSimplepath.select("#simplepath-skip")[0].observe("click", function(e) {
         e.stop();
         amazonSpBack.show();
         showAmazonConfig();
@@ -83,14 +97,14 @@ require(["prototype"], function(){
         amazonSimplepath.hide();
         amazonSpBack.show();
 
-        if (!$('payment_us_amazon_payment_general-head').hasClassName('open')) {
-            $('payment_us_amazon_payment_general-head').click();
-            $('payment_us_amazon_payment_general_credentials-head').click();
-            $('payment_us_amazon_payment_general_options-head').click();
+        if (!$("payment_"+co+"_amazon_payment_general-head").hasClassName('open')) {
+            $("payment_"+co+"_amazon_payment_general-head").click();
+            $("payment_"+co+"_amazon_payment_general_credentials-head").click();
         }
     }
 
 
+    // Perform Ajax request looking for new keys
     function pollForKeys() {
         new Ajax.Request(AmazonSp.pollUrl, {
             method:'get',

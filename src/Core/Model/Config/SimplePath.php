@@ -5,66 +5,136 @@ namespace Amazon\Core\Model\Config;
 use Amazon\Core\Helper\Data;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Backend\Model\UrlInterface;
+use Magento\Payment\Helper\Formatter;
 
 class SimplePath
 {
-    const API_ENDPOINT_DOWNLOAD_KEYS = 'https://payments.amazon.com/register';
-    const API_ENDPOINT_GET_PUBLICKEY = 'https://payments.amazon.com/register/getpublickey';
-
-    const PARAM_SP_ID = 'A2K7HE1S3M5XJ';
 
     const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payments/simplepath/privatekey';
     const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payments/simplepath/publickey';
 
-    /**
-     * @var \Magento\Backend\Model\UrlInterface
-     */
-    protected $backendUrl;
+    protected $_spIds = [
+        'USD' => 'AUGT0HMCLQVX1',
+        'GBP' => 'A1BJXVS5F6XP',
+        'EUR' => 'A2ZAYEJU54T1BM',
+        'JPY' => 'A1MCJZEB1HY93J',
+    ];
+
+    protected $_mapCurrencyRegion = [
+        'EUR' => 'de',
+        'USD' => 'us',
+        'GBP' => 'uk',
+        'JPY' => 'ja',
+    ];
+
+    protected $_storeId;
+    protected $_websiteId;
+    protected $_scope;
+    protected $_scopeId;
 
     /**
      * SimplePath constructor.
-     *
-     * @param ScopeConfigInterface $config
-     * @param Data                 $coreHelper
-     * @param State                $state
      */
-    //public function __construct(ScopeConfigInterface $config, Data $coreHelper, State $state, UrlInterface $backendUrl)
-
     public function __construct(
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\ProductMetadataInterface $productMeta,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Backend\Model\UrlInterface $backendUrl,
-        \phpseclib\Crypt\RSA $rsa,
-        \phpseclib\Crypt\AES $aes,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Module\ModuleListInterface $moduleList,
+        \Magento\Framework\App\ResourceConnection $connection,
         \Magento\Framework\App\Cache\Manager $cacheManager,
         \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\App\ResourceConnection $connection,
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Magento\Framework\App\ProductMetadataInterface $productMeta,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Psr\Log\LoggerInterface $logger
+        \Magento\Framework\App\State $state,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
+        \Magento\Paypal\Model\Config $paypal,
+        \Psr\Log\LoggerInterface $logger,
+        \phpseclib\Crypt\RSA $rsa,
+        \phpseclib\Crypt\AES $aes
     )
     {
 
-        $this->config       = $config;
-        $this->scopeConfig  = $scopeConfig;
-        $this->encryptor    = $encryptor;
-        $this->storeManager = $storeManager;
-        $this->backendUrl   = $backendUrl;
-        $this->rsa          = $rsa;
-        $this->aes          = $aes;
-        $this->cacheManager = $cacheManager;
-        $this->request      = $request;
-        $this->connection   = $connection;
-        $this->moduleList   = $moduleList;
-        $this->productMeta  = $productMeta;
-        $this->logger       = $logger;
+        $this->config        = $config;
+        $this->scopeConfig   = $scopeConfig;
+        $this->productMeta   = $productMeta;
+        $this->encryptor     = $encryptor;
+        $this->backendUrl    = $backendUrl;
+        $this->cacheManager  = $cacheManager;
+        $this->connection    = $connection;
+        $this->moduleList    = $moduleList;
+        $this->state         = $state;
+        $this->request       = $request;
+        $this->storeManager  = $storeManager;
+        $this->paypal        = $paypal;
+        $this->logger        = $logger;
+        $this->rsa           = $rsa;
+        $this->aes           = $aes;
 
         $this->messageManager = $messageManager;
+
+        // Find store ID and scope
+        $this->_websiteId = $request->getParam('website', 0);
+        $this->_storeId   = $request->getParam('store', 0);
+        $this->_scope     = $request->getParam('scope');
+
+        // Website scope
+        if ($this->_websiteId) {
+            $this->_scope = !$this->_scope ? 'websites' : $this->_scope;
+        } else {
+            $this->_websiteId = $storeManager->getWebsite()->getId();
+        }
+
+        // Store scope
+        if ($this->_storeId) {
+            $this->_websiteId = $this->storeManager->getStore($this->_storeId)->getWebsite()->getId();
+            $this->_scope = !$this->_scope ? 'stores' : $this->_scope;
+        } else {
+            $this->_storeId = $storeManager->getWebsite($this->_websiteId)->getDefaultStore()->getId();
+        }
+
+        // Set scope ID
+        switch ($this->_scope) {
+            case 'websites':
+                $this->_scopeId = $this->_websiteId;
+                break;
+            case 'stores':
+                $this->_scopeId = $this->_storeId;
+                break;
+            default:
+                $this->_scope = 'default';
+                $this->_scopeId = 0;
+                break;
+        }
+    }
+
+
+
+    /**
+     * Return domain
+     */
+    private function getEndpointDomain()
+    {
+        return in_array($this->getRegion(), array('EU', 'UK'))
+          ? 'https://payments-eu.amazon.com/'
+          : 'https://payments.amazon.com/';
+    }
+
+    /**
+     * Return register popup endpoint URL
+     */
+    public function getEndpointRegister()
+    {
+        return $this->getEndpointDomain() . 'register';
+    }
+
+    /**
+     * Return pubkey endpoint URL
+     */
+    public function getEndpointPubkey()
+    {
+        return $this->getEndpointDomain() . 'register/getpublickey';
     }
 
     /**
@@ -72,8 +142,6 @@ class SimplePath
      */
     public function generateKeys()
     {
-        //$keys = $rsa->generateKeys(array('private_key_bits' => 2048, 'privateKeyBits' => 2048, 'hashAlgorithm' => 'sha1'));
-
         $keys = $this->rsa->createKey(2048);
 
         $this->config
@@ -149,8 +217,8 @@ class SimplePath
           $payload = (object) json_decode($payloadJson);
           $payloadVerify = clone $payload;
 
-          // Unencrypted?
-          if (!isset($payload->encryptedKey) && isset($payload->merchant_id, $payload->access_key, $payload->secret_key)) {
+          // Unencrypted via admin
+          if ($this->state->getAreaCode() == 'adminhtml' && isset($payload->merchant_id, $payload->access_key, $payload->secret_key)) {
               return $this->saveToConfig($payloadJson, $autoEnable);
           }
 
@@ -166,7 +234,7 @@ class SimplePath
 
           // Retrieve Amazon public key to verify signature
           try {
-              $client = new \Zend_Http_Client(self::API_ENDPOINT_GET_PUBLICKEY, array(
+              $client = new \Zend_Http_Client($this->getEndpointPubkey(), array(
                   'maxredirects' => 2,
                   'timeout'      => 30));
 
@@ -194,7 +262,7 @@ class SimplePath
               if (function_exists('mcrypt_decrypt')) {
                   $finalPayload = @mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decryptedKey, base64_decode($payload->encryptedPayload), MCRYPT_MODE_CBC, base64_decode($payload->iv));
               } else {
-                  // This uses openssl_decrypt, which may have issues
+                  // This library uses openssl_decrypt, which may have issues
                   $this->aes->setKey($decryptedKey);
                   $this->aes->setIV(base64_decode($payload->iv, true));
                   $this->aes->setKeyLength(128);
@@ -240,11 +308,17 @@ class SimplePath
               $values->{strtolower($key)} = $value;
             }
 
-            $this->config->saveConfig('payment/amazon_payment/merchant_id', $values->merchant_id, 'default', 0);
-            $this->config->saveConfig('payment/amazon_payment/client_id', $values->client_id, 'default', 0);
-            $this->config->saveConfig('payment/amazon_payment/client_secret', $this->encryptor->encrypt($values->client_secret), 'default', 0);
-            $this->config->saveConfig('payment/amazon_payment/access_key', $values->access_key, 'default', 0);
-            $this->config->saveConfig('payment/amazon_payment/secret_key', $this->encryptor->encrypt($values->secret_key), 'default', 0);
+            $this->config->saveConfig('payment/amazon_payment/merchant_id', $values->merchant_id, $this->_scope, $this->_scopeId);
+            $this->config->saveConfig('payment/amazon_payment/client_id', $values->client_id, $this->_scope, $this->_scopeId);
+            $this->config->saveConfig('payment/amazon_payment/client_secret', $this->encryptor->encrypt($values->client_secret), $this->_scope, $this->_scopeId);
+            $this->config->saveConfig('payment/amazon_payment/access_key', $values->access_key, $this->_scope, $this->_scopeId);
+            $this->config->saveConfig('payment/amazon_payment/secret_key', $this->encryptor->encrypt($values->secret_key), $this->_scope, $this->_scopeId);
+
+            $currency = $this->getConfig('currency/options/default');
+            if (isset($this->_mapCurrencyRegion[$currency])) {
+                $this->config->saveConfig('payment/amazon_payment/payment_region', $this->_mapCurrencyRegion[$currency], $this->_scope, $this->_scopeId);
+            }
+
 
             if ($autoEnable) {
                 $this->autoEnable();
@@ -261,8 +335,8 @@ class SimplePath
      */
     public function autoEnable()
     {
-        if (!$this->scopeConfig->getValue('payment/amazon_payment/pwa_enabled')) {
-            $this->config->saveConfig('payment/amazon_payment/pwa_enabled', true, 'default', 0);
+        if (!$this->getConfig('payment/amazon_payment/pwa_enabled')) {
+            $this->config->saveConfig('payment/amazon_payment/pwa_enabled', true, $this->_scope, $this->_scopeId);
             $this->messageManager->addSuccess(__("Login and Pay with Amazon is now enabled."));
         }
     }
@@ -272,20 +346,9 @@ class SimplePath
      */
     public function getReturnUrl()
     {
-        /*
-        //$url = $this->_backendUrl->getUrl('amazon_payments/simplepath', array('_store' => Mage::helper('amazon_payments')->getAdminStoreId(), '_forced_secure' => true));
-        $url = $this->_backendUrl->getUrl('amazon_payments/simplepath');
-        // $this->_storeManager->getStore()->getBaseUrl()
-        // Add index.php
-        $baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true);
-        return str_replace($baseUrl, $baseUrl . 'index.php/', $url);
-        */
-
-        $baseUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+        $baseUrl = $this->storeManager->getStore($this->_storeId)->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
         $baseUrl = str_replace('http:', 'https:', $baseUrl);
-        return $baseUrl . 'amazon_core/simplepath/listener';
-
-        //return $this->storeManager->getStore()->getUrl('amazon_core/simplepath/listener', array('_secure' => true, '_forced_secure' => true));
+        return $baseUrl . 'amazon_core/simplepath/listener?website='.$this->_websiteId.'&store='.$this->_storeId.'&scope='.$this->_scope;
     }
 
     /**
@@ -293,7 +356,7 @@ class SimplePath
      */
     public function getSimplepathUrl()
     {
-        return self::API_ENDPOINT_DOWNLOAD_KEYS . '?returnUrl=' . urlencode($this->getReturnUrl()) .
+        return $this->getEndpointRegister() . '?returnUrl=' . urlencode($this->getReturnUrl()) .
 						'&pub_key=' . urlencode($this->getPublicKey()) .
 						'#event/fromSP';
     }
@@ -326,9 +389,11 @@ class SimplePath
         $version = $this->moduleList->getOne('Amazon_Core');
         $coreVersion = ($version && isset($version['setup_version'])) ? $version['setup_version'] : '--';
 
+        $currency = $this->getConfig('currency/options/default');
+
         return array(
-            'locale' => $this->scopeConfig->getValue('general/country/default'),
-            'spId' => self::PARAM_SP_ID,
+            'locale' => $this->getConfig('general/country/default'),
+            'spId' => isset($this->_spIds[$currency]) ? $this->_spIds[$currency] : '',
             'allowedLoginDomains[]' => $urls,
             'spSoftwareVersion' => $coreVersion,
             'spAmazonPluginVersion' => $this->productMeta->getVersion(),
@@ -336,18 +401,41 @@ class SimplePath
     }
 
     /**
+     * Return config value based on scope and scope ID
+     */
+    public function getConfig($path)
+    {
+        return $this->scopeConfig->getValue($path, $this->_scope, $this->_scopeId);
+    }
+
+    /**
+     * Return payment region based on currency
+     */
+    public function getRegion()
+    {
+        $currency = $this->getConfig('currency/options/default');
+
+        $region = isset($this->_mapCurrencyRegion[$currency]) ? strtoupper($this->_mapCurrencyRegion[$currency]) : '';
+        if ($region == 'DE') {
+            $region = 'EU';
+        }
+
+        return $region;
+    }
+
+
+    /**
      * Return array of config for JSON AmazonSp variable.
      */
     public function getJsonAmazonSpConfig()
     {
         return array(
+            'co'            => $this->getConfig('paypal/general/merchant_country'),
+            'region'        => $this->getRegion(),
+            'currency'      => $this->getConfig('currency/options/default'),
             'amazonUrl'     => $this->getSimplepathUrl(),
-            'pollUrl'       => $this->backendUrl->getUrl('amazonsp/simplepath/poll'),
-            'spUrl'         => $this->backendUrl->getUrl('amazonsp/simplepath/spurl'),
-            'importUrl'     => $this->backendUrl->getUrl('amazonsp/simplepath/import'),
+            'pollUrl'       => $this->backendUrl->getUrl('amazonsp/simplepath/poll/'),
             'isSecure'      => (int) ($this->request->isSecure()),
-            'region'        => (int) $this->scopeConfig->getValue('general/country/default'),
-            //'isUsa'         => (int) (Mage::helper('amazon_payments')->getAdminConfig() == 'US' && Mage::helper('amazon_payments')->getAdminRegion() != 'eu'),
             'hasOpenssl'    => (int) (extension_loaded('openssl')),
             'formParams'    => $this->getFormParams(),
         );
