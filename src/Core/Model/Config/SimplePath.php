@@ -429,8 +429,10 @@ class SimplePath
      */
     public function getJsonAmazonSpConfig()
     {
+        $co = $this->getConfig('paypal/general/merchant_country');
+
         return array(
-            'co'            => $this->getConfig('paypal/general/merchant_country'),
+            'co'            => $co ? $co : 'US',
             'region'        => $this->getRegion(),
             'currency'      => $this->getConfig('currency/options/default'),
             'amazonUrl'     => $this->getSimplepathUrl(),
