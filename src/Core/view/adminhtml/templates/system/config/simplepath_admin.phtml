@@ -18,25 +18,25 @@ require(["prototype"], function(){
     var amazonPollInterval = 1500;
     var amazonPollTimer = null;
 
-    var amazonSimplepath = $("amazon_simplepath");
-    var amazonFields = $$("#payment_"+co+"_amazon_payment .form-list");
-    var amazonSpBack = $("amazon_simplepath_back");
+    var amazonSimplepath = $('amazon_simplepath');
+    var amazonFields = $$('#payment_'+co+'_amazon_payment .form-list');
+    var amazonSpBack = $('amazon_simplepath_back');
 
     // Set region/currency hint
-    var hint = $("simplepath_hint").innerHTML;
-    hint = hint.replace("[REGION]", AmazonSp.region);
-    hint = hint.replace("[CURRENCY]", AmazonSp.currency);
-    $("simplepath_hint").innerHTML = hint;
+    var hint = $('simplepath_hint').innerHTML;
+    hint = hint.replace('[REGION]', AmazonSp.region);
+    hint = hint.replace('[CURRENCY]', AmazonSp.currency);
+    $('simplepath_hint').innerHTML = hint;
 
     // Show/hide fields
-    if ($("payment_"+co+"_amazon_payment_general_credentials_merchant_id") != null) {
-        if (!$("payment_"+co+"_amazon_payment_general_credentials_merchant_id").value) {
+    if ($('payment_'+co+'_amazon_payment_general_credentials_merchant_id') != null) {
+        if (!$('payment_'+co+'_amazon_payment_general_credentials_merchant_id').value) {
             amazonFields.each(Element.hide);
         } else {
             amazonSpBack.show();
             amazonSimplepath.hide();
 
-            if (window.location.hash == "#payment_amazon_payments-head") {
+            if (window.location.hash == '#payment_amazon_payments-head') {
                 showAmazonConfig();
             }
         }
@@ -51,7 +51,7 @@ require(["prototype"], function(){
     for (var key in AmazonSp.formParams) {
         if (typeof AmazonSp.formParams[key] == 'object' || typeof AmazonSp.formParams[key] == 'array') {
             for (var i in AmazonSp.formParams[key]) {
-                if (typeof AmazonSp.formParams[key][i] != "function") {
+                if (typeof AmazonSp.formParams[key][i] != 'function') {
                     form.insert(new Element('input', { type: 'hidden', name: key, value: AmazonSp.formParams[key][i]}));
                 }
             }
@@ -61,31 +61,69 @@ require(["prototype"], function(){
     }
 
     // Get Started clicked
-    $("simplepath_form").observe("submit", function(e) {
+    $('simplepath_form').observe('submit', function(e) {
         var heights = [660, 720, 810, 900];
         var popupHeight = heights[0];
         for (var i in heights) {
           popupHeight = (window.innerHeight >= heights[i]) ? heights[i] : popupHeight;
         }
 
-        window.launchPopup('', 768, popupHeight);
+        var popupWidth = this.action.indexOf('payments-eu') == -1 ? 768 : 1050;
+        window.launchPopup('', popupWidth, popupHeight);
 
+        // Show fields and import
         amazonFields.each(Element.show);
 
         if (!amazonPollTimer) {
             amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
         }
+
+        // Add "Import From Clipboard"
+        var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
+        if (elJson) {
+            // Enable Crednetials JSON config field
+            var elJsonCheckDefault = $$('#payment_'+co+'_amazon_payment_general_credentials_credentials_json_inherit:checked');
+            if (elJsonCheckDefault && elJsonCheckDefault.length) {
+                elJsonCheckDefault[0].click();
+            }
+
+            // Add Import/Save button
+            amazonSimplepath.insert({after: '<button id="saveJson" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Import From Clipboard</button>'});
+            $('saveJson').observe("click", function(e) {
+                e.stop();
+                elJson.value = $('json-import').value;
+                $('save').click();
+            });
+
+            // Add import textarea
+            amazonSimplepath.insert({after: '<br/><textarea id="json-import" rows="2" cols="15"></textarea>'});
+        }
+
+        // Autoset payment region (for EU/UK)
+        var region = AmazonSp.region.toLowerCase();
+        if (region == 'eu') {
+            region = 'de';
+        }
+        var elCheckDefault = $$('#payment_'+co+'_amazon_payment_general_credentials_payment_region_inherit:checked');
+        if (elCheckDefault && elCheckDefault.length) {
+            elCheckDefault[0].click();
+        }
+        var elRegion = $('payment_'+co+'_amazon_payment_general_credentials_payment_region');
+        if (elRegion) {
+            elRegion.value = region;
+        }
+
     });
 
     // User is skipping simplepath
-    amazonSimplepath.select("#simplepath-skip")[0].observe("click", function(e) {
+    amazonSimplepath.select('#simplepath-skip')[0].observe('click', function(e) {
         e.stop();
         amazonSpBack.show();
         showAmazonConfig();
     });
 
     // User clicked 'Back'
-    $("amazon_simplepath_back").select("a")[0].observe("click", function(e) {
+    $('amazon_simplepath_back').select('a')[0].observe('click', function(e) {
         e.stop();
         amazonSpBack.hide();
         amazonSimplepath.show();
@@ -97,9 +135,9 @@ require(["prototype"], function(){
         amazonSimplepath.hide();
         amazonSpBack.show();
 
-        if (!$("payment_"+co+"_amazon_payment_general-head").hasClassName('open')) {
-            $("payment_"+co+"_amazon_payment_general-head").click();
-            $("payment_"+co+"_amazon_payment_general_credentials-head").click();
+        if (!$('payment_'+co+'_amazon_payment_general-head').hasClassName('open')) {
+            $('payment_'+co+'_amazon_payment_general-head').click();
+            $('payment_'+co+'_amazon_payment_general_credentials-head').click();
         }
     }
 
@@ -110,8 +148,8 @@ require(["prototype"], function(){
             method:'get',
             onSuccess: function(transport) {
                 if (transport.responseText == '1') {
-                    $("amazon_reload").show();
-                    document.location.replace(document.location + "#payment_amazon_payments-head");
+                    $('amazon_reload').show();
+                    document.location.replace(document.location + '#payment_amazon_payments-head');
                     location.reload();
                 } else {
                     amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
@@ -131,7 +169,7 @@ require(["prototype"], function(){
 
 // Add Mage validator to fix "Save Config" button from not submitting
 require(["jquery", "jquery/validate"], function($) {
-    $("#simplepath_form").validate();
+    $('#simplepath_form').validate();
 });
 
 
