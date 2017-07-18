@@ -420,7 +420,7 @@ class SimplePath
             $region = 'EU';
         }
 
-        return $region;
+        return $region ? $region : 'US';
     }
 
 
