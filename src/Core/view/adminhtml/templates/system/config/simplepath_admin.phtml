@@ -80,7 +80,7 @@ require(["prototype"], function(){
 
         // Add "Import From Clipboard"
         var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
-        if (elJson) {
+        if (elJson && $('save-json') == null) {
             // Enable Crednetials JSON config field
             var elJsonCheckDefault = $$('#payment_'+co+'_amazon_payment_general_credentials_credentials_json_inherit:checked');
             if (elJsonCheckDefault && elJsonCheckDefault.length) {
@@ -88,8 +88,8 @@ require(["prototype"], function(){
             }
 
             // Add Import/Save button
-            amazonSimplepath.insert({after: '<button id="saveJson" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Import From Clipboard</button>'});
-            $('saveJson').observe("click", function(e) {
+            amazonSimplepath.insert({after: '<button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Import From Clipboard</button>'});
+            $('save-json').observe('click', function(e) {
                 e.stop();
                 elJson.value = $('json-import').value;
                 $('save').click();
