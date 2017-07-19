@@ -367,7 +367,7 @@ class SimplePath
     public function getFormParams()
     {
         // Retrieve store URLs from config table
-        $urls = array();
+        $baseUrls = array();
         $db = $this->connection->getConnection();
         $select = $db->select()
             ->from(
@@ -379,11 +379,22 @@ class SimplePath
             $url = parse_url($row['value']);
 
             if (isset($url['host'])){
-                $urls[] = 'https://' . $url['host'];
+                $baseUrls[] = 'https://' . $url['host'];
             }
         }
+        $baseUrls = array_unique($baseUrls);
 
-        $urls = array_unique($urls);
+        // Get redirect URLs
+        $urlArray = array();
+        $stores = $this->storeManager->getStores();
+        foreach ($stores as $store) {
+            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+            if ($baseUrl) {
+                $value = $baseUrl . 'amazon/login/processAuthHash/';
+                $urlArray[] = $value;
+            }
+        }
+        $urlArray = array_unique($urlArray);
 
 
         $version = $this->moduleList->getOne('Amazon_Core');
@@ -392,11 +403,14 @@ class SimplePath
         $currency = $this->getConfig('currency/options/default');
 
         return array(
-            'locale' => $this->getConfig('general/country/default'),
+            'locale' => $this->getConfig('general/locale/code'),
             'spId' => isset($this->_spIds[$currency]) ? $this->_spIds[$currency] : '',
-            'allowedLoginDomains[]' => $urls,
             'spSoftwareVersion' => $coreVersion,
             'spAmazonPluginVersion' => $this->productMeta->getVersion(),
+            'merchantStoreDescription' => $this->getConfig('general/store_information/name'),
+            'merchantLoginDomains[]' => $baseUrls,
+            'merchantLoginRedirectURLs[]' => $urlArray,
+
         );
     }
 
