@@ -101,7 +101,7 @@ require(["prototype"], function(){
 
         // Autoset payment region (for EU/UK)
         var region = AmazonSp.region.toLowerCase();
-        if (region == 'eu') {
+        if (region.indexOf('eu') != -1) {
             region = 'de';
         }
         var elCheckDefault = $$('#payment_'+co+'_amazon_payment_general_credentials_payment_region_inherit:checked');

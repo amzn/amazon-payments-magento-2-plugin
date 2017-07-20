@@ -356,9 +356,7 @@ class SimplePath
      */
     public function getSimplepathUrl()
     {
-        return $this->getEndpointRegister() . '?returnUrl=' . urlencode($this->getReturnUrl()) .
-						'&pub_key=' . urlencode($this->getPublicKey()) .
-						'#event/fromSP';
+        return $this->getEndpointRegister() . '#event/fromSP';
     }
 
     /**
@@ -403,7 +401,10 @@ class SimplePath
         $currency = $this->getConfig('currency/options/default');
 
         return array(
+            'keyShareURL' => $this->getReturnUrl(),
+            'publicKey' => $this->getPublicKey(),
             'locale' => $this->getConfig('general/locale/code'),
+            'source' => 'SPPL',
             'spId' => isset($this->_spIds[$currency]) ? $this->_spIds[$currency] : '',
             'spSoftwareVersion' => $coreVersion,
             'spAmazonPluginVersion' => $this->productMeta->getVersion(),
@@ -431,7 +432,7 @@ class SimplePath
 
         $region = isset($this->_mapCurrencyRegion[$currency]) ? strtoupper($this->_mapCurrencyRegion[$currency]) : '';
         if ($region == 'DE') {
-            $region = 'EU';
+            $region = 'Euro Region';
         }
 
         return $region ? $region : 'US';
