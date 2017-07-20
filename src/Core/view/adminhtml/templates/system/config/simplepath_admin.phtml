@@ -2,8 +2,6 @@
 
 var AmazonSp = <?php echo $this->getAmazonSpJson(); ?>;
 
-console.log(AmazonSp);
-
 require(["prototype"], function(){
 
     // Check if SimplePath is supported
@@ -78,7 +76,7 @@ require(["prototype"], function(){
             amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
         }
 
-        // Add "Import From Clipboard"
+        // Add "Save Credentials"
         var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
         if (elJson && $('save-json') == null) {
             // Enable Crednetials JSON config field
@@ -88,7 +86,7 @@ require(["prototype"], function(){
             }
 
             // Add Import/Save button
-            amazonSimplepath.insert({after: '<button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Import From Clipboard</button>'});
+            amazonSimplepath.insert({after: '<button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Save Credentials</button>'});
             $('save-json').observe('click', function(e) {
                 e.stop();
                 elJson.value = $('json-import').value;
