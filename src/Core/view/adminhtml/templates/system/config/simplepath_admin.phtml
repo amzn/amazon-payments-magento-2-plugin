@@ -85,16 +85,17 @@ require(["prototype"], function(){
                 elJsonCheckDefault[0].click();
             }
 
+            // Add import textarea
+            amazonSimplepath.insert({bottom: '<br/><br/><textarea id="json-import" rows="2" cols="15" placeholder="Paste JSON credentials here"></textarea>'});
+
             // Add Import/Save button
-            amazonSimplepath.insert({after: '<button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Save Credentials</button>'});
+            amazonSimplepath.insert({bottom: '<button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Save Credentials</button>'});
             $('save-json').observe('click', function(e) {
                 e.stop();
                 elJson.value = $('json-import').value;
                 $('save').click();
             });
 
-            // Add import textarea
-            amazonSimplepath.insert({after: '<br/><textarea id="json-import" rows="2" cols="15" placeholder="Paste JSON credentials here"></textarea>'});
         }
 
         // Autoset payment region (for EU/UK)
@@ -137,6 +138,10 @@ require(["prototype"], function(){
             $('payment_'+co+'_amazon_payment_general-head').click();
             $('payment_'+co+'_amazon_payment_general_credentials-head').click();
         }
+        if (!$('payment_'+co+'_amazon_payment_general_credentials-head').hasClassName('open')) {
+            $('payment_'+co+'_amazon_payment_general_credentials-head').click();
+        }
+
     }
 
 
