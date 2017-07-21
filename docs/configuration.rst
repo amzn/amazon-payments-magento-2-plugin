@@ -73,9 +73,6 @@ Update Mechanism
 * `Data polling via Cron Job` (default) - Pull based mechanism where Magento 2 periodically checks authorization, capture  and refund status against the Amazon Pay systems. This is set to run at 5 minute intervals and requires that Magento 2 cron is setup and running
 * `Instant Payment Notifications` - Push based mechanism where Amazon Pay pushes authorization, capture and refund status updates to Magento 2. This requires that your site has a valid SSL certificate
 
-Amazon Pay button is visible on Product Page
-.................................................
-toggles whether to show **Amazon Pay** on product pages
  
 Advanced
 --------
@@ -91,6 +88,18 @@ Button Color
 ............
 Allows selection of button color from a pre determined list.
 
+Amazon Pay button is visible on Product Page
+.................................................
+toggles whether to show **Amazon Pay** on product pages
+
+Amazon Pay button is visible on minicart
+.................................................
+toggles whether to show **Amazon Pay** in the minicart
+
+Login with Amazon available in authentication popup
+.................................................
+toggles whether to show **Login with Amazon** in the authentication popup
+
 Sales Options
 '''''''''''''
 
@@ -99,6 +108,13 @@ New Order Status
 Allows selection of a custom status for orders with a `Processing` state made using the Amazon Pay payment method. 
 
 .. note:: This status indicates, if a payment for the order was authorized by Amazon Pay
+
+Store Name
+................
+Allows setting the store name submitted to Amazon Pay per Store View. 
+
+.. note:: Store View name is provided by default.
+
 
 Sales Exclusions
 ''''''''''''''''
