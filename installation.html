@@ -160,13 +160,24 @@ Please follow the <a class="reference external" href="http://docs.magento.com/ma
 <ul class="simple">
 <li>Sign in to your server via SSH</li>
 <li><cite>cd</cite> into you Magento installation directory</li>
-<li>Install the extension via composer: <cite>composer require amzn/amazon-payments-magento-2-plugin:^1.1.0</cite></li>
+<li>Install the extension via composer: <cite>composer require amzn/amazon-payments-magento-2-plugin:^1.1.1</cite></li>
 <li>Enable the extension: <cite>php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment</cite></li>
-<li>Upgrade the Magento instalation: <cite>php bin/magento setup:upgrade</cite></li>
+<li>Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></li>
 <li>Follow any advice the upgrade routine provides</li>
-<li>Deploy static content: <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</li>
+</ul>
+<p>In production mode, you will also have to compile the code and the dependency injection (DI) configuration and deploy static content</p>
+<ul class="simple">
+<li>Compile code and DI: <cite>php bin/magento setup:di:compile</cite></li>
+<li>Deploy static view files: <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</li>
 <li>Check permissions on directories and files and set them correctly if needed</li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please also have a look at the official .. <span class="target" id="magento-documentation-for-command-line-configuration">Magento documentation for command line configuration</span>: <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html">http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html</a>
+E.g.
+* .. <span class="target" id="code-compiler">Code compiler</span>: <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands-compiler.html">http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands-compiler.html</a>
+* .. <span class="target" id="deploy-static-view-files">Deploy static view files</span>: <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands-static-view.html">http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands-static-view.html</a></p>
+</div>
 </div>
 </div>
 
