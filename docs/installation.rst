@@ -32,9 +32,6 @@ In production mode, you will also have to compile the code and the dependency in
 * Check permissions on directories and files and set them correctly if needed
 
 .. note:: 
-   Please also have a look at the official .. _`Magento documentation for command line configuration`: http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html
-   E.g.
-   * .. _`Code compiler`: http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands-compiler.html
-   * .. _`Deploy static view files`: http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands-static-view.html
-   
+   Please also have a look at the official Magento documentation for command line configuration: http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html
+
    
