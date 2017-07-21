@@ -116,7 +116,7 @@ class SimplePath
      */
     private function getEndpointDomain()
     {
-        return in_array($this->getRegion(), array('EU', 'UK'))
+        return in_array($this->getConfig('currency/options/default'), array('EUR', 'GBP'))
           ? 'https://payments-eu.amazon.com/'
           : 'https://payments.amazon.com/';
     }
