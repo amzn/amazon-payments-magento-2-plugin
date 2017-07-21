@@ -117,8 +117,8 @@ class SimplePath
     private function getEndpointDomain()
     {
         return in_array($this->getConfig('currency/options/default'), array('EUR', 'GBP'))
-          ? 'https://payments-eu.amazon.com/'
-          : 'https://payments.amazon.com/';
+            ? 'https://payments-eu.amazon.com/'
+            : 'https://payments.amazon.com/';
     }
 
     /**
@@ -352,14 +352,6 @@ class SimplePath
     }
 
     /**
-     * Return simplepath URL
-     */
-    public function getSimplepathUrl()
-    {
-        return $this->getEndpointRegister() . '#event/fromSP';
-    }
-
-    /**
      * Return array of form POST params for SimplePath sign up
      */
     public function getFormParams()
@@ -450,7 +442,7 @@ class SimplePath
             'co'            => $co ? $co : 'US',
             'region'        => $this->getRegion(),
             'currency'      => $this->getConfig('currency/options/default'),
-            'amazonUrl'     => $this->getSimplepathUrl(),
+            'amazonUrl'     => $this->getEndpointRegister(),
             'pollUrl'       => $this->backendUrl->getUrl('amazonsp/simplepath/poll/'),
             'isSecure'      => (int) ($this->request->isSecure()),
             'hasOpenssl'    => (int) (extension_loaded('openssl')),

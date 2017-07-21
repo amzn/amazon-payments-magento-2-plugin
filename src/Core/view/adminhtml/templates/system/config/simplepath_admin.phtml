@@ -1,3 +1,35 @@
+<br />
+<div id="amazon_simplepath">
+
+    <div id="simplepath_hint">You will be registering for a [REGION] account based on the base currency of your shop ([CURRENCY]). For more information, click <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html#advanced" target="_blank">here</a>.</div>
+
+    <span style="display:inline-block;padding:1em 0em;">
+        <button><span>Get started with account registration</span></button>
+        &nbsp; &nbsp;
+        <button><span>My account is ready, I need to connect it to Magento</span></button>
+    </span>
+    <span style="display:inline-block;">
+        &nbsp; or &nbsp;
+        <a href="#" id="simplepath-skip">I've already setup Pay with Amazon, I want to edit my settings</a>
+    </span>
+
+    <p style="color:red;display:none" id="amazon_https_required">In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in System > Configuration > Web > Use secure URLs in Admin.</p>
+    <p style="color:red;display:none" id="amazon_openssl_required">In order to set keys, the OpenSSL PHP library is required.</p>
+    <p style="color:red;display:none" id="amazon_reload">Updating your config with new keys, please wait...</p>
+
+
+    <div id="json-import" style="display: none;">
+        <textarea rows="2" cols="15" placeholder="Paste JSON credentials here"></textarea>
+        <br />
+        <button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Save Credentials</button>
+    </div>
+
+</div>
+
+<div id="amazon_simplepath_back" style="display:none;margin-bottom:1em;margin-top:-0.5em;">
+  <a href="#">&laquo; Back</a>
+</div>
+
 <script>
 
 var AmazonSp = <?php echo $this->getAmazonSpJson(); ?>;
@@ -20,6 +52,7 @@ require(["prototype"], function(){
     var amazonFields = $$('#payment_'+co+'_amazon_payment .form-list');
     var amazonSpBack = $('amazon_simplepath_back');
 
+
     // Set region/currency hint
     var hint = $('simplepath_hint').innerHTML;
     hint = hint.replace('[REGION]', AmazonSp.region);
@@ -28,9 +61,7 @@ require(["prototype"], function(){
 
     // Show/hide fields
     if ($('payment_'+co+'_amazon_payment_general_credentials_merchant_id') != null) {
-        if (!$('payment_'+co+'_amazon_payment_general_credentials_merchant_id').value) {
-            amazonFields.each(Element.hide);
-        } else {
+        if ($('payment_'+co+'_amazon_payment_general_credentials_merchant_id').value) {
             amazonSpBack.show();
             amazonSimplepath.hide();
 
@@ -78,18 +109,21 @@ require(["prototype"], function(){
 
         // Add "Save Credentials"
         var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
-        if (elJson && $('save-json') == null) {
+        if (elJson && $('sp-td-json-value') == null) {
+            // Must create dynamic table to prevent conflict with config tables
+            var tableJson = new Element('table').update('<tr><td class="label" style="width:10%;">Credentials JSON</td><td class="value" id="sp-td-json-value"></td></tr>');
+            amazonSimplepath.insert({bottom: tableJson});
+            $('sp-td-json-value').insert($('json-import').show());
+
+
             // Enable Crednetials JSON config field
             var elJsonCheckDefault = $$('#payment_'+co+'_amazon_payment_general_credentials_credentials_json_inherit:checked');
             if (elJsonCheckDefault && elJsonCheckDefault.length) {
                 elJsonCheckDefault[0].click();
             }
 
-            // Add import textarea
-            amazonSimplepath.insert({bottom: '<br/><br/><textarea id="json-import" rows="2" cols="15" placeholder="Paste JSON credentials here"></textarea>'});
+            // Show JSON
 
-            // Add Import/Save button
-            amazonSimplepath.insert({bottom: '<button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Save Credentials</button>'});
             $('save-json').observe('click', function(e) {
                 e.stop();
                 elJson.value = $('json-import').value;

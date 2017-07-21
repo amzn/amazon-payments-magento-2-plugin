@@ -4,37 +4,11 @@
         <section id="payment">
             <group id="amazon_payment" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Amazon Pay</label>
-                <comment><![CDATA[
-
-                    <div id="amazon_simplepath">
-
-                        <!-- @see simplepath_admin.phtml -->
-
-                        <div id="simplepath_hint">You will be registering for a [REGION] account based on the base currency of your shop ([CURRENCY]). For more information, click <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html#advanced" target="_blank">here</a>.</div>
-
-                        <span style="display:inline-block;padding:1em 0em;">
-                            <button><span>Get started with account registration</span></button>
-                            &nbsp; &nbsp;
-                            <button><span>My account is ready, I need to connect it to Magento</span></button>
-                        </span>
-                        <span style="display:inline-block;">
-                            &nbsp; or &nbsp;
-                            <a href="#" id="simplepath-skip">I've already setup Pay with Amazon, I want to edit my settings</a>
-                        </span>
-
-                        <p style="color:red;display:none" id="amazon_https_required">In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in System > Configuration > Web > Use secure URLs in Admin.</p>
-                        <p style="color:red;display:none" id="amazon_openssl_required">In order to set keys, the OpenSSL PHP library is required.</p>
-                        <p style="color:red;display:none" id="amazon_reload">Updating your config with new keys, please wait...</p>
-
-                    </div>
-
-                    <div id="amazon_simplepath_back" style="display:none;margin-bottom:1em;margin-top:-0.5em;">
-                      <a href="#">&laquo; Back</a>
-                    </div>
-
-                ]]></comment>
-                <field id="version" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="version" type="text" translate="label comment" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                </field>
+                <field id="simplepath" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\SimplepathConfig</frontend_model>
                 </field>
                 <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>General</label>
