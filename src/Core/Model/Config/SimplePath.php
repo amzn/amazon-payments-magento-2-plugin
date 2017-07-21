@@ -430,18 +430,36 @@ class SimplePath
         return $region ? $region : 'US';
     }
 
+    /**
+     * Return a valid store currency, otherwise return null
+     */
+    public function getCurrency()
+    {
+        $currency = $this->getConfig('currency/options/default');
+        return (isset($this->_mapCurrencyRegion[$currency])) ? $currency : null;
+    }
+
+    /**
+     * Return merchant country
+     */
+    public function getCountry()
+    {
+        $co = $this->getConfig('paypal/general/merchant_country');
+        return $co ? $co : 'US';
+    }
+
 
     /**
      * Return array of config for JSON AmazonSp variable.
      */
     public function getJsonAmazonSpConfig()
     {
-        $co = $this->getConfig('paypal/general/merchant_country');
+
 
         return array(
-            'co'            => $co ? $co : 'US',
+            'co'            => $this->getCountry(),
             'region'        => $this->getRegion(),
-            'currency'      => $this->getConfig('currency/options/default'),
+            'currency'      => $this->getCurrency(),
             'amazonUrl'     => $this->getEndpointRegister(),
             'pollUrl'       => $this->backendUrl->getUrl('amazonsp/simplepath/poll/'),
             'isSecure'      => (int) ($this->request->isSecure()),

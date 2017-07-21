@@ -33,6 +33,7 @@ class SimplepathConfig extends \Magento\Config\Block\System\Config\Form\Field
         $html = $this->_layout
             ->createBlock('Amazon\Core\Block\Adminhtml\System\Config\SimplePathAdmin')
             ->setTemplate('Amazon_Core::system/config/simplepath_admin.phtml')
+            ->setCacheable(false)
             ->toHtml();
 
         return $html;

@@ -1,33 +1,46 @@
 <br />
 <div id="amazon_simplepath">
 
-    <div id="simplepath_hint">You will be registering for a [REGION] account based on the base currency of your shop ([CURRENCY]). For more information, click <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html#advanced" target="_blank">here</a>.</div>
+    <?php if (!$this->getCurrency()) : ?>
+
+    <div id="simplepath_unsported"><?php echo sprintf(__('An unsupported currency is currently selected. Review our <a href="%s" target="_blank">configuration guide</a> for more information.'), 'https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html'); ?></div>
+
+    <?php else : ?>
+
+    <div id="simplepath_hint">
+        <?php echo sprintf(__('You will be registering for a %s account based on the base currency of your shop (%s). For more information, click <a href="%s" target="_blank">here</a>.'),
+        $this->getRegion(),
+        $this->getCurrency(),
+        'https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html#advanced');
+        ?>
+    </div>
 
     <span style="display:inline-block;padding:1em 0em;">
-        <button><span>Get started with account registration</span></button>
+        <button><span><?php echo __('Get started with account registration'); ?></span></button>
         &nbsp; &nbsp;
-        <button><span>My account is ready, I need to connect it to Magento</span></button>
+        <button><span><?php echo __('My account is ready, I need to connect it to Magento'); ?></span></button>
     </span>
     <span style="display:inline-block;">
-        &nbsp; or &nbsp;
-        <a href="#" id="simplepath-skip">I've already setup Pay with Amazon, I want to edit my settings</a>
+        &nbsp; <?php echo __('or'); ?> &nbsp;
+        <a href="#" id="simplepath-skip"><?php echo __("I've already setup Pay with Amazon, I want to edit my settings"); ?></a>
     </span>
 
-    <p style="color:red;display:none" id="amazon_https_required">In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in System > Configuration > Web > Use secure URLs in Admin.</p>
-    <p style="color:red;display:none" id="amazon_openssl_required">In order to set keys, the OpenSSL PHP library is required.</p>
-    <p style="color:red;display:none" id="amazon_reload">Updating your config with new keys, please wait...</p>
+    <p style="color:red;display:none" id="amazon_https_required"><?php echo __("In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in System > Configuration > Web > Use secure URLs in Admin."); ?></p>
+    <p style="color:red;display:none" id="amazon_reload"><?php echo __('Updating your config with new keys, please wait...'); ?></p>
 
 
-    <div id="json-import" style="display: none;">
-        <textarea rows="2" cols="15" placeholder="Paste JSON credentials here"></textarea>
+    <div id="json-import-wrapper" style="display: none;">
+        <textarea rows="2" cols="15" placeholder="<?php echo __('Paste JSON credentials here'); ?>" id="json-import"></textarea>
         <br />
-        <button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Save Credentials</button>
+        <button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><?php echo __('Save Credentials'); ?></button>
     </div>
+
+    <?php endif; ?>
 
 </div>
 
 <div id="amazon_simplepath_back" style="display:none;margin-bottom:1em;margin-top:-0.5em;">
-  <a href="#">&laquo; Back</a>
+  <a href="#">&laquo; <?php echo __('Back'); ?></a>
 </div>
 
 <script>
@@ -35,11 +48,6 @@
 var AmazonSp = <?php echo $this->getAmazonSpJson(); ?>;
 
 require(["prototype"], function(){
-
-    // Check if SimplePath is supported
-    if (!AmazonSp.region || AmazonSp.region == 'JA') {
-        return;
-    }
 
     // Country code for ID selectors
     var co = AmazonSp.co.toLowerCase();
@@ -52,12 +60,10 @@ require(["prototype"], function(){
     var amazonFields = $$('#payment_'+co+'_amazon_payment .form-list');
     var amazonSpBack = $('amazon_simplepath_back');
 
-
-    // Set region/currency hint
-    var hint = $('simplepath_hint').innerHTML;
-    hint = hint.replace('[REGION]', AmazonSp.region);
-    hint = hint.replace('[CURRENCY]', AmazonSp.currency);
-    $('simplepath_hint').innerHTML = hint;
+    // Not enabled
+    if ($('simplepath_hint') == null) {
+        return;
+    }
 
     // Show/hide fields
     if ($('payment_'+co+'_amazon_payment_general_credentials_merchant_id') != null) {
@@ -111,9 +117,9 @@ require(["prototype"], function(){
         var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
         if (elJson && $('sp-td-json-value') == null) {
             // Must create dynamic table to prevent conflict with config tables
-            var tableJson = new Element('table').update('<tr><td class="label" style="width:10%;">Credentials JSON</td><td class="value" id="sp-td-json-value"></td></tr>');
+            var tableJson = new Element('table').update('<tr><td class="label" style="width:10%;"><?php echo __('Credentials JSON'); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
             amazonSimplepath.insert({bottom: tableJson});
-            $('sp-td-json-value').insert($('json-import').show());
+            $('sp-td-json-value').insert($('json-import-wrapper').show());
 
 
             // Enable Crednetials JSON config field
@@ -122,11 +128,15 @@ require(["prototype"], function(){
                 elJsonCheckDefault[0].click();
             }
 
-            // Show JSON
-
+            // Save JSON
             $('save-json').observe('click', function(e) {
                 e.stop();
-                elJson.value = $('json-import').value;
+                var json = $('json-import').value;
+                if (!json || !json.isJSON()) {
+                    alert('<?php echo __('Valid JSON credentials are required.'); ?>');
+                    return;
+                }
+                elJson.value = json;
                 $('save').click();
             });
 

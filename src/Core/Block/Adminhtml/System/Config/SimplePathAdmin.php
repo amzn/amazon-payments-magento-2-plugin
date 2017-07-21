@@ -37,6 +37,22 @@ class SimplePathAdmin extends Template
     }
 
     /**
+     * Return region
+     */
+    function getRegion()
+    {
+        return $this->simplePath->getRegion();
+    }
+
+    /**
+     * Return currency
+     */
+    function getCurrency()
+    {
+        return $this->simplePath->getCurrency();
+    }
+
+    /**
      * Render only on Payment Methods page
      */
     protected function _toHtml()
