@@ -19,10 +19,10 @@
     <system>
         <section id="payment">
             <group id="amazon_payment">
-                <group id="general">
-                    <group id="options">
-                        <field id="amazon_login_in_popup" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Amazon Login available in Authentication popup</label>
+                <group id="advanced">
+                    <group id="frontend">
+                        <field id="amazon_login_in_popup" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Login with Amazon available in authentication popup</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/amazon_login_in_popup</config_path>
                         </field>
