@@ -74,6 +74,7 @@ class Config extends Template
             'customerLoginPageUrl'     => $this->url->getLoginUrl(),
             'sandboxSimulationOptions' => [],
             'loginScope'               => $this->coreHelper->getLoginScope(),
+            'allowAmLoginLoading'      => $this->coreHelper->allowAmLoginLoading(),
             'isEuPaymentRegion'        => $this->coreHelper->isEuPaymentRegion(),
             'oAuthHashRedirectUrl'     => $this->coreHelper->getOAuthRedirectUrl(),
             'isQuoteDirty'             => $this->categoryExclusionHelper->isQuoteDirty(),

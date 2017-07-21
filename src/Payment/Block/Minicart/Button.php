@@ -18,6 +18,7 @@ namespace Amazon\Payment\Block\Minicart;
 use Magento\Checkout\Model\Session;
 use Magento\Payment\Model\MethodInterface;
 use Amazon\Payment\Helper\Data;
+use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Magento\Paypal\Block\Express\InContext;
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
@@ -59,12 +60,18 @@ class Button extends Template implements ShortcutInterface
     private $session;
 
     /**
-     * Constructor
+     * @var AmazonCoreHelper
+     */
+    private $coreHelper;
+
+    /**
+     * Button constructor.
      * @param Context $context
      * @param ResolverInterface $localeResolver
      * @param Data $mainHelper
-     * @param MethodInterface $payment
      * @param Session $session
+     * @param MethodInterface $payment
+     * @param AmazonCoreHelper $coreHelper
      * @param array $data
      */
     public function __construct(
@@ -73,6 +80,7 @@ class Button extends Template implements ShortcutInterface
         Data $mainHelper,
         Session $session,
         MethodInterface $payment,
+        AmazonCoreHelper $coreHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -81,6 +89,7 @@ class Button extends Template implements ShortcutInterface
         $this->mainHelper = $mainHelper;
         $this->payment = $payment;
         $this->session = $session;
+        $this->coreHelper = $coreHelper;
     }
 
     /**
@@ -88,7 +97,8 @@ class Button extends Template implements ShortcutInterface
      */
     protected function shouldRender()
     {
-        return $this->payment->isAvailable($this->session->getQuote())
+        return $this->coreHelper->isPayButtonAvailableInMinicart()
+            && $this->payment->isAvailable($this->session->getQuote())
             && $this->isMiniCart;
     }
 
