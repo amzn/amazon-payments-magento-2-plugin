@@ -92,7 +92,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret">Merchant Id, Access Key Id, Secret Access Key, Client Id, Client Secret</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#payment-region">Payment Region</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sandbox">Sandbox</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#javascript-origin-redirect-url-ipn-url">Javascript Origin, Redirect URL, IPN URL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#allowed-javascript-origins-allowed-return-urls-ipn-url">Allowed Javascript Origins, Allowed Return URLs, IPN URL</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#options">Options</a><ul>
@@ -212,11 +212,11 @@
 <h4>Sandbox<a class="headerlink" href="#sandbox" title="Permalink to this headline">¶</a></h4>
 <p>Sandbox mode has been designed to test the <strong>Amazon Pay</strong> service. In sandbox mode the selected payment method is not charged. Refer to the <strong>Amazon Pay</strong> documentation to get more information about the sandbox environment. In general, sandbox mode should be enabled for development and staging environments for testing and always has to be disabled for production environments. Never show the sandbox buttons and widgets to buyers in your live environment.</p>
 </div>
-<div class="section" id="javascript-origin-redirect-url-ipn-url">
-<h4>Javascript Origin, Redirect URL, IPN URL<a class="headerlink" href="#javascript-origin-redirect-url-ipn-url" title="Permalink to this headline">¶</a></h4>
-<p>Used to display the URLs within Magento 2 that are required by Amazon Pay. Please add this information to your Seller Central account.</p>
+<div class="section" id="allowed-javascript-origins-allowed-return-urls-ipn-url">
+<h4>Allowed Javascript Origins, Allowed Return URLs, IPN URL<a class="headerlink" href="#allowed-javascript-origins-allowed-return-urls-ipn-url" title="Permalink to this headline">¶</a></h4>
+<p>These are URLs that are required by Amazon Pay and should be added to your Seller Central account. These URLs are built using the Base URL which can be found under <span class="menuselection">General ‣ Web</span>.</p>
 <ul class="simple">
-<li><cite>Javascript Origin, Redirect URL</cite> - Please add this information to your Login with Amazon section of the Seller Central</li>
+<li><cite>Allowed Javascript Origins, Allowed Return URLs</cite> - Please add this information to your Login with Amazon section of the Seller Central</li>
 <li><cite>IPN URL</cite> - Please add this information to the field <strong>Merchant URL</strong> at <span class="menuselection">Settings ‣ Integration Settings</span> of the Seller Central</li>
 </ul>
 <div class="admonition note">
