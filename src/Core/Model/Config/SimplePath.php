@@ -109,8 +109,6 @@ class SimplePath
         }
     }
 
-
-
     /**
      * Return domain
      */
@@ -386,7 +384,6 @@ class SimplePath
         }
         $urlArray = array_unique($urlArray);
 
-
         $version = $this->moduleList->getOne('Amazon_Core');
         $coreVersion = ($version && isset($version['setup_version'])) ? $version['setup_version'] : '--';
 
@@ -394,16 +391,15 @@ class SimplePath
 
         return array(
             'keyShareURL' => $this->getReturnUrl(),
-            'publicKey' => $this->getPublicKey(),
-            'locale' => $this->getConfig('general/locale/code'),
-            'source' => 'SPPL',
-            'spId' => isset($this->_spIds[$currency]) ? $this->_spIds[$currency] : '',
-            'spSoftwareVersion' => $this->productMeta->getVersion(),
-            'spAmazonPluginVersion' => $coreVersion,
-            'merchantStoreDescription' => $this->getConfig('general/store_information/name'),
-            'merchantLoginDomains[]' => $baseUrls,
+            'publicKey'   => $this->getPublicKey(),
+            'locale'      => $this->getConfig('general/locale/code'),
+            'source'      => 'SPPL',
+            'spId'        => isset($this->_spIds[$currency]) ? $this->_spIds[$currency] : '',
+            'spSoftwareVersion'           => $this->productMeta->getVersion(),
+            'spAmazonPluginVersion'       => $coreVersion,
+            'merchantStoreDescription'    => $this->getConfig('general/store_information/name'),
+            'merchantLoginDomains[]'      => $baseUrls,
             'merchantLoginRedirectURLs[]' => $urlArray,
-
         );
     }
 
@@ -454,8 +450,6 @@ class SimplePath
      */
     public function getJsonAmazonSpConfig()
     {
-
-
         return array(
             'co'            => $this->getCountry(),
             'region'        => $this->getRegion(),

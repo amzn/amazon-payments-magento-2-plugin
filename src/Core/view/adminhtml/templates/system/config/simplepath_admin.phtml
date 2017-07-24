@@ -1,7 +1,7 @@
 <br />
 <div id="amazon_simplepath">
 
-    <?php if (!$this->getCurrency()) : ?>
+    <?php if (!$this->getCurrency()) : // SimplePath not supported ?>
 
     <div id="simplepath_unsported"><?php echo sprintf(__('An unsupported currency is currently selected. Review our <a href="%s" target="_blank">configuration guide</a> for more information.'), 'https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html'); ?></div>
 
@@ -185,9 +185,7 @@ require(["prototype"], function(){
         if (!$('payment_'+co+'_amazon_payment_general_credentials-head').hasClassName('open')) {
             $('payment_'+co+'_amazon_payment_general_credentials-head').click();
         }
-
     }
-
 
     // Perform Ajax request looking for new keys
     function pollForKeys() {
