@@ -254,6 +254,8 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     {
         $quote = $this->session->getQuote();
 
+        $quote->getExtensionAttributes()->setAmazonOrderReferenceId(null);
+
         if ($quote->getId()) {
             $quoteLink = $this->quoteLinkFactory->create()->load($quote->getId(), 'quote_id');
 
