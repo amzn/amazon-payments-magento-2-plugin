@@ -72,10 +72,10 @@ class Redirect extends BaseRedirect
 
         $afterAmazonAuthUrl = $this->customerUrl->getAccountUrl();
 
-        if ($this->customerSession->getAfterAmazonAuthUrl()) {
-            $afterAmazonAuthUrl = $this->customerSession->getAfterAmazonAuthUrl();
-        } elseif ($this->checkoutSession->getQuote() && (int)$this->checkoutSession->getQuote()->getItemsCount() > 0) {
+        if ($this->checkoutSession->getQuote() && (int)$this->checkoutSession->getQuote()->getItemsCount() > 0) {
             $afterAmazonAuthUrl = $this->url->getUrl('checkout');
+        } elseif ($this->customerSession->getAfterAmazonAuthUrl()) {
+            $afterAmazonAuthUrl = $this->customerSession->getAfterAmazonAuthUrl();
         }
 
         $result->setUrl($afterAmazonAuthUrl);
