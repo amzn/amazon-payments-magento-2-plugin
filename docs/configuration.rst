@@ -31,11 +31,11 @@ Sandbox
 .......
 Sandbox mode has been designed to test the **Amazon Pay** service. In sandbox mode the selected payment method is not charged. Refer to the **Amazon Pay** documentation to get more information about the sandbox environment. In general, sandbox mode should be enabled for development and staging environments for testing and always has to be disabled for production environments. Never show the sandbox buttons and widgets to buyers in your live environment.
 
-Javascript Origin, Redirect URL, IPN URL
-........................................
-Used to display the URLs within Magento 2 that are required by Amazon Pay. Please add this information to your Seller Central account.
+Allowed Javascript Origins, Allowed Return URLs, IPN URL
+........................................................
+These are URLs that are required by Amazon Pay and should be added to your Seller Central account. These URLs are built using the Base URL which can be found under :menuselection:`General --> Web`.
 
-* `Javascript Origin, Redirect URL` - Please add this information to your Login with Amazon section of the Seller Central
+* `Allowed Javascript Origins, Allowed Return URLs` - Please add this information to your Login with Amazon section of the Seller Central
 * `IPN URL` - Please add this information to the field **Merchant URL** at :menuselection:`Settings --> Integration Settings` of the Seller Central
 
 .. note:: The IPN URL settings for the Sandbox - and Production View differ. Please add the correct value to the environment you are currently transacting on.
@@ -73,9 +73,6 @@ Update Mechanism
 * `Data polling via Cron Job` (default) - Pull based mechanism where Magento 2 periodically checks authorization, capture  and refund status against the Amazon Pay systems. This is set to run at 5 minute intervals and requires that Magento 2 cron is setup and running
 * `Instant Payment Notifications` - Push based mechanism where Amazon Pay pushes authorization, capture and refund status updates to Magento 2. This requires that your site has a valid SSL certificate
 
-Amazon Pay button is visible on Product Page
-.................................................
-toggles whether to show **Amazon Pay** on product pages
  
 Advanced
 --------
@@ -91,6 +88,18 @@ Button Color
 ............
 Allows selection of button color from a pre determined list.
 
+Amazon Pay button is visible on Product Page
+.................................................
+toggles whether to show **Amazon Pay** on product pages
+
+Amazon Pay button is visible on minicart
+.................................................
+toggles whether to show **Amazon Pay** in the minicart
+
+Login with Amazon available in authentication popup
+.................................................
+toggles whether to show **Login with Amazon** in the authentication popup
+
 Sales Options
 '''''''''''''
 
@@ -99,6 +108,13 @@ New Order Status
 Allows selection of a custom status for orders with a `Processing` state made using the Amazon Pay payment method. 
 
 .. note:: This status indicates, if a payment for the order was authorized by Amazon Pay
+
+Store Name
+................
+Allows setting the store name submitted to Amazon Pay per Store View. 
+
+.. note:: Store View name is provided by default.
+
 
 Sales Exclusions
 ''''''''''''''''

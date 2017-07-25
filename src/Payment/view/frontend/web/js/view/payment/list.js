@@ -125,12 +125,10 @@ define([
          * @private
          */
         _reInitializeAmazonWalletWidget: function () {
-            var items = this.getRegion('payment-method-items');
-            _.find(items(), function (value) {
-                if (value.index === 'amazon_payment') {
-                    value.renderPaymentWidget();
-                }
-            }, this);
+            var child = this.getChild('amazon_payment');
+            if (child) {
+                child.renderPaymentWidget();
+            }
         },
         /**
          * hides editable content and links to prevent unexptect behaviour
