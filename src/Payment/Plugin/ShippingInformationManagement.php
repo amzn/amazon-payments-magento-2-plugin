@@ -21,6 +21,7 @@ use Closure;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Amazon\Login\Helper\Session as LoginSessionHelper;
 
 class ShippingInformationManagement
 {
@@ -34,10 +35,23 @@ class ShippingInformationManagement
      */
     protected $orderInformationManagement;
 
+    /**
+     * @var LoginSessionHelper
+     */
+    protected $loginSessionHelper;
+
+    /**
+     * ShippingInformationManagement constructor.
+     * @param LoginSessionHelper $loginSessionHelper
+     * @param OrderInformationManagementInterface $orderInformationManagement
+     * @param CartRepositoryInterface $cartRepository
+     */
     public function __construct(
+        LoginSessionHelper $loginSessionHelper,
         OrderInformationManagementInterface $orderInformationManagement,
         CartRepositoryInterface $cartRepository
     ) {
+        $this->loginSessionHelper         = $loginSessionHelper;
         $this->cartRepository             = $cartRepository;
         $this->orderInformationManagement = $orderInformationManagement;
     }
@@ -54,6 +68,12 @@ class ShippingInformationManagement
 
         /* Grand total is 0, skip rest of the plugin */
         if ($quote->getGrandTotal() <= 0) {
+            return $return;
+        }
+
+        // Add Amazon Order Reference ID only when logged in using Amazon Account
+        $amazonCustomer = $this->loginSessionHelper->getAmazonCustomer();
+        if (!$amazonCustomer) {
             return $return;
         }
 
