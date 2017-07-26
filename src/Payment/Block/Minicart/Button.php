@@ -25,7 +25,6 @@ use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\App\Request\Http;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class Button
@@ -35,8 +34,6 @@ class Button extends Template implements ShortcutInterface
     const ALIAS_ELEMENT_INDEX = 'alias';
 
     const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
-
-    const CART_PAGE_IDENTIFIER = 'checkout_cart_index';
 
     /**
      * @var bool
@@ -67,12 +64,12 @@ class Button extends Template implements ShortcutInterface
      * @var AmazonCoreHelper
      */
     private $coreHelper;
+
+    /*
+     * @var Http
+     */
     private $request;
 
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
 
     /**
      * Button constructor.
@@ -82,6 +79,7 @@ class Button extends Template implements ShortcutInterface
      * @param Session $session
      * @param MethodInterface $payment
      * @param AmazonCoreHelper $coreHelper
+     * @param Http $request
      * @param array $data
      */
     public function __construct(
@@ -92,7 +90,6 @@ class Button extends Template implements ShortcutInterface
         MethodInterface $payment,
         AmazonCoreHelper $coreHelper,
         Http $request,
-        LoggerInterface $logger,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -103,7 +100,6 @@ class Button extends Template implements ShortcutInterface
         $this->session = $session;
         $this->coreHelper = $coreHelper;
         $this->request = $request;
-        $this->logger                             = $logger;
     }
 
     /**
@@ -111,7 +107,6 @@ class Button extends Template implements ShortcutInterface
      */
     protected function shouldRender()
     {
-        $this->logger->info($this->request->getFullActionName().", on cart: ".$this->_isOnCartPage());
         return $this->_isOnCartPage()
             || (
                 $this->coreHelper->isPayButtonAvailableInMinicart()
