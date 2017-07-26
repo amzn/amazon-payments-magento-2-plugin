@@ -17,6 +17,7 @@ namespace Amazon\Core\Model\Config\Credentials;
 
 use Amazon\Core\Helper\Data;
 use Amazon\Core\Model\Validation\JsonConfigDataValidatorFactory;
+use Amazon\Core\Model\Config\SimplePath;
 use Magento\Config\Model\ResourceModel\Config as ConfigWriter;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Json\DecoderInterface;
@@ -58,6 +59,11 @@ class Json
     protected $encryptor;
 
     /**
+     * @var SimplePath
+     */
+    protected $simplePath;
+
+    /**
      * @param Data                           $amazonCoreHelper
      * @param JsonConfigDataValidatorFactory $jsonConfigDataValidator
      * @param ConfigWriter                   $configWriter
@@ -71,7 +77,8 @@ class Json
         ConfigWriter $configWriter,
         MessageManager $messageManager,
         DecoderInterface $jsonDecoder,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        SimplePath $simplePath
     ) {
         $this->amazonCoreHelper               = $amazonCoreHelper;
         $this->jsonConfigDataValidatorFactory = $jsonConfigDataValidator;
@@ -79,6 +86,7 @@ class Json
         $this->messageManager                 = $messageManager;
         $this->jsonDecoder                    = $jsonDecoder;
         $this->encryptor                      = $encryptor;
+        $this->simplePath                     = $simplePath;
     }
 
     /**
@@ -102,6 +110,11 @@ class Json
     {
         $arrayCredentials = $this->jsonDecoder->decode($jsonCredentials);
         $this->wipeJsonCredentialsConfig($scopeData);
+
+        // Decrypt SimplePath JSON
+        if (isset($arrayCredentials['encryptedKey'])) {
+            $arrayCredentials = $this->jsonDecoder->decode($this->simplePath->decryptPayload(json_encode($arrayCredentials), false, false));
+        }
 
         foreach ($this->amazonCoreHelper->getAmazonCredentialsFields() as $mandatoryField) {
             $valueToSave     = $arrayCredentials[$mandatoryField];

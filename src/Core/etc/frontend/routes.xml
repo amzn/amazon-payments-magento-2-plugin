@@ -1,10 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="admin">
-        <route id="amazonlogs" frontName="amazonlogs">
-            <module name="Amazon_Core" />
-        </route>
-        <route id="amazonsp" frontName="amazonsp">
+    <router id="standard">
+        <route id="amazon_core" frontName="amazon_core">
             <module name="Amazon_Core" />
         </route>
     </router>
