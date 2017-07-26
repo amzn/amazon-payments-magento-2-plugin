@@ -107,8 +107,9 @@ class Button extends Template implements ShortcutInterface
      */
     protected function shouldRender()
     {
-        return $this->_isOnCartPage()
-            || (
+        return ( $this->_isOnCartPage() 
+                && $this->payment->isAvailable($this->session->getQuote())
+            ) || (
                 $this->coreHelper->isPayButtonAvailableInMinicart()
                 && $this->payment->isAvailable($this->session->getQuote())
                 && $this->isMiniCart
