@@ -24,6 +24,8 @@ use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\App\Request\Http;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Button
@@ -33,6 +35,8 @@ class Button extends Template implements ShortcutInterface
     const ALIAS_ELEMENT_INDEX = 'alias';
 
     const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
+
+    const CART_PAGE_IDENTIFIER = 'checkout_cart_index';
 
     /**
      * @var bool
@@ -63,6 +67,12 @@ class Button extends Template implements ShortcutInterface
      * @var AmazonCoreHelper
      */
     private $coreHelper;
+    private $request;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Button constructor.
@@ -81,6 +91,8 @@ class Button extends Template implements ShortcutInterface
         Session $session,
         MethodInterface $payment,
         AmazonCoreHelper $coreHelper,
+        Http $request,
+        LoggerInterface $logger,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -90,6 +102,8 @@ class Button extends Template implements ShortcutInterface
         $this->payment = $payment;
         $this->session = $session;
         $this->coreHelper = $coreHelper;
+        $this->request = $request;
+        $this->logger                             = $logger;
     }
 
     /**
@@ -97,9 +111,13 @@ class Button extends Template implements ShortcutInterface
      */
     protected function shouldRender()
     {
-        return $this->coreHelper->isPayButtonAvailableInMinicart()
-            && $this->payment->isAvailable($this->session->getQuote())
-            && $this->isMiniCart;
+        $this->logger->info($this->request->getFullActionName().", on cart: ".$this->_isOnCartPage());
+        return $this->_isOnCartPage()
+            || (
+                $this->coreHelper->isPayButtonAvailableInMinicart()
+                && $this->payment->isAvailable($this->session->getQuote())
+                && $this->isMiniCart
+            );
     }
 
     /**
@@ -112,6 +130,10 @@ class Button extends Template implements ShortcutInterface
         }
 
         return parent::_toHtml();
+    }
+
+    protected function _isOnCartPage(){
+        return $this->request->getFullActionName() == 'checkout_cart_index';
     }
 
     /**
