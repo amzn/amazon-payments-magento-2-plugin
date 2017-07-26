@@ -45,6 +45,7 @@ class Data extends AbstractHelper
      */
     public function getModuleVersion()
     {
-        return $this->moduleList->getOne(static::MODULE_CODE)['setup_version'];
+        // there is a similar function here: src/Core/Block/Adminhtml/System/Config/Form/Version.php, please update in parallel
+        return "1.1.2";
     }
 }
