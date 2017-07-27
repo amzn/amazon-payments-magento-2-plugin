@@ -19,13 +19,11 @@ class SimplePathAdmin extends Template
 
     function __construct(
         Context $context,
-        SimplePath $simplePath,
-        \Magento\Framework\UrlInterface $urlInterface
+        SimplePath $simplePath
     )
     {
         parent::__construct($context);
         $this->simplePath = $simplePath;
-        $this->urlInterface = $urlInterface;
     }
 
     /**
@@ -50,13 +48,5 @@ class SimplePathAdmin extends Template
     function getCurrency()
     {
         return $this->simplePath->getCurrency();
-    }
-
-    /**
-     * Render only on Payment Methods page
-     */
-    protected function _toHtml()
-    {
-        return strpos($this->urlInterface->getCurrentUrl(), 'payment') === FALSE ? '' : parent::_toHtml();
     }
 }

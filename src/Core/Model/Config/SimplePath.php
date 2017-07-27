@@ -7,6 +7,8 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Payment\Helper\Formatter;
+use \phpseclib\Crypt\RSA;
+use \phpseclib\Crypt\AES;
 
 class SimplePath
 {
@@ -50,9 +52,7 @@ class SimplePath
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Paypal\Model\Config $paypal,
-        \Psr\Log\LoggerInterface $logger,
-        \phpseclib\Crypt\RSA $rsa,
-        \phpseclib\Crypt\AES $aes
+        \Psr\Log\LoggerInterface $logger
     )
     {
 
@@ -69,8 +69,6 @@ class SimplePath
         $this->storeManager  = $storeManager;
         $this->paypal        = $paypal;
         $this->logger        = $logger;
-        $this->rsa           = $rsa;
-        $this->aes           = $aes;
 
         $this->messageManager = $messageManager;
 
@@ -140,7 +138,8 @@ class SimplePath
      */
     public function generateKeys()
     {
-        $keys = $this->rsa->createKey(2048);
+        $rsa = new RSA();
+        $keys = $rsa->createKey(2048);
 
         $this->config
             ->saveConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, $keys['publickey'], 'default', 0)
@@ -261,10 +260,11 @@ class SimplePath
                   $finalPayload = @mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decryptedKey, base64_decode($payload->encryptedPayload), MCRYPT_MODE_CBC, base64_decode($payload->iv));
               } else {
                   // This library uses openssl_decrypt, which may have issues
-                  $this->aes->setKey($decryptedKey);
-                  $this->aes->setIV(base64_decode($payload->iv, true));
-                  $this->aes->setKeyLength(128);
-                  $finalPayload = $this->aes->decrypt($payload->encryptedPayload);
+                  $aes = new AES();
+                  $aes->setKey($decryptedKey);
+                  $aes->setIV(base64_decode($payload->iv, true));
+                  $aes->setKeyLength(128);
+                  $finalPayload = $aes->decrypt($payload->encryptedPayload);
               }
 
               // Remove binary characters
