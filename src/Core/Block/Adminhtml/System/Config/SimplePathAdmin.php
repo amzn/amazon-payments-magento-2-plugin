@@ -2,27 +2,26 @@
 
 namespace Amazon\Core\Block\Adminhtml\System\Config;
 
-use Amazon\Core\Helper\CategoryExclusion;
-use Amazon\Core\Helper\Data;
-use Amazon\Core\Model\Config\SimplePath;
-use Magento\Customer\Model\Url;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
-
-class SimplePathAdmin extends Template
+class SimplePathAdmin extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Amazon\Core\Model\Config\simplePath
+     * @var SimplePath
      */
-    protected $_model;
+    protected $simplePath;
 
-
+    /**
+     * SimplePathAdmin constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Amazon\Core\Model\Config\SimplePath $simplePath
+     * @param array $data
+     */
     function __construct(
-        Context $context,
-        SimplePath $simplePath
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Amazon\Core\Model\Config\SimplePath $simplePath,
+        array $data = []
     )
     {
-        parent::__construct($context);
+        parent::__construct($context, $data);
         $this->simplePath = $simplePath;
     }
 
