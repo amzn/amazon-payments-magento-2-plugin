@@ -88,6 +88,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#pre-installation-steps">Pre-installation steps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#web-setup-wizard-magento-marketplace-install-method-preferred">Web Setup Wizard / Magento Marketplace Install Method (Preferred)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-composer-install-method">Manual Composer Install Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#un-install-method">Un-install Method</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
@@ -160,11 +161,15 @@ Please follow the <a class="reference external" href="http://docs.magento.com/ma
 <ul class="simple">
 <li>Sign in to your server via SSH</li>
 <li><cite>cd</cite> into you Magento installation directory</li>
-<li>Install the extension via composer: <cite>composer require amzn/amazon-payments-magento-2-plugin:^1.1.1</cite></li>
+<li>Install the extension via composer: <cite>composer require amzn/amazon-payments-magento-2-plugin:^1.1.3</cite></li>
 <li>Enable the extension: <cite>php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment</cite></li>
 <li>Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></li>
 <li>Follow any advice the upgrade routine provides</li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>composer require amzn/amazon-payments-magento-2-plugin:^1.1.3</cite> will always instal the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please remove the <cite>^</cite></p>
+</div>
 <p>In production mode, you will also have to compile the code and the dependency injection (DI) configuration and deploy static content</p>
 <ul class="simple">
 <li>Compile code and DI: <cite>php bin/magento setup:di:compile</cite></li>
@@ -175,6 +180,12 @@ Please follow the <a class="reference external" href="http://docs.magento.com/ma
 <p class="first admonition-title">Note</p>
 <p class="last">Please also have a look at the official Magento documentation for command line configuration: <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html">http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html</a></p>
 </div>
+</div>
+<div class="section" id="un-install-method">
+<h2>Un-install Method<a class="headerlink" href="#un-install-method" title="Permalink to this headline">¶</a></h2>
+<p>If there is a need ti disable the module, you can either disable Amazon Pay and Login with Amazon in the extension settings. This will temove all customer facing parts.</p>
+<p>To completely disable the module, please run <cite>php bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</cite></p>
+<p>To completely uninstall the module using composer, please run <cite>composer remove amzn/amazon-payments-magento-2-plugin</cite></p>
 </div>
 </div>
 
