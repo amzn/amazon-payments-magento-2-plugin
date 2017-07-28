@@ -57,6 +57,6 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
             return __('--');
         }
         */
-        return "1.1.2";
+        return "1.1.3";
     }
 }
