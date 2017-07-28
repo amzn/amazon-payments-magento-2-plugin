@@ -20,10 +20,12 @@ In case you are not able or willing to use the web installation, you can install
 
 * Sign in to your server via SSH
 * `cd` into you Magento installation directory
-* Install the extension via composer: `composer require amzn/amazon-payments-magento-2-plugin:^1.1.1`
+* Install the extension via composer: `composer require amzn/amazon-payments-magento-2-plugin:^1.1.3`
 * Enable the extension: `php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment`
 * Upgrade the Magento installation: `php bin/magento setup:upgrade`
 * Follow any advice the upgrade routine provides
+
+.. note:: `composer require amzn/amazon-payments-magento-2-plugin:^1.1.3` will always instal the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please remove the `^`
 
 In production mode, you will also have to compile the code and the dependency injection (DI) configuration and deploy static content
 
@@ -34,4 +36,10 @@ In production mode, you will also have to compile the code and the dependency in
 .. note:: 
    Please also have a look at the official Magento documentation for command line configuration: http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html
 
-   
+Un-install Method
+--------------------------
+If there is a need ti disable the module, you can either disable Amazon Pay and Login with Amazon in the extension settings. This will temove all customer facing parts.
+
+To completely disable the module, please run `php bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment`
+
+To completely uninstall the module using composer, please run `composer remove amzn/amazon-payments-magento-2-plugin`
