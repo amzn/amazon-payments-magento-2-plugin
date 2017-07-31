@@ -114,8 +114,7 @@ define(
                                 addressData.street[i] = '';
                             }
                         }
-                        checkoutData.setShippingAddressFromData(addressConverter.quoteAddressToFormAddressData(addressData));
-                        checkoutDataResolver.resolveShippingAddress();
+                        selectShippingAddress(addressData);
                     }
                 ).fail(
                     function (response) {
