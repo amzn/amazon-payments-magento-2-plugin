@@ -66,6 +66,11 @@ class JsonConfigDataValidator extends AbstractValidator
 
     protected function mandatoryFieldsExist($decodedCredentials)
     {
+        // SimplePath
+        if (isset($decodedCredentials['encryptedKey'])) {
+            return true;
+        }
+
         foreach ($this->amazonCoreHelper->getAmazonCredentialsFields() as $mandatoryField) {
             if (!isset($decodedCredentials[$mandatoryField])) {
                 return false;

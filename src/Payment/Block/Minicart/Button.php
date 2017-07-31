@@ -24,6 +24,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\App\Request\Http;
 
 /**
  * Class Button
@@ -64,6 +65,12 @@ class Button extends Template implements ShortcutInterface
      */
     private $coreHelper;
 
+    /*
+     * @var Http
+     */
+    private $request;
+
+
     /**
      * Button constructor.
      * @param Context $context
@@ -72,6 +79,7 @@ class Button extends Template implements ShortcutInterface
      * @param Session $session
      * @param MethodInterface $payment
      * @param AmazonCoreHelper $coreHelper
+     * @param Http $request
      * @param array $data
      */
     public function __construct(
@@ -81,6 +89,7 @@ class Button extends Template implements ShortcutInterface
         Session $session,
         MethodInterface $payment,
         AmazonCoreHelper $coreHelper,
+        Http $request,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -90,6 +99,7 @@ class Button extends Template implements ShortcutInterface
         $this->payment = $payment;
         $this->session = $session;
         $this->coreHelper = $coreHelper;
+        $this->request = $request;
     }
 
     /**
@@ -116,6 +126,10 @@ class Button extends Template implements ShortcutInterface
         }
 
         return parent::_toHtml();
+    }
+
+    protected function _isOnCartPage(){
+        return $this->request->getFullActionName() == 'checkout_cart_index';
     }
 
     /**

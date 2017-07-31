@@ -4,8 +4,11 @@
         <section id="payment">
             <group id="amazon_payment" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Amazon Pay</label>
-                <field id="version" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="version" type="text" translate="label comment" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                </field>
+                <field id="simplepath" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\SimplepathConfig</frontend_model>
                 </field>
                 <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>General</label>
@@ -63,22 +66,22 @@
                     </group>
                     <group id="options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Options</label>
-                        <field id="pwa_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="pwa_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enable Amazon Pay</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/pwa_enabled</config_path>
                         </field>
-                        <field id="lwa_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="lwa_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enable Login with Amazon</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/lwa_enabled</config_path>
                         </field>
-                        <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Payment Action</label>
                             <source_model>Amazon\Core\Model\Config\Source\PaymentAction</source_model>
                             <config_path>payment/amazon_payment/payment_action</config_path>
                         </field>
-                        <field id="authorization_mode" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="authorization_mode" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Authorization Mode</label>
                             <source_model>Amazon\Core\Model\Config\Source\AuthorizationMode</source_model>
                             <config_path>payment/amazon_payment/authorization_mode</config_path>
@@ -109,12 +112,12 @@
                             <source_model>Amazon\Core\Model\Config\Source\Button\Size</source_model>
                             <config_path>payment/amazon_payment/button_size</config_path>
                         </field>
-                        <field id="pwa_pp_button_is_visible" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="pwa_pp_button_is_visible" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Amazon Pay button on Product Page</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/pwa_pp_button_is_visible</config_path>
                         </field>
-                        <field id="minicart_button_is_visible" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="minicart_button_is_visible" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Amazon Pay button in minicart</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/minicart_button_is_visible</config_path>

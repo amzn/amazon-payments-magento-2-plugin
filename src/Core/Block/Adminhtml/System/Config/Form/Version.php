@@ -49,11 +49,14 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function getVersion($module)
     {
+        /*
         $version = $this->_moduleList->getOne($module);
         if ($version && isset($version['setup_version'])) {
             return $version['setup_version'];
         } else {
             return __('--');
         }
+        */
+        return "1.1.3";
     }
 }

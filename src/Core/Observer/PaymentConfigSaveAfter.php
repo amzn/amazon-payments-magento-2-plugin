@@ -79,7 +79,7 @@ class PaymentConfigSaveAfter implements ObserverInterface
     public function execute(Observer $observer)
     {
         $scopeData = $this->getScopeData($observer);
-        $jsonCredentials = $this->amazonCoreHelper->getCredentialsJson();
+        $jsonCredentials = $this->amazonCoreHelper->getCredentialsJson($scopeData['scope'], $scopeData['scope_id']);
 
         if (!empty($jsonCredentials)) {
             $this->appConfig->reinit();
