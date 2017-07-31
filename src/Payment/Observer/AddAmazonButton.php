@@ -68,6 +68,9 @@ class AddAmazonButton implements ObserverInterface
             )->setShowOrPosition(
                 $observer->getEvent()->getOrPosition()
             );
+
+            $shortcut->setIsCart(get_class($shortcutButtons) == 'Magento\Checkout\Block\QuoteShortcutButtons');
+
             $shortcutButtons->addShortcut($shortcut);
         }
     }
