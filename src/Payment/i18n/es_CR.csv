@@ -15,7 +15,6 @@
 "Could not find the ""multiline_count"" config of the ""street"" Customer address attribute.","No se ha podido encontrar la configuración ""multiline_count"" del atributo ""street"" de la dirección del cliente."
 "Are you an Amazon customer? Pay now with address and payment details stored in your Amazon account.","¿Eres cliente de Amazon? Ahora puedes pagar utilizando la dirección y los datos de pago almacenados en tu cuenta de Amazon."
 "Simulate Payment Scenarios","Simular casos de pago"
-"Your card will be charged on completion of this order.","Tu método de pago recibirá un cargo al completarse este pedido."
 "Amazon could not process your request.","Amazon Pay no ha podido procesar tu solicitud. Vuelve a intentarlo."
 "Please select a payment method.","Selecciona un método de pago."
 "Your session has expired, please reload the page and try again.","Tu sesión ha caducado. Actualiza la página e inténtalo de nuevo."
