@@ -18,9 +18,10 @@ define([
     'amazonCore',
     'amazonPaymentConfig',
     'amazonCsrf',
+    'mage/loader',
     'jquery/ui',
     'mage/cookies'
-], function ($, amazonCore, amazonPaymentConfig, amazonCsrf) {
+], function ($, amazonCore, amazonPaymentConfig, amazonCsrf, loader) {
     "use strict";
 
     var self;
@@ -33,6 +34,9 @@ define([
         _create: function () {
 
             self = this;
+            // start the loading animation. WIll en on redirect, no explicit stop here
+            $('body').trigger('processStart');
+
             //verify nonce first
             this.redirectOnInvalidState();
 
