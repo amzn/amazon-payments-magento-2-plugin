@@ -56,6 +56,12 @@ class Session
             $this->dispatchAuthenticationEvent();
             $this->session->setCustomerDataAsLoggedIn($customerData);
             $this->session->regenerateId();
+            
+            if ($this->checkoutSession->hasQuote() &&
+                $this->checkoutSession->getQuote()->hasDataChanges()
+            ) {
+                $this->checkoutSession->loadCustomerQuote();
+            }
         }
     }
 
