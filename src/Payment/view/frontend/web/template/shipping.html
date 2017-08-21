@@ -1,17 +1,7 @@
 <!--
 /**
- * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <li id="shipping" class="checkout-shipping-address" data-bind="fadeVisible: visible()">
@@ -20,19 +10,12 @@
          class="step-content"
          data-role="content">
 
-        <!-- ko ifnot: (isAmazonLoggedIn) -->
-        <!-- ko foreach: getRegion('amazon-pay-button') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
-        <!--/ko-->
-
         <!-- ko if: (!quoteIsVirtual) -->
         <!-- ko foreach: getRegion('customer-email') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
         <!--/ko-->
 
-        <!-- ko ifnot: (isAmazonLoggedIn) -->
         <!-- ko foreach: getRegion('address-list') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
@@ -52,17 +35,13 @@
         </div>
         <!-- /ko -->
 
-        <!--/ko-->
-
         <!-- ko foreach: getRegion('before-form') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
 
         <!-- Inline address form -->
-        <!-- ko ifnot: (isAmazonLoggedIn) -->
         <!-- ko if: (isFormInline) -->
         <!-- ko template: 'Magento_Checkout/shipping-address/form' --><!-- /ko -->
-        <!-- /ko -->
         <!-- /ko -->
     </div>
 </li>
@@ -73,7 +52,6 @@
     class="checkout-shipping-method"
     data-bind="fadeVisible: visible(), blockLoader: isLoading"
     role="presentation">
-
     <div class="checkout-shipping-method">
         <div class="step-title" data-bind="i18n: 'Shipping Methods'" data-role="title"></div>
         <!-- ko foreach: getRegion('before-shipping-method-form') -->
@@ -85,7 +63,7 @@
              role="tabpanel"
              aria-hidden="false">
             <!-- ko if: rates().length  -->
-            <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingInformation, afterRender: shippingMethodsOnRender" novalidate="novalidate">
+            <form class="form methods-shipping" id="co-shipping-method-form" data-bind="submit: setShippingInformation" novalidate="novalidate">
                 <div id="checkout-shipping-method-load">
                     <table class="table-checkout-shipping-method">
                         <thead>
@@ -103,8 +81,7 @@
                             <td class="col col-method">
                                 <!-- ko ifnot: method.error_message -->
                                 <!-- ko if: $parent.rates().length == 1 -->
-                                <input name="shipping_method"
-                                       class="radio"
+                                <input class="radio"
                                        type="radio"
                                        data-bind="attr: {
                                                     checked: $parent.rates().length == 1,
@@ -114,7 +91,7 @@
                                                  }" />
                                 <!-- /ko -->
                                 <!--ko ifnot: ($parent.rates().length == 1)-->
-                                <input name="shipping_method" type="radio"
+                                <input type="radio"
                                        data-bind="
                                                 value: method.carrier_code + '_' + method.method_code,
                                                 checked: $parent.isSelected,
@@ -147,7 +124,7 @@
                                     <div data-bind="text: method.error_message"></div>
                                 </div>
                                 <span class="no-display">
-                                    <input name="shipping_method" type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
+                                    <input type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
                                 </span>
                             </td>
                         </tr>

@@ -32,33 +32,34 @@ define(
                 template: 'Amazon_Payment/shipping'
             },
             isAmazonLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            isLoading: ko.pureComputed(function () {
-                return amazonStorage.isAmazonAccountLoggedIn() ? amazonStorage.isShippingMethodsLoading() : shippingService.isLoading();
-            }, this),
+            // isLoading: ko.pureComputed(function () {
+            //     return amazonStorage.isAmazonAccountLoggedIn() ? amazonStorage.isShippingMethodsLoading() : shippingService.isLoading();
+            // }, this),
 
             initialize: function () {
                 var self = this;
                 this._super();
-
-                //switch form inline based on amazon and customer loggedIn status
-                amazonStorage.isAmazonAccountLoggedIn.subscribe(function (loggedIn) {
-                    this.isFormInline = (loggedIn) ? false : (customer.isLoggedIn()) ? (addressList().length === 0) : true;
-                }, this);
-
+            },
+            initObservable: function () {
+                this._super();
+                this.isFormInline = ko.computed(function () {
+                    return amazonStorage.isAmazonAccountLoggedIn() ? false : (customer.isLoggedIn()) ? (addressList().length === 0) : true;
+                });
+                return this;
             },
             /**
              * OnRender for shipping Methods
              */
-            shippingMethodsOnRender: function() {
-                if (this.isAmazonLoggedIn()) {
-                    shippingService.getShippingRates().subscribe(function() {
-                        if(amazonStorage.isShippingMethodsLoading() === true) {
-                            amazonStorage.isShippingMethodsLoading(false);
-                        }
-                    }, this);
-                    amazonStorage.isShippingMethodsLoading(false); //remove loader when shippingMethod is set
-                }
-            },
+            // shippingMethodsOnRender: function() {
+            //     if (this.isAmazonLoggedIn()) {
+            //         shippingService.getShippingRates().subscribe(function() {
+            //             if(amazonStorage.isShippingMethodsLoading() === true) {
+            //                 amazonStorage.isShippingMethodsLoading(false);
+            //             }
+            //         }, this);
+            //         amazonStorage.isShippingMethodsLoading(false); //remove loader when shippingMethod is set
+            //     }
+            // },
             validateGuestEmail: function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]';
                 $(loginFormSelector).validation();
