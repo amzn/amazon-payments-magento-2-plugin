@@ -21,7 +21,6 @@ use Amazon\Payment\Model\ResourceModel\OrderLink;
 use Amazon\Payment\Model\ResourceModel\PendingAuthorization;
 use Amazon\Payment\Model\ResourceModel\PendingCapture;
 use Amazon\Payment\Model\ResourceModel\QuoteLink;
-use Amazon\Payment\Setup\Table\AmazonPendingRefundFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -34,18 +33,8 @@ use Magento\Sales\Api\Data\TransactionInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
-    /**
-     * @var AmazonPendingRefundFactory
-     */
-    private $amazonPendingRefundTableFactory;
 
-    /**
-     * @param AmazonPendingRefundFactory $amazonPendingRefundFactory
-     */
-    public function __construct(EavSetup $eavSetup, AmazonPendingRefundFactory $amazonPendingRefundFactory)
-    {
-        $this->amazonPendingRefundTableFactory = $amazonPendingRefundFactory;
-    }
+    const PENDING_REFUND_TABLE_NAME = 'amazon_pending_refund';
 
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -201,9 +190,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '1.9.0', '<')) {
-            $this->amazonPendingRefundTableFactory
-                ->create(['connection' => $setup->getConnection()])
-                ->createTable();
+            $this->createPendingRefundTable($setup);
         }
 
         if (version_compare($context->getVersion(), '1.10.0', '<')) {
@@ -381,6 +368,82 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $pendingColumns,
                 AdapterInterface::INDEX_TYPE_UNIQUE
             ),
+            $pendingColumns,
+            AdapterInterface::INDEX_TYPE_UNIQUE
+        );
+    }
+	
+	private function createPendingRefundTable(SchemaSetupInterface $setup) {
+        $setup->getConnection()->dropTable(static::PENDING_REFUND_TABLE_NAME);
+
+        $table = $setup->getConnection()->newTable($setup->getTable(static::PENDING_REFUND_TABLE_NAME));
+
+        $table
+            ->addColumn(
+                PendingRefundInterface::ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'identity' => true,
+                    'unsigned' => true,
+                    'primary'  => true,
+                    'nullable' => false
+                ]
+            )
+            ->addColumn(
+                PendingRefundInterface::REFUND_ID,
+                Table::TYPE_TEXT,
+                255,
+                [
+                    'nullable' => false
+                ]
+            )
+            ->addColumn(
+                PendingRefundInterface::CREATED_AT,
+                Table::TYPE_DATETIME,
+                null,
+                [
+                    'nullable' => false
+                ]
+            )
+            ->addColumn(
+                PendingRefundInterface::ORDER_ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'comment'  => 'order id'
+                ]
+            )
+            ->addColumn(
+                PendingRefundInterface::PAYMENT_ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'comment'  => 'payment id'
+                ]
+            );
+
+        $setup->getConnection()->createTable($table);
+
+        $pendingColumns = [
+            PendingRefundInterface::ORDER_ID,
+            PendingRefundInterface::PAYMENT_ID,
+            PendingRefundInterface::REFUND_ID,
+        ];
+
+        $indexName = $setup->getConnection()->getIndexName(
+            $setup->getTable(static::PENDING_REFUND_TABLE_NAME),
+            $pendingColumns,
+            AdapterInterface::INDEX_TYPE_UNIQUE
+        );
+
+        $setup->getConnection()->addIndex(
+            $setup->getTable(static::PENDING_REFUND_TABLE_NAME),
+            $indexName,
             $pendingColumns,
             AdapterInterface::INDEX_TYPE_UNIQUE
         );
