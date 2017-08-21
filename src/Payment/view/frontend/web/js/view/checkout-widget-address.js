@@ -92,6 +92,7 @@ define(
              */
             getShippingAddressFromAmazon: function () {
                 amazonStorage.isShippingMethodsLoading(true);
+                shippingService.isLoading(true);
                 var serviceUrl = urlBuilder.createUrl('/amazon-shipping-address/:amazonOrderReference', {amazonOrderReference: amazonStorage.getOrderReference()}),
                     payload = {
                         addressConsentToken: amazonStorage.getAddressConsentToken()
@@ -115,7 +116,7 @@ define(
                             }
                         }
                         checkoutData.setShippingAddressFromData(addressConverter.quoteAddressToFormAddressData(addressData));
-                        checkoutDataResolver.resolveShippingAddress();
+                        checkoutDataResolver.resolveEstimationAddress();
                     }
                 ).fail(
                     function (response) {

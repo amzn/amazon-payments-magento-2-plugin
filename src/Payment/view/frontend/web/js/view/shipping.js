@@ -28,38 +28,18 @@ define(
     ) {
         'use strict';
         return Component.extend({
-            defaults: {
-                template: 'Amazon_Payment/shipping'
-            },
-            isAmazonLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            // isLoading: ko.pureComputed(function () {
-            //     return amazonStorage.isAmazonAccountLoggedIn() ? amazonStorage.isShippingMethodsLoading() : shippingService.isLoading();
-            // }, this),
-
             initialize: function () {
-                var self = this;
+                this.isFormInline = !window.checkoutConfig.isCustomerLoggedIn;
                 this._super();
+                return this;
             },
             initObservable: function () {
                 this._super();
-                this.isFormInline = ko.computed(function () {
-                    return amazonStorage.isAmazonAccountLoggedIn() ? false : (customer.isLoggedIn()) ? (addressList().length === 0) : true;
-                });
+                amazonStorage.isAmazonAccountLoggedIn.subscribe(function (value) {
+                    this.isNewAddressAdded(value);
+                }, this);
                 return this;
             },
-            /**
-             * OnRender for shipping Methods
-             */
-            // shippingMethodsOnRender: function() {
-            //     if (this.isAmazonLoggedIn()) {
-            //         shippingService.getShippingRates().subscribe(function() {
-            //             if(amazonStorage.isShippingMethodsLoading() === true) {
-            //                 amazonStorage.isShippingMethodsLoading(false);
-            //             }
-            //         }, this);
-            //         amazonStorage.isShippingMethodsLoading(false); //remove loader when shippingMethod is set
-            //     }
-            // },
             validateGuestEmail: function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]';
                 $(loginFormSelector).validation();
