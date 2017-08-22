@@ -8,10 +8,7 @@ define(
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Checkout/js/model/step-navigator',
-        'Amazon_Payment/js/model/storage',
-        'Magento_Checkout/js/model/shipping-service',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Customer/js/model/address-list'
+        'Amazon_Payment/js/model/storage'
     ],
     function (
         $,
@@ -21,20 +18,13 @@ define(
         customer,
         setShippingInformationAction,
         stepNavigator,
-        amazonStorage,
-        shippingService,
-        quote,
-        addressList
+        amazonStorage
     ) {
         'use strict';
         return Component.extend({
             initialize: function () {
-                this.isFormInline = !window.checkoutConfig.isCustomerLoggedIn;
                 this._super();
-                return this;
-            },
-            initObservable: function () {
-                this._super();
+                this.isNewAddressAdded(amazonStorage.isAmazonAccountLoggedIn());
                 amazonStorage.isAmazonAccountLoggedIn.subscribe(function (value) {
                     this.isNewAddressAdded(value);
                 }, this);
