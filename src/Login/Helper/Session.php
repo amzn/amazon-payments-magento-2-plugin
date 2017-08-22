@@ -19,6 +19,7 @@ use Amazon\Core\Domain\AmazonCustomer;
 use Amazon\Login\Domain\ValidationCredentials;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 
 class Session
@@ -32,6 +33,11 @@ class Session
      * @var EventManagerInterface
      */
     protected $eventManager;
+    
+    /**
+     * @var CheckoutSession
+     */
+    protected $checkoutSession;
 
     /**
      * @param CustomerSession $session
@@ -39,10 +45,12 @@ class Session
      */
     public function __construct(
         CustomerSession $session,
-        EventManagerInterface $eventManager
+        EventManagerInterface $eventManager,
+        CheckoutSession $checkoutSession
     ) {
         $this->session      = $session;
         $this->eventManager = $eventManager;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
