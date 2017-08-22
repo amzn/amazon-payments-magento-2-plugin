@@ -22,7 +22,7 @@ use Amazon\Payment\Model\ResourceModel\PendingAuthorization;
 use Amazon\Payment\Model\ResourceModel\PendingCapture;
 use Amazon\Payment\Model\ResourceModel\QuoteLink;
 use Amazon\Payment\Setup\Table\AmazonPendingRefundFactory;
-use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
@@ -42,7 +42,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * @param AmazonPendingRefundFactory $amazonPendingRefundFactory
      */
-    public function __construct(EavSetup $eavSetup, AmazonPendingRefundFactory $amazonPendingRefundFactory)
+    public function __construct(EavSetupFactory $eavSetup, AmazonPendingRefundFactory $amazonPendingRefundFactory)
     {
         $this->amazonPendingRefundTableFactory = $amazonPendingRefundFactory;
     }
