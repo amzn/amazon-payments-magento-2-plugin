@@ -114,7 +114,16 @@ define(
                                 addressData.street[i] = '';
                             }
                         }
-                        checkoutData.setShippingAddressFromData(addressConverter.quoteAddressToFormAddressData(addressData));
+                        
+                        var amazonAddressData = addressConverter.quoteAddressToFormAddressData(addressData);
+                        checkoutData.setShippingAddressFromData(amazonAddressData);
+
+                        if(!checkoutData.getNewCustomerShippingAddress()) {
+                            if (quote.shippingAddress()) {
+                                selectShippingAddress(addressConverter.formAddressDataToQuoteAddress(amazonAddressData));
+                            }
+                        }
+
                         checkoutDataResolver.resolveShippingAddress();
                     }
                 ).fail(
