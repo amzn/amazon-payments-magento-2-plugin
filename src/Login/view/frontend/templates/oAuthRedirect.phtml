@@ -15,4 +15,13 @@
  */
 ?>
 <?php /** @var $block \Amazon\Login\Block\OAuthRedirect */ ?>
-<div data-mage-init='{"amazonOAuthRedirect": {}}'><?php echo __('You will be redirected shortly...'); ?></div>
+<div><?php echo __('You will be redirected shortly...'); ?></div>
+<script>
+require([
+    'jquery',
+    'Amazon_Login/js/amazon-redirect'
+], function ($) {
+    'use strict';
+    $.amazon.AmazonRedirect();
+});
+</script>
