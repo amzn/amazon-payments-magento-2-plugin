@@ -359,7 +359,7 @@ class SimplePath
         $db = $this->connection->getConnection();
         $select = $db->select()
             ->from(
-                ['c' => 'core_config_data']
+                ['c' => $this->connection->getTableName('core_config_data')]
             )
             ->where('c.path IN (?)', array('web/unsecure/base_url', 'web/secure/base_url'));
 
