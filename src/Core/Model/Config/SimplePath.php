@@ -354,35 +354,30 @@ class SimplePath
      */
     public function getFormParams()
     {
-        // Retrieve store URLs from config table
-        $baseUrls = array();
-        $db = $this->connection->getConnection();
-        $select = $db->select()
-            ->from(
-                ['c' => 'core_config_data']
-            )
-            ->where('c.path IN (?)', array('web/unsecure/base_url', 'web/secure/base_url'));
-
-        foreach ($db->fetchAll($select) as $row) {
-            $url = parse_url($row['value']);
-
-            if (isset($url['host'])){
-                $baseUrls[] = 'https://' . $url['host'];
-            }
-        }
-        $baseUrls = array_unique($baseUrls);
-
-        // Get redirect URLs
+        // Get redirect URLs and store URL-s
         $urlArray = array();
+        $baseUrls = array();
         $stores = $this->storeManager->getStores();
         foreach ($stores as $store) {
-            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
-            if ($baseUrl) {
+            // Get secure base URL
+            if ($baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true)) {
                 $value = $baseUrl . 'amazon/login/processAuthHash/';
                 $urlArray[] = $value;
+                $url = parse_url($baseUrl);
+                if (isset($url['host'])){
+                    $baseUrls[] = 'https://' . $url['host'];
+                }
+            }
+            // Get unsecure base URL
+            if ($baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, false)) {
+                $url = parse_url($baseUrl);
+                if (isset($url['host'])){
+                    $baseUrls[] = 'https://' . $url['host'];
+                }
             }
         }
         $urlArray = array_unique($urlArray);
+        $baseUrls = array_unique($baseUrls);
 
         $version = $this->moduleList->getOne('Amazon_Core');
         $coreVersion = ($version && isset($version['setup_version'])) ? $version['setup_version'] : '--';
