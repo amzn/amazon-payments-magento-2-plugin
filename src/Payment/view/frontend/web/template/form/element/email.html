@@ -14,12 +14,15 @@
  * permissions and limitations under the License.
  */
 -->
-<!-- ko foreach: getRegion('before-login-form') -->
+<!-- ko foreach: getRegion('amazon-button-region') -->
 <!-- ko template: getTemplate() --><!-- /ko -->
 <!-- /ko -->
 
 <!-- ko ifnot: isCustomerLoggedIn() -->
 
+<!-- ko foreach: getRegion('before-login-form') -->
+<!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->
 <form class="form form-login" data-role="email-with-possible-login"
       data-bind="submit:login"
       method="post">

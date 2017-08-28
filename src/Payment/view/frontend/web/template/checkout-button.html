@@ -19,22 +19,18 @@
     <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
 
-<!-- ko if: (isPwaVisible) -->
-    <!-- ko ifnot: (isAmazonAccountLoggedIn) -->
-        <div class="amazon-button-container">
-            <div class="amazon-button-container__cell">
-                <div id="PayWithAmazon" class="login-with-amazon" data-bind="mageInit: {'amazonButton':{'buttonType': 'PwA'}}"></div>
-            </div>
+<div class="amazon-button-container" data-bind="visible: !isAmazonAccountLoggedIn() && isPwaVisible()">
+    <div class="amazon-button-container__cell">
+        <div id="PayWithAmazon" class="login-with-amazon" data-bind="mageInit: {'amazonButton':{'buttonType': 'PwA'}}"></div>
+    </div>
 
-            <div class="amazon-button-container__cell">
-                <div class="field-tooltip toggle">
-                    <span class="field-tooltip-action action-help" data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-                    <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="text: tooltip"></div>
-                </div>
-            </div>
+    <div class="amazon-button-container__cell">
+        <div class="field-tooltip toggle">
+            <span class="field-tooltip-action action-help" data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+            <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="text: tooltip"></div>
         </div>
-    <!--/ko-->
-<!--/ko-->
+    </div>
+</div>
 
 <!-- ko foreach: getRegion('after-amazon-button') -->
     <!-- ko template: getTemplate() --><!-- /ko -->
