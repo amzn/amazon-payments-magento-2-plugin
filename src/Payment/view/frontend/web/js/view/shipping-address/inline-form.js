@@ -12,7 +12,7 @@ define([
         initObservable: function () {
             this._super();
             amazonStorage.isAmazonAccountLoggedIn.subscribe(function (value) {
-                var elem = document.getElementById('co-shipping-form');
+                var elem = document.getElementById(this.formSelector);
                 if (elem && value === false) {
                     document.getElementById(this.formSelector).style.display = 'block';
                 }
@@ -21,7 +21,7 @@ define([
         },
         manipulateInlineForm: function () {
             if (amazonStorage.isAmazonAccountLoggedIn()) {
-                var elem = document.getElementById('co-shipping-form');
+                var elem = document.getElementById(this.formSelector);
                 if (elem) {
                     document.getElementById(this.formSelector).style.display = 'none';
                 }
