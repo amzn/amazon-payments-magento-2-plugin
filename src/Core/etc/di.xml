@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Amazon\Core\Client\ClientFactoryInterface" type="Amazon\Core\Client\ClientFactory" />
-    <preference for="PayWithAmazon\ClientInterface" type="Amazon\Core\Client\Client" />
-    <type name="PayWithAmazon\ClientInterface">
+    <preference for="AmazonPay\ClientInterface" type="Amazon\Core\Client\Client" />
+    <type name="AmazonPay\ClientInterface">
         <arguments>
             <argument name="config" xsi:type="array" />
         </arguments>

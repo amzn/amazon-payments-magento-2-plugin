@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Domain;
 
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 
 class AmazonRefundResponse extends AbstractAmazonRefundResponse
 {

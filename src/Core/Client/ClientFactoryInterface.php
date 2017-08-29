@@ -16,7 +16,7 @@
 namespace Amazon\Core\Client;
 
 use Magento\Store\Model\ScopeInterface;
-use PayWithAmazon\ClientInterface;
+use AmazonPay\ClientInterface;
 
 interface ClientFactoryInterface
 {
