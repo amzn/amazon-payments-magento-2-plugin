@@ -45,6 +45,7 @@ class CompleteOrderStatus implements ObserverInterface
         $newOrderStatus = $this->coreHelper->getNewOrderStatus();
 
         if ($newOrderStatus
+            && $order->isObjectNew()
             && Amazon::PAYMENT_METHOD_CODE == $payment->getMethod()
             && $order->getState() == Order::STATE_PROCESSING
         ) {
