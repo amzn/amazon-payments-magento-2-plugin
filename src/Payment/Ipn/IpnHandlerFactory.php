@@ -18,7 +18,7 @@ namespace Amazon\Payment\Ipn;
 use Amazon\Core\Helper\Data;
 use Amazon\Core\Model\EnvironmentChecker;
 use Magento\Framework\ObjectManagerInterface;
-use PayWithAmazon\IpnHandlerInterface;
+use AmazonPay\IpnHandlerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -54,7 +54,7 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
         EnvironmentChecker $environmentChecker,
         LoggerInterface $logger,
         Data $coreHelper,
-        $instanceName = '\\PayWithAmazon\\IpnHandlerInterface'
+        $instanceName = '\\AmazonPay\\IpnHandlerInterface'
     ) {
         $this->objectManager      = $objectManager;
         $this->instanceName       = $instanceName;

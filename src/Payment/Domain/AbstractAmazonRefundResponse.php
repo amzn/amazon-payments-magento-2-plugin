@@ -18,7 +18,7 @@ namespace Amazon\Payment\Domain;
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Payment\Domain\Details\AmazonRefundDetails;
 use Amazon\Payment\Domain\Details\AmazonRefundDetailsFactory;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 
 abstract class AbstractAmazonRefundResponse
 {

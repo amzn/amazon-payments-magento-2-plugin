@@ -30,7 +30,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 class OrderInformationManagement implements OrderInformationManagementInterface
