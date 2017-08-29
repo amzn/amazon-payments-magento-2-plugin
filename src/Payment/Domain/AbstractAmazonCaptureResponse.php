@@ -18,7 +18,7 @@ namespace Amazon\Payment\Domain;
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Payment\Domain\Details\AmazonCaptureDetails;
 use Amazon\Payment\Domain\Details\AmazonCaptureDetailsFactory;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 
 abstract class AbstractAmazonCaptureResponse
 {

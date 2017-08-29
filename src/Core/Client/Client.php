@@ -15,7 +15,7 @@
  */
 namespace Amazon\Core\Client;
 
-use PayWithAmazon\Client as AmazonClient;
+use AmazonPay\Client as AmazonClient;
 
 class Client extends AmazonClient
 {
