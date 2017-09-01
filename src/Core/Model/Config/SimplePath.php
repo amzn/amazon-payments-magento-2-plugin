@@ -240,7 +240,7 @@ class SimplePath
               $response = $client->request();
               $amazonPublickey = urldecode($response->getBody());
 
-          } catch (Exception $e) {
+          } catch (\Exception $e) {
               throw new \Magento\Framework\Validator\Exception(__($e->getMessage()));
           }
 
@@ -283,7 +283,7 @@ class SimplePath
               throw new \Magento\Framework\Validator\Exception("Unable to verify signature for JSON payload.");
           }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->critical($e);
             $this->messageManager->addError(__($e->getMessage()));
 
@@ -359,7 +359,7 @@ class SimplePath
         $db = $this->connection->getConnection();
         $select = $db->select()
             ->from(
-                ['c' => 'core_config_data']
+                ['c' => $this->connection->getTableName('core_config_data')]
             )
             ->where('c.path IN (?)', array('web/unsecure/base_url', 'web/secure/base_url'));
 

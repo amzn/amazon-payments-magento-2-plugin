@@ -19,7 +19,7 @@ use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Core\Helper\Data;
 use Magento\Framework\DataObject;
 use Magento\Framework\Validator\AbstractValidator;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 
 class ApiCredentialsValidator extends AbstractValidator
 {

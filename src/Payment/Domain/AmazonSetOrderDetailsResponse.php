@@ -16,7 +16,7 @@
 namespace Amazon\Payment\Domain;
 
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 
 class AmazonSetOrderDetailsResponse
 {

@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Ipn;
 
-use PayWithAmazon\IpnHandlerInterface;
+use AmazonPay\IpnHandlerInterface;
 
 interface IpnHandlerFactoryInterface
 {

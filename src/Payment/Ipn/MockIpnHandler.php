@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Ipn;
 
-use PayWithAmazon\IpnHandler as AmazonIpnHandler;
+use AmazonPay\IpnHandler as AmazonIpnHandler;
 
 /**
  * Class MockIpnHandler

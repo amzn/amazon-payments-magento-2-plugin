@@ -18,7 +18,7 @@ namespace Amazon\Payment\Domain;
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Payment\Domain\Details\AmazonOrderDetails;
 use Amazon\Payment\Domain\Details\AmazonOrderDetailsFactory;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 
 class AmazonGetOrderDetailsResponse
 {
