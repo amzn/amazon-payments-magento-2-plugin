@@ -2,7 +2,7 @@
 
 namespace Amazon\Core\Model\Config;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Helper\Data as CoreHelper;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
@@ -35,16 +35,18 @@ class SimplePath
     protected $_scope;
     protected $_scopeId;
 
+    protected $coreHelper;
+
     /**
      * SimplePath constructor.
      */
     public function __construct(
+        CoreHelper $coreHelper,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMeta,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\App\ResourceConnection $connection,
         \Magento\Framework\App\Cache\Manager $cacheManager,
         \Magento\Framework\App\Request\Http $request,
@@ -55,7 +57,7 @@ class SimplePath
         \Psr\Log\LoggerInterface $logger
     )
     {
-
+        $this->coreHelper   = $coreHelper;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -63,7 +65,6 @@ class SimplePath
         $this->backendUrl    = $backendUrl;
         $this->cacheManager  = $cacheManager;
         $this->connection    = $connection;
-        $this->moduleList    = $moduleList;
         $this->state         = $state;
         $this->request       = $request;
         $this->storeManager  = $storeManager;
@@ -384,8 +385,10 @@ class SimplePath
         }
         $urlArray = array_unique($urlArray);
 
-        $version = $this->moduleList->getOne('Amazon_Core');
-        $coreVersion = ($version && isset($version['setup_version'])) ? $version['setup_version'] : '--';
+        $coreVersion = $this->coreHelper->getVersion();
+        if (!$coreVersion) {
+            $coreVersion = '--';
+        }
 
         $currency = $this->getConfig('currency/options/default');
 
