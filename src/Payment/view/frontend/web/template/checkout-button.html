@@ -23,7 +23,7 @@
     <!-- ko ifnot: (isAmazonAccountLoggedIn) -->
         <div class="amazon-button-container">
             <div class="amazon-button-container__cell">
-                <div id="PayWithAmazon" class="login-with-amazon" data-bind="mageInit: {'amazonButton':{'buttonType': 'PwA'}}"></div>
+		    <div class="login-with-amazon" data-bind="attr: {id: 'PayWithAmazon_' + displayArea}, mageInit: {'amazonButton':{'buttonType': 'PwA'}}"></div>
             </div>
 
             <div class="amazon-button-container__cell">

@@ -14,6 +14,7 @@
  * permissions and limitations under the License.
  */
 ?>
+<?php /** @var \Amazon\Login\Block\Login $block */?>
 <div class="block block-amazon-login">
     <div class="block-title">
         <strong id="block-amazon-login-heading" role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo __('Login with Amazon') ?></strong>
@@ -24,7 +25,7 @@
             <div class="primary">
                 <div class="amazon-button-container">
                     <div class="amazon-button-container__cell">
-                        <div id="LoginWithAmazon" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "LwA"}}'></div>
+                        <div id="LoginWithAmazon-<?php echo $block->getJsId() ?>" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "LwA"}}'></div>
                     </div>
                     <div class="amazon-button-container__cell">
                         <div class="field-tooltip toggle">

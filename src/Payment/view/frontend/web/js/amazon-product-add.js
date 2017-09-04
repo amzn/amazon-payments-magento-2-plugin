@@ -48,7 +48,7 @@ define([
             }, this);
 
             //setup binds for click
-            $('#amazon-addtoCart').on('click', function (e) {
+            $('.amazon-addtoCart').on('click', function (e) {
                 if ($(_this.options.addToCartForm).valid()) {
                     addedViaAmazon = true;
                     $(_this.options.addToCartForm).submit();
