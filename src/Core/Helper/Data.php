@@ -20,6 +20,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Module\ModuleListInterface;
 
 class Data extends AbstractHelper
 {
@@ -76,18 +77,27 @@ class Data extends AbstractHelper
     private $clientIpHelper;
 
     /**
-     * @param Context               $context
-     * @param EncryptorInterface    $encryptor
+     * @var ModuleListInterface
+     */
+    protected $moduleList;
+
+    /**
+     * Data constructor.
+     * @param ModuleListInterface $moduleList
+     * @param Context $context
+     * @param EncryptorInterface $encryptor
      * @param StoreManagerInterface $storeManager
-     * @param ClientIp              $clientIpHelper
+     * @param ClientIp $clientIpHelper
      */
     public function __construct(
+        ModuleListInterface $moduleList,
         Context $context,
         EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper
     ) {
         parent::__construct($context);
+        $this->moduleList = $moduleList;
         $this->encryptor      = $encryptor;
         $this->storeManager   = $storeManager;
         $this->clientIpHelper = $clientIpHelper;
@@ -679,5 +689,15 @@ class Data extends AbstractHelper
     public function getAmazonCredentialsEncryptedFields()
     {
         return $this->amazonCredentialsEncryptedFields;
+    }
+
+    public function getVersion()
+    {
+        $version = $this->moduleList->getOne('Amazon_Core');
+        if ($version && isset($version['setup_version'])) {
+            return $version['setup_version'];
+        } else {
+            return null;
+        }
     }
 }

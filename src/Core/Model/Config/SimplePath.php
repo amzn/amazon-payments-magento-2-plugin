@@ -2,7 +2,7 @@
 
 namespace Amazon\Core\Model\Config;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Helper\Data as CoreHelper;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
@@ -35,16 +35,18 @@ class SimplePath
     protected $_scope;
     protected $_scopeId;
 
+    protected $coreHelper;
+
     /**
      * SimplePath constructor.
      */
     public function __construct(
+        CoreHelper $coreHelper,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMeta,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\App\ResourceConnection $connection,
         \Magento\Framework\App\Cache\Manager $cacheManager,
         \Magento\Framework\App\Request\Http $request,
@@ -55,7 +57,7 @@ class SimplePath
         \Psr\Log\LoggerInterface $logger
     )
     {
-
+        $this->coreHelper   = $coreHelper;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -63,7 +65,6 @@ class SimplePath
         $this->backendUrl    = $backendUrl;
         $this->cacheManager  = $cacheManager;
         $this->connection    = $connection;
-        $this->moduleList    = $moduleList;
         $this->state         = $state;
         $this->request       = $request;
         $this->storeManager  = $storeManager;
@@ -354,38 +355,35 @@ class SimplePath
      */
     public function getFormParams()
     {
-        // Retrieve store URLs from config table
-        $baseUrls = array();
-        $db = $this->connection->getConnection();
-        $select = $db->select()
-            ->from(
-                ['c' => $this->connection->getTableName('core_config_data')]
-            )
-            ->where('c.path IN (?)', array('web/unsecure/base_url', 'web/secure/base_url'));
-
-        foreach ($db->fetchAll($select) as $row) {
-            $url = parse_url($row['value']);
-
-            if (isset($url['host'])){
-                $baseUrls[] = 'https://' . $url['host'];
-            }
-        }
-        $baseUrls = array_unique($baseUrls);
-
-        // Get redirect URLs
+        // Get redirect URLs and store URL-s
         $urlArray = array();
+        $baseUrls = array();
         $stores = $this->storeManager->getStores();
         foreach ($stores as $store) {
-            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
-            if ($baseUrl) {
+            // Get secure base URL
+            if ($baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true)) {
                 $value = $baseUrl . 'amazon/login/processAuthHash/';
                 $urlArray[] = $value;
+                $url = parse_url($baseUrl);
+                if (isset($url['host'])){
+                    $baseUrls[] = 'https://' . $url['host'];
+                }
+            }
+            // Get unsecure base URL
+            if ($baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, false)) {
+                $url = parse_url($baseUrl);
+                if (isset($url['host'])){
+                    $baseUrls[] = 'https://' . $url['host'];
+                }
             }
         }
         $urlArray = array_unique($urlArray);
+        $baseUrls = array_unique($baseUrls);
 
-        $version = $this->moduleList->getOne('Amazon_Core');
-        $coreVersion = ($version && isset($version['setup_version'])) ? $version['setup_version'] : '--';
+        $coreVersion = $this->coreHelper->getVersion();
+        if (!$coreVersion) {
+            $coreVersion = '--';
+        }
 
         $currency = $this->getConfig('currency/options/default');
 
