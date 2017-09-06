@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Setup;
 
-use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -24,14 +24,14 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var EavSetup
+     * @var EavSetupFactory
      */
     private $eavSetup;
 
     /**
-     * @param EavSetup $eavSetup
+     * @param EavSetupFactory $eavSetup
      */
-    public function __construct(EavSetup $eavSetup)
+    public function __construct(EavSetupFactory $eavSetup)
     {
         $this->eavSetup = $eavSetup;
     }
@@ -39,7 +39,7 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '1.5.0', '<')) {
-            $this->upgradeAddressStreetMultiline();
+            $this->upgradeAddressStreetMultiline($setup);
         }
     }
 
@@ -47,16 +47,18 @@ class UpgradeData implements UpgradeDataInterface
      * @throws LocalizedException
      * @return void
      */
-    private function upgradeAddressStreetMultiline()
+    private function upgradeAddressStreetMultiline(ModuleDataSetupInterface $setup)
     {
-        $row = $this->eavSetup->getAttribute('customer_address', 'street', 'multiline_count');
+        $eavSetup = $this->eavSetup->create(['setup' => $setup]);
+
+        $row = $eavSetup->getAttribute('customer_address', 'street', 'multiline_count');
 
         if ($row === false || ! is_numeric($row)) {
             throw new LocalizedException(__('Could not find the "multiline_count" config of the "street" Customer address attribute.'));
         }
 
         if ($row < 3) {
-            $this->eavSetup->updateAttribute('customer_address', 'street', 'multiline_count', 3);
+            $eavSetup->updateAttribute('customer_address', 'street', 'multiline_count', 3);
         }
     }
 }
