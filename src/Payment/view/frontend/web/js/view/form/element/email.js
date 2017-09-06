@@ -20,7 +20,8 @@ define([
 
     return Component.extend({
         defaults: {
-            email: checkoutData.getInputFieldEmailValue() || getAmazonCustomerEmail()
+            email: checkoutData.getInputFieldEmailValue() || getAmazonCustomerEmail(),
+            template: 'Amazon_Payment/form/element/email'
         },
         initialize: function () {
             this._super();
