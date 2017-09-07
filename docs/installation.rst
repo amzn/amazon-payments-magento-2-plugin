@@ -20,12 +20,12 @@ In case you are not able or willing to use the web installation, you can install
 
 * Sign in to your server via SSH
 * `cd` into you Magento installation directory
-* Install the extension via composer: `composer require amzn/amazon-payments-magento-2-plugin:^1.1.3`
+* Install the extension via composer: `composer require amzn/amazon-payments-magento-2-plugin:^1.1.4`
 * Enable the extension: `php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment`
 * Upgrade the Magento installation: `php bin/magento setup:upgrade`
 * Follow any advice the upgrade routine provides
 
-.. note:: `composer require amzn/amazon-payments-magento-2-plugin:^1.1.3` will always instal the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please remove the `^`
+.. note:: `composer require amzn/amazon-payments-magento-2-plugin:^1.1.4` will always instal the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please remove the `^`
 
 In production mode, you will also have to compile the code and the dependency injection (DI) configuration and deploy static content
 
