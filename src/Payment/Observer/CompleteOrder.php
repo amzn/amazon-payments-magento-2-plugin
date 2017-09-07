@@ -55,7 +55,12 @@ class CompleteOrder implements ObserverInterface
         }
 
         if ($order->getState() == Order::STATE_COMPLETE &&
-            $order->getStoredData()[OrderInterface::STATE] != Order::STATE_COMPLETE) {
+            ($order->isObjectNew() || (
+                array_key_exists(OrderInterface::STATE, $order->getStoredData()) &&
+                $order->getStoredData()[OrderInterface::STATE] != Order::STATE_COMPLETE
+                )
+            )
+        ) {
             $this->closeOrderReference($order);
         }
     }
