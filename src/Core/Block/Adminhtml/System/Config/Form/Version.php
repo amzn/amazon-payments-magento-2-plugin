@@ -3,31 +3,27 @@
 namespace Amazon\Core\Block\Adminhtml\System\Config\Form;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Module\ModuleListInterface;
+use Amazon\Core\Helper\Data as CoreHelper;
 
 class Version extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const MODULE_AMAZON_CORE = 'Amazon_Core';
-    const MODULE_AMAZON_LOGIN = 'Amazon_Login';
-    const MODULE_AMAZON_PAYMENT = 'Amazon_Payment';
-
     /**
-     * @var ModuleListInterface
+     * @var CoreHelper
      */
-    protected $_moduleList;
+    protected $coreHelper;
 
     /**
      * Version constructor.
-     * @param ModuleListInterface $moduleList
+     * @param CoreHelper $coreHelper
      * @param Context $context
      * @param array $data
      */
     public function __construct(
-        ModuleListInterface $moduleList,
+        CoreHelper $coreHelper,
         Context $context,
         array $data = []
     ) {
-        $this->_moduleList = $moduleList;
+        $this->coreHelper = $coreHelper;
         parent::__construct($context, $data);
     }
 
@@ -37,26 +33,13 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
+        $version = $this->coreHelper->getVersion();
+        if (!$version) {
+            $version = __('--');
+        }
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
-        $output .= __('Module version') . ': ' . $this->getVersion(self::MODULE_AMAZON_CORE);
+        $output .= __('Module version') . ': ' . $version;
         $output .= "</div>";
          return $output;
-    }
-
-    /**
-     * @param $module
-     * @return \Magento\Framework\Phrase
-     */
-    protected function getVersion($module)
-    {
-        /*
-        $version = $this->_moduleList->getOne($module);
-        if ($version && isset($version['setup_version'])) {
-            return $version['setup_version'];
-        } else {
-            return __('--');
-        }
-        */
-        return "1.1.3";
     }
 }

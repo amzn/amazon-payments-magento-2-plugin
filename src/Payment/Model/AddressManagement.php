@@ -29,7 +29,7 @@ use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Validator\Factory;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Model\Quote;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 class AddressManagement implements AddressManagementInterface

@@ -8,10 +8,7 @@ define(
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/action/set-shipping-information',
         'Magento_Checkout/js/model/step-navigator',
-        'Amazon_Payment/js/model/storage',
-        'Magento_Checkout/js/model/shipping-service',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Customer/js/model/address-list'
+        'Amazon_Payment/js/model/storage'
     ],
     function (
         $,
@@ -21,43 +18,17 @@ define(
         customer,
         setShippingInformationAction,
         stepNavigator,
-        amazonStorage,
-        shippingService,
-        quote,
-        addressList
+        amazonStorage
     ) {
         'use strict';
         return Component.extend({
-            defaults: {
-                template: 'Amazon_Payment/shipping'
-            },
-            isAmazonLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            isLoading: ko.pureComputed(function () {
-                return amazonStorage.isAmazonAccountLoggedIn() ? amazonStorage.isShippingMethodsLoading() : shippingService.isLoading();
-            }, this),
-
             initialize: function () {
-                var self = this;
                 this._super();
-
-                //switch form inline based on amazon and customer loggedIn status
-                amazonStorage.isAmazonAccountLoggedIn.subscribe(function (loggedIn) {
-                    this.isFormInline = (loggedIn) ? false : (customer.isLoggedIn()) ? (addressList().length === 0) : true;
+                this.isNewAddressAdded(amazonStorage.isAmazonAccountLoggedIn());
+                amazonStorage.isAmazonAccountLoggedIn.subscribe(function (value) {
+                    this.isNewAddressAdded(value);
                 }, this);
-
-            },
-            /**
-             * OnRender for shipping Methods
-             */
-            shippingMethodsOnRender: function() {
-                if (this.isAmazonLoggedIn()) {
-                    shippingService.getShippingRates().subscribe(function() {
-                        if(amazonStorage.isShippingMethodsLoading() === true) {
-                            amazonStorage.isShippingMethodsLoading(false);
-                        }
-                    }, this);
-                    amazonStorage.isShippingMethodsLoading(false); //remove loader when shippingMethod is set
-                }
+                return this;
             },
             validateGuestEmail: function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]';

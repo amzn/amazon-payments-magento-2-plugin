@@ -18,7 +18,7 @@ namespace Amazon\Payment\Domain;
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Payment\Domain\Details\AmazonAuthorizationDetails;
 use Amazon\Payment\Domain\Details\AmazonAuthorizationDetailsFactory;
-use PayWithAmazon\ResponseInterface;
+use AmazonPay\ResponseInterface;
 
 abstract class AbstractAmazonAuthorizationResponse
 {

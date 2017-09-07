@@ -55,7 +55,7 @@ class ClientFactory implements ClientFactoryInterface
         ObjectManagerInterface $objectManager,
         Data $coreHelper,
         LoggerInterface $logger,
-        $instanceName = '\\PayWithAmazon\\ClientInterface'
+        $instanceName = '\\AmazonPay\\ClientInterface'
     ) {
         $this->objectManager = $objectManager;
         $this->coreHelper    = $coreHelper;

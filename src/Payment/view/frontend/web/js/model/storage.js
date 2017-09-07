@@ -37,7 +37,7 @@ define(
             amazonDeclineCode = ko.observable(false),
             sandboxSimulationReference = ko.observable('default'),
             isPlaceOrderDisabled = ko.observable(false),
-            isShippingMethodsLoading = ko.observable(true),
+            isShippingMethodsLoading = ko.observable(false),
             isAmazonShippingAddressSelected = ko.observable(false),
             isQuoteDirty = ko.observable(amazonPaymentConfig.getValue('isQuoteDirty')),
             isPwaVisible = ko.computed(function () {

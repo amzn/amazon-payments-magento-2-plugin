@@ -58,7 +58,7 @@ class Listener extends \Magento\Framework\App\Action\Action
                 $return = array('result' => 'error', 'message' => 'payload parameter not found.');
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $return = array('result' => 'error', 'message' => $e->getMessage());
         }
 
