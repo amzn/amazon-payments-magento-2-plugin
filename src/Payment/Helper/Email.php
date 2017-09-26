@@ -74,9 +74,9 @@ class Email extends AbstractHelper
             $order->getStoreId()
         );
 
-        $storeName = $this->coreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
+        $storeName = $this->amazonCoreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
         if (!$storeName) {
-            $storeName = $this->coreHelper->getStoreFrontName($order->getStoreId());
+            $storeName = $this->amazonCoreHelper->getStoreFrontName($order->getStoreId());
         }
 
         $vars = [
@@ -99,9 +99,9 @@ class Email extends AbstractHelper
     {
         $emailTransportBuilder = $this->emailTransportBuilderFactory->create();
 
-        $storeName = $this->coreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
+        $storeName = $this->amazonCoreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
         if (!$storeName) {
-            $storeName = $this->coreHelper->getStoreFrontName($order->getStoreId());
+            $storeName = $this->amazonCoreHelper->getStoreFrontName($order->getStoreId());
         }
 
         $emailTransportBuilder->addTo($order->getCustomerEmail(), $order->getCustomerName());
