@@ -16,12 +16,12 @@
 namespace Amazon\Payment\Model\ResourceModel;
 
 use Amazon\Payment\Api\Data\PendingRefundInterface;
-use Amazon\Payment\Setup\Table\AmazonPendingRefund as AmazonPendingRefundTable;
+use Amazon\Payment\Setup\UpgradeSchema as AmazonSchemaHelper;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class PendingRefund extends AbstractDb
 {
-    const TABLE_NAME = AmazonPendingRefundTable::TABLE_NAME;
+    const TABLE_NAME = AmazonSchemaHelper::PENDING_REFUND_TABLE_NAME;
 
     protected function _construct()
     {
