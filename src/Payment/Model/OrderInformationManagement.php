@@ -22,7 +22,6 @@ use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Api\OrderInformationManagementInterface;
 use Amazon\Payment\Domain\AmazonSetOrderDetailsResponse;
 use Amazon\Payment\Domain\AmazonSetOrderDetailsResponseFactory;
-use Amazon\Payment\Helper\Data as PaymentHelper;
 use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\ProductMetadata;
@@ -44,11 +43,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
      * @var ClientFactoryInterface
      */
     protected $clientFactory;
-
-    /**
-     * @var PaymentHelper
-     */
-    protected $paymentHelper;
 
     /**
      * @var CoreHelper
@@ -78,7 +72,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     /**
      * @param Session                              $session
      * @param ClientFactoryInterface               $clientFactory
-     * @param PaymentHelper                        $paymentHelper
      * @param CoreHelper                           $coreHelper
      * @param AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory
      * @param QuoteLinkInterfaceFactory            $quoteLinkFactory
@@ -88,7 +81,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     public function __construct(
         Session $session,
         ClientFactoryInterface $clientFactory,
-        PaymentHelper $paymentHelper,
         CoreHelper $coreHelper,
         AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory,
         QuoteLinkInterfaceFactory $quoteLinkFactory,
@@ -97,7 +89,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     ) {
         $this->session                              = $session;
         $this->clientFactory                        = $clientFactory;
-        $this->paymentHelper                        = $paymentHelper;
         $this->coreHelper                           = $coreHelper;
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
         $this->quoteLinkFactory                     = $quoteLinkFactory;
@@ -131,7 +122,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'store_name'                => $storeName,
                 'custom_information'        =>
                     'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
-                    'Plugin Version : ' . $this->paymentHelper->getModuleVersion()
+                    'Plugin Version : ' . $this->coreHelper->getVersion()
                 ,
                 'platform_id'               => 'A2ZAYEJU54T1BM'
             ];
