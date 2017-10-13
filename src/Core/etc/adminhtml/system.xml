@@ -150,11 +150,6 @@
                                 <field id="packstation_terms_validation_switch">1</field>
                             </depends>
                         </field>
-                        <field id="excluded_categories" translate="label comment" type="Amazon\Core\Block\Adminhtml\Form\Field\CategoryMultiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Excluded Categories</label>
-                            <config_path>payment/amazon_payment/excluded_categories</config_path>
-                            <comment><![CDATA[The "Amazon Pay " button will not be available for products of the selected categories.]]></comment>
-                        </field>
                     </group>
                     <group id="developer_options" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Developer Options</label>
