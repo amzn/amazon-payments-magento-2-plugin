@@ -115,22 +115,6 @@ Allows setting the store name submitted to Amazon Pay per Store View.
 
 .. note:: Store View name is provided by default.
 
-
-Sales Exclusions
-''''''''''''''''
-
-Is Packing Stations Terms Validation Enabled
-............................................
-Toggles validation enabled for packing station terms, terms will be shown below when enabled.
-
-Packing Stations Terms
-......................
-Comma seperated list of terms that will prevent shipping address selection if they are found in address lines.
-
-Excluded Categories
-...................
-Allows selection of multiple categories, if a product has one of the assigned categories the **Amazon Pay** buttons will not be shown on the product page and if it's in the basket you will not be able to pay with Amazon Pay at checkout and will instead be reverted to the standard Magento 2 checkout.
-
 Developer Options
 '''''''''''''''''
 
