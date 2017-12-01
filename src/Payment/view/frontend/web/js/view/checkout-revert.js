@@ -8,7 +8,8 @@ define(
         'Amazon_Payment/js/model/storage',
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Checkout/js/model/url-builder'
+        'Magento_Checkout/js/model/url-builder',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
     function (
         $,
@@ -18,7 +19,8 @@ define(
         amazonStorage,
         storage,
         errorProcessor,
-        urlBuilder
+        urlBuilder,
+        fullScreenLoader
     ) {
         'use strict';
 
@@ -35,15 +37,18 @@ define(
                 this._super();
             },
             revertCheckout: function () {
+                fullScreenLoader.startLoader();
                 var serviceUrl = urlBuilder.createUrl('/amazon/order-ref', {});
                 storage.delete(
                     serviceUrl
                 ).done(
                     function () {
                         amazonStorage.amazonlogOut();
+                        window.location.reload();
                     }
                 ).fail(
                     function (response) {
+                        fullScreenLoader.stopLoader();
                         errorProcessor.process(response);
                     }
                 );
