@@ -4,14 +4,14 @@ Frequently Asked Questions (FAQ)
 I am using a custom theme, what do I have to do?
 ------------------------------------------------
 
-The styles used are based on the Luma theme Magento provides. Especially responsive breakpoints and other variables, like `@screen__m`_, in the LESS files are defined by the Luma theme.
+The styles used in the extension are based on Magento's Luma theme. Responsive breakpoints and other variables, like `@screen__m`_, in the LESS files are defined by the Luma theme.
 If your custom theme is based on Luma, you should be fine. If it isn't, you should define all the variables and `Responsive Breakpoints` used.
 
 Magento provides detailed information about `Responsive Breakpoints` and responsive design in general. See `responsive.html in the magento2 repository`_ (vendor/magento/magento2-base/lib/web/css/docs/responsive.html in your Magento 2 installation) for more detailed explanations.
 
 `Magento DevDocs`_ gives additional information around this topic as well.
 
-Amazon Pay provides two LESS files in this extension. They need to be adopted to match your theme's responsive breakpoints.
+Amazon Pay provides two LESS files in this extension. They need to be adapted to match your theme's responsive breakpoints.
 
 * https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/src/Login/view/frontend/web/css/source/_module.less
 * https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/src/Payment/view/frontend/web/css/source/_module.less
