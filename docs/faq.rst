@@ -13,8 +13,8 @@ Magento provides detailed information about `Responsive Breakpoints` and respons
 
 Amazon Pay provides two LESS files in this extension. They need to be adopted to match your theme's responsive breakpoints.
 
-* https://github.com/amzn/amazon-payments-magento-2-plugin/blob/1.2.4/src/Login/view/frontend/web/css/source/_module.less
-* https://github.com/amzn/amazon-payments-magento-2-plugin/blob/1.2.4/src/Payment/view/frontend/web/css/source/_module.less
+* https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/src/Login/view/frontend/web/css/source/_module.less
+* https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/src/Payment/view/frontend/web/css/source/_module.less
 
 
 .. _`@screen__m` : https://github.com/amzn/amazon-payments-magento-2-plugin/blob/1.2.4/src/Payment/view/frontend/web/css/source/_module.less#L71
