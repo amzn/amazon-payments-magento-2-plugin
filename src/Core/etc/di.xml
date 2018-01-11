@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Amazon\Core\Client\ClientFactoryInterface" type="Amazon\Core\Client\ClientFactory" />
     <preference for="AmazonPay\ClientInterface" type="Amazon\Core\Client\Client" />
-    <type name="AmazonPay\ClientInterface">
+    <type name="Amazon\Core\Client\Client">
         <arguments>
             <argument name="config" xsi:type="array" />
         </arguments>
@@ -56,7 +56,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Amazon\Core\Client\ClientFactoryInterface">
+    <type name="Amazon\Core\Client\ClientFactory">
         <arguments>
             <argument name="logger" xsi:type="object">amazonClientLogger</argument>
         </arguments>
