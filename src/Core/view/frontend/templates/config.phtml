@@ -16,5 +16,5 @@
 ?>
 
 <script>
-    window.amazonPayment = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getConfig()); ?>;
+    window.amazonPayment = <?php /* @noEscape */ echo \Zend_Json::encode($block->getConfig()); ?>;
 </script>
