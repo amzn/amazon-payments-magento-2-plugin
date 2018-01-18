@@ -7,7 +7,6 @@
     "Apache-2.0"
   ],
   "require": {
-    "amzn/amazon-pay-sdk-php": "^3.1.0",
     "amzn/amazon-pay-and-login-with-amazon-core-module": "1.2.4",
     "amzn/login-with-amazon-module": "1.2.4",
     "amzn/amazon-pay-module": "1.2.4"
