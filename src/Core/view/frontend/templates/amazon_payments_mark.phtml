@@ -22,7 +22,7 @@
 <?php if($block->isBadgeEnabled()): ?>
     <div class="amazon-payments-mark-container">
         <div class="amazon-payments-mark _grad">
-            <span class="text"><?php /* @escapeNotVerified */ echo __('Amazon Pay'); ?></span>
+	    <span class="text"><?php /* @noEscape */ echo __('Amazon Pay'); ?></span>
         </div>
     </div>
 <?php endif; ?>
