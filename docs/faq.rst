@@ -5,7 +5,7 @@ I am using a custom theme, what do I have to do?
 ------------------------------------------------
 
 The styles used are based on the Luma theme Magento provides. Especially responsive breakpoints and other variables, like `@screen__m`_, in the LESS files are defined by the Luma theme.
-If your custom theme is based on Luma, you should be fine. If it isn't, you should define all the variables and `Responsive Breakpoints` used.
+If your custom theme is based on the Magento themes Luma or Blank, you should be fine. If it isn't, you should define all the variables and `Responsive Breakpoints` used.
 
 Magento provides detailed information about `Responsive Breakpoints` and responsive design in general. See `responsive.html in the magento2 repository`_ (vendor/magento/magento2-base/lib/web/css/docs/responsive.html in your Magento 2 installation) for more detailed explanations.
 
