@@ -38,52 +38,52 @@ class Authorize extends Action
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var CompositeMatcherInterface
      */
-    protected $matcher;
+    private $matcher;
 
     /**
      * @var CustomerManagerInterface
      */
-    protected $customerManager;
+    private $customerManager;
 
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var AccountRedirect
      */
-    protected $accountRedirect;
+    private $accountRedirect;
 
     /**
      * @var AmazonCustomerFactory
      */
-    protected $amazonCustomerFactory;
+    private $amazonCustomerFactory;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var AmazonCoreHelper
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var Url
      */
-    protected $customerUrl;
+    private $customerUrl;
 
     /**
      * @var AccessTokenRequestValidator
      */
-    protected $accessTokenRequestValidator;
+    private $accessTokenRequestValidator;
 
     /**
      * @param Context                     $context
