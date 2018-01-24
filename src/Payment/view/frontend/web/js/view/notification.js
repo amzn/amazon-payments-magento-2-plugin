@@ -5,14 +5,16 @@ define(
         "underscore",
         'ko',
         'uiComponent',
-        'Amazon_Payment/js/model/storage'
+        'Amazon_Payment/js/model/storage',
+	'uiRegistry'
     ],
     function (
         $,
         _,
         ko,
         Component,
-        amazonStorage
+        amazonStorage,
+	registry
     ) {
         'use strict';
 
@@ -23,8 +25,8 @@ define(
                 template: 'Amazon_Payment/notification'
             },
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            chargeOnOrder: ko.observable(window.amazonPayment.chargeOnOrder),
-            isEuPaymentRegion: ko.observable(window.amazonPayment.isEuPaymentRegion),
+            chargeOnOrder: ko.observable(registry.get('amazonPayment').chargeOnOrder),
+	    isEuPaymentRegion: ko.observable(registry.get('amazonPayment').isEuPaymentRegion),
             initialize: function () {
                 self = this;
                 this._super();

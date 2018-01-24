@@ -18,7 +18,8 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/checkout-data',
-        'Magento_Checkout/js/model/checkout-data-resolver'
+        'Magento_Checkout/js/model/checkout-data-resolver',
+	'uiRegistry'
     ],
     function (
         $,
@@ -37,7 +38,8 @@ define(
         errorProcessor,
         urlBuilder,
         checkoutData,
-        checkoutDataResolver
+        checkoutDataResolver,
+	registry
     ) {
         'use strict';
         var self;
@@ -47,13 +49,13 @@ define(
                 template: 'Amazon_Payment/checkout-widget-address'
             },
             options: {
-                sellerId: window.amazonPayment.merchantId,
+		sellerId: registry.get('amazonPayment').merchantId,
                 addressWidgetDOMId: 'addressBookWidgetDiv',
-                widgetScope: window.amazonPayment.loginScope
+		widgetScope: registry.get('amazonPayment').loginScope
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            isAmazonEnabled: ko.observable(window.amazonPayment.isPwaEnabled),
+	    isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
             rates: shippingService.getShippingRates(),
             initialize: function () {
                 self = this;
