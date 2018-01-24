@@ -17,3 +17,4 @@ Amazon Pay and Login with Amazon extension for Magento 2
    customisation
    testing
    troubleshooting
+   faq
