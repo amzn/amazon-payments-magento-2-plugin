@@ -9,7 +9,8 @@ define(
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Checkout/js/model/url-builder',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Checkout/js/model/full-screen-loader',
+	'uiRegistry'
     ],
     function (
         $,
@@ -20,7 +21,8 @@ define(
         storage,
         errorProcessor,
         urlBuilder,
-        fullScreenLoader
+        fullScreenLoader,
+	registry
     ) {
         'use strict';
 
@@ -31,7 +33,7 @@ define(
                 template: 'Amazon_Payment/checkout-revert'
             },
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            isAmazonEnabled: ko.observable(window.amazonPayment.isPwaEnabled),
+	    isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
             initialize: function () {
                 self = this;
                 this._super();
