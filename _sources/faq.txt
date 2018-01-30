@@ -24,6 +24,6 @@ Amazon Pay provides two LESS files in this extension. They need to be adapted to
 
 Amazon Pay Widgets are not surfaced
 -----------------------------------
-Please check if you are using a theme, which is not based on Magento's Luma theme first and follow the advice above.
+Please check if you are using a theme, which is not based on Magento's Luma or Blank theme first and follow the advice above.
 
 If this is not the case and you need help, please file an issue with us.
