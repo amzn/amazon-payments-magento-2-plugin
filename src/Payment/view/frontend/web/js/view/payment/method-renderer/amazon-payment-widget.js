@@ -16,7 +16,8 @@ define(
         'Magento_Checkout/js/action/select-billing-address',
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/url-builder',
-        'amazonPaymentConfig'
+        'amazonPaymentConfig',
+	'uiRegistry'
     ],
     function (
         $,
@@ -35,7 +36,8 @@ define(
         selectBillingAddress,
         additionalValidators,
         urlBuilder,
-        amazonPaymentConfig
+        amazonPaymentConfig,
+	registry
     ) {
         'use strict';
 
@@ -48,9 +50,9 @@ define(
             },
 
             options: {
-                sellerId: window.amazonPayment.merchantId,
+		sellerId: registry.get('amazonPayment').merchantId,
                 paymentWidgetDOMId: 'walletWidgetDiv',
-                widgetScope: window.amazonPayment.loginScope
+		widgetScope: registry.get('amazonPayment').loginScope
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,

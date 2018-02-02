@@ -5,13 +5,15 @@ define(
         'jquery',
         "uiComponent",
         'ko',
-        'Amazon_Payment/js/model/storage'
+        'Amazon_Payment/js/model/storage',
+	'uiRegistry'
     ],
     function (
         $,
         Component,
         ko,
-        amazonStorage
+        amazonStorage,
+	registry
     ) {
         'use strict';
 
@@ -22,9 +24,9 @@ define(
                 template: 'Amazon_Payment/checkout-sandbox-simulator'
             },
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            isSandboxEnabled: ko.observable(window.amazonPayment.isSandboxEnabled),
+	    isSandboxEnabled: ko.observable(registry.get('amazonPayment').isSandboxEnabled),
             sandboxSimulationReference: amazonStorage.sandboxSimulationReference,
-            sandboxSimulationOptions: ko.observableArray(window.amazonPayment.sandboxSimulationOptions),
+            sandboxSimulationOptions: ko.observableArray(registry.get('amazonPayment').sandboxSimulationOptions),
             initialize: function () {
                 self = this;
                 this._super();

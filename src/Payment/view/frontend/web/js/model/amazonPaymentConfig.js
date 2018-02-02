@@ -13,11 +13,11 @@
  * permissions and limitations under the License.
  */
 define(
-    [],
-    function () {
+    ['uiRegistry'],
+    function (registry) {
         'use strict';
 
-        var config = window.amazonPayment || {};
+	var config = registry.get('amazonPayment') || {};
 
         return {
             getValue: function (key, defaultValue) {
@@ -28,7 +28,7 @@ define(
                 }
             },
             isDefined: function () {
-                return window.amazonPayment !== undefined
+		return registry.get('amazonPayment') !== undefined;
             }
         };
     }
