@@ -289,7 +289,7 @@ class SimplePath
             $this->messageManager->addError(__($e->getMessage()));
 
             $link = 'https://payments.amazon.com/help/202024240';
-            $this->messageManager->addError(__("If you're experiencing consistent errors with transferring keys, click <a href=\"%s\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link));
+            $this->messageManager->addError(__("If you're experiencing consistent errors with transferring keys, click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link));
         }
 
         return false;
@@ -304,7 +304,7 @@ class SimplePath
     {
         if ($values = (object) json_decode($json)) {
             foreach ($values as $key => $value) {
-              $values->{strtolower($key)} = $value;
+                $values->{strtolower($key)} = $value;
             }
 
             $this->config->saveConfig('payment/amazon_payment/merchant_id', $values->merchant_id, $this->_scope, $this->_scopeId);
