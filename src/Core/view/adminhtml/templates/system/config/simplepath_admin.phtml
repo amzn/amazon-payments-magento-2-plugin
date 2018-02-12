@@ -3,16 +3,16 @@
 
     <?php if (!$block->getCurrency()) : // SimplePath not supported ?>
 
-    <div id="simplepath_unsported"><?php echo sprintf(__('An unsupported currency is currently selected. Review our <a href="%s" target="_blank">configuration guide</a> for more information.'), 'https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html'); ?></div>
+    <div id="simplepath_unsported">
+        <?php echo __('An unsupported currency is currently selected. Please review our configuration guide.'); ?>
+        <span class="note"><a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">(<?php echo __('More Information'); ?>)</a></span>
+    </div>
 
     <?php else : ?>
 
     <div id="simplepath_hint">
-        <?php echo sprintf(__('You will be registering for a %s account based on the base currency of your shop (%s). For more information, click <a href="%s" target="_blank">here</a>.'),
-        $block->getRegion(),
-        $block->getCurrency(),
-        'https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html#advanced');
-        ?>
+        <?php echo __('You will be registering for a %1 account based on the base currency of your shop (%2).', $block->getRegion(), $block->getCurrency()); ?>
+        <span class="note"><a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">(<?php echo __('More Information'); ?>)</a></span>
     </div>
 
     <span style="display:inline-block;padding:1em 0em;">
