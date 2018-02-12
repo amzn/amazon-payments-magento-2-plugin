@@ -25,7 +25,7 @@
             <div class="primary">
                 <div class="amazon-button-container">
                     <div class="amazon-button-container__cell">
-                        <div id="LoginWithAmazon-<?php echo $block->getJsId() ?>" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "LwA"}}'></div>
+                        <div id="LoginWithAmazon-<?php /* @noEscape */ echo $block->getJsId() ?>" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "LwA"}}'></div>
                     </div>
                     <div class="amazon-button-container__cell">
                         <div class="field-tooltip toggle">

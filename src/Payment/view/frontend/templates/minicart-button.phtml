@@ -33,7 +33,7 @@ $tooltipConfig = [
 <div id="minicart-amazon-pay-button" class="amazon-minicart-container">
     <div class="amazon-button-container">
         <div class="amazon-button-container__cell">
-            <div id="PayWithAmazon-<?php echo $block->getParentBlock()->getJsId() ?>" class="login-with-amazon" data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'></div>
+            <div id="PayWithAmazon-<?php /* @noEscape */ echo $block->getParentBlock()->getJsId() ?>" class="login-with-amazon" data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'></div>
         </div>
 
         <div class="amazon-button-container__cell">

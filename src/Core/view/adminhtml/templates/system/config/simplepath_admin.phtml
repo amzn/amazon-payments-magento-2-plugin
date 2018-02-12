@@ -4,35 +4,35 @@
     <?php if (!$block->getCurrency()) : // SimplePath not supported ?>
 
     <div id="simplepath_unsported">
-        <?php echo __('An unsupported currency is currently selected. Please review our configuration guide.'); ?>
-        <span class="note"><a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">(<?php echo __('More Information'); ?>)</a></span>
+        <?php /* @noEscape */ echo __('An unsupported currency is currently selected. Please review our configuration guide.'); ?>
+        <span class="note"><a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">(<?php /* @noEscape */ echo __('More Information'); ?>)</a></span>
     </div>
 
     <?php else : ?>
 
     <div id="simplepath_hint">
-        <?php echo __('You will be registering for a %1 account based on the base currency of your shop (%2).', $block->getRegion(), $block->getCurrency()); ?>
-        <span class="note"><a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">(<?php echo __('More Information'); ?>)</a></span>
+        <?php echo $block->escapeHtml(__('You will be registering for a %1 account based on the base currency of your shop (%2).', $block->getRegion(), $block->getCurrency())); ?>
+        <span class="note"><a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">(<?php /* @noEscape */ echo __('More Information'); ?>)</a></span>
     </div>
 
     <span style="display:inline-block;padding:1em 0em;">
-        <button><span><?php echo __('Get started with account registration'); ?></span></button>
+        <button><span><?php /* @noEscape */ echo __('Get started with account registration'); ?></span></button>
         &nbsp; &nbsp;
-        <button><span><?php echo __('My account is ready, I need to connect it to Magento'); ?></span></button>
+        <button><span><?php /* @noEscape */ echo __('My account is ready, I need to connect it to Magento'); ?></span></button>
     </span>
     <span style="display:inline-block;">
-        &nbsp; <?php echo __('or'); ?> &nbsp;
-        <a href="#" id="simplepath-skip"><?php echo __("I've already setup Pay with Amazon, I want to edit my settings"); ?></a>
+        &nbsp; <?php /* @noEscape */ echo __('or'); ?> &nbsp;
+        <a href="#" id="simplepath-skip"><?php /* @noEscape */ echo __("I've already setup Pay with Amazon, I want to edit my settings"); ?></a>
     </span>
 
-    <p style="color:red;display:none" id="amazon_https_required"><?php echo __("In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin."); ?></p>
-    <p style="color:red;display:none" id="amazon_reload"><?php echo __('Updating your config with new keys, please wait...'); ?></p>
+    <p style="color:red;display:none" id="amazon_https_required"><?php /* @noEscape */ echo __("In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin."); ?></p>
+    <p style="color:red;display:none" id="amazon_reload"><?php /* @noEscape */ echo __('Updating your config with new keys, please wait...'); ?></p>
 
 
     <div id="json-import-wrapper" style="display: none;">
-        <textarea rows="2" cols="15" placeholder="<?php echo __('Paste JSON credentials here'); ?>" id="json-import"></textarea>
+        <textarea rows="2" cols="15" placeholder="<?php /* @noEscape */ echo __('Paste JSON credentials here'); ?>" id="json-import"></textarea>
         <br />
-        <button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><?php echo __('Save Credentials'); ?></button>
+        <button id="save-json" class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><?php /* @noEscape */ echo __('Save Credentials'); ?></button>
     </div>
 
     <?php endif; ?>
@@ -40,12 +40,12 @@
 </div>
 
 <div id="amazon_simplepath_back" style="display:none;margin-bottom:1em;margin-top:-0.5em;">
-  <a href="#">&laquo; <?php echo __('Back'); ?></a>
+  <a href="#">&laquo; <?php echo /* @noEscape */ __('Back'); ?></a>
 </div>
 
 <script>
 
-var AmazonSp = <?php echo $block->getAmazonSpJson(); ?>;
+var AmazonSp = <?php /* @noEscape */ echo $block->getAmazonSpJson(); ?>;
 
 require(['uiRegistry', "prototype"], function(registry){
 
@@ -119,7 +119,7 @@ require(['uiRegistry', "prototype"], function(registry){
         var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
         if (elJson && $('sp-td-json-value') == null) {
             // Must create dynamic table to prevent conflict with config tables
-            var tableJson = new Element('table').update('<tr><td class="label" style="width:10%;"><?php echo __('Credentials JSON'); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
+            var tableJson = new Element('table').update('<tr><td class="label" style="width:10%;"><?php /* @noEscape */ echo __('Credentials JSON'); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
             amazonSimplepath.insert({bottom: tableJson});
             $('sp-td-json-value').insert($('json-import-wrapper').show());
 
@@ -135,7 +135,7 @@ require(['uiRegistry', "prototype"], function(registry){
                 e.stop();
                 var json = $('json-import').value;
                 if (!json || !json.isJSON()) {
-                    alert('<?php echo __('Valid JSON credentials are required.'); ?>');
+                    alert('<?php /* @noEscape */ echo __('Valid JSON credentials are required.'); ?>');
                     return;
                 }
                 elJson.value = json;

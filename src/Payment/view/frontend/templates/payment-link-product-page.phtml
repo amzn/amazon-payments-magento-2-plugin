@@ -17,8 +17,8 @@
 <?php /** @var \Amazon\Payment\Block\ProductPagePaymentLink $block */ ?>
 <div class="amazon-button-container centered-button">
     <div class="amazon-button-container__cell">
-        <a href="javascript:;" class="amazon-addtoCart" id="amazon-addtoCart-<?php echo $block->getJsId() ?>" data-mage-init='{"amazonProductAdd": {}}'></a>
-        <div id="LoginWithAmazon-<?php echo $block->getJsId() ?>" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "PwA"}}'></div>
+        <a href="javascript:;" class="amazon-addtoCart" id="amazon-addtoCart-<?php /* @noEscape */ echo $block->getJsId() ?>" data-mage-init='{"amazonProductAdd": {}}'></a>
+        <div id="LoginWithAmazon-<?php /* @noEscape */ echo $block->getJsId() ?>" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "PwA"}}'></div>
     </div>
     <div class="amazon-button-container__cell">
         <div class="field-tooltip toggle">
