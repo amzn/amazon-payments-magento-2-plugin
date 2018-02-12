@@ -17,6 +17,9 @@ namespace Amazon\Login\Api\Data;
 
 use Exception;
 
+/**
+ * @api
+ */
 interface CustomerLinkInterface
 {
     /**

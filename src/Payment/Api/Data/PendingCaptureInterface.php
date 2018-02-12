@@ -18,6 +18,9 @@ namespace Amazon\Payment\Api\Data;
 use Amazon\Payment\Model\ResourceModel\PendingCapture as PendingCaptureResourceModel;
 use Exception;
 
+/**
+ * @api
+ */
 interface PendingCaptureInterface
 {
     const ID = 'entity_id';

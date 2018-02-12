@@ -23,6 +23,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Math\Random;
 
+/**
+ * @api
+ */
 class CustomerManager implements CustomerManagerInterface
 {
     /**

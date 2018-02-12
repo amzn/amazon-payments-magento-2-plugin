@@ -19,6 +19,9 @@ use Amazon\Payment\Api\Data\QuoteLinkInterface;
 use Amazon\Payment\Model\ResourceModel\QuoteLink as QuoteLinkResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * @api
+ */
 class QuoteLink extends AbstractModel implements QuoteLinkInterface
 {
     protected function _construct()

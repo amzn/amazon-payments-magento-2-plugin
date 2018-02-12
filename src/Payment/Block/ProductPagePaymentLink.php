@@ -22,6 +22,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class ProductPagePaymentLink extends PaymentLink
 {
     /**

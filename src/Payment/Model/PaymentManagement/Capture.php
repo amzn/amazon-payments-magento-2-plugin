@@ -37,6 +37,9 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @api
+ */
 class Capture extends AbstractOperation implements CaptureInterface
 {
     /**

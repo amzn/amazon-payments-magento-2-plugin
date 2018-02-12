@@ -18,6 +18,9 @@ namespace Amazon\Login\Api\Customer;
 use Amazon\Core\Domain\AmazonCustomer;
 use Magento\Customer\Api\Data\CustomerInterface;
 
+/**
+ * @api
+ */
 interface CompositeMatcherInterface
 {
     /**

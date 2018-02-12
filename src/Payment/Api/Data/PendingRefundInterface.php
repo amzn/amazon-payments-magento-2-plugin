@@ -17,6 +17,9 @@ namespace Amazon\Payment\Api\Data;
 
 use Amazon\Payment\Model\ResourceModel\PendingRefund as PendingRefundResource;
 
+/**
+ * @api
+ */
 interface PendingRefundInterface
 {
     const ID = 'entity_id';

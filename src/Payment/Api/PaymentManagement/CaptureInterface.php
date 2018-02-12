@@ -17,6 +17,9 @@ namespace Amazon\Payment\Api\PaymentManagement;
 
 use Amazon\Payment\Domain\Details\AmazonCaptureDetails;
 
+/**
+ * @api
+ */
 interface CaptureInterface
 {
     /**

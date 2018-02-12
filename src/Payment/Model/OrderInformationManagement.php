@@ -32,6 +32,9 @@ use Magento\Store\Model\ScopeInterface;
 use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @api
+ */
 class OrderInformationManagement implements OrderInformationManagementInterface
 {
     /**

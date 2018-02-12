@@ -31,6 +31,9 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 
+/**
+ * @api
+ */
 class PaymentManagement implements PaymentManagementInterface
 {
     /**

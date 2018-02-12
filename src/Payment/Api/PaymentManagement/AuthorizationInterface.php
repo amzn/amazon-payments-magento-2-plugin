@@ -18,6 +18,9 @@ namespace Amazon\Payment\Api\PaymentManagement;
 use Amazon\Payment\Domain\Details\AmazonAuthorizationDetails;
 use Amazon\Payment\Domain\Details\AmazonOrderDetails;
 
+/**
+ * @api
+ */
 interface AuthorizationInterface
 {
     /**

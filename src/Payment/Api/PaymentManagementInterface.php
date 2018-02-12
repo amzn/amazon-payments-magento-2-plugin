@@ -23,6 +23,9 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 
+/**
+ * @api
+ */
 interface PaymentManagementInterface
 {
     /**

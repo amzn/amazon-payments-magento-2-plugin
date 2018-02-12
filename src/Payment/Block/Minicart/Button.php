@@ -28,6 +28,8 @@ use Magento\Framework\App\Request\Http;
 
 /**
  * Class Button
+ *
+ * @api
  */
 class Button extends Template implements ShortcutInterface
 {

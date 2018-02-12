@@ -24,6 +24,9 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 
+/**
+ * @api
+ */
 class PendingCapture extends AbstractModel implements PendingCaptureInterface
 {
     /**

@@ -25,6 +25,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * @api
+ */
 class PendingAuthorization extends AbstractModel implements PendingAuthorizationInterface
 {
     /**

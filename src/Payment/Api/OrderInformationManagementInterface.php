@@ -17,6 +17,9 @@ namespace Amazon\Payment\Api;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @api
+ */
 interface OrderInformationManagementInterface
 {
     /**

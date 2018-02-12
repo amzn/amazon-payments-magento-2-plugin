@@ -17,6 +17,9 @@ namespace Amazon\Payment\Api\Data;
 
 use Exception;
 
+/**
+ * @api
+ */
 interface QuoteLinkInterface
 {
     /**

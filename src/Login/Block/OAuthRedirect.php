@@ -19,6 +19,9 @@ use Amazon\Core\Helper\Data;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class OAuthRedirect extends Template
 {
     /**

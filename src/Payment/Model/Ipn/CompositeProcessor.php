@@ -18,6 +18,9 @@ namespace Amazon\Payment\Model\Ipn;
 use Amazon\Payment\Api\Ipn\CompositeProcessorInterface;
 use Amazon\Payment\Api\Ipn\ProcessorInterface;
 
+/**
+ * @api
+ */
 class CompositeProcessor implements CompositeProcessorInterface
 {
     /**

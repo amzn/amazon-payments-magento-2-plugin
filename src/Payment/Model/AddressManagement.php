@@ -32,6 +32,9 @@ use Magento\Quote\Model\Quote;
 use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @api
+ */
 class AddressManagement implements AddressManagementInterface
 {
     /**
