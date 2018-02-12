@@ -139,7 +139,6 @@ interface PendingCaptureInterface
      */
     public function getLockOnLoad();
 
-
     /**
      * Retrieve model resource
      *

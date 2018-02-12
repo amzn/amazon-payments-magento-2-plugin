@@ -217,7 +217,7 @@ class Authorization extends AbstractOperation implements AuthorizationInterface
                 'amazon_authorization_id' => $authorizationId
             ]);
 
-            $response             = $this->amazonAuthorizationDetailsResponseFactory->create(['response' => $responseParser]);
+            $response = $this->amazonAuthorizationDetailsResponseFactory->create(['response' => $responseParser]);
             $authorizationDetails = $response->getDetails();
         }
 

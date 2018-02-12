@@ -42,7 +42,7 @@ class AmazonAddressJp extends AmazonAddress
             }
         }
 
-        if(!array_key_exists('City', $address)) {
+        if (!array_key_exists('City', $address)) {
             $this->city = $lines[1];
             $this->lines[] = $lines[2];
 

@@ -373,8 +373,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
             AdapterInterface::INDEX_TYPE_UNIQUE
         );
     }
-	
-	private function createPendingRefundTable(SchemaSetupInterface $setup) {
+    
+    private function createPendingRefundTable(SchemaSetupInterface $setup)
+    {
         $setup->getConnection()->dropTable(static::PENDING_REFUND_TABLE_NAME);
 
         $table = $setup->getConnection()->newTable($setup->getTable(static::PENDING_REFUND_TABLE_NAME));

@@ -108,7 +108,6 @@ interface PendingRefundInterface
      */
     public function getLockOnLoad();
 
-
     /**
      * @return PendingRefundResource
      */

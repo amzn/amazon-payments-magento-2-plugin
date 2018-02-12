@@ -91,7 +91,6 @@ class PaymentConfigSaveAfter implements ObserverInterface
 
         $messageManagerMethod = 'addErrorMessage';
 
-
         if ($validator->isValid($scopeData['scope_id'], $scopeData['scope'])) {
             $messageManagerMethod = 'addSuccessMessage';
         }

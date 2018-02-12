@@ -81,7 +81,6 @@ interface QuoteLinkInterface
      */
     public function setConfirmed($confirmed);
 
-
     /**
      * Get quote confirmed with amazon
      *

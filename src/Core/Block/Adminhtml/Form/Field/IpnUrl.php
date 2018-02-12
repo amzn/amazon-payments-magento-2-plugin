@@ -25,12 +25,12 @@ class IpnUrl extends BaseField
     {
         $stores = $this->_storeManager->getStores();
         $valueReturn = '';
-        $urlArray = array();
+        $urlArray = [];
 
         foreach ($stores as $store) {
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
-                $value = $baseUrl . 'amazonpayments/payment/ipn/';
+                $value      = $baseUrl . 'amazonpayments/payment/ipn/';
                 $urlArray[] = "<div>".$value."</div>";
             }
         }

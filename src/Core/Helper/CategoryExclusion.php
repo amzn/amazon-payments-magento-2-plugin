@@ -80,7 +80,9 @@ class CategoryExclusion extends AbstractHelper
         if (!empty($this->getExcludedCategories())) {
             /** @var \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem */
             foreach ($this->quote->getAllItems() as $quoteItem) {
-                $isDirtyQuoteItem = $quoteItem->getDataUsingMethod(CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT);
+                $isDirtyQuoteItem = $quoteItem->getDataUsingMethod(
+                    CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT
+                );
                 if (!$quoteItem->isDeleted() && $isDirtyQuoteItem) {
                     return true;
                 }

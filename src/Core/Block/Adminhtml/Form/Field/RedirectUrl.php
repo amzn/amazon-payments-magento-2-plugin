@@ -25,12 +25,12 @@ class RedirectUrl extends BaseField
     {
         $stores = $this->_storeManager->getStores();
         $valueReturn = '';
-        $urlArray = array();
+        $urlArray = [];
 
         foreach ($stores as $store) {
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
-                $value = $baseUrl . 'amazon/login/processAuthHash/';
+                $value      = $baseUrl . 'amazon/login/processAuthHash/';
                 $urlArray[] = "<div>".$value."</div>";
             }
         }

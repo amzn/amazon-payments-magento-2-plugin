@@ -53,7 +53,8 @@ class UpgradeData implements UpgradeDataInterface
         $row = $eavSetup->getAttribute('customer_address', 'street', 'multiline_count');
 
         if ($row === false || ! is_numeric($row)) {
-            throw new LocalizedException(__('Could not find the "multiline_count" config of the "street" Customer address attribute.'));
+            throw new LocalizedException(__('Could not find the "multiline_count" config of the "street" ' .
+                'Customer address attribute.'));
         }
 
         if ($row < 3) {

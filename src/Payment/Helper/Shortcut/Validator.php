@@ -98,11 +98,13 @@ class Validator implements ValidatorInterface
         if ($isInCatalog && $config->getValue('pwa_pp_button_is_visible')) {
             $currentProduct = $this->_registry->registry('current_product');
             if ($currentProduct !== null) {
-                if ($this->_categoryExclusionHelper->productHasExcludedCategory($currentProduct))
+                if ($this->_categoryExclusionHelper->productHasExcludedCategory($currentProduct)) {
                     return false;
+                }
             } else {
-                if ($this->_categoryExclusionHelper->isQuoteDirty())
+                if ($this->_categoryExclusionHelper->isQuoteDirty()) {
                     return false;
+                }
             }
             return true;
         }

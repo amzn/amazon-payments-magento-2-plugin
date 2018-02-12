@@ -441,7 +441,8 @@ class Amazon extends AbstractMethod
 
         throw new AmazonWebapiException(
             __(
-                'Unfortunately it is not possible to pay with Amazon Pay for this order. Please choose another payment method.'
+                'Unfortunately it is not possible to pay with Amazon Pay for this order. ' .
+                'Please choose another payment method.'
             ),
             AmazonAuthorizationStatus::CODE_HARD_DECLINE,
             AmazonWebapiException::HTTP_FORBIDDEN
@@ -462,7 +463,8 @@ class Amazon extends AbstractMethod
     {
         throw new AmazonWebapiException(
             __(
-                'There has been a problem with the selected payment method on your Amazon account. Please choose another one.'
+                'There has been a problem with the selected payment method on your Amazon account. ' .
+                'Please choose another one.'
             ),
             AmazonAuthorizationStatus::CODE_SOFT_DECLINE,
             AmazonWebapiException::HTTP_FORBIDDEN

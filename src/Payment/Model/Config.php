@@ -18,7 +18,8 @@ namespace Amazon\Payment\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class Config extends \Magento\Payment\Gateway\Config\Config {
+class Config extends \Magento\Payment\Gateway\Config\Config
+{
     /**
      * Map any supported payment method into a config path by specified field name
      *

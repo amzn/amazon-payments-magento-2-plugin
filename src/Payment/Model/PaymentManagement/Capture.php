@@ -169,7 +169,7 @@ class Capture extends AbstractOperation implements CaptureInterface
                         'amazon_capture_id' => $pendingCapture->getCaptureId()
                     ]);
 
-                    $response       = $this->amazonCaptureDetailsResponseFactory->create(['response' => $responseParser]);
+                    $response = $this->amazonCaptureDetailsResponseFactory->create(['response' => $responseParser]);
                     $captureDetails = $response->getDetails();
                 }
 

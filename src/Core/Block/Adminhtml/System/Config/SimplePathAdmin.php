@@ -15,12 +15,11 @@ class SimplePathAdmin extends \Magento\Framework\View\Element\Template
      * @param \Amazon\Core\Model\Config\SimplePath $simplePath
      * @param array $data
      */
-    function __construct(
+    public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\Core\Model\Config\SimplePath $simplePath,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
         $this->simplePath = $simplePath;
     }
@@ -28,7 +27,7 @@ class SimplePathAdmin extends \Magento\Framework\View\Element\Template
     /**
      * Return SimplePath settings
      */
-    function getAmazonSpJson()
+    public function getAmazonSpJson()
     {
         return json_encode($this->simplePath->getJsonAmazonSpConfig());
     }
@@ -36,7 +35,7 @@ class SimplePathAdmin extends \Magento\Framework\View\Element\Template
     /**
      * Return region
      */
-    function getRegion()
+    public function getRegion()
     {
         return $this->simplePath->getRegion();
     }
@@ -44,7 +43,7 @@ class SimplePathAdmin extends \Magento\Framework\View\Element\Template
     /**
      * Return currency
      */
-    function getCurrency()
+    public function getCurrency()
     {
         return $this->simplePath->getCurrency();
     }

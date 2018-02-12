@@ -30,5 +30,4 @@ class AmazonCustomerJp extends AmazonCustomer
         $this->email = $email;
         $this->name = new AmazonNameJp($name);
     }
-
 }

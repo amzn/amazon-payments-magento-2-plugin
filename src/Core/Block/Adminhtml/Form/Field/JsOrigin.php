@@ -27,12 +27,12 @@ class JsOrigin extends BaseField
     {
         $stores = $this->_storeManager->getStores();
         $valueReturn = '';
-        $urlArray = array();
+        $urlArray = [];
 
         foreach ($stores as $store) {
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
-                $uri   = UriFactory::factory($baseUrl);
+                $uri        = UriFactory::factory($baseUrl);
                 $urlArray[] = $uri->getScheme() . '://' . $uri->getHost();
             }
         }

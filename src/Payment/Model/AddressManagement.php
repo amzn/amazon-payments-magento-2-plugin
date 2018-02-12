@@ -164,7 +164,7 @@ class AddressManagement implements AddressManagementInterface
     protected function throwUnknownErrorException()
     {
         throw new WebapiException(
-            __(AmazonServiceUnavailableException::ERROR_MESSAGE),
+            __('Amazon could not process your request.'),
             0,
             WebapiException::HTTP_INTERNAL_ERROR
         );
@@ -228,7 +228,6 @@ class AddressManagement implements AddressManagementInterface
         if (! $quote->getId()) {
             throw new SessionException(__('Your session has expired, please reload the page and try again.'));
         }
-
 
         $quoteLink = $this->quoteLinkFactory->create()->load($quote->getId(), 'quote_id');
 

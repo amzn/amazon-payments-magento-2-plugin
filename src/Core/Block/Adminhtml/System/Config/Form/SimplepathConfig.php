@@ -21,5 +21,4 @@ class SimplepathConfig extends \Magento\Config\Block\System\Config\Form\Field
 
         return $html;
     }
-
 }

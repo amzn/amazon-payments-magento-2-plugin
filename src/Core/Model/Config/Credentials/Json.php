@@ -113,7 +113,13 @@ class Json
 
         // Decrypt SimplePath JSON
         if (isset($arrayCredentials['encryptedKey'])) {
-            $arrayCredentials = $this->jsonDecoder->decode($this->simplePath->decryptPayload(json_encode($arrayCredentials), false, false));
+            $arrayCredentials = $this->jsonDecoder->decode(
+                $this->simplePath->decryptPayload(
+                    json_encode($arrayCredentials),
+                    false,
+                    false
+                )
+            );
         }
 
         foreach ($this->amazonCoreHelper->getAmazonCredentialsFields() as $mandatoryField) {

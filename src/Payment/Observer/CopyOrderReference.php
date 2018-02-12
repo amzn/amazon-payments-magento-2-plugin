@@ -53,7 +53,7 @@ class CopyOrderReference implements ObserverInterface
             $quoteLink->load($quoteId, 'quote_id');
 
             $amazonOrderReferenceId = $quoteLink->getAmazonOrderReferenceId();
-            if (! is_null($amazonOrderReferenceId)) {
+            if ($amazonOrderReferenceId !== null) {
                 $orderLink = $this->orderLinkFactory->create();
                 $orderLink
                     ->load($orderId, 'order_id')

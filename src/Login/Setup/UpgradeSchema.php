@@ -26,9 +26,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '1.1.0', '<')) {
+            $table = $setup->getTable('customer_entity');
             $setup->getConnection()->addForeignKey(
-                $setup->getFkName(CustomerLink::TABLE_NAME, 'customer_id', $setup->getTable('customer_entity'), 'entity_id'),
-                $setup->getTable(CustomerLink::TABLE_NAME),
+                $setup->getFkName(CustomerLink::TABLE_NAME, 'customer_id', $table, 'entity_id'),
+                $table,
                 'customer_id',
                 $setup->getTable('customer_entity'),
                 'entity_id',
