@@ -18,6 +18,11 @@
     "bex/behat-magento2-init": "dev-master",
     "ciaranmcnulty/behat-stepthroughextension": "dev-master"
   },
+  "require": {
+    "amzn/amazon-pay-and-login-with-amazon-core-module": "1.2.5",
+    "amzn/login-with-amazon-module": "1.2.5",
+    "amzn/amazon-pay-module": "1.2.5"
+  },
   "repositories": [
     {
       "type": "composer",
