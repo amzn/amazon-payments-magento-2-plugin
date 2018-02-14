@@ -17,31 +17,48 @@
 <div class="amazon-validate-container">
     <div class="block block-amazon-validate">
         <div class="block-title">
-            <strong id="block-amazon-login-heading" role="heading" aria-level="2"><?php /* @noEscape */ echo __('Welcome back!') ?></strong>
+            <strong id="block-amazon-login-heading" role="heading" aria-level="2">
+                <?= /* @noEscape */ __('Welcome back!') ?>
+            </strong>
         </div>
         <div class="block-content" aria-labelledby="block-amazon-login-heading">
-            <p><?php /* @noEscape */ echo __('A shop account for this email address already exists. Please enter your shop accounts password to log in without leaving the shop.') ?></p>
+            <p><?= /* @noEscape */ __('A shop account for this email address already exists. Please enter your shop ' .
+                'accounts password to log in without leaving the shop.') ?>
+            </p>
             <form class="form password validate"
-                  action="<?php echo $block->escapeUrl($block->getUrl('*/*/validatepost')) ?>"
+                  action="<?= $block->escapeUrl($block->getUrl('*/*/validatepost')) ?>"
                   method="post"
                   id="form-validate"
                   data-mage-init='{"validation":{}}'>
-                <fieldset class="fieldset" data-hasrequired="<?php /* @noEscape */ echo __('* Required Fields') ?>">
+
+                <fieldset class="fieldset" data-hasrequired="<?= /* @noEscape */ __('* Required Fields') ?>">
                     <div class="field email required">
-                        <label for="password" class="label"><span><?php /* @noEscape */ echo __('Password') ?></span></label>
+                        <label for="password" class="label"><span><?= /* @noEscape */ __('Password') ?></span></label>
                         <div class="control">
-                            <input type="password" name="password" alt="password" id="password" class="input-text" value="" data-validate="{required:true}">
+                            <input type="password"
+                                   name="password"
+                                   alt="password"
+                                   id="password"
+                                   class="input-text"
+                                   value=""
+                                   data-validate="{required:true}">
                         </div>
                     </div>
                     <div class="actions-toolbar">
                         <div class="primary">
-                            <button type="submit" class="action submit primary"><span><?php /* @noEscape */ echo __('Ok') ?></span></button>
+                            <button type="submit" class="action submit primary">
+                                <span><?= /* @noEscape */ __('Ok') ?></span>
+                            </button>
                         </div>
                         <div class="secondary continue-as-guest">
-                            <a class="action secondary" href="<?php echo $block->escapeUrl($block->getContinueAsGuestUrl()) ?>"><span><?php /* @noEscape */ echo __('Continue as Guest') ?></span></a>
+                            <a class="action secondary" href="<?= $block->escapeUrl($block->getContinueAsGuestUrl())?>">
+                                <span><?= /* @noEscape */ __('Continue as Guest') ?></span>
+                            </a>
                         </div>
                         <div class="secondary forgot-password">
-                            <a class="action secondary" href="<?php echo $block->escapeUrl($block->getForgotPasswordUrl()) ?>"><span><?php /* @noEscape */ echo __('Forgot Your Password?') ?></span></a>
+                            <a class="action secondary" href="<?= $block->escapeUrl($block->getForgotPasswordUrl()) ?>">
+                                <span><?= /* @noEscape */ __('Forgot Your Password?') ?></span>
+                            </a>
                         </div>
                     </div>
                 </fieldset>

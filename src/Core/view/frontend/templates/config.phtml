@@ -19,7 +19,7 @@
 <script>
 
 require (['uiRegistry'], function(registry) {
-    registry.set('amazonPayment', <?php /* @noEscape */ echo \Zend_Json::encode($block->getConfig()); ?>);
+    registry.set('amazonPayment', <?= /* @noEscape */ \Zend_Json::encode($block->getConfig()); ?>);
 });
 
 </script>

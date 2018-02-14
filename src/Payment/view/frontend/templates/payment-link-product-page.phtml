@@ -17,13 +17,28 @@
 <?php /** @var \Amazon\Payment\Block\ProductPagePaymentLink $block */ ?>
 <div class="amazon-button-container centered-button">
     <div class="amazon-button-container__cell">
-        <a href="javascript:;" class="amazon-addtoCart" id="amazon-addtoCart-<?php /* @noEscape */ echo $block->getJsId() ?>" data-mage-init='{"amazonProductAdd": {}}'></a>
-        <div id="LoginWithAmazon-<?php /* @noEscape */ echo $block->getJsId() ?>" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "PwA"}}'></div>
+        <a href="javascript:;"
+           class="amazon-addtoCart"
+           id="amazon-addtoCart-<?= /* @noEscape */ $block->getJsId() ?>"
+           data-mage-init='{"amazonProductAdd": {}}'>
+        </a>
+        <div id="LoginWithAmazon-<?= /* @noEscape */ $block->getJsId() ?>"
+             class="login-with-amazon"
+             data-mage-init='{"amazonButton": {"buttonType": "PwA"}}'>
+        </div>
     </div>
     <div class="amazon-button-container__cell">
         <div class="field-tooltip toggle">
-            <span class="field-tooltip-action action-help" data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-            <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true"><?php /* @noEscape */  echo __('Are you an Amazon customer? Pay now with address and payment details stored in your Amazon account.'); ?></div>
+            <span class="field-tooltip-action action-help"
+                  data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+            </span>
+            <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
+                <?= /* @noEscape */  __('Are you an Amazon customer? ' .
+                    'Pay now with address and payment details stored in your Amazon account.'); ?>
+            </div>
         </div>
     </div>
 </div>
