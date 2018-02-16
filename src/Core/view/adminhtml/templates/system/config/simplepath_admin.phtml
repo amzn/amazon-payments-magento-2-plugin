@@ -28,27 +28,27 @@
         </span>
     </div>
 
-    <span style="display:inline-block;padding:1em 0em;">
+    <span class="apsp-getstarted">
         <button><span><?= /* @noEscape */ __('Get started with account registration'); ?></span></button>
         &nbsp; &nbsp;
         <button><span><?= /* @noEscape */ __('My account is ready, I need to connect it to Magento'); ?></span></button>
     </span>
-    <span style="display:inline-block;">
+    <span class="apsp-or">
         &nbsp; <?= /* @noEscape */ __('or'); ?> &nbsp;
         <a href="#" id="simplepath-skip">
             <?= /* @noEscape */ __("I've already setup Pay with Amazon, I want to edit my settings"); ?>
         </a>
     </span>
 
-    <p style="color:red;display:none" id="amazon_https_required">
+    <p id="amazon_https_required">
         <?= /* @noEscape */ __("In order to enable automatic account configuration using Amazon's secure key " .
             'exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.'); ?>
     </p>
-    <p style="color:red;display:none" id="amazon_reload">
+    <p id="amazon_reload">
         <?= /* @noEscape */ __('Updating your config with new keys, please wait...'); ?>
     </p>
 
-    <div id="json-import-wrapper" style="display: none;">
+    <div id="json-import-wrapper">
         <textarea rows="2"
                   cols="15"
                   placeholder="<?= /* @noEscape */ __('Paste JSON credentials here'); ?>"
@@ -66,7 +66,7 @@
 
 </div>
 
-<div id="amazon_simplepath_back" style="display:none;margin-bottom:1em;margin-top:-0.5em;">
+<div id="amazon_simplepath_back">
   <a href="#">&laquo; <?= /* @noEscape */ __('Back'); ?></a>
 </div>
 
@@ -149,7 +149,7 @@ require(['uiRegistry', "prototype"], function(registry){
         var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
         if (elJson && $('sp-td-json-value') == null) {
             // Must create dynamic table to prevent conflict with config tables
-            var tableJson = new Element('table').update('<tr><td class="label" style="width:10%;"> \
+            var tableJson = new Element('table').update('<tr><td class="label creds"> \
             <?= /* @noEscape */ __('Credentials JSON'); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
             amazonSimplepath.insert({bottom: tableJson});
             $('sp-td-json-value').insert($('json-import-wrapper').show());
