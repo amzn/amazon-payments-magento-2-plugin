@@ -56,15 +56,14 @@ class ShippingInformationManagement
         $this->orderInformationManagement = $orderInformationManagement;
     }
 
-    public function aroundSaveAddressInformation(
-        ShippingInformationManagementInterface $shippingInformationManagement,
-        Closure $proceed,
+    public function beforeSaveAddressInformation(
+        ShippingInformationManagementInterface $subject,
         $cartId,
         ShippingInformationInterface $shippingInformation
     ) {
-        $return = $proceed($cartId, $shippingInformation);
+        $return = [$cartId, $shippingInformation];
 
-        $quote                  = $this->cartRepository->getActive($cartId);
+        $quote = $this->cartRepository->getActive($cartId);
 
         /* Grand total is 0, skip rest of the plugin */
         if ($quote->getGrandTotal() <= 0) {
