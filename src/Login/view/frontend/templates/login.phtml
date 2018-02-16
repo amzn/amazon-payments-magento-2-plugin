@@ -18,12 +18,12 @@
 <div class="block block-amazon-login">
     <div class="block-title">
         <strong id="block-amazon-login-heading" role="heading" aria-level="2">
-            <?= /* @noEscape */ __('Login with Amazon') ?>
+            <?= $block->escapeHtml(__('Login with Amazon')) ?>
         </strong>
     </div>
     <div class="block-content" aria-labelledby="block-amazon-login-heading">
-        <p><?= /* @noEscape */ __('With Amazon Pay and Login with Amazon, you can easily sign-in and use the ' .
-            'shipping and payment information stored in your Amazon account to place an order on this shop. ') ?>
+        <p><?= $block->escapeHtml(__('With Amazon Pay and Login with Amazon, you can easily sign-in and use the ' .
+            'shipping and payment information stored in your Amazon account to place an order on this shop. ')) ?>
         </p>
         <div class="actions-toolbar">
             <div class="primary">
@@ -43,8 +43,8 @@
                                   aria-expanded="false">
                             </span>
                             <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
-                            <?= /* @noEscape */ __('Securely login into our website using your ' .
-                                'existing Amazon details.'); ?>
+                            <?= $block->escapeHtml(__('Securely login into our website using your ' .
+                                'existing Amazon details.')); ?>
                             </div>
                         </div>
                     </div>

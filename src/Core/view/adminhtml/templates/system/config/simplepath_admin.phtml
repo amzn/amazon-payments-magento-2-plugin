@@ -3,11 +3,11 @@
 
     <?php if (!$block->getCurrency()) : // SimplePath not supported ?>
     <div id="simplepath_unsported">
-        <?= /* @noEscape */ __('An unsupported currency is currently selected. ' .
-            'Please review our configuration guide.'); ?>
+        <?= $block->escapeHtml(__('An unsupported currency is currently selected. ' .
+            'Please review our configuration guide.')); ?>
         <span class="note">
             <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">
-                (<?= /* @noEscape */ __('More Information'); ?>)
+                (<?= $block->escapeHtml(__('More Information')); ?>)
             </a>
         </span>
     </div>
@@ -23,42 +23,44 @@
         ); ?>
         <span class="note">
             <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">
-                (<?= /* @noEscape */ __('More Information'); ?>)
+                (<?= $block->escapeHtml(__('More Information')); ?>)
             </a>
         </span>
     </div>
 
     <span class="apsp-getstarted">
-        <button><span><?= /* @noEscape */ __('Get started with account registration'); ?></span></button>
+        <button><span><?= $block->escapeHtml(__('Get started with account registration')); ?></span></button>
         &nbsp; &nbsp;
-        <button><span><?= /* @noEscape */ __('My account is ready, I need to connect it to Magento'); ?></span></button>
+        <button><span>
+            <?= $block->escapeHtml(__('My account is ready, I need to connect it to Magento')); ?>
+        </span></button>
     </span>
     <span class="apsp-or">
-        &nbsp; <?= /* @noEscape */ __('or'); ?> &nbsp;
+        &nbsp; <?= $block->escapeHtml(__('or')); ?> &nbsp;
         <a href="#" id="simplepath-skip">
-            <?= /* @noEscape */ __("I've already setup Pay with Amazon, I want to edit my settings"); ?>
+            <?= $block->escapeHtml(__("I've already setup Pay with Amazon, I want to edit my settings")); ?>
         </a>
     </span>
 
     <p id="amazon_https_required">
-        <?= /* @noEscape */ __("In order to enable automatic account configuration using Amazon's secure key " .
-            'exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.'); ?>
+        <?= $block->escapeHtml(__("In order to enable automatic account configuration using Amazon's secure key " .
+            'exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.')); ?>
     </p>
     <p id="amazon_reload">
-        <?= /* @noEscape */ __('Updating your config with new keys, please wait...'); ?>
+        <?= $block->escapeHtml(__('Updating your config with new keys, please wait...')); ?>
     </p>
 
     <div id="json-import-wrapper">
         <textarea rows="2"
                   cols="15"
-                  placeholder="<?= /* @noEscape */ __('Paste JSON credentials here'); ?>"
+                  placeholder="<?= $block->escapeHtml(__('Paste JSON credentials here')); ?>"
                   id="json-import">
         </textarea>
         <br />
         <button id="save-json"
                 class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all
                        ui-button-text-only">
-            <?= /* @noEscape */ __('Save Credentials'); ?>
+            <?= $block->escapeHtml(__('Save Credentials')); ?>
         </button>
     </div>
 
@@ -67,7 +69,7 @@
 </div>
 
 <div id="amazon_simplepath_back">
-  <a href="#">&laquo; <?= /* @noEscape */ __('Back'); ?></a>
+  <a href="#">&laquo; <?= $block->escapeHtml(__('Back')); ?></a>
 </div>
 
 <script>
@@ -150,7 +152,7 @@ require(['uiRegistry', "prototype"], function(registry){
         if (elJson && $('sp-td-json-value') == null) {
             // Must create dynamic table to prevent conflict with config tables
             var tableJson = new Element('table').update('<tr><td class="label creds"> \
-            <?= /* @noEscape */ __('Credentials JSON'); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
+            <?= $block->escapeHtml(__('Credentials JSON')); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
             amazonSimplepath.insert({bottom: tableJson});
             $('sp-td-json-value').insert($('json-import-wrapper').show());
 
@@ -167,7 +169,7 @@ require(['uiRegistry', "prototype"], function(registry){
                 e.stop();
                 var json = $('json-import').value;
                 if (!json || !json.isJSON()) {
-                    alert('<?= /* @noEscape */ __('Valid JSON credentials are required.'); ?>');
+                    alert('<?= $block->escapeHtml(__('Valid JSON credentials are required.')); ?>');
                     return;
                 }
                 elJson.value = json;
