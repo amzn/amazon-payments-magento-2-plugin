@@ -23,9 +23,6 @@ use Amazon\Payment\Model\ResourceModel\OrderLink;
 use Amazon\Payment\Model\ResourceModel\PendingAuthorization\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * @api
- */
 class OrderProcessor implements ProcessorInterface
 {
     /**

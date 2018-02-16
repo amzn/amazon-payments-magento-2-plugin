@@ -42,9 +42,6 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * @api
- */
 class Authorization extends AbstractOperation implements AuthorizationInterface
 {
     /**

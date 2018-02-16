@@ -22,9 +22,6 @@ use Amazon\Payment\Domain\Details\AmazonCaptureDetailsFactory;
 use Amazon\Payment\Model\ResourceModel\PendingCapture\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * @api
- */
 class CaptureProcessor implements ProcessorInterface
 {
     /**

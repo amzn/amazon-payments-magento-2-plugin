@@ -22,9 +22,6 @@ use Amazon\Payment\Domain\Details\AmazonAuthorizationDetailsFactory;
 use Amazon\Payment\Model\ResourceModel\PendingAuthorization\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * @api
- */
 class AuthorizationProcessor implements ProcessorInterface
 {
     /**
