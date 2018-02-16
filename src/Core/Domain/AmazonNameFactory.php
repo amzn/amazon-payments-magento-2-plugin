@@ -53,10 +53,14 @@ class AmazonNameFactory
     public function create(array $data = [])
     {
         $instanceClassName = AmazonName::class;
-        $countryCode = strtoupper($data['country']);
 
-        if (!empty($this->perCountryNameHandlers[$countryCode])) {
-            $instanceClassName = (string) $this->perCountryNameHandlers[$countryCode];
+        if (isset($data['country'])) {
+            $countryCode = strtoupper($data['country']);
+
+            if (!empty($this->perCountryNameHandlers[$countryCode])) {
+                $instanceClassName = (string) $this->perCountryNameHandlers[$countryCode];
+            }
+
         }
 
         $instance = $this->objectManager->create($instanceClassName, $data);

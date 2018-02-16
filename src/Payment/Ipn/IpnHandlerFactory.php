@@ -69,7 +69,9 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
     public function create($headers, $body)
     {
         if ($this->environmentChecker->isTestMode()) {
-            return new MockIpnHandler($headers, $body);
+            return $this->objectManager->create(MockIpnHandler::class,
+                ['requestHeaders' => $headers, 'requestBody' => $body]
+            );
         }
 
         $handler = $this->objectManager->create(

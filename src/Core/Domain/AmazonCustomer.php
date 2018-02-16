@@ -38,12 +38,13 @@ class AmazonCustomer
      * @param string $id
      * @param string $email
      * @param string $name
+     * @param AmazonNameFactory $addressNameFactory
      */
-    public function __construct($id, $email, $name)
+    public function __construct($id, $email, $name, AmazonNameFactory $addressNameFactory)
     {
         $this->id    = $id;
         $this->email = $email;
-        $this->name = new AmazonName($name);
+        $this->name  = $addressNameFactory->create(['name' => $name]);
     }
 
     /**

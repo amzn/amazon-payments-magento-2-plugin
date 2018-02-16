@@ -24,10 +24,10 @@ class AmazonCustomerJp extends AmazonCustomer
      * @param string $email
      * @param string $name
      */
-    public function __construct($id, $email, $name)
+    public function __construct($id, $email, $name, AmazonNameFactory $addressNameFactory)
     {
         $this->id    = $id;
         $this->email = $email;
-        $this->name = new AmazonNameJp($name);
+        $this->name  = $addressNameFactory->create(['name' => $name, 'country' => 'JP']);
     }
 }
