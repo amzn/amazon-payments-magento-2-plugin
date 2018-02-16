@@ -16,7 +16,7 @@
 namespace Amazon\Payment\Plugin;
 
 use Closure;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection;
@@ -26,21 +26,17 @@ class TransactionRepository
     /**
      * Fix core bug where sort order is not applied
      *
-     * @param TransactionRepositoryInterface $transactionRepository
-     * @param Closure                        $proceed
-     * @param SearchCriteria                 $searchCriteria
+     * @param SearchCriteriaInterface        $subject
+     * @param TransactionRepositoryInterface $collection
      *
      * @return Collection
      */
-    public function aroundGetList(
-        TransactionRepositoryInterface $transactionRepository,
-        Closure $proceed,
-        SearchCriteria $searchCriteria
+    public function afterGetList(
+        SearchCriteriaInterface $subject,
+        TransactionRepositoryInterface $collection
     ) {
-        $collection = $proceed($searchCriteria);
-
         if ($collection instanceof Collection) {
-            $sortOrders = $searchCriteria->getSortOrders();
+            $sortOrders = $subject->getSortOrders();
             if ($sortOrders) {
                 foreach ($sortOrders as $sortOrder) {
                     $collection->addOrder(
