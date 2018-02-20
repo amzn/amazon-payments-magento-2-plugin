@@ -22,6 +22,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class PaymentConfigSaveAfter implements ObserverInterface
@@ -54,6 +55,11 @@ class PaymentConfigSaveAfter implements ObserverInterface
     protected $appConfig;
 
     /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    /**
      * @param ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory
      * @param ManagerInterface               $messageManager
      * @param Json                           $jsonCredentials
@@ -64,13 +70,16 @@ class PaymentConfigSaveAfter implements ObserverInterface
         ManagerInterface $messageManager,
         Json $jsonCredentials,
         Data $amazonCoreHelper,
-        ReinitableConfigInterface $config
+        ReinitableConfigInterface $config,
+        RequestInterface $request
+
     ) {
         $this->apiCredentialsValidatorFactory = $apiCredentialsValidatorFactory;
         $this->messageManager                 = $messageManager;
         $this->amazonCoreHelper               = $amazonCoreHelper;
         $this->jsonCredentials                = $jsonCredentials;
         $this->appConfig                      = $config;
+        $this->request                        = $request;
     }
 
     /**
@@ -78,6 +87,10 @@ class PaymentConfigSaveAfter implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        if (!$this->request->getParam('amazon_test_creds')) {
+            return;
+        }
+
         $scopeData = $this->getScopeData($observer);
         $jsonCredentials = $this->amazonCoreHelper->getCredentialsJson($scopeData['scope'], $scopeData['scope_id']);
 

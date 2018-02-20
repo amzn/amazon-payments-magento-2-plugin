@@ -31,10 +31,11 @@
                             <label>Client Id</label>
                             <config_path>payment/amazon_payment/client_id</config_path>
                         </field>
-                        <field id="client_secret" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="client_secret" translate="label comment" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Client Secret</label>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                             <config_path>payment/amazon_payment/client_secret</config_path>
+                            <comment><![CDATA[<input type="checkbox" name="amazon_test_creds" id="amazon_test_creds" value="1"><label for="amazon_test_creds">]]><![CDATA[Test Credentials]]><![CDATA[</label>]]></comment>
                         </field>
                         <field id="credentials_json" translate="label" type="textarea" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Credentials JSON</label>
