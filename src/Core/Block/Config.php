@@ -99,6 +99,14 @@ class Config extends Template
     /**
      * @return bool
      */
+    public function isExtensionEnabled()
+    {
+	    return ($this->coreHelper->isPwaEnabled() || $this->coreHelper->isLwaEnabled());
+    }
+
+    /**
+     * @return bool
+     */
     public function sanitizePaymentAction()
     {
         return ($this->coreHelper->getPaymentAction() === 'authorize_capture');

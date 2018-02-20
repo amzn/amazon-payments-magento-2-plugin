@@ -3,8 +3,6 @@
     <module name="Amazon_Login" setup_version="1.2.0">
         <sequence>
             <module name="Amazon_Core"/>
-            <module name="Magento_Customer"/>
-            <module name="Magento_Checkout"/>
         </sequence>
     </module>
 </config>

@@ -16,7 +16,7 @@
 var registry = require('uiRegistry');
 var amazonPayment = registry.get('amazonPayment');
 
-if (amazonPayment.allowAmLoginLoading == true) {
+if (amazonPayment != undefined && amazonPayment.allowAmLoginLoading == true) {
     define(['require', 'Amazon_Login/js/view/login-button'], function (require) {
         return require("Amazon_Login/js/view/login-button");
     });

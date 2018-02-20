@@ -36,7 +36,7 @@ define(
                     $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                 );
             });
-
+            $("#co-shipping-form").css("display", "none");
             checkoutDataResolver.resolveShippingAddress();
         }
 
@@ -45,16 +45,7 @@ define(
          * @private
          */
         return function () {
-            //check to see if user is logged out of amazon (otherwise shipping form won't be in DOM)
-            if (!amazonStorage.isAmazonAccountLoggedIn) {
-                populateShippingForm();
-            }
-            //subscribe to logout and trigger shippingform population when logged out.
-            amazonStorage.isAmazonAccountLoggedIn.subscribe(function (loggedIn) {
-                if (!loggedIn) {
-                    populateShippingForm();
-                }
-            });
+            populateShippingForm();
         }
     }
 );
