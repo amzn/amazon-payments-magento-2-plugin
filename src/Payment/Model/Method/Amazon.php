@@ -37,7 +37,6 @@ use Amazon\Payment\Exception\CapturePendingException;
 use Amazon\Payment\Exception\HardDeclineException;
 use Amazon\Payment\Exception\SoftDeclineException;
 use Amazon\Payment\Exception\TransactionTimeoutException;
-use Amazon\Payment\Plugin\AdditionalInformation;
 use Exception;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -58,6 +57,7 @@ use Magento\Store\Model\ScopeInterface;
 class Amazon extends AbstractMethod
 {
     const PAYMENT_METHOD_CODE = 'amazon_payment';
+    const KEY_SANDBOX_SIMULATION_REFERENCE = 'sandbox_simulation_reference';
 
     /**
      * {@inheritdoc}
@@ -612,7 +612,7 @@ class Amazon extends AbstractMethod
         $additionalData = new DataObject($additionalData);
 
         $infoInstance = $this->getInfoInstance();
-        $key          = AdditionalInformation::KEY_SANDBOX_SIMULATION_REFERENCE;
+        $key          = self::KEY_SANDBOX_SIMULATION_REFERENCE;
         $infoInstance->setAdditionalInformation($key, $additionalData->getData($key));
 
         return $this;

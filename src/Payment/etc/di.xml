@@ -19,9 +19,6 @@
     <type name="Magento\Checkout\Api\ShippingInformationManagementInterface">
         <plugin name="amazon_payment_shipping_information_management" type="Amazon\Payment\Plugin\ShippingInformationManagement" sortOrder="1" />
     </type>
-    <type name="Magento\Quote\Api\Data\PaymentInterface">
-        <plugin name="amazon_payment_additional_information" type="Amazon\Payment\Plugin\AdditionalInformation" />
-    </type>
     <type name="Magento\Sales\Controller\Adminhtml\Order\Invoice\Save">
         <plugin name="amazon_payment_invoice_save" type="Amazon\Payment\Plugin\InvoiceSave" sortOrder="1" />
     </type>
