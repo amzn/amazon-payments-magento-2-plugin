@@ -25,8 +25,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @param string $fieldName
      * @return string|null
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getSpecificConfigPath($fieldName)
     {

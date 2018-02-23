@@ -51,6 +51,9 @@ class CustomerCollection
         return $proceed($attribute, $condition, $joinType);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function addAmazonIdFilter(array $attribute, Collection $collection)
     {
         foreach ($attribute as $key => $condition) {

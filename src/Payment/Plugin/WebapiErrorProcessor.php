@@ -20,6 +20,9 @@ use Magento\Framework\Webapi\ErrorProcessor;
 
 class WebapiErrorProcessor
 {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function beforeMaskException(ErrorProcessor $subject, \Exception $e)
     {
         $previous = $e->getPrevious();

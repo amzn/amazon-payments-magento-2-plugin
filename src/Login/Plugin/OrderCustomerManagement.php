@@ -59,6 +59,7 @@ class OrderCustomerManagement
      * @param \Closure $proceed
      * @param int $orderId
      * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundCreate(OrderCustomerManagementInterface $subject, \Closure $proceed, $orderId)
     {

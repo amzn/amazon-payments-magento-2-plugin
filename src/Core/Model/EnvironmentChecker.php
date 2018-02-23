@@ -19,7 +19,7 @@ use Amazon\Core\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 
-final class EnvironmentChecker
+class EnvironmentChecker
 {
     /**
      * @var ScopeConfigInterface

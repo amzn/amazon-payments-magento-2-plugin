@@ -53,6 +53,7 @@ class CustomerRepository
      * @param CustomerInterface           $customer
      *
      * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetById(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
@@ -68,6 +69,7 @@ class CustomerRepository
      * @param CustomerInterface           $customer
      *
      * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGet(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {

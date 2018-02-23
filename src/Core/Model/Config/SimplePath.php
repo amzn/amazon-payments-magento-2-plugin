@@ -10,6 +10,9 @@ use Magento\Payment\Helper\Formatter;
 use \phpseclib\Crypt\RSA;
 use \phpseclib\Crypt\AES;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SimplePath
 {
 
@@ -39,6 +42,7 @@ class SimplePath
 
     /**
      * SimplePath constructor.
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CoreHelper $coreHelper,
@@ -209,6 +213,7 @@ class SimplePath
      * Verify and decrypt JSON payload
      *
      * @param string $payloadJson
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
     {
@@ -229,7 +234,6 @@ class SimplePath
                     'Please verify your JSON format and values.'));
             }
 
-            // URL decode values
             foreach ($payload as $key => $value) {
                 $payload->$key = urldecode($value);
             }
@@ -240,9 +244,7 @@ class SimplePath
                     'maxredirects' => 2,
                     'timeout'      => 30,
                 ]);
-
                 $client->setParameterGet(['sigkey_id' => $payload->sigKeyID]);
-
                 $response = $client->request();
                 $amazonPublickey = urldecode($response->getBody());
             } catch (\Exception $e) {
@@ -297,7 +299,6 @@ class SimplePath
                         $this->saveToConfig($finalPayload, $autoEnable);
                         $this->destroyKeys();
                     }
-
                     return $finalPayload;
                 }
             } else {
@@ -306,7 +307,6 @@ class SimplePath
         } catch (\Exception $e) {
             $this->logger->critical($e);
             $this->messageManager->addError(__($e->getMessage()));
-
             $link = 'https://payments.amazon.com/help/202024240';
             $this->messageManager->addError(__("If you're experiencing consistent errors with transferring keys, " .
                 "click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link));

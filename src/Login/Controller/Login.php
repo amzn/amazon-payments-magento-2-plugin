@@ -36,6 +36,7 @@ use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Login with token controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Login extends Action
 {
@@ -107,6 +108,7 @@ abstract class Login extends Action
      * @param CustomerSession             $customerSession
      * @param Session                     $session
      * @param LoggerInterface             $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,

@@ -162,7 +162,7 @@ class PendingCapture extends AbstractModel implements PendingCaptureInterface
     /**
      * {@inheritDoc}
      */
-    public function getLockOnLoad()
+    public function hasLockOnLoad()
     {
         return $this->lockOnLoad;
     }

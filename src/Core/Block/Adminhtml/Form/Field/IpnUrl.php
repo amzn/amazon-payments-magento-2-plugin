@@ -21,6 +21,13 @@ use Magento\Framework\UrlInterface;
 
 class IpnUrl extends BaseField
 {
+    /**
+     * Render element value
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function _renderValue(AbstractElement $element)
     {
         $stores = $this->_storeManager->getStores();
@@ -43,6 +50,13 @@ class IpnUrl extends BaseField
         return '<td class="value">' . $valueReturn . '</td>';
     }
 
+    /**
+     * Render element value
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function _renderInheritCheckbox(AbstractElement $element)
     {
         return '<td class="use-default"></td>';

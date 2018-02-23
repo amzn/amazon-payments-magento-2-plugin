@@ -32,6 +32,9 @@ use Magento\Store\Model\ScopeInterface;
 use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderInformationManagement implements OrderInformationManagementInterface
 {
     /**

@@ -218,7 +218,7 @@ interface PendingAuthorizationInterface
      *
      * @return boolean
      */
-    public function getLockOnLoad();
+    public function hasLockOnLoad();
 
     /**
      * Retrieve model resource

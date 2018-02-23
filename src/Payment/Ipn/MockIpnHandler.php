@@ -35,6 +35,7 @@ class MockIpnHandler extends AmazonIpnHandler
      * @param array      $requestHeaders
      * @param string     $requestBody
      * @param null|array $ipnConfig
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct($requestHeaders, $requestBody, $ipnConfig = null)
     {

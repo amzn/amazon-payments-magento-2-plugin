@@ -37,6 +37,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     const PENDING_REFUND_TABLE_NAME = 'amazon_pending_refund';
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '1.1.0', '<')) {
@@ -373,7 +378,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             AdapterInterface::INDEX_TYPE_UNIQUE
         );
     }
-    
+
     private function createPendingRefundTable(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->dropTable(static::PENDING_REFUND_TABLE_NAME);

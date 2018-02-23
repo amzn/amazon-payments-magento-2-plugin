@@ -42,6 +42,9 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Authorization extends AbstractOperation implements AuthorizationInterface
 {
     /**
@@ -107,33 +110,34 @@ class Authorization extends AbstractOperation implements AuthorizationInterface
     /**
      * Authorization constructor.
      *
+     * @param NotifierInterface                         $notifier
+     * @param UrlInterface                              $urlBuilder
+     * @param SearchCriteriaBuilderFactory              $searchCriteriaBuilderFactory
+     * @param InvoiceRepositoryInterface                $invoiceRepository
      * @param ClientFactoryInterface                    $clientFactory
      * @param PendingAuthorizationInterfaceFactory      $pendingAuthorizationFactory
      * @param AmazonAuthorizationDetailsResponseFactory $amazonAuthorizationDetailsResponseFactory
      * @param AmazonAuthorization                       $amazonAuthorizationValidator
-     * @param NotifierInterface                         $notifier
-     * @param UrlInterface                              $urlBuilder
-     * @param SearchCriteriaBuilderFactory              $searchCriteriaBuilderFactory
      * @param OrderPaymentRepositoryInterface           $orderPaymentRepository
      * @param OrderRepositoryInterface                  $orderRepository
-     * @param InvoiceRepositoryInterface                $invoiceRepository
      * @param ManagerInterface                          $eventManager
      * @param AmazonGetOrderDetailsResponseFactory      $amazonGetOrderDetailsResponseFactory
      * @param StoreManagerInterface                     $storeManager
      * @param PaymentManagementInterface                $paymentManagement
      * @param LoggerInterface                           $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        NotifierInterface $notifier,
+        UrlInterface $urlBuilder,
+        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
+        InvoiceRepositoryInterface $invoiceRepository,
         ClientFactoryInterface $clientFactory,
         PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         AmazonAuthorizationDetailsResponseFactory $amazonAuthorizationDetailsResponseFactory,
         AmazonAuthorization $amazonAuthorizationValidator,
-        NotifierInterface $notifier,
-        UrlInterface $urlBuilder,
-        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         OrderPaymentRepositoryInterface $orderPaymentRepository,
         OrderRepositoryInterface $orderRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
         ManagerInterface $eventManager,
         AmazonGetOrderDetailsResponseFactory $amazonGetOrderDetailsResponseFactory,
         StoreManagerInterface $storeManager,

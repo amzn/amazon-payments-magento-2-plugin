@@ -37,6 +37,9 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Capture extends AbstractOperation implements CaptureInterface
 {
     /**
@@ -92,28 +95,29 @@ class Capture extends AbstractOperation implements CaptureInterface
     /**
      * Capture constructor.
      *
-     * @param ClientFactoryInterface              $clientFactory
-     * @param PendingCaptureInterfaceFactory      $pendingCaptureFactory
-     * @param AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory
      * @param NotifierInterface                   $notifier
      * @param UrlInterface                        $urlBuilder
      * @param SearchCriteriaBuilderFactory        $searchCriteriaBuilderFactory
      * @param InvoiceRepositoryInterface          $invoiceRepository
+     * @param ClientFactoryInterface              $clientFactory
+     * @param PendingCaptureInterfaceFactory      $pendingCaptureFactory
+     * @param AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory
      * @param OrderPaymentRepositoryInterface     $orderPaymentRepository
      * @param OrderRepositoryInterface            $orderRepository
      * @param TransactionRepositoryInterface      $transactionRepository
      * @param StoreManagerInterface               $storeManager
      * @param PaymentManagementInterface          $paymentManagement
      * @param LoggerInterface                     $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ClientFactoryInterface $clientFactory,
-        PendingCaptureInterfaceFactory $pendingCaptureFactory,
-        AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory,
         NotifierInterface $notifier,
         UrlInterface $urlBuilder,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         InvoiceRepositoryInterface $invoiceRepository,
+        ClientFactoryInterface $clientFactory,
+        PendingCaptureInterfaceFactory $pendingCaptureFactory,
+        AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory,
         OrderPaymentRepositoryInterface $orderPaymentRepository,
         OrderRepositoryInterface $orderRepository,
         TransactionRepositoryInterface $transactionRepository,

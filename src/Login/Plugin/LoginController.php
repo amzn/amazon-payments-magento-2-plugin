@@ -38,6 +38,9 @@ class LoginController
         $this->url     = $url;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterExecute(Login $login, ResultInterface $result)
     {
         $this->session->setAfterAmazonAuthUrl($this->url->getAccountUrl());

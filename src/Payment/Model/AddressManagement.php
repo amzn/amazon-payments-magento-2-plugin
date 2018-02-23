@@ -32,6 +32,9 @@ use Magento\Quote\Model\Quote;
 use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddressManagement implements AddressManagementInterface
 {
     /**

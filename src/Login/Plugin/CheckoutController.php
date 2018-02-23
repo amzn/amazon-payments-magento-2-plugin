@@ -38,6 +38,9 @@ class CheckoutController
         $this->url     = $url;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterExecute(Index $index, ResultInterface $result)
     {
         $this->session->setAfterAmazonAuthUrl($this->url->getUrl('checkout'));

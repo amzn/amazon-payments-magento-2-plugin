@@ -40,6 +40,9 @@ class QuoteRepository
         $this->quoteLinkFactory     = $quoteLinkFactory;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterGet(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
         $this->setAmazonOrderReferenceIdExtensionAttribute($cart);
@@ -47,6 +50,9 @@ class QuoteRepository
         return $cart;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterGetForCustomer(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
         $this->setAmazonOrderReferenceIdExtensionAttribute($cart);
@@ -54,6 +60,9 @@ class QuoteRepository
         return $cart;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterGetActive(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
         $this->setAmazonOrderReferenceIdExtensionAttribute($cart);
@@ -61,6 +70,9 @@ class QuoteRepository
         return $cart;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterGetActiveForCustomer(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
         $this->setAmazonOrderReferenceIdExtensionAttribute($cart);

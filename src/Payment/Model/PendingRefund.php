@@ -160,7 +160,7 @@ class PendingRefund extends AbstractModel implements PendingRefundInterface
     /**
      * {@inheritDoc}
      */
-    public function getLockOnLoad()
+    public function hasLockOnLoad()
     {
         return $this->lockOnLoad;
     }

@@ -54,6 +54,10 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class Amazon extends AbstractMethod
 {
     const PAYMENT_METHOD_CODE = 'amazon_payment';
@@ -196,6 +200,7 @@ class Amazon extends AbstractMethod
      * @param AbstractResource|null                     $resource
      * @param AbstractDb|null                           $resourceCollection
      * @param array                                     $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,

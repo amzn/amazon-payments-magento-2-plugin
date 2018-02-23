@@ -38,6 +38,7 @@ class CartSection
      * @param array $result
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetSectionData(Cart $subject, $result)
     {

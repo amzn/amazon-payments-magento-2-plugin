@@ -38,6 +38,9 @@ class CreateController
         $this->url     = $url;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterExecute(Create $create, ResultInterface $result)
     {
         $this->session->setAfterAmazonAuthUrl($this->url->getAccountUrl());

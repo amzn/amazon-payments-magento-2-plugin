@@ -240,7 +240,7 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
     /**
      * {@inheritDoc}
      */
-    public function getLockOnLoad()
+    public function hasLockOnLoad()
     {
         return $this->lockOnLoad;
     }

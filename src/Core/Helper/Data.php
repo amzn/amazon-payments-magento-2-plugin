@@ -22,6 +22,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ */
 class Data extends AbstractHelper
 {
     const AMAZON_SECRET_KEY = 'secret_key';

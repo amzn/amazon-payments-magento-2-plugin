@@ -56,6 +56,9 @@ class ShippingInformationManagement
         $this->orderInformationManagement = $orderInformationManagement;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function beforeSaveAddressInformation(
         ShippingInformationManagementInterface $subject,
         $cartId,

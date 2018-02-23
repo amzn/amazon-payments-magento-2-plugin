@@ -109,7 +109,7 @@ interface PendingRefundInterface
      *
      * @return boolean
      */
-    public function getLockOnLoad();
+    public function hasLockOnLoad();
 
     /**
      * @return PendingRefundResource
