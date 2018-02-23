@@ -9,8 +9,11 @@
   "require": {
     "amzn/amazon-pay-and-login-with-amazon-core-module": "^1.2.5",
     "magento/module-customer": "^100.1.0|^101.0.0",
-	"magento/module-checkout": "^100.1.0|^100.2.0"
-    
+    "magento/module-store": "^100.1.0|^100.2.0",
+    "magento/module-eav": "^100.1.0|^101.0.0",
+    "magento/module-checkout": "^100.1.0|^100.2.0",
+    "magento/module-checkout-agreements": "100.2.*"
+
   },
   "autoload": {
     "files": ["registration.php"],
