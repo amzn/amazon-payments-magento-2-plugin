@@ -15,13 +15,26 @@
  */
 namespace Amazon\Login\Api\Data;
 
-use Exception;
-
 /**
  * @api
  */
 interface CustomerLinkInterface
 {
+    /*
+     * Entity ID.
+     */
+    const ENTITY_ID = 'entity_id';
+
+    /*
+     * Customer ID.
+     */
+    const CUSTOMER_ID = 'customer_id';
+
+    /*
+     * Amazon ID.
+     */
+    const AMAZON_ID = 'amazon_id';
+
     /**
      * Set amazon id
      *
@@ -53,21 +66,4 @@ interface CustomerLinkInterface
      * @return integer
      */
     public function getCustomerId();
-
-    /**
-     * Save customer link
-     *
-     * @return $this
-     * @throws Exception
-     */
-    public function save();
-
-    /**
-     * Load customer link data
-     *
-     * @param integer $modelId
-     * @param null|string $field
-     * @return $this
-     */
-    public function load($modelId, $field = null);
 }

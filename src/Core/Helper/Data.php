@@ -318,6 +318,15 @@ class Data extends AbstractHelper
     }
 
     /*
+     * @return bool
+     */
+    public function isEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->isLwaEnabled($scope, $scopeCode) || $this->isPwaEnabled($scope, $scopeCode);
+    }
+
+
+    /*
      * @return string
      */
     public function getPaymentAction($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)

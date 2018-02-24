@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Controller\Login;
 
-use Amazon\Login\Api\CustomerManagerInterface;
+use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Amazon\Login\Domain\ValidationCredentials;
 use Amazon\Login\Helper\Session;
 use Amazon\Login\Model\Customer\Account\Redirect as AccountRedirect;
@@ -47,9 +47,9 @@ class ValidatePost extends Action
     protected $encryptor;
 
     /**
-     * @var CustomerManagerInterface
+     * @var CustomerLinkManagement
      */
-    protected $customerManager;
+    protected $customerLinkManagement;
 
     /**
      * ValidatePost constructor.
@@ -59,7 +59,7 @@ class ValidatePost extends Action
      * @param AccountRedirect          $accountRedirect
      * @param CustomerRegistry         $customerRegistry
      * @param Encryptor                $encryptor
-     * @param CustomerManagerInterface $customerManager
+     * @param customerLinkManagement   $customerLinkManagement
      */
     public function __construct(
         Context $context,
@@ -67,15 +67,15 @@ class ValidatePost extends Action
         AccountRedirect $accountRedirect,
         CustomerRegistry $customerRegistry,
         Encryptor $encryptor,
-        CustomerManagerInterface $customerManager
+        CustomerLinkManagementInterface $customerLinkManagement
     ) {
         parent::__construct($context);
 
-        $this->session          = $session;
-        $this->accountRedirect  = $accountRedirect;
-        $this->customerRegistry = $customerRegistry;
-        $this->encryptor        = $encryptor;
-        $this->customerManager  = $customerManager;
+        $this->session                = $session;
+        $this->accountRedirect        = $accountRedirect;
+        $this->customerRegistry       = $customerRegistry;
+        $this->encryptor              = $encryptor;
+        $this->customerLinkManagement = $customerLinkManagement;
     }
 
     public function execute()
@@ -87,7 +87,7 @@ class ValidatePost extends Action
             $hash     = $this->customerRegistry->retrieveSecureData($credentials->getCustomerId())->getPasswordHash();
 
             if ($this->encryptor->validateHash($password, $hash)) {
-                $this->customerManager->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
+                $this->customerLinkManagement->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
                 $this->session->loginById($credentials->getCustomerId());
             } else {
                 $this->messageManager->addErrorMessage('The password supplied was incorrect');

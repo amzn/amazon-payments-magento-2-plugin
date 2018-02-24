@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Plugin;
 
-use Amazon\Login\Api\CustomerManagerInterface;
+use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Amazon\Login\Helper\Session as LoginSessionHelper;
 use Amazon\Payment\Model\Method\Amazon as AmazonPaymentMethod;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -35,23 +35,23 @@ class OrderCustomerManagement
     protected $orderRepository;
 
     /**
-     * @var CustomerManagerInterface
+     * @var CustomerLinkManagementInterface
      */
-    protected $customerManager;
+    protected $customerLinkManagement;
 
     /**
      * @param LoginSessionHelper $loginSessionHelper
      * @param OrderRepositoryInterface $orderRepository
-     * @param CustomerManagerInterface $customerManager
+     * @param CustomerLinkManagementInterface $customerLinkManagement
      */
     public function __construct(
         LoginSessionHelper $loginSessionHelper,
         OrderRepositoryInterface $orderRepository,
-        CustomerManagerInterface $customerManager
+        CustomerLinkManagementInterface $customerLinkManagement
     ) {
-        $this->loginSessionHelper = $loginSessionHelper;
-        $this->orderRepository = $orderRepository;
-        $this->customerManager = $customerManager;
+        $this->loginSessionHelper     = $loginSessionHelper;
+        $this->orderRepository        = $orderRepository;
+        $this->customerLinkManagement = $customerLinkManagement;
     }
 
     /**
@@ -70,7 +70,7 @@ class OrderCustomerManagement
         $amazonCustomer = $this->loginSessionHelper->getAmazonCustomer();
 
         if ($isAmazonPayment && $amazonCustomer) {
-            $this->customerManager->updateLink($customerData->getId(), $amazonCustomer->getId());
+            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
         }
 
         return $customerData;

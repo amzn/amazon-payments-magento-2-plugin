@@ -15,7 +15,8 @@
  */
 namespace Amazon\Login\Plugin;
 
-use Amazon\Login\Api\Data\CustomerLinkInterfaceFactory;
+use Amazon\Core\Helper\Data as AmazonHelper;
+use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerExtensionFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -28,22 +29,30 @@ class CustomerRepository
     protected $customerExtensionFactory;
 
     /**
-     * @var CustomerLinkInterfaceFactory
+     * @var CustomerLinkManagementInterface
      */
-    protected $customerLinkFactory;
+    protected $customerLinkManagement;
+
+    /**
+     * @var Data
+     */
+    protected $amazonHelper;
 
     /**
      * CustomerRepository constructor.
      *
      * @param CustomerExtensionFactory     $customerExtensionFactory
-     * @param CustomerLinkInterfaceFactory $customerLinkFactory
+     * @param CustomerLinkManagementInterface $customerLinkManagement
+     * @param AmazonHelper $amazonHelper
      */
     public function __construct(
         CustomerExtensionFactory $customerExtensionFactory,
-        CustomerLinkInterfaceFactory $customerLinkFactory
+        CustomerLinkManagementInterface $customerLinkManagement,
+        AmazonHelper $amazonHelper
     ) {
         $this->customerExtensionFactory = $customerExtensionFactory;
-        $this->customerLinkFactory      = $customerLinkFactory;
+        $this->customerLinkManagement   = $customerLinkManagement;
+        $this->amazonHelper             = $amazonHelper;
     }
 
     /**
@@ -57,7 +66,9 @@ class CustomerRepository
      */
     public function afterGetById(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        $this->setAmazonIdExtensionAttribute($customer);
+        if ($this->amazonHelper->isEnabled()) {
+            $this->customerLinkManagement->setAmazonIdExtensionAttribute($customer);
+        }
 
         return $customer;
     }
@@ -73,22 +84,10 @@ class CustomerRepository
      */
     public function afterGet(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        $this->setAmazonIdExtensionAttribute($customer);
-
-        return $customer;
-    }
-
-    protected function setAmazonIdExtensionAttribute(CustomerInterface $customer)
-    {
-        $customerExtension = ($customer->getExtensionAttributes()) ?: $this->customerExtensionFactory->create();
-
-        $amazonCustomer = $this->customerLinkFactory->create();
-        $amazonCustomer->load($customer->getId(), 'customer_id');
-
-        if ($amazonCustomer->getId()) {
-            $customerExtension->setAmazonId($amazonCustomer->getAmazonId());
+        if ($this->amazonHelper->isEnabled()) {
+            $this->customerLinkManagement->setAmazonIdExtensionAttribute($customer);
         }
 
-        $customer->setExtensionAttributes($customerExtension);
+        return $customer;
     }
 }

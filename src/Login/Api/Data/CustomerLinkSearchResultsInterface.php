@@ -13,28 +13,25 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Login\Api;
-
-use Amazon\Core\Domain\AmazonCustomer;
-use Magento\Customer\Api\Data\CustomerInterface;
+namespace Amazon\Login\Api\Data;
 
 /**
  * @api
  */
-interface CustomerManagerInterface
+interface CustomerLinkSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
-     * @param AmazonCustomer $amazonCustomer
+     * Gets collection items.
      *
-     * @return CustomerInterface|null
+     * @return \Amazon\Login\Api\Data\CustomerLinkInterface[] Array of collection items.
      */
-    public function create(AmazonCustomer $amazonCustomer);
+    public function getItems();
 
     /**
-     * @param integer $customerId
-     * @param string  $amazonId
+     * Sets collection items.
      *
-     * @return void
+     * @param \Amazon\Login\Api\Data\CustomerLinkInterface[] $items
+     * @return $this
      */
-    public function updateLink($customerId, $amazonId);
+    public function setItems(array $items);
 }

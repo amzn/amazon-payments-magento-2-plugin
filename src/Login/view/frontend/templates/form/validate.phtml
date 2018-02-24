@@ -22,8 +22,8 @@
             </strong>
         </div>
         <div class="block-content" aria-labelledby="block-amazon-login-heading">
-            <p><?= $block->escapeHtml(__('A shop account for this email address already exists. Please enter your shop ' .
-                'accounts password to log in without leaving the shop.')) ?>
+            <p><?= $block->escapeHtml(__('A shop account for this email address already exists. Please enter your ' .
+                'shop accounts password to log in without leaving the shop.')) ?>
             </p>
             <form class="form password validate"
                   action="<?= $block->escapeUrl($block->getUrl('*/*/validatepost')) ?>"
@@ -33,7 +33,9 @@
 
                 <fieldset class="fieldset" data-hasrequired="<?= $block->escapeHtml(__('* Required Fields')) ?>">
                     <div class="field email required">
-                        <label for="password" class="label"><span><?= $block->escapeHtml(__('Password')) ?></span></label>
+                        <label for="password" class="label">
+                            <span><?= $block->escapeHtml(__('Password')) ?></span>
+                        </label>
                         <div class="control">
                             <input type="password"
                                    name="password"

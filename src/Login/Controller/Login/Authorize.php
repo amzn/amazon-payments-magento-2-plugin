@@ -16,6 +16,7 @@
 namespace Amazon\Login\Controller\Login;
 
 use Amazon\Core\Domain\AmazonCustomer;
+use Amazon\Login\Domain\ValidationCredentials;
 use Zend_Validate;
 
 class Authorize extends \Amazon\Login\Controller\Login
@@ -73,7 +74,7 @@ class Authorize extends \Amazon\Login\Controller\Login
                 return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());
             }
 
-            $this->customerManager->updateLink($customerData->getId(), $amazonCustomer->getId());
+            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
         }
 
         return $customerData;
@@ -85,8 +86,8 @@ class Authorize extends \Amazon\Login\Controller\Login
             throw new ValidatorException(__('the email address for your Amazon account is invalid'));
         }
 
-        $customerData = $this->customerManager->create($amazonCustomer);
-        $this->customerManager->updateLink($customerData->getId(), $amazonCustomer->getId());
+        $customerData = $this->customerLinkManagement->create($amazonCustomer);
+        $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
 
         return $customerData;
     }

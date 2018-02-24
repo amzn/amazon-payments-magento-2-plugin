@@ -28,10 +28,8 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
-
 use Amazon\Login\Api\Customer\CompositeMatcherInterface;
-use Amazon\Login\Api\CustomerManagerInterface;
-use Amazon\Login\Domain\ValidationCredentials;
+use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
@@ -76,9 +74,9 @@ abstract class Login extends Action
     protected $matcher;
 
     /**
-     * @var CustomerManagerInterface
+     * @var CustomerLinkManagementInterface
      */
-    protected $customerManager;
+    protected $customerLinkManagement;
 
     /**
      * @var CustomerSession
@@ -104,7 +102,7 @@ abstract class Login extends Action
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      * @param AccountRedirect             $accountRedirect
      * @param CompositeMatcherInterface   $matcher
-     * @param CustomerManagerInterface    $customerManager
+     * @param CustomerLinkManagementInterface    $customerLinkManagement
      * @param CustomerSession             $customerSession
      * @param Session                     $session
      * @param LoggerInterface             $logger
@@ -119,7 +117,7 @@ abstract class Login extends Action
         AccessTokenRequestValidator $accessTokenRequestValidator,
         AccountRedirect $accountRedirect,
         CompositeMatcherInterface $matcher,
-        CustomerManagerInterface $customerManager,
+        CustomerLinkManagementInterface $customerLinkManagement,
         CustomerSession $customerSession,
         Session $session,
         LoggerInterface $logger
@@ -131,7 +129,7 @@ abstract class Login extends Action
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
         $this->accountRedirect             = $accountRedirect;
         $this->matcher                     = $matcher;
-        $this->customerManager             = $customerManager;
+        $this->customerLinkManagement      = $customerLinkManagement;
         $this->customerSession             = $customerSession;
         $this->session                     = $session;
         $this->logger                      = $logger;
@@ -191,5 +189,4 @@ abstract class Login extends Action
     {
         return $this->accountRedirect->getRedirect();
     }
-
 }
