@@ -9,4 +9,7 @@
             <argument name="payment" xsi:type="object">Amazon\Payment\Model\Method\Amazon</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="amazon_payment_checkout_processor" type="Amazon\Payment\Plugin\CheckoutProcessor"/>
+    </type>
 </config>
