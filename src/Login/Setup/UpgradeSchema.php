@@ -29,7 +29,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $table = $setup->getTable('customer_entity');
             $setup->getConnection()->addForeignKey(
                 $setup->getFkName(CustomerLink::TABLE_NAME, 'customer_id', $table, 'entity_id'),
-                $table,
+                $setup->getTable(CustomerLink::TABLE_NAME),
                 'customer_id',
                 $setup->getTable('customer_entity'),
                 'entity_id',
