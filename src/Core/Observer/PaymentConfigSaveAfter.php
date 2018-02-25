@@ -72,7 +72,6 @@ class PaymentConfigSaveAfter implements ObserverInterface
         Data $amazonCoreHelper,
         ReinitableConfigInterface $config,
         RequestInterface $request
-
     ) {
         $this->apiCredentialsValidatorFactory = $apiCredentialsValidatorFactory;
         $this->messageManager                 = $messageManager;

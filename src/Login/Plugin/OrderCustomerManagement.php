@@ -15,6 +15,7 @@
  */
 namespace Amazon\Login\Plugin;
 
+use Amazon\Core\Helper\Data;
 use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Amazon\Login\Helper\Session as LoginSessionHelper;
 use Amazon\Payment\Model\Method\Amazon as AmazonPaymentMethod;
@@ -40,18 +41,26 @@ class OrderCustomerManagement
     protected $customerLinkManagement;
 
     /**
+     * @var Data
+     */
+    protected $coreHelper;
+
+    /**
      * @param LoginSessionHelper $loginSessionHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param CustomerLinkManagementInterface $customerLinkManagement
+     * @param Data $coreHelper
      */
     public function __construct(
         LoginSessionHelper $loginSessionHelper,
         OrderRepositoryInterface $orderRepository,
-        CustomerLinkManagementInterface $customerLinkManagement
+        CustomerLinkManagementInterface $customerLinkManagement,
+        Data $coreHelper
     ) {
         $this->loginSessionHelper     = $loginSessionHelper;
         $this->orderRepository        = $orderRepository;
         $this->customerLinkManagement = $customerLinkManagement;
+        $this->coreHelper             = $coreHelper;
     }
 
     /**
@@ -65,12 +74,15 @@ class OrderCustomerManagement
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customerData */
         $customerData = $proceed($orderId);
-        $paymentMethodName = $this->orderRepository->get($orderId)->getPayment()->getMethod();
-        $isAmazonPayment = $paymentMethodName === AmazonPaymentMethod::PAYMENT_METHOD_CODE;
-        $amazonCustomer = $this->loginSessionHelper->getAmazonCustomer();
 
-        if ($isAmazonPayment && $amazonCustomer) {
-            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
+        if ($this->coreHelper->isLwaEnabled()) {
+            $paymentMethodName = $this->orderRepository->get($orderId)->getPayment()->getMethod();
+            $isAmazonPayment   = $paymentMethodName === AmazonPaymentMethod::PAYMENT_METHOD_CODE;
+            $amazonCustomer    = $this->loginSessionHelper->getAmazonCustomer();
+
+            if ($isAmazonPayment && $amazonCustomer) {
+                $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
+            }
         }
 
         return $customerData;

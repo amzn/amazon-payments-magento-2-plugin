@@ -15,6 +15,7 @@
  */
 namespace Amazon\Payment\Plugin;
 
+use Amazon\Core\Helper\Data;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartExtensionFactory;
@@ -32,12 +33,19 @@ class QuoteRepository
      */
     protected $quoteLinkFactory;
 
+    /**
+     * @var Data
+     */
+    protected $coreHelper;
+
     public function __construct(
         CartExtensionFactory $cartExtensionFactory,
-        QuoteLinkInterfaceFactory $quoteLinkFactory
+        QuoteLinkInterfaceFactory $quoteLinkFactory,
+        Data $coreHelper
     ) {
         $this->cartExtensionFactory = $cartExtensionFactory;
         $this->quoteLinkFactory     = $quoteLinkFactory;
+        $this->coreHelper           = $coreHelper;
     }
 
     /**
@@ -82,6 +90,10 @@ class QuoteRepository
 
     protected function setAmazonOrderReferenceIdExtensionAttribute(CartInterface $cart)
     {
+        if (!$this->coreHelper->isPwaEnabled()) {
+            return;
+        }
+
         $cartExtension = ($cart->getExtensionAttributes()) ?: $this->cartExtensionFactory->create();
 
         $amazonQuote = $this->quoteLinkFactory->create();

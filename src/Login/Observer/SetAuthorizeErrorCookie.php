@@ -15,6 +15,7 @@
  */
 namespace Amazon\Login\Observer;
 
+use Amazon\Core\Helper\Data;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
@@ -35,15 +36,23 @@ class SetAuthorizeErrorCookie implements ObserverInterface
     protected $cookieMetadataFactory;
 
     /**
+     * @var Data
+     */
+    protected $coreHelper;
+
+    /**
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param Data $coreHelper
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory
+        CookieMetadataFactory $cookieMetadataFactory,
+        Data $coreHelper
     ) {
-        $this->cookieManager = $cookieManager;
+        $this->cookieManager         = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->coreHelper            = $coreHelper;
     }
 
     /**
@@ -51,12 +60,14 @@ class SetAuthorizeErrorCookie implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $cookieMeta = $this->cookieMetadataFactory
-                           ->createPublicCookieMetadata()
-                           ->setDurationOneYear()
-                           ->setPath('/')
-                           ->setHttpOnly(false); // JS-accessible
+        if ($this->coreHelper->isLwaEnabled()) {
+            $cookieMeta = $this->cookieMetadataFactory
+                               ->createPublicCookieMetadata()
+                               ->setDurationOneYear()
+                               ->setPath('/')
+                               ->setHttpOnly(false); // JS-accessible
 
-        $this->cookieManager->setPublicCookie(self::LOGIN_AUTHORIZE_ERROR_COOKIE, '1', $cookieMeta);
+            $this->cookieManager->setPublicCookie(self::LOGIN_AUTHORIZE_ERROR_COOKIE, '1', $cookieMeta);
+        }
     }
 }

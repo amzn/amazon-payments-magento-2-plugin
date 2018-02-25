@@ -15,6 +15,7 @@
  */
 namespace Amazon\Core\Observer;
 
+use Amazon\Core\Helper\Data;
 use Amazon\Core\Helper\CategoryExclusion;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Event\Observer;
@@ -28,11 +29,20 @@ class ExcludedCategoryQuoteItemAddition implements ObserverInterface
     protected $categoryExclusionHelper;
 
     /**
-     * @param CategoryExclusion $categoryExclusionHelper
+     * @var Data
      */
-    public function __construct(CategoryExclusion $categoryExclusionHelper)
-    {
+    protected $coreHelper;
+
+    /**
+     * @param CategoryExclusion $categoryExclusionHelper
+     * @param Data $coreHelper
+     */
+    public function __construct(
+        CategoryExclusion $categoryExclusionHelper,
+        Data $coreHelper
+    ) {
         $this->categoryExclusionHelper = $categoryExclusionHelper;
+        $this->coreHelper              = $coreHelper;
     }
 
     /**
@@ -42,10 +52,12 @@ class ExcludedCategoryQuoteItemAddition implements ObserverInterface
     {
         /** @see \Magento\Quote\Model\Quote::addProduct() */
 
-        /** @var \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem */
-        foreach ($observer->getItems() as $quoteItem) {
-            $isExcludedProduct = $this->categoryExclusionHelper->productHasExcludedCategory($quoteItem->getProduct());
-            $quoteItem->setDataUsingMethod(CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT, $isExcludedProduct);
+        if ($this->coreHelper->isPwaEnabled()) {
+            /** @var \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem */
+            foreach ($observer->getItems() as $quoteItem) {
+                $isExcludedProduct = $this->categoryExclusionHelper->productHasExcludedCategory($quoteItem->getProduct());
+                $quoteItem->setDataUsingMethod(CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT, $isExcludedProduct);
+            }
         }
     }
 }

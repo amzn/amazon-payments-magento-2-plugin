@@ -325,7 +325,6 @@ class Data extends AbstractHelper
         return $this->isLwaEnabled($scope, $scopeCode) || $this->isPwaEnabled($scope, $scopeCode);
     }
 
-
     /*
      * @return string
      */
