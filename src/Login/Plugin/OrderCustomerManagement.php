@@ -28,22 +28,22 @@ class OrderCustomerManagement
     /**
      * @var LoginSessionHelper
      */
-    protected $loginSessionHelper;
+    private $loginSessionHelper;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var CustomerLinkManagementInterface
      */
-    protected $customerLinkManagement;
+    private $customerLinkManagement;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @param LoginSessionHelper $loginSessionHelper

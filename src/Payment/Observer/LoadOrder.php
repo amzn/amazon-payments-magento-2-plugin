@@ -27,17 +27,17 @@ class LoadOrder implements ObserverInterface
     /**
      * @var OrderExtensionFactory
      */
-    protected $orderExtensionFactory;
+    private $orderExtensionFactory;
 
     /**
      * @var OrderLinkInterfaceFactory
      */
-    protected $orderLinkFactory;
+    private $orderLinkFactory;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         OrderExtensionFactory $orderExtensionFactory,

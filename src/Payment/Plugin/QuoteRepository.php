@@ -26,17 +26,17 @@ class QuoteRepository
     /**
      * @var CartExtensionFactory
      */
-    protected $cartExtensionFactory;
+    private $cartExtensionFactory;
 
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         CartExtensionFactory $cartExtensionFactory,

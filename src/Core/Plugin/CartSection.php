@@ -24,12 +24,12 @@ class CartSection
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @param CategoryExclusion $categoryExclusionHelper

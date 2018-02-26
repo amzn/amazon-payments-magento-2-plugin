@@ -25,12 +25,12 @@ class CartController
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var UrlInterface
      */
-    protected $url;
+    private $url;
 
     public function __construct(Session $session, UrlInterface $url)
     {

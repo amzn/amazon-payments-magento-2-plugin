@@ -28,7 +28,7 @@ class CompleteOrder implements ObserverInterface
     /**
      * @var OrderInformationManagement
      */
-    protected $orderInformationManagement;
+    private $orderInformationManagement;
 
     /**
      * CompleteOrder constructor.

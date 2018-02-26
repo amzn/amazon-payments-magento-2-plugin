@@ -27,7 +27,7 @@ class CompleteOrderStatus implements ObserverInterface
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         Data $coreHelper

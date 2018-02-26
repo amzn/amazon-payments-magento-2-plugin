@@ -27,17 +27,17 @@ class CopyOrderReference implements ObserverInterface
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var OrderLinkInterfaceFactory
      */
-    protected $orderLinkFactory;
+    private $orderLinkFactory;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         QuoteLinkInterfaceFactory $quoteLinkFactory,

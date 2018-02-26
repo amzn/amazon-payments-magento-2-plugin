@@ -30,34 +30,34 @@ class PaymentConfigSaveAfter implements ObserverInterface
     /**
      * @var ApiCredentialsValidatorFactory
      */
-    protected $apiCredentialsValidatorFactory;
+    private $apiCredentialsValidatorFactory;
 
     /**
      * @var ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var Json
      */
-    protected $jsonCredentials;
+    private $jsonCredentials;
 
     /**
      * @var Data
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * Application config
      *
      * @var ReinitableConfigInterface
      */
-    protected $appConfig;
+    private $appConfig;
 
     /**
      * @var RequestInterface
      */
-    protected $request;
+    private $request;
 
     /**
      * @param ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory

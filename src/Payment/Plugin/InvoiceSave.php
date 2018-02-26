@@ -27,12 +27,12 @@ class InvoiceSave
     /**
      * @var OrderInterfaceFactory
      */
-    protected $orderFactory;
+    private $orderFactory;
 
     /**
      * @var Context
      */
-    protected $context;
+    private $context;
 
     public function __construct(OrderInterfaceFactory $orderFactory, Context $context)
     {

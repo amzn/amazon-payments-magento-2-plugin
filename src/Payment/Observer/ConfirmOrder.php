@@ -33,27 +33,27 @@ class ConfirmOrder implements ObserverInterface
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var OrderInformationManagement
      */
-    protected $orderInformationManagement;
+    private $orderInformationManagement;
 
     /**
      * @var PaymentMethodManagementInterface
      */
-    protected $paymentMethodManagement;
+    private $paymentMethodManagement;
 
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * ConfirmOrder constructor.

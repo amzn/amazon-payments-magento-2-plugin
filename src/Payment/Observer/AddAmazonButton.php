@@ -25,12 +25,12 @@ class AddAmazonButton implements ObserverInterface
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var ShortcutFactory
      */
-    protected $shortcutFactory;
+    private $shortcutFactory;
 
     /**
      * @param Data $coreHelper

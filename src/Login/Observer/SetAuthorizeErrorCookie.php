@@ -28,17 +28,17 @@ class SetAuthorizeErrorCookie implements ObserverInterface
     /**
      * @var CookieManagerInterface
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
      * @var CookieMetadataFactory
      */
-    protected $cookieMetadataFactory;
+    private $cookieMetadataFactory;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @param CookieManagerInterface $cookieManager

@@ -25,12 +25,12 @@ class LoginController
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var Url
      */
-    protected $url;
+    private $url;
 
     public function __construct(Session $session, Url $url)
     {

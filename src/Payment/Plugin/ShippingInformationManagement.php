@@ -28,17 +28,17 @@ class ShippingInformationManagement
     /**
      * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
     /**
      * @var OrderInformationManagementInterface
      */
-    protected $orderInformationManagement;
+    private $orderInformationManagement;
 
     /**
      * @var LoginSessionHelper
      */
-    protected $loginSessionHelper;
+    private $loginSessionHelper;
 
     /**
      * ShippingInformationManagement constructor.

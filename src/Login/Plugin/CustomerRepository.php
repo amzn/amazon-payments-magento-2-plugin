@@ -26,17 +26,17 @@ class CustomerRepository
     /**
      * @var CustomerExtensionFactory
      */
-    protected $customerExtensionFactory;
+    private $customerExtensionFactory;
 
     /**
      * @var CustomerLinkManagementInterface
      */
-    protected $customerLinkManagement;
+    private $customerLinkManagement;
 
     /**
      * @var Data
      */
-    protected $amazonHelper;
+    private $amazonHelper;
 
     /**
      * CustomerRepository constructor.

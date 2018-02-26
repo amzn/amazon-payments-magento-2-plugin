@@ -26,12 +26,12 @@ class ExcludedCategoryQuoteItemAddition implements ObserverInterface
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @param CategoryExclusion $categoryExclusionHelper

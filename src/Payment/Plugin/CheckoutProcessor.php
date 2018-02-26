@@ -22,7 +22,7 @@ class CheckoutProcessor
     /**
      * @var Data
      */
-    protected $amazonHelper;
+    private $amazonHelper;
 
     /**
      * CheckoutProcessor constructor.
