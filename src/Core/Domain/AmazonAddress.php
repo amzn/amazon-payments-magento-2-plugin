@@ -15,107 +15,86 @@
  */
 namespace Amazon\Core\Domain;
 
-class AmazonAddress
+use Amazon\Core\Api\Data\AmazonAddressInterface;
+
+class AmazonAddress implements AmazonAddressInterface
 {
     /**
-     * @var AmazonName
+     * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * @var array
      */
-    protected $lines;
+    private $lines = [];
 
     /**
      * @var string
      */
-    protected $city;
+    private $city;
 
     /**
      * @var string|null
      */
-    protected $state;
+    private $state;
 
     /**
      * @var string
      */
-    protected $postCode;
+    private $postCode;
 
     /**
      * @var string
      */
-    protected $countryCode;
+    private $countryCode;
 
     /**
      * @var string
      */
-    protected $telephone;
+    private $telephone;
 
     /**
      * @var string
      */
-    protected $company = '';
+    private $company = '';
 
     /**
-     * @param array $address
+     * @var AmazonName
+     */
+    private $amazonName;
+
+    /**
+     * @var AmazonNameFactory
+     */
+    private $amazonNameFactory;
+
+    /**
      * @param AmazonNameFactory $addressNameFactory
      */
-    public function __construct(array $address, AmazonNameFactory $addressNameFactory)
+    public function __construct(AmazonNameFactory $amazonNameFactory)
     {
-        $this->name = $addressNameFactory->create(['name' => $address['Name'],
-                                                   'country' => $address['CountryCode']
-                                                  ]);
-
-        $this->lines = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $key = 'AddressLine' . $i;
-
-            if (isset($address[$key])) {
-                if (empty($address[$key])) {
-                    $this->lines[$i] = '';
-                } else {
-                    $this->lines[$i] = $address[$key];
-                }
-            }
-        }
-
-        $this->city        = $address['City'];
-        $this->postCode    = $address['PostalCode'];
-        $this->countryCode = $address['CountryCode'];
-
-        if (isset($address['Phone'])) {
-            $this->telephone = $address['Phone'];
-        }
-
-        if (isset($address['StateOrRegion'])) {
-            $this->state = $address['StateOrRegion'];
-        }
+        $this->amazonNameFactory = $amazonNameFactory;
     }
 
     /**
-     * Get first name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstName()
     {
-        return $this->name->getFirstName();
+        return $this->getAmazonName()->getFirstName();
     }
 
     /**
-     * Get last name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastName()
     {
-        return $this->name->getLastName();
+        return $this->getAmazonName()->getLastName();
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getLines()
     {
@@ -123,8 +102,7 @@ class AmazonAddress
     }
 
     /**
-     * @param int $lineNumber
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getLine($lineNumber)
     {
@@ -135,7 +113,7 @@ class AmazonAddress
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCity()
     {
@@ -143,7 +121,7 @@ class AmazonAddress
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getState()
     {
@@ -151,7 +129,7 @@ class AmazonAddress
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getPostCode()
     {
@@ -159,7 +137,7 @@ class AmazonAddress
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCountryCode()
     {
@@ -167,7 +145,7 @@ class AmazonAddress
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTelephone()
     {
@@ -175,10 +153,96 @@ class AmazonAddress
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLines($lines)
+    {
+        $this->lines = $lines;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPostCode($postCode)
+    {
+        $this->postCode = $postCode;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCountryCode($countryCode)
+    {
+        $this->countryCode = $countryCode;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
+        return $this;
+    }
+
+    /**
+     * Get AmazonName
+     *
+     * @return AmazonName
+     */
+    private function getAmazonName()
+    {
+        if (null === $this->amazonName) {
+            $this->amazonName = $this->amazonNameFactory
+                ->create(['name' => $this->name, 'country' => $this->countryCode]);
+        }
+        return $this->amazonName;
     }
 }

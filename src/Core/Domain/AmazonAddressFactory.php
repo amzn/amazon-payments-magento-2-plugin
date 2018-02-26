@@ -15,6 +15,7 @@
  */
 namespace Amazon\Core\Domain;
 
+use Amazon\Core\Api\Data\AmazonAddressInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -24,49 +25,95 @@ class AmazonAddressFactory
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager = null;
+    private $objectManager = null;
 
     /**
      * @var array
      */
-    protected $perCountryAddressHandlers;
+    private $perCountryAddressHandlers;
+
+    /**
+     * @var AmazonAddress
+     */
+    private $amazonAddress;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @param AmazonAddressInterface $amazonAddress
      * @param array $perCountryAddressHandlers Per-country custom handlers of incoming address data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
+        AmazonAddressInterface $amazonAddress,
         array $perCountryAddressHandlers = []
     ) {
         $this->objectManager = $objectManager;
-        $this->perCountryAddressHandlers = array_change_key_case($perCountryAddressHandlers, CASE_UPPER);
+        $this->amazonAddress = $amazonAddress;
+        $this->perCountryAddressHandlers = $perCountryAddressHandlers;
     }
 
     /**
      * @param array $data
      * @return AmazonAddress
-     * @throws LocalizedException
      */
     public function create(array $data = [])
     {
-        $instanceClassName = AmazonAddress::class;
+        $instanceClassName = AmazonAddressBuilder::class;
         $countryCode = strtoupper($data['address']['CountryCode']);
+
+        $this->perCountryAddressHandlers = array_change_key_case($this->perCountryAddressHandlers, CASE_UPPER);
 
         if (!empty($this->perCountryAddressHandlers[$countryCode])) {
             $instanceClassName = (string) $this->perCountryAddressHandlers[$countryCode];
         }
 
-        $instance = $this->objectManager->create($instanceClassName, $data);
+        $amazonAddressBuilder = $this->objectManager->create($instanceClassName);
 
-        if (!$instance instanceof AmazonAddress) {
-            throw new LocalizedException(
-                __('Address country handler %1 must be of type %2', [$instanceClassName, AmazonAddress::class])
-            );
+        $addressData = $this->getAddressData($data['address']);
+
+        return $amazonAddressBuilder
+            ->setData($addressData)
+            ->setAddress($data['address'], $addressData['lines'])
+            ->build($this->amazonAddress);
+    }
+
+    /**
+     * Convert Amazon address array into data array
+     *
+     * @param array $address
+     * @return array
+     */
+    private function getAddressData($address)
+    {
+        $data = [];
+        $data['name']        = $address['Name'];
+        $data['city']        = $address['City'];
+        $data['postCode']    = $address['PostalCode'];
+        $data['countryCode'] = $address['CountryCode'];
+
+        if (isset($address['Phone'])) {
+            $data['telephone'] = $address['Phone'];
         }
 
-        return $instance;
+        if (isset($address['StateOrRegion'])) {
+            $data['state'] = $address['StateOrRegion'];
+        }
+
+        $data['lines'] = [];
+        for ($i = 1; $i <= 3; $i++) {
+            $key = 'AddressLine' . $i;
+
+            if (isset($address[$key])) {
+                if (empty($address[$key])) {
+                    $data['lines'][$i] = '';
+                } else {
+                    $data['lines'][$i] = $address[$key];
+                }
+            }
+        }
+
+        return $data;
     }
 }

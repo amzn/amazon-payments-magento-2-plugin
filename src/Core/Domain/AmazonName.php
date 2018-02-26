@@ -15,47 +15,43 @@
  */
 namespace Amazon\Core\Domain;
 
-class AmazonName
+use Amazon\Core\Api\Data\AmazonNameInterface;
+use Magento\Framework\Api\AbstractSimpleObject;
+
+class AmazonName extends AbstractSimpleObject implements AmazonNameInterface
 {
-    /**
-     * @var string
-     */
-    protected $firstName;
+    const FIRST_NAME = 'first_name';
+    const LAST_NAME  = 'last_name';
 
     /**
-     * @var string
-     */
-    protected $lastName;
-
-    /**
-     * AmazonName constructor.
-     *
-     * @param string $name
-     */
-    public function __construct($name)
-    {
-        $nameParts       = explode(' ', trim($name), 2);
-        $this->firstName = $nameParts[0];
-        $this->lastName  = isset($nameParts[1]) ? $nameParts[1] : '.';
-    }
-
-    /**
-     * Get first name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstName()
     {
-        return $this->firstName;
+        return $this->_get(self::FIRST_NAME);
     }
 
     /**
-     * Get last name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastName()
     {
-        return $this->lastName;
+        return $this->_get(self::LAST_NAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFirstName($name)
+    {
+        return $this->setData(self::FIRST_NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLastName($name)
+    {
+        return $this->setData(self::LAST_NAME, $name);
     }
 }

@@ -13,21 +13,38 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Core\Domain;
+namespace Amazon\Core\Api\Data;
 
-class AmazonCustomerJp extends AmazonCustomer
+/**
+ * @api
+ */
+interface AmazonNameInterface
 {
     /**
-     * AmazonCustomer constructor.
+     * Get first name
      *
-     * @param string $id
-     * @param string $email
-     * @param string $name
+     * @return string
      */
-    public function __construct($id, $email, $name, AmazonNameFactory $addressNameFactory)
-    {
-        $this->id    = $id;
-        $this->email = $email;
-        $this->name  = $addressNameFactory->create(['name' => $name, 'country' => 'JP']);
-    }
+    public function getFirstName();
+
+    /**
+     * Get last name
+     *
+     * @return string
+     */
+    public function getLastName();
+
+    /**
+     * Set first name
+     *
+     * @return $this
+     */
+    public function setFirstName($name);
+
+    /**
+     * Set last name
+     *
+     * @return $this
+     */
+    public function setLastName($name);
 }

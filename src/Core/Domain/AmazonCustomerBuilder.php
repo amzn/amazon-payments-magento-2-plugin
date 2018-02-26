@@ -16,43 +16,49 @@
 namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Api\DataObjectHelper;
 
-class AmazonCustomerFactory
+/**
+ * Class Builder
+ */
+class AmazonCustomerBuilder
 {
     /**
-     * @var ObjectManagerInterface
+     * @var array
      */
-    private $objectManager = null;
+    private $data = [];
 
     /**
-     * @var AmazonCustomer
-     */
-    private $amazonCustomer;
-
-    /**
-     * @param ObjectManagerInterface $objectManager
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        AmazonCustomerInterface $amazonCustomer
+        DataObjectHelper $dataObjectHelper
     ) {
-        $this->objectManager  = $objectManager;
-        $this->amazonCustomer = $amazonCustomer;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
      * @param array $data
+     * @return $this
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * @param AmazonCustomer $amazonCustomer
      * @return AmazonCustomer
      */
-    public function create(array $data = [])
+    public function build(AmazonCustomerInterface $amazonCustomer)
     {
-        $amazonCustomerBuilder = $this->objectManager->create(AmazonCustomerBuilder::class);
+        $this->dataObjectHelper->populateWithArray(
+            $amazonCustomer,
+            $this->data,
+            AmazonCustomerInterface::class
+        );
 
-        return $amazonCustomerBuilder
-            ->setData($data)
-            ->build($this->amazonCustomer);
+        return $amazonCustomer;
     }
 }

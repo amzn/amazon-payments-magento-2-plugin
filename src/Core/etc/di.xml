@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Amazon\Core\Client\ClientFactoryInterface" type="Amazon\Core\Client\ClientFactory" />
+    <preference for="Amazon\Core\Api\Data\AmazonNameInterface" type="Amazon\Core\Domain\AmazonName" />
+    <preference for="Amazon\Core\Api\Data\AmazonCustomerInterface" type="Amazon\Core\Domain\AmazonCustomer" />
+    <preference for="Amazon\Core\Api\Data\AmazonAddressInterface" type="Amazon\Core\Domain\AmazonAddress" />
+
     <preference for="AmazonPay\ClientInterface" type="Amazon\Core\Client\Client" />
     <type name="Amazon\Core\Client\Client">
         <arguments>
@@ -13,26 +17,19 @@
             <argument name="clientIpHelper" xsi:type="object">Amazon\Core\Helper\ClientIp\Proxy</argument>
         </arguments>
     </type>
-    <type name="Amazon\Core\Domain\AmazonCustomerFactory">
-        <arguments>
-            <argument name="perCountryCustomerHandlers" xsi:type="array">
-                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonCustomerJp</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Amazon\Core\Domain\AmazonNameFactory">
         <arguments>
             <argument name="perCountryNameHandlers" xsi:type="array">
-                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonNameJp</item>
+                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonNameJpBuilder</item>
             </argument>
         </arguments>
     </type>
     <type name="Amazon\Core\Domain\AmazonAddressFactory">
         <arguments>
             <argument name="perCountryAddressHandlers" xsi:type="array">
-                <item name="DE" xsi:type="string">Amazon\Core\Domain\AmazonAddressDe</item>
-                <item name="AT" xsi:type="string">Amazon\Core\Domain\AmazonAddressDe</item>
-                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonAddressJp</item>
+                <item name="DE" xsi:type="string">Amazon\Core\Domain\AmazonAddressDeBuilder</item>
+                <item name="AT" xsi:type="string">Amazon\Core\Domain\AmazonAddressDeBuilder</item>
+                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonAddressJpBuilder</item>
             </argument>
         </arguments>
     </type>
