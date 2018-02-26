@@ -83,7 +83,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         CustomerLinkSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionFactory $collectionFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor
     ) {
         $this->resourceModel = $resourceModel;
         $this->customerLinkFactory = $customerLinkFactory;
@@ -91,7 +91,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionFactory = $collectionFactory;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -152,20 +152,5 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
             );
         }
         return $customerLink;
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
-            );
-        }
-        return $this->collectionProcessor;
     }
 }
