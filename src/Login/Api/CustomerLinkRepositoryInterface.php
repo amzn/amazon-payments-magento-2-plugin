@@ -31,6 +31,14 @@ interface CustomerLinkRepositoryInterface
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
+     * Loads by Customer ID.
+     *
+     * @param int $customerId The customer ID.
+     * @return \Amazon\Login\Api\Data\CustomerLinkInterface Customer link interface.
+     */
+    public function get($customerId);
+
+    /**
      * Loads by Entity ID.
      *
      * @param int $entityId The customer link entity ID.

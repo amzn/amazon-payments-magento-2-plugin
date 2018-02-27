@@ -97,6 +97,16 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function get($customerId)
+    {
+        $customerLink = $this->customerLinkFactory->create();
+        $this->resourceModel->load($customerLink, $customerId, 'customer_id');
+        return $customerLink;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getById($entityId)
     {
         $customerLink = $this->customerLinkFactory->create();

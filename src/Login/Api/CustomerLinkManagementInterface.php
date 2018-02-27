@@ -15,7 +15,6 @@
  */
 namespace Amazon\Login\Api;
 
-use Amazon\Core\Domain\AmazonCustomer;
 use Amazon\Login\Api\Data\CustomerLinkInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 
@@ -37,10 +36,10 @@ interface CustomerLinkManagementInterface
     /**
      * Create magento customer using amazon customer details
      *
-     * @param AmazonCustomer $amazonCustomer
+     * @param AmazonCustomerInterface $amazonCustomer
      * @return CustomerInterface|null
      */
-    public function create(AmazonCustomer $amazonCustomer);
+    public function create(\Amazon\Core\Api\Data\AmazonCustomerInterface $amazonCustomer);
 
     /**
      * Create or update magento/amazon customer link entity
@@ -50,12 +49,4 @@ interface CustomerLinkManagementInterface
      * @return void
      */
     public function updateLink($customerId, $amazonId);
-
-    /**
-     * Add amazon id extension attribute to customer
-     *
-     * @param CustomerInterface $customer
-     * @return void
-     */
-    public function setAmazonIdExtensionAttribute(\Magento\Customer\Api\Data\CustomerInterface $customer);
 }

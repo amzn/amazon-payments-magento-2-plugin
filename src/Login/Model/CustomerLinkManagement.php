@@ -15,14 +15,12 @@
  */
 namespace Amazon\Login\Model;
 
-use Amazon\Core\Domain\AmazonCustomer;
-
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Model\CustomerLinkRepositryFactory;
 use Amazon\Login\Api\CustomerLinkRepositoryInterface;
 use Amazon\Login\Api\Data\CustomerLinkInterfaceFactory;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Api\Data\CustomerExtensionFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Math\Random;
@@ -32,37 +30,32 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
     /**
      * @var CustomerLinkRepositoryInterface
      */
-    protected $customerLinkRepository;
-
-    /**
-     * @var CustomerExtensionFactory
-     */
-    protected $customerExtensionFactory;
+    private $customerLinkRepository;
 
     /**
      * @var CustomerLinkFactory
      */
-    protected $customerLinkFactory;
+    private $customerLinkFactory;
 
     /**
      * @var CustomerInterface
      */
-    protected $customerInterface;
+    private $customerInterface;
 
     /**
      * @var Session
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
      * @var CustomerInterfaceFactory
      */
-    protected $customerDataFactory;
+    private $customerDataFactory;
 
     /**
      * @var AccountManagementInterface
      */
-    protected $accountManagement;
+    private $accountManagement;
 
     /**
      * @var Random
@@ -71,7 +64,6 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
 
     /**
      * @param CustomerLinkRepositoryInterface $customerLinkRepository
-     * @param CustomerExtensionFactory $customerExtensionFactory
      * @param CustomerLinkFactory $customerLinkFactory
      * @param CustomerInterface $customerInterface
      * @param Session $customerSession
@@ -81,7 +73,6 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
      */
     public function __construct(
         CustomerLinkRepositoryInterface $customerLinkRepository,
-        CustomerExtensionFactory $customerExtensionFactory,
         CustomerLinkFactory $customerLinkFactory,
         CustomerInterface $customerInterface,
         Session $customerSession,
@@ -90,7 +81,6 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
         Random $random
     ) {
         $this->customerLinkRepository   = $customerLinkRepository;
-        $this->customerExtensionFactory = $customerExtensionFactory;
         $this->customerLinkFactory = $customerLinkFactory;
         $this->customerInterface   = $customerInterface;
         $this->customerSession     = $customerSession;
@@ -104,13 +94,13 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
      */
     public function getByCustomerId($customerId)
     {
-        return $this->customerLinkFactory->create()->load($customerId, 'customer_id');
+        return $this->customerLinkRepository->get($customerId);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function create(AmazonCustomer $amazonCustomer)
+    public function create(AmazonCustomerInterface $amazonCustomer)
     {
         $customerData = $this->customerDataFactory->create();
 
@@ -137,34 +127,5 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
             ->setCustomerId($customerId);
 
         $this->customerLinkRepository->save($customerLink);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAmazonIdExtensionAttribute(CustomerInterface $customer)
-    {
-        $isSession = $this->customerSession->getId() == $customer->getId();
-        $amazonId  = $isSession ? $this->customerSession->getAmazonId() : null;
-
-        $customerExtension = ($customer->getExtensionAttributes()) ?: $this->customerExtensionFactory->create();
-
-        if (null === $amazonId) {
-            $amazonCustomer = $this->getByCustomerId($customer->getId());
-
-            if ($amazonCustomer->getId()) {
-                $amazonId = $amazonCustomer->getAmazonId();
-            }
-
-            if ($isSession) {
-                $this->customerSession->setAmazonId($amazonId ? $amazonId : false);
-            }
-        }
-
-        if ($amazonId) {
-            $customerExtension->setAmazonId($amazonId);
-        }
-
-        $customer->setExtensionAttributes($customerExtension);
     }
 }

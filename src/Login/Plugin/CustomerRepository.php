@@ -16,22 +16,16 @@
 namespace Amazon\Login\Plugin;
 
 use Amazon\Core\Helper\Data as AmazonHelper;
-use Amazon\Login\Api\CustomerLinkManagementInterface;
+use Amazon\Login\Api\CustomerManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerExtensionFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 
 class CustomerRepository
 {
     /**
-     * @var CustomerExtensionFactory
+     * @var CustomerManagementInterface
      */
-    private $customerExtensionFactory;
-
-    /**
-     * @var CustomerLinkManagementInterface
-     */
-    private $customerLinkManagement;
+    private $customerManagement;
 
     /**
      * @var Data
@@ -41,17 +35,14 @@ class CustomerRepository
     /**
      * CustomerRepository constructor.
      *
-     * @param CustomerExtensionFactory     $customerExtensionFactory
-     * @param CustomerLinkManagementInterface $customerLinkManagement
+     * @param CustomerManagementInterface  $customerManagement
      * @param AmazonHelper $amazonHelper
      */
     public function __construct(
-        CustomerExtensionFactory $customerExtensionFactory,
-        CustomerLinkManagementInterface $customerLinkManagement,
+        customerManagementInterface $customerManagement,
         AmazonHelper $amazonHelper
     ) {
-        $this->customerExtensionFactory = $customerExtensionFactory;
-        $this->customerLinkManagement   = $customerLinkManagement;
+        $this->customerManagement       = $customerManagement;
         $this->amazonHelper             = $amazonHelper;
     }
 
@@ -67,7 +58,7 @@ class CustomerRepository
     public function afterGetById(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
         if ($this->amazonHelper->isEnabled()) {
-            $this->customerLinkManagement->setAmazonIdExtensionAttribute($customer);
+            $this->customerManagement->setAmazonIdExtensionAttribute($customer);
         }
 
         return $customer;
@@ -85,7 +76,7 @@ class CustomerRepository
     public function afterGet(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
         if ($this->amazonHelper->isEnabled()) {
-            $this->customerLinkManagement->setAmazonIdExtensionAttribute($customer);
+            $this->customerManagement->setAmazonIdExtensionAttribute($customer);
         }
 
         return $customer;
