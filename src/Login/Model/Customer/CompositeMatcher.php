@@ -24,7 +24,7 @@ class CompositeMatcher implements CompositeMatcherInterface
     /**
      * @var MatcherInterface[]
      */
-    protected $matchers;
+    private $matchers;
 
     /**
      * CompositeMatcher constructor.

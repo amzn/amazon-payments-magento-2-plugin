@@ -32,47 +32,47 @@ class QueuedRefundUpdater
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    protected $orderPaymentRepository;
+    private $orderPaymentRepository;
 
     /**
      * @var ClientFactoryInterface
      */
-    protected $amazonHttpClientFactory;
+    private $amazonHttpClientFactory;
 
     /**
      * @var AmazonRefundDetailsResponseFactory
      */
-    protected $amazonRefundDetailsResponseFactory;
+    private $amazonRefundDetailsResponseFactory;
 
     /**
      * @var NotifierInterface
      */
-    protected $adminNotifier;
+    private $adminNotifier;
 
     /**
      * @var PendingRefundInterfaceFactory
      */
-    protected $pendingRefundFactory;
+    private $pendingRefundFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var bool
      */
-    protected $throwExceptions = false;
+    private $throwExceptions = false;
 
     /**
      * @param OrderRepositoryInterface           $orderRepository

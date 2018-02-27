@@ -24,7 +24,7 @@ class ProductContext implements SnippetAcceptingContext
     /**
      * @var ProductFixture
      */
-    protected $productFixture;
+    private $productFixture;
 
     public function __construct()
     {

@@ -40,37 +40,37 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var CoreHelper
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var AmazonSetOrderDetailsResponseFactory
      */
-    protected $amazonSetOrderDetailsResponseFactory;
+    private $amazonSetOrderDetailsResponseFactory;
 
     /*
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var ProductMetadata
      */
-    protected $productMetadata;
+    private $productMetadata;
 
     /**
      * @param Session                              $session

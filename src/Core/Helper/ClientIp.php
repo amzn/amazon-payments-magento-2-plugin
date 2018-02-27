@@ -24,12 +24,12 @@ class ClientIp extends AbstractHelper
     /**
      * @var string
      */
-    protected $clientIp;
+    private $clientIp;
 
     /**
      * @var bool
      */
-    protected $clientHasAllowedIp;
+    private $clientHasAllowedIp;
 
     /**
      * @param Context       $context

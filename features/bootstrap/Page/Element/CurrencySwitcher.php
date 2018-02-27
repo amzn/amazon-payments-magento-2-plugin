@@ -20,7 +20,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 
 class CurrencySwitcher extends Element
 {
-    protected $selector = '#switcher-currency';
+    private $selector = '#switcher-currency';
 
     public function selectCurrency($code)
     {

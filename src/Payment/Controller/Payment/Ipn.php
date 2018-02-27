@@ -30,17 +30,17 @@ class Ipn extends Action
     /**
      * @var IpnHandlerFactoryInterface
      */
-    protected $ipnHandlerFactory;
+    private $ipnHandlerFactory;
 
     /**
      * @var CompositeProcessorInterface
      */
-    protected $compositeProcessor;
+    private $compositeProcessor;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         Context $context,

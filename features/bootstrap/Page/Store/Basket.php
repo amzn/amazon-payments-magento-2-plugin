@@ -23,13 +23,13 @@ class Basket extends Page
 {
     use PageTrait, AmazonLoginTrait;
 
-    protected $elements
+    private $elements
         = [
             'open-amazon-login' => ['css' => '#OffAmazonPaymentsWidgets0'],
             'amazon-login'      => ['css' => 'button']
         ];
 
-    protected $path = '/checkout/cart/';
+    private $path = '/checkout/cart/';
 
     /**
      * @return bool

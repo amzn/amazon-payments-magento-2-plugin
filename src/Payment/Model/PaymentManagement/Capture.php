@@ -45,52 +45,52 @@ class Capture extends AbstractOperation implements CaptureInterface
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var PendingCaptureInterfaceFactory
      */
-    protected $pendingCaptureFactory;
+    private $pendingCaptureFactory;
 
     /**
      * @var AmazonCaptureDetailsResponseFactory
      */
-    protected $amazonCaptureDetailsResponseFactory;
+    private $amazonCaptureDetailsResponseFactory;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    protected $orderPaymentRepository;
+    private $orderPaymentRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var TransactionRepositoryInterface
      */
-    protected $transactionRepository;
+    private $transactionRepository;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var PaymentManagementInterface
      */
-    protected $paymentManagement;
+    private $paymentManagement;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var bool
      */
-    protected $throwExceptions = false;
+    private $throwExceptions = false;
 
     /**
      * Capture constructor.

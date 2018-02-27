@@ -23,7 +23,7 @@ class AddressBlacklistTermsValidator extends AbstractValidator
     /**
      * @var Data
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @param Data $amazonCoreHelper

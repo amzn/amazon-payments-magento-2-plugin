@@ -35,32 +35,32 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     /**
      * @var CustomerLinkResourceModel
      */
-    protected $resourceModel;
+    private $resourceModel;
 
     /**
      * @var CustomerLinkFactory
      */
-    protected $customerLinkFactory;
+    private $customerLinkFactory;
 
     /**
      * @var PaymentTokenSearchResultsInterfaceFactory
      */
-    protected $searchResultsFactory;
+    private $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
      */
-    protected $filterBuilder;
+    private $filterBuilder;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface

@@ -24,7 +24,7 @@ class SessionMatcher implements MatcherInterface
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     public function __construct(
         Session $session

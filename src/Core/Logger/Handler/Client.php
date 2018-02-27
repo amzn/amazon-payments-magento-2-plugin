@@ -25,10 +25,10 @@ class Client extends Base
     /**
      * @var string
      */
-    protected $fileName = self::FILENAME;
+    private $fileName = self::FILENAME;
 
     /**
      * @var int
      */
-    protected $loggerType = Logger::DEBUG;
+    private $loggerType = Logger::DEBUG;
 }

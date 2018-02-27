@@ -25,17 +25,17 @@ class AmazonOrder extends BaseFixture
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var AmazonAddressFactory
      */
-    protected $amazonAddressFactory;
+    private $amazonAddressFactory;
 
     /**
      * @var Address
      */
-    protected $addressHelper;
+    private $addressHelper;
 
     public function __construct()
     {

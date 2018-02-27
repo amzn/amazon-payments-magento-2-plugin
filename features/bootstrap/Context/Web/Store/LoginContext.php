@@ -30,39 +30,39 @@ class LoginContext implements SnippetAcceptingContext
     /**
      * @var Login
      */
-    protected $loginPage;
+    private $loginPage;
 
     /**
      * @var Basket
      */
-    protected $basketPage;
+    private $basketPage;
 
-    protected $amazonPassword = 'eZhV5fyirWImL7OzIJ9t';
+    private $amazonPassword = 'eZhV5fyirWImL7OzIJ9t';
 
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
 
     /**
      * @var Product
      */
-    protected $productPage;
+    private $productPage;
 
     /**
      * @var CustomerSection
      */
-    protected $customerSectionPage;
+    private $customerSectionPage;
 
     /**
      * @var ValidatePassword
      */
-    protected $validatePasswordPage;
+    private $validatePasswordPage;
 
     /**
      * @var Logout
      */
-    protected $logoutPage;
+    private $logoutPage;
 
     /**
      * @param Login   $loginPage

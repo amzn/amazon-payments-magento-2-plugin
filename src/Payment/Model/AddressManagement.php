@@ -40,42 +40,42 @@ class AddressManagement implements AddressManagementInterface
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var Address
      */
-    protected $addressHelper;
+    private $addressHelper;
 
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var CollectionFactory
      */
-    protected $countryCollectionFactory;
+    private $countryCollectionFactory;
 
     /**
      * @var AmazonAddressFactory
      */
-    protected $amazonAddressFactory;
+    private $amazonAddressFactory;
 
     /**
      * @var Factory
      */
-    protected $validatorFactory;
+    private $validatorFactory;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @param ClientFactoryInterface    $clientFactory

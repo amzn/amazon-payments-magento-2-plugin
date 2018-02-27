@@ -19,26 +19,26 @@ class SimplePath
     const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payments/simplepath/privatekey';
     const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payments/simplepath/publickey';
 
-    protected $_spIds = [
+    private $_spIds = [
         'USD' => 'AUGT0HMCLQVX1',
         'GBP' => 'A1BJXVS5F6XP',
         'EUR' => 'A2ZAYEJU54T1BM',
         'JPY' => 'A1MCJZEB1HY93J',
     ];
 
-    protected $_mapCurrencyRegion = [
+    private $_mapCurrencyRegion = [
         'EUR' => 'de',
         'USD' => 'us',
         'GBP' => 'uk',
         'JPY' => 'ja',
     ];
 
-    protected $_storeId;
-    protected $_websiteId;
-    protected $_scope;
-    protected $_scopeId;
+    private $_storeId;
+    private $_websiteId;
+    private $_scope;
+    private $_scopeId;
 
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * SimplePath constructor.

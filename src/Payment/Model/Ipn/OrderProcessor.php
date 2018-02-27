@@ -28,22 +28,22 @@ class OrderProcessor implements ProcessorInterface
     /**
      * @var AmazonOrderDetailsFactory
      */
-    protected $amazonOrderDetailsFactory;
+    private $amazonOrderDetailsFactory;
 
     /**
      * @var AuthorizationInterface
      */
-    protected $authorization;
+    private $authorization;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     public function __construct(
         AmazonOrderDetailsFactory $amazonOrderDetailsFactory,

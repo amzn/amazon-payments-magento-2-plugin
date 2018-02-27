@@ -101,77 +101,77 @@ class Amazon extends AbstractMethod
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var OrderInformationManagementInterface
      */
-    protected $orderInformationManagement;
+    private $orderInformationManagement;
 
     /**
      * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
     /**
      * @var AmazonAuthorizationResponseFactory
      */
-    protected $amazonAuthorizationResponseFactory;
+    private $amazonAuthorizationResponseFactory;
 
     /**
      * @var AmazonRefundResponseFactory
      */
-    protected $amazonRefundResponseFactory;
+    private $amazonRefundResponseFactory;
 
     /**
      * @var AmazonCaptureResponseFactory
      */
-    protected $amazonCaptureResponseFactory;
+    private $amazonCaptureResponseFactory;
 
     /**
      * @var AmazonAuthorization
      */
-    protected $amazonAuthorizationValidator;
+    private $amazonAuthorizationValidator;
 
     /**
      * @var AmazonCapture
      */
-    protected $amazonCaptureValidator;
+    private $amazonCaptureValidator;
 
     /**
      * @var AmazonRefund
      */
-    protected $amazonRefundValidator;
+    private $amazonRefundValidator;
 
     /**
      * @var PaymentManagementInterface
      */
-    protected $paymentManagement;
+    private $paymentManagement;
 
     /**
      * @var AmazonPreCapture
      */
-    protected $amazonPreCaptureValidator;
+    private $amazonPreCaptureValidator;
 
     /**
      * @var AmazonAuthorizationDetailsResponseFactory
      */
-    protected $amazonAuthorizationDetailsResponseFactory;
+    private $amazonAuthorizationDetailsResponseFactory;
 
     /**
      * @var AmazonCoreHelper
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var integer
      */
-    protected $lastTransactionTime = 0;
+    private $lastTransactionTime = 0;
 
     /**
      * Amazon constructor.

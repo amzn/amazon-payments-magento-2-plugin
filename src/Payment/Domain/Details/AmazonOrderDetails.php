@@ -23,12 +23,12 @@ class AmazonOrderDetails
     /**
      * @var string
      */
-    protected $orderReferenceId;
+    private $orderReferenceId;
 
     /**
      * @var AmazonOrderStatus
      */
-    protected $status;
+    private $status;
 
     /**
      * AmazonOrderDetails constructor.

@@ -27,22 +27,22 @@ class AuthorizationProcessor implements ProcessorInterface
     /**
      * @var AmazonAuthorizationDetailsFactory
      */
-    protected $amazonAuthorizationDetailsFactory;
+    private $amazonAuthorizationDetailsFactory;
 
     /**
      * @var AuthorizationInterface
      */
-    protected $authorization;
+    private $authorization;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     public function __construct(
         AmazonAuthorizationDetailsFactory $amazonAuthorizationDetailsFactory,

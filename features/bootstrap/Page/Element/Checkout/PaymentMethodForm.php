@@ -23,7 +23,7 @@ class PaymentMethodForm extends Element
 {
     use ElementHelper;
 
-    protected $selector = 'form#co-payment-form';
+    private $selector = 'form#co-payment-form';
 
     /**
      * @param string $paymentMethodCode e.g. "checkmo"

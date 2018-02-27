@@ -22,5 +22,5 @@ class Home extends UnsecurePage
 {
     use PageTrait;
 
-    protected $path = '/';
+    private $path = '/';
 }

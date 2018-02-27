@@ -50,62 +50,62 @@ class Authorization extends AbstractOperation implements AuthorizationInterface
     /**
      * @var PendingAuthorizationInterfaceFactory
      */
-    protected $pendingAuthorizationFactory;
+    private $pendingAuthorizationFactory;
 
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var AmazonAuthorizationDetailsResponseFactory
      */
-    protected $amazonAuthorizationDetailsResponseFactory;
+    private $amazonAuthorizationDetailsResponseFactory;
 
     /**
      * @var AmazonAuthorization
      */
-    protected $amazonAuthorizationValidator;
+    private $amazonAuthorizationValidator;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    protected $orderPaymentRepository;
+    private $orderPaymentRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var ManagerInterface
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      * @var AmazonGetOrderDetailsResponseFactory
      */
-    protected $amazonGetOrderDetailsResponseFactory;
+    private $amazonGetOrderDetailsResponseFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var PaymentManagementInterface
      */
-    protected $paymentManagement;
+    private $paymentManagement;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var bool
      */
-    protected $throwExceptions = false;
+    private $throwExceptions = false;
 
     /**
      * Authorization constructor.

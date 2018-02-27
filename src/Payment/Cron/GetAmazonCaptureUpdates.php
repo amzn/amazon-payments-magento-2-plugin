@@ -27,22 +27,22 @@ class GetAmazonCaptureUpdates
     /**
      * @var int
      */
-    protected $limit;
+    private $limit;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var CaptureInterface
      */
-    protected $capture;
+    private $capture;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         CollectionFactory $collectionFactory,

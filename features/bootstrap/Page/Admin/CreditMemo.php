@@ -22,12 +22,12 @@ class CreditMemo extends Page
 {
     use PageTrait;
 
-    protected $elements
+    private $elements
         = [
             'credit-memo' => ['css' => '.actions button.refund']
         ];
 
-    protected $path = '/admin/sales/order_creditmemo/new/order_id/{orderId}/invoice_id/{invoiceId}';
+    private $path = '/admin/sales/order_creditmemo/new/order_id/{orderId}/invoice_id/{invoiceId}';
 
     public function submitCreditMemo()
     {

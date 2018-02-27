@@ -29,32 +29,32 @@ class CustomerContext implements SnippetAcceptingContext
     /**
      * @var Checkout
      */
-    protected $checkoutPage;
+    private $checkoutPage;
 
     /**
      * @var Success
      */
-    protected $successPage;
+    private $successPage;
 
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
 
     /**
      * @var OrderFixture
      */
-    protected $orderFixture;
+    private $orderFixture;
 
     /**
      * @var AmazonOrderFixture
      */
-    protected $amazonOrderFixture;
+    private $amazonOrderFixture;
 
     /**
      * @var QuoteLinkFixture
      */
-    protected $quoteLinkFixture;
+    private $quoteLinkFixture;
 
     /**
      * CustomerContext constructor.

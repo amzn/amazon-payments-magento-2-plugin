@@ -7,7 +7,7 @@ class SimplePathAdmin extends \Magento\Framework\View\Element\Template
     /**
      * @var SimplePath
      */
-    protected $simplePath;
+    private $simplePath;
 
     /**
      * SimplePathAdmin constructor.

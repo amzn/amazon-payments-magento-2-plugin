@@ -35,7 +35,7 @@ class Data extends AbstractHelper
     const AMAZON_REGION = 'region';
     const AMAZON_SANDBOX = 'sandbox';
 
-    protected $amazonAccountUrl
+    private $amazonAccountUrl
         = [
             'us' => 'https://payments.amazon.com/overview',
             'uk' => 'https://payments.amazon.co.uk/overview',
@@ -46,7 +46,7 @@ class Data extends AbstractHelper
     /**
      * @var Array
      */
-    protected $amazonCredentialsFields
+    private $amazonCredentialsFields
         = [
             self::AMAZON_SECRET_KEY,
             self::AMAZON_ACCESS_KEY,
@@ -58,7 +58,7 @@ class Data extends AbstractHelper
     /**
      * @var Array
      */
-    protected $amazonCredentialsEncryptedFields
+    private $amazonCredentialsEncryptedFields
         = [
             self::AMAZON_SECRET_KEY,
             self::AMAZON_CLIENT_SECRET
@@ -67,12 +67,12 @@ class Data extends AbstractHelper
     /**
      * @var EncryptorInterface
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \Amazon\Core\Helper\ClientIp
@@ -82,7 +82,7 @@ class Data extends AbstractHelper
     /**
      * @var ModuleListInterface
      */
-    protected $moduleList;
+    private $moduleList;
 
     /**
      * Data constructor.

@@ -35,7 +35,7 @@ class ProductPagePaymentLink extends PaymentLink
     /**
      * @var Registry
      */
-    protected $registry;
+    private $registry;
 
     /**
      * @param Context           $context

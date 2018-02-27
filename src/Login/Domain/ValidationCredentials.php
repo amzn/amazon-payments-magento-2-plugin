@@ -20,12 +20,12 @@ class ValidationCredentials
     /**
      * @var integer
      */
-    protected $customerId;
+    private $customerId;
 
     /**
      * @var string
      */
-    protected $amazonId;
+    private $amazonId;
 
     /**
      * ValidationCredentials constructor.

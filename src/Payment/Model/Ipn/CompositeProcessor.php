@@ -23,7 +23,7 @@ class CompositeProcessor implements CompositeProcessorInterface
     /**
      * @var ProcessorInterface[]
      */
-    protected $processors;
+    private $processors;
 
     public function __construct(array $processors)
     {

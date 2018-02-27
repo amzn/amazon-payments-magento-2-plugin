@@ -27,7 +27,7 @@ class OAuthRedirect extends Template
     /**
      * @var Data
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @param Context $context

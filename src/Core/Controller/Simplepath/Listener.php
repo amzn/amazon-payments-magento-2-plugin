@@ -6,10 +6,10 @@ class Listener extends \Magento\Framework\App\Action\Action
 {
 
     // @var \Magento\Framework\Controller\Result\JsonFactory
-    protected $jsonResultFactory;
+    private $jsonResultFactory;
 
     // @var \Amazon\Core\Model\Config\SimplePath
-    protected $simplepath;
+    private $simplepath;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

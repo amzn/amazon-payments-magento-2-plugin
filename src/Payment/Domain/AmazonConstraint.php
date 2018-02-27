@@ -23,12 +23,12 @@ class AmazonConstraint
     /**
      * @var string
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
      */
-    protected $description;
+    private $description;
 
     /**
      * AmazonConstraint constructor.

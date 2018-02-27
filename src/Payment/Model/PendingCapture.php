@@ -29,12 +29,12 @@ class PendingCapture extends AbstractModel implements PendingCaptureInterface
     /**
      * @var DateTimeFactory
      */
-    protected $dateFactory;
+    private $dateFactory;
 
     /**
      * @var boolean
      */
-    protected $lockOnLoad = false;
+    private $lockOnLoad = false;
 
     /**
      * PendingCapture constructor.

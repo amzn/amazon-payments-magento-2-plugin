@@ -25,7 +25,7 @@ class EmailMatcher implements MatcherInterface
     /**
      * @var CustomerRepositoryInterface
      */
-    protected $customerRepository;
+    private $customerRepository;
 
     /**
      * EmailMatcher constructor.

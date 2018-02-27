@@ -25,7 +25,7 @@ use Magento\Framework\Math\Random;
 
 class Customer extends BaseFixture
 {
-    protected $defaults
+    private $defaults
         = [
             CustomerInterface::FIRSTNAME => 'John',
             CustomerInterface::LASTNAME  => 'Doe',
@@ -35,17 +35,17 @@ class Customer extends BaseFixture
     /**
      * @var CustomerRepositoryInterface
      */
-    protected $repository;
+    private $repository;
 
     /**
      * @var EncryptorInterface
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var Random
      */
-    protected $random;
+    private $random;
 
     public function __construct()
     {

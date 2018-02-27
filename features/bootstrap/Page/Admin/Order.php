@@ -22,13 +22,13 @@ class Order extends Page
 {
     use PageTrait;
 
-    protected $elements
+    private $elements
         = [
             'invoice' => ['css' => '#order_invoice'],
             'submit-invoice' => ['css' => '#invoice_totals .submit-button']
         ];
 
-    protected $path = '/admin/sales/order/view/order_id/{id}';
+    private $path = '/admin/sales/order/view/order_id/{id}';
 
     public function openWithOrderId($orderId)
     {

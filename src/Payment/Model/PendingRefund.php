@@ -29,12 +29,12 @@ class PendingRefund extends AbstractModel implements PendingRefundInterface
     /**
      * @var DateTimeFactory
      */
-    protected $dateFactory;
+    private $dateFactory;
 
     /**
      * @var boolean
      */
-    protected $lockOnLoad = false;
+    private $lockOnLoad = false;
 
     /**
      * @param Context               $context

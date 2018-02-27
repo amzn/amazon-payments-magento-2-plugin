@@ -26,17 +26,17 @@ class Address
     /**
      * @var AddressInterfaceFactory
      */
-    protected $addressFactory;
+    private $addressFactory;
 
     /**
      * @var RegionFactory
      */
-    protected $regionFactory;
+    private $regionFactory;
 
     /**
      * @var RegionInterfaceFactory
      */
-    protected $regionDataFactory;
+    private $regionDataFactory;
 
     public function __construct(
         AddressInterfaceFactory $addressFactory,

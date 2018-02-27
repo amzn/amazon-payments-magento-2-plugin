@@ -26,7 +26,7 @@ class Data extends AbstractHelper
     /**
      * @var ModuleListInterface
      */
-    protected $moduleList;
+    private $moduleList;
 
     /**
      * Data constructor.

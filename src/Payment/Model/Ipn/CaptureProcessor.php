@@ -27,22 +27,22 @@ class CaptureProcessor implements ProcessorInterface
     /**
      * @var AmazonCaptureDetailsFactory
      */
-    protected $amazonCaptureDetailsFactory;
+    private $amazonCaptureDetailsFactory;
 
     /**
      * @var CaptureInterface
      */
-    protected $capture;
+    private $capture;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     public function __construct(
         AmazonCaptureDetailsFactory $amazonCaptureDetailsFactory,

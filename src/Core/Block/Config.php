@@ -29,17 +29,17 @@ class Config extends Template
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var Url
      */
-    protected $url;
+    private $url;
 
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     public function __construct(
         Context $context,

@@ -22,7 +22,7 @@ class Logout extends Page
 {
     use PageTrait;
 
-    protected $path = '/customer/account/logout';
+    private $path = '/customer/account/logout';
 
     public function logout()
     {

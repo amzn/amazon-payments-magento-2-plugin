@@ -31,12 +31,12 @@ class Redirect extends BaseRedirect
     /**
      * @var CheckoutSession
      */
-    protected $checkoutSession;
+    private $checkoutSession;
 
     /**
      * @var CustomerSession
      */
-    protected $customerSession;
+    private $customerSession;
 
     public function __construct(
         RequestInterface $request,

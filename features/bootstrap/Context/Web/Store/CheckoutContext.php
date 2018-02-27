@@ -24,7 +24,7 @@ class CheckoutContext implements SnippetAcceptingContext
     /**
      * @var Checkout
      */
-    protected $checkoutPage;
+    private $checkoutPage;
 
     public function __construct(Checkout $checkoutPage)
     {

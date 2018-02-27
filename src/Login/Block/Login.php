@@ -27,7 +27,7 @@ class Login extends Template
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(Context $context, Data $coreHelper)
     {

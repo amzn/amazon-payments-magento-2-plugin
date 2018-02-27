@@ -23,12 +23,12 @@ class AmazonCaptureDetails
     /**
      * @var AmazonCaptureStatus
      */
-    protected $status;
+    private $status;
 
     /**
      * @var string|null
      */
-    protected $transactionId;
+    private $transactionId;
 
     /**
      * AmazonCaptureDetails constructor.

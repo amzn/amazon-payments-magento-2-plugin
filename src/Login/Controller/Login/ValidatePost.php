@@ -29,27 +29,27 @@ class ValidatePost extends Action
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var AccountRedirect
      */
-    protected $accountRedirect;
+    private $accountRedirect;
 
     /**
      * @var CustomerRegistry
      */
-    protected $customerRegistry;
+    private $customerRegistry;
 
     /**
      * @var Encryptor
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var CustomerLinkManagement
      */
-    protected $customerLinkManagement;
+    private $customerLinkManagement;
 
     /**
      * ValidatePost constructor.

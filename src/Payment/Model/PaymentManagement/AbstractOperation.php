@@ -40,22 +40,22 @@ abstract class AbstractOperation
     /**
      * @var SearchCriteriaBuilderFactory
      */
-    protected $searchCriteriaBuilderFactory;
+    private $searchCriteriaBuilderFactory;
 
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @var NotifierInterface
      */
-    protected $notifier;
+    private $notifier;
 
     /**
      * @var InvoiceRepositoryInterface
      */
-    protected $invoiceRepository;
+    private $invoiceRepository;
 
     public function __construct(
         NotifierInterface $notifier,

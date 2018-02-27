@@ -23,7 +23,7 @@ class Basket extends BaseFixture
     /**
      * @var CartRepositoryInterface
      */
-    protected $repository;
+    private $repository;
 
     public function __construct()
     {

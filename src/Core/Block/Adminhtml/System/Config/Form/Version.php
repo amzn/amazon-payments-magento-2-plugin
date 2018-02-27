@@ -10,7 +10,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @var CoreHelper
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * Version constructor.

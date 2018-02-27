@@ -27,22 +27,22 @@ class GetAmazonAuthorizationUpdates
     /**
      * @var int
      */
-    protected $limit;
+    private $limit;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var AuthorizationInterface
      */
-    protected $authorization;
+    private $authorization;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         CollectionFactory $collectionFactory,

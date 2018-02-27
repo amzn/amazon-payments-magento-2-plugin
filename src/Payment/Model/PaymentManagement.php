@@ -39,37 +39,37 @@ class PaymentManagement implements PaymentManagementInterface
     /**
      * @var PendingCaptureInterfaceFactory
      */
-    protected $pendingCaptureFactory;
+    private $pendingCaptureFactory;
 
     /**
      * @var PendingAuthorizationInterfaceFactory
      */
-    protected $pendingAuthorizationFactory;
+    private $pendingAuthorizationFactory;
 
     /**
      * @var PendingRefundInterfaceFactory
      */
-    protected $pendingRefundFactory;
+    private $pendingRefundFactory;
 
     /**
      * @var SearchCriteriaBuilderFactory
      */
-    protected $searchCriteriaBuilderFactory;
+    private $searchCriteriaBuilderFactory;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    protected $orderPaymentRepository;
+    private $orderPaymentRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var TransactionRepositoryInterface
      */
-    protected $transactionRepository;
+    private $transactionRepository;
 
     /**
      * PaymentManagement constructor.

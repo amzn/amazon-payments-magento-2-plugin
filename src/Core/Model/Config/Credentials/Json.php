@@ -31,37 +31,37 @@ class Json
     /**
      * @var Data
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var JsonConfigDataValidatorFactory
      */
-    protected $jsonConfigDataValidatorFactory;
+    private $jsonConfigDataValidatorFactory;
 
     /**
      * @var ConfigWriter
      */
-    protected $configWriter;
+    private $configWriter;
 
     /**
      * @var MessageManager
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var DecoderInterface
      */
-    protected $jsonDecoder;
+    private $jsonDecoder;
 
     /**
      * @var EncryptorInterface $encryptor
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var SimplePath
      */
-    protected $simplePath;
+    private $simplePath;
 
     /**
      * @param Data                           $amazonCoreHelper
