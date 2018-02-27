@@ -15,8 +15,9 @@
  */
 namespace Amazon\Login\Controller\Login;
 
-use Amazon\Core\Domain\AmazonCustomer;
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Domain\ValidationCredentials;
+use Magento\Framework\Exception\ValidatorException;
 use Zend_Validate;
 
 class Authorize extends \Amazon\Login\Controller\Login
@@ -61,7 +62,7 @@ class Authorize extends \Amazon\Login\Controller\Login
         return $this->getRedirectAccount();
     }
 
-    protected function processAmazonCustomer(AmazonCustomer $amazonCustomer)
+    protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
     {
         $customerData = $this->matcher->match($amazonCustomer);
 
@@ -80,7 +81,7 @@ class Authorize extends \Amazon\Login\Controller\Login
         return $customerData;
     }
 
-    protected function createCustomer(AmazonCustomer $amazonCustomer)
+    protected function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
         if (! Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
             throw new ValidatorException(__('the email address for your Amazon account is invalid'));

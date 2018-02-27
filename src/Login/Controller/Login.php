@@ -16,8 +16,7 @@
 namespace Amazon\Login\Controller;
 
 use Amazon\Core\Client\ClientFactoryInterface;
-use Amazon\Core\Domain\AmazonCustomer;
-use Amazon\Core\Domain\AmazonCustomerFactory;
+use Amazon\Core\Api\Data\AmazonCustomerInterfaceFactory;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
 use Amazon\Login\Model\Customer\Account\Redirect as AccountRedirect;
@@ -39,7 +38,7 @@ use Magento\Framework\Exception\ValidatorException;
 abstract class Login extends Action
 {
     /**
-     * @var AmazonCustomerFactory
+     * @var AmazonCustomerInterfaceFactory
      */
     protected $amazonCustomerFactory;
 
@@ -94,7 +93,7 @@ abstract class Login extends Action
     protected $logger;
 
     /**
-     * @param AmazonCustomerFactory       $amazonCustomerFactory
+     * @param AmazonCustomerInterfaceFactory   $amazonCustomerFactory
      * @param ClientFactoryInterface      $clientFactory
      * @param LoggerInterface             $logger
      * @param AmazonCoreHelper            $amazonCoreHelper
@@ -110,7 +109,7 @@ abstract class Login extends Action
      */
     public function __construct(
         Context $context,
-        AmazonCustomerFactory $amazonCustomerFactory,
+        AmazonCustomerInterfaceFactory $amazonCustomerFactory,
         ClientFactoryInterface $clientFactory,
         AmazonCoreHelper $amazonCoreHelper,
         Url $customerUrl,
@@ -139,7 +138,7 @@ abstract class Login extends Action
     /**
      * Load userinfo from access token
      *
-     * @return AmazonCustomer
+     * @return AmazonCustomerInterface
      */
     protected function getAmazonCustomer()
     {
@@ -149,12 +148,11 @@ abstract class Login extends Action
                              ->getUserInfo($this->getRequest()->getParam('access_token'));
 
             if (is_array($userInfo) && isset($userInfo['user_id'])) {
-                $amazonCustomer = $this->amazonCustomerFactory->create([
-                    'id'    => $userInfo['user_id'],
-                    'email' => $userInfo['email'],
-                    'name'  => $userInfo['name'],
-                    'country' => $this->amazonCoreHelper->getRegion()
-                ]);
+                $amazonCustomer = $this->amazonCustomerFactory->create()
+                    ->setId($userInfo['user_id'])
+                    ->setEmail($userInfo['email'])
+                    ->setName($userInfo['name'])
+                    ->setCountry($this->amazonCoreHelper->getRegion());
 
                 return $amazonCustomer;
             }
