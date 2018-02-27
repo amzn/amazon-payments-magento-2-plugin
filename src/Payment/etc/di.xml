@@ -3,6 +3,7 @@
     <preference for="Amazon\Payment\Api\OrderInformationManagementInterface" type="Amazon\Payment\Model\OrderInformationManagement" />
     <preference for="Amazon\Payment\Api\AddressManagementInterface" type="Amazon\Payment\Model\AddressManagement" />
     <preference for="Amazon\Payment\Api\PaymentManagementInterface" type="Amazon\Payment\Model\PaymentManagement" />
+    <preference for="Amazon\Payment\Api\QuoteLinkManagementInterface" type="Amazon\Payment\Model\QuoteLinkManagement" />
     <preference for="Amazon\Payment\Api\PaymentManagement\CaptureInterface" type="Amazon\Payment\Model\PaymentManagement\Capture" />
     <preference for="Amazon\Payment\Api\PaymentManagement\AuthorizationInterface" type="Amazon\Payment\Model\PaymentManagement\Authorization" />
     <preference for="Amazon\Payment\Api\Data\QuoteLinkInterface" type="Amazon\Payment\Model\QuoteLink" />

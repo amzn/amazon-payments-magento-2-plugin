@@ -16,17 +16,16 @@
 namespace Amazon\Payment\Plugin;
 
 use Amazon\Core\Helper\Data;
-use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
+use Amazon\Payment\Api\QuoteLinkManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartExtensionFactory;
 use Magento\Quote\Api\Data\CartInterface;
 
 class QuoteRepository
 {
     /**
-     * @var CartExtensionFactory
+     * @var QuoteLinkManagementInterface
      */
-    private $cartExtensionFactory;
+    private $quoteLinkManagement;
 
     /**
      * @var QuoteLinkInterfaceFactory
@@ -39,12 +38,10 @@ class QuoteRepository
     private $coreHelper;
 
     public function __construct(
-        CartExtensionFactory $cartExtensionFactory,
-        QuoteLinkInterfaceFactory $quoteLinkFactory,
+        QuoteLinkManagementInterface $quoteLinkManagement,
         Data $coreHelper
     ) {
-        $this->cartExtensionFactory = $cartExtensionFactory;
-        $this->quoteLinkFactory     = $quoteLinkFactory;
+        $this->quoteLinkManagement  = $quoteLinkManagement;
         $this->coreHelper           = $coreHelper;
     }
 
@@ -53,7 +50,9 @@ class QuoteRepository
      */
     public function afterGet(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        $this->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        if ($this->coreHelper->isPwaEnabled()) {
+            $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        }
 
         return $cart;
     }
@@ -63,7 +62,9 @@ class QuoteRepository
      */
     public function afterGetForCustomer(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        $this->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        if ($this->coreHelper->isPwaEnabled()) {
+            $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        }
 
         return $cart;
     }
@@ -73,7 +74,9 @@ class QuoteRepository
      */
     public function afterGetActive(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        $this->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        if ($this->coreHelper->isPwaEnabled()) {
+            $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        }
 
         return $cart;
     }
@@ -83,26 +86,10 @@ class QuoteRepository
      */
     public function afterGetActiveForCustomer(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        $this->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        if ($this->coreHelper->isPwaEnabled()) {
+            $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
+        }
 
         return $cart;
-    }
-
-    protected function setAmazonOrderReferenceIdExtensionAttribute(CartInterface $cart)
-    {
-        if (!$this->coreHelper->isPwaEnabled()) {
-            return;
-        }
-
-        $cartExtension = ($cart->getExtensionAttributes()) ?: $this->cartExtensionFactory->create();
-
-        $amazonQuote = $this->quoteLinkFactory->create();
-        $amazonQuote->load($cart->getId(), 'quote_id');
-
-        if ($amazonQuote->getId()) {
-            $cartExtension->setAmazonOrderReferenceId($amazonQuote->getAmazonOrderReferenceId());
-        }
-
-        $cart->setExtensionAttributes($cartExtension);
     }
 }
