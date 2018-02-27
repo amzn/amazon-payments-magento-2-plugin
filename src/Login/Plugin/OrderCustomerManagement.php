@@ -65,26 +65,23 @@ class OrderCustomerManagement
 
     /**
      * @param OrderCustomerManagementInterface $subject
-     * @param \Closure $proceed
+     * @param CustomerInterface $result
      * @param int $orderId
      * @return CustomerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCreate(OrderCustomerManagementInterface $subject, \Closure $proceed, $orderId)
+    public function afterCreate(OrderCustomerManagementInterface $subject, $result, $orderId)
     {
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $customerData */
-        $customerData = $proceed($orderId);
-
         if ($this->coreHelper->isLwaEnabled()) {
             $paymentMethodName = $this->orderRepository->get($orderId)->getPayment()->getMethod();
             $isAmazonPayment   = $paymentMethodName === AmazonPaymentMethod::PAYMENT_METHOD_CODE;
             $amazonCustomer    = $this->loginSessionHelper->getAmazonCustomer();
 
             if ($isAmazonPayment && $amazonCustomer) {
-                $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
+                $this->customerLinkManagement->updateLink($result->getId(), $amazonCustomer->getId());
             }
         }
 
-        return $customerData;
+        return $result;
     }
 }
