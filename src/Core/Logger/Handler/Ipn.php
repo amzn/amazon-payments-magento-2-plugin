@@ -25,10 +25,10 @@ class Ipn extends Base
     /**
      * @var string
      */
-    private $fileName = self::FILENAME;
+    protected $fileName = self::FILENAME;
 
     /**
      * @var int
      */
-    private $loggerType = Logger::DEBUG;
+    protected $loggerType = Logger::DEBUG;
 }
