@@ -95,8 +95,8 @@ require(['uiRegistry', "prototype"], function(registry){
     }
 
     // Show/hide fields
-    if ($('payment_'+co+'_amazon_payment_general_credentials_merchant_id') != null) {
-        if ($('payment_'+co+'_amazon_payment_general_credentials_merchant_id').value) {
+    if ($('payment_'+co+'_amazon_payment_credentials_merchant_id') != null) {
+        if ($('payment_'+co+'_amazon_payment_credentials_merchant_id').value) {
             amazonSpBack.show();
             amazonSimplepath.hide();
 
@@ -148,7 +148,7 @@ require(['uiRegistry', "prototype"], function(registry){
         }
 
         // Add "Save Credentials"
-        var elJson = $('payment_'+co+'_amazon_payment_general_credentials_credentials_json');
+        var elJson = $('payment_'+co+'_amazon_payment_credentials_credentials_json');
         if (elJson && $('sp-td-json-value') == null) {
             // Must create dynamic table to prevent conflict with config tables
             var tableJson = new Element('table').update('<tr><td class="label creds"> \
@@ -158,7 +158,7 @@ require(['uiRegistry', "prototype"], function(registry){
 
 
             // Enable Crednetials JSON config field
-            var elIdCredCheck = '#payment_'+co+'_amazon_payment_general_credentials_credentials_json_inherit:checked';
+            var elIdCredCheck = '#payment_'+co+'_amazon_payment_credentials_credentials_json_inherit:checked';
             var elJsonCheckDefault = $$(elIdCredCheck);
             if (elJsonCheckDefault && elJsonCheckDefault.length) {
                 elJsonCheckDefault[0].click();
@@ -183,11 +183,11 @@ require(['uiRegistry', "prototype"], function(registry){
         if (region.indexOf('eu') != -1) {
             region = 'de';
         }
-        var elCheckDefault = $$('#payment_'+co+'_amazon_payment_general_credentials_payment_region_inherit:checked');
+        var elCheckDefault = $$('#payment_'+co+'_amazon_payment_credentials_payment_region_inherit:checked');
         if (elCheckDefault && elCheckDefault.length) {
             elCheckDefault[0].click();
         }
-        var elRegion = $('payment_'+co+'_amazon_payment_general_credentials_payment_region');
+        var elRegion = $('payment_'+co+'_amazon_payment_credentials_payment_region');
         if (elRegion) {
             elRegion.value = region;
         }
@@ -213,13 +213,8 @@ require(['uiRegistry', "prototype"], function(registry){
         amazonFields.each(Element.show);
         amazonSimplepath.hide();
         amazonSpBack.show();
-
-        if (!$('payment_'+co+'_amazon_payment_general-head').hasClassName('open')) {
-            $('payment_'+co+'_amazon_payment_general-head').click();
-            $('payment_'+co+'_amazon_payment_general_credentials-head').click();
-        }
-        if (!$('payment_'+co+'_amazon_payment_general_credentials-head').hasClassName('open')) {
-            $('payment_'+co+'_amazon_payment_general_credentials-head').click();
+        if (!$('payment_'+co+'_amazon_payment_credentials-head').hasClassName('open')) {
+            $('payment_'+co+'_amazon_payment_credentials-head').click();
         }
     }
 
