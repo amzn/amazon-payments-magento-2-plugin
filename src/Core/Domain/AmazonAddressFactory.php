@@ -28,92 +28,95 @@ class AmazonAddressFactory
     private $objectManager = null;
 
     /**
-     * @var array
+     * @var AmazonAddressInterface[]
      */
-    private $perCountryAddressHandlers;
+    private $addressDecoratorPool;
 
     /**
-     * @var AmazonAddress
+     * @var AmazonNameFactory
      */
-    private $amazonAddress;
+    private $addressNameFactory;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param AmazonAddressInterface $amazonAddress
-     * @param array $perCountryAddressHandlers Per-country custom handlers of incoming address data.
+     * @param AmazonNameFactory $addressNameFactory
+     * @param array $addressDecoratorPool Per-country custom decorators of incoming address data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        AmazonAddressInterface $amazonAddress,
-        array $perCountryAddressHandlers = []
+        AmazonNameFactory $addressNameFactory,
+        array $addressDecoratorPool = []
     ) {
         $this->objectManager = $objectManager;
-        $this->amazonAddress = $amazonAddress;
-        $this->perCountryAddressHandlers = $perCountryAddressHandlers;
+        $this->addressNameFactory = $addressNameFactory;
+        $this->addressDecoratorPool = $addressDecoratorPool;
     }
 
     /**
-     * @param array $data
-     * @return AmazonAddress
+     * @param array $responseData
+     *
+     * @return AmazonAddressInterface
+     * @throws LocalizedException
      */
-    public function create(array $data = [])
+    public function create(array $responseData = []): AmazonAddressInterface
     {
-        $instanceClassName = AmazonAddressBuilder::class;
+        $addressName = $this->addressNameFactory->create(
+            ['name' => $responseData['Name'], 'country' => $responseData['CountryCode']]
+        );
+
+        $data = [
+            'city' => $responseData['City'],
+            'postCode' => $responseData['PostalCode'],
+            'countryCode' => $responseData['CountryCode'],
+            'telephone' => $responseData['Phone'] ?? '',
+            'state' => $responseData['StateOrRegion'] ?? '',
+            'firstName' => $addressName->getFirstName(),
+            'lastName' => $addressName->getLastName(),
+            'lines' => $this->getLines($responseData)
+        ];
+
+        $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['data' => $data]);
+
         $countryCode = strtoupper($data['address']['CountryCode']);
-
-        $this->perCountryAddressHandlers = array_change_key_case($this->perCountryAddressHandlers, CASE_UPPER);
-
-        if (!empty($this->perCountryAddressHandlers[$countryCode])) {
-            $instanceClassName = (string) $this->perCountryAddressHandlers[$countryCode];
+        if (empty($this->addressDecoratorPool[$countryCode])) {
+            return $amazonAddress;
         }
 
-        $amazonAddressBuilder = $this->objectManager->create($instanceClassName);
+        $amazonAddress = $this->objectManager->create(
+            $this->addressDecoratorPool[$countryCode],
+            [
+                'amazonAddress' => $amazonAddress,
+                'responseData' => $responseData
+            ]
+        );
 
-        $addressData = $this->getAddressData($data['address']);
+        if (!$amazonAddress instanceof AmazonAddress) {
+            throw new LocalizedException(
+                __(
+                    'Address country handler %1 must be of type %2',
+                    [$this->addressDecoratorPool[$countryCode], AmazonAddress::class]
+                )
+            );
+        }
 
-        return $amazonAddressBuilder
-            ->setData($addressData)
-            ->setAddress($data['address'], $addressData['lines'])
-            ->build($this->amazonAddress);
+        return $amazonAddress;
     }
 
     /**
-     * Convert Amazon address array into data array
+     * Returns address lines.
      *
-     * @param array $address
+     * @param array $responseData
      * @return array
      */
-    private function getAddressData($address)
+    private function getLines(array $responseData = []): array
     {
-        $data = [];
-        $data['name']        = $address['Name'];
-        $data['city']        = $address['City'];
-        $data['postCode']    = $address['PostalCode'];
-        $data['countryCode'] = $address['CountryCode'];
-
-        if (isset($address['Phone'])) {
-            $data['telephone'] = $address['Phone'];
-        }
-
-        if (isset($address['StateOrRegion'])) {
-            $data['state'] = $address['StateOrRegion'];
-        }
-
-        $data['lines'] = [];
+        $lines = [];
         for ($i = 1; $i <= 3; $i++) {
-            $key = 'AddressLine' . $i;
-
-            if (isset($address[$key])) {
-                if (empty($address[$key])) {
-                    $data['lines'][$i] = '';
-                } else {
-                    $data['lines'][$i] = $address[$key];
-                }
-            }
+            $lines[$i] = $responseData['AddressLine' . $i] ?? '';
         }
 
-        return $data;
+        return $lines;
     }
 }

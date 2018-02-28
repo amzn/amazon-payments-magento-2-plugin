@@ -26,10 +26,10 @@
     </type>
     <type name="Amazon\Core\Domain\AmazonAddressFactory">
         <arguments>
-            <argument name="perCountryAddressHandlers" xsi:type="array">
-                <item name="DE" xsi:type="string">Amazon\Core\Domain\AmazonAddressDeBuilder</item>
-                <item name="AT" xsi:type="string">Amazon\Core\Domain\AmazonAddressDeBuilder</item>
-                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonAddressJpBuilder</item>
+            <argument name="addressDecoratorPool" xsi:type="array">
+                <item name="DE" xsi:type="string">Amazon\Core\Domain\AmazonAddressDecoratorDe</item>
+                <item name="AT" xsi:type="string">Amazon\Core\Domain\AmazonAddressDecoratorDe</item>
+                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonAddressDecoratorJp</item>
             </argument>
         </arguments>
     </type>
