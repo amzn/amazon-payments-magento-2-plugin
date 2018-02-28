@@ -15,6 +15,8 @@
  */
 namespace Amazon\Core\Domain;
 
+use Amazon\Core\Api\Data\AmazonAddressInterface;
+
 class AmazonAddressDecoratorJp implements AmazonAddressInterface
 {
     /**
@@ -120,5 +122,104 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     public function getTelephone()
     {
         return $this->amazonAddress->getTelephone();
+    }
+
+    /**
+     * Get an address line
+     *
+     * @param int $lineNumber
+     *
+     * @return null|string
+     */
+    public function getLine($lineNumber) {
+        $this->amazonAddress->getLine($lineNumber);
+    }
+
+    /**
+     * Set full name
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name) {
+        $this->amazonAddress->setName($name);
+    }
+
+    /**
+     * Set address lines
+     *
+     * @param array $lines
+     *
+     * @return $this
+     */
+    public function setLines($lines) {
+        $this->amazonAddress->setLines($lines);
+    }
+
+    /**
+     * Set city
+     *
+     * @param string $city
+     *
+     * @return $this
+     */
+    public function setCity($city) {
+        $this->amazonAddress->setCity($city);
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return $this
+     */
+    public function setState($state) {
+        $this->amazonAddress->setState($state);
+    }
+
+    /**
+     * Set postal code
+     *
+     * @param string $postCode
+     *
+     * @return $this
+     */
+    public function setPostCode($postCode) {
+        $this->amazonAddress->setPostCode($postCode);
+    }
+
+    /**
+     * Set country code
+     *
+     * @param string $countryCode
+     *
+     * @return $this
+     */
+    public function setCountryCode($countryCode) {
+        $this->amazonAddress->setCountryCode($countryCode);
+    }
+
+    /**
+     * Set telephone
+     *
+     * @param string $telephone
+     *
+     * @return $this
+     */
+    public function setTelephone($telephone) {
+        $this->amazonAddress->setTelephone($telephone);
+    }
+
+    /**
+     * Set company name
+     *
+     * @param string $company
+     *
+     * @return $this
+     */
+    public function setCompany($company) {
+        $this->amazonAddress->setCompany($company);
     }
 }

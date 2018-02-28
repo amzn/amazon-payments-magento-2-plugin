@@ -62,24 +62,26 @@ class AmazonAddressFactory
      */
     public function create(array $responseData = []): AmazonAddressInterface
     {
+        $address = $responseData['address'];
         $addressName = $this->addressNameFactory->create(
-            ['name' => $responseData['Name'], 'country' => $responseData['CountryCode']]
+            ['name' => $address['Name'], 'country' => $address['CountryCode']]
         );
 
         $data = [
-            'city' => $responseData['City'],
-            'postCode' => $responseData['PostalCode'],
-            'countryCode' => $responseData['CountryCode'],
-            'telephone' => $responseData['Phone'] ?? '',
-            'state' => $responseData['StateOrRegion'] ?? '',
+            'city' => $address['City'],
+            'postCode' => $address['PostalCode'],
+            'countryCode' => $address['CountryCode'],
+            'telephone' => $address['Phone'] ?? '',
+            'state' => $address['StateOrRegion'] ?? '',
+            'name' => $address['Name'],
             'firstName' => $addressName->getFirstName(),
             'lastName' => $addressName->getLastName(),
-            'lines' => $this->getLines($responseData)
+            'lines' => $this->getLines($address)
         ];
 
-        $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['data' => $data]);
+        $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['addressData' => $data]);
 
-        $countryCode = strtoupper($data['address']['CountryCode']);
+        $countryCode = strtoupper($address['CountryCode']);
         if (empty($this->addressDecoratorPool[$countryCode])) {
             return $amazonAddress;
         }

@@ -72,9 +72,16 @@ class AmazonAddress implements AmazonAddressInterface
     /**
      * @param AmazonNameFactory $addressNameFactory
      */
-    public function __construct(AmazonNameFactory $amazonNameFactory)
+    public function __construct(AmazonNameFactory $amazonNameFactory, $addressData)
     {
         $this->amazonNameFactory = $amazonNameFactory;
+        $this->name = $addressData['name'];
+        $this->lines = $addressData['lines'];
+        $this->city = $addressData['city'];
+        $this->state = $addressData['state'];
+        $this->postCode = $addressData['postCode'];
+        $this->countryCode = $addressData['countryCode'];
+        $this->telephone = $addressData['telephone'];
     }
 
     /**
