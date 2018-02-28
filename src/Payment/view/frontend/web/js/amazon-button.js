@@ -88,7 +88,7 @@ define([
         },
         /**
          * Should we use the pop up login flow?
-         *  - are we on an HTTPS page (required for popup) 
+         *  - are we on an HTTPS page (required for popup)
          *  - confirm we are not on the product detail page (items are added asynchronously to the cart, hence popups will be blocked)
          *  - confirm we are not using a touch device (redirect provides a better mobile experience)
          * @returns {Boolean}
@@ -114,6 +114,7 @@ define([
                     authRequest = amazon.Login.authorize(_this._getLoginOptions(), _this._popupCallback());
                 }
             });
+            $('.amazon-button-container .field-tooltip').fadeIn();
         },
         /**
          * Build login options
