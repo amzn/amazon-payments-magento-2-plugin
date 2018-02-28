@@ -18,8 +18,8 @@ namespace Amazon\Payment\Model\PaymentManagement;
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Payment\Api\Data\PendingCaptureInterface;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
-use Amazon\Payment\Api\PaymentManagement\CaptureInterface;
-use Amazon\Payment\Api\PaymentManagementInterface;
+use Amazon\Payment\Model\PaymentManagement\Capture;
+use Amazon\Payment\Model\PaymentManagement;
 use Amazon\Payment\Domain\AmazonCaptureDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonCaptureStatus;
 use Amazon\Payment\Domain\Details\AmazonCaptureDetails;
@@ -40,7 +40,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Capture extends AbstractOperation implements CaptureInterface
+class Capture extends AbstractOperation
 {
     /**
      * @var ClientFactoryInterface
@@ -78,7 +78,7 @@ class Capture extends AbstractOperation implements CaptureInterface
     private $storeManager;
 
     /**
-     * @var PaymentManagementInterface
+     * @var PaymentManagement
      */
     private $paymentManagement;
 
@@ -106,7 +106,7 @@ class Capture extends AbstractOperation implements CaptureInterface
      * @param OrderRepositoryInterface            $orderRepository
      * @param TransactionRepositoryInterface      $transactionRepository
      * @param StoreManagerInterface               $storeManager
-     * @param PaymentManagementInterface          $paymentManagement
+     * @param PaymentManagement                   $paymentManagement
      * @param LoggerInterface                     $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -122,7 +122,7 @@ class Capture extends AbstractOperation implements CaptureInterface
         OrderRepositoryInterface $orderRepository,
         TransactionRepositoryInterface $transactionRepository,
         StoreManagerInterface $storeManager,
-        PaymentManagementInterface $paymentManagement,
+        PaymentManagement $paymentManagement,
         LoggerInterface $logger
     ) {
         $this->clientFactory                       = $clientFactory;

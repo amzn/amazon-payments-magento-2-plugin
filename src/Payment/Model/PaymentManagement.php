@@ -18,7 +18,6 @@ namespace Amazon\Payment\Model;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingRefundInterfaceFactory;
-use Amazon\Payment\Api\PaymentManagementInterface;
 use Amazon\Payment\Domain\Details\AmazonAuthorizationDetails;
 use Amazon\Payment\Domain\Details\AmazonCaptureDetails;
 use Amazon\Payment\Domain\Details\AmazonRefundDetails;
@@ -34,7 +33,7 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PaymentManagement implements PaymentManagementInterface
+class PaymentManagement
 {
     /**
      * @var PendingCaptureInterfaceFactory

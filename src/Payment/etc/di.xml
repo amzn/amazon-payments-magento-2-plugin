@@ -2,10 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Amazon\Payment\Api\OrderInformationManagementInterface" type="Amazon\Payment\Model\OrderInformationManagement" />
     <preference for="Amazon\Payment\Api\AddressManagementInterface" type="Amazon\Payment\Model\AddressManagement" />
-    <preference for="Amazon\Payment\Api\PaymentManagementInterface" type="Amazon\Payment\Model\PaymentManagement" />
     <preference for="Amazon\Payment\Api\QuoteLinkManagementInterface" type="Amazon\Payment\Model\QuoteLinkManagement" />
-    <preference for="Amazon\Payment\Api\PaymentManagement\CaptureInterface" type="Amazon\Payment\Model\PaymentManagement\Capture" />
-    <preference for="Amazon\Payment\Api\PaymentManagement\AuthorizationInterface" type="Amazon\Payment\Model\PaymentManagement\Authorization" />
     <preference for="Amazon\Payment\Api\Data\QuoteLinkInterface" type="Amazon\Payment\Model\QuoteLink" />
     <preference for="Amazon\Payment\Api\Data\OrderLinkInterface" type="Amazon\Payment\Model\OrderLink" />
     <preference for="Amazon\Payment\Api\Data\PendingCaptureInterface" type="Amazon\Payment\Model\PendingCapture" />
@@ -25,12 +22,12 @@
     </type>
     <type name="Amazon\Payment\Cron\ProcessAmazonRefunds">
         <arguments>
-            <argument name="paymentManagement" xsi:type="object">Amazon\Payment\Api\PaymentManagementInterface\Proxy</argument>
+            <argument name="paymentManagement" xsi:type="object">Amazon\Payment\Model\PaymentManagement\Proxy</argument>
         </arguments>
     </type>
     <type name="Amazon\Payment\Cron\GetAmazonCaptureUpdates">
         <arguments>
-            <argument name="paymentManagement" xsi:type="object">Amazon\Payment\Api\PaymentManagementInterface\Proxy</argument>
+            <argument name="paymentManagement" xsi:type="object">Amazon\Payment\Model\PaymentManagement\Proxy</argument>
         </arguments>
     </type>
     <type name="Amazon\Payment\Model\QueuedRefundUpdater">

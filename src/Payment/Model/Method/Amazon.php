@@ -21,7 +21,7 @@ use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Core\Model\Config\Source\AuthorizationMode;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Api\OrderInformationManagementInterface;
-use Amazon\Payment\Api\PaymentManagementInterface;
+use Amazon\Payment\Model\PaymentManagement;
 use Amazon\Payment\Domain\AmazonAuthorizationDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonAuthorizationResponseFactory;
 use Amazon\Payment\Domain\AmazonAuthorizationStatus;
@@ -149,7 +149,7 @@ class Amazon extends AbstractMethod
     private $amazonRefundValidator;
 
     /**
-     * @var PaymentManagementInterface
+     * @var PaymentManagement
      */
     private $paymentManagement;
 
@@ -195,7 +195,7 @@ class Amazon extends AbstractMethod
      * @param AmazonPreCapture                          $amazonPreCaptureValidator
      * @param AmazonCapture                             $amazonCaptureValidator
      * @param AmazonRefund                              $amazonRefundValidator
-     * @param PaymentManagementInterface                $paymentManagement
+     * @param PaymentManagement                         $paymentManagement
      * @param AmazonCoreHelper                          $amazonCoreHelper
      * @param AbstractResource|null                     $resource
      * @param AbstractDb|null                           $resourceCollection
@@ -222,7 +222,7 @@ class Amazon extends AbstractMethod
         AmazonPreCapture $amazonPreCaptureValidator,
         AmazonCapture $amazonCaptureValidator,
         AmazonRefund $amazonRefundValidator,
-        PaymentManagementInterface $paymentManagement,
+        PaymentManagement $paymentManagement,
         AmazonCoreHelper $amazonCoreHelper,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,

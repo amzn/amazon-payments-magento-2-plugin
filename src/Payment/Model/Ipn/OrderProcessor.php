@@ -17,7 +17,7 @@ namespace Amazon\Payment\Model\Ipn;
 
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;
 use Amazon\Payment\Api\Ipn\ProcessorInterface;
-use Amazon\Payment\Api\PaymentManagement\AuthorizationInterface;
+use Amazon\Payment\Model\PaymentManagement\Authorization;
 use Amazon\Payment\Domain\Details\AmazonOrderDetailsFactory;
 use Amazon\Payment\Model\ResourceModel\OrderLink;
 use Amazon\Payment\Model\ResourceModel\PendingAuthorization\CollectionFactory;
@@ -47,7 +47,7 @@ class OrderProcessor implements ProcessorInterface
 
     public function __construct(
         AmazonOrderDetailsFactory $amazonOrderDetailsFactory,
-        AuthorizationInterface $authorization,
+        Authorization $authorization,
         CollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager
     ) {

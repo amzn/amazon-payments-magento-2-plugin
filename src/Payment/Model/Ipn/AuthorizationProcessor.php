@@ -17,7 +17,7 @@ namespace Amazon\Payment\Model\Ipn;
 
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;
 use Amazon\Payment\Api\Ipn\ProcessorInterface;
-use Amazon\Payment\Api\PaymentManagement\AuthorizationInterface;
+use Amazon\Payment\Model\PaymentManagement\Authorization;
 use Amazon\Payment\Domain\Details\AmazonAuthorizationDetailsFactory;
 use Amazon\Payment\Model\ResourceModel\PendingAuthorization\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -30,7 +30,7 @@ class AuthorizationProcessor implements ProcessorInterface
     private $amazonAuthorizationDetailsFactory;
 
     /**
-     * @var AuthorizationInterface
+     * @var Authorization
      */
     private $authorization;
 
@@ -46,7 +46,7 @@ class AuthorizationProcessor implements ProcessorInterface
 
     public function __construct(
         AmazonAuthorizationDetailsFactory $amazonAuthorizationDetailsFactory,
-        AuthorizationInterface $authorization,
+        Authorization $authorization,
         CollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager
     ) {

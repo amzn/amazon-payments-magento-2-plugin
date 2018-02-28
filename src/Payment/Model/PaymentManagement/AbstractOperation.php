@@ -15,7 +15,6 @@
  */
 namespace Amazon\Payment\Model\PaymentManagement;
 
-use Amazon\Payment\Api\PaymentManagementInterface;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Event\ManagerInterface;

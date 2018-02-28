@@ -18,8 +18,7 @@ namespace Amazon\Payment\Model\PaymentManagement;
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
-use Amazon\Payment\Api\PaymentManagement\AuthorizationInterface;
-use Amazon\Payment\Api\PaymentManagementInterface;
+use Amazon\Payment\Model\PaymentManagement;
 use Amazon\Payment\Domain\AmazonAuthorizationDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonGetOrderDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonOrderStatus;
@@ -45,7 +44,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Authorization extends AbstractOperation implements AuthorizationInterface
+class Authorization extends AbstractOperation
 {
     /**
      * @var PendingAuthorizationInterfaceFactory
@@ -93,7 +92,7 @@ class Authorization extends AbstractOperation implements AuthorizationInterface
     private $storeManager;
 
     /**
-     * @var PaymentManagementInterface
+     * @var PaymentManagement
      */
     private $paymentManagement;
 
@@ -123,7 +122,7 @@ class Authorization extends AbstractOperation implements AuthorizationInterface
      * @param ManagerInterface                          $eventManager
      * @param AmazonGetOrderDetailsResponseFactory      $amazonGetOrderDetailsResponseFactory
      * @param StoreManagerInterface                     $storeManager
-     * @param PaymentManagementInterface                $paymentManagement
+     * @param PaymentManagement                         $paymentManagement
      * @param LoggerInterface                           $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -141,7 +140,7 @@ class Authorization extends AbstractOperation implements AuthorizationInterface
         ManagerInterface $eventManager,
         AmazonGetOrderDetailsResponseFactory $amazonGetOrderDetailsResponseFactory,
         StoreManagerInterface $storeManager,
-        PaymentManagementInterface $paymentManagement,
+        PaymentManagement $paymentManagement,
         LoggerInterface $logger
     ) {
         $this->clientFactory                             = $clientFactory;
