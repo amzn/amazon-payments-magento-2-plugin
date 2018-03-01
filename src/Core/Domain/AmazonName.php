@@ -16,9 +16,8 @@
 namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonNameInterface;
-use Magento\Framework\Api\AbstractSimpleObject;
 
-class AmazonName extends AbstractSimpleObject implements AmazonNameInterface
+class AmazonName extends \Magento\Framework\DataObject implements AmazonNameInterface
 {
     const FIRST_NAME = 'first_name';
     const LAST_NAME  = 'last_name';
@@ -28,7 +27,7 @@ class AmazonName extends AbstractSimpleObject implements AmazonNameInterface
      */
     public function getFirstName()
     {
-        return $this->_get(self::FIRST_NAME);
+        return $this->getData(self::FIRST_NAME);
     }
 
     /**
@@ -36,22 +35,6 @@ class AmazonName extends AbstractSimpleObject implements AmazonNameInterface
      */
     public function getLastName()
     {
-        return $this->_get(self::LAST_NAME);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setFirstName($name)
-    {
-        return $this->setData(self::FIRST_NAME, $name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLastName($name)
-    {
-        return $this->setData(self::LAST_NAME, $name);
+        return $this->getData(self::LAST_NAME);
     }
 }

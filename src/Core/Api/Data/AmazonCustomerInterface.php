@@ -47,36 +47,4 @@ interface AmazonCustomerInterface
      * @return string
      */
     public function getId();
-
-    /**
-     * Set full name
-     *
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name);
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return $this
-     */
-    public function setEmail($email);
-
-    /**
-     * Set id
-     *
-     * @param string $id
-     * @return $this
-     */
-    public function setId($id);
-
-    /**
-     * Set country
-     *
-     * @param string $country
-     * @return $this
-     */
-    public function setCountry($country);
 }

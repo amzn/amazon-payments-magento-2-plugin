@@ -18,28 +18,8 @@ namespace Amazon\Core\Domain;
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
-class AmazonCustomer implements AmazonCustomerInterface
+class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCustomerInterface
 {
-    /**
-     * @var string
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $email;
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $country;
-
     /**
      * @var AmazonName
      */
@@ -52,10 +32,12 @@ class AmazonCustomer implements AmazonCustomerInterface
 
     /**
      * @param AmazonNameFactory $amazonNameFactory
+     * @param array $data
      */
-    public function __construct(AmazonNameFactory $amazonNameFactory)
+    public function __construct(AmazonNameFactory $amazonNameFactory, $data = [])
     {
         $this->amazonNameFactory = $amazonNameFactory;
+        parent::__construct($data);
     }
 
     /**
@@ -63,7 +45,7 @@ class AmazonCustomer implements AmazonCustomerInterface
      */
     public function getEmail()
     {
-        return $this->email;
+        return $this->getData('email');
     }
 
     /**
@@ -71,7 +53,7 @@ class AmazonCustomer implements AmazonCustomerInterface
      */
     public function getId()
     {
-        return $this->id;
+        return $this->getData('id');
     }
 
     /**
@@ -88,42 +70,6 @@ class AmazonCustomer implements AmazonCustomerInterface
     public function getLastName()
     {
         return $this->getAmazonName()->getLastName();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-        return $this;
     }
 
     /**

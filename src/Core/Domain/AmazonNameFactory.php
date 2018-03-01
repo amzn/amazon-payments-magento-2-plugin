@@ -61,22 +61,33 @@ class AmazonNameFactory
      */
     public function create(array $data = [])
     {
-        $instanceClassName = AmazonNameBuilder::class;
+        $nameParts = explode(' ', trim($data['name']), 2);
+        $data['first_name'] = $nameParts[0];
+        $data['last_name'] = $nameParts[1] ?? '.';
 
-        if (isset($data['country'])) {
-            $countryCode = strtoupper($data['country']);
+        $amazonName = $this->objectManager->create(AmazonName::class, ['data' => $data]);
 
-            $this->perCountryNameHandlers = array_change_key_case($this->perCountryNameHandlers, CASE_UPPER);
-
-            if (!empty($this->perCountryNameHandlers[$countryCode])) {
-                $instanceClassName = (string) $this->perCountryNameHandlers[$countryCode];
-            }
+        $countryCode = strtoupper($data['country']);
+        if (empty($this->nameDecoratorPool[$countryCode])) {
+            return $amazonName;
         }
 
-        $amazonNameBuilder = $this->objectManager->create($instanceClassName);
+        $amazonName = $this->objectManager->create(
+            $this->nameDecoratorPool[$countryCode],
+            [
+                'amazonName' => $amazonName,
+            ]
+        );
 
-        return $amazonNameBuilder
-            ->setName($data['name'])
-            ->build($this->amazonName);
+        if (!$amazonName instanceof AmazonName) {
+            throw new LocalizedException(
+                __(
+                    'Address country handler %1 must be of type %2',
+                    [$this->nameDecoratorPool[$countryCode], AmazonName::class]
+                )
+            );
+        }
+
+        return $amazonName;
     }
 }

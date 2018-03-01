@@ -148,11 +148,13 @@ abstract class Login extends Action
                              ->getUserInfo($this->getRequest()->getParam('access_token'));
 
             if (is_array($userInfo) && isset($userInfo['user_id'])) {
-                $amazonCustomer = $this->amazonCustomerFactory->create()
-                    ->setId($userInfo['user_id'])
-                    ->setEmail($userInfo['email'])
-                    ->setName($userInfo['name'])
-                    ->setCountry($this->amazonCoreHelper->getRegion());
+                $data = [
+                    'user_id' => $userInfo['user_id'],
+                    'email' => $userInfo['email'],
+                    'name' => $userInfo['name'],
+                    'country' => $this->amazonCoreHelper->getRegion(),
+                ];
+                $amazonCustomer = $this->amazonCustomerFactory->create(['data' => $data]);
 
                 return $amazonCustomer;
             }

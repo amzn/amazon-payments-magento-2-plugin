@@ -31,7 +31,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     private $amazonNameFactory;
 
     /**
-     * @param AmazonNameFactory $addressNameFactory
+     * @param AmazonNameFactory $amazonNameFactory
      * @param array $data
      */
     public function __construct(AmazonNameFactory $amazonNameFactory, $data)

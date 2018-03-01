@@ -19,8 +19,8 @@
     </type>
     <type name="Amazon\Core\Domain\AmazonNameFactory">
         <arguments>
-            <argument name="perCountryNameHandlers" xsi:type="array">
-                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonNameJpBuilder</item>
+            <argument name="nameDecoratorPool" xsi:type="array">
+                <item name="JP" xsi:type="string">Amazon\Core\Domain\AmazonNameDecoratorJp</item>
             </argument>
         </arguments>
     </type>

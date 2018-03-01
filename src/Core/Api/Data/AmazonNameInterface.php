@@ -33,18 +33,4 @@ interface AmazonNameInterface
      * @return string
      */
     public function getLastName();
-
-    /**
-     * Set first name
-     *
-     * @return $this
-     */
-    public function setFirstName($name);
-
-    /**
-     * Set last name
-     *
-     * @return $this
-     */
-    public function setLastName($name);
 }

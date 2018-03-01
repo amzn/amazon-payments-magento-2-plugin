@@ -28,19 +28,12 @@ class AmazonCustomerFactory
     private $objectManager = null;
 
     /**
-     * @var AmazonCustomer
-     */
-    private $amazonCustomer;
-
-    /**
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        AmazonCustomerInterface $amazonCustomer
+        ObjectManagerInterface $objectManager
     ) {
         $this->objectManager  = $objectManager;
-        $this->amazonCustomer = $amazonCustomer;
     }
 
     /**
@@ -49,10 +42,6 @@ class AmazonCustomerFactory
      */
     public function create(array $data = [])
     {
-        $amazonCustomerBuilder = $this->objectManager->create(AmazonCustomerBuilder::class);
-
-        return $amazonCustomerBuilder
-            ->setData($data)
-            ->build($this->amazonCustomer);
+        return $this->objectManager->create(AmazonCustomer::class, ['data' => $data]);
     }
 }

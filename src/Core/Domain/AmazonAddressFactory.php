@@ -35,22 +35,22 @@ class AmazonAddressFactory
     /**
      * @var AmazonNameFactory
      */
-    private $addressNameFactory;
+    private $amazonNameFactory;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param AmazonNameFactory $addressNameFactory
+     * @param AmazonNameFactory $amazonNameFactory
      * @param array $addressDecoratorPool Per-country custom decorators of incoming address data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        AmazonNameFactory $addressNameFactory,
+        AmazonNameFactory $amazonNameFactory,
         array $addressDecoratorPool = []
     ) {
         $this->objectManager = $objectManager;
-        $this->addressNameFactory = $addressNameFactory;
+        $this->amazonNameFactory = $amazonNameFactory;
         $this->addressDecoratorPool = $addressDecoratorPool;
     }
 
@@ -63,7 +63,7 @@ class AmazonAddressFactory
     public function create(array $responseData = []): AmazonAddressInterface
     {
         $address = $responseData['address'];
-        $addressName = $this->addressNameFactory->create(
+        $amazonName = $this->amazonNameFactory->create(
             ['name' => $address['Name'], 'country' => $address['CountryCode']]
         );
 
@@ -74,8 +74,8 @@ class AmazonAddressFactory
             'telephone' => $address['Phone'] ?? '',
             'state' => $address['StateOrRegion'] ?? '',
             'name' => $address['Name'],
-            'firstName' => $addressName->getFirstName(),
-            'lastName' => $addressName->getLastName(),
+            'firstName' => $amazonName->getFirstName(),
+            'lastName' => $amazonName->getLastName(),
             'lines' => $this->getLines($address)
         ];
 
@@ -90,7 +90,6 @@ class AmazonAddressFactory
             $this->addressDecoratorPool[$countryCode],
             [
                 'amazonAddress' => $amazonAddress,
-                'responseData' => $responseData
             ]
         );
 
