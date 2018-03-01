@@ -79,7 +79,7 @@ class AmazonAddressFactory
             'lines' => $this->getLines($address)
         ];
 
-        $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['addressData' => $data]);
+        $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['data' => $data]);
 
         $countryCode = strtoupper($address['CountryCode']);
         if (empty($this->addressDecoratorPool[$countryCode])) {
