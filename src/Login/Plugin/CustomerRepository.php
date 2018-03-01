@@ -28,7 +28,7 @@ class CustomerRepository
     private $customerManagement;
 
     /**
-     * @var Data
+     * @var AmazonHelper
      */
     private $amazonHelper;
 
@@ -39,7 +39,7 @@ class CustomerRepository
      * @param AmazonHelper $amazonHelper
      */
     public function __construct(
-        customerManagementInterface $customerManagement,
+        CustomerManagementInterface $customerManagement,
         AmazonHelper $amazonHelper
     ) {
         $this->customerManagement       = $customerManagement;
