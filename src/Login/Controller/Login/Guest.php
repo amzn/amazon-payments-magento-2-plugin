@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Controller\Login;
 
-use Amazon\Core\Domain\AmazonCustomer;
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
 
 class Guest extends \Amazon\Login\Controller\Login
 {
@@ -37,10 +37,10 @@ class Guest extends \Amazon\Login\Controller\Login
     }
 
     /**
-     * @param AmazonCustomer $amazonCustomer
+     * @param AmazonCustomerInterface $amazonCustomer
      * @return void
      */
-    protected function storeUserInfoToSession(AmazonCustomer $amazonCustomer)
+    protected function storeUserInfoToSession(AmazonCustomerInterface $amazonCustomer)
     {
         $this->customerSession->setAmazonCustomer($amazonCustomer);
     }

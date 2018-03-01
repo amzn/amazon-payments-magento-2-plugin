@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Model\Customer;
 
-use Amazon\Core\Domain\AmazonCustomer;
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Api\Customer\CompositeMatcherInterface;
 use Amazon\Login\Api\Customer\MatcherInterface;
 
@@ -39,7 +39,7 @@ class CompositeMatcher implements CompositeMatcherInterface
     /**
      * {@inheritDoc}
      */
-    public function match(AmazonCustomer $amazonCustomer)
+    public function match(AmazonCustomerInterface $amazonCustomer)
     {
         foreach ($this->matchers as $matcher) {
             if ($customerData = $matcher->match($amazonCustomer)) {
