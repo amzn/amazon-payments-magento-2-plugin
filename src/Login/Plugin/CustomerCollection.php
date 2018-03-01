@@ -24,7 +24,7 @@ use Magento\Framework\DB\Select;
 class CustomerCollection
 {
     /**
-     * @var Data
+     * @var AmazonHelper
      */
     private $amazonHelper;
 
@@ -61,11 +61,9 @@ class CustomerCollection
             if (0 === count($attribute)) {
                 return $collection;
             }
-
-            return $proceed($attribute, $condition, $joinType);
         }
 
-        return $collection;
+        return $proceed($attribute, $condition, $joinType);
     }
 
     /**
