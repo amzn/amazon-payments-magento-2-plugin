@@ -16,6 +16,7 @@
 namespace Amazon\Login\Controller;
 
 use Amazon\Core\Client\ClientFactoryInterface;
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Core\Api\Data\AmazonCustomerInterfaceFactory;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
@@ -25,11 +26,9 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 use Amazon\Login\Api\Customer\CompositeMatcherInterface;
 use Amazon\Login\Api\CustomerLinkManagementInterface;
-use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Login with token controller

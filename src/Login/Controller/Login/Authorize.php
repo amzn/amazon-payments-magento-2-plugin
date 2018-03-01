@@ -18,6 +18,7 @@ namespace Amazon\Login\Controller\Login;
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Domain\ValidationCredentials;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\NotFoundException;
 use Zend_Validate;
 
 class Authorize extends \Amazon\Login\Controller\Login

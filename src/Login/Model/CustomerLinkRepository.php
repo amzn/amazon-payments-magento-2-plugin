@@ -135,7 +135,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
         try {
             $this->resourceModel->delete($customerLink);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new \Magento\Framework\Exception\CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;
     }
@@ -156,7 +156,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
         try {
             $this->resourceModel->save($customerLink);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(
+            throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __('Could not save Amazon customer link: %1', $exception->getMessage()),
                 $exception
             );
