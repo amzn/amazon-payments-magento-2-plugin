@@ -87,7 +87,7 @@ class Listener extends \Magento\Framework\App\Action\Action
             if ($this->getRequest()->getQuery('isAjax', false) || $this->getRequest()->getQuery('ajax', false)) {
                 $this->getResponse()->representJson(
                     $this->_objectManager->get(
-                        'Magento\Framework\Json\Helper\Data'
+                        \Magento\Framework\Json\Helper\Data::class
                     )->jsonEncode(
                         ['error' => true, 'message' => $_keyErrorMsg]
                     )

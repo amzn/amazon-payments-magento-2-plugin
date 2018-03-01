@@ -120,7 +120,8 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     /**
      * {@inheritdoc}
      */
-    public function getLine($lineNumber) {
+    public function getLine($lineNumber)
+    {
         $this->amazonAddress->getLine($lineNumber);
     }
 }

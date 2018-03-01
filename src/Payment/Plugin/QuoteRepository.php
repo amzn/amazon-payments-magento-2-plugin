@@ -28,11 +28,6 @@ class QuoteRepository
     private $quoteLinkManagement;
 
     /**
-     * @var QuoteLinkInterfaceFactory
-     */
-    private $quoteLinkFactory;
-
-    /**
      * @var Data
      */
     private $coreHelper;
