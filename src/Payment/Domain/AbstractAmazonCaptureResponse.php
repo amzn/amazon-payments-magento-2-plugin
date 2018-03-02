@@ -25,7 +25,7 @@ abstract class AbstractAmazonCaptureResponse
     /**
      * @var AmazonCaptureDetails
      */
-    protected $details;
+    private $details;
 
     /**
      * AbstractAmazonCaptureResponse constructor.

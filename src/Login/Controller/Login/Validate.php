@@ -24,7 +24,7 @@ class Validate extends Action
     /**
      * @var PageFactory
      */
-    protected $pageFactory;
+    private $pageFactory;
 
     /**
      * Validate constructor.

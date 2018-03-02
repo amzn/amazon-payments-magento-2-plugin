@@ -23,12 +23,12 @@ class AmazonRefundDetails
     /**
      * @var AmazonRefundStatus
      */
-    protected $refundStatus;
+    private $refundStatus;
 
     /**
      * @var string|null
      */
-    protected $refundId;
+    private $refundId;
 
     /**
      * @param AmazonRefundStatusFactory $amazonRefundStatusFactory

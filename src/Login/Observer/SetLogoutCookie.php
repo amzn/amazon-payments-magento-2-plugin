@@ -15,6 +15,7 @@
  */
 namespace Amazon\Login\Observer;
 
+use Amazon\Core\Helper\Data;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
@@ -27,23 +28,31 @@ class SetLogoutCookie implements ObserverInterface
     /**
      * @var CookieManagerInterface
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
      * @var CookieMetadataFactory
      */
-    protected $cookieMetadataFactory;
+    private $cookieMetadataFactory;
+
+    /**
+     * @var Data
+     */
+    private $coreHelper;
 
     /**
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory  $cookieMetadataFactory
+     * @param Data $coreHelper
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory
+        CookieMetadataFactory $cookieMetadataFactory,
+        Data $coreHelper
     ) {
         $this->cookieManager         = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->coreHelper            = $coreHelper;
     }
 
     /**
@@ -51,12 +60,14 @@ class SetLogoutCookie implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $cookieMeta = $this->cookieMetadataFactory
-            ->createPublicCookieMetadata()
-            ->setDuration(86400)
-            ->setPath('/')
-            ->setHttpOnly(false);
+        if ($this->coreHelper->isLwaEnabled()) {
+            $cookieMeta = $this->cookieMetadataFactory
+                ->createPublicCookieMetadata()
+                ->setDuration(86400)
+                ->setPath('/')
+                ->setHttpOnly(false);
 
-        $this->cookieManager->setPublicCookie(self::LOGGEDOUT_COOKIE, '1', $cookieMeta);
+            $this->cookieManager->setPublicCookie(self::LOGGEDOUT_COOKIE, '1', $cookieMeta);
+        }
     }
 }

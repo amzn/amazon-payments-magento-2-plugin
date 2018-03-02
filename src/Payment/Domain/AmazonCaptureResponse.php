@@ -17,7 +17,7 @@ namespace Amazon\Payment\Domain;
 
 class AmazonCaptureResponse extends AbstractAmazonCaptureResponse
 {
-    protected $resultKey = 'CaptureResult';
+    private $resultKey = 'CaptureResult';
 
     /**
      * {@inheritDoc}

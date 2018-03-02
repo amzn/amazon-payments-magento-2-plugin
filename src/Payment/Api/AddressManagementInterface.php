@@ -15,6 +15,9 @@
  */
 namespace Amazon\Payment\Api;
 
+/**
+ * @api
+ */
 interface AddressManagementInterface
 {
     /**

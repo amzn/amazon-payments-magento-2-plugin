@@ -33,7 +33,7 @@ class PendingAuthorization extends AbstractDb
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
-        $select->forUpdate($object->getLockOnLoad());
+        $select->forUpdate($object->hasLockOnLoad());
 
         return $select;
     }

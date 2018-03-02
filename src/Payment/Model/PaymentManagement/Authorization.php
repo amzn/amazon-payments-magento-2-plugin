@@ -18,8 +18,7 @@ namespace Amazon\Payment\Model\PaymentManagement;
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
-use Amazon\Payment\Api\PaymentManagement\AuthorizationInterface;
-use Amazon\Payment\Api\PaymentManagementInterface;
+use Amazon\Payment\Model\PaymentManagement;
 use Amazon\Payment\Domain\AmazonAuthorizationDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonGetOrderDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonOrderStatus;
@@ -42,102 +41,106 @@ use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
-class Authorization extends AbstractOperation implements AuthorizationInterface
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Authorization extends AbstractOperation
 {
     /**
      * @var PendingAuthorizationInterfaceFactory
      */
-    protected $pendingAuthorizationFactory;
+    private $pendingAuthorizationFactory;
 
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var AmazonAuthorizationDetailsResponseFactory
      */
-    protected $amazonAuthorizationDetailsResponseFactory;
+    private $amazonAuthorizationDetailsResponseFactory;
 
     /**
      * @var AmazonAuthorization
      */
-    protected $amazonAuthorizationValidator;
+    private $amazonAuthorizationValidator;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    protected $orderPaymentRepository;
+    private $orderPaymentRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var ManagerInterface
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      * @var AmazonGetOrderDetailsResponseFactory
      */
-    protected $amazonGetOrderDetailsResponseFactory;
+    private $amazonGetOrderDetailsResponseFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
-     * @var PaymentManagementInterface
+     * @var PaymentManagement
      */
-    protected $paymentManagement;
+    private $paymentManagement;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var bool
      */
-    protected $throwExceptions = false;
+    private $throwExceptions = false;
 
     /**
      * Authorization constructor.
      *
+     * @param NotifierInterface                         $notifier
+     * @param UrlInterface                              $urlBuilder
+     * @param SearchCriteriaBuilderFactory              $searchCriteriaBuilderFactory
+     * @param InvoiceRepositoryInterface                $invoiceRepository
      * @param ClientFactoryInterface                    $clientFactory
      * @param PendingAuthorizationInterfaceFactory      $pendingAuthorizationFactory
      * @param AmazonAuthorizationDetailsResponseFactory $amazonAuthorizationDetailsResponseFactory
      * @param AmazonAuthorization                       $amazonAuthorizationValidator
-     * @param NotifierInterface                         $notifier
-     * @param UrlInterface                              $urlBuilder
-     * @param SearchCriteriaBuilderFactory              $searchCriteriaBuilderFactory
      * @param OrderPaymentRepositoryInterface           $orderPaymentRepository
      * @param OrderRepositoryInterface                  $orderRepository
-     * @param InvoiceRepositoryInterface                $invoiceRepository
      * @param ManagerInterface                          $eventManager
      * @param AmazonGetOrderDetailsResponseFactory      $amazonGetOrderDetailsResponseFactory
      * @param StoreManagerInterface                     $storeManager
-     * @param PaymentManagementInterface                $paymentManagement
+     * @param PaymentManagement                         $paymentManagement
      * @param LoggerInterface                           $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        NotifierInterface $notifier,
+        UrlInterface $urlBuilder,
+        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
+        InvoiceRepositoryInterface $invoiceRepository,
         ClientFactoryInterface $clientFactory,
         PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         AmazonAuthorizationDetailsResponseFactory $amazonAuthorizationDetailsResponseFactory,
         AmazonAuthorization $amazonAuthorizationValidator,
-        NotifierInterface $notifier,
-        UrlInterface $urlBuilder,
-        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         OrderPaymentRepositoryInterface $orderPaymentRepository,
         OrderRepositoryInterface $orderRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
         ManagerInterface $eventManager,
         AmazonGetOrderDetailsResponseFactory $amazonGetOrderDetailsResponseFactory,
         StoreManagerInterface $storeManager,
-        PaymentManagementInterface $paymentManagement,
+        PaymentManagement $paymentManagement,
         LoggerInterface $logger
     ) {
         $this->clientFactory                             = $clientFactory;
@@ -217,7 +220,7 @@ class Authorization extends AbstractOperation implements AuthorizationInterface
                 'amazon_authorization_id' => $authorizationId
             ]);
 
-            $response             = $this->amazonAuthorizationDetailsResponseFactory->create(['response' => $responseParser]);
+            $response = $this->amazonAuthorizationDetailsResponseFactory->create(['response' => $responseParser]);
             $authorizationDetails = $response->getDetails();
         }
 

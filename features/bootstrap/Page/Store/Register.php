@@ -23,9 +23,9 @@ class Register extends Page
 {
     use PageTrait, AmazonLoginTrait;
 
-    protected $path = '/customer/account/create';
+    private $path = '/customer/account/create';
 
-    protected $elements
+    private $elements
         = [
             'open-amazon-login' => ['css' => '#OffAmazonPaymentsWidgets0']
         ];

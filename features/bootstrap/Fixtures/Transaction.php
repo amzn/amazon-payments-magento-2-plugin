@@ -24,7 +24,7 @@ class Transaction extends BaseFixture
     /**
      * @var OrderFixture
      */
-    protected $orderFixture;
+    private $orderFixture;
 
     public function __construct()
     {

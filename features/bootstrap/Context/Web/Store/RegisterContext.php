@@ -24,7 +24,7 @@ class RegisterContext implements SnippetAcceptingContext
     /**
      * @var Register
      */
-    protected $registerPage;
+    private $registerPage;
 
     public function __construct(Register $registerPage)
     {

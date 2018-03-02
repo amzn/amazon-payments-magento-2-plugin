@@ -23,9 +23,9 @@ class Login extends Page
 {
     use PageTrait, AmazonLoginTrait;
 
-    protected $path = '/customer/account/login/';
+    private $path = '/customer/account/login/';
 
-    protected $elements
+    private $elements
         = [
             'login'             => ['css' => '#send2'],
             'open-amazon-login' => ['css' => '#OffAmazonPaymentsWidgets0'],

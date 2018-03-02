@@ -26,22 +26,22 @@ class ClientFactory implements ClientFactoryInterface
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var string
      */
-    protected $instanceName;
+    private $instanceName;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * ClientFactory constructor.

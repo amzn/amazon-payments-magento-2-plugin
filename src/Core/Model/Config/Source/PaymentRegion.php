@@ -19,15 +19,13 @@ use Magento\Framework\Option\ArrayInterface;
 
 class PaymentRegion implements ArrayInterface
 {
-    const UNDEFINED_OPTION_LABEL = '-- Please Select --';
-
     /**
      * {@inheritdoc}
      */
     public function toOptionArray()
     {
         return [
-            ['value' => '', 'label' => __(self::UNDEFINED_OPTION_LABEL)],
+            ['value' => '', 'label' => __('-- Please Select --')],
             ['value' => 'de', 'label' => __('Euro Region')],
             ['value' => 'uk', 'label' => __('United Kingdom')],
             ['value' => 'us', 'label' => __('United States')],

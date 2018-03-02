@@ -23,7 +23,7 @@ class CheckoutConfigProvider implements ConfigProviderInterface
     /**
      * @var CustomerSession
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
      * @param CustomerSession $customerSession

@@ -29,32 +29,32 @@ class BillingContext implements SnippetAcceptingContext
     /**
      * @var Checkout
      */
-    protected $checkoutPage;
+    private $checkoutPage;
 
     /**
      * @var Messages
      */
-    protected $messagesElement;
+    private $messagesElement;
 
     /**
      * @var PaymentMethods
      */
-    protected $paymentMethodsElement;
+    private $paymentMethodsElement;
 
     /**
      * @var OrderFixture
      */
-    protected $orderFixture;
+    private $orderFixture;
 
     /**
      * @var AmazonOrderFixture
      */
-    protected $amazonOrderFixture;
+    private $amazonOrderFixture;
 
     /**
      * @var string|null
      */
-    protected $addressConsentToken = null;
+    private $addressConsentToken = null;
 
     public function __construct(
         Checkout $checkoutPage,

@@ -25,12 +25,12 @@ class IdMatcher implements MatcherInterface
     /**
      * @var CustomerRepositoryInterface
      */
-    protected $customerRepository;
+    private $customerRepository;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * IdMatcher constructor.

@@ -24,12 +24,12 @@ class JsonConfigDataValidator extends AbstractValidator
     /**
      * @var DecoderInterface
      */
-    protected $jsonDecoder;
+    private $jsonDecoder;
 
     /**
      * @var Data
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @param DecoderInterface $jsonDecoder

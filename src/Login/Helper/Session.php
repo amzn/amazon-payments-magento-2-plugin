@@ -26,12 +26,12 @@ class Session
     /**
      * @var CustomerSession
      */
-    protected $session;
+    private $session;
 
     /**
      * @var EventManagerInterface
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      * @param CustomerSession $session

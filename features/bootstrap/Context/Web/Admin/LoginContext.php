@@ -25,12 +25,12 @@ class LoginContext implements SnippetAcceptingContext
     /**
      * @var AdminUserFixture
      */
-    protected $adminUserFixture;
+    private $adminUserFixture;
 
     /**
      * @var Login
      */
-    protected $loginPage;
+    private $loginPage;
 
     public function __construct(Login $loginPage)
     {

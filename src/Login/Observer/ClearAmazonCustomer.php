@@ -24,7 +24,7 @@ class ClearAmazonCustomer implements ObserverInterface
     /**
      * @var SessionHelper
      */
-    protected $sessionHelper;
+    private $sessionHelper;
 
     /**
      * @param SessionHelper $sessionHelper

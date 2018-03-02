@@ -13,22 +13,18 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Core\Domain;
+namespace Amazon\Payment\Api;
 
-class AmazonCustomerJp extends AmazonCustomer
+/**
+ * @api
+ */
+interface QuoteLinkManagementInterface
 {
     /**
-     * AmazonCustomer constructor.
+     * Link Amazon Reference ID to cart quote
      *
-     * @param string $id
-     * @param string $email
-     * @param string $name
+     * @param CartInterface $cartInterface
+     * @return void
      */
-    public function __construct($id, $email, $name)
-    {
-        $this->id    = $id;
-        $this->email = $email;
-        $this->name = new AmazonNameJp($name);
-    }
-
+    public function setAmazonOrderReferenceIdExtensionAttribute(\Magento\Quote\Api\Data\CartInterface $cartInterface);
 }

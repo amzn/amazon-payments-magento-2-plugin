@@ -17,7 +17,7 @@ namespace Amazon\Payment\Domain;
 
 class AmazonRefundDetailsResponse extends AbstractAmazonRefundResponse
 {
-    protected $resultKey = 'GetRefundDetailsResult';
+    private $resultKey = 'GetRefundDetailsResult';
 
     /**
      * {@inheritDoc}

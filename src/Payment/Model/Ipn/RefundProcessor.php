@@ -27,22 +27,22 @@ class RefundProcessor implements ProcessorInterface
     /**
      * @var AmazonRefundDetailsFactory
      */
-    protected $amazonRefundDetailsFactory;
+    private $amazonRefundDetailsFactory;
 
     /**
      * @var QueuedRefundUpdater
      */
-    protected $queuedRefundUpdater;
+    private $queuedRefundUpdater;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     public function __construct(
         AmazonRefundDetailsFactory $amazonRefundDetailsFactory,

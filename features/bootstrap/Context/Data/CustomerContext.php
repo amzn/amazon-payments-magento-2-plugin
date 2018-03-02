@@ -26,7 +26,7 @@ class CustomerContext implements SnippetAcceptingContext
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
 
     public function __construct()
     {

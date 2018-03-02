@@ -25,12 +25,12 @@ class AmazonContext implements SnippetAcceptingContext
     /**
      * @var Checkout
      */
-    protected $checkoutPage;
+    private $checkoutPage;
 
     /**
      * @var AmazonOrderFixture
      */
-    protected $amazonOrderFixture;
+    private $amazonOrderFixture;
 
     public function __construct(Checkout $checkoutPage)
     {

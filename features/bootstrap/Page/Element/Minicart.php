@@ -20,7 +20,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
 class Minicart extends Element
 {
-    protected $selector = 'div[data-block="minicart"]';
+    private $selector = 'div[data-block="minicart"]';
 
     public function collapseMinicartContent()
     {

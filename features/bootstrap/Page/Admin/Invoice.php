@@ -23,13 +23,13 @@ class Invoice extends Page
 {
     use PageTrait;
 
-    protected $elements
+    private $elements
         = [
             'credit-memo' => ['css' => 'button.credit-memo'],
             'error'       => ['css' => '.message-error']
         ];
 
-    protected $path = '/admin/sales/order_invoice/view/invoice_id/{id}';
+    private $path = '/admin/sales/order_invoice/view/invoice_id/{id}';
 
     public function openWithInvoiceId($invoiceId)
     {

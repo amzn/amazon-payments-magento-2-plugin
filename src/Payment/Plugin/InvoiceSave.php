@@ -27,12 +27,12 @@ class InvoiceSave
     /**
      * @var OrderInterfaceFactory
      */
-    protected $orderFactory;
+    private $orderFactory;
 
     /**
      * @var Context
      */
-    protected $context;
+    private $context;
 
     public function __construct(OrderInterfaceFactory $orderFactory, Context $context)
     {
@@ -50,7 +50,8 @@ class InvoiceSave
             $lastInvoice = $order->getInvoiceCollection()->getLastItem();
 
             if ($lastInvoice && Invoice::STATE_OPEN == $lastInvoice->getState()) {
-                $this->context->getMessageManager()->addErrorMessage(__('Capture pending approval from the payment gateway'));
+                $this->context->getMessageManager()->addErrorMessage(__('Capture pending approval from ' .
+                    'the payment gateway'));
             }
         }
 

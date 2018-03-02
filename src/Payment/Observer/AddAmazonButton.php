@@ -25,12 +25,12 @@ class AddAmazonButton implements ObserverInterface
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var ShortcutFactory
      */
-    protected $shortcutFactory;
+    private $shortcutFactory;
 
     /**
      * @param Data $coreHelper
@@ -50,7 +50,6 @@ class AddAmazonButton implements ObserverInterface
         $shortcutButtons = $observer->getEvent()->getContainer();
 
         if ($this->coreHelper->isPwaEnabled() && $this->coreHelper->isCurrentCurrencySupportedByAmazon()) {
-
             $params = [
                 'shortcutValidator' => $this->shortcutFactory->create($observer->getEvent()->getCheckoutSession()),
             ];

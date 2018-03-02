@@ -28,12 +28,12 @@ class ApiCredentialsValidator extends AbstractValidator
     /**
      * @var ClientFactoryInterface
      */
-    protected $amazonHttpClientFactory;
+    private $amazonHttpClientFactory;
 
     /**
      * @var Data
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @param ClientFactoryInterface $amazonHttpClientFactory

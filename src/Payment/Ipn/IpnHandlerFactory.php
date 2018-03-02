@@ -27,27 +27,27 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var string
      */
-    protected $instanceName;
+    private $instanceName;
 
     /**
      * @var EnvironmentChecker
      */
-    protected $environmentChecker;
+    private $environmentChecker;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -69,7 +69,10 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
     public function create($headers, $body)
     {
         if ($this->environmentChecker->isTestMode()) {
-            return new MockIpnHandler($headers, $body);
+            return $this->objectManager->create(
+                MockIpnHandler::class,
+                ['requestHeaders' => $headers, 'requestBody' => $body]
+            );
         }
 
         $handler = $this->objectManager->create(

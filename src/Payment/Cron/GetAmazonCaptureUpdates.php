@@ -18,7 +18,7 @@ namespace Amazon\Payment\Cron;
 use Amazon\Core\Helper\Data;
 use Amazon\Core\Model\Config\Source\UpdateMechanism;
 use Amazon\Payment\Api\Data\PendingCaptureInterface;
-use Amazon\Payment\Api\PaymentManagement\CaptureInterface;
+use Amazon\Payment\Model\PaymentManagement\Capture;
 use Amazon\Payment\Model\ResourceModel\PendingCapture\CollectionFactory;
 use Magento\Framework\Data\Collection;
 
@@ -27,26 +27,26 @@ class GetAmazonCaptureUpdates
     /**
      * @var int
      */
-    protected $limit;
+    private $limit;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
-     * @var CaptureInterface
+     * @var Capture
      */
-    protected $capture;
+    private $capture;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     public function __construct(
         CollectionFactory $collectionFactory,
-        CaptureInterface $capture,
+        Capture $capture,
         Data $coreHelper,
         $limit = 100
     ) {

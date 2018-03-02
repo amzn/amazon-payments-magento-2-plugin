@@ -19,7 +19,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
 class SandboxSimulation extends Element
 {
-    protected $selector = '.amazon-sandbox-simulator';
+    private $selector = '.amazon-sandbox-simulator';
 
     const SIMULATION_REJECTED = 'Authorization:Declined:AmazonRejected';
     const SIMILATION_TIMEOUT = 'Authorization:Declined:TransactionTimedOut';

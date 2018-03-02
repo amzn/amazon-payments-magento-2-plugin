@@ -15,41 +15,51 @@
  */
 namespace Amazon\Core\Domain;
 
-class AmazonCustomer
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
+use Magento\Framework\Api\AbstractSimpleObject;
+
+class AmazonCustomer implements AmazonCustomerInterface
 {
     /**
      * @var string
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
      */
-    protected $email;
+    private $email;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $country;
 
     /**
      * @var AmazonName
      */
-    protected $name;
+    private $amazonName;
 
     /**
-     * AmazonCustomer constructor.
-     *
-     * @param string $id
-     * @param string $email
-     * @param string $name
+     * @var AmazonNameFactory
      */
-    public function __construct($id, $email, $name)
+    private $amazonNameFactory;
+
+    /**
+     * @param AmazonNameFactory $amazonNameFactory
+     */
+    public function __construct(AmazonNameFactory $amazonNameFactory)
     {
-        $this->id    = $id;
-        $this->email = $email;
-        $this->name = new AmazonName($name);
+        $this->amazonNameFactory = $amazonNameFactory;
     }
 
     /**
-     * Get email
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getEmail()
     {
@@ -57,9 +67,7 @@ class AmazonCustomer
     }
 
     /**
-     * Get id
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getId()
     {
@@ -67,22 +75,68 @@ class AmazonCustomer
     }
 
     /**
-     * Get first name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstName()
     {
-        return $this->name->getFirstName();
+        return $this->getAmazonName()->getFirstName();
     }
 
     /**
-     * Get last name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastName()
     {
-        return $this->name->getLastName();
+        return $this->getAmazonName()->getLastName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    /**
+     * Get AmazonName
+     *
+     * @return AmazonName
+     */
+    private function getAmazonName()
+    {
+        if (null === $this->amazonName) {
+            $this->amazonName = $this->amazonNameFactory
+                ->create(['name' => $this->name, 'country' => $this->country]);
+        }
+        return $this->amazonName;
     }
 }

@@ -73,19 +73,23 @@
             }
         }
 
-        .field-tooltip .field-tooltip-content {
-            @abs-checkout-tooltip-content-position-top();
+        .field-tooltip {
+            display: none;
 
-            @media all and (max-width: @screen__m) {
+            .field-tooltip-content {
+                @abs-checkout-tooltip-content-position-top();
 
-                @right-shift: 56px;
-                right: -@right-shift;
-                top: 38px;
-                left: auto;
+                @media all and (max-width: @screen__m) {
 
-                &:before,
-                &:after {
-                    right: @right-shift;
+                    @right-shift: 56px;
+                    right: -@right-shift;
+                    top: 38px;
+                    left: auto;
+
+                    &:before,
+                    &:after {
+                        right: @right-shift;
+                    }
                 }
             }
         }

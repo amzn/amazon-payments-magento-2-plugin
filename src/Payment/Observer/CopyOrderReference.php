@@ -15,6 +15,7 @@
  */
 namespace Amazon\Payment\Observer;
 
+use Amazon\Core\Helper\Data;
 use Amazon\Payment\Api\Data\OrderLinkInterfaceFactory;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Magento\Framework\Event\Observer;
@@ -26,40 +27,49 @@ class CopyOrderReference implements ObserverInterface
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var OrderLinkInterfaceFactory
      */
-    protected $orderLinkFactory;
+    private $orderLinkFactory;
+
+    /**
+     * @var Data
+     */
+    private $coreHelper;
 
     public function __construct(
         QuoteLinkInterfaceFactory $quoteLinkFactory,
-        OrderLinkInterfaceFactory $orderLinkFactory
+        OrderLinkInterfaceFactory $orderLinkFactory,
+        Data $coreHelper
     ) {
         $this->quoteLinkFactory = $quoteLinkFactory;
         $this->orderLinkFactory = $orderLinkFactory;
+        $this->coreHelper       = $coreHelper;
     }
 
     public function execute(Observer $observer)
     {
-        $order = $observer->getOrder();
+        if ($this->coreHelper->isPwaEnabled()) {
+            $order = $observer->getOrder();
 
-        if ($order instanceof Order) {
-            $orderId = $order->getId();
-            $quoteId = $order->getQuoteId();
+            if ($order instanceof Order) {
+                $orderId = $order->getId();
+                $quoteId = $order->getQuoteId();
 
-            $quoteLink = $this->quoteLinkFactory->create();
-            $quoteLink->load($quoteId, 'quote_id');
+                $quoteLink = $this->quoteLinkFactory->create();
+                $quoteLink->load($quoteId, 'quote_id');
 
-            $amazonOrderReferenceId = $quoteLink->getAmazonOrderReferenceId();
-            if (! is_null($amazonOrderReferenceId)) {
-                $orderLink = $this->orderLinkFactory->create();
-                $orderLink
-                    ->load($orderId, 'order_id')
-                    ->setAmazonOrderReferenceId($amazonOrderReferenceId)
-                    ->setOrderId($orderId)
-                    ->save();
+                $amazonOrderReferenceId = $quoteLink->getAmazonOrderReferenceId();
+                if ($amazonOrderReferenceId !== null) {
+                    $orderLink = $this->orderLinkFactory->create();
+                    $orderLink
+                        ->load($orderId, 'order_id')
+                        ->setAmazonOrderReferenceId($amazonOrderReferenceId)
+                        ->setOrderId($orderId)
+                        ->save();
+                }
             }
         }
     }

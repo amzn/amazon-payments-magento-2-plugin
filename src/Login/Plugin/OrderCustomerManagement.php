@@ -15,7 +15,8 @@
  */
 namespace Amazon\Login\Plugin;
 
-use Amazon\Login\Api\CustomerManagerInterface;
+use Amazon\Core\Helper\Data;
+use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Amazon\Login\Helper\Session as LoginSessionHelper;
 use Amazon\Payment\Model\Method\Amazon as AmazonPaymentMethod;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -27,51 +28,60 @@ class OrderCustomerManagement
     /**
      * @var LoginSessionHelper
      */
-    protected $loginSessionHelper;
+    private $loginSessionHelper;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
-     * @var CustomerManagerInterface
+     * @var CustomerLinkManagementInterface
      */
-    protected $customerManager;
+    private $customerLinkManagement;
+
+    /**
+     * @var Data
+     */
+    private $coreHelper;
 
     /**
      * @param LoginSessionHelper $loginSessionHelper
      * @param OrderRepositoryInterface $orderRepository
-     * @param CustomerManagerInterface $customerManager
+     * @param CustomerLinkManagementInterface $customerLinkManagement
+     * @param Data $coreHelper
      */
     public function __construct(
         LoginSessionHelper $loginSessionHelper,
         OrderRepositoryInterface $orderRepository,
-        CustomerManagerInterface $customerManager
+        CustomerLinkManagementInterface $customerLinkManagement,
+        Data $coreHelper
     ) {
-        $this->loginSessionHelper = $loginSessionHelper;
-        $this->orderRepository = $orderRepository;
-        $this->customerManager = $customerManager;
+        $this->loginSessionHelper     = $loginSessionHelper;
+        $this->orderRepository        = $orderRepository;
+        $this->customerLinkManagement = $customerLinkManagement;
+        $this->coreHelper             = $coreHelper;
     }
 
     /**
      * @param OrderCustomerManagementInterface $subject
-     * @param \Closure $proceed
+     * @param CustomerInterface $result
      * @param int $orderId
      * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCreate(OrderCustomerManagementInterface $subject, \Closure $proceed, $orderId)
+    public function afterCreate(OrderCustomerManagementInterface $subject, $result, $orderId)
     {
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $customerData */
-        $customerData = $proceed($orderId);
-        $paymentMethodName = $this->orderRepository->get($orderId)->getPayment()->getMethod();
-        $isAmazonPayment = $paymentMethodName === AmazonPaymentMethod::PAYMENT_METHOD_CODE;
-        $amazonCustomer = $this->loginSessionHelper->getAmazonCustomer();
+        if ($this->coreHelper->isLwaEnabled()) {
+            $paymentMethodName = $this->orderRepository->get($orderId)->getPayment()->getMethod();
+            $isAmazonPayment   = $paymentMethodName === AmazonPaymentMethod::PAYMENT_METHOD_CODE;
+            $amazonCustomer    = $this->loginSessionHelper->getAmazonCustomer();
 
-        if ($isAmazonPayment && $amazonCustomer) {
-            $this->customerManager->updateLink($customerData->getId(), $amazonCustomer->getId());
+            if ($isAmazonPayment && $amazonCustomer) {
+                $this->customerLinkManagement->updateLink($result->getId(), $amazonCustomer->getId());
+            }
         }
 
-        return $customerData;
+        return $result;
     }
 }

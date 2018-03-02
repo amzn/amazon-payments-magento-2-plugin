@@ -20,12 +20,12 @@ abstract class AbstractAmazonStatus
     /**
      * @var string
      */
-    protected $state;
+    private $state;
 
     /**
      * @var string
      */
-    protected $reasonCode;
+    private $reasonCode;
 
     /**
      * AmazonAuthorizationStatus constructor.

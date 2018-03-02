@@ -13,21 +13,38 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Core\Domain;
+namespace Amazon\Core\Api\Data;
 
-class AmazonNameJp extends AmazonName
+/**
+ * @api
+ */
+interface AmazonNameInterface
 {
+    /**
+     * Get first name
+     *
+     * @return string
+     */
+    public function getFirstName();
 
     /**
-     * AmazonName constructor.
+     * Get last name
      *
-     * @param string $name
+     * @return string
      */
-    public function __construct($name)
-    {
-        $name      = mb_convert_kana($name, 's', 'utf-8');
-        $nameParts       = explode(' ', trim($name), 2);
-        $this->firstName = isset($nameParts[1]) ? $nameParts[1] : '.';
-        $this->lastName  = $nameParts[0];
-    }
+    public function getLastName();
+
+    /**
+     * Set first name
+     *
+     * @return $this
+     */
+    public function setFirstName($name);
+
+    /**
+     * Set last name
+     *
+     * @return $this
+     */
+    public function setLastName($name);
 }

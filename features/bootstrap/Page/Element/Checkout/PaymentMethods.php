@@ -19,7 +19,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
 class PaymentMethods extends Element
 {
-    protected $selector = '.payment-methods';
+    private $selector = '.payment-methods';
     
     public function hasMethods()
     {

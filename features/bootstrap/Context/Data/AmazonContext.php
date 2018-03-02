@@ -27,22 +27,22 @@ class AmazonContext implements SnippetAcceptingContext
     /**
      * @var AmazonOrderFixture
      */
-    protected $amazonOrderFixture;
+    private $amazonOrderFixture;
 
     /**
      * @var OrderFixture
      */
-    protected $orderFixture;
+    private $orderFixture;
 
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
 
     /**
      * @var TransactionFixture
      */
-    protected $transactionFixture;
+    private $transactionFixture;
 
     public function __construct()
     {

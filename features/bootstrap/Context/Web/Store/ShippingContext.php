@@ -27,22 +27,22 @@ class ShippingContext implements SnippetAcceptingContext
     /**
      * @var Checkout
      */
-    protected $checkoutPage;
+    private $checkoutPage;
 
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
 
     /**
      * @var BasketFixture
      */
-    protected $basketFixture;
+    private $basketFixture;
 
     /**
      * @var AmazonOrderFixture
      */
-    protected $amazonOrderFixture;
+    private $amazonOrderFixture;
 
     public function __construct(Checkout $checkoutPage)
     {

@@ -15,7 +15,6 @@
  */
 namespace Amazon\Payment\Model\PaymentManagement;
 
-use Amazon\Payment\Api\PaymentManagementInterface;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Event\ManagerInterface;
@@ -40,22 +39,22 @@ abstract class AbstractOperation
     /**
      * @var SearchCriteriaBuilderFactory
      */
-    protected $searchCriteriaBuilderFactory;
+    private $searchCriteriaBuilderFactory;
 
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @var NotifierInterface
      */
-    protected $notifier;
+    private $notifier;
 
     /**
      * @var InvoiceRepositoryInterface
      */
-    protected $invoiceRepository;
+    private $invoiceRepository;
 
     public function __construct(
         NotifierInterface $notifier,

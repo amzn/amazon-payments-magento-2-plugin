@@ -26,12 +26,12 @@ class IpnContext implements SnippetAcceptingContext
     /**
      * @var OrderFixture
      */
-    protected $orderFixture;
+    private $orderFixture;
 
     /**
      * @var TransactionFixture
      */
-    protected $transactionFixture;
+    private $transactionFixture;
 
     public function __construct($baseUri)
     {

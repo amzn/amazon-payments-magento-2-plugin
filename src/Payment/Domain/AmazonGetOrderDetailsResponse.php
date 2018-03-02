@@ -25,7 +25,7 @@ class AmazonGetOrderDetailsResponse
     /**
      * @var AmazonOrderDetails
      */
-    protected $details;
+    private $details;
 
     public function __construct(ResponseInterface $response, AmazonOrderDetailsFactory $amazonOrderDetailsFactory)
     {

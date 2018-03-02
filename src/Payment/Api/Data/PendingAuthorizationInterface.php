@@ -19,6 +19,9 @@ use Amazon\Payment\Model\ResourceModel\PendingAuthorization as PendingAuthorizat
 use Exception;
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * @api
+ */
 interface PendingAuthorizationInterface
 {
     const ID = 'entity_id';
@@ -215,7 +218,7 @@ interface PendingAuthorizationInterface
      *
      * @return boolean
      */
-    public function getLockOnLoad();
+    public function hasLockOnLoad();
 
     /**
      * Retrieve model resource

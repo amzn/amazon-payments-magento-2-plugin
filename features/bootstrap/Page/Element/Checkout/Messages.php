@@ -20,7 +20,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
 class Messages extends Element
 {
-    protected $selector = '.messages';
+    private $selector = '.messages';
 
     public function hasHardDeclineError()
     {

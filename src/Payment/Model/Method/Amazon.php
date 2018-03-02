@@ -21,7 +21,7 @@ use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Core\Model\Config\Source\AuthorizationMode;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Api\OrderInformationManagementInterface;
-use Amazon\Payment\Api\PaymentManagementInterface;
+use Amazon\Payment\Model\PaymentManagement;
 use Amazon\Payment\Domain\AmazonAuthorizationDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonAuthorizationResponseFactory;
 use Amazon\Payment\Domain\AmazonAuthorizationStatus;
@@ -37,7 +37,6 @@ use Amazon\Payment\Exception\CapturePendingException;
 use Amazon\Payment\Exception\HardDeclineException;
 use Amazon\Payment\Exception\SoftDeclineException;
 use Amazon\Payment\Exception\TransactionTimeoutException;
-use Amazon\Payment\Plugin\AdditionalInformation;
 use Exception;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -55,9 +54,14 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class Amazon extends AbstractMethod
 {
     const PAYMENT_METHOD_CODE = 'amazon_payment';
+    const KEY_SANDBOX_SIMULATION_REFERENCE = 'sandbox_simulation_reference';
 
     /**
      * {@inheritdoc}
@@ -97,77 +101,77 @@ class Amazon extends AbstractMethod
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var OrderInformationManagementInterface
      */
-    protected $orderInformationManagement;
+    private $orderInformationManagement;
 
     /**
      * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
     /**
      * @var AmazonAuthorizationResponseFactory
      */
-    protected $amazonAuthorizationResponseFactory;
+    private $amazonAuthorizationResponseFactory;
 
     /**
      * @var AmazonRefundResponseFactory
      */
-    protected $amazonRefundResponseFactory;
+    private $amazonRefundResponseFactory;
 
     /**
      * @var AmazonCaptureResponseFactory
      */
-    protected $amazonCaptureResponseFactory;
+    private $amazonCaptureResponseFactory;
 
     /**
      * @var AmazonAuthorization
      */
-    protected $amazonAuthorizationValidator;
+    private $amazonAuthorizationValidator;
 
     /**
      * @var AmazonCapture
      */
-    protected $amazonCaptureValidator;
+    private $amazonCaptureValidator;
 
     /**
      * @var AmazonRefund
      */
-    protected $amazonRefundValidator;
+    private $amazonRefundValidator;
 
     /**
-     * @var PaymentManagementInterface
+     * @var PaymentManagement
      */
-    protected $paymentManagement;
+    private $paymentManagement;
 
     /**
      * @var AmazonPreCapture
      */
-    protected $amazonPreCaptureValidator;
+    private $amazonPreCaptureValidator;
 
     /**
      * @var AmazonAuthorizationDetailsResponseFactory
      */
-    protected $amazonAuthorizationDetailsResponseFactory;
+    private $amazonAuthorizationDetailsResponseFactory;
 
     /**
      * @var AmazonCoreHelper
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var integer
      */
-    protected $lastTransactionTime = 0;
+    private $lastTransactionTime = 0;
 
     /**
      * Amazon constructor.
@@ -191,11 +195,12 @@ class Amazon extends AbstractMethod
      * @param AmazonPreCapture                          $amazonPreCaptureValidator
      * @param AmazonCapture                             $amazonCaptureValidator
      * @param AmazonRefund                              $amazonRefundValidator
-     * @param PaymentManagementInterface                $paymentManagement
+     * @param PaymentManagement                         $paymentManagement
      * @param AmazonCoreHelper                          $amazonCoreHelper
      * @param AbstractResource|null                     $resource
      * @param AbstractDb|null                           $resourceCollection
      * @param array                                     $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -217,7 +222,7 @@ class Amazon extends AbstractMethod
         AmazonPreCapture $amazonPreCaptureValidator,
         AmazonCapture $amazonCaptureValidator,
         AmazonRefund $amazonRefundValidator,
-        PaymentManagementInterface $paymentManagement,
+        PaymentManagement $paymentManagement,
         AmazonCoreHelper $amazonCoreHelper,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
@@ -441,7 +446,8 @@ class Amazon extends AbstractMethod
 
         throw new AmazonWebapiException(
             __(
-                'Unfortunately it is not possible to pay with Amazon Pay for this order. Please choose another payment method.'
+                'Unfortunately it is not possible to pay with Amazon Pay for this order. ' .
+                'Please choose another payment method.'
             ),
             AmazonAuthorizationStatus::CODE_HARD_DECLINE,
             AmazonWebapiException::HTTP_FORBIDDEN
@@ -462,7 +468,8 @@ class Amazon extends AbstractMethod
     {
         throw new AmazonWebapiException(
             __(
-                'There has been a problem with the selected payment method on your Amazon account. Please choose another one.'
+                'There has been a problem with the selected payment method on your Amazon account. ' .
+                'Please choose another one.'
             ),
             AmazonAuthorizationStatus::CODE_SOFT_DECLINE,
             AmazonWebapiException::HTTP_FORBIDDEN
@@ -610,7 +617,7 @@ class Amazon extends AbstractMethod
         $additionalData = new DataObject($additionalData);
 
         $infoInstance = $this->getInfoInstance();
-        $key          = AdditionalInformation::KEY_SANDBOX_SIMULATION_REFERENCE;
+        $key          = self::KEY_SANDBOX_SIMULATION_REFERENCE;
         $infoInstance->setAdditionalInformation($key, $additionalData->getData($key));
 
         return $this;

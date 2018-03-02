@@ -19,6 +19,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class Validate extends Template
 {
     public function getForgotPasswordUrl()

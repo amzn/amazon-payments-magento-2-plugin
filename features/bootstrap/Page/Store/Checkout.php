@@ -24,7 +24,7 @@ class Checkout extends Page
 {
     use PageTrait;
 
-    protected $elements
+    private $elements
         = [
             'shipping-widget'            => ['css' => '#addressBookWidgetDiv iframe'],
             'payment-widget'             => ['css' => '#walletWidgetDiv iframe'],
@@ -44,7 +44,7 @@ class Checkout extends Page
             'error-messages-container'   => ['css' => 'div#checkout > div[data-role=checkout-messages]'],
         ];
 
-    protected $path = '/checkout/';
+    private $path = '/checkout/';
 
     public function provideShippingAddress()
     {

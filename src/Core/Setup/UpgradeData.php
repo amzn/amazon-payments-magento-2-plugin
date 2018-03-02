@@ -27,7 +27,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @var QuoteSetupFactory
      */
-    protected $quoteSetupFactory;
+    private $quoteSetupFactory;
 
     /**
      * @param QuoteSetupFactory $quoteSetupFactory

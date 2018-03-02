@@ -32,32 +32,32 @@ class OrderContext implements SnippetAcceptingContext
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
 
     /**
      * @var OrderFixture
      */
-    protected $orderFixture;
+    private $orderFixture;
 
     /**
      * @var TransactionFixture
      */
-    protected $transactionFixture;
+    private $transactionFixture;
 
     /**
      * @var invoiceFixture
      */
-    protected $invoiceFixture;
+    private $invoiceFixture;
 
     /**
      * @var CreditMemoFixture
      */
-    protected $creditMemoFixture;
+    private $creditMemoFixture;
 
     /**
      * @var AdminNotificationFixture
      */
-    protected $adminNotificationFixture;
+    private $adminNotificationFixture;
 
     public function __construct()
     {

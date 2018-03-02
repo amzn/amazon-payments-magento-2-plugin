@@ -17,7 +17,7 @@ namespace Amazon\Payment\Model\Ipn;
 
 use Amazon\Payment\Api\Data\PendingCaptureInterface;
 use Amazon\Payment\Api\Ipn\ProcessorInterface;
-use Amazon\Payment\Api\PaymentManagement\CaptureInterface;
+use Amazon\Payment\Model\PaymentManagement\Capture;
 use Amazon\Payment\Domain\Details\AmazonCaptureDetailsFactory;
 use Amazon\Payment\Model\ResourceModel\PendingCapture\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -27,26 +27,26 @@ class CaptureProcessor implements ProcessorInterface
     /**
      * @var AmazonCaptureDetailsFactory
      */
-    protected $amazonCaptureDetailsFactory;
+    private $amazonCaptureDetailsFactory;
 
     /**
-     * @var CaptureInterface
+     * @var Capture
      */
-    protected $capture;
+    private $capture;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     public function __construct(
         AmazonCaptureDetailsFactory $amazonCaptureDetailsFactory,
-        CaptureInterface $capture,
+        Capture $capture,
         CollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager
     ) {

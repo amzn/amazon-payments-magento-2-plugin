@@ -10,7 +10,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @var CoreHelper
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * Version constructor.
@@ -19,8 +19,8 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
      * @param array $data
      */
     public function __construct(
-        CoreHelper $coreHelper,
         Context $context,
+        CoreHelper $coreHelper,
         array $data = []
     ) {
         $this->coreHelper = $coreHelper;
@@ -28,8 +28,11 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Render element value
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -40,6 +43,6 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
         $output .= __('Module version') . ': ' . $version;
         $output .= "</div>";
-         return $output;
+        return $output;
     }
 }

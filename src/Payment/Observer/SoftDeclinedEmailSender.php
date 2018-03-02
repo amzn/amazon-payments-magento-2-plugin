@@ -24,7 +24,7 @@ class SoftDeclinedEmailSender implements ObserverInterface
     /**
      * @var Email
      */
-    protected $emailHelper;
+    private $emailHelper;
 
     /**
      * SoftDeclinedEmailSender constructor.

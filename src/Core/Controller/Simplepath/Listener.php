@@ -6,18 +6,16 @@ class Listener extends \Magento\Framework\App\Action\Action
 {
 
     // @var \Magento\Framework\Controller\Result\JsonFactory
-    protected $jsonResultFactory;
+    private $jsonResultFactory;
 
     // @var \Amazon\Core\Model\Config\SimplePath
-    protected $simplepath;
-
+    private $simplepath;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory,
         \Amazon\Core\Model\Config\SimplePath $simplepath,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-
     ) {
         $this->simplepath        = $simplepath;
         $this->jsonResultFactory = $jsonResultFactory;
@@ -25,13 +23,11 @@ class Listener extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
     }
 
-
     /**
      * Parse POST request from Amazon and import keys
      */
     public function execute()
     {
-
         $url = parse_url($this->simplepath->getEndpointRegister());
 
         header('Access-Control-Allow-Origin: https://' . $url['host']);
@@ -42,24 +38,22 @@ class Listener extends \Magento\Framework\App\Action\Action
 
         $result = $this->jsonResultFactory->create();
 
-        $return = array('result' => 'error', 'message' => 'Empty payload');
+        $return = ['result' => 'error', 'message' => 'Empty payload'];
 
         try {
-            if (strpos($payload, 'encryptedKey') === FALSE) {
-                $return = array('result' => 'error', 'message' => 'Invalid payload: ' . $payload);
+            if (strpos($payload, 'encryptedKey') === false) {
+                $return = ['result' => 'error', 'message' => 'Invalid payload: ' . $payload];
             } else if ($payload) {
-
                 $json = $this->simplepath->decryptPayload($payload, false);
 
                 if ($json) {
-                    $return = array('result' => 'success');
+                    $return = ['result' => 'success'];
                 }
             } else {
-                $return = array('result' => 'error', 'message' => 'payload parameter not found.');
+                $return = ['result' => 'error', 'message' => 'payload parameter not found.'];
             }
-
         } catch (\Exception $e) {
-            $return = array('result' => 'error', 'message' => $e->getMessage());
+            $return = ['result' => 'error', 'message' => $e->getMessage()];
         }
 
         if ($this->_request->isPost() && (empty($return['result']) || $return['result'] == 'error')) {
@@ -70,7 +64,6 @@ class Listener extends \Magento\Framework\App\Action\Action
 
         return $result;
     }
-
 
     /**
      * Overridden to allow POST without form key
@@ -106,5 +99,4 @@ class Listener extends \Magento\Framework\App\Action\Action
         }
         return true;
     }
-
 }

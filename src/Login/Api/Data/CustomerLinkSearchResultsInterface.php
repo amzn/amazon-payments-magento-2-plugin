@@ -13,26 +13,25 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Payment\Api\PaymentManagement;
+namespace Amazon\Login\Api\Data;
 
-use Amazon\Payment\Domain\Details\AmazonCaptureDetails;
-
-interface CaptureInterface
+/**
+ * @api
+ */
+interface CustomerLinkSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
-     * @param boolean $throwExceptions
+     * Gets collection items.
      *
-     * @return $this
+     * @return \Amazon\Login\Api\Data\CustomerLinkInterface[] Array of collection items.
      */
-    public function setThrowExceptions($throwExceptions);
+    public function getItems();
 
     /**
-     * Update capture
+     * Sets collection items.
      *
-     * @param integer                   $pendingCaptureId
-     * @param AmazonCaptureDetails|null $captureDetails
-     *
-     * @return void
+     * @param \Amazon\Login\Api\Data\CustomerLinkInterface[] $items
+     * @return $this
      */
-    public function updateCapture($pendingCaptureId, AmazonCaptureDetails $captureDetails = null);
+    public function setItems(array $items);
 }

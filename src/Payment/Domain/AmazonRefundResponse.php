@@ -19,7 +19,7 @@ use AmazonPay\ResponseInterface;
 
 class AmazonRefundResponse extends AbstractAmazonRefundResponse
 {
-    protected $resultKey = 'RefundResult';
+    private $resultKey = 'RefundResult';
 
     /**
      * {@inheritDoc}

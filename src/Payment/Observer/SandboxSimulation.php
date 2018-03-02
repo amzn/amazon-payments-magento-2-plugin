@@ -26,12 +26,12 @@ class SandboxSimulation implements ObserverInterface
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @param Data $coreHelper
@@ -107,7 +107,9 @@ class SandboxSimulation implements ObserverInterface
         $simulationReference = null;
 
         $additionalInformation = $payment->getAdditionalInformation();
-        if (is_array($additionalInformation) and array_key_exists('sandbox_simulation_reference', $additionalInformation)) {
+        if (is_array($additionalInformation) &&
+            array_key_exists('sandbox_simulation_reference', $additionalInformation)
+        ) {
             $simulationReference = $additionalInformation['sandbox_simulation_reference'];
         }
 

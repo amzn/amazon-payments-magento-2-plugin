@@ -31,37 +31,37 @@ class Json
     /**
      * @var Data
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var JsonConfigDataValidatorFactory
      */
-    protected $jsonConfigDataValidatorFactory;
+    private $jsonConfigDataValidatorFactory;
 
     /**
      * @var ConfigWriter
      */
-    protected $configWriter;
+    private $configWriter;
 
     /**
      * @var MessageManager
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var DecoderInterface
      */
-    protected $jsonDecoder;
+    private $jsonDecoder;
 
     /**
      * @var EncryptorInterface $encryptor
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var SimplePath
      */
-    protected $simplePath;
+    private $simplePath;
 
     /**
      * @param Data                           $amazonCoreHelper
@@ -113,7 +113,13 @@ class Json
 
         // Decrypt SimplePath JSON
         if (isset($arrayCredentials['encryptedKey'])) {
-            $arrayCredentials = $this->jsonDecoder->decode($this->simplePath->decryptPayload(json_encode($arrayCredentials), false, false));
+            $arrayCredentials = $this->jsonDecoder->decode(
+                $this->simplePath->decryptPayload(
+                    json_encode($arrayCredentials),
+                    false,
+                    false
+                )
+            );
         }
 
         foreach ($this->amazonCoreHelper->getAmazonCredentialsFields() as $mandatoryField) {

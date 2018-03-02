@@ -22,9 +22,9 @@ class Login extends Page
 {
     use PageTrait;
 
-    protected $path = '/admin/admin/';
+    private $path = '/admin/admin/';
 
-    protected $elements
+    private $elements
         = [
             'login' => ['css' => '.action-login'],
         ];

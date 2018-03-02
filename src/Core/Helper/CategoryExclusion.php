@@ -27,9 +27,9 @@ class CategoryExclusion extends AbstractHelper
     const ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT = 'is_excluded_product';
 
     /**
-     * @var Quote
+     * @var Session
      */
-    protected $quote;
+    protected $checkoutSession;
 
     /**
      * @param Context $context
@@ -38,7 +38,7 @@ class CategoryExclusion extends AbstractHelper
     public function __construct(Context $context, Session $checkoutSession)
     {
         parent::__construct($context);
-        $this->quote = $checkoutSession->getQuote();
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
@@ -79,8 +79,10 @@ class CategoryExclusion extends AbstractHelper
     {
         if (!empty($this->getExcludedCategories())) {
             /** @var \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem */
-            foreach ($this->quote->getAllItems() as $quoteItem) {
-                $isDirtyQuoteItem = $quoteItem->getDataUsingMethod(CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT);
+            foreach ($this->checkoutSession->getQuote()->getAllItems() as $quoteItem) {
+                $isDirtyQuoteItem = $quoteItem->getDataUsingMethod(
+                    CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT
+                );
                 if (!$quoteItem->isDeleted() && $isDirtyQuoteItem) {
                     return true;
                 }

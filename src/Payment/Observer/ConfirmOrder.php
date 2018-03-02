@@ -15,6 +15,7 @@
  */
 namespace Amazon\Payment\Observer;
 
+use Amazon\Core\Helper\Data;
 use Amazon\Core\Exception\AmazonWebapiException;
 use Amazon\Core\Helper\CategoryExclusion;
 use Amazon\Payment\Api\Data\QuoteLinkInterface;
@@ -32,22 +33,27 @@ class ConfirmOrder implements ObserverInterface
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var OrderInformationManagement
      */
-    protected $orderInformationManagement;
+    private $orderInformationManagement;
 
     /**
      * @var PaymentMethodManagementInterface
      */
-    protected $paymentMethodManagement;
+    private $paymentMethodManagement;
 
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
+
+    /**
+     * @var Data
+     */
+    private $coreHelper;
 
     /**
      * ConfirmOrder constructor.
@@ -61,28 +67,32 @@ class ConfirmOrder implements ObserverInterface
         QuoteLinkInterfaceFactory $quoteLinkFactory,
         OrderInformationManagement $orderInformationManagement,
         PaymentMethodManagementInterface $paymentMethodManagement,
-        CategoryExclusion $categoryExclusionHelper
+        CategoryExclusion $categoryExclusionHelper,
+        Data $coreHelper
     ) {
         $this->quoteLinkFactory           = $quoteLinkFactory;
         $this->orderInformationManagement = $orderInformationManagement;
         $this->paymentMethodManagement    = $paymentMethodManagement;
         $this->categoryExclusionHelper    = $categoryExclusionHelper;
+        $this->coreHelper                 = $coreHelper;
     }
 
     public function execute(Observer $observer)
     {
-        $order                  = $observer->getOrder();
-        $quoteId                = $order->getQuoteId();
-        $storeId                = $order->getStoreId();
-        $quoteLink              = $this->getQuoteLink($quoteId);
-        $amazonOrderReferenceId = $quoteLink->getAmazonOrderReferenceId();
+        if ($this->coreHelper->isPwaEnabled()) {
+            $order                  = $observer->getOrder();
+            $quoteId                = $order->getQuoteId();
+            $storeId                = $order->getStoreId();
+            $quoteLink              = $this->getQuoteLink($quoteId);
+            $amazonOrderReferenceId = $quoteLink->getAmazonOrderReferenceId();
 
-        if ($amazonOrderReferenceId) {
-            $payment = $this->paymentMethodManagement->get($quoteId);
-            if (Amazon::PAYMENT_METHOD_CODE == $payment->getMethod()) {
-                $this->checkForExcludedProducts();
-                $this->saveOrderInformation($quoteLink, $amazonOrderReferenceId);
-                $this->confirmOrderReference($quoteLink, $amazonOrderReferenceId, $storeId);
+            if ($amazonOrderReferenceId) {
+                $payment = $this->paymentMethodManagement->get($quoteId);
+                if (Amazon::PAYMENT_METHOD_CODE == $payment->getMethod()) {
+                    $this->checkForExcludedProducts();
+                    $this->saveOrderInformation($quoteLink, $amazonOrderReferenceId);
+                    $this->confirmOrderReference($quoteLink, $amazonOrderReferenceId, $storeId);
+                }
             }
         }
     }
@@ -92,7 +102,8 @@ class ConfirmOrder implements ObserverInterface
         if ($this->categoryExclusionHelper->isQuoteDirty()) {
             throw new AmazonWebapiException(
                 __(
-                    'Unfortunately it is not possible to pay with Amazon Pay for this order. Please choose another payment method.'
+                    'Unfortunately it is not possible to pay with Amazon Pay for this order. ' .
+                    'Please choose another payment method.'
                 ),
                 AmazonAuthorizationStatus::CODE_HARD_DECLINE,
                 AmazonWebapiException::HTTP_FORBIDDEN
