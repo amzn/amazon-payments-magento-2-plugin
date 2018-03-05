@@ -19,8 +19,7 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
-        'uiRegistry',
-        'Amazon_Payment/js/action/populate-shipping-address'
+	'uiRegistry'
     ],
     function (
         $,
@@ -40,8 +39,7 @@ define(
         urlBuilder,
         checkoutData,
         checkoutDataResolver,
-        registry,
-        populateShippingAddressAction
+	registry
     ) {
         'use strict';
         var self;
@@ -121,7 +119,6 @@ define(
                         }
                         checkoutData.setShippingAddressFromData(addressConverter.quoteAddressToFormAddressData(addressData));
                         checkoutDataResolver.resolveEstimationAddress();
-                        populateShippingAddressAction();
                     }
                 ).fail(
                     function (response) {
