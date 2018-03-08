@@ -21,26 +21,6 @@ use Magento\Framework\Api\AbstractSimpleObject;
 class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCustomerInterface
 {
     /**
-     * @var AmazonName
-     */
-    private $amazonName;
-
-    /**
-     * @var AmazonNameFactory
-     */
-    private $amazonNameFactory;
-
-    /**
-     * @param AmazonNameFactory $amazonNameFactory
-     * @param array $data
-     */
-    public function __construct(AmazonNameFactory $amazonNameFactory, $data = [])
-    {
-        $this->amazonNameFactory = $amazonNameFactory;
-        parent::__construct($data);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getEmail()
@@ -70,19 +50,5 @@ class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCust
     public function getLastName()
     {
         return $this->getAmazonName()->getLastName();
-    }
-
-    /**
-     * Get AmazonName
-     *
-     * @return AmazonName
-     */
-    private function getAmazonName()
-    {
-        if (null === $this->amazonName) {
-            $this->amazonName = $this->amazonNameFactory
-                ->create(['name' => $this->name, 'country' => $this->country]);
-        }
-        return $this->amazonName;
     }
 }

@@ -33,16 +33,29 @@ class AmazonNameDecoratorJp implements AmazonNameInterface
         $this->amazonName = $amazonName;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFirstName()
     {
         return $this->convertKana($this->amazonName->getLastName());
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getLastName()
     {
         return $this->convertKana($this->amazonName->getFirstName());
     }
 
+    /**
+     * Convert to UTF-8 Kana
+     *
+     * @param $string
+     *
+     * @return string
+     */
     private function convertKana($string)
     {
         return mb_convert_kana($string, 's', 'utf-8');

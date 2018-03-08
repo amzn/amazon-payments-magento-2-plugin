@@ -19,33 +19,12 @@ use Amazon\Core\Api\Data\AmazonAddressInterface;
 
 class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddressInterface
 {
-
-    /**
-     * @var AmazonName
-     */
-    private $amazonName;
-
-    /**
-     * @var AmazonNameFactory
-     */
-    private $amazonNameFactory;
-
-    /**
-     * @param AmazonNameFactory $amazonNameFactory
-     * @param array $data
-     */
-    public function __construct(AmazonNameFactory $amazonNameFactory, $data)
-    {
-        $this->amazonNameFactory = $amazonNameFactory;
-        parent::__construct($data);
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getFirstName()
     {
-        return $this->getAmazonName()->getFirstName();
+        return $this->getData('firstName');
     }
 
     /**
@@ -53,7 +32,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getLastName()
     {
-        return $this->getAmazonName()->getLastName();
+        return $this->getData('lastName');
     }
 
     /**
@@ -121,19 +100,5 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     public function getCompany()
     {
         return $this->getData('company');
-    }
-
-    /**
-     * Get AmazonName
-     *
-     * @return AmazonName
-     */
-    private function getAmazonName()
-    {
-        if (null === $this->getData('amazonName')) {
-            $this->setData('amazonName', $this->amazonNameFactory
-                ->create(['name' => $this->getData('name'), 'country' => $this->getData('countryCode')]));
-        }
-        return $this->getData('amazonName');
     }
 }

@@ -16,6 +16,7 @@
 namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
+use Amazon\Core\Api\Data\AmazonNameInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -28,12 +29,24 @@ class AmazonCustomerFactory
     private $objectManager = null;
 
     /**
+     * @var AmazonName
+     */
+    private $amazonName;
+
+    /**
+     * @var AmazonNameFactory
+     */
+    private $amazonNameFactory;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        AmazonNameFactory $amazonNameFactory
     ) {
         $this->objectManager  = $objectManager;
+        $this->amazonNameFactory = $amazonNameFactory;
     }
 
     /**
@@ -42,6 +55,10 @@ class AmazonCustomerFactory
      */
     public function create(array $data = [])
     {
+        $amazonName = $this->amazonNameFactory
+            ->create(['name' => $data['name'], 'country' => $data['country']]);
+        $data[AmazonNameInterface::FIRST_NAME] = $amazonName->getFirstName();
+        $data[AmazonNameInterface::LAST_NAME] = $amazonName->getLastName();
         return $this->objectManager->create(AmazonCustomer::class, ['data' => $data]);
     }
 }

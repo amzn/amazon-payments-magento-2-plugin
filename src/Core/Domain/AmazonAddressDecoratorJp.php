@@ -37,9 +37,9 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
      */
     public function getLines()
     {
-        $line1 = (string) $this->amazonAddress->getLines()[1];
-        $line2 = (string) $this->amazonAddress->getLines()[2];
-        $line3 = (string) $this->amazonAddress->getLines()[3];
+        $line1 = (string) $this->amazonAddress->getLine(1);
+        $line2 = (string) $this->amazonAddress->getLine(2);
+        $line3 = (string) $this->amazonAddress->getLine(3);
         $city = (string) $this->amazonAddress->getCity();
 
         $lines = [];
@@ -82,7 +82,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
      */
     public function getCity()
     {
-        return $this->amazonAddress->getCity() ?? $this->amazonAddress->getLines()[1];
+        return $this->amazonAddress->getCity() ?? $this->amazonAddress->getLine(1);
     }
 
     /**

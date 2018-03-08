@@ -19,9 +19,6 @@ use Amazon\Core\Api\Data\AmazonNameInterface;
 
 class AmazonName extends \Magento\Framework\DataObject implements AmazonNameInterface
 {
-    const FIRST_NAME = 'first_name';
-    const LAST_NAME  = 'last_name';
-
     /**
      * {@inheritdoc}
      */

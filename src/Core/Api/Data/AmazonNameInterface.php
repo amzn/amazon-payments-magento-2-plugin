@@ -20,6 +20,9 @@ namespace Amazon\Core\Api\Data;
  */
 interface AmazonNameInterface
 {
+    const FIRST_NAME = 'first_name';
+    const LAST_NAME  = 'last_name';
+
     /**
      * Get first name
      *

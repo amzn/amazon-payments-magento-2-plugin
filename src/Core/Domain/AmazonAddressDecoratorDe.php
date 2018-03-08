@@ -37,9 +37,9 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
      */
     public function getLines()
     {
-        $line1 = (string) $this->amazonAddress->getLines()[1];
-        $line2 = (string) $this->amazonAddress->getLines()[2];
-        $line3 = (string) $this->amazonAddress->getLines()[3];
+        $line1 = (string) $this->amazonAddress->getLine(1);
+        $line2 = (string) $this->amazonAddress->getLine(2);
+        $line3 = (string) $this->amazonAddress->getLine(3);
 
         $lines = [];
         switch (true) {
@@ -69,9 +69,9 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
      */
     public function getCompany()
     {
-        $line1 = (string) $this->amazonAddress->getLines()[1];
-        $line2 = (string) $this->amazonAddress->getLines()[2];
-        $line3 = (string) $this->amazonAddress->getLines()[3];
+        $line1 = (string) $this->amazonAddress->getLine(1);
+        $line2 = (string) $this->amazonAddress->getLine(2);
+        $line3 = (string) $this->amazonAddress->getLine(3);
 
         $company = $this->amazonAddress->getCompany();
         switch (true) {

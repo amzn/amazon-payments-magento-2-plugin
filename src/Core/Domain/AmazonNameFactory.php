@@ -62,8 +62,8 @@ class AmazonNameFactory
     public function create(array $data = [])
     {
         $nameParts = explode(' ', trim($data['name']), 2);
-        $data['first_name'] = $nameParts[0];
-        $data['last_name'] = $nameParts[1] ?? '.';
+        $data[AmazonNameInterface::FIRST_NAME] = $nameParts[0];
+        $data[AmazonNameInterface::LAST_NAME] = $nameParts[1] ?? '.';
 
         $amazonName = $this->objectManager->create(AmazonName::class, ['data' => $data]);
 
