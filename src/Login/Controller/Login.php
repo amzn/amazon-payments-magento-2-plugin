@@ -17,7 +17,7 @@ namespace Amazon\Login\Controller;
 
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
-use Amazon\Core\Api\Data\AmazonCustomerInterfaceFactory;
+use Amazon\Core\Domain\AmazonCustomerFactory;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
 use Amazon\Login\Model\Customer\Account\Redirect as AccountRedirect;
@@ -37,7 +37,7 @@ use Amazon\Login\Api\CustomerLinkManagementInterface;
 abstract class Login extends Action
 {
     /**
-     * @var AmazonCustomerInterfaceFactory
+     * @var AmazonCustomerFactory
      */
     protected $amazonCustomerFactory;
 
@@ -92,7 +92,7 @@ abstract class Login extends Action
     protected $logger;
 
     /**
-     * @param AmazonCustomerInterfaceFactory   $amazonCustomerFactory
+     * @param AmazonCustomerFactory       $amazonCustomerFactory
      * @param ClientFactoryInterface      $clientFactory
      * @param LoggerInterface             $logger
      * @param AmazonCoreHelper            $amazonCoreHelper
@@ -108,7 +108,7 @@ abstract class Login extends Action
      */
     public function __construct(
         Context $context,
-        AmazonCustomerInterfaceFactory $amazonCustomerFactory,
+        AmazonCustomerFactory $amazonCustomerFactory,
         ClientFactoryInterface $clientFactory,
         AmazonCoreHelper $amazonCoreHelper,
         Url $customerUrl,
@@ -153,7 +153,7 @@ abstract class Login extends Action
                     'name' => $userInfo['name'],
                     'country' => $this->amazonCoreHelper->getRegion(),
                 ];
-                $amazonCustomer = $this->amazonCustomerFactory->create(['data' => $data]);
+                $amazonCustomer = $this->amazonCustomerFactory->create($data);
 
                 return $amazonCustomer;
             }

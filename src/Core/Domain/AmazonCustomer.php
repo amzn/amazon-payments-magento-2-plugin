@@ -16,6 +16,7 @@
 namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
+use Amazon\Core\Api\Data\AmazonNameInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCustomerInterface
@@ -41,7 +42,7 @@ class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCust
      */
     public function getFirstName()
     {
-        return $this->getAmazonName()->getFirstName();
+        return $this->getData(AmazonNameInterface::FIRST_NAME);
     }
 
     /**
@@ -49,6 +50,6 @@ class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCust
      */
     public function getLastName()
     {
-        return $this->getAmazonName()->getLastName();
+        return $this->getData(AmazonNameInterface::LAST_NAME);
     }
 }
