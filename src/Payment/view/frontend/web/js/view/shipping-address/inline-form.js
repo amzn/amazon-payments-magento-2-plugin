@@ -1,15 +1,14 @@
 define([
-    'jquery',
     'uiComponent',
     'ko',
     'Amazon_Payment/js/model/storage'
-], function ($, Component, ko, amazonStorage) {
+], function (Component, ko, amazonStorage) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'Amazon_Payment/shipping-address/inline-form',
-            formSelector: '#co-shipping-form'
+            formSelector: 'co-shipping-form'
         },
 
         /**
@@ -32,25 +31,13 @@ define([
          * Show/hide inline form
          */
         manipulateInlineForm: function () {
-            var errorCount = 0,
-                elem;
+            var elem;
 
             if (amazonStorage.isAmazonAccountLoggedIn()) {
-                $(this.formSelector).find('.field').each(function () {
-                    if ($(this).hasClass('_error')) {
-                        errorCount++;
-                        $(this).show();
-                    } else {
-                        $(this).css('display', 'none');
-                    }
-                });
+                elem = document.getElementById(this.formSelector);
 
-                elem = $(this.formSelector);
-
-                if (elem && errorCount > 0) {
-                    $(this.formSelector).show();
-                } else {
-                    $(this.formSelector).hide();
+                if (elem) {
+                    document.getElementById(this.formSelector).style.display = 'none';
                 }
             }
         }

@@ -20,9 +20,10 @@ define(
         'Magento_Checkout/js/model/quote',
         'uiRegistry',
         'Magento_Checkout/js/checkout-data',
-        'Magento_Checkout/js/model/checkout-data-resolver'
+        'Magento_Checkout/js/model/checkout-data-resolver',
+        'Amazon_Payment/js/model/storage'
     ],
-    function ($, addressConverter, quote, registry, checkoutData, checkoutDataResolver) {
+    function ($, addressConverter, quote, registry, checkoutData, checkoutDataResolver, amazonStorage) {
         'use strict';
 
         /**
@@ -37,7 +38,6 @@ define(
                     $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                 );
             });
-            $('#co-shipping-form').css('display', 'none');
             checkoutDataResolver.resolveShippingAddress();
         }
 
@@ -46,7 +46,16 @@ define(
          * @private
          */
         return function () {
-            populateShippingForm();
+            //check to see if user is logged out of amazon (otherwise shipping form won't be in DOM)
+            if (!amazonStorage.isAmazonAccountLoggedIn) {
+                populateShippingForm();
+            }
+            //subscribe to logout and trigger shippingform population when logged out.
+            amazonStorage.isAmazonAccountLoggedIn.subscribe(function (loggedIn) {
+                if (!loggedIn) {
+                    populateShippingForm();
+                }
+            });
         };
     }
 );
