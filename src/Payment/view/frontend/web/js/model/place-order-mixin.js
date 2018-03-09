@@ -24,7 +24,9 @@ define([
     return function (placeOrderAction) {
 
         /** Override default place order action and add agreement_ids to request */
-        return wrapper.wrap(placeOrderAction, function (originalAction, paymentData, redirectOnSuccess, messageContainer) {
+        return wrapper.wrap(placeOrderAction, function (originalAction,paymentData,
+            redirectOnSuccess, messageContainer)
+        {
             agreementsAssigner(paymentData);
 
             return originalAction(paymentData, redirectOnSuccess, messageContainer);

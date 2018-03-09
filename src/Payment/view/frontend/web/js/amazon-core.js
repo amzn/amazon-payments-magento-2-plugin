@@ -31,12 +31,12 @@ define([
 
     if (typeof amazon === 'undefined') {
         window.onAmazonLoginReady = function () {
-            setClientId(clientId);
-            doLogoutOnFlagCookie();
-        }
+            setClientId(clientId);  //eslint-disable-line no-use-before-define
+            doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
+        };
     } else {
-        setClientId(clientId);
-        doLogoutOnFlagCookie();
+        setClientId(clientId);  //eslint-disable-line no-use-before-define
+        doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
     }
 
     /**
@@ -45,7 +45,7 @@ define([
      */
     function setClientId(cid)
     {
-        amazon.Login.setClientId(cid);
+        amazon.Login.setClientId(cid); //eslint-disable-line no-undef
         amazonDefined(true);
     }
 
@@ -55,11 +55,11 @@ define([
     function amazonLogout()
     {
         if (amazonDefined()) {
-            amazon.Login.logout();
+            amazon.Login.logout(); //eslint-disable-line no-undef
         } else {
-            var logout = amazonDefined.subscribe(function (defined) {
+            var logout = amazonDefined.subscribe(function (defined) { //eslint-disable-line vars-on-top
                 if (defined) {
-                    amazon.Login.logout();
+                    amazon.Login.logout(); // eslint-disable-line no-undef
                     logout.dispose(); //remove subscribe
                 }
             });
@@ -72,7 +72,9 @@ define([
         var errorFlagCookie = 'amz_auth_err',
             amazonLogoutCookie = 'amz_auth_logout';
 
+        //eslint-disable-next-line no-use-before-define
         $.cookieStorage.isSet(errorFlagCookie) ? amazonLogoutThrowError(errorFlagCookie) : false;
+        //eslint-disable-next-line no-use-before-define
         $.cookieStorage.isSet(amazonLogoutCookie) ? amazonLogoutThrowError(amazonLogoutCookie) : false;
     }
 
@@ -90,14 +92,14 @@ define([
          */
         verifyAmazonLoggedIn: function () {
             var defer  = $.Deferred();
-            
+
             var loginOptions = {
                 scope: amazonPaymentConfig.getValue('loginScope'),
                 popup: true,
                 interactive: 'never'
             };
-            
-            amazon.Login.authorize(loginOptions, function (response) {
+
+            amazon.Login.authorize(loginOptions, function (response) { //eslint-disable-line no-undef
                 if (response.error) {
                     defer.reject(response.error);
                 } else {
@@ -105,9 +107,10 @@ define([
                     defer.resolve(!response.error);
                 }
             });
-            
+
             return defer.promise();
         },
+
         /**
          * Log user out of Amazon
          */

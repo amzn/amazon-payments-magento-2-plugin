@@ -9,7 +9,7 @@ define([
         initObservable: function () {
             this._super();
             this.visible = ko.computed(function () {
-                return addressList().length > 0 && !amazonStorage.isAmazonAccountLoggedIn()
+                return addressList().length > 0 && !amazonStorage.isAmazonAccountLoggedIn();
             });
             return this;
         }

@@ -54,6 +54,7 @@ define([
 
             return this;
         },
+
         /**
          * Check if a payment method is applicable with Amazon Pay
          * @param method
@@ -63,6 +64,7 @@ define([
         _shouldRemovePaymentMethod: function (method) {
             return amazonStorage.isAmazonAccountLoggedIn() && method !== 'amazon_payment' && method !== 'free';
         },
+
         /**
          * handle decline codes
          * @private
@@ -91,6 +93,7 @@ define([
                 }
             }, this);
         },
+
         /**
          * When payment methods exist on load hook into widget render to remove when widget has rendered
          * @private
@@ -107,6 +110,7 @@ define([
                 });
             }
         },
+
         /**
          * reload payment methods on decline
          * @private
@@ -120,16 +124,19 @@ define([
                 }
             }, this);
         },
+
         /**
          * re-intialises Amazon wallet widget
          * @private
          */
         _reInitializeAmazonWalletWidget: function () {
             var child = this.getChild('amazon_payment');
+
             if (child) {
                 child.renderPaymentWidget();
             }
         },
+
         /**
          * hides editable content and links to prevent unexptect behaviour
          * @private

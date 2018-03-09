@@ -18,8 +18,6 @@ define(
     ) {
         'use strict';
 
-        var self;
-
         return Component.extend({
             defaults: {
                 template: 'Amazon_Payment/notification'
@@ -28,7 +26,6 @@ define(
             chargeOnOrder: ko.observable(registry.get('amazonPayment').chargeOnOrder),
 	    isEuPaymentRegion: ko.observable(registry.get('amazonPayment').isEuPaymentRegion),
             initialize: function () {
-                self = this;
                 this._super();
             }
         });

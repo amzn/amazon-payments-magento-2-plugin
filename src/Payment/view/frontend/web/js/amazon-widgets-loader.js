@@ -17,6 +17,7 @@ var registry = require('uiRegistry');
 var amazonPayment = registry.get('amazonPayment');
 
 define([amazonPayment.widgetUrl], function () {
+    "use strict";
     //after amazon widgets file as loaded
 });
 

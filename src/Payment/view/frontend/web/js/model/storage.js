@@ -27,12 +27,14 @@ define(
         amazonPaymentConfig
     ) {
         'use strict';
-        
+
         var isAmazonAccountLoggedIn = ko.observable(false),
             isAmazonEnabled = ko.observable(amazonPaymentConfig.getValue('isPwaEnabled')),
             orderReference,
             addressConsentToken = amazonCore.accessToken,
+            //eslint-disable-next-line no-use-before-define
             isAmazonDefined = amazonCore.amazonDefined.subscribe(checkAmazonDefined),
+            //eslint-disable-next-line no-use-before-define
             amazonLoginError = amazonCore.amazonLoginError.subscribe(setAmazonLoggedOutIfLoginError),
             amazonDeclineCode = ko.observable(false),
             sandboxSimulationReference = ko.observable('default'),
@@ -43,7 +45,7 @@ define(
             isPwaVisible = ko.computed(function () {
                 return isAmazonEnabled() && !isQuoteDirty(); }),
             isAmazonCartInValid = ko.computed(function () {
-                return isAmazonAccountLoggedIn() && isQuoteDirty() }),
+                return isAmazonAccountLoggedIn() && isQuoteDirty(); }),
             isLoginRedirectPage = $('body').hasClass('amazon-login-login-processauthhash');
 
         /**
@@ -53,7 +55,7 @@ define(
             function checkAmazonDefined(amazonDefined)
             {
                 if (amazonDefined && !isLoginRedirectPage) {
-                    verifyAmazonLoggedIn();
+                    verifyAmazonLoggedIn(); //eslint-disable-line no-use-before-define
                     //remove subscription to amazonDefined once loaded
                     isAmazonDefined.dispose();
                 }
@@ -63,7 +65,7 @@ define(
             function amazonLogOut()
             {
                 if (amazonCore.amazonDefined()) {
-                    amazon.Login.logout();
+                    amazon.Login.logout(); // eslint-disable-line no-undef
                 }
                 this.isAmazonAccountLoggedIn(false);
             }
@@ -120,6 +122,6 @@ define(
                 getAddressConsentToken: function () {
                     return addressConsentToken();
                 }
-        }
+        };
     }
 );

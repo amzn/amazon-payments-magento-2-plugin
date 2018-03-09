@@ -63,30 +63,34 @@ define(
                 self = this;
                 this._super();
             },
+
             /**
              * Call when component template is rendered
              */
             initAddressWidget: function () {
                 self.renderAddressWidget();
             },
+
             /**
              * render Amazon address Widget
              */
             renderAddressWidget: function () {
-                new OffAmazonPayments.Widgets.AddressBook({
+                new OffAmazonPayments.Widgets.AddressBook({ // eslint-disable-line no-undef
                     sellerId: self.options.sellerId,
                     scope: self.options.widgetScope,
                     onOrderReferenceCreate: function (orderReference) {
                         var orderid = orderReference.getAmazonOrderReferenceId();
+
                         amazonStorage.setOrderReference(orderid);
                     },
-                    onAddressSelect: function (orderReference) {
+                    onAddressSelect: function () { // orderReference
                         self.getShippingAddressFromAmazon();
                     },
                     design: {
                         designMode: 'responsive'
                     },
                     onError: function (error) {
+                        console.log(error);
                     }
                 }).bind(self.options.addressWidgetDOMId);
             },
@@ -95,9 +99,12 @@ define(
              * Get shipping address from Amazon API
              */
             getShippingAddressFromAmazon: function () {
+                var serviceUrl, payload;
+
                 amazonStorage.isShippingMethodsLoading(true);
                 shippingService.isLoading(true);
-                var serviceUrl = urlBuilder.createUrl('/amazon-shipping-address/:amazonOrderReference', {amazonOrderReference: amazonStorage.getOrderReference()}),
+                serviceUrl = urlBuilder.createUrl('/amazon-shipping-address/:amazonOrderReference',
+                    {amazonOrderReference: amazonStorage.getOrderReference()}),
                     payload = {
                         addressConsentToken: amazonStorage.getAddressConsentToken()
                 };
@@ -108,18 +115,21 @@ define(
                 ).done(
                     function (data) {
                         var amazonAddress = data.shift(),
-                            addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress);
+                            addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress),
+                            i;
 
                         //if telephone is blank set it to 00000000 so it passes the required validation
-                        addressData.telephone = !(addressData.telephone) ? '0000000000' : addressData.telephone;
+                        addressData.telephone = !addressData.telephone ? '0000000000' : addressData.telephone;
 
                         //fill in blank street fields
                         if ($.isArray(addressData.street)) {
-                            for (var i = addressData.street.length; i <= 2; i++) {
+                            for (i = addressData.street.length; i <= 2; i++) {
                                 addressData.street[i] = '';
                             }
                         }
-                        checkoutData.setShippingAddressFromData(addressConverter.quoteAddressToFormAddressData(addressData));
+                        checkoutData.setShippingAddressFromData(
+                            addressConverter.quoteAddressToFormAddressData(addressData)
+                        );
                         checkoutDataResolver.resolveEstimationAddress();
                         populateShippingAddressAction();
                     }

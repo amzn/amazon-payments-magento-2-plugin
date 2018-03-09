@@ -17,8 +17,6 @@ define(
     ) {
         'use strict';
 
-        var self;
-
         return Component.extend({
             defaults: {
                 template: 'Amazon_Payment/checkout-sandbox-simulator'
@@ -28,7 +26,6 @@ define(
             sandboxSimulationReference: amazonStorage.sandboxSimulationReference,
             sandboxSimulationOptions: ko.observableArray(registry.get('amazonPayment').sandboxSimulationOptions),
             initialize: function () {
-                self = this;
                 this._super();
             }
         });

@@ -66,20 +66,21 @@ define(
             },
             initPaymentWidget: function () {
                 var $amazonPayment = $('#amazon_payment');
+
                 self.renderPaymentWidget();
                 $amazonPayment.trigger('click'); //activate Amazon Pay method on render
                 $amazonPayment.trigger('rendered');
-
             },
+
             /**
              * render Amazon payment Widget
              */
             renderPaymentWidget: function () {
-                new OffAmazonPayments.Widgets.Wallet({
+                new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
                     sellerId: self.options.sellerId,
                     scope: self.options.widgetScope,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
-                    onPaymentSelect: function (orderReference) {
+                    onPaymentSelect: function () { // orderReference
                         amazonStorage.isPlaceOrderDisabled(true);
                         self.setBillingAddressFromAmazon();
                     },
@@ -98,13 +99,15 @@ define(
                 return true;
             },
             getCountryName: function (countryId) {
-                return (countryData()[countryId] != undefined) ? countryData()[countryId].name : "";
+                return countryData()[countryId] !== undefined ? countryData()[countryId].name : "";
             },
             checkCountryName: function (countryId) {
-                return (countryData()[countryId] != undefined);
+                return countryData()[countryId] !== undefined;
             },
             setBillingAddressFromAmazon: function () {
-                var serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {amazonOrderReference: amazonStorage.getOrderReference()}),
+                var serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {
+                        amazonOrderReference: amazonStorage.getOrderReference()
+                    }),
                     payload = {
                         addressConsentToken : amazonStorage.getAddressConsentToken()
                 };
@@ -119,7 +122,7 @@ define(
                         var amazonAddress = data.shift();
                         var addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress);
 
-                        addressData.telephone = !(addressData.telephone) ? '0000000000' : addressData.telephone;
+                        addressData.telephone = !addressData.telephone ? '0000000000' : addressData.telephone;
 
                         selectBillingAddress(addressData);
                         amazonStorage.isPlaceOrderDisabled(false);
@@ -140,11 +143,12 @@ define(
                     "additional_data": {
                         "sandbox_simulation_reference": amazonStorage.sandboxSimulationReference()
                     }
-                }
+                };
             },
             placeOrder: function (data, event) {
-                var self = this,
-                    placeOrder;
+                var placeOrder;
+
+                self = this;
 
                 if (event) {
                     event.preventDefault();

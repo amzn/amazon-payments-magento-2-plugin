@@ -24,7 +24,6 @@ define(
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
             isPwaVisible: amazonStorage.isPwaVisible,
             initialize: function () {
-                var self = this;
                 this._super();
             }
         });

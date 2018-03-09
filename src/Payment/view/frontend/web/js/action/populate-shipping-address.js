@@ -20,16 +20,15 @@ define(
         'Magento_Checkout/js/model/quote',
         'uiRegistry',
         'Magento_Checkout/js/checkout-data',
-        'Magento_Checkout/js/model/checkout-data-resolver',
-        'Amazon_Payment/js/model/storage'
+        'Magento_Checkout/js/model/checkout-data-resolver'
     ],
-    function ($, addressConverter, quote, registry, checkoutData, checkoutDataResolver, amazonStorage) {
+    function ($, addressConverter, quote, registry, checkoutData, checkoutDataResolver) {
         'use strict';
 
         function populateShippingForm()
         {
             var shippingAddressData = checkoutData.getShippingAddressFromData();
-            
+
             registry.async('checkoutProvider')(function (checkoutProvider) {
                 checkoutProvider.set(
                     'shippingAddress',
@@ -46,6 +45,6 @@ define(
          */
         return function () {
             populateShippingForm();
-        }
+        };
     }
 );

@@ -14,6 +14,7 @@ define(
                 component: 'Amazon_Payment/js/view/payment/method-renderer/amazon-payment-widget'
             }
         );
+
         /** Add view logic here if needed */
         return Component.extend({});
     }

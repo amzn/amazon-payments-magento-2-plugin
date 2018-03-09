@@ -10,7 +10,8 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         'Amazon_Payment/js/model/storage',
         'Magento_Customer/js/model/address-list',
-        'Magento_Checkout/js/model/quote'
+        'Magento_Checkout/js/model/quote',
+        'mage/translate'
     ],
     function (
         $,
@@ -22,11 +23,12 @@ define(
         stepNavigator,
         amazonStorage,
         addressList,
-        quote
+        quote,
+        $t
     ) {
         'use strict';
         return Component.extend({
-            isFormInline: ko.observable(addressList().length == 0),
+            isFormInline: ko.observable(addressList().length === 0),
             formSelector: '#co-shipping-form',
 
             initialize: function () {
@@ -39,9 +41,11 @@ define(
             },
             validateGuestEmail: function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]';
+
                 $(loginFormSelector).validation();
                 return $(loginFormSelector + ' input[type=email]').valid();
             },
+
             /**
              * New setShipping Action for Amazon Pay to bypass validation
              */
@@ -63,19 +67,17 @@ define(
                     if (this.validateGuestEmail() && this.validateShippingInformation()) {
                         setShippingInformationAmazon();
                     }
-                } else {
-                    //if using guest checkout or guest checkout with amazon pay we need to use the main validation
-                    if (this.validateShippingInformation()) {
-                        setShippingInformationAmazon();
-                    }
+                //if using guest checkout or guest checkout with amazon pay we need to use the main validation
+                } else if (this.validateShippingInformation()) {
+                    setShippingInformationAmazon();
                 }
             },
 
             validateShippingInformation: function () {
-                var shippingAddress,
-                    addressData,
-                    loginFormSelector = 'form[data-role=email-with-possible-login]',
-                    emailValidationResult = customer.isLoggedIn();
+                var loginFormSelector = 'form[data-role=email-with-possible-login]',
+                    emailValidationResult = customer.isLoggedIn(),
+                    errorCount = 0,
+                    elem;
 
                 if (!quote.shippingMethod()) {
                     this.errorValidationMessage($t('Please specify a shipping method.'));
@@ -101,7 +103,7 @@ define(
                         !quote.shippingMethod().carrier_code ||
                         !emailValidationResult
                     ) {
-                        var errorCount = 0;
+
                         $(this.formSelector).find(".field").each(function () {
                             if ($(this).hasClass('_error')) {
                                 errorCount ++;
@@ -110,13 +112,13 @@ define(
                                 $(this).css("display", "none");
                             }
                         });
-                        var elem = $(this.formSelector);
-                        if (elem) {
-                            if (errorCount > 0) {
-                                $(this.formSelector).show();
-                            } else {
-                                $(this.formSelector).hide();
-                            }
+
+                        elem = $(this.formSelector);
+
+                        if (elem && errorCount > 0) { // eslint-disable-line max-depth
+                            $(this.formSelector).show();
+                        } else {
+                            $(this.formSelector).hide();
                         }
                         return false;
                     }

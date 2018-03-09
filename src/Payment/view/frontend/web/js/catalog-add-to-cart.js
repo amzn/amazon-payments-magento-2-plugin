@@ -29,6 +29,7 @@ define([
 
         _bindSubmit: function () {
             var self = this;
+
             this.element.mage('validation');
             this.element.on('submit', function (e) {
                 e.preventDefault();

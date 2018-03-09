@@ -26,8 +26,6 @@ define(
     ) {
         'use strict';
 
-        var self;
-
         return Component.extend({
             defaults: {
                 template: 'Amazon_Payment/checkout-revert'
@@ -35,12 +33,12 @@ define(
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
 	    isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
             initialize: function () {
-                self = this;
                 this._super();
             },
             revertCheckout: function () {
-                fullScreenLoader.startLoader();
                 var serviceUrl = urlBuilder.createUrl('/amazon/order-ref', {});
+
+                fullScreenLoader.startLoader();
                 storage.delete(
                     serviceUrl
                 ).done(

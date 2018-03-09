@@ -32,6 +32,7 @@ define([
             _this = this;
             this.setupTriggers();
         },
+
         /**
          * Setup triggers when item added to cart if amazon pay button pressed
          */
@@ -48,14 +49,14 @@ define([
             }, this);
 
             //setup binds for click
-            $('.amazon-addtoCart').on('click', function (e) {
+            $('.amazon-addtoCart').on('click', function () {
                 if ($(_this.options.addToCartForm).valid()) {
                     addedViaAmazon = true;
                     $(_this.options.addToCartForm).submit();
                 }
             });
         }
-       
+
     });
 
     return $.amazon.AmazonProductAdd;

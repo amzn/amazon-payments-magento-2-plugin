@@ -14,6 +14,7 @@ define([
             this._super();
             amazonStorage.isAmazonAccountLoggedIn.subscribe(function (value) {
                 var elem = document.getElementById(this.formSelector);
+
                 if (elem && value === false) {
                     document.getElementById(this.formSelector).style.display = 'block';
                 }
@@ -21,8 +22,10 @@ define([
             return this;
         },
         manipulateInlineForm: function () {
+            var errorCount = 0,
+                elem;
+
             if (amazonStorage.isAmazonAccountLoggedIn()) {
-                var errorCount = 0;
                 $(this.formSelector).find(".field").each(function () {
                     if ($(this).hasClass('_error')) {
                         errorCount ++;
@@ -31,13 +34,13 @@ define([
                         $(this).css("display", "none");
                     }
                 });
-                var elem = $(this.formSelector);
-                if (elem) {
-                    if (errorCount > 0) {
-                        $(this.formSelector).show();
-                    } else {
-                        $(this.formSelector).hide();
-                    }
+
+                elem = $(this.formSelector);
+
+                if (elem && errorCount > 0) {
+                    $(this.formSelector).show();
+                } else {
+                    $(this.formSelector).hide();
                 }
             }
         }

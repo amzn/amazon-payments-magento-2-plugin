@@ -27,7 +27,7 @@ define(
     function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader, amazonStorage) {
         'use strict';
 
-        return function (paymentData, redirectOnSuccess, messageContainer) {
+        return function (paymentData, redirectOnSuccess) {
             var serviceUrl,
                 payload;
 
