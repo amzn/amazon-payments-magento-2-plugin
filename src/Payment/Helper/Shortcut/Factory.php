@@ -54,4 +54,3 @@ class Factory
         return $this->_objectManager->create($instanceName);
     }
 }
-
