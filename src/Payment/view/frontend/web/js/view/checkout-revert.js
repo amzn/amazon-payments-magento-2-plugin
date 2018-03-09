@@ -2,7 +2,7 @@
 define(
     [
         'jquery',
-        "underscore",
+        'underscore',
         'ko',
         'uiComponent',
         'Amazon_Payment/js/model/storage',
@@ -10,7 +10,7 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/model/full-screen-loader',
-	'uiRegistry'
+        'uiRegistry'
     ],
     function (
         $,
@@ -22,7 +22,7 @@ define(
         errorProcessor,
         urlBuilder,
         fullScreenLoader,
-	registry
+        registry
     ) {
         'use strict';
 
@@ -31,10 +31,18 @@ define(
                 template: 'Amazon_Payment/checkout-revert'
             },
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-	    isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
+            isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
+
+            /**
+             * Init
+             */
             initialize: function () {
                 this._super();
             },
+
+            /**
+             * Revert checkout
+             */
             revertCheckout: function () {
                 var serviceUrl = urlBuilder.createUrl('/amazon/order-ref', {});
 

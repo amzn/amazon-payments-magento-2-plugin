@@ -16,7 +16,7 @@
 define(
     [
         'jquery',
-        "uiComponent",
+        'uiComponent',
         'ko',
         'Magento_Customer/js/model/customer',
         'Amazon_Payment/js/model/storage',
@@ -31,6 +31,7 @@ define(
         amazonPaymentConfig
     ) {
         'use strict';
+
         return Component.extend({
             defaults: {
                 template: 'Amazon_Login/login-button'
@@ -38,6 +39,10 @@ define(
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
             isLwaVisible: ko.observable(amazonPaymentConfig.getValue('isLwaEnabled')),
+
+            /**
+             * Initialize login button
+             */
             initialize: function () {
                 this._super();
             }

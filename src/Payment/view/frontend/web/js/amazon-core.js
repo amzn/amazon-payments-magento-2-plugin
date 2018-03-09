@@ -21,15 +21,17 @@ define([
     'bluebird',
     'jquery/jquery-storageapi'
 ], function ($, ko, amazonPaymentConfig) {
-    "use strict";
+    'use strict';
 
     var clientId = amazonPaymentConfig.getValue('clientId'),
         amazonDefined = ko.observable(false),
         amazonLoginError = ko.observable(false),
         accessToken = ko.observable(null);
 
-
     if (typeof amazon === 'undefined') {
+        /**
+         * Amazon login ready callback
+         */
         window.onAmazonLoginReady = function () {
             setClientId(clientId);  //eslint-disable-line no-use-before-define
             doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
@@ -41,10 +43,9 @@ define([
 
     /**
      * Set Client ID
-     * @param cid
+     * @param {String} cid
      */
-    function setClientId(cid)
-    {
+    function setClientId(cid) {
         amazon.Login.setClientId(cid); //eslint-disable-line no-undef
         amazonDefined(true);
     }
@@ -52,8 +53,7 @@ define([
     /**
      * Log user out of amazon
      */
-    function amazonLogout()
-    {
+    function amazonLogout() {
         if (amazonDefined()) {
             amazon.Login.logout(); //eslint-disable-line no-undef
         } else {
@@ -66,9 +66,10 @@ define([
         }
     }
 
-    //Check if login error / logout cookies are present
-    function doLogoutOnFlagCookie()
-    {
+    /**
+     * Check if login error / logout cookies are present
+     */
+    function doLogoutOnFlagCookie() {
         var errorFlagCookie = 'amz_auth_err',
             amazonLogoutCookie = 'amz_auth_logout';
 
@@ -78,9 +79,10 @@ define([
         $.cookieStorage.isSet(amazonLogoutCookie) ? amazonLogoutThrowError(amazonLogoutCookie) : false;
     }
 
-    //handle deletion of cookie and log user out if present
-    function amazonLogoutThrowError(cookieToRemove)
-    {
+    /**
+     * Handle deletion of cookie and log user out if present
+     */
+    function amazonLogoutThrowError(cookieToRemove) {
         amazonLogout();
         document.cookie = cookieToRemove + '=; Path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         amazonLoginError(true);
@@ -91,14 +93,14 @@ define([
          * Verify a user is logged into amazon
          */
         verifyAmazonLoggedIn: function () {
-            var defer  = $.Deferred();
+            var defer  = $.Deferred(),
+                loginOptions = {
+                    scope: amazonPaymentConfig.getValue('loginScope'),
+                    popup: true,
+                    interactive: 'never'
+                };
 
-            var loginOptions = {
-                scope: amazonPaymentConfig.getValue('loginScope'),
-                popup: true,
-                interactive: 'never'
-            };
-
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             amazon.Login.authorize(loginOptions, function (response) { //eslint-disable-line no-undef
                 if (response.error) {
                     defer.reject(response.error);
@@ -107,6 +109,7 @@ define([
                     defer.resolve(!response.error);
                 }
             });
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
             return defer.promise();
         },

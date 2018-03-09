@@ -17,9 +17,12 @@ define(
     function (registry) {
         'use strict';
 
-	var config = registry.get('amazonPayment') || {};
+        var config = registry.get('amazonPayment') || {};
 
         return {
+            /**
+             * Get config value
+             */
             getValue: function (key, defaultValue) {
                 if (config.hasOwnProperty(key)) {
                     return config[key];
@@ -27,8 +30,12 @@ define(
                     return defaultValue;
                 }
             },
+
+            /**
+             * Is amazonPayment defined?
+             */
             isDefined: function () {
-		return registry.get('amazonPayment') !== undefined;
+                return registry.get('amazonPayment') !== undefined;
             }
         };
     }

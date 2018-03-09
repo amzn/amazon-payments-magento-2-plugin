@@ -18,25 +18,41 @@ define([
     'jquery',
     'mage/cookies'
 ], function (sjcl, $) {
-    "use strict";
+    'use strict';
 
     return {
         options: {
             wordsLength: 8,
             cookieName: 'amazon-csrf-state'
         },
+
+        /**
+         * Create random string for Amazon CSRF cookie
+         */
         generateNewValue: function () {
             var randomString = sjcl.codec.base64.fromBits(sjcl.random.randomWords(this.options.wordsLength));
 
             $.mage.cookies.set(this.options.cookieName, randomString);
+
             return randomString;
         },
+
+        /**
+         * Check if Amazon CSRF cookie is valid and clear cookie
+         * @param {String} stateString
+         * @returns {Boolean}
+         */
         isValid: function (stateString) {
             var isValid = $.mage.cookies.get(this.options.cookieName) === stateString;
 
             this.clear(); // always clear nonce when validating
+
             return isValid;
         },
+
+        /**
+         * Clear Amazon CSRF cookie
+         */
         clear: function () {
             $.mage.cookies.clear(this.options.cookieName);
         }

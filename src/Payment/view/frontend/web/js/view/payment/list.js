@@ -57,8 +57,8 @@ define([
 
         /**
          * Check if a payment method is applicable with Amazon Pay
-         * @param method
-         * @returns {boolean}
+         * @param {String} method
+         * @returns {Boolean}
          * @private
          */
         _shouldRemovePaymentMethod: function (method) {

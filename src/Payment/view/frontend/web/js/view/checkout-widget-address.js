@@ -3,7 +3,7 @@
 define(
     [
         'jquery',
-        "uiComponent",
+        'uiComponent',
         'ko',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/quote',
@@ -44,6 +44,7 @@ define(
         populateShippingAddressAction
     ) {
         'use strict';
+
         var self;
 
         return Component.extend({
@@ -51,14 +52,18 @@ define(
                 template: 'Amazon_Payment/checkout-widget-address'
             },
             options: {
-		sellerId: registry.get('amazonPayment').merchantId,
+                sellerId: registry.get('amazonPayment').merchantId,
                 addressWidgetDOMId: 'addressBookWidgetDiv',
-		widgetScope: registry.get('amazonPayment').loginScope
+                widgetScope: registry.get('amazonPayment').loginScope
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-	    isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
+            isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
             rates: shippingService.getShippingRates(),
+
+            /**
+             * Init
+             */
             initialize: function () {
                 self = this;
                 this._super();
@@ -78,17 +83,29 @@ define(
                 new OffAmazonPayments.Widgets.AddressBook({ // eslint-disable-line no-undef
                     sellerId: self.options.sellerId,
                     scope: self.options.widgetScope,
+
+                    /**
+                     * Order reference creation callback
+                     */
                     onOrderReferenceCreate: function (orderReference) {
                         var orderid = orderReference.getAmazonOrderReferenceId();
 
                         amazonStorage.setOrderReference(orderid);
                     },
+
+                    /**
+                     * Address select callback
+                     */
                     onAddressSelect: function () { // orderReference
                         self.getShippingAddressFromAmazon();
                     },
                     design: {
                         designMode: 'responsive'
                     },
+
+                    /**
+                     * Error callback
+                     */
                     onError: function (error) {
                         console.log(error);
                     }
@@ -103,11 +120,12 @@ define(
 
                 amazonStorage.isShippingMethodsLoading(true);
                 shippingService.isLoading(true);
-                serviceUrl = urlBuilder.createUrl('/amazon-shipping-address/:amazonOrderReference',
-                    {amazonOrderReference: amazonStorage.getOrderReference()}),
+                serviceUrl = urlBuilder.createUrl('/amazon-shipping-address/:amazonOrderReference', {
+                        amazonOrderReference: amazonStorage.getOrderReference()
+                    }),
                     payload = {
                         addressConsentToken: amazonStorage.getAddressConsentToken()
-                };
+                    };
 
                 storage.put(
                     serviceUrl,
@@ -143,10 +161,16 @@ define(
                 );
             },
 
+            /**
+             * Get Amazon Order Reference ID
+             */
             getAmazonOrderReference: function () {
                 return amazonStorage.getOrderReference();
             },
 
+            /**
+             * Get Amazon Address Consent Token
+             */
             getAddressConsentToken: function () {
                 return amazonStorage.getAddressConsentToken();
             }

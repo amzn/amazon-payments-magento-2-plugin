@@ -13,18 +13,20 @@
  * permissions and limitations under the License.
  */
 
-var registry = require('uiRegistry');
-var amazonPayment = registry.get('amazonPayment');
+var registry = require('uiRegistry'),
+    amazonPayment = registry.get('amazonPayment');
 
 if (amazonPayment !== undefined && amazonPayment.allowAmLoginLoading === true) {
     define(['require', 'Amazon_Login/js/view/login-button'], function (require) {
-        "use strict";
-        return require("Amazon_Login/js/view/login-button");
+        'use strict';
+
+        return require('Amazon_Login/js/view/login-button');
     });
 } else {
     define(['require', 'uiComponent'], function (require) {
-        "use strict";
-        return require("uiComponent");
+        'use strict';
+
+        return require('uiComponent');
     });
 }
 

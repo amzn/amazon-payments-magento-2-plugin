@@ -13,11 +13,11 @@
  * permissions and limitations under the License.
  */
 
-var registry = require('uiRegistry');
-var amazonPayment = registry.get('amazonPayment');
+var registry = require('uiRegistry'),
+    amazonPayment = registry.get('amazonPayment');
 
 define([amazonPayment.widgetUrl], function () {
-    "use strict";
+    'use strict';
+
     //after amazon widgets file as loaded
 });
-

@@ -19,7 +19,7 @@ define([
     'amazonCore',
     'jquery/ui'
 ], function ($, customerData) {
-    "use strict";
+    'use strict';
 
     var _this,
         addedViaAmazon = false;
@@ -28,6 +28,10 @@ define([
         options: {
             addToCartForm: '#product_addtocart_form'
         },
+
+        /**
+         * Create triggers
+         */
         _create: function () {
             _this = this;
             this.setupTriggers();

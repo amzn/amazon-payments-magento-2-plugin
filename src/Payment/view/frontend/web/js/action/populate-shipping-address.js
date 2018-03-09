@@ -25,8 +25,10 @@ define(
     function ($, addressConverter, quote, registry, checkoutData, checkoutDataResolver) {
         'use strict';
 
-        function populateShippingForm()
-        {
+        /**
+         * Populate shipping address form in shipping step from quote model         *
+         */
+        function populateShippingForm() {
             var shippingAddressData = checkoutData.getShippingAddressFromData();
 
             registry.async('checkoutProvider')(function (checkoutProvider) {
@@ -35,7 +37,7 @@ define(
                     $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                 );
             });
-            $("#co-shipping-form").css("display", "none");
+            $('#co-shipping-form').css('display', 'none');
             checkoutDataResolver.resolveShippingAddress();
         }
 

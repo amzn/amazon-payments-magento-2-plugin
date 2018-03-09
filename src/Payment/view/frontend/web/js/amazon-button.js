@@ -22,7 +22,7 @@ define([
     'amazonCore',
     'jquery/ui'
 ], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf) {
-    "use strict";
+    'use strict';
 
     var _this,
         $button;
@@ -37,6 +37,9 @@ define([
             loginPostUrl: null
         },
 
+        /**
+         * Create button
+         */
         _create: function () {
             _this = this;
             $button = this.element;
@@ -51,8 +54,8 @@ define([
         _verifyAmazonConfig: function () {
             if (amazonPaymentConfig.isDefined()) {
                 _this.options.merchantId = amazonPaymentConfig.getValue('merchantId');
-                _this.options.buttonType = _this.options.buttonType === 'LwA'
-                    ? amazonPaymentConfig.getValue('buttonTypeLwa') : amazonPaymentConfig.getValue('buttonTypePwa');
+                _this.options.buttonType = _this.options.buttonType === 'LwA' ?
+                    amazonPaymentConfig.getValue('buttonTypeLwa') : amazonPaymentConfig.getValue('buttonTypePwa');
                 _this.options.buttonColor = amazonPaymentConfig.getValue('buttonColor');
                 _this.options.buttonSize = amazonPaymentConfig.getValue('buttonSize');
                 _this.options.redirectUrl = amazonPaymentConfig.getValue('redirectUrl');
@@ -61,16 +64,23 @@ define([
                 _this.options.buttonLanguage = amazonPaymentConfig.getValue('displayLanguage');
             }
         },
+
+        /**
+         * Validate CSRF cookie and redirect to HTTPS
+         */
         secureHttpsCallback: function (event) {
             var sections = sectionConfig.getAffectedSections(_this.options.loginPostUrl);
 
             if (!event.state || !amazonCsrf.isValid(event.state)) {
                 window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
+
                 return window.location;
             }
 
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             if (!event.access_token || !!event.error) {
                 window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
+
                 return window.location;
             }
 
@@ -78,7 +88,14 @@ define([
                 customerData.invalidate(sections);
             }
             window.location = _this.options.redirectUrl + '?access_token=' + event.access_token;
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         },
+
+        /**
+         * Use popup or redirect URI
+         *
+         * @return {String}
+         */
         _popupCallback: function () {
             return _this.usePopUp() ? _this.secureHttpsCallback : amazonPaymentConfig.getValue('oAuthHashRedirectUrl');
         },
@@ -119,6 +136,9 @@ define([
                 size: _this.options.buttonSize,
                 language: _this.options.buttonLanguage,
 
+                /**
+                 * Authorization callback
+                 */
                 authorization: function () {
                     //eslint-disable-next-line no-undef
                     amazon.Login.authorize(_this._getLoginOptions(), _this._popupCallback());

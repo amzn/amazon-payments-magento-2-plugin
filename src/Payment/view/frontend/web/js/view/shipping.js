@@ -2,7 +2,7 @@
 define(
     [
         'jquery',
-        "underscore",
+        'underscore',
         'ko',
         'Magento_Checkout/js/view/shipping',
         'Magento_Customer/js/model/customer',
@@ -27,22 +27,32 @@ define(
         $t
     ) {
         'use strict';
+
         return Component.extend({
             isFormInline: ko.observable(addressList().length === 0),
             formSelector: '#co-shipping-form',
 
+            /**
+             * Initialize shipping
+             */
             initialize: function () {
                 this._super();
                 this.isNewAddressAdded(amazonStorage.isAmazonAccountLoggedIn());
                 amazonStorage.isAmazonAccountLoggedIn.subscribe(function (value) {
                     this.isNewAddressAdded(value);
                 }, this);
+
                 return this;
             },
+
+            /**
+             * Validate guest email
+             */
             validateGuestEmail: function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]';
 
                 $(loginFormSelector).validation();
+
                 return $(loginFormSelector + ' input[type=email]').valid();
             },
 
@@ -50,20 +60,26 @@ define(
              * New setShipping Action for Amazon Pay to bypass validation
              */
             setShippingInformation: function () {
-                function setShippingInformationAmazon()
-                {
+
+                /**
+                 * Set Amazon shipping info
+                 */
+                function setShippingInformationAmazon() {
                     setShippingInformationAction().done(
                         function () {
                             stepNavigator.next();
                         }
                     );
                 }
+
                 if (amazonStorage.isAmazonAccountLoggedIn() && customer.isLoggedIn()) {
                     this.isFormInline(true);
+
                     if (this.validateShippingInformation()) {
                         setShippingInformationAmazon();
                     }
                 } else if (amazonStorage.isAmazonAccountLoggedIn() && !customer.isLoggedIn()) {
+
                     if (this.validateGuestEmail() && this.validateShippingInformation()) {
                         setShippingInformationAmazon();
                     }
@@ -73,6 +89,9 @@ define(
                 }
             },
 
+            /**
+             * Validate shipping method
+             */
             validateShippingInformation: function () {
                 var loginFormSelector = 'form[data-role=email-with-possible-login]',
                     emailValidationResult = customer.isLoggedIn(),
@@ -98,18 +117,21 @@ define(
                         this.source.trigger('shippingAddress.custom_attributes.data.validate');
                     }
 
+                    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+
                     if (this.source.get('params.invalid') ||
                         !quote.shippingMethod().method_code ||
                         !quote.shippingMethod().carrier_code ||
                         !emailValidationResult
                     ) {
+                        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
-                        $(this.formSelector).find(".field").each(function () {
+                        $(this.formSelector).find('.field').each(function () {
                             if ($(this).hasClass('_error')) {
-                                errorCount ++;
+                                errorCount++;
                                 $(this).show();
                             } else {
-                                $(this).css("display", "none");
+                                $(this).css('display', 'none');
                             }
                         });
 
@@ -120,11 +142,11 @@ define(
                         } else {
                             $(this.formSelector).hide();
                         }
+
                         return false;
                     }
-
-
                 }
+
                 return this._super();
             }
         });

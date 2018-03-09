@@ -18,7 +18,7 @@ define([
     'amazonCore',
     'jquery/ui'
 ], function ($, core) {
-    "use strict";
+    'use strict';
 
     $.widget('amazon.AmazonLogout', {
         options: {
