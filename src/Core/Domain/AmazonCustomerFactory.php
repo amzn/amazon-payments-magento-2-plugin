@@ -29,11 +29,6 @@ class AmazonCustomerFactory
     private $objectManager = null;
 
     /**
-     * @var AmazonName
-     */
-    private $amazonName;
-
-    /**
      * @var AmazonNameFactory
      */
     private $amazonNameFactory;
