@@ -148,9 +148,9 @@ abstract class Login extends Action
 
             if (is_array($userInfo) && isset($userInfo['user_id'])) {
                 $data = [
-                    'user_id' => $userInfo['user_id'],
-                    'email' => $userInfo['email'],
-                    'name' => $userInfo['name'],
+                    'id'      => $userInfo['user_id'],
+                    'email'   => $userInfo['email'],
+                    'name'    => $userInfo['name'],
                     'country' => $this->amazonCoreHelper->getRegion(),
                 ];
                 $amazonCustomer = $this->amazonCustomerFactory->create($data);
