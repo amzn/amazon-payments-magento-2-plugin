@@ -68,15 +68,14 @@ class AmazonAddressFactory
         );
 
         $data = [
-            'city' => $address['City'],
-            'postCode' => $address['PostalCode'],
-            'countryCode' => $address['CountryCode'],
-            'telephone' => $address['Phone'] ?? '',
-            'state' => $address['StateOrRegion'] ?? '',
-            'name' => $address['Name'],
-            'firstName' => $amazonName->getFirstName(),
-            'lastName' => $amazonName->getLastName(),
-            'lines' => $this->getLines($address)
+            AmazonAddressInterface::CITY => $address['City'],
+            AmazonAddressInterface::POSTAL_CODE => $address['PostalCode'],
+            AmazonAddressInterface::COUNTRY_CODE => $address['CountryCode'],
+            AmazonAddressInterface::TELEPHONE => $address['Phone'] ?? '',
+            AmazonAddressInterface::STATE_OR_REGION => $address['StateOrRegion'] ?? '',
+            AmazonAddressInterface::FIRST_NAME => $amazonName->getFirstName(),
+            AmazonAddressInterface::LAST_NAME => $amazonName->getLastName(),
+            AmazonAddressInterface::LINES => $this->getLines($address)
         ];
 
         $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['data' => $data]);

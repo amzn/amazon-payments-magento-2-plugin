@@ -20,6 +20,16 @@ namespace Amazon\Core\Api\Data;
  */
 interface AmazonAddressInterface
 {
+    const FIRST_NAME = 'first_name';
+    const LAST_NAME  = 'last_name';
+    const CITY = 'city';
+    const POSTAL_CODE = 'postal_code';
+    const COUNTRY_CODE  = 'country_code';
+    const TELEPHONE = 'telephone';
+    const STATE_OR_REGION  = 'state';
+    const LINES = 'lines';
+    const COMPANY = 'company';
+
     /**
      * Get first name
      *

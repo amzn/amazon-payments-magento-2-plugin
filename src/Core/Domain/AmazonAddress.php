@@ -24,7 +24,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getFirstName()
     {
-        return $this->getData('firstName');
+        return $this->getData(AmazonAddressInterface::FIRST_NAME);
     }
 
     /**
@@ -32,7 +32,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getLastName()
     {
-        return $this->getData('lastName');
+        return $this->getData(AmazonAddressInterface::LAST_NAME);
     }
 
     /**
@@ -40,7 +40,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getLines()
     {
-        return $this->getData('lines');
+        return $this->getData(AmazonAddressInterface::LINES);
     }
 
     /**
@@ -48,8 +48,8 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getLine($lineNumber)
     {
-        if (isset($this->getData('lines')[$lineNumber])) {
-            return $this->getData('lines')[$lineNumber];
+        if (isset($this->getData(AmazonAddressInterface::LINES)[$lineNumber])) {
+            return $this->getData(AmazonAddressInterface::LINES)[$lineNumber];
         }
         return null;
     }
@@ -59,7 +59,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getCity()
     {
-        return $this->getData('city');
+        return $this->getData(AmazonAddressInterface::CITY);
     }
 
     /**
@@ -67,7 +67,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getState()
     {
-        return $this->getData('state');
+        return $this->getData(AmazonAddressInterface::STATE_OR_REGION);
     }
 
     /**
@@ -75,7 +75,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getPostCode()
     {
-        return $this->getData('postCode');
+        return $this->getData(AmazonAddressInterface::POSTAL_CODE);
     }
 
     /**
@@ -83,7 +83,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getCountryCode()
     {
-        return $this->getData('countryCode');
+        return $this->getData(AmazonAddressInterface::COUNTRY_CODE);
     }
 
     /**
@@ -91,7 +91,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getTelephone()
     {
-        return $this->getData('telephone');
+        return $this->getData(AmazonAddressInterface::TELEPHONE);
     }
 
     /**
@@ -99,6 +99,6 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
      */
     public function getCompany()
     {
-        return $this->getData('company');
+        return $this->getData(AmazonAddressInterface::COMPANY);
     }
 }
