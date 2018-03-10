@@ -15,6 +15,7 @@
  */
 namespace Amazon\Payment\Helper;
 
+use Amazon\Core\Api\Data\AmazonAddressInterface;
 use Amazon\Core\Domain\AmazonAddress;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
@@ -51,11 +52,11 @@ class Address
     /**
      * Convert Amazon Address to Magento Address
      *
-     * @param AmazonAddress $amazonAddress
+     * @param AmazonAddressInterface $amazonAddress
      *
      * @return AddressInterface
      */
-    public function convertToMagentoEntity(AmazonAddress $amazonAddress)
+    public function convertToMagentoEntity(AmazonAddressInterface $amazonAddress)
     {
         $address = $this->addressFactory->create();
         $address->setFirstname($amazonAddress->getFirstName());
@@ -76,12 +77,12 @@ class Address
         return $address;
     }
 
-    protected function getCountryId(AmazonAddress $amazonAddress)
+    protected function getCountryId(AmazonAddressInterface $amazonAddress)
     {
         return strtoupper($amazonAddress->getCountryCode());
     }
 
-    protected function getRegionData(AmazonAddress $amazonAddress, $countryId)
+    protected function getRegionData(AmazonAddressInterface $amazonAddress, $countryId)
     {
         $region     = $this->regionFactory->create();
         $regionData = $this->regionDataFactory->create();

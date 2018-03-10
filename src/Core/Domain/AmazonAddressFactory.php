@@ -92,7 +92,7 @@ class AmazonAddressFactory
             ]
         );
 
-        if (!$amazonAddress instanceof AmazonAddress) {
+        if (!$amazonAddress instanceof AmazonAddressInterface) {
             throw new LocalizedException(
                 __(
                     'Address country handler %1 must be of type %2',
