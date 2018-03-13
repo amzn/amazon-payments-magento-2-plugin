@@ -9,6 +9,7 @@
                 <sort_order>1</sort_order>
                 <model>Amazon\Payment\Model\Method\Amazon</model>
                 <order_status>pending_payment</order_status>
+                <new_order_status>pending</new_order_status>
                 <payment_action>authorize</payment_action>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
