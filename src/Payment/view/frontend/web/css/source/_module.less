@@ -24,6 +24,30 @@
             display: inline-block;
             margin: 12px 0 4px 0;
         }
+
+        .field-tooltip {
+            .field-tooltip-content {
+                top: 38px;
+                left: -245px;
+
+                &:before {
+                    border: none;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid #666666;
+                    top: -10px;
+                    left: 244px;
+                }
+                &:after {
+                    border: none;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid #f4f4f4;
+                    top: -8px;
+                    left: 244px;
+                }
+            }
+        }
     }
 
     .amazon-addtoCart {
