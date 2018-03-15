@@ -20,6 +20,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
+    const KEY_ACTIVE = 'active';
+
     /**
      * Map any supported payment method into a config path by specified field name
      *
@@ -31,4 +33,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         return 'payment/amazon_payment/general/options';
     }
+
+    /**
+     * Gets Payment configuration status.
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isActive($storeId = null)
+    {
+        return (bool) $this->getValue(self::KEY_ACTIVE, $storeId);
+    }
+
 }

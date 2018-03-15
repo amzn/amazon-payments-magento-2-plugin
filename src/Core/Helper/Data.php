@@ -34,6 +34,7 @@ class Data extends AbstractHelper
     const AMAZON_CLIENT_SECRET = 'client_secret';
     const AMAZON_REGION = 'region';
     const AMAZON_SANDBOX = 'sandbox';
+    const AMAZON_ACTIVE = 'payment/amazon_payment/active';
 
     private $amazonAccountUrl
         = [
@@ -295,7 +296,7 @@ class Data extends AbstractHelper
         }
 
         return $this->scopeConfig->isSetFlag(
-            'payment/amazon_payment/pwa_enabled',
+            self::AMAZON_ACTIVE,
             $scope,
             $scopeCode
         );

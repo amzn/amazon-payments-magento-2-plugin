@@ -16,7 +16,6 @@
                 <can_void>1</can_void>
                 <can_use_checkout>1</can_use_checkout>
                 <packstation_terms>Packstation,Pack-Station,Pack Station,PO Box,Post Office box,Locker</packstation_terms>
-                <pwa_enabled>0</pwa_enabled>
                 <lwa_enabled>0</lwa_enabled>
                 <authorization_mode>synchronous</authorization_mode>
                 <update_mechanism>polling</update_mechanism>
