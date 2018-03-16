@@ -448,18 +448,6 @@ class Data extends AbstractHelper
     /*
      * @return string
      */
-    public function getNewOrderStatus($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
-    {
-        return $this->scopeConfig->getValue(
-            'payment/amazon_payment/new_order_status',
-            $scope,
-            $scopeCode
-        );
-    }
-
-    /*
-     * @return string
-     */
     public function getEmailStoreName($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->scopeConfig->getValue(

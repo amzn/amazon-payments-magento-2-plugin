@@ -6,10 +6,6 @@
     <event name="sales_order_save_after">
         <observer name="amazon_payment_copy_order_reference" instance="Amazon\Payment\Observer\CopyOrderReference" />
     </event>
-    <event name="sales_order_save_before">
-        <observer name="amazon_payment_complete_order" instance="Amazon\Payment\Observer\CompleteOrder" />
-        <observer name="amazon_payment_complete_order_status" instance="Amazon\Payment\Observer\CompleteOrderStatus" />
-    </event>
     <event name="sales_order_load_after">
         <observer name="amazon_payment_load_order" instance="Amazon\Payment\Observer\LoadOrder" />
     </event>

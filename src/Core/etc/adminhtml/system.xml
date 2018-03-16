@@ -123,11 +123,6 @@
                     </group>
                     <group id="sales_options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sales Options</label>
-                        <field id="new_order_status" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>New Order Status</label>
-                            <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
-                            <config_path>payment/amazon_payment/new_order_status</config_path>
-                        </field>
                         <field id="storename" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
                             <label>Store Name</label>
                             <config_path>payment/amazon_payment/storename</config_path>
