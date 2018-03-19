@@ -127,7 +127,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                     'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
                     'Plugin Version : ' . $this->coreHelper->getVersion()
                 ,
-                'platform_id'               => 'A2ZAYEJU54T1BM'
+                'platform_id'               => 'AUGT0HMCLQVX1'
             ];
 
             $responseParser = $this->clientFactory->create($storeId)->setOrderReferenceDetails($data);
