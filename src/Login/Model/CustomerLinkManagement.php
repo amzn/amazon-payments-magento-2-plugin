@@ -43,11 +43,6 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
     private $customerInterface;
 
     /**
-     * @var Session
-     */
-    private $customerSession;
-
-    /**
      * @var CustomerInterfaceFactory
      */
     private $customerDataFactory;
@@ -66,7 +61,6 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
      * @param CustomerLinkRepositoryInterface $customerLinkRepository
      * @param CustomerLinkFactory $customerLinkFactory
      * @param CustomerInterface $customerInterface
-     * @param Session $customerSession
      * @param CustomerInterfaceFactory $customerDataFactory
      * @param AccountManagementInterface $accountManagement
      * @param Random $random
@@ -75,7 +69,6 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
         CustomerLinkRepositoryInterface $customerLinkRepository,
         CustomerLinkFactory $customerLinkFactory,
         CustomerInterface $customerInterface,
-        Session $customerSession,
         CustomerInterfaceFactory $customerDataFactory,
         AccountManagementInterface $accountManagement,
         Random $random
@@ -83,7 +76,6 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
         $this->customerLinkRepository   = $customerLinkRepository;
         $this->customerLinkFactory = $customerLinkFactory;
         $this->customerInterface   = $customerInterface;
-        $this->customerSession     = $customerSession;
         $this->customerDataFactory = $customerDataFactory;
         $this->accountManagement   = $accountManagement;
         $this->random              = $random;
