@@ -9,15 +9,15 @@ and Login with Amazon services. This helps your customers shop quickly, safely a
 Your customers can pay on your website without re-entering their payment and address 
 details. All Amazon Pay transactions are protected by Amazon's A-to-z Guarantee.
 
-##Dependencies
+## Dependencies
 
-You can find a list of modules in the require section of the composer.json file located in the 
-same directory as this README.md file.
+You can find a list of modules in the require section of the `composer.json` file located in the
+same directory as this `README.md` file.
 
-##Extension Points
+## Extension Points
 
 Amazon Payment does not provide any specific extension points.
 
-##Additional Information
+## Additional Information
 
 [View the Complete User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin/)
