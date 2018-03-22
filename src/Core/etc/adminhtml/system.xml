@@ -128,7 +128,7 @@
                             <config_path>payment/amazon_payment/storename</config_path>
                         </field>
                     </group>
-                    <group id="developer_options" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <group id="extra_options" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Developer Options</label>
                         <field id="logging" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Logging</label>
