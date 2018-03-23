@@ -93,7 +93,7 @@ require(['uiRegistry', "prototype"], function(registry){
     // Show/hide fields
     if ($('payment_'+co+'_amazon_payment_credentials_merchant_id') != null) {
         if ($('payment_'+co+'_amazon_payment_credentials_merchant_id').value) {
-            amazonSpBack.show();
+            amazonSpBack.setStyle({'display':'block'});
             amazonSimplepath.hide();
 
             if (window.location.hash == '#payment_amazon_payments-head') {
