@@ -60,7 +60,7 @@ class SimplePath
         \Magento\Paypal\Model\Config $paypal,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->coreHelper   = $coreHelper;
+        $this->coreHelper    = $coreHelper;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -235,7 +235,7 @@ class SimplePath
             }
 
             foreach ($payload as $key => $value) {
-                $payload->$key = urldecode($value);
+                $payload->$key = rawurldecode($value);
             }
 
             // Retrieve Amazon public key to verify signature

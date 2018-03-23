@@ -193,8 +193,8 @@ require(['uiRegistry', "prototype"], function(registry){
     // User is skipping simplepath
     amazonSimplepath.select('#simplepath-skip')[0].observe('click', function(e) {
         e.stop();
-        amazonSpBack.show();
         showAmazonConfig();
+        amazonSpBack.setStyle({'display':'block'});
     });
 
     // User clicked 'Back'
