@@ -42,7 +42,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function isActive($storeId = null)
     {
-        return (bool) $this->getValue(self::KEY_ACTIVE, $storeId);
+        return (bool)$this->getValue(self::KEY_ACTIVE, $storeId);
     }
-
 }
