@@ -98,7 +98,7 @@
                         <field id="display_language" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Button Display Language</label>
                             <config_path>payment/amazon_payment/button_display_language</config_path>
-                            <comment><![CDATA[Controls button and widget language. The default is your shop's locale. Available options can be found <a href="https://payments.amazon.co.uk/developer/documentation/lpwa/201953980#ENTER_LANGUAGE_PARAMETER">here</a>.]]></comment>
+                            <comment><![CDATA[Controls button and widget language. The default is your shop's locale. Available options can be found <a href="https://payments.amazon.co.uk/developer/documentation/lpwa/201953980#ENTER_LANGUAGE_PARAMETER">here</a>. Applies only to UK and DE Amazon Merchant Accounts.]]></comment>
                         </field>
                         <field id="button_color" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Button Color</label>
