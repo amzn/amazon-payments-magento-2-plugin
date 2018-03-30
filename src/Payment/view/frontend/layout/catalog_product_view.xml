@@ -18,7 +18,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="product.info.social">
-            <block class="Amazon\Payment\Block\ProductPagePaymentLink" name="amazon.pay.button.product" before="-" template="Amazon_Payment::payment-link-product-page.phtml" />
+            <block class="Amazon\Payment\Block\ProductPagePaymentLink" name="amazon.pay.button.product" before="-" template="Amazon_Payment::payment-link-product-page.phtml" ifconfig="payment/amazon_payment/active" />
         </referenceContainer>
     </body>
 </page>
