@@ -24,8 +24,8 @@ class IpnUrl extends BaseField
     /**
      * Render element value
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _renderValue(AbstractElement $element)
@@ -38,7 +38,7 @@ class IpnUrl extends BaseField
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
                 $value      = $baseUrl . 'amazonpayments/payment/ipn/';
-                $urlArray[] = "<div>".$value."</div>";
+                $urlArray[] = "<div>".$this->escapeHtml($value)."</div>";
             }
         }
 
@@ -53,8 +53,8 @@ class IpnUrl extends BaseField
     /**
      * Render element value
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _renderInheritCheckbox(AbstractElement $element)
