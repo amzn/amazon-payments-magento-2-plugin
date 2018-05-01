@@ -24,8 +24,8 @@ class RedirectUrl extends BaseField
     /**
      * Render element value
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _renderValue(AbstractElement $element)
@@ -38,7 +38,7 @@ class RedirectUrl extends BaseField
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
                 $value      = $baseUrl . 'amazon/login/processAuthHash/';
-                $urlArray[] = "<div>".$value."</div>";
+                $urlArray[] = "<div>".$this->escapeHtml($value)."</div>";
             }
         }
 
@@ -53,8 +53,8 @@ class RedirectUrl extends BaseField
     /**
      * Render element value
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _renderInheritCheckbox(AbstractElement $element)
