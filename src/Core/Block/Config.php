@@ -21,22 +21,25 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class Config extends Template
 {
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var Url
      */
-    protected $url;
+    private $url;
 
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     public function __construct(
         Context $context,

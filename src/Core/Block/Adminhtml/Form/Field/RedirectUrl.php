@@ -21,17 +21,24 @@ use Magento\Framework\UrlInterface;
 
 class RedirectUrl extends BaseField
 {
+    /**
+     * Render element value
+     *
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function _renderValue(AbstractElement $element)
     {
         $stores = $this->_storeManager->getStores();
         $valueReturn = '';
-        $urlArray = array();
+        $urlArray = [];
 
         foreach ($stores as $store) {
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
-                $value = $baseUrl . 'amazon/login/processAuthHash/';
-                $urlArray[] = "<div>".$value."</div>";
+                $value      = $baseUrl . 'amazon/login/processAuthHash/';
+                $urlArray[] = "<div>".$this->escapeHtml($value)."</div>";
             }
         }
 
@@ -43,6 +50,13 @@ class RedirectUrl extends BaseField
         return '<td class="value">' . $valueReturn . '</td>';
     }
 
+    /**
+     * Render element value
+     *
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function _renderInheritCheckbox(AbstractElement $element)
     {
         return '<td class="use-default"></td>';
