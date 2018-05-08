@@ -24,43 +24,24 @@ use Magento\Quote\Setup\QuoteSetupFactory;
 
 class UpgradeData implements UpgradeDataInterface
 {
-    /**
-     * @var QuoteSetupFactory
-     */
-    private $quoteSetupFactory;
-
-    /**
-     * @param QuoteSetupFactory $quoteSetupFactory
-     */
-    public function __construct(QuoteSetupFactory $quoteSetupFactory)
-    {
-        $this->quoteSetupFactory = $quoteSetupFactory;
-    }
 
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '1.0.0', '<=')) {
-            $this->addQuoteTableDirtyFlagAttribute($setup);
+
+        // Used update query because all scopes needed to have this value updated and this is a fast, simple approach
+        if (version_compare($context->getVersion(), '1.2.6', '<')) {
+
+            $sql = "SELECT c.config_id 
+                    FROM core_config_data c 
+                    WHERE c.path = 'payment/amazon_payment/authorization_mode' AND c.value = 'asynchronous'";
+
+            $result = $setup->getConnection()->fetchAll($sql);
+
+            foreach ($result as $row) {
+                $sql = "UPDATE core_config_data SET value='synchronous_possible' WHERE config_id = ".$row['config_id'];
+                $setup->getConnection()->query($sql);
+
+            }
         }
-    }
-
-    /**
-     * @param ModuleDataSetupInterface $setup
-     */
-    private function addQuoteTableDirtyFlagAttribute(ModuleDataSetupInterface $setup)
-    {
-        $options = [
-            'type' => Table::TYPE_SMALLINT,
-            'visible' => false,
-            'required' => false,
-            'default' => 0,
-            'nullable' => false,
-            'unsigned' => true
-        ];
-
-        /** @var \Magento\Quote\Setup\QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
-
-        $quoteSetup->addAttribute('quote_item', CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT, $options);
     }
 }
