@@ -33,11 +33,7 @@
     <type name="Magento\Customer\Controller\Account\Create">
         <plugin name="amazon_login_create_controller" type="Amazon\Login\Plugin\CreateController" sortOrder="1" />
     </type>
-    <type name="Amazon\Login\Controller\Login\Guest">
-        <arguments>
-            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
+
     <type name="Amazon\Login\Helper\Session">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
