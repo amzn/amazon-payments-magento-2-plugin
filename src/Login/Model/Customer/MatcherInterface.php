@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Login\Api\Customer;
+namespace Amazon\Login\Model\Customer;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -21,7 +21,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 /**
  * @api
  */
-interface CompositeMatcherInterface
+interface MatcherInterface
 {
     /**
      * Match magento customer using amazon customer

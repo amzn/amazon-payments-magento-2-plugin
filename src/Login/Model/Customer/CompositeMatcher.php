@@ -16,10 +16,9 @@
 namespace Amazon\Login\Model\Customer;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
-use Amazon\Login\Api\Customer\CompositeMatcherInterface;
-use Amazon\Login\Api\Customer\MatcherInterface;
+use Amazon\Login\Model\Customer\MatcherInterface;
 
-class CompositeMatcher implements CompositeMatcherInterface
+class CompositeMatcher implements MatcherInterface
 {
     /**
      * @var MatcherInterface[]
