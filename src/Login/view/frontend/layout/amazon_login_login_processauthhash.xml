@@ -19,8 +19,8 @@
     <body>
         <referenceBlock name="page.main.title" display="false"/>
         <referenceContainer name="content">
-            <block class="Amazon\Core\Block\Config" name="amazon_config" template="Amazon_Core::config.phtml" ifconfig="payment/amazon_payment/active" />
-            <block class="Amazon\Login\Block\OAuthRedirect" name="amazon_login_oauth_redirect" template="Amazon_Login::oAuthRedirect.phtml" ifconfig="payment/amazon_payment/active" />
+            <block class="Amazon\Core\Block\Config" name="amazon_config" template="Amazon_Core::config.phtml" />
+            <block class="Amazon\Login\Block\OAuthRedirect" name="amazon_login_oauth_redirect" template="Amazon_Login::oAuthRedirect.phtml" />
         </referenceContainer>
     </body>
 </page>

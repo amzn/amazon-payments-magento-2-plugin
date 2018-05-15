@@ -18,7 +18,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="customer.login.container">
-            <block class="Amazon\Login\Block\Login" name="amazon_login" after="customer.new" template="Amazon_Login::login.phtml" ifconfig="payment/amazon_payment/active"/>
+            <block class="Amazon\Login\Block\Login" name="amazon_login" after="customer.new" template="Amazon_Login::login.phtml" />
         </referenceContainer>
     </body>
 </page>
