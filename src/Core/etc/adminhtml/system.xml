@@ -71,6 +71,7 @@
                         <label>Enable Login with Amazon</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment/lwa_enabled</config_path>
+                        <comment><![CDATA[Note that if Login with Amazon is disabled and Guest Checkout is disabled, the customer will not be able to use Amazon Payment.]]></comment>
                     </field>
                     <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Action</label>

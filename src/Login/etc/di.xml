@@ -5,8 +5,7 @@
     <preference for="Amazon\Login\Api\CustomerManagementInterface" type="Amazon\Login\Model\CustomerManagement" />
     <preference for="Amazon\Login\Api\Data\CustomerLinkInterface" type="Amazon\Login\Model\ResourceModel\CustomerLink" />
     <preference for="Amazon\Login\Api\Data\CustomerLinkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Amazon\Login\Api\Customer\CompositeMatcherInterface" type="Amazon\Login\Model\Customer\CompositeMatcher" />
-    <type name="Amazon\Login\Api\Customer\CompositeMatcherInterface">
+    <type name="Amazon\Login\Model\Customer\MatcherInterface">
         <arguments>
             <argument name="matchers" xsi:type="array">
                 <item name="sessionmatcher" xsi:type="object">Amazon\Login\Model\Customer\SessionMatcher</item>
@@ -33,9 +32,9 @@
     <type name="Magento\Customer\Controller\Account\Create">
         <plugin name="amazon_login_create_controller" type="Amazon\Login\Plugin\CreateController" sortOrder="1" />
     </type>
-    <type name="Amazon\Login\Controller\Login\Guest">
+    <type name="Amazon\Login\Controller\Login\Authorize">
         <arguments>
-            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="matcher" xsi:type="object">Amazon\Login\Model\Customer\CompositeMatcher</argument>
         </arguments>
     </type>
     <type name="Amazon\Login\Helper\Session">

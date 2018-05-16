@@ -16,7 +16,7 @@
 namespace Amazon\Login\Model\Customer;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
-use Amazon\Login\Api\Customer\MatcherInterface;
+use Amazon\Login\Model\Customer\MatcherInterface;
 use Magento\Customer\Model\Session;
 
 class SessionMatcher implements MatcherInterface
