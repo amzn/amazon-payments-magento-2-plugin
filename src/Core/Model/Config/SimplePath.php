@@ -334,8 +334,8 @@ class SimplePath
      */
     public function autoEnable()
     {
-        if (!$this->getConfig('payment/amazon_payment/pwa_enabled')) {
-            $this->config->saveConfig('payment/amazon_payment/pwa_enabled', true, $this->_scope, $this->_scopeId);
+        if (!$this->getConfig('payment/amazon_payment/active')) {
+            $this->config->saveConfig('payment/amazon_payment/active', true, $this->_scope, $this->_scopeId);
             $this->messageManager->addSuccess(__("Login and Pay with Amazon is now enabled."));
         }
     }
