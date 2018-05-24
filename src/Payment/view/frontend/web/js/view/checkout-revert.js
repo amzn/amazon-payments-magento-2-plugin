@@ -27,7 +27,7 @@ define(
         'use strict';
 
         var self;
-
+        if (registry.get('amazonPayment') !== undefined) {
         return Component.extend({
             defaults: {
                 template: 'Amazon_Payment/checkout-revert'
@@ -56,5 +56,8 @@ define(
                 );
             }
         });
+        } else {
+            return Component.extend({});
+        }
     }
 );
