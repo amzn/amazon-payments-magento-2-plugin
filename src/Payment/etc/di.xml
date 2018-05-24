@@ -71,4 +71,11 @@
             <argument name="amazonConfig" xsi:type="object">Amazon\Payment\Model\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\ScalableCheckout\Console\Command\SplitQuote">
+        <arguments>
+            <argument name="tables" xsi:type="array">
+                <item name="amazon_quote" xsi:type="string">amazon_quote</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
