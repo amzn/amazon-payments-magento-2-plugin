@@ -16,7 +16,7 @@
     </div>
 
     <span style="display:inline-block;padding:1em 0em;">
-        <button><span><?php echo __('Get started with account registration'); ?></span></button>
+        <button><span><?= $block->escapeHtml(__('Get started with account registration')); ?></span></button>
         &nbsp; &nbsp;
         <button><span><?php echo __('My account is ready, I need to connect it to Magento'); ?></span></button>
     </span>
@@ -40,7 +40,7 @@
 </div>
 
 <div id="amazon_simplepath_back" style="display:none;margin-bottom:1em;margin-top:-0.5em;">
-  <a href="#">&laquo; <?php echo __('Back'); ?></a>
+  <a href="#">&laquo; <?= $block->escapeHtml(__('Back')); ?></a>
 </div>
 
 <script>
