@@ -15,12 +15,11 @@
  */
 namespace Amazon\Core\Setup;
 
-use Amazon\Core\Helper\CategoryExclusion;
-use Magento\Framework\DB\Ddl\Table;
+
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Quote\Setup\QuoteSetupFactory;
+
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -31,16 +30,25 @@ class UpgradeData implements UpgradeDataInterface
         // Used update query because all scopes needed to have this value updated and this is a fast, simple approach
         if (version_compare($context->getVersion(), '1.2.6', '<')) {
 
-            $sql = "SELECT c.config_id 
-                    FROM core_config_data c 
-                    WHERE c.path = 'payment/amazon_payment/authorization_mode' AND c.value = 'asynchronous'";
+            $select = $setup->getConnection()->select()->from(
+                $setup->getTable('core_config_data'),
+                ['config_id', 'value']
+            )->where(
+                'path = ?',
+                'payment/amazon_payment/authorization_mode'
+            );
 
-            $result = $setup->getConnection()->fetchAll($sql);
-
-            foreach ($result as $row) {
-                $sql = "UPDATE core_config_data SET value='synchronous_possible' WHERE config_id = ".$row['config_id'];
-                $setup->getConnection()->query($sql);
-
+            foreach ($setup->getConnection()->fetchAll($select) as $configRow) {
+                if ($configRow['value'] === 'asynchronous') {
+                    $row = [
+                        'value' => 'synchronous_possible'
+                    ];
+                    $setup->getConnection()->update(
+                        $setup->getTable('core_config_data'),
+                        $row,
+                        ['config_id = ?' => $configRow['config_id']]
+                    );
+                }
             }
         }
     }
