@@ -90,7 +90,7 @@ class ConfirmOrder implements ObserverInterface
                 $payment = $this->paymentMethodManagement->get($quoteId);
                 if (Amazon::PAYMENT_METHOD_CODE == $payment->getMethod()) {
                     $this->checkForExcludedProducts();
-                    $this->saveOrderInformation($quoteLink, $amazonOrderReferenceId);
+                    $this->saveOrderInformation($quoteLink, $amazonOrderReferenceId, $order);
                     $this->confirmOrderReference($quoteLink, $amazonOrderReferenceId, $storeId);
                 }
             }
@@ -111,10 +111,10 @@ class ConfirmOrder implements ObserverInterface
         }
     }
 
-    protected function saveOrderInformation(QuoteLinkInterface $quoteLink, $amazonOrderReferenceId)
+    protected function saveOrderInformation(QuoteLinkInterface $quoteLink, $amazonOrderReferenceId, \Magento\Sales\Model\Order\Interceptor $order)
     {
         if (! $quoteLink->isConfirmed()) {
-            $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId);
+            $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId, [], $order->getIncrementId());
         }
     }
 
