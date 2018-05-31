@@ -78,4 +78,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Amazon\Payment\Model\ResourceModel\QuoteLink">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">checkout</argument>
+        </arguments>
+    </type>
 </config>
