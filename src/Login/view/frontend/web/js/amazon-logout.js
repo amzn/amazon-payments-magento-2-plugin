@@ -16,7 +16,8 @@
 define([
     'jquery',
     'amazonCore',
-    'jquery/ui'
+    'jquery/ui',
+    'mage/cookies'
 ], function ($, core) {
     'use strict';
 
@@ -32,6 +33,7 @@ define([
         _create: function () {
             if (this.options.onInit) {
                 core.AmazonLogout(); //logout amazon user on init
+                $.mage.cookies.clear('amazon_Login_accessToken');
             }
         },
 
@@ -41,6 +43,7 @@ define([
          */
         _logoutAmazonUser: function () {
             core.AmazonLogout();
+            $.mage.cookies.clear('amazon_Login_accessToken');
         }
     });
 
