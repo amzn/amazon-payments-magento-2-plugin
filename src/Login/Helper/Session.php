@@ -40,8 +40,10 @@ class Session
     private $eventManager;
 
     /**
+     * Session constructor.
      * @param CustomerSession $session
      * @param EventManagerInterface $eventManager
+     * @param CheckoutSession $checkoutSession
      */
     public function __construct(
         CustomerSession $session,
