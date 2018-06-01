@@ -21,8 +21,8 @@ define([
     'mage/loader',
     'jquery/ui',
     'mage/cookies'
-], function ($, amazonCore, amazonPaymentConfig, amazonCsrf, loader) {
-    "use strict";
+], function ($, amazonCore, amazonPaymentConfig, amazonCsrf) {
+    'use strict';
 
     var self;
 
@@ -45,7 +45,7 @@ define([
             this.setAuthStateCookies();
             amazonCore.amazonDefined.subscribe(function () {
                 //only set this on the redirect page
-                amazon.Login.setUseCookie(true);
+                amazon.Login.setUseCookie(true); //eslint-disable-line no-undef
                 amazonCore.verifyAmazonLoggedIn().then(function (loggedIn) {
                     if (loggedIn) {
                         self.redirect();
@@ -56,13 +56,13 @@ define([
 
         /**
          * getURLParamater from URL for access OAuth Token
-         * @param name
-         * @param source
-         * @returns {string|null}
+         * @param {String} name
+         * @param {String} source
+         * @returns {String|Null}
          */
         getURLParameter: function (name, source) {
             return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
-                    '([^&]+?)(&|#|;|$)').exec(source) || [,""])[1].replace(
+                    '([^&]+?)(&|#|;|$)').exec(source) || [,''])[1].replace(
                         /\+/g,
                         '%20'
                     )) || null;
@@ -70,27 +70,40 @@ define([
 
         /**
          * Set State Cache Auth Cookies if they aren't already set
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         setAuthStateCookies: function () {
-            var token = this.getURLParameter("access_token", location.hash);
+            var token = this.getURLParameter('access_token', location.hash);
+
             if (typeof token === 'string' && token.match(/^Atza/)) {
                 $.mage.cookies.set('amazon_Login_accessToken', token);
             }
+
             return true;
         },
+
         /**
          * Redirect user to correct controller which logs them into M2 via Amazon hash
          */
         redirect: function () {
-            window.location = amazonPaymentConfig.getValue('redirectUrl') + '?access_token=' + this.getURLParameter('access_token', location.hash);
+            window.location = amazonPaymentConfig.getValue('redirectUrl') + '?access_token=' +
+                this.getURLParameter('access_token', location.hash);
         },
+
+        /**
+         * Redirect user on invalid state
+         */
         redirectOnInvalidState: function () {
             var state = this.getURLParameter('state', location.hash);
+
             if (!state || !amazonCsrf.isValid(state)) {
                 window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
             }
         },
+
+        /**
+         * Redirect user on request error
+         */
         redirectOnRequestWithError: function () {
             if (this.getURLParameter('error', window.location)) {
                 window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
