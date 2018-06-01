@@ -102,7 +102,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     /**
      * {@inheritDoc}
      */
-    public function saveOrderInformation($amazonOrderReferenceId, $allowedConstraints = [], $order_id = 0)
+    public function saveOrderInformation($amazonOrderReferenceId, $allowedConstraints = [], $orderId = 0)
     {
         try {
             $quote   = $this->session->getQuote();
@@ -121,7 +121,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'amazon_order_reference_id' => $amazonOrderReferenceId,
                 'amount'                    => $quote->getGrandTotal(),
                 'currency_code'             => $quote->getQuoteCurrencyCode(),
-                'seller_order_id'           => $order_id ? $order_id : $quote->getReservedOrderId(),
+                'seller_order_id'           => $orderId ? $orderId : $quote->getReservedOrderId(),
                 'store_name'                => $storeName,
                 'custom_information'        =>
                     'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
