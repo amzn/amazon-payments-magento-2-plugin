@@ -92,9 +92,7 @@
                                                                             <item name="displayArea" xsi:type="string">before-widget-address</item>
                                                                             <item name="children" xsi:type="array">
                                                                                 <!-- before amazon address widget -->
-                                                                                <item name="amazon-checkout-revert" xsi:type="array">
-                                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/checkout-revert</item>
-                                                                                </item>
+
                                                                             </item>
                                                                         </item>
                                                                         <item name="after-widget-address" xsi:type="array">
@@ -102,6 +100,9 @@
                                                                             <item name="displayArea" xsi:type="string">after-widget-address</item>
                                                                             <item name="children" xsi:type="array">
                                                                                 <!-- after amazon address widget -->
+                                                                                <item name="amazon-checkout-revert" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/checkout-revert</item>
+                                                                                </item>
                                                                             </item>
                                                                         </item>
                                                                     </item>
@@ -138,6 +139,7 @@
                                                                                 <!-- after amazon sandbox simulator -->
                                                                             </item>
                                                                         </item>
+
                                                                     </item>
                                                                 </item>
                                                             </item>
@@ -159,6 +161,7 @@
                                                                 </item>
                                                             </item>
                                                         </item>
+
                                                     </item>
                                                 </item>
                                             </item>
