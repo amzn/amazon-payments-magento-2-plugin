@@ -11,6 +11,7 @@
     "amzn/amazon-pay-and-login-with-amazon-core-module": "^2.0.8",
     "amzn/login-with-amazon-module": "^2.0.8",
     "magento/module-eav": "^100.1.0|^101.0.3",
+    "magento/module-customer": "^100.1.0|^101.0.4",
     "magento/module-sales": "^100.1.0|^101.0.3",
     "magento/module-quote": "^100.1.0|^101.0.3",
     "magento/module-payment": "^100.2.*",
