@@ -25,12 +25,12 @@ class AddAmazonButton implements ObserverInterface
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var ShortcutFactory
      */
-    protected $shortcutFactory;
+    private $shortcutFactory;
 
     /**
      * @param Data $coreHelper
@@ -50,7 +50,6 @@ class AddAmazonButton implements ObserverInterface
         $shortcutButtons = $observer->getEvent()->getContainer();
 
         if ($this->coreHelper->isPwaEnabled() && $this->coreHelper->isCurrentCurrencySupportedByAmazon()) {
-
             $params = [
                 'shortcutValidator' => $this->shortcutFactory->create($observer->getEvent()->getCheckoutSession()),
             ];
@@ -58,7 +57,7 @@ class AddAmazonButton implements ObserverInterface
 
             /** @var \Magento\Framework\View\Element\Template $shortcut */
             $shortcut = $shortcutButtons->getLayout()->createBlock(
-                'Amazon\Payment\Block\Minicart\Button',
+                \Amazon\Payment\Block\Minicart\Button::class,
                 '',
                 $params
             );
@@ -69,7 +68,7 @@ class AddAmazonButton implements ObserverInterface
                 $observer->getEvent()->getOrPosition()
             );
 
-            $shortcut->setIsCart(get_class($shortcutButtons) == 'Magento\Checkout\Block\QuoteShortcutButtons');
+            $shortcut->setIsCart(get_class($shortcutButtons) == \Magento\Checkout\Block\QuoteShortcutButtons::class);
 
             $shortcutButtons->addShortcut($shortcut);
         }
