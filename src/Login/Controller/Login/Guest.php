@@ -21,6 +21,10 @@ use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Class Guest
+ * @package Amazon\Login\Controller\Login
+ */
 class Guest extends Action
 {
 
@@ -39,6 +43,13 @@ class Guest extends Action
      */
     protected $accessTokenRequestValidator;
 
+    /**
+     * Guest constructor.
+     * @param Context $context
+     * @param AmazonCoreHelper $amazonCoreHelper
+     * @param Url $customerUrl
+     * @param AccessTokenRequestValidator $accessTokenRequestValidator
+     */
     public function __construct(
         Context $context,
         AmazonCoreHelper $amazonCoreHelper,
@@ -50,6 +61,7 @@ class Guest extends Action
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
         parent::__construct($context);
     }
+
     /**
      * {@inheritdoc}
      */
@@ -70,7 +82,10 @@ class Guest extends Action
         return $this->_redirect($this->customerUrl->getLoginUrl());
     }
 
-
+    /**
+     * @return bool
+     * @throws \Zend_Validate_Exception
+     */
     protected function isValidToken()
     {
         return $this->accessTokenRequestValidator->isValid($this->getRequest());

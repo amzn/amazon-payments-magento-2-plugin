@@ -129,6 +129,9 @@ class Button extends Template implements ShortcutInterface
         return parent::_toHtml();
     }
 
+    /**
+     * @return bool
+     */
     protected function _isOnCartPage()
     {
         return $this->request->getFullActionName() == 'checkout_cart_index';
