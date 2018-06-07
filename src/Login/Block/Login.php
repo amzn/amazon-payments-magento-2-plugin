@@ -29,12 +29,20 @@ class Login extends Template
      */
     private $coreHelper;
 
+    /**
+     * Login constructor.
+     * @param Context $context
+     * @param Data $coreHelper
+     */
     public function __construct(Context $context, Data $coreHelper)
     {
         $this->coreHelper = $coreHelper;
         parent::__construct($context);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         if (!$this->coreHelper->isLoginButtonEnabled()) {

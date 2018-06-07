@@ -28,6 +28,10 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Sales\Model\Order;
 
+/**
+ * Class ConfirmOrder
+ * @package Amazon\Payment\Observer
+ */
 class ConfirmOrder implements ObserverInterface
 {
     /**
@@ -77,6 +81,11 @@ class ConfirmOrder implements ObserverInterface
         $this->coreHelper                 = $coreHelper;
     }
 
+    /**
+     * @param Observer $observer
+     * @throws AmazonWebapiException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function execute(Observer $observer)
     {
         if ($this->coreHelper->isPwaEnabled()) {
@@ -97,6 +106,9 @@ class ConfirmOrder implements ObserverInterface
         }
     }
 
+    /**
+     * @throws AmazonWebapiException
+     */
     protected function checkForExcludedProducts()
     {
         if ($this->categoryExclusionHelper->isQuoteDirty()) {
@@ -111,19 +123,42 @@ class ConfirmOrder implements ObserverInterface
         }
     }
 
-    protected function saveOrderInformation(QuoteLinkInterface $quoteLink, $amazonOrderReferenceId, \Magento\Sales\Model\Order\Interceptor $order)
-    {
+    /**
+     * @param QuoteLinkInterface $quoteLink
+     * @param $amazonOrderReferenceId
+     * @param Order\Interceptor $order
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function saveOrderInformation(
+        QuoteLinkInterface $quoteLink,
+        $amazonOrderReferenceId,
+        \Magento\Sales\Model\Order\Interceptor $order
+    ) {
         if (! $quoteLink->isConfirmed()) {
-            $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId, [], $order->getIncrementId());
+            $this->orderInformationManagement->saveOrderInformation(
+                $amazonOrderReferenceId,
+                [],
+                $order->getIncrementId()
+            );
         }
     }
 
+    /**
+     * @param QuoteLinkInterface $quoteLink
+     * @param $amazonOrderReferenceId
+     * @param $storeId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     protected function confirmOrderReference(QuoteLinkInterface $quoteLink, $amazonOrderReferenceId, $storeId)
     {
         $this->orderInformationManagement->confirmOrderReference($amazonOrderReferenceId, $storeId);
         $quoteLink->setConfirmed(true)->save();
     }
 
+    /**
+     * @param $quoteId
+     * @return QuoteLinkInterface
+     */
     protected function getQuoteLink($quoteId)
     {
         $quoteLink = $this->quoteLinkFactory->create();
