@@ -1,4 +1,4 @@
-
+6
 "click here to display the categories","haz clic aquí para mostrar las categorías"
 "No Simulation","Sin simulación"
 "Authorization soft decline","Rechazo parcial de la autorización"
@@ -77,7 +77,7 @@
 "My account is ready, I need to connect it to Magento","Mi cuenta está lista, sólo tengo que vincularla a Magento."
 "or","o bien"
 "I've already setup Pay with Amazon, I want to edit my settings","Ya he configurado Amazon Pay, pero quiero modificar mi configuración."
-"Back","Volver"
+"Back to register or connect an account","Volver"
 "Updating your config with new keys, please wait...","Actualizando tu configuración con claves nuevas... Espera, por favor."
 "In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.","Para activar la configuración automática utilizando el intercambio seguro de claves de Amazon, accede a la página de administración de seguridad en General > Web > Utilizar URL seguras en Admin."
 "Pega las credenciales de JSON aquí"

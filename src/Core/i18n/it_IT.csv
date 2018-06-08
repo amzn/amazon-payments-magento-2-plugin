@@ -76,7 +76,7 @@
 "My account is ready, I need to connect it to Magento","Il mio account è pronto, devo associarlo a Magento"
 "or","o"
 "I've already setup Pay with Amazon, I want to edit my settings","Ho già configurato Amazon Pay, voglio modificare le mie impostazioni"
-"Back","Indietro"
+"Back to register or connect an account","Indietro"
 "Updating your config with new keys, please wait...","Aggiornamento della configurazione con nuove chiavi in corso. Attendi..."
 "In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.","Per attivare la configurazione automatica dell'account mediante lo scambio di chiavi sicuro Amazon, attiva le pagine di amministrazione sicura in Generale > Web > Utilizza URL sicuri in Amministrazione."
 "Paste JSON credentials here","Incolla credenziali JSON qui"

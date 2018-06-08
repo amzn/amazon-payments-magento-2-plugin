@@ -76,7 +76,7 @@ Logging,Logging
 "My account is ready, I need to connect it to Magento","My account is ready, I need to connect it to Magento"
 "or","or"
 "I've already setup Pay with Amazon, I want to edit my settings","I've already setup Amazon Pay, I want to edit my settings"
-"Back","Back to register or connect an account"
+"Back to register or connect an account","Back to register or connect an account"
 "Updating your config with new keys, please wait...","Updating your config with new keys, please wait..."
 "In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.","In order to enable automatic account configuration using Amazon's secure key exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin."
 "Paste JSON credentials here","Paste JSON credentials here"
