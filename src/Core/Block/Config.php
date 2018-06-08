@@ -21,10 +21,6 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
-/**
- * Class Config
- * @package Amazon\Core\Block
- */
 class Config extends Template
 {
     /**
