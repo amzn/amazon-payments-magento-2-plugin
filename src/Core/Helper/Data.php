@@ -222,8 +222,7 @@ class Data extends AbstractHelper
             'de' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/de/lpa/js/Widgets.js?nomin',
             'uk' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/uk/lpa/js/Widgets.js?nomin',
             'us' => 'https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js?nomin',
-            'jp' => 'https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod' .
-                '/lpa/js/Widgets.js?nomin',
+            'jp' => 'https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js?nomin',
         ];
 
         if ($sandboxEnabled) {
@@ -231,8 +230,7 @@ class Data extends AbstractHelper
                 'de' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/de/sandbox/lpa/js/Widgets.js?nomin',
                 'uk' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/lpa/js/Widgets.js?nomin',
                 'us' => 'https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js?nomin',
-                'jp' => 'https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js' .
-                    '/Widgets.js?nomin',
+                'jp' => 'https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js?nomin',
             ];
         }
 
