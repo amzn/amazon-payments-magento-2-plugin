@@ -216,7 +216,9 @@ require(['uiRegistry', "prototype"], function(registry){
 
 // Add Mage validator to fix "Save Config" button from not submitting
 require(["jquery", "jquery/validate"], function($) {
-    $('#simplepath_form').validate();
+    if ($('#simplepath_form').length > 0) {
+        $('#simplepath_form').validate();
+    }
 });
 
 
