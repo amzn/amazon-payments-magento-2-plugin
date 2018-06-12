@@ -11,6 +11,7 @@
     "amzn/amazon-pay-and-login-with-amazon-core-module": "^2.0.11",
     "amzn/login-with-amazon-module": "^2.0.11",
     "magento/module-eav": "^100.1.0|^101.0.3",
+    "magento/module-customer": "^100.1.0|^101.0.4",
     "magento/module-sales": "^100.1.0|^101.0.3",
     "magento/module-quote": "^100.1.0|^101.0.3",
     "magento/module-payment": "^100.2.*",
@@ -22,8 +23,8 @@
     "magento/module-directory": "100.2.*"
   },
   "suggest": {
-    "magento/module-customer": "^100.1.0|^101.0.4",
-    "magento/module-scalable-checkout": "100.2.0"
+    "magento/module-scalable-checkout": "100.2.0",
+    "magento/module-scalable-oms": "100.2.*"
   },
   "autoload": {
     "files": ["registration.php"],

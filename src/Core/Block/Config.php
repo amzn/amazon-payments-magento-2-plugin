@@ -21,6 +21,9 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class Config extends Template
 {
     /**
