@@ -16,32 +16,34 @@
 define([
     'jquery',
     'amazonCore',
-    'jquery/ui'
+    'jquery/ui',
+    'mage/cookies'
 ], function ($, core) {
-    "use strict";
-
-    var _this;
+    'use strict';
 
     $.widget('amazon.AmazonLogout', {
         options: {
             onInit: false
         },
+
         /**
          * Create Amazon Logout Widget
          * @private
          */
         _create: function () {
-            _this = this;
             if (this.options.onInit) {
                 core.AmazonLogout(); //logout amazon user on init
+                $.mage.cookies.clear('amazon_Login_accessToken');
             }
         },
+
         /**
          * Logs out a user if called directly
          * @private
          */
         _logoutAmazonUser: function () {
             core.AmazonLogout();
+            $.mage.cookies.clear('amazon_Login_accessToken');
         }
     });
 
