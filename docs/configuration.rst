@@ -26,6 +26,7 @@ The credentials can be found in Seller Central at :menuselection:`Integration --
 Payment Region
 ..............
 Select the region where you registered your seller account from the provided list. If you're unsure about this information, please consult the Amazon Pay merchant support. Supported regions are:
+
 * Euro (use for countries that use EUR as their currency, e.g. Germany, France, Italy, Spain, etc.)
 * United Kingdom
 * United States
