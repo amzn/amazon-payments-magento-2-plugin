@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Login\Controller\Login;
 
 use Magento\Framework\App\Action\Action;
@@ -21,33 +22,28 @@ use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 
-/**
- * Class Guest
- * @package Amazon\Login\Controller\Login
- */
 class Guest extends Action
 {
-
     /**
      * @var AmazonCoreHelper
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var Url
      */
-    protected $customerUrl;
+    private $customerUrl;
 
     /**
      * @var AccessTokenRequestValidator
      */
-    protected $accessTokenRequestValidator;
+    private $accessTokenRequestValidator;
 
     /**
      * Guest constructor.
-     * @param Context $context
-     * @param AmazonCoreHelper $amazonCoreHelper
-     * @param Url $customerUrl
+     * @param Context                     $context
+     * @param AmazonCoreHelper            $amazonCoreHelper
+     * @param Url                         $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      */
     public function __construct(
@@ -56,8 +52,8 @@ class Guest extends Action
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator
     ) {
-        $this->amazonCoreHelper            = $amazonCoreHelper;
-        $this->customerUrl                 = $customerUrl;
+        $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->customerUrl = $customerUrl;
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
         parent::__construct($context);
     }
@@ -77,7 +73,7 @@ class Guest extends Action
     /**
      * @return string
      */
-    protected function getRedirectLogin()
+    private function getRedirectLogin()
     {
         return $this->_redirect($this->customerUrl->getLoginUrl());
     }
@@ -86,7 +82,7 @@ class Guest extends Action
      * @return bool
      * @throws \Zend_Validate_Exception
      */
-    protected function isValidToken()
+    private function isValidToken()
     {
         return $this->accessTokenRequestValidator->isValid($this->getRequest());
     }
