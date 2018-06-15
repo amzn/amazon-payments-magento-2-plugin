@@ -39,6 +39,12 @@ class LoadOrder implements ObserverInterface
      */
     private $coreHelper;
 
+    /**
+     * LoadOrder constructor.
+     * @param \Magento\Sales\Api\Data\OrderExtensionFactory      $orderExtensionFactory
+     * @param \Amazon\Payment\Api\Data\OrderLinkInterfaceFactory $orderLinkFactory
+     * @param \Amazon\Core\Helper\Data                           $coreHelper
+     */
     public function __construct(
         OrderExtensionFactory $orderExtensionFactory,
         OrderLinkInterfaceFactory $orderLinkFactory,
@@ -49,6 +55,9 @@ class LoadOrder implements ObserverInterface
         $this->coreHelper            = $coreHelper;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function execute(Observer $observer)
     {
         if ($this->coreHelper->isPwaEnabled()) {
@@ -57,7 +66,10 @@ class LoadOrder implements ObserverInterface
         }
     }
 
-    protected function setAmazonOrderReferenceIdExtensionAttribute(OrderInterface $order)
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     */
+    private function setAmazonOrderReferenceIdExtensionAttribute(OrderInterface $order)
     {
         $orderExtension = ($order->getExtensionAttributes()) ?: $this->orderExtensionFactory->create();
 

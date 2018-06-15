@@ -23,6 +23,9 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 class Collection extends AbstractCollection
 {
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _construct()
     {
         $this->_init(PendingRefundModel::class, PendingRefundResourceModel::class);
@@ -30,6 +33,7 @@ class Collection extends AbstractCollection
 
     /**
      * @return \Generator
+     * @throws \Zend_Db_Statement_Exception
      */
     public function getIdGenerator()
     {

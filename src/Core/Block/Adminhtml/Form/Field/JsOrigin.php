@@ -13,22 +13,17 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Core\Block\Adminhtml\Form\Field;
 
-use Magento\Backend\Block\Template\Context;
-use Magento\Config\Block\System\Config\Form\Field as BaseField;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\UrlInterface;
 use Zend\Uri\UriFactory;
 
-class JsOrigin extends BaseField
+class JsOrigin extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * Render element value
-     *
-     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return                                        string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     protected function _renderValue(AbstractElement $element)
     {
@@ -39,25 +34,21 @@ class JsOrigin extends BaseField
         foreach ($stores as $store) {
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
-                $uri        = UriFactory::factory($baseUrl);
+                $uri = UriFactory::factory($baseUrl);
                 $urlArray[] = $this->escapeHtml($uri->getScheme() . '://' . $uri->getHost());
             }
         }
 
         $urlArray = array_unique($urlArray);
         foreach ($urlArray as $uniqueUrl) {
-            $valueReturn .= "<div>".$uniqueUrl."</div>";
+            $valueReturn .= "<div>" . $uniqueUrl . "</div>";
         }
 
         return '<td class="value">' . $valueReturn . '</td>';
     }
 
     /**
-     * Render element value
-     *
-     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return                                        string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     protected function _renderInheritCheckbox(AbstractElement $element)
     {

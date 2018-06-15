@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Login\Block;
 
 use Amazon\Core\Helper\Data;
@@ -32,7 +33,7 @@ class Login extends Template
     /**
      * Login constructor.
      * @param Context $context
-     * @param Data $coreHelper
+     * @param Data    $coreHelper
      */
     public function __construct(Context $context, Data $coreHelper)
     {
@@ -41,7 +42,7 @@ class Login extends Template
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     protected function _toHtml()
     {

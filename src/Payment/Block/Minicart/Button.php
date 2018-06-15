@@ -19,7 +19,6 @@ use Magento\Checkout\Model\Session;
 use Magento\Payment\Model\MethodInterface;
 use Amazon\Payment\Helper\Data;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
-use Magento\Paypal\Block\Express\InContext;
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\Locale\ResolverInterface;
@@ -106,7 +105,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return bool
      */
-    protected function shouldRender()
+    private function shouldRender()
     {
         if ($this->getIsCart() && $this->payment->isAvailable($this->session->getQuote())) {
             return true;
@@ -118,7 +117,7 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function _toHtml()
     {
@@ -132,7 +131,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return bool
      */
-    protected function _isOnCartPage()
+    public function _isOnCartPage()
     {
         return $this->request->getFullActionName() == 'checkout_cart_index';
     }

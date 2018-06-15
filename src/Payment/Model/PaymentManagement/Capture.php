@@ -191,7 +191,14 @@ class Capture extends AbstractOperation
         }
     }
 
-    protected function processUpdateCaptureResponse(
+    /**
+     * @param \Amazon\Payment\Domain\Details\AmazonCaptureDetails $details
+     * @param \Amazon\Payment\Api\Data\PendingCaptureInterface    $pendingCapture
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface       $payment
+     * @param \Magento\Sales\Api\Data\OrderInterface              $order
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function processUpdateCaptureResponse(
         AmazonCaptureDetails $details,
         PendingCaptureInterface $pendingCapture,
         OrderPaymentInterface $payment,
@@ -209,7 +216,13 @@ class Capture extends AbstractOperation
         }
     }
 
-    protected function completePendingCapture(
+    /**
+     * @param \Amazon\Payment\Api\Data\PendingCaptureInterface $pendingCapture
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface    $payment
+     * @param \Magento\Sales\Api\Data\OrderInterface           $order
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function completePendingCapture(
         PendingCaptureInterface $pendingCapture,
         OrderPaymentInterface $payment,
         OrderInterface $order
@@ -230,7 +243,13 @@ class Capture extends AbstractOperation
         $pendingCapture->delete();
     }
 
-    protected function declinePendingCapture(
+    /**
+     * @param \Amazon\Payment\Api\Data\PendingCaptureInterface $pendingCapture
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface    $payment
+     * @param \Magento\Sales\Api\Data\OrderInterface           $order
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function declinePendingCapture(
         PendingCaptureInterface $pendingCapture,
         OrderPaymentInterface $payment,
         OrderInterface $order

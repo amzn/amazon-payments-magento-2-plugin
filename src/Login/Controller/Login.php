@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Login\Controller;
 
 use Amazon\Core\Client\ClientFactoryInterface;
@@ -39,71 +40,72 @@ abstract class Login extends Action
     /**
      * @var AmazonCustomerFactory
      */
-    protected $amazonCustomerFactory;
+    private $amazonCustomerFactory;
 
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var AmazonCoreHelper
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var Url
      */
-    protected $customerUrl;
+    private $customerUrl;
 
     /**
      * @var AccessTokenRequestValidator
      */
-    protected $accessTokenRequestValidator;
+    private $accessTokenRequestValidator;
 
     /**
      * @var AccountRedirect
      */
-    protected $accountRedirect;
+    private $accountRedirect;
 
     /**
      * @var MatcherInterface
      */
-    protected $matcher;
+    private $matcher;
 
     /**
      * @var CustomerLinkManagementInterface
      */
-    protected $customerLinkManagement;
+    private $customerLinkManagement;
 
     /**
      * @var CustomerSession
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
-     * @param AmazonCustomerFactory       $amazonCustomerFactory
-     * @param ClientFactoryInterface      $clientFactory
-     * @param LoggerInterface             $logger
-     * @param AmazonCoreHelper            $amazonCoreHelper
-     * @param Url                         $customerUrl
-     * @param AccessTokenRequestValidator $accessTokenRequestValidator
-     * @param AccountRedirect $accountRedirect
-     * @param MatcherInterface $matcher
-     * @param CustomerLinkManagementInterface $customerLinkManagement
-     * @param CustomerSession $customerSession
-     * @param Session $session
-     * @param LoggerInterface $logger
+     * Login constructor.
+     * @param \Magento\Framework\App\Action\Context                     $context
+     * @param \Amazon\Core\Domain\AmazonCustomerFactory                 $amazonCustomerFactory
+     * @param \Amazon\Core\Client\ClientFactoryInterface                $clientFactory
+     * @param \Amazon\Core\Helper\Data                                  $amazonCoreHelper
+     * @param \Magento\Customer\Model\Url                               $customerUrl
+     * @param \Amazon\Login\Model\Validator\AccessTokenRequestValidator $accessTokenRequestValidator
+     * @param \Amazon\Login\Model\Customer\Account\Redirect             $accountRedirect
+     * @param \Amazon\Login\Model\Customer\MatcherInterface             $matcher
+     * @param \Amazon\Login\Api\CustomerLinkManagementInterface         $customerLinkManagement
+     * @param \Magento\Customer\Model\Session                           $customerSession
+     * @param \Amazon\Login\Helper\Session                              $session
+     * @param \Psr\Log\LoggerInterface                                  $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,31 +122,31 @@ abstract class Login extends Action
         Session $session,
         LoggerInterface $logger
     ) {
-        $this->amazonCustomerFactory       = $amazonCustomerFactory;
-        $this->clientFactory               = $clientFactory;
-        $this->amazonCoreHelper            = $amazonCoreHelper;
-        $this->customerUrl                 = $customerUrl;
+        $this->amazonCustomerFactory = $amazonCustomerFactory;
+        $this->clientFactory = $clientFactory;
+        $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->customerUrl = $customerUrl;
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
-        $this->accountRedirect             = $accountRedirect;
-        $this->matcher                     = $matcher;
-        $this->customerLinkManagement      = $customerLinkManagement;
-        $this->customerSession             = $customerSession;
-        $this->session                     = $session;
-        $this->logger                      = $logger;
+        $this->accountRedirect = $accountRedirect;
+        $this->matcher = $matcher;
+        $this->customerLinkManagement = $customerLinkManagement;
+        $this->customerSession = $customerSession;
+        $this->session = $session;
+        $this->logger = $logger;
         parent::__construct($context);
     }
 
     /**
      * Load userinfo from access token
      *
-     * @return AmazonCustomerInterface
+     * @return \Amazon\Core\Domain\AmazonCustomer|bool
      */
-    protected function getAmazonCustomer()
+    public function getAmazonCustomer()
     {
         try {
             $userInfo = $this->clientFactory
-                             ->create()
-                             ->getUserInfo($this->getRequest()->getParam('access_token'));
+                ->create()
+                ->getUserInfo($this->getRequest()->getParam('access_token'));
 
             if (is_array($userInfo) && isset($userInfo['user_id'])) {
                 $data = [
@@ -167,24 +169,26 @@ abstract class Login extends Action
 
     /**
      * @return bool
+     * @throws \Zend_Validate_Exception
      */
-    protected function isValidToken()
+    public function isValidToken()
     {
         return $this->accessTokenRequestValidator->isValid($this->getRequest());
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\App\ResponseInterface
      */
-    protected function getRedirectLogin()
+    public function getRedirectLogin()
     {
         return $this->_redirect($this->customerUrl->getLoginUrl());
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Controller\Result\Forward|\Magento\Framework\Controller\Result\Redirect
+     * |\Magento\Framework\Controller\ResultInterface
      */
-    protected function getRedirectAccount()
+    public function getRedirectAccount()
     {
         return $this->accountRedirect->getRedirect();
     }

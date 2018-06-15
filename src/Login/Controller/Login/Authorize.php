@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Login\Controller\Login;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
@@ -63,7 +64,13 @@ class Authorize extends \Amazon\Login\Controller\Login
         return $this->getRedirectAccount();
     }
 
-    protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
+    /**
+     * @param \Amazon\Core\Api\Data\AmazonCustomerInterface $amazonCustomer
+     * @return \Amazon\Login\Domain\ValidationCredentials|\Magento\Customer\Api\Data\CustomerInterface|null
+     * @throws \Magento\Framework\Exception\ValidatorException
+     * @throws \Zend_Validate_Exception
+     */
+    private function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
     {
         $customerData = $this->matcher->match($amazonCustomer);
 
@@ -72,7 +79,7 @@ class Authorize extends \Amazon\Login\Controller\Login
         }
 
         if ($amazonCustomer->getId() != $customerData->getExtensionAttributes()->getAmazonId()) {
-            if (! $this->session->isLoggedIn()) {
+            if (!$this->session->isLoggedIn()) {
                 return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());
             }
 
@@ -82,9 +89,15 @@ class Authorize extends \Amazon\Login\Controller\Login
         return $customerData;
     }
 
-    protected function createCustomer(AmazonCustomerInterface $amazonCustomer)
+    /**
+     * @param \Amazon\Core\Api\Data\AmazonCustomerInterface $amazonCustomer
+     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * @throws \Magento\Framework\Exception\ValidatorException
+     * @throws \Zend_Validate_Exception
+     */
+    private function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
-        if (! Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
+        if (!Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
             throw new ValidatorException(__('the email address for your Amazon account is invalid'));
         }
 

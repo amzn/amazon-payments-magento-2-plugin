@@ -34,7 +34,7 @@ class AmazonNameDecoratorJp implements AmazonNameInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getFirstName()
     {
@@ -42,7 +42,7 @@ class AmazonNameDecoratorJp implements AmazonNameInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getLastName()
     {

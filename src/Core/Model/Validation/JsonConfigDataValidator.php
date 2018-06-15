@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Core\Model\Validation;
 
 use Amazon\Core\Helper\Data;
@@ -33,14 +34,14 @@ class JsonConfigDataValidator extends AbstractValidator
 
     /**
      * @param DecoderInterface $jsonDecoder
-     * @param Data $amazonCoreHelper
+     * @param Data             $amazonCoreHelper
      */
     public function __construct(
         Data $amazonCoreHelper,
         DecoderInterface $jsonDecoder
     ) {
         $this->amazonCoreHelper = $amazonCoreHelper;
-        $this->jsonDecoder      = $jsonDecoder;
+        $this->jsonDecoder = $jsonDecoder;
     }
 
     /**
@@ -64,7 +65,11 @@ class JsonConfigDataValidator extends AbstractValidator
         return true;
     }
 
-    protected function mandatoryFieldsExist($decodedCredentials)
+    /**
+     * @param $decodedCredentials
+     * @return bool
+     */
+    public function mandatoryFieldsExist($decodedCredentials)
     {
         // SimplePath
         if (isset($decodedCredentials['encryptedKey'])) {

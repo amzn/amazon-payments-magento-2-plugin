@@ -21,6 +21,9 @@ use Magento\Framework\Model\AbstractModel;
 
 class OrderLink extends AbstractModel implements OrderLinkInterface
 {
+    /*
+     * {@inheritdoc}
+     */
     protected function _construct()
     {
         $this->_init(OrderLinkResourceModel::class);

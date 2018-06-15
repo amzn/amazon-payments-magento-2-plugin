@@ -44,6 +44,9 @@ class AddAmazonButton implements ObserverInterface
         $this->shortcutFactory = $shortcutFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function execute(Observer $observer)
     {
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */

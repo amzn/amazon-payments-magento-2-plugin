@@ -93,7 +93,7 @@ define([
          * Verify a user is logged into amazon
          */
         verifyAmazonLoggedIn: function () {
-            var defer  = $.Deferred(),
+            var defer = $.Deferred(),
                 loginOptions = {
                     scope: amazonPaymentConfig.getValue('loginScope'),
                     popup: true,
@@ -122,5 +122,4 @@ define([
         accessToken: accessToken,
         amazonLoginError: amazonLoginError
     };
-
 });

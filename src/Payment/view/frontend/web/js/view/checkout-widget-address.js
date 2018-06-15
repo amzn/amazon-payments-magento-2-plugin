@@ -119,8 +119,8 @@ define(
                 amazonStorage.isShippingMethodsLoading(true);
                 shippingService.isLoading(true);
                 serviceUrl = urlBuilder.createUrl('/amazon-shipping-address/:amazonOrderReference', {
-                        amazonOrderReference: amazonStorage.getOrderReference()
-                    }),
+                    amazonOrderReference: amazonStorage.getOrderReference()
+                }),
                     payload = {
                         addressConsentToken: amazonStorage.getAddressConsentToken()
                     };

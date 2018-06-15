@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Login\Helper;
 
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
@@ -41,16 +42,16 @@ class Session
 
     /**
      * Session constructor.
-     * @param CustomerSession $session
+     * @param CustomerSession       $session
      * @param EventManagerInterface $eventManager
-     * @param CheckoutSession $checkoutSession
+     * @param CheckoutSession       $checkoutSession
      */
     public function __construct(
         CustomerSession $session,
         EventManagerInterface $eventManager,
         CheckoutSession $checkoutSession
     ) {
-        $this->session      = $session;
+        $this->session = $session;
         $this->checkoutSession = $checkoutSession;
         $this->eventManager = $eventManager;
     }

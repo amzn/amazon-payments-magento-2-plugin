@@ -112,7 +112,11 @@ class PaymentConfigSaveAfter implements ObserverInterface
         }
     }
 
-    protected function getScopeData($observer)
+    /**
+     * @param $observer
+     * @return array
+     */
+    private function getScopeData($observer)
     {
         $scopeData = [];
 

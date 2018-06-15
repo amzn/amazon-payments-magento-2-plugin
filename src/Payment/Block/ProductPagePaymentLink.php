@@ -30,12 +30,17 @@ class ProductPagePaymentLink extends PaymentLink
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     /**
      * @var Registry
      */
     private $registry;
+
+    /**
+     * @var \Amazon\Core\Helper\Data
+     */
+    private $coreHelper;
 
     /**
      * @param Context           $context
@@ -53,6 +58,8 @@ class ProductPagePaymentLink extends PaymentLink
     ) {
         parent::__construct($context, $coreHelper, $categoryExclusionHelper, $data);
         $this->registry = $registry;
+        $this->coreHelper = $coreHelper;
+        $this->categoryExclusionHelper = $categoryExclusionHelper;
     }
 
     /**

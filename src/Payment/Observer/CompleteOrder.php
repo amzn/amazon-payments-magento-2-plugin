@@ -41,7 +41,7 @@ class CompleteOrder implements ObserverInterface
     }
 
     /**
-     * @param Observer $observer
+     * {@inheritDoc}
      */
     public function execute(Observer $observer)
     {
@@ -68,7 +68,7 @@ class CompleteOrder implements ObserverInterface
     /**
      * @param OrderInterface $order
      */
-    protected function closeOrderReference(OrderInterface $order)
+    private function closeOrderReference(OrderInterface $order)
     {
         try {
             $amazonOrderReferenceId = $order->getExtensionAttributes()->getAmazonOrderReferenceId();

@@ -23,6 +23,9 @@ class PendingRefund extends AbstractDb
 {
     const TABLE_NAME = AmazonSchemaHelper::PENDING_REFUND_TABLE_NAME;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _construct()
     {
         $this->_init(static::TABLE_NAME, PendingRefundInterface::ID);

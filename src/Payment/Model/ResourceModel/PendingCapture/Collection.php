@@ -23,6 +23,9 @@ use Amazon\Payment\Model\ResourceModel\PendingCapture as PendingCaptureResourceM
 
 class Collection extends AbstractCollection
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function _construct()
     {
         $this->_init(PendingCaptureModel::class, PendingCaptureResourceModel::class);
@@ -31,7 +34,8 @@ class Collection extends AbstractCollection
     /**
      * Get ID generator
      *
-     * @return Generator
+     * @return \Generator
+     * @throws \Zend_Db_Statement_Exception
      */
     public function getIdGenerator()
     {

@@ -21,6 +21,9 @@ use Magento\Framework\Model\AbstractModel;
 
 class CustomerLink extends AbstractModel implements CustomerLinkInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function _construct()
     {
         $this->_init(CustomerLinkResourceModel::class);
