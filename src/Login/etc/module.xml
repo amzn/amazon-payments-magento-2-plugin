@@ -2,7 +2,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Amazon_Login" setup_version="1.2.0">
         <sequence>
-            <module name="Magento_Customer"/>
             <module name="Amazon_Core"/>
         </sequence>
     </module>
