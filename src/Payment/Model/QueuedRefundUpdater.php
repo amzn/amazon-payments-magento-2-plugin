@@ -115,9 +115,9 @@ class QueuedRefundUpdater
     }
 
     /**
-     * @param int $pendingRefundId
-     *
-     * @return void
+     * @param                                                         $pendingRefundId
+     * @param \Amazon\Payment\Domain\Details\AmazonRefundDetails|null $refundDetails
+     * @throws \Exception
      */
     public function checkAndUpdateRefund($pendingRefundId, AmazonRefundDetails $refundDetails = null)
     {
@@ -171,7 +171,7 @@ class QueuedRefundUpdater
      *
      * @return void
      */
-    protected function triggerAdminNotificationForDeclinedRefund(PendingRefundInterface $pendingRefund)
+    private function triggerAdminNotificationForDeclinedRefund(PendingRefundInterface $pendingRefund)
     {
         $this->adminNotifier->addMajor(
             'Amazon Pay has declined a refund',

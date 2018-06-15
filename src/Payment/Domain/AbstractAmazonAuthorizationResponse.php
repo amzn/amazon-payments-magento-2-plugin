@@ -33,6 +33,12 @@ abstract class AbstractAmazonAuthorizationResponse
      * @param ResponseInterface                 $response
      * @param AmazonAuthorizationDetailsFactory $amazonAuthorizationDetailsFactory
      */
+    /**
+     * AbstractAmazonAuthorizationResponse constructor.
+     * @param \AmazonPay\ResponseInterface                                     $response
+     * @param \Amazon\Payment\Domain\Details\AmazonAuthorizationDetailsFactory $amazonAuthorizationDetailsFactory
+     * @throws \Amazon\Core\Exception\AmazonServiceUnavailableException
+     */
     public function __construct(
         ResponseInterface $response,
         AmazonAuthorizationDetailsFactory $amazonAuthorizationDetailsFactory

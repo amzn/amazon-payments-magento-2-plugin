@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Payment\Model;
 
 use Amazon\Core\Client\ClientFactoryInterface;
@@ -90,13 +91,13 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         LoggerInterface $logger,
         ProductMetadata $productMetadata
     ) {
-        $this->session                              = $session;
-        $this->clientFactory                        = $clientFactory;
-        $this->coreHelper                           = $coreHelper;
+        $this->session = $session;
+        $this->clientFactory = $clientFactory;
+        $this->coreHelper = $coreHelper;
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
-        $this->quoteLinkFactory                     = $quoteLinkFactory;
-        $this->logger                               = $logger;
-        $this->productMetadata                      = $productMetadata;
+        $this->quoteLinkFactory = $quoteLinkFactory;
+        $this->logger = $logger;
+        $this->productMetadata = $productMetadata;
     }
 
     /**
@@ -105,7 +106,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     public function saveOrderInformation($amazonOrderReferenceId, $allowedConstraints = [], $orderId = 0)
     {
         try {
-            $quote   = $this->session->getQuote();
+            $quote = $this->session->getQuote();
             $storeId = $quote->getStoreId();
 
             $this->validateCurrency($quote->getQuoteCurrencyCode());
@@ -131,9 +132,10 @@ class OrderInformationManagement implements OrderInformationManagementInterface
             ];
 
             $responseParser = $this->clientFactory->create($storeId)->setOrderReferenceDetails($data);
-            $response       = $this->amazonSetOrderDetailsResponseFactory->create([
-                'response' => $responseParser
-            ]);
+            $response = $this->amazonSetOrderDetailsResponseFactory->create(
+                [
+                    'response' => $responseParser
+                ]);
 
             $this->validateConstraints($response, $allowedConstraints);
         } catch (LocalizedException $e) {
@@ -144,25 +146,37 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         }
     }
 
-    protected function validateCurrency($code)
+    /**
+     * @param $code
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function validateCurrency($code)
     {
         if ($this->coreHelper->getCurrencyCode() !== $code) {
             throw new LocalizedException(__('The currency selected is not supported by Amazon Pay'));
         }
     }
 
-    protected function validateConstraints(AmazonSetOrderDetailsResponse $response, $allowedConstraints)
+    /**
+     * @param \Amazon\Payment\Domain\AmazonSetOrderDetailsResponse $response
+     * @param                                                      $allowedConstraints
+     * @throws \Magento\Framework\Exception\ValidatorException
+     */
+    private function validateConstraints(AmazonSetOrderDetailsResponse $response, $allowedConstraints)
     {
         foreach ($response->getConstraints() as $constraint) {
-            if (! in_array($constraint->getId(), $allowedConstraints)) {
+            if (!in_array($constraint->getId(), $allowedConstraints)) {
                 throw new ValidatorException(__($constraint->getErrorMessage()));
             }
         }
     }
 
-    protected function setReservedOrderId(Quote $quote)
+    /**
+     * @param \Magento\Quote\Model\Quote $quote
+     */
+    private function setReservedOrderId(Quote $quote)
     {
-        if (! $quote->getReservedOrderId()) {
+        if (!$quote->getReservedOrderId()) {
             $quote
                 ->reserveOrderId()
                 ->save();
@@ -232,7 +246,11 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         }
     }
 
-    protected function validateResponse(ResponseInterface $response)
+    /**
+     * @param \AmazonPay\ResponseInterface $response
+     * @throws \Amazon\Core\Exception\AmazonServiceUnavailableException
+     */
+    private function validateResponse(ResponseInterface $response)
     {
         $data = $response->toArray();
 

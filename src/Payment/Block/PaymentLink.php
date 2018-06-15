@@ -29,12 +29,12 @@ class PaymentLink extends Template
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     /**
      * @param Context           $context

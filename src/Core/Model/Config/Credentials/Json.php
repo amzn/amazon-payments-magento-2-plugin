@@ -106,7 +106,11 @@ class Json
         }
     }
 
-    protected function applyCredentialsFromJson($jsonCredentials, $scopeData)
+    /**
+     * @param $jsonCredentials
+     * @param $scopeData
+     */
+    public function applyCredentialsFromJson($jsonCredentials, $scopeData)
     {
         $arrayCredentials = $this->jsonDecoder->decode($jsonCredentials);
         $this->wipeJsonCredentialsConfig($scopeData);
@@ -139,7 +143,10 @@ class Json
         }
     }
 
-    protected function wipeJsonCredentialsConfig($scopeData)
+    /**
+     * @param $scopeData
+     */
+    public function wipeJsonCredentialsConfig($scopeData)
     {
         $this->configWriter->deleteConfig(
             self::AMAZON_CONFIG_PREFIX . self::AMAZON_CREDENTIALS_JSON,

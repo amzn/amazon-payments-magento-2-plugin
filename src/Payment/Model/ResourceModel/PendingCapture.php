@@ -22,6 +22,9 @@ class PendingCapture extends AbstractDb
 {
     const TABLE_NAME = 'amazon_pending_capture';
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _construct()
     {
         $this->_init(static::TABLE_NAME, PendingCaptureInterface::ID);

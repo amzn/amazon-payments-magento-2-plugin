@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Core\Model\Validation;
 
 use Amazon\Core\Client\ClientFactoryInterface;
@@ -110,8 +111,7 @@ class ApiCredentialsValidator extends AbstractValidator
             return
                 'Amazon responded with 200 on the OrderReference check. ' .
                 'Although the configuration is correct, you are probably using a valid order reference' .
-                ' to do the checking, and must revert to using S00-0000000-0000000 instead.'
-            ;
+                ' to do the checking, and must revert to using S00-0000000-0000000 instead.';
         }
 
         $message = $response->getData('Error/Message') ?: 'There was an unknown error in the Amazon service.';

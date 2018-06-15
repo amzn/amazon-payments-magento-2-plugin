@@ -29,7 +29,7 @@ class CategoryExclusion extends AbstractHelper
     /**
      * @var Session
      */
-    protected $checkoutSession;
+    private $checkoutSession;
 
     /**
      * @param Context $context

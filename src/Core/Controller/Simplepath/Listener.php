@@ -5,10 +5,14 @@ namespace Amazon\Core\Controller\Simplepath;
 class Listener extends \Magento\Framework\App\Action\Action
 {
 
-    // @var \Magento\Framework\Controller\Result\JsonFactory
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
     private $jsonResultFactory;
 
-    // @var \Amazon\Core\Model\Config\SimplePath
+    /**
+     * @var \Amazon\Core\Model\Config\SimplePath
+     */
     private $simplepath;
 
     public function __construct(
@@ -17,9 +21,9 @@ class Listener extends \Magento\Framework\App\Action\Action
         \Amazon\Core\Model\Config\SimplePath $simplepath,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->simplepath        = $simplepath;
+        $this->simplepath = $simplepath;
         $this->jsonResultFactory = $jsonResultFactory;
-        $this->scopeConfig       = $scopeConfig;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -43,7 +47,7 @@ class Listener extends \Magento\Framework\App\Action\Action
         try {
             if (strpos($payload, 'encryptedKey') === false) {
                 $return = ['result' => 'error', 'message' => 'Invalid payload: ' . $payload];
-            } else if ($payload) {
+            } elseif ($payload) {
                 $json = $this->simplepath->decryptPayload($payload, false);
 
                 if ($json) {

@@ -56,6 +56,13 @@ abstract class AbstractOperation
      */
     private $invoiceRepository;
 
+    /**
+     * AbstractOperation constructor.
+     * @param \Magento\Framework\Notification\NotifierInterface   $notifier
+     * @param \Magento\Backend\Model\UrlInterface                 $urlBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface       $invoiceRepository
+     */
     public function __construct(
         NotifierInterface $notifier,
         UrlInterface $urlBuilder,
@@ -68,6 +75,12 @@ abstract class AbstractOperation
         $this->invoiceRepository            = $invoiceRepository;
     }
 
+    /**
+     * @param                                        $transactionId
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @return \Magento\Sales\Api\Data\InvoiceInterface|mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     protected function getInvoice($transactionId, OrderInterface $order)
     {
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
@@ -98,6 +111,12 @@ abstract class AbstractOperation
         throw new NoSuchEntityException();
     }
 
+    /**
+     * @param                                        $transactionId
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @return \Magento\Sales\Api\Data\InvoiceInterface|mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     protected function getInvoiceAndSetPaid($transactionId, OrderInterface $order)
     {
         $invoice = $this->getInvoice($transactionId, $order);
@@ -107,6 +126,12 @@ abstract class AbstractOperation
         return $invoice;
     }
 
+    /**
+     * @param                                        $transactionId
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @return \Magento\Sales\Api\Data\InvoiceInterface|mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     protected function getInvoiceAndSetCancelled($transactionId, OrderInterface $order)
     {
         $invoice = $this->getInvoice($transactionId, $order);
@@ -116,27 +141,43 @@ abstract class AbstractOperation
         return $invoice;
     }
 
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     */
     protected function setOnHold(OrderInterface $order)
     {
         $this->setOrderState($order, Order::STATE_HOLDED);
     }
 
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     */
     protected function setProcessing(OrderInterface $order)
     {
         $this->setOrderState($order, Order::STATE_PROCESSING);
     }
 
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     */
     protected function setPaymentReview(OrderInterface $order)
     {
         $this->setOrderState($order, Order::STATE_PAYMENT_REVIEW);
     }
 
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param                                        $state
+     */
     protected function setOrderState(OrderInterface $order, $state)
     {
         $status = $order->getConfig()->getStateDefaultStatus($state);
         $order->setState($state)->setStatus($status);
     }
 
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     */
     protected function addCaptureDeclinedNotice(OrderInterface $order)
     {
         $orderUrl = $this->urlBuilder->getUrl('sales/order/view', ['order_id' => $order->getId()]);

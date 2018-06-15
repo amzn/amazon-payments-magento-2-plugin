@@ -19,6 +19,9 @@ use Amazon\Core\Logger\Handler\Ipn;
 
 class IpnLog extends AbstractLog
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function getFilePath()
     {
         return Ipn::FILENAME;

@@ -8,11 +8,7 @@ class SimplepathConfig extends \Magento\Config\Block\System\Config\Form\Field
 {
 
     /**
-     * Render element value
-     *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Payment\Setup;
 
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;

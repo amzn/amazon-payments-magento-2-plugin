@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Core\Controller\Adminhtml\Simplepath;
 
 use Magento\Backend\App\Action\Context;

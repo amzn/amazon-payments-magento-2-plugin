@@ -21,6 +21,9 @@ use Magento\Framework\Model\AbstractModel;
 
 class QuoteLink extends AbstractModel implements QuoteLinkInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function _construct()
     {
         $this->_init(QuoteLinkResourceModel::class);

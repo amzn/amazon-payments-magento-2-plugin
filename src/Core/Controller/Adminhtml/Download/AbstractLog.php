@@ -35,6 +35,9 @@ abstract class AbstractLog extends System
         parent::__construct($context);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $filePath = $this->getFilePath();

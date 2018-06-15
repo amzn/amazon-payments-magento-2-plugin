@@ -29,7 +29,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getSpecificConfigPath($fieldName)
+    public function _getSpecificConfigPath($fieldName)
     {
         return 'payment/amazon_payment/general/options';
     }

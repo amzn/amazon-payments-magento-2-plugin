@@ -15,8 +15,8 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Version constructor.
      * @param CoreHelper $coreHelper
-     * @param Context $context
-     * @param array $data
+     * @param Context    $context
+     * @param array      $data
      */
     public function __construct(
         Context $context,
@@ -28,11 +28,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * Render element value
-     *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

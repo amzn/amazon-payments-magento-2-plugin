@@ -19,6 +19,9 @@ use Amazon\Core\Logger\Handler\Client;
 
 class ClientLog extends AbstractLog
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function getFilePath()
     {
         return Client::FILENAME;

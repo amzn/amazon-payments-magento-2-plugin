@@ -579,7 +579,7 @@ class Data extends AbstractHelper
         return $this->getCurrentCurrencyCode() == $this->getCurrencyCode();
     }
 
-    protected function getCurrentCurrencyCode()
+    public function getCurrentCurrencyCode()
     {
         return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
     }

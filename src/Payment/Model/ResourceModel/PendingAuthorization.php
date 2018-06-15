@@ -22,6 +22,9 @@ class PendingAuthorization extends AbstractDb
 {
     const TABLE_NAME = 'amazon_pending_authorization';
 
+    /**
+     * {@inheritDoc}
+     */
     protected function _construct()
     {
         $this->_init(static::TABLE_NAME, PendingAuthorizationInterface::ID);

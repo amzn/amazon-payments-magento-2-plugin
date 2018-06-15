@@ -44,6 +44,13 @@ class AuthorizationProcessor implements ProcessorInterface
      */
     private $storeManager;
 
+    /**
+     * AuthorizationProcessor constructor.
+     * @param \Amazon\Payment\Domain\Details\AmazonAuthorizationDetailsFactory           $amazonAuthorizationDetailsFactory
+     * @param \Amazon\Payment\Model\PaymentManagement\Authorization                      $authorization
+     * @param \Amazon\Payment\Model\ResourceModel\PendingAuthorization\CollectionFactory $collectionFactory
+     * @param \Magento\Store\Model\StoreManagerInterface                                 $storeManager
+     */
     public function __construct(
         AmazonAuthorizationDetailsFactory $amazonAuthorizationDetailsFactory,
         Authorization $authorization,

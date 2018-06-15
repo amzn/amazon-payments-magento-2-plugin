@@ -82,9 +82,7 @@ class ConfirmOrder implements ObserverInterface
     }
 
     /**
-     * @param Observer $observer
-     * @throws AmazonWebapiException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * {@inheritDoc}
      */
     public function execute(Observer $observer)
     {
@@ -109,7 +107,7 @@ class ConfirmOrder implements ObserverInterface
     /**
      * @throws AmazonWebapiException
      */
-    protected function checkForExcludedProducts()
+    private function checkForExcludedProducts()
     {
         if ($this->categoryExclusionHelper->isQuoteDirty()) {
             throw new AmazonWebapiException(
@@ -129,7 +127,7 @@ class ConfirmOrder implements ObserverInterface
      * @param Order\Interceptor $order
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function saveOrderInformation(
+    private function saveOrderInformation(
         QuoteLinkInterface $quoteLink,
         $amazonOrderReferenceId,
         \Magento\Sales\Model\Order\Interceptor $order
@@ -149,7 +147,7 @@ class ConfirmOrder implements ObserverInterface
      * @param $storeId
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function confirmOrderReference(QuoteLinkInterface $quoteLink, $amazonOrderReferenceId, $storeId)
+    private function confirmOrderReference(QuoteLinkInterface $quoteLink, $amazonOrderReferenceId, $storeId)
     {
         $this->orderInformationManagement->confirmOrderReference($amazonOrderReferenceId, $storeId);
         $quoteLink->setConfirmed(true)->save();
@@ -159,7 +157,7 @@ class ConfirmOrder implements ObserverInterface
      * @param $quoteId
      * @return QuoteLinkInterface
      */
-    protected function getQuoteLink($quoteId)
+    private function getQuoteLink($quoteId)
     {
         $quoteLink = $this->quoteLinkFactory->create();
         $quoteLink->load($quoteId, 'quote_id');

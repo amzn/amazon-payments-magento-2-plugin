@@ -201,7 +201,11 @@ class Authorization extends AbstractOperation
         }
     }
 
-    protected function processUpdateAuthorization(
+    /**
+     * @param \Amazon\Payment\Api\Data\PendingAuthorizationInterface         $pendingAuthorization
+     * @param \Amazon\Payment\Domain\Details\AmazonAuthorizationDetails|null $authorizationDetails
+     */
+    private function processUpdateAuthorization(
         PendingAuthorizationInterface $pendingAuthorization,
         AmazonAuthorizationDetails $authorizationDetails = null
     ) {
@@ -239,7 +243,15 @@ class Authorization extends AbstractOperation
         }
     }
 
-    protected function completePendingAuthorization(
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface                 $order
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface          $payment
+     * @param \Amazon\Payment\Api\Data\PendingAuthorizationInterface $pendingAuthorization
+     * @param                                                        $capture
+     * @param \Magento\Sales\Api\Data\TransactionInterface|null      $newTransaction
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function completePendingAuthorization(
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization,
@@ -278,7 +290,14 @@ class Authorization extends AbstractOperation
         $order->save();
     }
 
-    protected function softDeclinePendingAuthorization(
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface                 $order
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface          $payment
+     * @param \Amazon\Payment\Api\Data\PendingAuthorizationInterface $pendingAuthorization
+     * @param                                                        $capture
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function softDeclinePendingAuthorization(
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization,
@@ -314,7 +333,14 @@ class Authorization extends AbstractOperation
         );
     }
 
-    protected function hardDeclinePendingAuthorization(
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface                 $order
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface          $payment
+     * @param \Amazon\Payment\Api\Data\PendingAuthorizationInterface $pendingAuthorization
+     * @param                                                        $capture
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function hardDeclinePendingAuthorization(
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization,
@@ -351,7 +377,11 @@ class Authorization extends AbstractOperation
         );
     }
 
-    protected function processNewAuthorization(
+    /**
+     * @param \Amazon\Payment\Api\Data\PendingAuthorizationInterface $pendingAuthorization
+     * @param \Amazon\Payment\Domain\Details\AmazonOrderDetails|null $orderDetails
+     */
+    private function processNewAuthorization(
         PendingAuthorizationInterface $pendingAuthorization,
         AmazonOrderDetails $orderDetails = null
     ) {
@@ -383,7 +413,13 @@ class Authorization extends AbstractOperation
         }
     }
 
-    protected function requestNewAuthorization(
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface                 $order
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface          $payment
+     * @param \Amazon\Payment\Api\Data\PendingAuthorizationInterface $pendingAuthorization
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function requestNewAuthorization(
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization
@@ -413,7 +449,13 @@ class Authorization extends AbstractOperation
         }
     }
 
-    protected function requestNewAuthorizationAndCapture(
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface                 $order
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface          $payment
+     * @param \Amazon\Payment\Api\Data\PendingAuthorizationInterface $pendingAuthorization
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function requestNewAuthorizationAndCapture(
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization

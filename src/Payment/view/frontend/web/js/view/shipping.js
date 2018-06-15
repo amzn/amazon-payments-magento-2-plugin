@@ -52,7 +52,6 @@ define(
              * New setShipping Action for Amazon Pay to bypass validation
              */
             setShippingInformation: function () {
-
                 /**
                  * Set Amazon shipping info
                  */
@@ -71,7 +70,7 @@ define(
                     if (this.validateGuestEmail()) {
                         setShippingInformationAmazon();
                     }
-                //if using guest checkout or guest checkout with amazon pay we need to use the main validation
+                    //if using guest checkout or guest checkout with amazon pay we need to use the main validation
                 } else if (this.validateShippingInformation()) {
                     setShippingInformationAmazon();
                 }

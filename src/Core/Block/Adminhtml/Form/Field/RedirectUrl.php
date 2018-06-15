@@ -13,20 +13,16 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Core\Block\Adminhtml\Form\Field;
 
-use Magento\Config\Block\System\Config\Form\Field as BaseField;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\UrlInterface;
 
-class RedirectUrl extends BaseField
+class RedirectUrl extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * Render element value
-     *
-     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return                                        string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     protected function _renderValue(AbstractElement $element)
     {
@@ -37,25 +33,21 @@ class RedirectUrl extends BaseField
         foreach ($stores as $store) {
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
-                $value      = $baseUrl . 'amazon/login/processAuthHash/';
-                $urlArray[] = "<div>".$this->escapeHtml($value)."</div>";
+                $value = $baseUrl . 'amazon/login/processAuthHash/';
+                $urlArray[] = "<div>" . $this->escapeHtml($value) . "</div>";
             }
         }
 
         $urlArray = array_unique($urlArray);
         foreach ($urlArray as $uniqueUrl) {
-            $valueReturn .= "<div>".$uniqueUrl."</div>";
+            $valueReturn .= "<div>" . $uniqueUrl . "</div>";
         }
 
         return '<td class="value">' . $valueReturn . '</td>';
     }
 
     /**
-     * Render element value
-     *
-     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return                                        string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     protected function _renderInheritCheckbox(AbstractElement $element)
     {

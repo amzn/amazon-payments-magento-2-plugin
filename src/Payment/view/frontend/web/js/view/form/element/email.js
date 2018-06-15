@@ -36,7 +36,6 @@ define([
             this._super();
 
             if (this.email()) {
-
                 if ($.validator.methods['validate-email'].call(this, this.email())) {
                     quote.guestEmail = this.email();
                     checkoutData.setValidatedEmailValue(this.email());

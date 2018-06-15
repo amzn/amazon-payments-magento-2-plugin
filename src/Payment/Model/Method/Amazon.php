@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Payment\Model\Method;
 
 use Amazon\Core\Client\ClientFactoryInterface;
@@ -66,37 +67,37 @@ class Amazon extends AbstractMethod
     /**
      * {@inheritdoc}
      */
-    protected $_isGateway = true;
+    private $_isGateway = true;
 
     /**
      * {@inheritdoc}
      */
-    protected $_code = self::PAYMENT_METHOD_CODE;
+    private $_code = self::PAYMENT_METHOD_CODE;
 
     /**
      * {@inheritdoc}
      */
-    protected $_canCapture = true;
+    private $_canCapture = true;
 
     /**
      * {@inheritdoc}
      */
-    protected $_canAuthorize = true;
+    private $_canAuthorize = true;
 
     /**
      * {@inheritdoc}
      */
-    protected $_canRefund = true;
+    private $_canRefund = true;
 
     /**
      * {@inheritdoc}
      */
-    protected $_canRefundInvoicePartial = true;
+    private $_canRefundInvoicePartial = true;
 
     /**
      * {@inheritdoc}
      */
-    protected $_canUseInternal = false;
+    private $_canUseInternal = false;
 
     /**
      * @var ClientFactoryInterface
@@ -241,20 +242,20 @@ class Amazon extends AbstractMethod
             $data
         );
 
-        $this->clientFactory                             = $clientFactory;
-        $this->quoteLinkFactory                          = $quoteLinkFactory;
-        $this->orderInformationManagement                = $orderInformationManagement;
-        $this->cartRepository                            = $cartRepository;
-        $this->amazonAuthorizationResponseFactory        = $amazonAuthorizationResponseFactory;
-        $this->amazonCaptureResponseFactory              = $amazonCaptureResponseFactory;
-        $this->amazonRefundResponseFactory               = $amazonRefundResponseFactory;
-        $this->amazonAuthorizationValidator              = $amazonAuthorizationValidator;
-        $this->amazonCaptureValidator                    = $amazonCaptureValidator;
-        $this->amazonRefundValidator                     = $amazonRefundValidator;
-        $this->paymentManagement                         = $paymentManagement;
-        $this->amazonPreCaptureValidator                 = $amazonPreCaptureValidator;
+        $this->clientFactory = $clientFactory;
+        $this->quoteLinkFactory = $quoteLinkFactory;
+        $this->orderInformationManagement = $orderInformationManagement;
+        $this->cartRepository = $cartRepository;
+        $this->amazonAuthorizationResponseFactory = $amazonAuthorizationResponseFactory;
+        $this->amazonCaptureResponseFactory = $amazonCaptureResponseFactory;
+        $this->amazonRefundResponseFactory = $amazonRefundResponseFactory;
+        $this->amazonAuthorizationValidator = $amazonAuthorizationValidator;
+        $this->amazonCaptureValidator = $amazonCaptureValidator;
+        $this->amazonRefundValidator = $amazonRefundValidator;
+        $this->paymentManagement = $paymentManagement;
+        $this->amazonPreCaptureValidator = $amazonPreCaptureValidator;
         $this->amazonAuthorizationDetailsResponseFactory = $amazonAuthorizationDetailsResponseFactory;
-        $this->amazonCoreHelper                          = $amazonCoreHelper;
+        $this->amazonCoreHelper = $amazonCoreHelper;
     }
 
     /**
@@ -268,8 +269,8 @@ class Amazon extends AbstractMethod
     public function authorizeInCron(InfoInterface $payment, $amount, $capture)
     {
         $amazonOrderReferenceId = $this->getAmazonOrderReferenceId($payment);
-        $storeId                = $payment->getOrder()->getStoreId();
-        $async                  = false;
+        $storeId = $payment->getOrder()->getStoreId();
+        $async = false;
 
         $this->_authorize($payment, $amount, $amazonOrderReferenceId, $storeId, $capture, $async);
     }
@@ -292,8 +293,8 @@ class Amazon extends AbstractMethod
     public function refund(InfoInterface $payment, $amount)
     {
         $amazonOrderReferenceId = $this->getAmazonOrderReferenceId($payment);
-        $captureId              = $payment->getParentTransactionId();
-        $storeId                = $payment->getOrder()->getStoreId();
+        $captureId = $payment->getParentTransactionId();
+        $storeId = $payment->getOrder()->getStoreId();
 
         $data = [
             'amazon_capture_id'   => $captureId,
@@ -316,8 +317,8 @@ class Amazon extends AbstractMethod
         $client = $this->clientFactory->create($storeId);
 
         $responseParser = $client->refund($data);
-        $response       = $this->amazonRefundResponseFactory->create(['response' => $responseParser]);
-        $refundDetails  = $response->getDetails();
+        $response = $this->amazonRefundResponseFactory->create(['response' => $responseParser]);
+        $refundDetails = $response->getDetails();
         $this->amazonRefundValidator->validate($refundDetails);
 
         $payment->setTransactionId($refundDetails->getRefundId());
@@ -325,12 +326,18 @@ class Amazon extends AbstractMethod
         $this->paymentManagement->queuePendingRefund($refundDetails, $payment);
     }
 
-    protected function authorizeInStore(InfoInterface $payment, $amount, $capture = false)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @param                                      $amount
+     * @param bool                                 $capture
+     * @throws \Amazon\Core\Exception\AmazonWebapiException
+     */
+    private function authorizeInStore(InfoInterface $payment, $amount, $capture = false)
     {
         $amazonOrderReferenceId = $this->getAmazonOrderReferenceId($payment);
-        $storeId                = $payment->getOrder()->getStoreId();
-        $authMode               = $this->amazonCoreHelper->getAuthorizationMode(ScopeInterface::SCOPE_STORE, $storeId);
-        $async                  = (AuthorizationMode::ASYNC === $authMode);
+        $storeId = $payment->getOrder()->getStoreId();
+        $authMode = $this->amazonCoreHelper->getAuthorizationMode(ScopeInterface::SCOPE_STORE, $storeId);
+        $async = (AuthorizationMode::ASYNC === $authMode);
 
         try {
             try {
@@ -346,14 +353,24 @@ class Amazon extends AbstractMethod
         } catch (SoftDeclineException $e) {
             $this->processSoftDecline();
         } catch (Exception $e) {
-            if (! $e instanceof HardDeclineException) {
+            if (!$e instanceof HardDeclineException) {
                 $this->_logger->error($e);
             }
             $this->processHardDecline($payment, $amazonOrderReferenceId);
         }
     }
 
-    protected function reauthorizeAndCapture(
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @param                                      $amount
+     * @param                                      $amazonOrderReferenceId
+     * @param                                      $authorizationId
+     * @param                                      $storeId
+     * @throws \Amazon\Payment\Exception\HardDeclineException
+     * @throws \Amazon\Payment\Exception\SoftDeclineException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    private function reauthorizeAndCapture(
         InfoInterface $payment,
         $amount,
         $amazonOrderReferenceId,
@@ -365,7 +382,18 @@ class Amazon extends AbstractMethod
         $this->_authorize($payment, $amount, $amazonOrderReferenceId, $storeId, true);
     }
 
-    protected function _authorize(
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @param                                      $amount
+     * @param                                      $amazonOrderReferenceId
+     * @param                                      $storeId
+     * @param bool                                 $capture
+     * @param bool                                 $async
+     * @throws \Amazon\Payment\Exception\HardDeclineException
+     * @throws \Amazon\Payment\Exception\SoftDeclineException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    private function _authorize(
         InfoInterface $payment,
         $amount,
         $amazonOrderReferenceId,
@@ -381,7 +409,7 @@ class Amazon extends AbstractMethod
             'capture_now'                => $capture,
         ];
 
-        if (! $async) {
+        if (!$async) {
             $data['transaction_timeout'] = 0;
         }
 
@@ -398,8 +426,8 @@ class Amazon extends AbstractMethod
 
         $client = $this->clientFactory->create($storeId);
 
-        $responseParser       = $client->authorize($data);
-        $response             = $this->amazonAuthorizationResponseFactory->create(['response' => $responseParser]);
+        $responseParser = $client->authorize($data);
+        $response = $this->amazonAuthorizationResponseFactory->create(['response' => $responseParser]);
         $authorizationDetails = $response->getDetails();
 
         $this->amazonAuthorizationValidator->validate($authorizationDetails);
@@ -407,12 +435,17 @@ class Amazon extends AbstractMethod
         $this->setAuthorizeTransaction($payment, $authorizationDetails, $capture);
     }
 
-    protected function setAuthorizeTransaction(
+    /**
+     * @param \Magento\Payment\Model\InfoInterface                      $payment
+     * @param \Amazon\Payment\Domain\Details\AmazonAuthorizationDetails $details
+     * @param                                                           $capture
+     */
+    private function setAuthorizeTransaction(
         InfoInterface $payment,
         AmazonAuthorizationDetails $details,
         $capture
     ) {
-        $pending       = (AmazonAuthorizationStatus::STATE_PENDING == $details->getStatus()->getState());
+        $pending = (AmazonAuthorizationStatus::STATE_PENDING == $details->getStatus()->getState());
         $transactionId = $details->getAuthorizeTransactionId();
 
         $payment->setIsTransactionPending($pending);
@@ -421,7 +454,7 @@ class Amazon extends AbstractMethod
         if ($capture) {
             $transactionId = $details->getCaptureTransactionId();
 
-            if (! $pending) {
+            if (!$pending) {
                 $payment->setIsTransactionClosed(true);
             }
         }
@@ -436,7 +469,12 @@ class Amazon extends AbstractMethod
         $payment->setTransactionId($transactionId);
     }
 
-    protected function processHardDecline(InfoInterface $payment, $amazonOrderReferenceId)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @param                                      $amazonOrderReferenceId
+     * @throws \Amazon\Core\Exception\AmazonWebapiException
+     */
+    private function processHardDecline(InfoInterface $payment, $amazonOrderReferenceId)
     {
         $storeId = $payment->getOrder()->getStoreId();
 
@@ -454,7 +492,11 @@ class Amazon extends AbstractMethod
         );
     }
 
-    protected function cancelOrderReference($amazonOrderReferenceId, $storeId)
+    /**
+     * @param $amazonOrderReferenceId
+     * @param $storeId
+     */
+    private function cancelOrderReference($amazonOrderReferenceId, $storeId)
     {
         try {
             $this->orderInformationManagement->cancelOrderReference($amazonOrderReferenceId, $storeId);
@@ -464,7 +506,10 @@ class Amazon extends AbstractMethod
         }
     }
 
-    protected function processSoftDecline()
+    /**
+     * @throws \Amazon\Core\Exception\AmazonWebapiException
+     */
+    private function processSoftDecline()
     {
         throw new AmazonWebapiException(
             __(
@@ -476,11 +521,12 @@ class Amazon extends AbstractMethod
         );
     }
 
-    protected function _capture(InfoInterface $payment, $amount)
+
+    private function _capture(InfoInterface $payment, $amount)
     {
         $amazonOrderReferenceId = $this->getAmazonOrderReferenceId($payment);
-        $authorizationId        = $payment->getParentTransactionId();
-        $storeId                = $payment->getOrder()->getStoreId();
+        $authorizationId = $payment->getParentTransactionId();
+        $storeId = $payment->getOrder()->getStoreId();
 
         if ($this->validatePreCapture($payment, $amount, $amazonOrderReferenceId, $authorizationId, $storeId)) {
             $data = [
@@ -501,7 +547,7 @@ class Amazon extends AbstractMethod
 
             try {
                 $responseParser = $client->capture($data);
-                $response       = $this->amazonCaptureResponseFactory->create(['response' => $responseParser]);
+                $response = $this->amazonCaptureResponseFactory->create(['response' => $responseParser]);
                 $captureDetails = $response->getDetails();
 
                 $this->amazonCaptureValidator->validate($captureDetails);
@@ -524,7 +570,15 @@ class Amazon extends AbstractMethod
         }
     }
 
-    protected function validatePreCapture(
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @param                                      $amount
+     * @param                                      $amazonOrderReferenceId
+     * @param                                      $authorizationId
+     * @param                                      $storeId
+     * @return bool
+     */
+    private function validatePreCapture(
         InfoInterface $payment,
         $amount,
         $amazonOrderReferenceId,
@@ -539,7 +593,7 @@ class Amazon extends AbstractMethod
             $client = $this->clientFactory->create($storeId);
 
             $responseParser = $client->getAuthorizationDetails($data);
-            $response       = $this->amazonAuthorizationDetailsResponseFactory->create(['response' => $responseParser]);
+            $response = $this->amazonAuthorizationDetailsResponseFactory->create(['response' => $responseParser]);
 
             $authorizationDetails = $response->getDetails();
             $this->amazonPreCaptureValidator->validate($authorizationDetails);
@@ -552,45 +606,71 @@ class Amazon extends AbstractMethod
         return false;
     }
 
-    protected function getCurrencyCode(InfoInterface $payment)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @return mixed
+     */
+    private function getCurrencyCode(InfoInterface $payment)
     {
         return $payment->getOrder()->getOrderCurrencyCode();
     }
 
-    protected function getAmazonOrderReferenceId(InfoInterface $payment)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @return string
+     */
+    private function getAmazonOrderReferenceId(InfoInterface $payment)
     {
         return $this->getQuoteLink($payment)->getAmazonOrderReferenceId();
     }
 
-    protected function deleteAmazonOrderReferenceId(InfoInterface $payment)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @throws \Exception
+     */
+    private function deleteAmazonOrderReferenceId(InfoInterface $payment)
     {
         $this->getQuoteLink($payment)->delete();
     }
 
-    protected function reserveNewOrderId(InfoInterface $payment)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
+    private function reserveNewOrderId(InfoInterface $payment)
     {
         $this->getQuote($payment)
-            ->setReservedOrderId(null)
-            ->reserveOrderId()
-            ->save();
+             ->setReservedOrderId(null)
+             ->reserveOrderId()
+             ->save();
     }
 
-    protected function getQuote(InfoInterface $payment)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @return \Magento\Quote\Api\Data\CartInterface
+     */
+    private function getQuote(InfoInterface $payment)
     {
         $quoteId = $payment->getOrder()->getQuoteId();
         return $this->cartRepository->get($quoteId);
     }
 
-    protected function getQuoteLink(InfoInterface $payment)
+    /**
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @return \Amazon\Payment\Api\Data\QuoteLinkInterface
+     */
+    private function getQuoteLink(InfoInterface $payment)
     {
-        $quoteId   = $payment->getOrder()->getQuoteId();
+        $quoteId = $payment->getOrder()->getQuoteId();
         $quoteLink = $this->quoteLinkFactory->create();
         $quoteLink->load($quoteId, 'quote_id');
 
         return $quoteLink;
     }
 
-    protected function getUniqueTransactionPostfix()
+    /**
+     * @return int
+     */
+    private function getUniqueTransactionPostfix()
     {
         $transactionTime = time();
 
@@ -610,14 +690,14 @@ class Amazon extends AbstractMethod
     {
         $additionalData = $data->getAdditionalData();
 
-        if (! is_array($additionalData)) {
+        if (!is_array($additionalData)) {
             return $this;
         }
 
         $additionalData = new DataObject($additionalData);
 
         $infoInstance = $this->getInfoInstance();
-        $key          = self::KEY_SANDBOX_SIMULATION_REFERENCE;
+        $key = self::KEY_SANDBOX_SIMULATION_REFERENCE;
         $infoInstance->setAdditionalInformation($key, $additionalData->getData($key));
 
         return $this;

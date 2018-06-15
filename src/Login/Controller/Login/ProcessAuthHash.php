@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Login\Controller\Login;
 
 use Magento\Framework\App\Action\Context;
@@ -35,6 +36,9 @@ class ProcessAuthHash extends \Magento\Framework\App\Action\Action
         $this->pageFactory = $pageFactory;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         return $this->pageFactory->create();
