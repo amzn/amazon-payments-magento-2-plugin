@@ -23,8 +23,9 @@ define([
     $.widget('amazon.catalogAddToCart', $.mage.catalogAddToCart, {
 
         _create: function () {
-            //this is overridden here and ignores the redirect option until fixed by Magento (as of 2.1)
-            this._bindSubmit();
+            if (this.options.bindSubmit) {
+                this._bindSubmit();
+            }
         },
 
         _bindSubmit: function () {
