@@ -16,7 +16,7 @@
 namespace Amazon\Core\Observer;
 
 use Amazon\Core\Helper\Data;
-use Amazon\Core\Model\Validation\ApiCredentialsValidator;
+use Amazon\Core\Model\Validation\ApiCredentialsValidatorFactory;
 use Amazon\Core\Model\Config\Credentials\Json;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -28,9 +28,9 @@ use Magento\Store\Model\ScopeInterface;
 class PaymentConfigSaveAfter implements ObserverInterface
 {
     /**
-     * @var ApiCredentialsValidator
+     * @var ApiCredentialsValidatorFactory
      */
-    private $apiCredentialsValidator;
+    private $apiCredentialsValidatorFactory;
 
     /**
      * @var ManagerInterface
@@ -60,23 +60,20 @@ class PaymentConfigSaveAfter implements ObserverInterface
     private $request;
 
     /**
-     * PaymentConfigSaveAfter constructor.
-     * @param ApiCredentialsValidator $apiCredentialsValidator
-     * @param ManagerInterface $messageManager
-     * @param Json $jsonCredentials
-     * @param Data $amazonCoreHelper
-     * @param ReinitableConfigInterface $config
-     * @param RequestInterface $request
+     * @param ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory
+     * @param ManagerInterface               $messageManager
+     * @param Json                           $jsonCredentials
+     * @param Data                           $amazonCoreHelper
      */
     public function __construct(
-        ApiCredentialsValidator $apiCredentialsValidator,
+        ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory,
         ManagerInterface $messageManager,
         Json $jsonCredentials,
         Data $amazonCoreHelper,
         ReinitableConfigInterface $config,
         RequestInterface $request
     ) {
-        $this->apiCredentialsValidator = $apiCredentialsValidator;
+        $this->apiCredentialsValidatorFactory = $apiCredentialsValidatorFactory;
         $this->messageManager                 = $messageManager;
         $this->amazonCoreHelper               = $amazonCoreHelper;
         $this->jsonCredentials                = $jsonCredentials;
@@ -102,7 +99,7 @@ class PaymentConfigSaveAfter implements ObserverInterface
         }
 
         /** @see \Magento\Config\Model\Config::save() */
-        $validator = $this->apiCredentialsValidator->create();
+        $validator = $this->apiCredentialsValidatorFactory->create();
 
         $messageManagerMethod = 'addErrorMessage';
 
