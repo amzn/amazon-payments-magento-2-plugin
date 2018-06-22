@@ -1,4 +1,18 @@
 <?php
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 namespace Amazon\Core\Model\Config;
 
@@ -42,6 +56,21 @@ class SimplePath
 
     /**
      * SimplePath constructor.
+     * @param CoreHelper $coreHelper
+     * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMeta
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\App\ResourceConnection $connection
+     * @param \Magento\Framework\App\Cache\Manager $cacheManager
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param State $state
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param UrlInterface $backendUrl
+     * @param \Magento\Paypal\Model\Config $paypal
+     * @param \Psr\Log\LoggerInterface $logger
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -98,16 +127,16 @@ class SimplePath
 
         // Set scope ID
         switch ($this->_scope) {
-            case 'websites':
-                $this->_scopeId = $this->_websiteId;
-                break;
-            case 'stores':
-                $this->_scopeId = $this->_storeId;
-                break;
-            default:
-                $this->_scope = 'default';
-                $this->_scopeId = 0;
-                break;
+        case 'websites':
+            $this->_scopeId = $this->_websiteId;
+            break;
+        case 'stores':
+            $this->_scopeId = $this->_storeId;
+            break;
+        default:
+            $this->_scope = 'default';
+            $this->_scopeId = 0;
+            break;
         }
     }
 
@@ -170,7 +199,7 @@ class SimplePath
     /**
      * Return RSA public key
      *
-     * @param bool $pemformat  Return key in PEM format
+     * @param bool $pemformat Return key in PEM format
      */
     public function getPublicKey($pemformat = false, $reset = false)
     {
@@ -212,7 +241,7 @@ class SimplePath
     /**
      * Verify and decrypt JSON payload
      *
-     * @param string $payloadJson
+     * @param                                        string $payloadJson
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
@@ -230,8 +259,12 @@ class SimplePath
 
             // Validate JSON
             if (!isset($payload->encryptedKey, $payload->encryptedPayload, $payload->iv, $payload->sigKeyID)) {
-                throw new \Magento\Framework\Validator\Exception(__('Unable to import Amazon keys. ' .
-                    'Please verify your JSON format and values.'));
+                throw new \Magento\Framework\Validator\Exception(
+                    __(
+                        'Unable to import Amazon keys. ' .
+                        'Please verify your JSON format and values.'
+                    )
+                );
             }
 
             foreach ($payload as $key => $value) {
@@ -240,10 +273,12 @@ class SimplePath
 
             // Retrieve Amazon public key to verify signature
             try {
-                $client = new \Zend_Http_Client($this->getEndpointPubkey(), [
+                $client = new \Zend_Http_Client(
+                    $this->getEndpointPubkey(), [
                     'maxredirects' => 2,
                     'timeout'      => 30,
-                ]);
+                    ]
+                );
                 $client->setParameterGet(['sigkey_id' => $payload->sigKeyID]);
                 $response = $client->request();
                 $amazonPublickey = urldecode($response->getBody());
@@ -308,8 +343,12 @@ class SimplePath
             $this->logger->critical($e);
             $this->messageManager->addError(__($e->getMessage()));
             $link = 'https://payments.amazon.com/help/202024240';
-            $this->messageManager->addError(__("If you're experiencing consistent errors with transferring keys, " .
-                "click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link));
+            $this->messageManager->addError(
+                __(
+                    "If you're experiencing consistent errors with transferring keys, " .
+                    "click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link
+                )
+            );
         }
 
         return false;
@@ -385,7 +424,7 @@ class SimplePath
     {
         if (!$this->getConfig('payment/amazon_payment/active')) {
             $this->config->saveConfig('payment/amazon_payment/active', true, $this->_scope, $this->_scopeId);
-            $this->messageManager->addSuccess(__("Login and Pay with Amazon is now enabled."));
+            $this->messageManager->addSuccessMessage(__("Login and Pay with Amazon is now enabled."));
         }
     }
 
@@ -397,7 +436,7 @@ class SimplePath
         $baseUrl = $this->storeManager->getStore($this->_storeId)->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
         $baseUrl = str_replace('http:', 'https:', $baseUrl);
         $params  = 'website=' . $this->_websiteId . '&store=' . $this->_storeId . '&scope=' . $this->_scope;
-        return $baseUrl . 'amazon_core/simplepath/listener?' . $params;
+        return $baseUrl . 'amazon_core/simplepath/listener?' . urlencode($params);
     }
 
     /**

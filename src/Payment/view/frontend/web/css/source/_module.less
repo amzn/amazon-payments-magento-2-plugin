@@ -16,10 +16,11 @@
 & when (@media-common = true) {
 
     /** mini cart styling **/
+    .product-social-links,
     .amazon-minicart-container {
+        width: 100%;
         display: block;
         text-align: center;
-        width: 100%;
         .amazon-button-container {
             display: inline-block;
             margin: 12px 0 4px 0;
@@ -27,24 +28,24 @@
 
         .field-tooltip {
             .field-tooltip-content {
-                left: -245px;
                 top: 38px;
+                left: -245px;
 
                 &:before {
                     border: none;
-                    border-bottom: 10px solid #666666;
                     border-left: 10px solid transparent;
                     border-right: 10px solid transparent;
-                    left: 244px;
+                    border-bottom: 10px solid #666666;
                     top: -10px;
+                    left: 244px;
                 }
                 &:after {
                     border: none;
-                    border-bottom: 10px solid #f4f4f4;
                     border-left: 10px solid transparent;
                     border-right: 10px solid transparent;
-                    left: 244px;
+                    border-bottom: 10px solid #f4f4f4;
                     top: -8px;
+                    left: 244px;
                 }
             }
         }
@@ -52,21 +53,21 @@
 
     .amazon-addtoCart {
         display: block;
-        height: 100%;
-        left: 0;
-        position: absolute;
         width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
         top: 0;
     }
 
     .revert-checkout {
-        display: block;
         margin-top: 20px;
+        display: block;
     }
 
     .centered-button {
-        display: inline-block;
         text-align: center;
+        display: inline-block;
         .catalog-product-view & {
             display: table;
         }
@@ -106,9 +107,9 @@
                 @media all and (max-width: @screen__m) {
 
                     @right-shift: 56px;
-                    left: auto;
                     right: -@right-shift;
                     top: 38px;
+                    left: auto;
 
                     &:before,
                     &:after {
@@ -120,8 +121,8 @@
     }
 
     .amazon-widget {
-        height: 228px;
         max-width: 400px;
+        height: 228px;
     }
 
     .amazon-widget--address {
@@ -138,8 +139,8 @@
     .checkout-payment-method {
         .amazon-payment-method {
             .payment-method-title {
-                padding-bottom: 0;
                 visibility: hidden; //hide the title for amazon payment methods only
+                padding-bottom: 0;
             }
         }
     }

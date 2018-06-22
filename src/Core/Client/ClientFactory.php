@@ -69,12 +69,12 @@ class ClientFactory implements ClientFactoryInterface
     public function create($scopeId = null, $scope = ScopeInterface::SCOPE_STORE)
     {
         $config = [
-            Data::AMAZON_SECRET_KEY  => $this->coreHelper->getSecretKey($scope, $scopeId),
-            Data::AMAZON_ACCESS_KEY  => $this->coreHelper->getAccessKey($scope, $scopeId),
-            Data::AMAZON_MERCHANT_ID => $this->coreHelper->getMerchantId($scope, $scopeId),
-            Data::AMAZON_REGION      => $this->coreHelper->getRegion($scope, $scopeId),
-            Data::AMAZON_SANDBOX     => $this->coreHelper->isSandboxEnabled($scope, $scopeId),
-            Data::AMAZON_CLIENT_ID   => $this->coreHelper->getClientId($scope, $scopeId)
+            $this->coreHelper->getClientPath('secretkey')  => $this->coreHelper->getSecretKey($scope, $scopeId),
+            $this->coreHelper->getClientPath('accesskey')  => $this->coreHelper->getAccessKey($scope, $scopeId),
+            $this->coreHelper->getClientPath('merchantid') => $this->coreHelper->getMerchantId($scope, $scopeId),
+            $this->coreHelper->getClientPath('amazonregion')     => $this->coreHelper->getRegion($scope, $scopeId),
+            $this->coreHelper->getClientPath('amazonsandbox')    => $this->coreHelper->isSandboxEnabled($scope, $scopeId),
+            $this->coreHelper->getClientPath('clientid')   => $this->coreHelper->getClientId($scope, $scopeId)
         ];
 
         $client = $this->objectManager->create($this->instanceName, ['amazonConfig' => $config]);

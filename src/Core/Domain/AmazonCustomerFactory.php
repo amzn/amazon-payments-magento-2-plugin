@@ -20,6 +20,7 @@ use Amazon\Core\Api\Data\AmazonNameInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Escaper;
 
 class AmazonCustomerFactory
 {
@@ -34,14 +35,25 @@ class AmazonCustomerFactory
     private $amazonNameFactory;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * AmazonCustomerFactory constructor.
+     *
      * @param ObjectManagerInterface $objectManager
+     * @param AmazonNameFactory $amazonNameFactory
+     * @param Escaper $escaper
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        AmazonNameFactory $amazonNameFactory
+        AmazonNameFactory $amazonNameFactory,
+        Escaper $escaper
     ) {
         $this->objectManager  = $objectManager;
         $this->amazonNameFactory = $amazonNameFactory;
+        $this->escaper = $escaper;
     }
 
     /**
@@ -51,7 +63,7 @@ class AmazonCustomerFactory
     public function create(array $data = [])
     {
         $amazonName = $this->amazonNameFactory
-            ->create(['name' => $data['name'], 'country' => $data['country']]);
+            ->create(['name' => $this->escaper->escapeHtml($data['name']), 'country' => $this->escaper->escapeHtml($data['country'])]);
         $data[AmazonNameInterface::FIRST_NAME] = $amazonName->getFirstName();
         $data[AmazonNameInterface::LAST_NAME] = $amazonName->getLastName();
         return $this->objectManager->create(AmazonCustomer::class, ['data' => $data]);

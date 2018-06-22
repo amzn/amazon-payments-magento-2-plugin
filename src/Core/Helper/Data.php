@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Core\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -27,43 +28,8 @@ use Magento\Framework\Module\ModuleListInterface;
  */
 class Data extends AbstractHelper
 {
-    const AMAZON_SECRET_KEY = 'secret_key';
-    const AMAZON_ACCESS_KEY = 'access_key';
-    const AMAZON_MERCHANT_ID = 'merchant_id';
-    const AMAZON_CLIENT_ID = 'client_id';
-    const AMAZON_CLIENT_SECRET = 'client_secret';
-    const AMAZON_REGION = 'region';
-    const AMAZON_SANDBOX = 'sandbox';
+
     const AMAZON_ACTIVE = 'payment/amazon_payment/active';
-
-    private $amazonAccountUrl
-        = [
-            'us' => 'https://payments.amazon.com/overview',
-            'uk' => 'https://payments.amazon.co.uk/overview',
-            'de' => 'https://payments.amazon.de/overview',
-            'jp' => 'https://payments.amazon.co.jp/overview',
-        ];
-
-    /**
-     * @var Array
-     */
-    private $amazonCredentialsFields
-        = [
-            self::AMAZON_SECRET_KEY,
-            self::AMAZON_ACCESS_KEY,
-            self::AMAZON_MERCHANT_ID,
-            self::AMAZON_CLIENT_ID,
-            self::AMAZON_CLIENT_SECRET
-        ];
-
-    /**
-     * @var Array
-     */
-    private $amazonCredentialsEncryptedFields
-        = [
-            self::AMAZON_SECRET_KEY,
-            self::AMAZON_CLIENT_SECRET
-        ];
 
     /**
      * @var EncryptorInterface
@@ -87,6 +53,7 @@ class Data extends AbstractHelper
 
     /**
      * Data constructor.
+     *
      * @param ModuleListInterface $moduleList
      * @param Context $context
      * @param EncryptorInterface $encryptor
@@ -99,11 +66,12 @@ class Data extends AbstractHelper
         EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->moduleList = $moduleList;
-        $this->encryptor      = $encryptor;
-        $this->storeManager   = $storeManager;
+        $this->encryptor = $encryptor;
+        $this->storeManager = $storeManager;
         $this->clientIpHelper = $clientIpHelper;
     }
 
@@ -215,30 +183,47 @@ class Data extends AbstractHelper
      */
     public function getWidgetUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        $paymentRegion  = $this->getPaymentRegion($scope, $scopeCode);
+        $paymentRegion = $this->getPaymentRegion($scope, $scopeCode);
         $sandboxEnabled = $this->isSandboxEnabled($scope, $scopeCode);
 
         $widgetUrlMap = [
-            'de' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/de/lpa/js/Widgets.js?nomin',
-            'uk' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/uk/lpa/js/Widgets.js?nomin',
-            'us' => 'https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js?nomin',
-            'jp' => 'https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js?nomin',
+            'de' => $this->getWidgetPath('production/de'),
+            'uk' => $this->getWidgetPath('production/uk'),
+            'us' => $this->getWidgetPath('production/us'),
+            'jp' => $this->getWidgetPath('production/jp')
         ];
 
         if ($sandboxEnabled) {
             $widgetUrlMap = [
-                'de' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/de/sandbox/lpa/js/Widgets.js?nomin',
-                'uk' => 'https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/lpa/js/Widgets.js?nomin',
-                'us' => 'https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js?nomin',
-                'jp' => 'https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js?nomin',
+                'de' => $this->getWidgetPath('sandbox/de'),
+                'uk' => $this->getWidgetPath('sandbox/uk'),
+                'us' => $this->getWidgetPath('sandbox/us'),
+                'jp' => $this->getWidgetPath('sandbox/jp')
             ];
         }
 
         return array_key_exists($paymentRegion, $widgetUrlMap) ? $widgetUrlMap[$paymentRegion] : '';
     }
 
+
     /**
-     * @param string      $scope
+     * Retrieves region path from config.xml settings
+     *
+     * @param $key
+     * @param null $store
+     * @return mixed
+     */
+    public function getWidgetPath($key, $store = null)
+    {
+        return $this->scopeConfig->getValue(
+            'widget/' . $key,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * @param string $scope
      * @param null|string $scopeCode
      *
      * @return string
@@ -289,7 +274,7 @@ class Data extends AbstractHelper
      */
     public function isPwaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        if (! $this->clientIpHelper->clientHasAllowedIp()) {
+        if (!$this->clientIpHelper->clientHasAllowedIp()) {
             return false;
         }
 
@@ -305,7 +290,7 @@ class Data extends AbstractHelper
      */
     public function isLwaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        if (! $this->clientIpHelper->clientHasAllowedIp()) {
+        if (!$this->clientIpHelper->clientHasAllowedIp()) {
             return false;
         }
 
@@ -395,9 +380,9 @@ class Data extends AbstractHelper
         $buttonType = $this->getButtonType($scope, $scopeCode);
 
         $buttonTypeMap = [
-            'full'  => 'PwA',
+            'full' => 'PwA',
             'short' => 'Pay',
-            'logo'  => 'A',
+            'logo' => 'A',
         ];
 
         return array_key_exists($buttonType, $buttonTypeMap) ? $buttonTypeMap[$buttonType] : '';
@@ -411,9 +396,9 @@ class Data extends AbstractHelper
         $buttonType = $this->getButtonType($scope, $scopeCode);
 
         $buttonTypeMap = [
-            'full'  => 'LwA',
+            'full' => 'LwA',
             'short' => 'Login',
-            'logo'  => 'A',
+            'logo' => 'A',
         ];
 
         return array_key_exists($buttonType, $buttonTypeMap) ? $buttonTypeMap[$buttonType] : '';
@@ -522,7 +507,7 @@ class Data extends AbstractHelper
         if (in_array($context, ['authorization', 'authorization_capture'])) {
             $simulationStrings['Authorization:Declined:InvalidPaymentMethod']
                 = '{"SandboxSimulation": {"State":"Declined", "ReasonCode":"InvalidPaymentMethod", ' .
-                  '"PaymentMethodUpdateTimeInMins":5}}';
+                '"PaymentMethodUpdateTimeInMins":5}}';
             $simulationStrings['Authorization:Declined:AmazonRejected']
                 = '{"SandboxSimulation": {"State":"Declined", "ReasonCode":"AmazonRejected"}}';
             $simulationStrings['Authorization:Declined:TransactionTimedOut']
@@ -550,33 +535,47 @@ class Data extends AbstractHelper
     public function getSandboxSimulationOptions()
     {
         $simulationlabels = [
-            'default'                                     => __('No Simulation'),
+            'default' => __('No Simulation'),
             'Authorization:Declined:InvalidPaymentMethod' => __('Authorization soft decline'),
-            'Authorization:Declined:AmazonRejected'       => __('Authorization hard decline'),
-            'Authorization:Declined:TransactionTimedOut'  => __('Authorization timed out'),
-            'Capture:Declined:AmazonRejected'             => __('Capture declined'),
-            'Capture:Pending'                             => __('Capture pending'),
-            'Refund:Declined'                             => __('Refund declined')
+            'Authorization:Declined:AmazonRejected' => __('Authorization hard decline'),
+            'Authorization:Declined:TransactionTimedOut' => __('Authorization timed out'),
+            'Capture:Declined:AmazonRejected' => __('Capture declined'),
+            'Capture:Pending' => __('Capture pending'),
+            'Refund:Declined' => __('Refund declined')
         ];
 
         return $simulationlabels;
     }
 
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
     public function isPaymentButtonEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return ($this->isPwaEnabled($scope, $scopeCode) && $this->isCurrentCurrencySupportedByAmazon());
     }
 
+    /**
+     * @return bool
+     */
     public function isLoginButtonEnabled()
     {
         return ($this->isLwaEnabled() && $this->isPwaEnabled() && $this->isCurrentCurrencySupportedByAmazon());
     }
 
+    /**
+     * @return bool
+     */
     public function isCurrentCurrencySupportedByAmazon()
     {
         return $this->getCurrentCurrencyCode() == $this->getCurrencyCode();
     }
 
+    /**
+     * @return mixed
+     */
     protected function getCurrentCurrencyCode()
     {
         return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
@@ -589,15 +588,49 @@ class Data extends AbstractHelper
      */
     public function getAmazonAccountUrlByPaymentRegion($paymentRegion)
     {
-        if (empty($this->amazonAccountUrl[$paymentRegion])) {
+        $url = $this->getPaymentRegionUrl($paymentRegion);
+
+        if (!$url || empty($url)) {
             throw new \InvalidArgumentException("$paymentRegion is not a valid payment region");
         }
 
-        return $this->amazonAccountUrl[$paymentRegion];
+        return $url;
     }
 
     /**
-     * @param string      $scope
+     * Retrieves region path from config.xml settings
+     *
+     * @param $key
+     * @param null $store
+     * @return mixed
+     */
+    public function getPaymentRegionUrl($key, $store = null)
+    {
+        return $this->scopeConfig->getValue(
+            'region/country/' . $key,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Retrieves client path from config.xml settings
+     *
+     * @param $key
+     * @param null $store
+     * @return mixed
+     */
+    public function getClientPath($key, $store = null)
+    {
+        return $this->scopeConfig->getValue(
+            'client/paths/' . $key,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * @param string $scope
      * @param null|string $scopeCode
      *
      * @return array
@@ -609,7 +642,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param string      $scope
+     * @param string $scope
      * @param null|string $scopeCode
      *
      * @return bool
@@ -629,7 +662,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param string      $scope
+     * @param string $scope
      * @param null|string $scopeCode
      *
      * @return bool
@@ -637,7 +670,7 @@ class Data extends AbstractHelper
     public function isPwaButtonVisibleOnProductPage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->isPaymentButtonEnabled($scope, $scopeCode)
-        && $this->scopeConfig->isSetFlag('payment/amazon_payment/pwa_pp_button_is_visible', $scope, $scopeCode);
+            && $this->scopeConfig->isSetFlag('payment/amazon_payment/pwa_pp_button_is_visible', $scope, $scopeCode);
     }
 
     /**
@@ -665,7 +698,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param string      $scope
+     * @param string $scope
      * @param null|string $scopeCode
      *
      * @return string
@@ -681,7 +714,13 @@ class Data extends AbstractHelper
      */
     public function getAmazonCredentialsFields()
     {
-        return $this->amazonCredentialsFields;
+        return [
+            $this->getClientPath('secretkey'),
+            $this->getClientPath('accesskey'),
+            $this->getClientPath('merchantid'),
+            $this->getClientPath('clientid'),
+            $this->getClientPath('clientsecret')
+        ];
     }
 
     /**
@@ -689,9 +728,15 @@ class Data extends AbstractHelper
      */
     public function getAmazonCredentialsEncryptedFields()
     {
-        return $this->amazonCredentialsEncryptedFields;
+        return [
+            $this->getClientPath('secretkey'),
+            $this->getClientPath('clientsecret')
+        ];
     }
 
+    /**
+     * @return null
+     */
     public function getVersion()
     {
         $version = $this->moduleList->getOne('Amazon_Core');

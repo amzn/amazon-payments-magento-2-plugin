@@ -42,9 +42,10 @@ class ShippingInformationManagement
 
     /**
      * ShippingInformationManagement constructor.
-     * @param LoginSessionHelper $loginSessionHelper
+     *
+     * @param LoginSessionHelper                  $loginSessionHelper
      * @param OrderInformationManagementInterface $orderInformationManagement
-     * @param CartRepositoryInterface $cartRepository
+     * @param CartRepositoryInterface             $cartRepository
      */
     public function __construct(
         LoginSessionHelper $loginSessionHelper,

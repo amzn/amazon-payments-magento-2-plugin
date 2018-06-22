@@ -157,6 +157,14 @@
                                                                         </item>
                                                                     </item>
                                                                 </item>
+                                                                <item name="amazonlogin" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/payment/amazonlogin</item>
+                                                                    <item name="methods" xsi:type="array">
+                                                                        <item name="amazonlogin" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
                                                             </item>
                                                         </item>
                                                     </item>

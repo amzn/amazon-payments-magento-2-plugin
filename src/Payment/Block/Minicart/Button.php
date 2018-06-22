@@ -15,10 +15,11 @@
  */
 namespace Amazon\Payment\Block\Minicart;
 
+
 use Magento\Checkout\Model\Session;
-use Magento\Payment\Model\MethodInterface;
 use Amazon\Payment\Helper\Data;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
+use Amazon\Payment\Gateway\Config\Config;
 use Magento\Paypal\Block\Express\InContext;
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
@@ -53,7 +54,7 @@ class Button extends Template implements ShortcutInterface
     private $mainHelper;
 
     /**
-     * @var MethodInterface
+     * @var Config
      */
     private $payment;
 
@@ -74,33 +75,34 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * Button constructor.
-     * @param Context $context
+     *
+     * @param Context           $context
      * @param ResolverInterface $localeResolver
-     * @param Data $mainHelper
-     * @param Session $session
-     * @param MethodInterface $payment
-     * @param AmazonCoreHelper $coreHelper
-     * @param Http $request
-     * @param array $data
+     * @param Data              $mainHelper
+     * @param Session           $session
+     * @param Config            $payment
+     * @param AmazonCoreHelper  $coreHelper
+     * @param Http              $request
+     * @param array             $data
      */
     public function __construct(
         Context $context,
         ResolverInterface $localeResolver,
         Data $mainHelper,
         Session $session,
-        MethodInterface $payment,
+        Config $payment,
         AmazonCoreHelper $coreHelper,
         Http $request,
         array $data = []
     ) {
         parent::__construct($context, $data);
-
         $this->localeResolver = $localeResolver;
         $this->mainHelper = $mainHelper;
         $this->payment = $payment;
         $this->session = $session;
         $this->coreHelper = $coreHelper;
         $this->request = $request;
+        $this->payment->setMethodCode($this->payment::CODE);
     }
 
     /**
@@ -108,12 +110,11 @@ class Button extends Template implements ShortcutInterface
      */
     protected function shouldRender()
     {
-        if ($this->getIsCart() && $this->payment->isAvailable($this->session->getQuote())) {
+        if ($this->getIsCart() && $this->payment->isActive($this->session->getQuote()->getStoreId())) {
             return true;
         }
-
         return $this->coreHelper->isPayButtonAvailableInMinicart()
-            && $this->payment->isAvailable($this->session->getQuote())
+            && $this->payment->isActive($this->session->getQuote()->getStoreId())
             && $this->isMiniCart;
     }
 
@@ -129,9 +130,6 @@ class Button extends Template implements ShortcutInterface
         return parent::_toHtml();
     }
 
-    /**
-     * @return bool
-     */
     protected function _isOnCartPage()
     {
         return $this->request->getFullActionName() == 'checkout_cart_index';

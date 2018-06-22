@@ -37,9 +37,11 @@ class AmazonGetOrderDetailsResponse
 
         $details = $data['GetOrderReferenceDetailsResult']['OrderReferenceDetails'];
 
-        $this->details = $amazonOrderDetailsFactory->create([
+        $this->details = $amazonOrderDetailsFactory->create(
+            [
             'details' => $details
-        ]);
+            ]
+        );
     }
 
     /**

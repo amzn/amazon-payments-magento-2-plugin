@@ -70,15 +70,19 @@ class AuthorizationProcessor implements ProcessorInterface
      */
     public function process(array $ipnData)
     {
-        $details = $this->amazonAuthorizationDetailsFactory->create([
+        $details = $this->amazonAuthorizationDetailsFactory->create(
+            [
             'details' => $ipnData['AuthorizationDetails']
-        ]);
+            ]
+        );
 
         $collection = $this->collectionFactory
             ->create()
-            ->addFieldToFilter(PendingAuthorizationInterface::AUTHORIZATION_ID, [
+            ->addFieldToFilter(
+                PendingAuthorizationInterface::AUTHORIZATION_ID, [
                 'eq' => $details->getAuthorizeTransactionId()
-            ])
+                ]
+            )
             ->setPageSize(1)
             ->setCurPage(1);
 

@@ -18,20 +18,23 @@ define(
     ) {
         'use strict';
 
-        return Component.extend({
-            defaults: {
-                template: 'Amazon_Payment/notification'
-            },
-            isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            chargeOnOrder: ko.observable(registry.get('amazonPayment').chargeOnOrder),
-            isEuPaymentRegion: ko.observable(registry.get('amazonPayment').isEuPaymentRegion),
+        return Component.extend(
+            {
+                defaults: {
+                    template: 'Amazon_Payment/notification'
+                },
+                isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
+                chargeOnOrder: ko.observable(registry.get('amazonPayment').chargeOnOrder),
+                isEuPaymentRegion: ko.observable(registry.get('amazonPayment').isEuPaymentRegion),
 
-            /**
-             * Init
-             */
-            initialize: function () {
-                this._super();
+                /**
+                 * Init
+                 */
+                initialize: function () {
+                    this._super();
+                }
             }
-        });
+        );
     }
 );
+

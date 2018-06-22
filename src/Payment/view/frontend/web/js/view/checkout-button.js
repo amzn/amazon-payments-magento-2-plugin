@@ -17,20 +17,23 @@ define(
     ) {
         'use strict';
 
-        return Component.extend({
-            defaults: {
-                template: 'Amazon_Payment/checkout-button'
-            },
-            isCustomerLoggedIn: customer.isLoggedIn,
-            isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-            isPwaVisible: amazonStorage.isPwaVisible,
+        return Component.extend(
+            {
+                defaults: {
+                    template: 'Amazon_Payment/checkout-button'
+                },
+                isCustomerLoggedIn: customer.isLoggedIn,
+                isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
+                isPwaVisible: amazonStorage.isPwaVisible,
 
-            /**
-             * Init
-             */
-            initialize: function () {
-                this._super();
+                /**
+                 * Init
+                 */
+                initialize: function () {
+                    this._super();
+                }
             }
-        });
+        );
     }
 );
+

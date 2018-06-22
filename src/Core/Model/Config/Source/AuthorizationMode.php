@@ -29,9 +29,8 @@ class AuthorizationMode implements ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => static::SYNC, 'label' => __('Synchronous')],
-            ['value' => static::ASYNC, 'label' => __('Asynchronous')],
-            ['value' => static::SYNC_THEN_ASYNC, 'label' => __('Synchronous if Possible')]
+            ['value' => static::SYNC, 'label' => __('Immediate')],
+            ['value' => static::SYNC_THEN_ASYNC, 'label' => __('Automatic')]
         ];
     }
 }

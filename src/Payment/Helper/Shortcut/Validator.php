@@ -22,56 +22,58 @@ namespace Amazon\Payment\Helper\Shortcut;
 class Validator implements ValidatorInterface
 {
     /**
-     * @var \Amazon\Payment\Model\Config
+     * @var \Amazon\Payment\Gateway\Config\Config 
      */
-    private $_amazonConfigFactory;
+    private $amazonConfig;
 
     /**
      * @var \Magento\Framework\Registry
      */
-    private $_registry;
+    private $registry;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
      */
-    private $_productTypeConfig;
+    private $productTypeConfig;
 
     /**
      * @var \Magento\Payment\Helper\Data
      */
-    private $_paymentData;
+    private $paymentData;
 
     /**
      * @var \Amazon\Core\Helper\CategoryExclusion
      */
-    private $_categoryExclusionHelper;
+    private $categoryExclusionHelper;
 
     /**
-     * @param \Amazon\Payment\Model\Config $amazonConfig
-     * @param \Magento\Framework\Registry $registry
+     * Validator constructor.
+     *
+     * @param \Amazon\Payment\Gateway\Config\Config               $amazonConfig
+     * @param \Magento\Framework\Registry                         $registry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Amazon\Core\Helper\CategoryExclusion $categoryExclusionHelper
+     * @param \Magento\Payment\Helper\Data                        $paymentData
+     * @param \Amazon\Core\Helper\CategoryExclusion               $categoryExclusionHelper
      */
     public function __construct(
-        \Amazon\Payment\Model\Config $amazonConfig,
+        \Amazon\Payment\Gateway\Config\Config $amazonConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Payment\Helper\Data $paymentData,
         \Amazon\Core\Helper\CategoryExclusion $categoryExclusionHelper
     ) {
-        $this->_amazonConfig = $amazonConfig;
-        $this->_registry = $registry;
-        $this->_productTypeConfig = $productTypeConfig;
-        $this->_paymentData = $paymentData;
-        $this->_categoryExclusionHelper = $categoryExclusionHelper;
+        $this->amazonConfig = $amazonConfig;
+        $this->registry = $registry;
+        $this->productTypeConfig = $productTypeConfig;
+        $this->paymentData = $paymentData;
+        $this->categoryExclusionHelper = $categoryExclusionHelper;
     }
 
     /**
      * Validates shortcut
      *
-     * @param string $code
-     * @param bool $isInCatalog
+     * @param  string $code
+     * @param  bool   $isInCatalog
      * @return bool
      */
     public function validate($code, $isInCatalog)
@@ -84,25 +86,23 @@ class Validator implements ValidatorInterface
     /**
      * Checks visibility of context (cart or product page)
      *
-     * @param string $paymentCode Payment method code
-     * @param bool $isInCatalog
+     * @param  string $paymentCode Payment method code
+     * @param  bool   $isInCatalog
      * @return bool
      */
     public function isContextAvailable($paymentCode, $isInCatalog)
     {
-        /** @var \Magento\Paypal\Model\Config $config */
-        $config = $this->_amazonConfigFactory->create();
-        $config->setMethod($paymentCode);
+        $this->amazonConfig->setMethodCode($this->amazonConfig::CODE);
 
         // check visibility on product page
-        if ($isInCatalog && $config->getValue('pwa_pp_button_is_visible')) {
-            $currentProduct = $this->_registry->registry('current_product');
+        if ($isInCatalog && $this->amazonConfig->getValue('pwa_pp_button_is_visible')) {
+            $currentProduct = $this->registry->registry('current_product');
             if ($currentProduct !== null) {
-                if ($this->_categoryExclusionHelper->productHasExcludedCategory($currentProduct)) {
+                if ($this->categoryExclusionHelper->productHasExcludedCategory($currentProduct)) {
                     return false;
                 }
             } else {
-                if ($this->_categoryExclusionHelper->isQuoteDirty()) {
+                if ($this->categoryExclusionHelper->isQuoteDirty()) {
                     return false;
                 }
             }
@@ -114,7 +114,7 @@ class Validator implements ValidatorInterface
     /**
      * Check is product available depending on final price or type set(configurable)
      *
-     * @param bool $isInCatalog
+     * @param  bool $isInCatalog
      * @return bool
      */
     public function isPriceOrSetAvailable($isInCatalog)
@@ -122,12 +122,12 @@ class Validator implements ValidatorInterface
         if ($isInCatalog) {
             // Show PayPal shortcut on a product view page only if product has nonzero price
             /** @var $currentProduct \Magento\Catalog\Model\Product */
-            $currentProduct = $this->_registry->registry('current_product');
+            $currentProduct = $this->registry->registry('current_product');
             if ($currentProduct !== null) {
                 $productPrice = (double)$currentProduct->getFinalPrice();
                 $typeInstance = $currentProduct->getTypeInstance();
                 if (empty($productPrice)
-                    && !$this->_productTypeConfig->isProductSet($currentProduct->getTypeId())
+                    && !$this->productTypeConfig->isProductSet($currentProduct->getTypeId())
                     && !$typeInstance->canConfigure($currentProduct)
                 ) {
                     return  false;
@@ -140,14 +140,14 @@ class Validator implements ValidatorInterface
     /**
      * Checks payment method and quote availability
      *
-     * @param string $paymentCode
+     * @param  string $paymentCode
      * @return bool
      */
     public function isMethodAvailable($paymentCode)
     {
         // check payment method availability
         /** @var \Magento\Payment\Model\Method\AbstractMethod $methodInstance */
-        $methodInstance = $this->_paymentData->getMethodInstance($paymentCode);
+        $methodInstance = $this->paymentData->getMethodInstance($paymentCode);
         if (!$methodInstance->isAvailable()) {
             return false;
         }

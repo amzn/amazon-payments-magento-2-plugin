@@ -18,7 +18,7 @@ namespace Amazon\Login\Plugin;
 use Amazon\Core\Helper\Data;
 use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Amazon\Login\Helper\Session as LoginSessionHelper;
-use Amazon\Payment\Model\Method\Amazon as AmazonPaymentMethod;
+use Amazon\Payment\Gateway\Config\Config;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Sales\Api\OrderCustomerManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -74,7 +74,7 @@ class OrderCustomerManagement
     {
         if ($this->coreHelper->isLwaEnabled()) {
             $paymentMethodName = $this->orderRepository->get($orderId)->getPayment()->getMethod();
-            $isAmazonPayment   = $paymentMethodName === AmazonPaymentMethod::PAYMENT_METHOD_CODE;
+            $isAmazonPayment   = $paymentMethodName === Config::CODE;
             $amazonCustomer    = $this->loginSessionHelper->getAmazonCustomer();
 
             if ($isAmazonPayment && $amazonCustomer) {

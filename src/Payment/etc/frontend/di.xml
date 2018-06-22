@@ -6,7 +6,7 @@
                 <item name="template" xsi:type="string">Amazon_Payment::minicart-button.phtml</item>
                 <item name="alias" xsi:type="string">amazon.button.mini-cart</item>
             </argument>
-            <argument name="payment" xsi:type="object">Amazon\Payment\Model\Method\Amazon</argument>
+            <argument name="payment" xsi:type="object">Amazon\Payment\Gateway\Config\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">

@@ -143,6 +143,13 @@
                             <config_path>payment/amazon_payment/allowed_ips</config_path>
                             <backend_model>Magento\Developer\Model\Config\Backend\AllowedIps</backend_model>
                         </field>
+                        <field id="loglist" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Developer Logs</label>
+                            <depends>
+                                <field id="logging">1</field>
+                            </depends>
+                            <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\DeveloperLogs</frontend_model>
+                        </field>
                     </group>
                 </group>
             </group>

@@ -19,9 +19,15 @@ use Amazon\Core\Api\Data\AmazonAddressInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Escaper;
 
 class AmazonAddressFactory
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     /**
      * @var ObjectManagerInterface
      */
@@ -38,8 +44,11 @@ class AmazonAddressFactory
     private $amazonNameFactory;
 
     /**
+     * AmazonAddressFactory constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      * @param AmazonNameFactory $amazonNameFactory
+     * @param Escaper $escaper
      * @param array $addressDecoratorPool Per-country custom decorators of incoming address data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
@@ -47,10 +56,12 @@ class AmazonAddressFactory
     public function __construct(
         ObjectManagerInterface $objectManager,
         AmazonNameFactory $amazonNameFactory,
+        Escaper $escaper,
         array $addressDecoratorPool = []
     ) {
         $this->objectManager = $objectManager;
         $this->amazonNameFactory = $amazonNameFactory;
+        $this->escaper = $escaper;
         $this->addressDecoratorPool = $addressDecoratorPool;
     }
 
@@ -64,17 +75,19 @@ class AmazonAddressFactory
     {
         $address = $responseData['address'];
         $amazonName = $this->amazonNameFactory->create(
-            ['name' => $address['Name'], 'country' => $address['CountryCode']]
+            [
+                'name' => $this->escaper->escapeHtml($address['Name']),
+                'country' => $this->escaper->escapeHtml($address['CountryCode'])]
         );
 
         $data = [
-            AmazonAddressInterface::CITY => $address['City'],
-            AmazonAddressInterface::POSTAL_CODE => $address['PostalCode'],
-            AmazonAddressInterface::COUNTRY_CODE => $address['CountryCode'],
-            AmazonAddressInterface::TELEPHONE => $address['Phone'] ?? '',
-            AmazonAddressInterface::STATE_OR_REGION => $address['StateOrRegion'] ?? '',
-            AmazonAddressInterface::FIRST_NAME => $amazonName->getFirstName(),
-            AmazonAddressInterface::LAST_NAME => $amazonName->getLastName(),
+            AmazonAddressInterface::CITY => $this->escaper->escapeHtml($address['City']),
+            AmazonAddressInterface::POSTAL_CODE => $this->escaper->escapeHtml($address['PostalCode']),
+            AmazonAddressInterface::COUNTRY_CODE => $this->escaper->escapeHtml($address['CountryCode']),
+            AmazonAddressInterface::TELEPHONE => $this->escaper->escapeHtml($address['Phone']) ?? '',
+            AmazonAddressInterface::STATE_OR_REGION => $this->escaper->escapeHtml($address['StateOrRegion']) ?? '',
+            AmazonAddressInterface::FIRST_NAME => $this->escaper->escapeHtml($amazonName->getFirstName()),
+            AmazonAddressInterface::LAST_NAME => $this->escaper->escapeHtml($amazonName->getLastName()),
             AmazonAddressInterface::LINES => $this->getLines($address)
         ];
 
@@ -107,14 +120,16 @@ class AmazonAddressFactory
     /**
      * Returns address lines.
      *
-     * @param array $responseData
+     * @param  array $responseData
      * @return array
      */
     private function getLines(array $responseData = []): array
     {
         $lines = [];
         for ($i = 1; $i <= 3; $i++) {
-            $lines[$i] = $responseData['AddressLine' . $i] ?? '';
+            if (isset($responseData['AddressLine' . $i]) && $responseData['AddressLine' . $i]) {
+                $lines[$i] = $this->escaper->escapeHtml($responseData['AddressLine' . $i]);
+            }
         }
 
         return $lines;
