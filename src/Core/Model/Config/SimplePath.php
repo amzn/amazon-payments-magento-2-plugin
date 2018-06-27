@@ -127,16 +127,16 @@ class SimplePath
 
         // Set scope ID
         switch ($this->_scope) {
-        case 'websites':
-            $this->_scopeId = $this->_websiteId;
-            break;
-        case 'stores':
-            $this->_scopeId = $this->_storeId;
-            break;
-        default:
-            $this->_scope = 'default';
-            $this->_scopeId = 0;
-            break;
+            case 'websites':
+                $this->_scopeId = $this->_websiteId;
+                break;
+            case 'stores':
+                $this->_scopeId = $this->_storeId;
+                break;
+            default:
+                $this->_scope = 'default';
+                $this->_scopeId = 0;
+                break;
         }
     }
 
@@ -234,8 +234,8 @@ class SimplePath
     public function key2pem($key)
     {
         return "-----BEGIN PUBLIC KEY-----\n" .
-               chunk_split($key, 64, "\n") .
-               "-----END PUBLIC KEY-----\n";
+            chunk_split($key, 64, "\n") .
+            "-----END PUBLIC KEY-----\n";
     }
 
     /**
@@ -275,8 +275,8 @@ class SimplePath
             try {
                 $client = new \Zend_Http_Client(
                     $this->getEndpointPubkey(), [
-                    'maxredirects' => 2,
-                    'timeout'      => 30,
+                        'maxredirects' => 2,
+                        'timeout'      => 30,
                     ]
                 );
                 $client->setParameterGet(['sigkey_id' => $payload->sigKeyID]);

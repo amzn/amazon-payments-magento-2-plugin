@@ -313,4 +313,28 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    <type name="Magento\ScalableCheckout\Console\Command\SplitQuote">
+        <arguments>
+            <argument name="tables" xsi:type="array">
+                <item name="amazon_quote" xsi:type="string">amazon_quote</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Payment\Model\ResourceModel\QuoteLink">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">checkout</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ScalableOms\Console\Command\SplitSales">
+        <arguments>
+            <argument name="tables" xsi:type="array">
+                <item name="amazon_sales_order" xsi:type="string">amazon_sales_order</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Payment\Model\ResourceModel\OrderLink">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>
