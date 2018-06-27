@@ -121,6 +121,12 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/minicart_button_is_visible</config_path>
                         </field>
+                        <field id="amazonloggin" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Display Amazon Payment Method</label>
+                            <comment><![CDATA[Display the Login With Amazon button widget in the list of available Payment Methods during checkout (applies only to users who are not logged in via Amazon Pay).]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/amazonlogin/active</config_path>
+                        </field>
                     </group>
                     <group id="sales_options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sales Options</label>
