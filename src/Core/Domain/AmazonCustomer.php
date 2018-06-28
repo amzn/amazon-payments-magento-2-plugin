@@ -15,74 +15,41 @@
  */
 namespace Amazon\Core\Domain;
 
-class AmazonCustomer
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
+use Amazon\Core\Api\Data\AmazonNameInterface;
+use Magento\Framework\Api\AbstractSimpleObject;
+
+class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCustomerInterface
 {
     /**
-     * @var string
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $email;
-
-    /**
-     * @var AmazonName
-     */
-    protected $name;
-
-    /**
-     * AmazonCustomer constructor.
-     *
-     * @param string $id
-     * @param string $email
-     * @param string $name
-     */
-    public function __construct($id, $email, $name)
-    {
-        $this->id    = $id;
-        $this->email = $email;
-        $this->name = new AmazonName($name);
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getEmail()
     {
-        return $this->email;
+        return $this->getData('email');
     }
 
     /**
-     * Get id
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getId()
     {
-        return $this->id;
+        return $this->getData('id');
     }
 
     /**
-     * Get first name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstName()
     {
-        return $this->name->getFirstName();
+        return $this->getData(AmazonNameInterface::FIRST_NAME);
     }
 
     /**
-     * Get last name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastName()
     {
-        return $this->name->getLastName();
+        return $this->getData(AmazonNameInterface::LAST_NAME);
     }
 }

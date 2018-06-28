@@ -25,12 +25,12 @@ class CreateController
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var Url
      */
-    protected $url;
+    private $url;
 
     public function __construct(Session $session, Url $url)
     {
@@ -38,6 +38,9 @@ class CreateController
         $this->url     = $url;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterExecute(Create $create, ResultInterface $result)
     {
         $this->session->setAfterAmazonAuthUrl($this->url->getAccountUrl());

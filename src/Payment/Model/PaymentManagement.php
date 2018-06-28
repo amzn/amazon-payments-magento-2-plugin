@@ -18,7 +18,6 @@ namespace Amazon\Payment\Model;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingRefundInterfaceFactory;
-use Amazon\Payment\Api\PaymentManagementInterface;
 use Amazon\Payment\Domain\Details\AmazonAuthorizationDetails;
 use Amazon\Payment\Domain\Details\AmazonCaptureDetails;
 use Amazon\Payment\Domain\Details\AmazonRefundDetails;
@@ -31,42 +30,45 @@ use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 
-class PaymentManagement implements PaymentManagementInterface
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class PaymentManagement
 {
     /**
      * @var PendingCaptureInterfaceFactory
      */
-    protected $pendingCaptureFactory;
+    private $pendingCaptureFactory;
 
     /**
      * @var PendingAuthorizationInterfaceFactory
      */
-    protected $pendingAuthorizationFactory;
+    private $pendingAuthorizationFactory;
 
     /**
      * @var PendingRefundInterfaceFactory
      */
-    protected $pendingRefundFactory;
+    private $pendingRefundFactory;
 
     /**
      * @var SearchCriteriaBuilderFactory
      */
-    protected $searchCriteriaBuilderFactory;
+    private $searchCriteriaBuilderFactory;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    protected $orderPaymentRepository;
+    private $orderPaymentRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var TransactionRepositoryInterface
      */
-    protected $transactionRepository;
+    private $transactionRepository;
 
     /**
      * PaymentManagement constructor.

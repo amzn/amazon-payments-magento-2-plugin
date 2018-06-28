@@ -23,17 +23,24 @@ use Zend\Uri\UriFactory;
 
 class JsOrigin extends BaseField
 {
+    /**
+     * Render element value
+     *
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function _renderValue(AbstractElement $element)
     {
         $stores = $this->_storeManager->getStores();
         $valueReturn = '';
-        $urlArray = array();
+        $urlArray = [];
 
         foreach ($stores as $store) {
             $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
             if ($baseUrl) {
-                $uri   = UriFactory::factory($baseUrl);
-                $urlArray[] = $uri->getScheme() . '://' . $uri->getHost();
+                $uri        = UriFactory::factory($baseUrl);
+                $urlArray[] = $this->escapeHtml($uri->getScheme() . '://' . $uri->getHost());
             }
         }
 
@@ -45,6 +52,13 @@ class JsOrigin extends BaseField
         return '<td class="value">' . $valueReturn . '</td>';
     }
 
+    /**
+     * Render element value
+     *
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function _renderInheritCheckbox(AbstractElement $element)
     {
         return '<td class="use-default"></td>';

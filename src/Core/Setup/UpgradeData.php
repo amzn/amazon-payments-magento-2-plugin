@@ -15,52 +15,45 @@
  */
 namespace Amazon\Core\Setup;
 
-use Amazon\Core\Helper\CategoryExclusion;
-use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Quote\Setup\QuoteSetupFactory;
 
+/**
+ * Class UpgradeData
+ * @package Amazon\Core\Setup
+ */
 class UpgradeData implements UpgradeDataInterface
 {
-    /**
-     * @var QuoteSetupFactory
-     */
-    protected $quoteSetupFactory;
-
-    /**
-     * @param QuoteSetupFactory $quoteSetupFactory
-     */
-    public function __construct(QuoteSetupFactory $quoteSetupFactory)
-    {
-        $this->quoteSetupFactory = $quoteSetupFactory;
-    }
-
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
-    {
-        if (version_compare($context->getVersion(), '1.0.0', '<=')) {
-            $this->addQuoteTableDirtyFlagAttribute($setup);
-        }
-    }
 
     /**
      * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
      */
-    private function addQuoteTableDirtyFlagAttribute(ModuleDataSetupInterface $setup)
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $options = [
-            'type' => Table::TYPE_SMALLINT,
-            'visible' => false,
-            'required' => false,
-            'default' => 0,
-            'nullable' => false,
-            'unsigned' => true
-        ];
+        // Used update query because all scopes needed to have this value updated and this is a fast, simple approach
+        if (version_compare($context->getVersion(), '3.0.0', '<')) {
+            $select = $setup->getConnection()->select()->from(
+                $setup->getTable('core_config_data'),
+                ['config_id', 'value']
+            )->where(
+                'path = ?',
+                'payment/amazon_payment/authorization_mode'
+            );
 
-        /** @var \Magento\Quote\Setup\QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
-
-        $quoteSetup->addAttribute('quote_item', CategoryExclusion::ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT, $options);
+            foreach ($setup->getConnection()->fetchAll($select) as $configRow) {
+                if ($configRow['value'] === 'asynchronous') {
+                    $row = [
+                        'value' => 'synchronous_possible'
+                    ];
+                    $setup->getConnection()->update(
+                        $setup->getTable('core_config_data'),
+                        $row,
+                        ['config_id = ?' => $configRow['config_id']]
+                    );
+                }
+            }
+        }
     }
 }

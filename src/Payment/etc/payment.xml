@@ -4,5 +4,8 @@
         <method name="amazon_payment">
             <allow_multiple_address>1</allow_multiple_address>
         </method>
+        <method name="amazonlogin">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
     </methods>
 </payment>

@@ -18,8 +18,8 @@ namespace Amazon\Payment\Model\PaymentManagement;
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Payment\Api\Data\PendingCaptureInterface;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
-use Amazon\Payment\Api\PaymentManagement\CaptureInterface;
-use Amazon\Payment\Api\PaymentManagementInterface;
+use Amazon\Payment\Model\PaymentManagement\Capture;
+use Amazon\Payment\Model\PaymentManagement;
 use Amazon\Payment\Domain\AmazonCaptureDetailsResponseFactory;
 use Amazon\Payment\Domain\AmazonCaptureStatus;
 use Amazon\Payment\Domain\Details\AmazonCaptureDetails;
@@ -37,88 +37,92 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
-class Capture extends AbstractOperation implements CaptureInterface
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Capture extends AbstractOperation
 {
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var PendingCaptureInterfaceFactory
      */
-    protected $pendingCaptureFactory;
+    private $pendingCaptureFactory;
 
     /**
      * @var AmazonCaptureDetailsResponseFactory
      */
-    protected $amazonCaptureDetailsResponseFactory;
+    private $amazonCaptureDetailsResponseFactory;
 
     /**
      * @var OrderPaymentRepositoryInterface
      */
-    protected $orderPaymentRepository;
+    private $orderPaymentRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    private $orderRepository;
 
     /**
      * @var TransactionRepositoryInterface
      */
-    protected $transactionRepository;
+    private $transactionRepository;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
-     * @var PaymentManagementInterface
+     * @var PaymentManagement
      */
-    protected $paymentManagement;
+    private $paymentManagement;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var bool
      */
-    protected $throwExceptions = false;
+    private $throwExceptions = false;
 
     /**
      * Capture constructor.
      *
-     * @param ClientFactoryInterface              $clientFactory
-     * @param PendingCaptureInterfaceFactory      $pendingCaptureFactory
-     * @param AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory
      * @param NotifierInterface                   $notifier
      * @param UrlInterface                        $urlBuilder
      * @param SearchCriteriaBuilderFactory        $searchCriteriaBuilderFactory
      * @param InvoiceRepositoryInterface          $invoiceRepository
+     * @param ClientFactoryInterface              $clientFactory
+     * @param PendingCaptureInterfaceFactory      $pendingCaptureFactory
+     * @param AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory
      * @param OrderPaymentRepositoryInterface     $orderPaymentRepository
      * @param OrderRepositoryInterface            $orderRepository
      * @param TransactionRepositoryInterface      $transactionRepository
      * @param StoreManagerInterface               $storeManager
-     * @param PaymentManagementInterface          $paymentManagement
+     * @param PaymentManagement                   $paymentManagement
      * @param LoggerInterface                     $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ClientFactoryInterface $clientFactory,
-        PendingCaptureInterfaceFactory $pendingCaptureFactory,
-        AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory,
         NotifierInterface $notifier,
         UrlInterface $urlBuilder,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         InvoiceRepositoryInterface $invoiceRepository,
+        ClientFactoryInterface $clientFactory,
+        PendingCaptureInterfaceFactory $pendingCaptureFactory,
+        AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory,
         OrderPaymentRepositoryInterface $orderPaymentRepository,
         OrderRepositoryInterface $orderRepository,
         TransactionRepositoryInterface $transactionRepository,
         StoreManagerInterface $storeManager,
-        PaymentManagementInterface $paymentManagement,
+        PaymentManagement $paymentManagement,
         LoggerInterface $logger
     ) {
         $this->clientFactory                       = $clientFactory;
@@ -165,11 +169,13 @@ class Capture extends AbstractOperation implements CaptureInterface
                 $this->storeManager->setCurrentStore($storeId);
 
                 if (null === $captureDetails) {
-                    $responseParser = $this->clientFactory->create($storeId)->getCaptureDetails([
+                    $responseParser = $this->clientFactory->create($storeId)->getCaptureDetails(
+                        [
                         'amazon_capture_id' => $pendingCapture->getCaptureId()
-                    ]);
+                        ]
+                    );
 
-                    $response       = $this->amazonCaptureDetailsResponseFactory->create(['response' => $responseParser]);
+                    $response = $this->amazonCaptureDetailsResponseFactory->create(['response' => $responseParser]);
                     $captureDetails = $response->getDetails();
                 }
 
@@ -196,12 +202,12 @@ class Capture extends AbstractOperation implements CaptureInterface
         $status = $details->getStatus();
 
         switch ($status->getState()) {
-            case AmazonCaptureStatus::STATE_COMPLETED:
-                $this->completePendingCapture($pendingCapture, $payment, $order);
-                break;
-            case AmazonCaptureStatus::STATE_DECLINED:
-                $this->declinePendingCapture($pendingCapture, $payment, $order);
-                break;
+        case AmazonCaptureStatus::STATE_COMPLETED:
+            $this->completePendingCapture($pendingCapture, $payment, $order);
+            break;
+        case AmazonCaptureStatus::STATE_DECLINED:
+            $this->declinePendingCapture($pendingCapture, $payment, $order);
+            break;
         }
     }
 

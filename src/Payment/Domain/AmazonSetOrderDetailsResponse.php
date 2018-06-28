@@ -23,7 +23,7 @@ class AmazonSetOrderDetailsResponse
     /**
      * @var AmazonConstraint[]
      */
-    protected $constraints;
+    private $constraints;
 
     public function __construct(ResponseInterface $response, AmazonConstraintFactory $amazonConstraintFactory)
     {

@@ -30,32 +30,32 @@ class BasketContext implements SnippetAcceptingContext
     /**
      * @var Product
      */
-    protected $productPage;
+    private $productPage;
 
     /**
      * @var CurrencySwitcher
      */
-    protected $currencySwitcherElement;
+    private $currencySwitcherElement;
 
     /**
      * @var Home
      */
-    protected $homePage;
+    private $homePage;
 
     /**
      * @var CurrencyFixture
      */
-    protected $currencyFixture;
+    private $currencyFixture;
 
     /**
      * @var Basket
      */
-    protected $basketPage;
+    private $basketPage;
 
     /**
      * @var ProductFixture
      */
-    protected $productFixture;
+    private $productFixture;
 
     /**
      * @param Product          $productPage

@@ -15,170 +15,90 @@
  */
 namespace Amazon\Core\Domain;
 
-class AmazonAddress
+use Amazon\Core\Api\Data\AmazonAddressInterface;
+
+class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddressInterface
 {
     /**
-     * @var AmazonName
-     */
-    protected $name;
-
-    /**
-     * @var array
-     */
-    protected $lines;
-
-    /**
-     * @var string
-     */
-    protected $city;
-
-    /**
-     * @var string|null
-     */
-    protected $state;
-
-    /**
-     * @var string
-     */
-    protected $postCode;
-
-    /**
-     * @var string
-     */
-    protected $countryCode;
-
-    /**
-     * @var string
-     */
-    protected $telephone;
-
-    /**
-     * @var string
-     */
-    protected $company = '';
-
-    /**
-     * @param array $address
-     * @param AmazonNameFactory $addressNameFactory
-     */
-    public function __construct(array $address, AmazonNameFactory $addressNameFactory)
-    {
-        $this->name = $addressNameFactory->create(['name' => $address['Name'],
-                                                   'country' => $address['CountryCode']
-                                                  ]);
-
-        $this->lines = [];
-
-        for ($i = 1; $i <= 3; $i++) {
-            $key = 'AddressLine' . $i;
-
-            if (isset($address[$key])) {
-                if (empty($address[$key])) {
-                    $this->lines[$i] = '';
-                } else {
-                    $this->lines[$i] = $address[$key];
-                }
-            }
-        }
-
-        $this->city        = $address['City'];
-        $this->postCode    = $address['PostalCode'];
-        $this->countryCode = $address['CountryCode'];
-
-        if (isset($address['Phone'])) {
-            $this->telephone = $address['Phone'];
-        }
-
-        if (isset($address['StateOrRegion'])) {
-            $this->state = $address['StateOrRegion'];
-        }
-    }
-
-    /**
-     * Get first name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstName()
     {
-        return $this->name->getFirstName();
+        return $this->getData(AmazonAddressInterface::FIRST_NAME);
     }
 
     /**
-     * Get last name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastName()
     {
-        return $this->name->getLastName();
+        return $this->getData(AmazonAddressInterface::LAST_NAME);
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getLines()
     {
-        return $this->lines;
+        return $this->getData(AmazonAddressInterface::LINES);
     }
 
     /**
-     * @param int $lineNumber
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getLine($lineNumber)
     {
-        if (isset($this->lines[$lineNumber])) {
-            return $this->lines[$lineNumber];
+        if (isset($this->getData(AmazonAddressInterface::LINES)[$lineNumber])) {
+            return $this->getData(AmazonAddressInterface::LINES)[$lineNumber];
         }
         return null;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCity()
     {
-        return $this->city;
+        return $this->getData(AmazonAddressInterface::CITY);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getState()
     {
-        return $this->state;
+        return $this->getData(AmazonAddressInterface::STATE_OR_REGION);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getPostCode()
     {
-        return $this->postCode;
+        return $this->getData(AmazonAddressInterface::POSTAL_CODE);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCountryCode()
     {
-        return $this->countryCode;
+        return $this->getData(AmazonAddressInterface::COUNTRY_CODE);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTelephone()
     {
-        return $this->telephone;
+        return $this->getData(AmazonAddressInterface::TELEPHONE);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCompany()
     {
-        return $this->company;
+        return $this->getData(AmazonAddressInterface::COMPANY);
     }
 }

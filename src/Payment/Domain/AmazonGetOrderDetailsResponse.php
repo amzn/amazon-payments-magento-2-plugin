@@ -25,7 +25,7 @@ class AmazonGetOrderDetailsResponse
     /**
      * @var AmazonOrderDetails
      */
-    protected $details;
+    private $details;
 
     public function __construct(ResponseInterface $response, AmazonOrderDetailsFactory $amazonOrderDetailsFactory)
     {
@@ -37,9 +37,11 @@ class AmazonGetOrderDetailsResponse
 
         $details = $data['GetOrderReferenceDetailsResult']['OrderReferenceDetails'];
 
-        $this->details = $amazonOrderDetailsFactory->create([
+        $this->details = $amazonOrderDetailsFactory->create(
+            [
             'details' => $details
-        ]);
+            ]
+        );
     }
 
     /**

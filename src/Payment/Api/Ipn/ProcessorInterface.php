@@ -15,6 +15,9 @@
  */
 namespace Amazon\Payment\Api\Ipn;
 
+/**
+ * @api
+ */
 interface ProcessorInterface
 {
     /**

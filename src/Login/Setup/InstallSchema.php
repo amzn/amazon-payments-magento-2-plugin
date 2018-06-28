@@ -24,6 +24,9 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 class InstallSchema implements InstallSchemaInterface
 {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $table = $setup->getConnection()->newTable($setup->getTable(CustomerLink::TABLE_NAME));

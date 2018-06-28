@@ -15,6 +15,7 @@
  */
 namespace Amazon\Core\Domain;
 
+use Amazon\Core\Api\Data\AmazonNameInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -22,27 +23,35 @@ use Magento\Store\Model\StoreManagerInterface;
 class AmazonNameFactory
 {
     /**
+     * @var AmazonNameInterface
+     */
+    private $amazonName;
+
+    /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager = null;
+    private $objectManager = null;
 
     /**
      * @var array
      */
-    protected $perCountryNameHandlers;
+    private $perCountryNameHandlers;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @param AmazonNameInterface $amazonName
      * @param array $perCountryNameHandlers Per-country custom handlers of incoming name data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
+        AmazonNameInterface $amazonName,
         array $perCountryNameHandlers = []
     ) {
-        $this->objectManager = $objectManager;
-        $this->perCountryNameHandlers = array_change_key_case($perCountryNameHandlers, CASE_UPPER);
+        $this->objectManager          = $objectManager;
+        $this->amazonName             = $amazonName;
+        $this->perCountryNameHandlers = $perCountryNameHandlers;
     }
 
     /**
@@ -52,21 +61,33 @@ class AmazonNameFactory
      */
     public function create(array $data = [])
     {
-        $instanceClassName = AmazonName::class;
-        $countryCode = strtoupper($data['country']);
+        $nameParts = explode(' ', trim($data['name']), 2);
+        $data[AmazonNameInterface::FIRST_NAME] = $nameParts[0];
+        $data[AmazonNameInterface::LAST_NAME] = $nameParts[1] ?? '.';
 
-        if (!empty($this->perCountryNameHandlers[$countryCode])) {
-            $instanceClassName = (string) $this->perCountryNameHandlers[$countryCode];
+        $amazonName = $this->objectManager->create(AmazonName::class, ['data' => $data]);
+
+        $countryCode = strtoupper($data['country']);
+        if (empty($this->nameDecoratorPool[$countryCode])) {
+            return $amazonName;
         }
 
-        $instance = $this->objectManager->create($instanceClassName, $data);
+        $amazonName = $this->objectManager->create(
+            $this->nameDecoratorPool[$countryCode],
+            [
+                'amazonName' => $amazonName,
+            ]
+        );
 
-        if (!$instance instanceof AmazonName) {
+        if (!$amazonName instanceof AmazonNameInterface) {
             throw new LocalizedException(
-                __('Name country handler %1 must be of type %2', [$instanceClassName, AmazonName::class])
+                __(
+                    'Address country handler %1 must be of type %2',
+                    [$this->nameDecoratorPool[$countryCode], AmazonName::class]
+                )
             );
         }
 
-        return $instance;
+        return $amazonName;
     }
 }

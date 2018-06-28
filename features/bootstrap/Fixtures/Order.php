@@ -27,7 +27,7 @@ class Order extends BaseFixture
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
     
     public function __construct()
     {

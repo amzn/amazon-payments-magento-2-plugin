@@ -22,6 +22,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class ProductPagePaymentLink extends PaymentLink
 {
     /**
@@ -32,7 +35,7 @@ class ProductPagePaymentLink extends PaymentLink
     /**
      * @var Registry
      */
-    protected $registry;
+    private $registry;
 
     /**
      * @param Context           $context

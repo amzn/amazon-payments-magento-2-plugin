@@ -15,6 +15,7 @@
  */
 namespace Amazon\Core\Plugin;
 
+use Amazon\Core\Helper\Data;
 use Amazon\Core\Helper\CategoryExclusion;
 use Magento\Checkout\CustomerData\Cart;
 
@@ -23,14 +24,23 @@ class CartSection
     /**
      * @var CategoryExclusion
      */
-    protected $categoryExclusionHelper;
+    private $categoryExclusionHelper;
+
+    /**
+     * @var Data
+     */
+    private $coreHelper;
 
     /**
      * @param CategoryExclusion $categoryExclusionHelper
+     * @param Data $coreHelper
      */
-    public function __construct(CategoryExclusion $categoryExclusionHelper)
-    {
+    public function __construct(
+        CategoryExclusion $categoryExclusionHelper,
+        Data $coreHelper
+    ) {
         $this->categoryExclusionHelper = $categoryExclusionHelper;
+        $this->coreHelper              = $coreHelper;
     }
 
     /**
@@ -38,10 +48,13 @@ class CartSection
      * @param array $result
      *
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetSectionData(Cart $subject, $result)
     {
-        $result['amazon_quote_has_excluded_item'] = $this->categoryExclusionHelper->isQuoteDirty();
+        if ($this->coreHelper->isPwaEnabled()) {
+            $result['amazon_quote_has_excluded_item'] = $this->categoryExclusionHelper->isQuoteDirty();
+        }
 
         return $result;
     }

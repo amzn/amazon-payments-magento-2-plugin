@@ -25,7 +25,7 @@ class Invoice extends BaseFixture
     /**
      * @var InvoiceRepositoryInterface
      */
-    protected $repository;
+    private $repository;
 
     public function __construct()
     {

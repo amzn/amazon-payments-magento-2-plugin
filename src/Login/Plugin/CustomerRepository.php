@@ -15,35 +15,35 @@
  */
 namespace Amazon\Login\Plugin;
 
-use Amazon\Login\Api\Data\CustomerLinkInterfaceFactory;
+use Amazon\Core\Helper\Data as AmazonHelper;
+use Amazon\Login\Api\CustomerManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerExtensionFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 
 class CustomerRepository
 {
     /**
-     * @var CustomerExtensionFactory
+     * @var CustomerManagementInterface
      */
-    protected $customerExtensionFactory;
+    private $customerManagement;
 
     /**
-     * @var CustomerLinkInterfaceFactory
+     * @var AmazonHelper
      */
-    protected $customerLinkFactory;
+    private $amazonHelper;
 
     /**
      * CustomerRepository constructor.
      *
-     * @param CustomerExtensionFactory     $customerExtensionFactory
-     * @param CustomerLinkInterfaceFactory $customerLinkFactory
+     * @param CustomerManagementInterface  $customerManagement
+     * @param AmazonHelper $amazonHelper
      */
     public function __construct(
-        CustomerExtensionFactory $customerExtensionFactory,
-        CustomerLinkInterfaceFactory $customerLinkFactory
+        CustomerManagementInterface $customerManagement,
+        AmazonHelper $amazonHelper
     ) {
-        $this->customerExtensionFactory = $customerExtensionFactory;
-        $this->customerLinkFactory      = $customerLinkFactory;
+        $this->customerManagement       = $customerManagement;
+        $this->amazonHelper             = $amazonHelper;
     }
 
     /**
@@ -53,10 +53,13 @@ class CustomerRepository
      * @param CustomerInterface           $customer
      *
      * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetById(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        $this->setAmazonIdExtensionAttribute($customer);
+        if ($this->amazonHelper->isEnabled()) {
+            $this->customerManagement->setAmazonIdExtensionAttribute($customer);
+        }
 
         return $customer;
     }
@@ -68,25 +71,14 @@ class CustomerRepository
      * @param CustomerInterface           $customer
      *
      * @return CustomerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGet(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        $this->setAmazonIdExtensionAttribute($customer);
-
-        return $customer;
-    }
-
-    protected function setAmazonIdExtensionAttribute(CustomerInterface $customer)
-    {
-        $customerExtension = ($customer->getExtensionAttributes()) ?: $this->customerExtensionFactory->create();
-
-        $amazonCustomer = $this->customerLinkFactory->create();
-        $amazonCustomer->load($customer->getId(), 'customer_id');
-
-        if ($amazonCustomer->getId()) {
-            $customerExtension->setAmazonId($amazonCustomer->getAmazonId());
+        if ($this->amazonHelper->isEnabled()) {
+            $this->customerManagement->setAmazonIdExtensionAttribute($customer);
         }
 
-        $customer->setExtensionAttributes($customerExtension);
+        return $customer;
     }
 }

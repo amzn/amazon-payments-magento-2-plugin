@@ -25,12 +25,12 @@ class ProductContext implements SnippetAcceptingContext
     /**
      * @var Product
      */
-    protected $productPage;
+    private $productPage;
 
     /**
      * @var Basket
      */
-    protected $basketPage;
+    private $basketPage;
 
     /**
      * @param Product $productPage

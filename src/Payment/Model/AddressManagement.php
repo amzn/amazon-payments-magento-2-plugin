@@ -32,47 +32,50 @@ use Magento\Quote\Model\Quote;
 use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddressManagement implements AddressManagementInterface
 {
     /**
      * @var ClientFactoryInterface
      */
-    protected $clientFactory;
+    private $clientFactory;
 
     /**
      * @var Address
      */
-    protected $addressHelper;
+    private $addressHelper;
 
     /**
      * @var QuoteLinkInterfaceFactory
      */
-    protected $quoteLinkFactory;
+    private $quoteLinkFactory;
 
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var CollectionFactory
      */
-    protected $countryCollectionFactory;
+    private $countryCollectionFactory;
 
     /**
      * @var AmazonAddressFactory
      */
-    protected $amazonAddressFactory;
+    private $amazonAddressFactory;
 
     /**
      * @var Factory
      */
-    protected $validatorFactory;
+    private $validatorFactory;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @param ClientFactoryInterface    $clientFactory
@@ -164,7 +167,7 @@ class AddressManagement implements AddressManagementInterface
     protected function throwUnknownErrorException()
     {
         throw new WebapiException(
-            __(AmazonServiceUnavailableException::ERROR_MESSAGE),
+            __('Amazon could not process your request.'),
             0,
             WebapiException::HTTP_INTERNAL_ERROR
         );
@@ -228,7 +231,6 @@ class AddressManagement implements AddressManagementInterface
         if (! $quote->getId()) {
             throw new SessionException(__('Your session has expired, please reload the page and try again.'));
         }
-
 
         $quoteLink = $this->quoteLinkFactory->create()->load($quote->getId(), 'quote_id');
 

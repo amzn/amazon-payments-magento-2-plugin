@@ -16,13 +16,24 @@
 ?>
 <div class="amazon-button-container centered-button">
     <div class="amazon-button-container__cell">
-        <div id="PayWithAmazon-<?php echo $block->getJsId() ?>" class="login-with-amazon" data-mage-init='{"amazonButton": {"buttonType": "PwA"}}'></div>
+        <div id="PayWithAmazon-<?= /* @noEscape */ $block->getJsId() ?>"
+             class="login-with-amazon"
+             data-mage-init='{"amazonButton": {"buttonType": "PwA"}}'>
+        </div>
     </div>
 
     <div class="amazon-button-container__cell">
         <div class="field-tooltip toggle">
-            <span class="field-tooltip-action action-help" data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-            <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true"><?php /* @noEscape */  echo __('Are you an Amazon customer? Pay now with address and payment details stored in your Amazon account.'); ?></div>
+            <span class="field-tooltip-action action-help"
+                  data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+            </span>
+            <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
+                <?= $block->escapeHtml(__('Are you an Amazon customer? ' .
+                    'Pay now with address and payment details stored in your Amazon account.')); ?>
+            </div>
         </div>
     </div>
 </div>

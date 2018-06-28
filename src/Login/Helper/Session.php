@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Helper;
 
-use Amazon\Core\Domain\AmazonCustomer;
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Domain\ValidationCredentials;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -40,8 +40,10 @@ class Session
     private $eventManager;
 
     /**
+     * Session constructor.
      * @param CustomerSession $session
      * @param EventManagerInterface $eventManager
+     * @param CheckoutSession $checkoutSession
      */
     public function __construct(
         CustomerSession $session,
@@ -122,10 +124,10 @@ class Session
     }
 
     /**
-     * @param AmazonCustomer $amazonCustomer
+     * @param AmazonCustomerInterface $amazonCustomer
      * @return void
      */
-    public function setAmazonCustomer(AmazonCustomer $amazonCustomer)
+    public function setAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
     {
         $this->session->setAmazonCustomer($amazonCustomer);
     }
@@ -139,13 +141,13 @@ class Session
     }
 
     /**
-     * @return AmazonCustomer|null
+     * @return AmazonCustomerInterface|null
      */
     public function getAmazonCustomer()
     {
         $amazonCustomer = $this->session->getAmazonCustomer();
 
-        if ($amazonCustomer && (!$amazonCustomer instanceof AmazonCustomer)) {
+        if ($amazonCustomer && (!$amazonCustomer instanceof AmazonCustomerInterface)) {
             $this->clearAmazonCustomer();
             $amazonCustomer = null;
         }

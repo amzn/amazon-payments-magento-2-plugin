@@ -25,12 +25,12 @@ class CheckoutController
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var UrlInterface
      */
-    protected $url;
+    private $url;
 
     public function __construct(Session $session, UrlInterface $url)
     {
@@ -38,6 +38,9 @@ class CheckoutController
         $this->url     = $url;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function afterExecute(Index $index, ResultInterface $result)
     {
         $this->session->setAfterAmazonAuthUrl($this->url->getUrl('checkout'));

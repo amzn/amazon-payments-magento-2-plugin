@@ -28,12 +28,12 @@ class Email extends AbstractHelper
     /**
      * @var TransportBuilderFactory
      */
-    protected $emailTransportBuilderFactory;
+    private $emailTransportBuilderFactory;
 
     /**
      * @var AmazonCoreHelper
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @param Context                 $context

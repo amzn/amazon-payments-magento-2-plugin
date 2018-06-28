@@ -21,6 +21,9 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Model\Product;
 
+/**
+ * @api
+ */
 class PaymentLink extends Template
 {
     /**

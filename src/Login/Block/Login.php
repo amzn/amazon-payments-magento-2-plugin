@@ -19,19 +19,30 @@ use Amazon\Core\Helper\Data;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class Login extends Template
 {
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
+    /**
+     * Login constructor.
+     * @param Context $context
+     * @param Data $coreHelper
+     */
     public function __construct(Context $context, Data $coreHelper)
     {
         $this->coreHelper = $coreHelper;
         parent::__construct($context);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         if (!$this->coreHelper->isLoginButtonEnabled()) {

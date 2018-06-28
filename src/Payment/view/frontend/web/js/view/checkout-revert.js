@@ -2,7 +2,7 @@
 define(
     [
         'jquery',
-        "underscore",
+        'underscore',
         'ko',
         'uiComponent',
         'Amazon_Payment/js/model/storage',
@@ -10,7 +10,7 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/model/full-screen-loader',
-	'uiRegistry'
+        'uiRegistry'
     ],
     function (
         $,
@@ -22,25 +22,31 @@ define(
         errorProcessor,
         urlBuilder,
         fullScreenLoader,
-	registry
+        registry
     ) {
         'use strict';
 
-        var self;
-        if (registry.get('amazonPayment') !== undefined) {
         return Component.extend({
             defaults: {
                 template: 'Amazon_Payment/checkout-revert'
             },
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
-	    isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
+            isAmazonEnabled: ko.observable(registry.get('amazonPayment').isPwaEnabled),
+
+            /**
+             * Init
+             */
             initialize: function () {
-                self = this;
                 this._super();
             },
+
+            /**
+             * Revert checkout
+             */
             revertCheckout: function () {
-                fullScreenLoader.startLoader();
                 var serviceUrl = urlBuilder.createUrl('/amazon/order-ref', {});
+
+                fullScreenLoader.startLoader();
                 storage.delete(
                     serviceUrl
                 ).done(
@@ -56,8 +62,5 @@ define(
                 );
             }
         });
-        } else {
-            return Component.extend({});
-        }
     }
 );

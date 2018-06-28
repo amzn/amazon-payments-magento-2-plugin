@@ -1,4 +1,18 @@
 <?php
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 namespace Amazon\Core\Model\Config;
 
@@ -10,35 +24,54 @@ use Magento\Payment\Helper\Formatter;
 use \phpseclib\Crypt\RSA;
 use \phpseclib\Crypt\AES;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SimplePath
 {
 
     const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payments/simplepath/privatekey';
     const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payments/simplepath/publickey';
 
-    protected $_spIds = [
+    private $_spIds = [
         'USD' => 'AUGT0HMCLQVX1',
         'GBP' => 'A1BJXVS5F6XP',
         'EUR' => 'A2ZAYEJU54T1BM',
         'JPY' => 'A1MCJZEB1HY93J',
     ];
 
-    protected $_mapCurrencyRegion = [
+    private $_mapCurrencyRegion = [
         'EUR' => 'de',
         'USD' => 'us',
         'GBP' => 'uk',
         'JPY' => 'ja',
     ];
 
-    protected $_storeId;
-    protected $_websiteId;
-    protected $_scope;
-    protected $_scopeId;
+    private $_storeId;
+    private $_websiteId;
+    private $_scope;
+    private $_scopeId;
 
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * SimplePath constructor.
+     * @param CoreHelper $coreHelper
+     * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMeta
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\App\ResourceConnection $connection
+     * @param \Magento\Framework\App\Cache\Manager $cacheManager
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param State $state
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param UrlInterface $backendUrl
+     * @param \Magento\Paypal\Model\Config $paypal
+     * @param \Psr\Log\LoggerInterface $logger
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CoreHelper $coreHelper,
@@ -55,9 +88,8 @@ class SimplePath
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Paypal\Model\Config $paypal,
         \Psr\Log\LoggerInterface $logger
-    )
-    {
-        $this->coreHelper   = $coreHelper;
+    ) {
+        $this->coreHelper    = $coreHelper;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -113,7 +145,7 @@ class SimplePath
      */
     private function getEndpointDomain()
     {
-        return in_array($this->getConfig('currency/options/default'), array('EUR', 'GBP'))
+        return in_array($this->getConfig('currency/options/default'), ['EUR', 'GBP'])
             ? 'https://payments-eu.amazon.com/'
             : 'https://payments.amazon.com/';
     }
@@ -141,10 +173,11 @@ class SimplePath
     {
         $rsa = new RSA();
         $keys = $rsa->createKey(2048);
+        $encrypt = $this->encryptor->encrypt($keys['privatekey']);
 
         $this->config
             ->saveConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, $keys['publickey'], 'default', 0)
-            ->saveConfig(self::CONFIG_XML_PATH_PRIVATE_KEY, $this->encryptor->encrypt($keys['privatekey']), 'default', 0);
+            ->saveConfig(self::CONFIG_XML_PATH_PRIVATE_KEY, $encrypt, 'default', 0);
 
         $this->cacheManager->clean([CacheTypeConfig::TYPE_IDENTIFIER]);
 
@@ -166,7 +199,7 @@ class SimplePath
     /**
      * Return RSA public key
      *
-     * @param bool $pemformat  Return key in PEM format
+     * @param bool $pemformat Return key in PEM format
      */
     public function getPublicKey($pemformat = false, $reset = false)
     {
@@ -179,7 +212,8 @@ class SimplePath
         }
 
         if (!$pemformat) {
-            $publickey = str_replace(array('-----BEGIN PUBLIC KEY-----', '-----END PUBLIC KEY-----', "\n"), array('','',''), $publickey);
+            $pubtrim   = ['-----BEGIN PUBLIC KEY-----', '-----END PUBLIC KEY-----', "\n"];
+            $publickey = str_replace($pubtrim, ['','',''], $publickey);
             // Remove binary characters
             $publickey = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $publickey);
         }
@@ -200,96 +234,121 @@ class SimplePath
     public function key2pem($key)
     {
         return "-----BEGIN PUBLIC KEY-----\n" .
-               chunk_split($key, 64, "\n") .
-               "-----END PUBLIC KEY-----\n";
+            chunk_split($key, 64, "\n") .
+            "-----END PUBLIC KEY-----\n";
     }
 
     /**
      * Verify and decrypt JSON payload
      *
-     * @param string $payloadJson
+     * @param                                        string $payloadJson
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
     {
         try {
-          $payload = (object) json_decode($payloadJson);
-          $payloadVerify = clone $payload;
+            $payload = (object) json_decode($payloadJson);
+            $payloadVerify = clone $payload;
 
-          // Unencrypted via admin
-          if ($this->state->getAreaCode() == 'adminhtml' && isset($payload->merchant_id, $payload->access_key, $payload->secret_key)) {
-              return $this->saveToConfig($payloadJson, $autoEnable);
-          }
+            // Unencrypted via admin
+            if ($this->state->getAreaCode() == 'adminhtml' &&
+                isset($payload->merchant_id, $payload->access_key, $payload->secret_key)
+            ) {
+                return $this->saveToConfig($payloadJson, $autoEnable);
+            }
 
-          // Validate JSON
-          if (!isset($payload->encryptedKey, $payload->encryptedPayload, $payload->iv, $payload->sigKeyID, $payload->signature)) {
-              throw new  \Magento\Framework\Validator\Exception(__("Unable to import Amazon keys. Please verify your JSON format and values."));
-          }
+            // Validate JSON
+            if (!isset($payload->encryptedKey, $payload->encryptedPayload, $payload->iv, $payload->sigKeyID)) {
+                throw new \Magento\Framework\Validator\Exception(
+                    __(
+                        'Unable to import Amazon keys. ' .
+                        'Please verify your JSON format and values.'
+                    )
+                );
+            }
 
-          // URL decode values
-          foreach ($payload as $key => $value) {
-              $payload->$key = urldecode($value);
-          }
+            foreach ($payload as $key => $value) {
+                $payload->$key = rawurldecode($value);
+            }
 
-          // Retrieve Amazon public key to verify signature
-          try {
-              $client = new \Zend_Http_Client($this->getEndpointPubkey(), array(
-                  'maxredirects' => 2,
-                  'timeout'      => 30));
+            // Retrieve Amazon public key to verify signature
+            try {
+                $client = new \Zend_Http_Client(
+                    $this->getEndpointPubkey(), [
+                        'maxredirects' => 2,
+                        'timeout'      => 30,
+                    ]
+                );
+                $client->setParameterGet(['sigkey_id' => $payload->sigKeyID]);
+                $response = $client->request();
+                $amazonPublickey = urldecode($response->getBody());
+            } catch (\Exception $e) {
+                throw new \Magento\Framework\Validator\Exception(__($e->getMessage()));
+            }
 
-              $client->setParameterGet(array('sigkey_id' => $payload->sigKeyID));
+            // Use raw JSON (without signature or URL decode) as the data to verify signature
+            unset($payloadVerify->signature);
+            $payloadVerifyJson = json_encode($payloadVerify);
 
-              $response = $client->request();
-              $amazonPublickey = urldecode($response->getBody());
+            // Verify signature using Amazon publickey and JSON paylaod
+            if ($amazonPublickey &&
+                openssl_verify(
+                    $payloadVerifyJson,
+                    base64_decode($payload->signature),
+                    $this->key2pem($amazonPublickey),
+                    'SHA256'
+                )
+            ) {
+                // Decrypt Amazon key using own private key
+                $decryptedKey = null;
+                openssl_private_decrypt(
+                    base64_decode($payload->encryptedKey),
+                    $decryptedKey,
+                    $this->getPrivateKey(),
+                    OPENSSL_PKCS1_OAEP_PADDING
+                );
 
-          } catch (\Exception $e) {
-              throw new \Magento\Framework\Validator\Exception(__($e->getMessage()));
-          }
+                // Decrypt final payload (AES 128-bit CBC)
+                if (function_exists('mcrypt_decrypt')) {
+                    $finalPayload = @mcrypt_decrypt(
+                        MCRYPT_RIJNDAEL_128,
+                        $decryptedKey,
+                        base64_decode($payload->encryptedPayload),
+                        MCRYPT_MODE_CBC,
+                        base64_decode($payload->iv)
+                    );
+                } else {
+                    // This library uses openssl_decrypt, which may have issues
+                    $aes = new AES();
+                    $aes->setKey($decryptedKey);
+                    $aes->setIV(base64_decode($payload->iv, true));
+                    $aes->setKeyLength(128);
+                    $finalPayload = $aes->decrypt($payload->encryptedPayload);
+                }
 
-          // Use raw JSON (without signature or URL decode) as the data to verify signature
-          unset($payloadVerify->signature);
-          $payloadVerifyJson = json_encode($payloadVerify);
+                // Remove binary characters
+                $finalPayload = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $finalPayload);
 
-          // Verify signature using Amazon publickey and JSON paylaod
-          if ($amazonPublickey && openssl_verify($payloadVerifyJson, base64_decode($payload->signature), $this->key2pem($amazonPublickey), 'SHA256')) {
-
-              // Decrypt Amazon key using own private key
-              $decryptedKey = null;
-              openssl_private_decrypt(base64_decode($payload->encryptedKey), $decryptedKey, $this->getPrivateKey(), OPENSSL_PKCS1_OAEP_PADDING);
-
-              // Decrypt final payload (AES 128-bit CBC)
-              if (function_exists('mcrypt_decrypt')) {
-                  $finalPayload = @mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decryptedKey, base64_decode($payload->encryptedPayload), MCRYPT_MODE_CBC, base64_decode($payload->iv));
-              } else {
-                  // This library uses openssl_decrypt, which may have issues
-                  $aes = new AES();
-                  $aes->setKey($decryptedKey);
-                  $aes->setIV(base64_decode($payload->iv, true));
-                  $aes->setKeyLength(128);
-                  $finalPayload = $aes->decrypt($payload->encryptedPayload);
-              }
-
-              // Remove binary characters
-              $finalPayload = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $finalPayload);
-
-              if (json_decode($finalPayload)) {
-                  if ($autoSave) {
-                      $this->saveToConfig($finalPayload, $autoEnable);
-                      $this->destroyKeys();
-                  }
-
-                  return $finalPayload;
-              }
-
-          } else {
-              throw new \Magento\Framework\Validator\Exception("Unable to verify signature for JSON payload.");
-          }
-
+                if (json_decode($finalPayload)) {
+                    if ($autoSave) {
+                        $this->saveToConfig($finalPayload, $autoEnable);
+                        $this->destroyKeys();
+                    }
+                    return $finalPayload;
+                }
+            } else {
+                throw new \Magento\Framework\Validator\Exception("Unable to verify signature for JSON payload.");
+            }
         } catch (\Exception $e) {
             $this->logger->critical($e);
             $this->messageManager->addError(__($e->getMessage()));
-
             $link = 'https://payments.amazon.com/help/202024240';
-            $this->messageManager->addError(__("If you're experiencing consistent errors with transferring keys, click <a href=\"%s\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link));
+            $this->messageManager->addError(
+                __(
+                    "If you're experiencing consistent errors with transferring keys, " .
+                    "click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link
+                )
+            );
         }
 
         return false;
@@ -304,20 +363,49 @@ class SimplePath
     {
         if ($values = (object) json_decode($json)) {
             foreach ($values as $key => $value) {
-              $values->{strtolower($key)} = $value;
+                $values->{strtolower($key)} = $value;
             }
 
-            $this->config->saveConfig('payment/amazon_payment/merchant_id', $values->merchant_id, $this->_scope, $this->_scopeId);
-            $this->config->saveConfig('payment/amazon_payment/client_id', $values->client_id, $this->_scope, $this->_scopeId);
-            $this->config->saveConfig('payment/amazon_payment/client_secret', $this->encryptor->encrypt($values->client_secret), $this->_scope, $this->_scopeId);
-            $this->config->saveConfig('payment/amazon_payment/access_key', $values->access_key, $this->_scope, $this->_scopeId);
-            $this->config->saveConfig('payment/amazon_payment/secret_key', $this->encryptor->encrypt($values->secret_key), $this->_scope, $this->_scopeId);
+            $this->config->saveConfig(
+                'payment/amazon_payment/merchant_id',
+                $values->merchant_id,
+                $this->_scope,
+                $this->_scopeId
+            );
+            $this->config->saveConfig(
+                'payment/amazon_payment/client_id',
+                $values->client_id,
+                $this->_scope,
+                $this->_scopeId
+            );
+            $this->config->saveConfig(
+                'payment/amazon_payment/client_secret',
+                $this->encryptor->encrypt($values->client_secret),
+                $this->_scope,
+                $this->_scopeId
+            );
+            $this->config->saveConfig(
+                'payment/amazon_payment/access_key',
+                $values->access_key,
+                $this->_scope,
+                $this->_scopeId
+            );
+            $this->config->saveConfig(
+                'payment/amazon_payment/secret_key',
+                $this->encryptor->encrypt($values->secret_key),
+                $this->_scope,
+                $this->_scopeId
+            );
 
             $currency = $this->getConfig('currency/options/default');
             if (isset($this->_mapCurrencyRegion[$currency])) {
-                $this->config->saveConfig('payment/amazon_payment/payment_region', $this->_mapCurrencyRegion[$currency], $this->_scope, $this->_scopeId);
+                $this->config->saveConfig(
+                    'payment/amazon_payment/payment_region',
+                    $this->_mapCurrencyRegion[$currency],
+                    $this->_scope,
+                    $this->_scopeId
+                );
             }
-
 
             if ($autoEnable) {
                 $this->autoEnable();
@@ -336,7 +424,7 @@ class SimplePath
     {
         if (!$this->getConfig('payment/amazon_payment/active')) {
             $this->config->saveConfig('payment/amazon_payment/active', true, $this->_scope, $this->_scopeId);
-            $this->messageManager->addSuccess(__("Login and Pay with Amazon is now enabled."));
+            $this->messageManager->addSuccessMessage(__("Login and Pay with Amazon is now enabled."));
         }
     }
 
@@ -347,7 +435,8 @@ class SimplePath
     {
         $baseUrl = $this->storeManager->getStore($this->_storeId)->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
         $baseUrl = str_replace('http:', 'https:', $baseUrl);
-        return $baseUrl . 'amazon_core/simplepath/listener?website='.$this->_websiteId.'&store='.$this->_storeId.'&scope='.$this->_scope;
+        $params  = 'website=' . $this->_websiteId . '&store=' . $this->_storeId . '&scope=' . $this->_scope;
+        return $baseUrl . 'amazon_core/simplepath/listener?' . urlencode($params);
     }
 
     /**
@@ -356,8 +445,8 @@ class SimplePath
     public function getFormParams()
     {
         // Get redirect URLs and store URL-s
-        $urlArray = array();
-        $baseUrls = array();
+        $urlArray = [];
+        $baseUrls = [];
         $stores = $this->storeManager->getStores();
         foreach ($stores as $store) {
             // Get secure base URL
@@ -365,14 +454,14 @@ class SimplePath
                 $value = $baseUrl . 'amazon/login/processAuthHash/';
                 $urlArray[] = $value;
                 $url = parse_url($baseUrl);
-                if (isset($url['host'])){
+                if (isset($url['host'])) {
                     $baseUrls[] = 'https://' . $url['host'];
                 }
             }
             // Get unsecure base URL
             if ($baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, false)) {
                 $url = parse_url($baseUrl);
-                if (isset($url['host'])){
+                if (isset($url['host'])) {
                     $baseUrls[] = 'https://' . $url['host'];
                 }
             }
@@ -387,7 +476,7 @@ class SimplePath
 
         $currency = $this->getConfig('currency/options/default');
 
-        return array(
+        return [
             'keyShareURL' => $this->getReturnUrl(),
             'publicKey'   => $this->getPublicKey(),
             'locale'      => $this->getConfig('general/locale/code'),
@@ -398,7 +487,7 @@ class SimplePath
             'merchantStoreDescription'    => $this->getConfig('general/store_information/name'),
             'merchantLoginDomains[]'      => $baseUrls,
             'merchantLoginRedirectURLs[]' => $urlArray,
-        );
+        ];
     }
 
     /**
@@ -442,13 +531,12 @@ class SimplePath
         return $co ? $co : 'US';
     }
 
-
     /**
      * Return array of config for JSON AmazonSp variable.
      */
     public function getJsonAmazonSpConfig()
     {
-        return array(
+        return [
             'co'            => $this->getCountry(),
             'region'        => $this->getRegion(),
             'currency'      => $this->getCurrency(),
@@ -457,6 +545,6 @@ class SimplePath
             'isSecure'      => (int) ($this->request->isSecure()),
             'hasOpenssl'    => (int) (extension_loaded('openssl')),
             'formParams'    => $this->getFormParams(),
-        );
+        ];
     }
 }

@@ -26,17 +26,18 @@ define(
     function ($, addressConverter, quote, registry, checkoutData, checkoutDataResolver, amazonStorage) {
         'use strict';
 
-        function populateShippingForm()
-        {
+        /**
+         * Populate shipping address form in shipping step from quote model         *
+         */
+        function populateShippingForm() {
             var shippingAddressData = checkoutData.getShippingAddressFromData();
-            
+
             registry.async('checkoutProvider')(function (checkoutProvider) {
                 checkoutProvider.set(
                     'shippingAddress',
                     $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                 );
             });
-
             checkoutDataResolver.resolveShippingAddress();
         }
 
@@ -55,6 +56,6 @@ define(
                     populateShippingForm();
                 }
             });
-        }
+        };
     }
 );

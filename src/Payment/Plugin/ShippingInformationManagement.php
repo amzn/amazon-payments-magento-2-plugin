@@ -28,23 +28,24 @@ class ShippingInformationManagement
     /**
      * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
     /**
      * @var OrderInformationManagementInterface
      */
-    protected $orderInformationManagement;
+    private $orderInformationManagement;
 
     /**
      * @var LoginSessionHelper
      */
-    protected $loginSessionHelper;
+    private $loginSessionHelper;
 
     /**
      * ShippingInformationManagement constructor.
-     * @param LoginSessionHelper $loginSessionHelper
+     *
+     * @param LoginSessionHelper                  $loginSessionHelper
      * @param OrderInformationManagementInterface $orderInformationManagement
-     * @param CartRepositoryInterface $cartRepository
+     * @param CartRepositoryInterface             $cartRepository
      */
     public function __construct(
         LoginSessionHelper $loginSessionHelper,
@@ -56,15 +57,17 @@ class ShippingInformationManagement
         $this->orderInformationManagement = $orderInformationManagement;
     }
 
-    public function aroundSaveAddressInformation(
-        ShippingInformationManagementInterface $shippingInformationManagement,
-        Closure $proceed,
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeSaveAddressInformation(
+        ShippingInformationManagementInterface $subject,
         $cartId,
         ShippingInformationInterface $shippingInformation
     ) {
-        $return = $proceed($cartId, $shippingInformation);
+        $return = [$cartId, $shippingInformation];
 
-        $quote                  = $this->cartRepository->getActive($cartId);
+        $quote = $this->cartRepository->getActive($cartId);
 
         /* Grand total is 0, skip rest of the plugin */
         if ($quote->getGrandTotal() <= 0) {

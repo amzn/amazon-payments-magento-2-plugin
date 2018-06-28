@@ -23,22 +23,22 @@ class AmazonAuthorizationDetails
     /**
      * @var AmazonAuthorizationStatus
      */
-    protected $status;
+    private $status;
 
     /**
      * @var string|null
      */
-    protected $captureTransactionId;
+    private $captureTransactionId;
 
     /**
      * @var string|null
      */
-    protected $authorizeTransactionId;
+    private $authorizeTransactionId;
 
     /**
      * @var bool
      */
-    protected $captureNow = false;
+    private $captureNow = false;
 
     /**
      * AmazonAuthorizationDetails constructor.

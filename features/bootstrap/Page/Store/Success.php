@@ -22,9 +22,9 @@ class Success extends Page
 {
     use PageTrait;
 
-    protected $path = '/checkout/onepage/success';
+    private $path = '/checkout/onepage/success';
 
-    protected $elements = [
+    private $elements = [
         'create-account-btn' => ['css' => 'input[type="submit"]'],
     ];
 

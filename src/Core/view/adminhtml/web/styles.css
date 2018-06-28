@@ -1,0 +1,6 @@
+.apsp-getstarted { display:inline-block; padding:1em 0em; }
+.apsp-or { display:inline-block; }
+#amazon_https_required, #amazon_reload { color:red; display:none; }
+#json-import-wrapper { display:none; }
+#amazon_simplepath_back { display:none; margin-bottom:1em; margin-top:-0.5em; }
+#amazon_simplepath td.creds { width:10%; }

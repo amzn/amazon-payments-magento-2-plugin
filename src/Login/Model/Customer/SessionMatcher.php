@@ -15,8 +15,8 @@
  */
 namespace Amazon\Login\Model\Customer;
 
-use Amazon\Core\Domain\AmazonCustomer;
-use Amazon\Login\Api\Customer\MatcherInterface;
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
+use Amazon\Login\Model\Customer\MatcherInterface;
 use Magento\Customer\Model\Session;
 
 class SessionMatcher implements MatcherInterface
@@ -24,7 +24,7 @@ class SessionMatcher implements MatcherInterface
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     public function __construct(
         Session $session
@@ -35,7 +35,7 @@ class SessionMatcher implements MatcherInterface
     /**
      * {@inheritDoc}
      */
-    public function match(AmazonCustomer $amazonCustomer)
+    public function match(AmazonCustomerInterface $amazonCustomer)
     {
         if ($this->session->isLoggedIn()) {
             return $this->session->getCustomerData();

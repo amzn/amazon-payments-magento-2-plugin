@@ -16,6 +16,7 @@
 & when (@media-common = true) {
 
     /** mini cart styling **/
+    .product-social-links,
     .amazon-minicart-container {
         width: 100%;
         display: block;
@@ -23,6 +24,30 @@
         .amazon-button-container {
             display: inline-block;
             margin: 12px 0 4px 0;
+        }
+
+        .field-tooltip {
+            .field-tooltip-content {
+                top: 38px;
+                left: -245px;
+
+                &:before {
+                    border: none;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid #666666;
+                    top: -10px;
+                    left: 244px;
+                }
+                &:after {
+                    border: none;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid #f4f4f4;
+                    top: -8px;
+                    left: 244px;
+                }
+            }
         }
     }
 
@@ -73,19 +98,23 @@
             }
         }
 
-        .field-tooltip .field-tooltip-content {
-            @abs-checkout-tooltip-content-position-top();
+        .field-tooltip {
+            display: none;
 
-            @media all and (max-width: @screen__m) {
+            .field-tooltip-content {
+                @abs-checkout-tooltip-content-position-top();
 
-                @right-shift: 56px;
-                right: -@right-shift;
-                top: 38px;
-                left: auto;
+                @media all and (max-width: @screen__m) {
 
-                &:before,
-                &:after {
-                    right: @right-shift;
+                    @right-shift: 56px;
+                    right: -@right-shift;
+                    top: 38px;
+                    left: auto;
+
+                    &:before,
+                    &:after {
+                        right: @right-shift;
+                    }
                 }
             }
         }

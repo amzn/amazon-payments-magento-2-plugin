@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Amazon\Login\Api\Data\CustomerLinkInterface" type="Amazon\Login\Model\CustomerLink" />
-    <preference for="Amazon\Login\Api\CustomerManagerInterface" type="Amazon\Login\Model\CustomerManager" />
-    <preference for="Amazon\Login\Api\Customer\CompositeMatcherInterface" type="Amazon\Login\Model\Customer\CompositeMatcher" />
-    <type name="Amazon\Login\Api\Customer\CompositeMatcherInterface">
+    <preference for="Amazon\Login\Api\CustomerLinkRepositoryInterface" type="Amazon\Login\Model\CustomerLinkRepository" />
+    <preference for="Amazon\Login\Api\CustomerLinkManagementInterface" type="Amazon\Login\Model\CustomerLinkManagement" />
+    <preference for="Amazon\Login\Api\CustomerManagementInterface" type="Amazon\Login\Model\CustomerManagement" />
+    <preference for="Amazon\Login\Api\Data\CustomerLinkInterface" type="Amazon\Login\Model\ResourceModel\CustomerLink" />
+    <preference for="Amazon\Login\Api\Data\CustomerLinkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <type name="Amazon\Login\Model\Customer\MatcherInterface">
         <arguments>
             <argument name="matchers" xsi:type="array">
                 <item name="sessionmatcher" xsi:type="object">Amazon\Login\Model\Customer\SessionMatcher</item>
@@ -30,9 +32,9 @@
     <type name="Magento\Customer\Controller\Account\Create">
         <plugin name="amazon_login_create_controller" type="Amazon\Login\Plugin\CreateController" sortOrder="1" />
     </type>
-    <type name="Amazon\Login\Controller\Login\Guest">
+    <type name="Amazon\Login\Controller\Login\Authorize">
         <arguments>
-            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="matcher" xsi:type="object">Amazon\Login\Model\Customer\CompositeMatcher</argument>
         </arguments>
     </type>
     <type name="Amazon\Login\Helper\Session">

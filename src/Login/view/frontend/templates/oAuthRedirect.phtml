@@ -15,7 +15,7 @@
  */
 ?>
 <?php /** @var $block \Amazon\Login\Block\OAuthRedirect */ ?>
-<div><?php echo __('You will be redirected shortly...'); ?></div>
+<div><?= $block->escapeHtml(__('You will be redirected shortly...')); ?></div>
 <script>
 require([
     'jquery',

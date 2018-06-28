@@ -23,7 +23,7 @@ class CheckoutConfigProvider implements ConfigProviderInterface
     /**
      * @var CustomerSession
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
      * @param CustomerSession $customerSession
@@ -40,7 +40,7 @@ class CheckoutConfigProvider implements ConfigProviderInterface
     {
         $config = [];
 
-        /** @var \Amazon\Core\Domain\AmazonCustomer $amazonCustomer */
+        /** @var \Amazon\Core\Api\Data\AmazonCustomerInterface $amazonCustomer */
         if ($amazonCustomer = $this->customerSession->getAmazonCustomer()) {
             $config['amazon_customer_email'] = $amazonCustomer->getEmail();
         }

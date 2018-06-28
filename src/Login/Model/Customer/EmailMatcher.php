@@ -15,8 +15,8 @@
  */
 namespace Amazon\Login\Model\Customer;
 
-use Amazon\Core\Domain\AmazonCustomer;
-use Amazon\Login\Api\Customer\MatcherInterface;
+use Amazon\Core\Api\Data\AmazonCustomerInterface;
+use Amazon\Login\Model\Customer\MatcherInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -25,7 +25,7 @@ class EmailMatcher implements MatcherInterface
     /**
      * @var CustomerRepositoryInterface
      */
-    protected $customerRepository;
+    private $customerRepository;
 
     /**
      * EmailMatcher constructor.
@@ -41,7 +41,7 @@ class EmailMatcher implements MatcherInterface
     /**
      * {@inheritDoc}
      */
-    public function match(AmazonCustomer $amazonCustomer)
+    public function match(AmazonCustomerInterface $amazonCustomer)
     {
         try {
             $customerData = $this->customerRepository->get($amazonCustomer->getEmail());

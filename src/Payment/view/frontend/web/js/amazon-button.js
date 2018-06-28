@@ -22,7 +22,7 @@ define([
     'amazonCore',
     'jquery/ui'
 ], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf) {
-    "use strict";
+    'use strict';
 
     var _this,
         $button;
@@ -37,12 +37,16 @@ define([
             loginPostUrl: null
         },
 
+        /**
+         * Create button
+         */
         _create: function () {
             _this = this;
             $button = this.element;
             this._verifyAmazonConfig();
             _this._renderAmazonButton();
         },
+
         /**
          * Verify if checkout config is available
          * @private
@@ -50,7 +54,8 @@ define([
         _verifyAmazonConfig: function () {
             if (amazonPaymentConfig.isDefined()) {
                 _this.options.merchantId = amazonPaymentConfig.getValue('merchantId');
-                _this.options.buttonType = (_this.options.buttonType == 'LwA') ? amazonPaymentConfig.getValue('buttonTypeLwa') : amazonPaymentConfig.getValue('buttonTypePwa');
+                _this.options.buttonType = _this.options.buttonType === 'LwA' ?
+                    amazonPaymentConfig.getValue('buttonTypeLwa') : amazonPaymentConfig.getValue('buttonTypePwa');
                 _this.options.buttonColor = amazonPaymentConfig.getValue('buttonColor');
                 _this.options.buttonSize = amazonPaymentConfig.getValue('buttonSize');
                 _this.options.redirectUrl = amazonPaymentConfig.getValue('redirectUrl');
@@ -59,24 +64,42 @@ define([
                 _this.options.buttonLanguage = amazonPaymentConfig.getValue('displayLanguage');
             }
         },
+
+        /**
+         * Validate CSRF cookie and redirect to HTTPS
+         */
         secureHttpsCallback: function (event) {
-            if (!event.state || !amazonCsrf.isValid(event.state)) {
-                return window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
-            }
-
-            if (!event.access_token || !!event.error) {
-                return window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
-            }
-
             var sections = sectionConfig.getAffectedSections(_this.options.loginPostUrl);
+
+            if (!event.state || !amazonCsrf.isValid(event.state)) {
+                window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
+
+                return window.location;
+            }
+
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+            if (!event.access_token || !!event.error) {
+                window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
+
+                return window.location;
+            }
+
             if (sections) {
                 customerData.invalidate(sections);
             }
             window.location = _this.options.redirectUrl + '?access_token=' + event.access_token;
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         },
+
+        /**
+         * Use popup or redirect URI
+         *
+         * @return {String}
+         */
         _popupCallback: function () {
             return _this.usePopUp() ? _this.secureHttpsCallback : amazonPaymentConfig.getValue('oAuthHashRedirectUrl');
         },
+
         /**
          * Are touch events available
          * (Supports both v2 and v3 Modernizr)
@@ -84,37 +107,46 @@ define([
          * @private
          */
         _touchSupported: function () {
+            //eslint-disable-next-line no-undef
             return Modernizr.touch !== undefined ? Modernizr.touch : Modernizr.touchevents;
         },
+
         /**
          * Should we use the pop up login flow?
-         *  - are we on an HTTPS page (required for popup) 
-         *  - confirm we are not on the product detail page (items are added asynchronously to the cart, hence popups will be blocked)
+         *  - are we on an HTTPS page (required for popup)
+         *  - confirm we are not on the product detail page (items are added asynchronously to the cart,
+         *    hence popups will be blocked)
          *  - confirm we are not using a touch device (redirect provides a better mobile experience)
          * @returns {Boolean}
          * @public
          */
         usePopUp: function () {
-            return ((window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view')) && !_this._touchSupported());
+            return window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view') &&
+                !_this._touchSupported();
         },
+
         /**
          * onAmazonPaymentsReady
          * @private
          */
         _renderAmazonButton: function () {
-            var authRequest;
-
-            OffAmazonPayments.Button($button.attr('id'), _this.options.merchantId, {
+            OffAmazonPayments.Button($button.attr('id'), _this.options.merchantId, { //eslint-disable-line no-undef
                 type: _this.options.buttonType,
                 color: _this.options.buttonColor,
                 size: _this.options.buttonSize,
                 language: _this.options.buttonLanguage,
 
+                /**
+                 * Authorization callback
+                 */
                 authorization: function () {
-                    authRequest = amazon.Login.authorize(_this._getLoginOptions(), _this._popupCallback());
+                    //eslint-disable-next-line no-undef
+                    amazon.Login.authorize(_this._getLoginOptions(), _this._popupCallback());
                 }
             });
+            $('.amazon-button-container .field-tooltip').fadeIn();
         },
+
         /**
          * Build login options
          * @returns {{scope: *, popup: *, state: *}}

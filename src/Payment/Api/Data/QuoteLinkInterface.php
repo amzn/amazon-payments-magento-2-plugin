@@ -17,6 +17,9 @@ namespace Amazon\Payment\Api\Data;
 
 use Exception;
 
+/**
+ * @api
+ */
 interface QuoteLinkInterface
 {
     /**
@@ -80,7 +83,6 @@ interface QuoteLinkInterface
      * @return $this
      */
     public function setConfirmed($confirmed);
-
 
     /**
      * Get quote confirmed with amazon

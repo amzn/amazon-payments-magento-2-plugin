@@ -23,6 +23,6 @@ class AmazonServiceUnavailableException extends RemoteServiceUnavailableExceptio
 
     public function __construct()
     {
-        parent::__construct(__(static::ERROR_MESSAGE));
+        parent::__construct(__('Amazon could not process your request.'));
     }
 }

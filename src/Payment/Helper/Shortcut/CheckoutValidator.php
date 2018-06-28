@@ -35,8 +35,8 @@ class CheckoutValidator implements ValidatorInterface
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param Validator $shortcutValidator
-     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param Validator                       $shortcutValidator
+     * @param \Magento\Payment\Helper\Data    $paymentData
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -51,13 +51,12 @@ class CheckoutValidator implements ValidatorInterface
     /**
      * Validates shortcut
      *
-     * @param string $code
-     * @param bool $isInCatalog
+     * @param  string $code
+     * @param  bool   $isInCatalog
      * @return bool
      */
     public function validate($code, $isInCatalog)
     {
-        return false;
         return $this->_shortcutValidator->isContextAvailable($code, $isInCatalog)
             && $this->_shortcutValidator->isPriceOrSetAvailable($isInCatalog)
             && $this->isMethodQuoteAvailable($code, $isInCatalog)
@@ -67,8 +66,8 @@ class CheckoutValidator implements ValidatorInterface
     /**
      * Checks payment method and quote availability
      *
-     * @param string $paymentCode
-     * @param bool $isInCatalog
+     * @param  string $paymentCode
+     * @param  bool   $isInCatalog
      * @return bool
      */
     public function isMethodQuoteAvailable($paymentCode, $isInCatalog)
@@ -86,7 +85,7 @@ class CheckoutValidator implements ValidatorInterface
     /**
      *  Validates minimum quote amount and zero grand total
      *
-     * @param bool $isInCatalog
+     * @param  bool $isInCatalog
      * @return bool
      */
     public function isQuoteSummaryValid($isInCatalog)

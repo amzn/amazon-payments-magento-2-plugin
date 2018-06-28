@@ -1,30 +1,37 @@
-<?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <payment>
-            <amazon_payment>
-                <active>0</active>
-                <is_gateway>1</is_gateway>
-                <title>Amazon Pay</title>
-                <sort_order>1</sort_order>
-                <model>Amazon\Payment\Model\Method\Amazon</model>
-                <order_status>pending_payment</order_status>
-                <payment_action>authorize</payment_action>
-                <can_authorize>1</can_authorize>
-                <can_capture>1</can_capture>
-                <can_void>1</can_void>
-                <can_use_checkout>1</can_use_checkout>
-                <packstation_terms>Packstation,Pack-Station,Pack Station,PO Box,Post Office box,Locker</packstation_terms>
-                <lwa_enabled>0</lwa_enabled>
-                <authorization_mode>synchronous</authorization_mode>
-                <update_mechanism>polling</update_mechanism>
-                <pwa_pp_button_is_visible>1</pwa_pp_button_is_visible>
-                <minicart_button_is_visible>1</minicart_button_is_visible>
-                <button_type>full</button_type>
-                <button_color>Gold</button_color>
-                <button_size>medium</button_size>
-                <logging>1</logging>
-            </amazon_payment>
-        </payment>
+        <region>
+            <country>
+                <us>https://payments.amazon.com/overview</us>
+                <uk>https://payments.amazon.co.uk/overview</uk>
+                <de>https://payments.amazon.de/overview</de>
+                <jp>https://payments.amazon.co.jp/overview</jp>
+            </country>
+        </region>
+        <client>
+            <paths>
+                <secretkey>secret_key</secretkey>
+                <accesskey>access_key</accesskey>
+                <merchantid>merchant_id</merchantid>
+                <clientid>client_id</clientid>
+                <clientsecret>client_secret</clientsecret>
+                <amazonregion>region</amazonregion>
+                <amazonsandbox>sandbox</amazonsandbox>
+            </paths>
+        </client>
+        <widget>
+            <production>
+                <de>https://static-eu.payments-amazon.com/OffAmazonPayments/de/lpa/js/Widgets.js?nomin</de>
+                <uk>https://static-eu.payments-amazon.com/OffAmazonPayments/uk/lpa/js/Widgets.js?nomin</uk>
+                <us>https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js?nomin</us>
+                <jp>https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?nomin</jp>
+            </production>
+            <sandbox>
+                <de>https://static-eu.payments-amazon.com/OffAmazonPayments/de/sandbox/lpa/js/Widgets.js?nomin</de>
+                <uk>https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/lpa/js/Widgets.js?nomin</uk>
+                <us>https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js?nomin</us>
+                <jp>https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?nomin</jp>
+            </sandbox>
+        </widget>
     </default>
 </config>

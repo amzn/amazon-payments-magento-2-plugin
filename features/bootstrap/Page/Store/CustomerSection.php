@@ -19,7 +19,7 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class CustomerSection extends Page
 {
-    protected $path = '/customer/section/load/?sections=customer';
+    private $path = '/customer/section/load/?sections=customer';
 
     public function isLoggedIn()
     {

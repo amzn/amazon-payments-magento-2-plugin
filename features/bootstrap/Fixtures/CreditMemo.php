@@ -25,7 +25,7 @@ class CreditMemo extends BaseFixture
     /**
      * @var CreditmemoRepositoryInterface
      */
-    protected $repository;
+    private $repository;
 
     public function __construct()
     {

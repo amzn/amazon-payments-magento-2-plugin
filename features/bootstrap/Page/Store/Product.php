@@ -25,9 +25,9 @@ class Product extends Page
 {
     use PageTrait, AmazonLoginTrait;
 
-    protected $path = '/catalog/product/view/id/{id}';
+    private $path = '/catalog/product/view/id/{id}';
 
-    protected $elements
+    private $elements
         = [
             'add-to-cart'     => ['css' => '#product-addtocart-button'],
             'success-message' => ['css' => '.message-success'],

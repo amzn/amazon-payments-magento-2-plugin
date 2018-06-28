@@ -15,58 +15,123 @@
  */
 namespace Amazon\Core\Domain;
 
+use Amazon\Core\Api\Data\AmazonAddressInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Escaper;
 
 class AmazonAddressFactory
 {
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager = null;
+    private $objectManager = null;
 
     /**
-     * @var array
+     * @var AmazonAddressInterface[]
      */
-    protected $perCountryAddressHandlers;
+    private $addressDecoratorPool;
 
     /**
+     * @var AmazonNameFactory
+     */
+    private $amazonNameFactory;
+
+    /**
+     * AmazonAddressFactory constructor.
+     *
      * @param ObjectManagerInterface $objectManager
-     * @param array $perCountryAddressHandlers Per-country custom handlers of incoming address data.
+     * @param AmazonNameFactory $amazonNameFactory
+     * @param Escaper $escaper
+     * @param array $addressDecoratorPool Per-country custom decorators of incoming address data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        array $perCountryAddressHandlers = []
+        AmazonNameFactory $amazonNameFactory,
+        Escaper $escaper,
+        array $addressDecoratorPool = []
     ) {
         $this->objectManager = $objectManager;
-        $this->perCountryAddressHandlers = array_change_key_case($perCountryAddressHandlers, CASE_UPPER);
+        $this->amazonNameFactory = $amazonNameFactory;
+        $this->escaper = $escaper;
+        $this->addressDecoratorPool = $addressDecoratorPool;
     }
 
     /**
-     * @param array $data
-     * @return AmazonAddress
+     * @param array $responseData
+     *
+     * @return AmazonAddressInterface
      * @throws LocalizedException
      */
-    public function create(array $data = [])
+    public function create(array $responseData = []): AmazonAddressInterface
     {
-        $instanceClassName = AmazonAddress::class;
-        $countryCode = strtoupper($data['address']['CountryCode']);
+        $address = $responseData['address'];
+        $amazonName = $this->amazonNameFactory->create(
+            [
+                'name' => $this->escaper->escapeHtml($address['Name']),
+                'country' => $this->escaper->escapeHtml($address['CountryCode'])]
+        );
 
-        if (!empty($this->perCountryAddressHandlers[$countryCode])) {
-            $instanceClassName = (string) $this->perCountryAddressHandlers[$countryCode];
+        $data = [
+            AmazonAddressInterface::CITY => $this->escaper->escapeHtml($address['City']),
+            AmazonAddressInterface::POSTAL_CODE => $this->escaper->escapeHtml($address['PostalCode']),
+            AmazonAddressInterface::COUNTRY_CODE => $this->escaper->escapeHtml($address['CountryCode']),
+            AmazonAddressInterface::TELEPHONE => $this->escaper->escapeHtml($address['Phone']) ?? '',
+            AmazonAddressInterface::STATE_OR_REGION => $this->escaper->escapeHtml($address['StateOrRegion']) ?? '',
+            AmazonAddressInterface::FIRST_NAME => $this->escaper->escapeHtml($amazonName->getFirstName()),
+            AmazonAddressInterface::LAST_NAME => $this->escaper->escapeHtml($amazonName->getLastName()),
+            AmazonAddressInterface::LINES => $this->getLines($address)
+        ];
+
+        $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['data' => $data]);
+
+        $countryCode = strtoupper($address['CountryCode']);
+        if (empty($this->addressDecoratorPool[$countryCode])) {
+            return $amazonAddress;
         }
 
-        $instance = $this->objectManager->create($instanceClassName, $data);
+        $amazonAddress = $this->objectManager->create(
+            $this->addressDecoratorPool[$countryCode],
+            [
+                'amazonAddress' => $amazonAddress,
+            ]
+        );
 
-        if (!$instance instanceof AmazonAddress) {
+        if (!$amazonAddress instanceof AmazonAddressInterface) {
             throw new LocalizedException(
-                __('Address country handler %1 must be of type %2', [$instanceClassName, AmazonAddress::class])
+                __(
+                    'Address country handler %1 must be of type %2',
+                    [$this->addressDecoratorPool[$countryCode], AmazonAddress::class]
+                )
             );
         }
 
-        return $instance;
+        return $amazonAddress;
+    }
+
+    /**
+     * Returns address lines.
+     *
+     * @param  array $responseData
+     * @return array
+     */
+    private function getLines(array $responseData = []): array
+    {
+        $lines = [];
+        for ($i = 1; $i <= 3; $i++) {
+            if (isset($responseData['AddressLine' . $i]) && $responseData['AddressLine' . $i]) {
+                $lines[$i] = $this->escaper->escapeHtml($responseData['AddressLine' . $i]);
+            }
+        }
+
+        return $lines;
     }
 }

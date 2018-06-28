@@ -8,13 +8,18 @@ define([
 ], function ($, Component, customerData, quote, checkoutData) {
     'use strict';
 
-    function getAmazonCustomerEmail()
-    {
+    /**
+     * Get Amazon customer email
+     */
+    function getAmazonCustomerEmail() {
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         if (window.checkoutConfig.hasOwnProperty('amazonLogin') &&
-            typeof window.checkoutConfig.amazonLogin.amazon_customer_email === "string"
+            typeof window.checkoutConfig.amazonLogin.amazon_customer_email === 'string'
         ) {
             return window.checkoutConfig.amazonLogin.amazon_customer_email;
         }
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+
         return '';
     }
 
@@ -23,15 +28,22 @@ define([
             email: checkoutData.getInputFieldEmailValue() || getAmazonCustomerEmail(),
             template: 'Amazon_Payment/form/element/email'
         },
+
+        /**
+         * Init email validator
+         */
         initialize: function () {
             this._super();
+
             if (this.email()) {
+
                 if ($.validator.methods['validate-email'].call(this, this.email())) {
                     quote.guestEmail = this.email();
                     checkoutData.setValidatedEmailValue(this.email());
                 }
                 checkoutData.setInputFieldEmailValue(this.email());
             }
+
             return this;
         }
     });

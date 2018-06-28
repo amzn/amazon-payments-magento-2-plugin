@@ -29,7 +29,7 @@ use Magento\Catalog\Model\Product\Type;
 
 class Product extends BaseFixture
 {
-    protected $defaults
+    private $defaults
         = [
             ProductInterface::NAME             => 'Test Product',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
@@ -42,7 +42,7 @@ class Product extends BaseFixture
     /**
      * @var ProductRepositoryInterface
      */
-    protected $repository;
+    private $repository;
 
     public function __construct()
     {

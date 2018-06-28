@@ -29,17 +29,17 @@ class OrderContext implements SnippetAcceptingContext
     /**
      * @var Order
      */
-    protected $orderPage;
+    private $orderPage;
 
     /**
      * @var Invoice
      */
-    protected $invoicePage;
+    private $invoicePage;
 
     /**
      * @var CreditMemo
      */
-    protected $creditMemoPage;
+    private $creditMemoPage;
 
     public function __construct(Order $orderPage, Invoice $invoicePage, CreditMemo $creditMemoPage)
     {

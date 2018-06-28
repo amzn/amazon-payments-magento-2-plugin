@@ -27,22 +27,22 @@ class ProcessAmazonRefunds
     /**
      * @var int
      */
-    protected $limit;
+    private $limit;
 
     /**
      * @var CollectionFactory
      */
-    protected $queuedRefundsCollectionFactory;
+    private $queuedRefundsCollectionFactory;
 
     /**
      * @var QueuedRefundUpdaterFactory
      */
-    protected $queuedRefundUpdater;
+    private $queuedRefundUpdater;
 
     /**
      * @var Data
      */
-    protected $coreHelper;
+    private $coreHelper;
 
     /**
      * @param CollectionFactory          $collectionFactory

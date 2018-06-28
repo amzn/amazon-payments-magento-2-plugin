@@ -13,16 +13,16 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
- 
+
 /**
  * Show Amazon badges widget if badge enabled
  */
 ?>
 
-<?php if($block->isBadgeEnabled()): ?>
+<?php if ($block->isBadgeEnabled()) : ?>
     <div class="amazon-payments-mark-container">
         <div class="amazon-payments-mark _grad">
-	    <span class="text"><?php /* @noEscape */ echo __('Amazon Pay'); ?></span>
+            <span class="text"><?= $block->escapeHtml(__('Amazon Pay')); ?></span>
         </div>
     </div>
 <?php endif; ?>

@@ -16,12 +16,27 @@
 namespace Amazon\Login\Plugin;
 
 use Closure;
+use Amazon\Core\Helper\Data as AmazonHelper;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
 use Magento\Framework\DB\Select;
 
 class CustomerCollection
 {
+    /**
+     * @var AmazonHelper
+     */
+    private $amazonHelper;
+
+    /**
+     * @param AmazonHelper $amazonHelper
+     */
+    public function __construct(
+        AmazonHelper $amazonHelper
+    ) {
+        $this->amazonHelper = $amazonHelper;
+    }
+
     /**
      * Resolve issue with core magento not allowing extension attributes to be applied as filter
      *
@@ -40,7 +55,7 @@ class CustomerCollection
         $condition = null,
         $joinType = 'inner'
     ) {
-        if (is_array($attribute)) {
+        if ($this->amazonHelper->isLwaEnabled() && is_array($attribute)) {
             $attribute = $this->addAmazonIdFilter($attribute, $collection);
 
             if (0 === count($attribute)) {
@@ -51,7 +66,10 @@ class CustomerCollection
         return $proceed($attribute, $condition, $joinType);
     }
 
-    protected function addAmazonIdFilter(array $attribute, Collection $collection)
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    private function addAmazonIdFilter(array $attribute, Collection $collection)
     {
         foreach ($attribute as $key => $condition) {
             if ('amazon_id' == $condition['attribute']) {

@@ -25,12 +25,12 @@ class AdminUser extends BaseFixture
     /**
      * @var UserFactory
      */
-    protected $factory;
+    private $factory;
 
     /**
      * @var Random
      */
-    protected $random;
+    private $random;
 
     public function __construct()
     {

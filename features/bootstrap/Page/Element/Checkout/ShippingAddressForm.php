@@ -22,7 +22,7 @@ class ShippingAddressForm extends Element
 {
     use ElementHelper;
 
-    protected $selector = 'form#co-shipping-form';
+    private $selector = 'form#co-shipping-form';
 
     /**
      * @param string $firstName

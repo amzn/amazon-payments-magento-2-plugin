@@ -17,7 +17,7 @@ namespace Amazon\Payment\Model\Ipn;
 
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;
 use Amazon\Payment\Api\Ipn\ProcessorInterface;
-use Amazon\Payment\Api\PaymentManagement\AuthorizationInterface;
+use Amazon\Payment\Model\PaymentManagement\Authorization;
 use Amazon\Payment\Domain\Details\AmazonAuthorizationDetailsFactory;
 use Amazon\Payment\Model\ResourceModel\PendingAuthorization\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -27,26 +27,26 @@ class AuthorizationProcessor implements ProcessorInterface
     /**
      * @var AmazonAuthorizationDetailsFactory
      */
-    protected $amazonAuthorizationDetailsFactory;
+    private $amazonAuthorizationDetailsFactory;
 
     /**
-     * @var AuthorizationInterface
+     * @var Authorization
      */
-    protected $authorization;
+    private $authorization;
 
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     public function __construct(
         AmazonAuthorizationDetailsFactory $amazonAuthorizationDetailsFactory,
-        AuthorizationInterface $authorization,
+        Authorization $authorization,
         CollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager
     ) {
@@ -70,15 +70,19 @@ class AuthorizationProcessor implements ProcessorInterface
      */
     public function process(array $ipnData)
     {
-        $details = $this->amazonAuthorizationDetailsFactory->create([
+        $details = $this->amazonAuthorizationDetailsFactory->create(
+            [
             'details' => $ipnData['AuthorizationDetails']
-        ]);
+            ]
+        );
 
         $collection = $this->collectionFactory
             ->create()
-            ->addFieldToFilter(PendingAuthorizationInterface::AUTHORIZATION_ID, [
+            ->addFieldToFilter(
+                PendingAuthorizationInterface::AUTHORIZATION_ID, [
                 'eq' => $details->getAuthorizeTransactionId()
-            ])
+                ]
+            )
             ->setPageSize(1)
             ->setCurPage(1);
 

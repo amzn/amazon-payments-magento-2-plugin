@@ -25,12 +25,12 @@ class BasketContext implements SnippetAcceptingContext
     /**
      * @var CustomerFixture
      */
-    protected $customerFixture;
+    private $customerFixture;
 
     /**
      * @var BasketFixture
      */
-    protected $basketFixture;
+    private $basketFixture;
 
     public function __construct()
     {

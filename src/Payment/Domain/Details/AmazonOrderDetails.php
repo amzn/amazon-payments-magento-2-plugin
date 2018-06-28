@@ -23,12 +23,12 @@ class AmazonOrderDetails
     /**
      * @var string
      */
-    protected $orderReferenceId;
+    private $orderReferenceId;
 
     /**
      * @var AmazonOrderStatus
      */
-    protected $status;
+    private $status;
 
     /**
      * AmazonOrderDetails constructor.
@@ -39,10 +39,12 @@ class AmazonOrderDetails
     public function __construct(AmazonOrderStatusFactory $amazonOrderStatusFactory, array $details)
     {
         $status       = $details['OrderReferenceStatus'];
-        $this->status = $amazonOrderStatusFactory->create([
+        $this->status = $amazonOrderStatusFactory->create(
+            [
             'state'      => $status['State'],
             'reasonCode' => (isset($status['ReasonCode']) ? $status['ReasonCode'] : null)
-        ]);
+            ]
+        );
 
         $this->orderReferenceId = $details['AmazonOrderReferenceId'];
     }

@@ -22,9 +22,9 @@ class ValidatePassword extends Page
 {
     use PageTrait;
 
-    protected $path = '/amazon/login/validate';
+    private $path = '/amazon/login/validate';
 
-    protected $elements
+    private $elements
         = [
             'submit-password' => ['css' => 'button.submit']
         ];

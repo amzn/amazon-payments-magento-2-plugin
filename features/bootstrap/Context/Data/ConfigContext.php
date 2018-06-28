@@ -24,14 +24,14 @@ class ConfigContext implements SnippetAcceptingContext
     /**
      * @var MagentoConfigManager
      */
-    protected $configManager;
+    private $configManager;
 
-    protected $hasConfigChanges = false;
+    private $hasConfigChanges = false;
 
     /**
      * @var ProductFixture
      */
-    protected $productFixture;
+    private $productFixture;
 
     /**
      * @Given IPN is disabled
