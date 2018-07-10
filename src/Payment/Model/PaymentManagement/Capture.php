@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Payment\Model\PaymentManagement;
 
 use Amazon\Core\Client\ClientFactoryInterface;
@@ -95,19 +96,19 @@ class Capture extends AbstractOperation
     /**
      * Capture constructor.
      *
-     * @param NotifierInterface                   $notifier
-     * @param UrlInterface                        $urlBuilder
-     * @param SearchCriteriaBuilderFactory        $searchCriteriaBuilderFactory
-     * @param InvoiceRepositoryInterface          $invoiceRepository
-     * @param ClientFactoryInterface              $clientFactory
-     * @param PendingCaptureInterfaceFactory      $pendingCaptureFactory
+     * @param NotifierInterface $notifier
+     * @param UrlInterface $urlBuilder
+     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param ClientFactoryInterface $clientFactory
+     * @param PendingCaptureInterfaceFactory $pendingCaptureFactory
      * @param AmazonCaptureDetailsResponseFactory $amazonCaptureDetailsResponseFactory
-     * @param OrderPaymentRepositoryInterface     $orderPaymentRepository
-     * @param OrderRepositoryInterface            $orderRepository
-     * @param TransactionRepositoryInterface      $transactionRepository
-     * @param StoreManagerInterface               $storeManager
-     * @param PaymentManagement                   $paymentManagement
-     * @param LoggerInterface                     $logger
+     * @param OrderPaymentRepositoryInterface $orderPaymentRepository
+     * @param OrderRepositoryInterface $orderRepository
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param StoreManagerInterface $storeManager
+     * @param PaymentManagement $paymentManagement
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -125,15 +126,15 @@ class Capture extends AbstractOperation
         PaymentManagement $paymentManagement,
         LoggerInterface $logger
     ) {
-        $this->clientFactory                       = $clientFactory;
-        $this->pendingCaptureFactory               = $pendingCaptureFactory;
+        $this->clientFactory = $clientFactory;
+        $this->pendingCaptureFactory = $pendingCaptureFactory;
         $this->amazonCaptureDetailsResponseFactory = $amazonCaptureDetailsResponseFactory;
-        $this->orderPaymentRepository              = $orderPaymentRepository;
-        $this->orderRepository                     = $orderRepository;
-        $this->transactionRepository               = $transactionRepository;
-        $this->storeManager                        = $storeManager;
-        $this->paymentManagement                   = $paymentManagement;
-        $this->logger                              = $logger;
+        $this->orderPaymentRepository = $orderPaymentRepository;
+        $this->orderRepository = $orderRepository;
+        $this->transactionRepository = $transactionRepository;
+        $this->storeManager = $storeManager;
+        $this->paymentManagement = $paymentManagement;
+        $this->logger = $logger;
 
         parent::__construct($notifier, $urlBuilder, $searchCriteriaBuilderFactory, $invoiceRepository);
     }
@@ -160,7 +161,7 @@ class Capture extends AbstractOperation
             $pendingCapture->load($pendingCaptureId);
 
             if ($pendingCapture->getCaptureId()) {
-                $order   = $this->orderRepository->get($pendingCapture->getOrderId());
+                $order = $this->orderRepository->get($pendingCapture->getOrderId());
                 $payment = $this->orderPaymentRepository->get($pendingCapture->getPaymentId());
                 $order->setPayment($payment);
                 $order->setData(OrderInterface::PAYMENT, $payment);
@@ -171,7 +172,7 @@ class Capture extends AbstractOperation
                 if (null === $captureDetails) {
                     $responseParser = $this->clientFactory->create($storeId)->getCaptureDetails(
                         [
-                        'amazon_capture_id' => $pendingCapture->getCaptureId()
+                            'amazon_capture_id' => $pendingCapture->getCaptureId()
                         ]
                     );
 
@@ -202,12 +203,12 @@ class Capture extends AbstractOperation
         $status = $details->getStatus();
 
         switch ($status->getState()) {
-        case AmazonCaptureStatus::STATE_COMPLETED:
-            $this->completePendingCapture($pendingCapture, $payment, $order);
-            break;
-        case AmazonCaptureStatus::STATE_DECLINED:
-            $this->declinePendingCapture($pendingCapture, $payment, $order);
-            break;
+            case AmazonCaptureStatus::STATE_COMPLETED:
+                $this->completePendingCapture($pendingCapture, $payment, $order);
+                break;
+            case AmazonCaptureStatus::STATE_DECLINED:
+                $this->declinePendingCapture($pendingCapture, $payment, $order);
+                break;
         }
     }
 
@@ -216,11 +217,11 @@ class Capture extends AbstractOperation
         OrderPaymentInterface $payment,
         OrderInterface $order
     ) {
-        $transactionId   = $pendingCapture->getCaptureId();
-        $transaction     = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
-        $invoice         = $this->getInvoice($transactionId, $order);
+        $transactionId = $pendingCapture->getCaptureId();
+        $transaction = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
+        $invoice = $this->getInvoice($transactionId, $order);
         $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
-        $message         = __('Captured amount of %1 online', $formattedAmount);
+        $message = __('Captured amount of %1 online', $formattedAmount);
 
         $this->getInvoiceAndSetPaid($transactionId, $order);
         $payment->setDataUsingMethod('base_amount_paid_online', $invoice->getBaseGrandTotal());
@@ -237,11 +238,11 @@ class Capture extends AbstractOperation
         OrderPaymentInterface $payment,
         OrderInterface $order
     ) {
-        $transactionId   = $pendingCapture->getCaptureId();
-        $transaction     = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
-        $invoice         = $this->getInvoice($transactionId, $order);
+        $transactionId = $pendingCapture->getCaptureId();
+        $transaction = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
+        $invoice = $this->getInvoice($transactionId, $order);
         $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
-        $message         = __('Declined amount of %1 online', $formattedAmount);
+        $message = __('Declined amount of %1 online', $formattedAmount);
 
         $this->getInvoiceAndSetCancelled($transactionId, $order);
         $this->setOnHold($order);
