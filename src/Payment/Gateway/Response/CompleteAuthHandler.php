@@ -66,11 +66,8 @@ class CompleteAuthHandler implements HandlerInterface
     {
 
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
-
         $amazonId = $this->subjectReader->getAmazonId();
-
         $payment = $paymentDO->getPayment();
-
         $order = $this->subjectReader->getOrder();
 
         if ($response['status']) {
@@ -84,9 +81,6 @@ class CompleteAuthHandler implements HandlerInterface
             $message .= ' ' . __('Transaction ID: "%1"', $amazonId);
 
             $order->addStatusHistoryComment($message);
-
         }
-
     }
-
 }

@@ -36,6 +36,8 @@
                 <button_size>medium</button_size>
                 <logging>1</logging>
                 <platform_id>A2ZAYEJU54T1BM</platform_id>
+                <hard_decline_code>4273</hard_decline_code>
+                <soft_decline_code>7638</soft_decline_code>
             </amazon_payment>
         </payment>
     </default>
