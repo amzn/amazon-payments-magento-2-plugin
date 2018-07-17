@@ -19,6 +19,11 @@
     <!-- ko if: (isAmazonAccountLoggedIn) -->
 
         <div class="payment-method amazon-payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+
+            <a href="javascript:;" data-bind="click: revertCheckout" class="revert-checkout">
+                <!-- ko i18n: 'Return to standard checkout' --><!--/ko-->
+            </a>
+
             <div class="payment-method-title field choice">
                 <input type="radio"
                        name="payment[method]"

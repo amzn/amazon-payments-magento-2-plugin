@@ -210,6 +210,28 @@ define(
                 }
 
                 return false;
+            },
+
+            /**
+             * Revert checkout
+             */
+            revertCheckout: function () {
+                var serviceUrl = urlBuilder.createUrl('/amazon/order-ref', {});
+
+                fullScreenLoader.startLoader();
+                storage.delete(
+                    serviceUrl
+                ).done(
+                    function () {
+                        amazonStorage.amazonlogOut();
+                        window.location.reload();
+                    }
+                ).fail(
+                    function (response) {
+                        fullScreenLoader.stopLoader();
+                        errorProcessor.process(response);
+                    }
+                );
             }
         });
     }

@@ -10,13 +10,13 @@ define(
         'Amazon_Login/js/view/login-button',
     ],
     function ($,
-        Component,
-        ko,
-        amazonStorage,
-        storage,
-        amazonPaymentConfig,
-        registry,
-        loginButton,
+              Component,
+              ko,
+              amazonStorage,
+              storage,
+              amazonPaymentConfig,
+              registry,
+              loginButton,
     ) {
         'use strict';
 
