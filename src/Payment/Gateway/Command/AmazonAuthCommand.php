@@ -164,13 +164,13 @@ class AmazonAuthCommand implements CommandInterface
 
             $this->logger->critical('Payment Error: ' . $message . ': ' . $mapped);
 
-            if ($message == 'AmazonRejected') {
+            if ($message == 'AmazonRejected' || $message == 'TransactionTimedOut') {
                 $code = (int)$this->config->getValue('hard_decline_code');
-            } elseif ($message == 'InvalidPaymentMethod' || $message == 'TransactionTimedOut' || $message == 'Declined') {
-                $code = (int)$this->config->getValue('soft_decline_code');
                 if ($mode == 'synchronous_possible' && $message == 'TransactionTimedOut') {
                     $isTimeout = true;
                 }
+            } elseif ($message == 'InvalidPaymentMethod'  || $message == 'Declined') {
+                $code = (int)$this->config->getValue('soft_decline_code');
             }
         }
 
