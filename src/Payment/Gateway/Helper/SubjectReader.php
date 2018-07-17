@@ -152,6 +152,14 @@ class SubjectReader
     }
 
     /**
+     * Gets last valid order ID
+     * @return mixed
+     */
+    public function getOrderId() {
+        return $this->checkoutSession->getLastOrderId();
+    }
+
+    /**
      * @return \Magento\Sales\Model\Order
      */
     public function getOrder() 

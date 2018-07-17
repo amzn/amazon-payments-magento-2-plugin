@@ -119,8 +119,18 @@ class AmazonAuthCommand implements CommandInterface
                 array_merge($commandSubject, ['response' => $response])
             );
             if (!$result->isValid()) {
-                $this->processErrors($result);
+                $auth_mode = '';
+                if (isset($response['auth_mode'])) {
+                    $auth_mode = $response['auth_mode'];
+                }
+                $isTimeout = $this->processErrors($result, $auth_mode);
             }
+        }
+
+        $response['timeout'] = $isTimeout;
+
+        if ($isTimeout) {
+            $response['status'] = true;
         }
 
         if ($this->handler) {
@@ -137,8 +147,9 @@ class AmazonAuthCommand implements CommandInterface
      *
      * @throws AmazonWebapiException
      */
-    private function processErrors(ResultInterface $result)
+    private function processErrors(ResultInterface $result, $mode = '')
     {
+        $isTimeout = false;
         $code = false;
         $messages = [];
         foreach ($result->getFailsDescription() as $failPhrase) {
@@ -157,7 +168,14 @@ class AmazonAuthCommand implements CommandInterface
                 $code = (int)$this->config->getValue('hard_decline_code');
             } elseif ($message == 'InvalidPaymentMethod' || $message == 'TransactionTimedOut' || $message == 'Declined') {
                 $code = (int)$this->config->getValue('soft_decline_code');
+                if ($mode == 'synchronous_possible' && $message == 'TransactionTimedOut') {
+                    $isTimeout = true;
+                }
             }
+        }
+
+        if ($isTimeout) {
+            return true;
         }
 
         throw new AmazonWebapiException(
@@ -166,5 +184,7 @@ class AmazonAuthCommand implements CommandInterface
                 : __('Transaction has been declined. Please try again later.'),
             $code
         );
+
+        return $false;
     }
 }
