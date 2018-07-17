@@ -17,7 +17,7 @@ System requirements
 --------------------------------------------------
 
 
-Registering an Amazon Payy merchant Account
+Registering an Amazon Pay merchant Account
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Go to:
