@@ -4,7 +4,7 @@ Prerequisites
 System requirements
 -------------------
 
-+The **Amazon Pay and Login with Amazon** Magento 2 extension requires you to have a valid **Amazon Payments** merchant account (refer to the :ref:`prerequisites-amazon-account-setup` if you don't have one yet) and a webserver running a Magento 2 store instance with following conditions met:
++The **Amazon Pay and Login with Amazon** Magento 2 extension requires you to have a valid **Amazon Pay** merchant account (refer to the :ref:`prerequisites-amazon-account-setup` if you don't have one yet) and a webserver running a Magento 2 store instance with following conditions met:
 
 * Magento CE (2.1.0 or higher)
 * cURL for PHP
@@ -17,7 +17,7 @@ System requirements
 --------------------------------------------------
 
 
-Registering an Amazon Payments merchant Account
+Registering an Amazon Payy merchant Account
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Go to:
@@ -33,7 +33,7 @@ Registering an Amazon Payments merchant Account
 .. image:: /images/seller-central/prerequisites_screenshot_1.png
 
 * Go through the questionnaire to find out if you qualify for using Amazon Pay, then click `Sign up now`
-* At the moment you cannot add your **Amazon Payments** merchant account to an existing Amazon seller account. You have to register a new account specifically for Amazon Pay.
+* At the moment you cannot add your **Amazon Pay** merchant account to an existing Amazon seller account. You have to register a new account specifically for Amazon Pay.
 * Start registering a new account:
 
   * If you see the link `Would you like to create a new account using a different e-mail address? Click here`, please do so.

@@ -117,7 +117,7 @@ class AmazonPaymentAdapter
 
 
     /**
-     * Sets Amazon payment order data
+     * Sets Amazon Pay order data
      *
      * @param $storeId
      * @param $data
