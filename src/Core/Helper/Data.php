@@ -236,11 +236,8 @@ class Data extends AbstractHelper
             'profile',
             'payments:widget',
             'payments:shipping_address',
+            'payments:billing_address'
         ];
-
-        if (in_array($paymentRegion, ['uk', 'de', 'jp'])) {
-            $scope[] = 'payments:billing_address';
-        }
 
         return implode(' ', $scope);
     }

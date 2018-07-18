@@ -149,6 +149,11 @@ class AddressManagement implements AddressManagementInterface
             if (isset($data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'])) {
                 $billingAddress = $data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'];
 
+                // Amazon billing data might not have a phone number but Magento expects Phone index in array
+                if (!isset($billingAddress['Phone'])) {
+                    $billingAddress['Phone'] = '';
+                }
+
                 return $this->convertToMagentoAddress($billingAddress);
             } elseif (isset($data['OrderReferenceDetails']['Destination']['PhysicalDestination'])) {
                 $billingAddress = $data['OrderReferenceDetails']['Destination']['PhysicalDestination'];
