@@ -21,6 +21,9 @@ use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
+use Magento\Checkout\Model\Session;
+use Amazon\Core\Client\ClientFactoryInterface;
+use Psr\Log\LoggerInterface;
 
 class Guest extends Action
 {
@@ -40,21 +43,48 @@ class Guest extends Action
     private $accessTokenRequestValidator;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * @var ClientFactoryInterface
+     */
+    private $clientFactory;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    private $quoteRepository;
+
+    /**
      * Guest constructor.
-     * @param Context                     $context
-     * @param AmazonCoreHelper            $amazonCoreHelper
-     * @param Url                         $customerUrl
+     * @param Context $context
+     * @param AmazonCoreHelper $amazonCoreHelper
+     * @param Url $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
+     * @param Session $session
+     * @param ClientFactoryInterface $clientFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         AmazonCoreHelper $amazonCoreHelper,
         Url $customerUrl,
-        AccessTokenRequestValidator $accessTokenRequestValidator
-    ) {
+        AccessTokenRequestValidator $accessTokenRequestValidator,
+        Session $session,
+        ClientFactoryInterface $clientFactory,
+        LoggerInterface $logger
+    )
+    {
         $this->amazonCoreHelper = $amazonCoreHelper;
         $this->customerUrl = $customerUrl;
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
+        $this->session = $session;
+        $this->clientFactory = $clientFactory;
+        $this->logger = $logger;
         parent::__construct($context);
     }
 
@@ -65,6 +95,16 @@ class Guest extends Action
     {
         if (!$this->isValidToken()) {
             return $this->getRedirectLogin();
+        }
+
+        $customerData = $this->getAmazonCustomer();
+        if ($customerData && isset($customerData['email'])) {
+            $quote = $this->session->getQuote();
+
+            if ($quote) {
+                $quote->setCustomerEmail($customerData['email']);
+                $quote->save();
+            }
         }
 
         return $this->_redirect('checkout');
@@ -80,10 +120,43 @@ class Guest extends Action
 
     /**
      * @return bool
-     * @throws \Zend_Validate_Exception
      */
     private function isValidToken()
     {
-        return $this->accessTokenRequestValidator->isValid($this->getRequest());
+        $isValid = false;
+        try {
+            $isValid = $this->accessTokenRequestValidator->isValid($this->getRequest());
+        } catch (\Zend_Validate_Exception $e) {
+            $this->logger->error($e);
+        }
+
+        return $isValid;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAmazonCustomer()
+    {
+        try {
+            $userInfo = $this->clientFactory
+                ->create()
+                ->getUserInfo($this->getRequest()->getParam('access_token'));
+
+            if (is_array($userInfo) && isset($userInfo['user_id'])) {
+                $data = [
+                    'id' => $userInfo['user_id'],
+                    'email' => $userInfo['email'],
+                    'name' => $userInfo['name'],
+                    'country' => $this->amazonCoreHelper->getRegion(),
+                ];
+
+                return $data;
+            }
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+        }
+
+        return [];
     }
 }
