@@ -1,305 +1,349 @@
-<br />
+<br/>
 <div id="amazon_simplepath">
 
     <?php if (!$block->getCurrency()) : // SimplePath not supported ?>
-    <div id="simplepath_unsported">
-        <?= $block->escapeHtml(__('An unsupported currency is currently selected. ' .
-            'Please review our configuration guide.')); ?>
-        <span class="note">
+        <div id="simplepath_unsported">
+            <?= $block->escapeHtml(__('An unsupported currency is currently selected. ' .
+                'Please review our configuration guide.')); ?>
+            <span class="note">
             <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">
                 (<?= $block->escapeHtml(__('More Information')); ?>)
             </a>
         </span>
-    </div>
+        </div>
 
     <?php else : ?>
-    <div id="simplepath_hint">
-        <?= $block->escapeHtml(
-            __(
-                'You will be registering for a %1 account based on the base currency of your shop (%2).',
-                $block->getRegion(),
-                $block->getCurrency()
-            )
-        ); ?>
-        <span class="note">
+        <div id="simplepath_hint">
+            <?= $block->escapeHtml(
+                __(
+                    'You will be registering for a %1 account based on the base currency of your shop (%2).',
+                    $block->getRegion(),
+                    $block->getCurrency()
+                )
+            ); ?>
+            <span class="note">
             <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">
                 (<?= $block->escapeHtml(__('More Information')); ?>)
             </a>
         </span>
-    </div>
+        </div>
 
-    <span class="apsp-getstarted">
+        <span class="apsp-getstarted">
         <button><span><?= $block->escapeHtml(__('Get started with account registration')); ?></span></button>
+            <input id="spId" name="spId" type="hidden"/>
     </span>
-    <span class="apsp-or">
+        <span class="apsp-or">
         &nbsp; <?= $block->escapeHtml(__('or')); ?> &nbsp;
         <a href="#" id="simplepath-skip">
             <?= $block->escapeHtml(__("I've already setup Pay with Amazon, I want to edit my settings")); ?>
         </a>
     </span>
 
-    <p id="amazon_https_required">
-        <?= $block->escapeHtml(__("In order to enable automatic account configuration using Amazon's secure key " .
-            'exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.')); ?>
-    </p>
-    <p id="amazon_reload">
-        <?= $block->escapeHtml(__('Updating your config with new keys, please wait...')); ?>
-    </p>
+        <p id="amazon_https_required">
+            <?= $block->escapeHtml(__("In order to enable automatic account configuration using Amazon's secure key " .
+                'exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.')); ?>
+        </p>
+        <p id="amazon_reload">
+            <?= $block->escapeHtml(__('Updating your config with new keys, please wait...')); ?>
+        </p>
 
-    <div id="json-import-wrapper">
+        <div id="json-import-wrapper">
         <textarea rows="2"
                   cols="15"
                   placeholder="<?= $block->escapeHtml(__('Paste JSON credentials here')); ?>"
                   id="json-import">
         </textarea>
-        <br />
-        <button id="save-json"
-                class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all
+            <br/>
+            <button id="save-json"
+                    class="action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all
                        ui-button-text-only">
-            <?= $block->escapeHtml(__('Save Credentials')); ?>
-        </button>
-    </div>
+                <?= $block->escapeHtml(__('Save Credentials')); ?>
+            </button>
+        </div>
 
     <?php endif; ?>
 
 </div>
 
 <div id="amazon_simplepath_back">
-  <a href="#">&laquo; <?= $block->escapeHtml(__('Back to register or connect an account')); ?></a>
+    <a href="#">&laquo; <?= $block->escapeHtml(__('Back to register or connect an account')); ?></a>
 </div>
 
 <script>
 
-var AmazonSp = <?= /* @noEscape */ $block->getAmazonSpJson(); ?>;
+    var AmazonSp = <?= /* @noEscape */ $block->getAmazonSpJson(); ?>;
 
-require(['uiRegistry', "prototype"], function(registry){
+    require(['uiRegistry', "prototype", "domReady!"], function (registry) {
 
-    // Country code for ID selectors
-    var co = AmazonSp.co.toLowerCase();
+        // Country code for ID selectors
+        var co = AmazonSp.co.toLowerCase();
+        var form;
 
-    // Poll every ms for keys
-    var amazonPollInterval = 1500;
-    var amazonPollTimer = null;
+        // Poll every ms for keys
+        var amazonPollInterval = 1500;
+        var amazonPollTimer = null;
 
-    var amazonSimplepath = $('amazon_simplepath');
-    var amazonFields = $$('#payment_'+co+'_amazon_payment .form-list');
-    var amazonSpBack = $('amazon_simplepath_back');
+        var amazonSimplepath = $('amazon_simplepath');
+        var amazonFields = $$('#payment_' + co + '_amazon_payment .form-list');
+        var amazonSpBack = $('amazon_simplepath_back');
+        var amazonCredentialJson = jQuery('#row_payment_' + co + '_amazon_payment_credentials_credentials_json');
 
-    // Not enabled
-    if ($('simplepath_hint') == null) {
-        return;
-    }
-
-    // Show/hide fields
-    if ($('payment_'+co+'_amazon_payment_credentials_merchant_id') != null) {
-        if ($('payment_'+co+'_amazon_payment_credentials_merchant_id').value) {
-            amazonSpBack.setStyle({'display':'block'});
-            amazonSimplepath.hide();
-
-            if (window.location.hash == '#payment_amazon_payments-head') {
-                showAmazonConfig();
+        jQuery('button#save').click(function () {
+            if (jQuery('#simplepath_form').length > 0) {
+                jQuery('#simplepath_form').empty();
             }
+            if (amazonPollTimer) {
+                clearTimeout(amazonPollTimer);
+            }
+        });
+
+        // Not enabled
+        if ($('simplepath_hint') == null) {
+            return;
         }
-    }
 
-    // Generate form to post to Amazon
-    var form = new Element('form', { method: 'post',
-                                     action: AmazonSp.amazonUrl,
-                                     id: 'simplepath_form',
-                                     target: 'simplepath'});
-    amazonSimplepath.wrap(form);
+        // Show/hide fields
+        if ($('payment_' + co + '_amazon_payment_credentials_merchant_id') != null) {
+            if ($('payment_' + co + '_amazon_payment_credentials_merchant_id').value) {
+                amazonSpBack.setStyle({'display': 'block'});
+                amazonSimplepath.hide();
 
-    // Convert formParams JSON to hidden inputs
-    var formInput;
-    for (var key in AmazonSp.formParams) {
-        if (typeof AmazonSp.formParams[key] == 'object' || typeof AmazonSp.formParams[key] == 'array') {
-            for (var i in AmazonSp.formParams[key]) {
-                if (typeof AmazonSp.formParams[key][i] != 'function') {
-                    form.insert(new Element('input', { type: 'hidden', name: key, value: AmazonSp.formParams[key][i]}));
+                if (window.location.hash == '#payment_amazon_payments-head') {
+                    showAmazonConfig();
                 }
             }
-        } else {
-            form.insert(new Element('input', { type: 'hidden', name: key, value: AmazonSp.formParams[key]}));
-        }
-    }
-
-    // Get Started clicked
-    $('simplepath_form').observe('submit', function(e) {
-        var heights = [660, 720, 810, 900];
-        var popupHeight = heights[0];
-        for (var i in heights) {
-          popupHeight = (window.innerHeight >= heights[i]) ? heights[i] : popupHeight;
         }
 
-        var popupWidth = this.action.indexOf('payments-eu') == -1 ? 768 : 1050;
-
-        var launchPopup = registry.get('launchPopup');
-        launchPopup('', popupWidth, popupHeight);
-
-        // Show fields and import
-        amazonFields.each(Element.show);
-
-        if (!amazonPollTimer) {
-            amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
-        }
-
-        // Add "Save Credentials"
-        var elJson = $('payment_'+co+'_amazon_payment_credentials_credentials_json');
-        if (elJson && $('sp-td-json-value') == null) {
-            // Must create dynamic table to prevent conflict with config tables
-            var tableJson = new Element('table').update('<tr><td class="label creds"> \
-            <?= $block->escapeHtml(__('Credentials JSON')); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
-            amazonSimplepath.insert({bottom: tableJson});
-            $('sp-td-json-value').insert($('json-import-wrapper').show());
-
-
-            // Enable Crednetials JSON config field
-            var elIdCredCheck = '#payment_'+co+'_amazon_payment_credentials_credentials_json_inherit:checked';
-            var elJsonCheckDefault = $$(elIdCredCheck);
-            if (elJsonCheckDefault && elJsonCheckDefault.length) {
-                elJsonCheckDefault[0].click();
-            }
-
-            // Save JSON
-            $('save-json').observe('click', function(e) {
-                e.stop();
-                var json = $('json-import').value;
-                if (!json || !json.isJSON()) {
-                    alert('<?= $block->escapeHtml(__('Valid JSON credentials are required.')); ?>');
-                    return;
-                }
-                elJson.value = json;
-                $('save').click();
+        if (!form) {
+            // Generate form to post to Amazon
+            form = new Element('form', {
+                method: 'post',
+                action: AmazonSp.amazonUrl,
+                id: 'simplepath_form',
+                target: 'simplepath'
             });
+            amazonSimplepath.wrap(form);
 
-        }
-
-        // Autoset payment region (for EU/UK)
-        var region = AmazonSp.region.toLowerCase();
-        if (region.indexOf('eu') != -1) {
-            region = 'de';
-        }
-        var elCheckDefault = $$('#payment_'+co+'_amazon_payment_credentials_payment_region_inherit:checked');
-        if (elCheckDefault && elCheckDefault.length) {
-            elCheckDefault[0].click();
-        }
-        var elRegion = $('payment_'+co+'_amazon_payment_credentials_payment_region');
-        if (elRegion) {
-            elRegion.value = region;
-        }
-
-    });
-
-    // User is skipping simplepath
-    amazonSimplepath.select('#simplepath-skip')[0].observe('click', function(e) {
-        e.stop();
-        showAmazonConfig();
-        amazonSpBack.setStyle({'display':'block'});
-    });
-
-    // User clicked 'Back'
-    $('amazon_simplepath_back').select('a')[0].observe('click', function(e) {
-        e.stop();
-        amazonSpBack.hide();
-        amazonSimplepath.show();
-    });
-
-
-    function showAmazonConfig() {
-        amazonFields.each(Element.show);
-        amazonSimplepath.hide();
-        amazonSpBack.show();
-        if (!$('payment_'+co+'_amazon_payment_credentials-head').hasClassName('open')) {
-            $('payment_'+co+'_amazon_payment_credentials-head').click();
-        }
-    }
-
-    // Perform Ajax request looking for new keys
-    function pollForKeys() {
-        new Ajax.Request(AmazonSp.pollUrl, {
-            method:'get',
-            onSuccess: function(transport) {
-                if (transport.responseText == '1') {
-                    $('amazon_reload').show();
-                    document.location.replace(document.location + '#payment_amazon_payments-head');
-                    location.reload();
+            // Convert formParams JSON to hidden inputs
+            var formInput;
+            for (var key in AmazonSp.formParams) {
+                if (typeof AmazonSp.formParams[key] == 'object' || typeof AmazonSp.formParams[key] == 'array') {
+                    for (var i in AmazonSp.formParams[key]) {
+                        if (typeof AmazonSp.formParams[key][i] != 'function') {
+                            form.insert(new Element('input', {
+                                type: 'hidden',
+                                name: key,
+                                value: AmazonSp.formParams[key][i]
+                            }));
+                        }
+                    }
                 } else {
+                    form.insert(new Element('input', {type: 'hidden', name: key, value: AmazonSp.formParams[key]}));
+                }
+            }
+
+            // Get Started clicked
+            $('simplepath_form').observe('submit', function (e) {
+                var heights = [660, 720, 810, 900];
+                var popupHeight = heights[0];
+                for (var i in heights) {
+                    popupHeight = (window.innerHeight >= heights[i]) ? heights[i] : popupHeight;
+                }
+
+                var popupWidth = this.action.indexOf('payments-eu') == -1 ? 768 : 1050;
+
+                var launchPopup = registry.get('launchPopup');
+                launchPopup('', popupWidth, popupHeight);
+
+                // Show fields and import
+                amazonFields.each(Element.show);
+
+                if (!amazonPollTimer) {
                     amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
                 }
 
-            },
-            onFailure: function() {  },
-            // Disable "Please Wait" modal
-            onCreate: function(request) {
-                Ajax.Responders.unregister(varienLoaderHandler.handler);
-            },
+                // Add "Save Credentials"
+                var elJson = $('payment_' + co + '_amazon_payment_credentials_credentials_json');
+                if (elJson && $('sp-td-json-value') == null) {
+                    // Must create dynamic table to prevent conflict with config tables
+                    var tableJson = new Element('table').update('<tr><td class="label creds"> \
+                    <?= $block->escapeHtml(__('Credentials JSON')); ?></td><td class="value" id="sp-td-json-value"></td></tr>');
+                    amazonSimplepath.insert({bottom: tableJson});
+                    $('sp-td-json-value').insert($('json-import-wrapper').show());
+
+                    // Enable Crednetials JSON config field
+                    var elIdCredCheck = '#payment_' + co + '_amazon_payment_credentials_credentials_json_inherit:checked';
+                    var elJsonCheckDefault = $$(elIdCredCheck);
+                    if (elJsonCheckDefault && elJsonCheckDefault.length) {
+                        elJsonCheckDefault[0].click();
+                    }
+
+                    // Save JSON
+                    $('save-json').observe('click', function (e) {
+                        e.stop();
+                        var json = $('json-import').value;
+                        if (!json || !json.isJSON()) {
+                            alert('<?= $block->escapeHtml(__('Valid JSON credentials are required.')); ?>');
+                            return;
+                        }
+                        elJson.value = json;
+                        $('save').click();
+                    });
+                }
+
+                // Autoset payment region (for EU/UK)
+                var region = AmazonSp.region.toLowerCase();
+                if (region.indexOf('eu') != -1) {
+                    region = 'de';
+                }
+                var elCheckDefault = $$('#payment_' + co + '_amazon_payment_credentials_payment_region_inherit:checked');
+                if (elCheckDefault && elCheckDefault.length) {
+                    elCheckDefault[0].click();
+                }
+                var elRegion = $('payment_' + co + '_amazon_payment_credentials_payment_region');
+                if (elRegion) {
+                    elRegion.value = region;
+                }
+            });
+        }
+
+        // User is skipping simplepath
+        amazonSimplepath.select('#simplepath-skip')[0].observe('click', function (e) {
+            e.stop();
+            showAmazonConfig();
+            amazonSpBack.setStyle({'display': 'block'});
         });
-    }
 
+        // User clicked 'Back'
+        $('amazon_simplepath_back').select('a')[0].observe('click', function (e) {
+            e.stop();
+            amazonSpBack.hide();
+            amazonSimplepath.show();
+        });
 
-});
+        function showAmazonConfig() {
+            amazonFields.each(Element.show);
+            amazonSimplepath.hide();
+            amazonSpBack.show();
+            if (!$('payment_' + co + '_amazon_payment_credentials-head').hasClassName('open')) {
+                $('payment_' + co + '_amazon_payment_credentials-head').click();
+            }
+        }
 
-// Add Mage validator to fix "Save Config" button from not submitting
-require(["jquery", "jquery/validate"], function($) {
-    if ($('#simplepath_form').length > 0) {
-        $('#simplepath_form').validate();
-    }
-});
+        // Perform Ajax request looking for new keys
+        function pollForKeys() {
+            new Ajax.Request(AmazonSp.pollUrl, {
+                method: 'get',
+                onSuccess: function (transport) {
+                    if (transport.responseText == '1') {
+                        $('amazon_reload').show();
+                        document.location.replace(document.location + '#payment_amazon_payments-head');
+                        location.reload();
+                    } else {
+                        amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
+                    }
+                },
+                onFailure: function () {
+                },
+                // Disable "Please Wait" modal
+                onCreate: function (request) {
+                    Ajax.Responders.unregister(varienLoaderHandler.handler);
+                },
+            });
+        }
 
+        if (amazonCredentialJson.length > 0) {
+            var jsonField = jQuery('#payment_' + co + '_amazon_payment_credentials_credentials_json');
+            jsonField.on('input', function (e) {
+                var elJson = jsonField.val();
+                var obj = null;
+                try {
+                    obj = jQuery.parseJSON(jQuery.trim(elJson));
+                }
+                catch (err) {
+                    obj = null;
+                    jsonField.val('').attr('placeholder', '<?= $block->escapeHtml(__('Invalid JSON credentials entered, please try again.')); ?>').focus();
+                }
+                if (obj && typeof obj === 'object') {
+                    var success = true;
+                    for (var prop in obj) {
+                        var item = jQuery('#payment_' + co + '_amazon_payment_credentials_' + jQuery.trim(prop));
+                        if (item && item.length) {
+                            jQuery('#payment_' + co + '_amazon_payment_credentials_' + jQuery.trim(prop)).val(jQuery.trim(obj[prop]));
+                        }
+                        else {
+                            success = false;
+                        }
+                    }
+                    if (success) {
+                        jsonField.val('').attr('placeholder', '<?= $block->escapeHtml(__('Credential fields successfully updated and being saved.')); ?>').focus();
+                        $('save').click();
+                    }
+                    else {
+                        jsonField.val('').attr('placeholder', '<?= $block->escapeHtml(__('One or more of your credential fields did not parse correctly. Please review your entry and try again.')); ?>').focus();
+                    }
+                    showAmazonConfig();
+                }
+            });
+        }
+    });
+
+    // Add Mage validator to fix "Save Config" button from not submitting
+    require(["jquery", "jquery/validate"], function ($) {
+        if ($('#simplepath_form').length > 0) {
+            $('#simplepath_form').validate();
+        }
+    });
 
 </script>
 
 <script>
-// Amazon Pop-up
-require(['uiRegistry'], function (registry) {
-    'use strict';
+    // Amazon Pop-up
+    require(['uiRegistry'], function (registry) {
+        'use strict';
 
-    function launchPopup(url, requestedWidth, requestedHeight) {
-        var leftOffset = getLeftOffset(requestedWidth),
-            topOffset = getTopOffset(requestedHeight),
-            newWindow = window.open(url, 'simplepath', 'scrollbars=yes, width=' + requestedWidth + ', height=' +
-                requestedHeight + ', top=' + topOffset + ', left=' + leftOffset);
+        function launchPopup(url, requestedWidth, requestedHeight) {
+            var leftOffset = getLeftOffset(requestedWidth),
+                topOffset = getTopOffset(requestedHeight),
+                newWindow = window.open(url, 'simplepath', 'scrollbars=yes, width=' + requestedWidth + ', height=' +
+                    requestedHeight + ', top=' + topOffset + ', left=' + leftOffset);
 
-        if (window.focus) {
-            newWindow.focus();
+            if (window.focus) {
+                newWindow.focus();
+            }
         }
-    }
 
-    function getLeftOffset(requestedWidth) {
-        var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
-
-        return ((windowWidth() / 2) - (requestedWidth / 2)) + dualScreenLeft;
-    }
-
-    function getTopOffset(requestedHeight) {
-        var dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
-
-        return ((windowHeight() / 2) - (requestedHeight / 2)) + dualScreenTop;
-    }
-
-    function windowWidth() {
-        if (window.innerWidth) {
-            return window.innerWidth;
-        } else if (document.documentElement.clientWidth) {
-            return document.documentElement.clientWidth;
-        } else {
-            return screen.width;
+        function getLeftOffset(requestedWidth) {
+            var dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+            return ((windowWidth() / 2) - (requestedWidth / 2)) + dualScreenLeft;
         }
-    }
 
-    function windowHeight() {
-        if (window.innerHeight) {
-            return window.innerHeight;
-        } else if (document.documentElement.clientHeight) {
-            return document.documentElement.clientHeight;
-        } else {
-            return screen.height;
+        function getTopOffset(requestedHeight) {
+            var dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
+            return ((windowHeight() / 2) - (requestedHeight / 2)) + dualScreenTop;
         }
-    }
 
-    // window.launchPopup = launchPopup;
-    registry.set('launchPopup', launchPopup);
+        function windowWidth() {
+            if (window.innerWidth) {
+                return window.innerWidth;
+            } else if (document.documentElement.clientWidth) {
+                return document.documentElement.clientWidth;
+            } else {
+                return screen.width;
+            }
+        }
 
-});
+        function windowHeight() {
+            if (window.innerHeight) {
+                return window.innerHeight;
+            } else if (document.documentElement.clientHeight) {
+                return document.documentElement.clientHeight;
+            } else {
+                return screen.height;
+            }
+        }
+        // window.launchPopup = launchPopup;
+        registry.set('launchPopup', launchPopup);
+
+    });
 </script>
-
