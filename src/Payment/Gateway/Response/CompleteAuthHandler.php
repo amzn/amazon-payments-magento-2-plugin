@@ -86,11 +86,8 @@ class CompleteAuthHandler implements HandlerInterface
             $payment->setIsTransactionClosed(false);
 
             if ($response['timeout']) {
-                // couldn't get order ID yet since it hasn't been saved, so extrapolate from last available id and
-                // increment by 1
                 $pendingAuthorization = $this->pendingAuthorizationFactory->create()
                     ->setAuthorizationId($response['authorize_transaction_id'])
-                    ->setOrderId($this->subjectReader->getOrderId() + 1)
                     ->save();
                 $payment->setIsTransactionPending(true);
                 $order->setState($order::STATE_PAYMENT_REVIEW)->setStatus($order::STATE_PAYMENT_REVIEW);

@@ -111,21 +111,21 @@ class Authorization extends AbstractOperation
     /**
      * Authorization constructor.
      *
-     * @param NotifierInterface                         $notifier
-     * @param UrlInterface                              $urlBuilder
-     * @param SearchCriteriaBuilderFactory              $searchCriteriaBuilderFactory
-     * @param InvoiceRepositoryInterface                $invoiceRepository
-     * @param ClientFactoryInterface                    $clientFactory
-     * @param PendingAuthorizationInterfaceFactory      $pendingAuthorizationFactory
+     * @param NotifierInterface $notifier
+     * @param UrlInterface $urlBuilder
+     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param ClientFactoryInterface $clientFactory
+     * @param PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory
      * @param AmazonAuthorizationDetailsResponseFactory $amazonAuthorizationDetailsResponseFactory
-     * @param AmazonAuthorization                       $amazonAuthorizationValidator
-     * @param OrderPaymentRepositoryInterface           $orderPaymentRepository
-     * @param OrderRepositoryInterface                  $orderRepository
-     * @param ManagerInterface                          $eventManager
-     * @param AmazonGetOrderDetailsResponseFactory      $amazonGetOrderDetailsResponseFactory
-     * @param StoreManagerInterface                     $storeManager
-     * @param PaymentManagement                         $paymentManagement
-     * @param LoggerInterface                           $logger
+     * @param AmazonAuthorization $amazonAuthorizationValidator
+     * @param OrderPaymentRepositoryInterface $orderPaymentRepository
+     * @param OrderRepositoryInterface $orderRepository
+     * @param ManagerInterface $eventManager
+     * @param AmazonGetOrderDetailsResponseFactory $amazonGetOrderDetailsResponseFactory
+     * @param StoreManagerInterface $storeManager
+     * @param PaymentManagement $paymentManagement
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -211,6 +211,7 @@ class Authorization extends AbstractOperation
      * @param PendingAuthorizationInterface $pendingAuthorization
      * @param AmazonAuthorizationDetails|null $authorizationDetails
      * @throws TransactionTimeoutException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function processUpdateAuthorization(
         PendingAuthorizationInterface $pendingAuthorization,
@@ -415,6 +416,7 @@ class Authorization extends AbstractOperation
      *
      * @param PendingAuthorizationInterface $pendingAuthorization
      * @param AmazonOrderDetails|null $orderDetails
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function processNewAuthorization(
         PendingAuthorizationInterface $pendingAuthorization,
@@ -453,6 +455,11 @@ class Authorization extends AbstractOperation
 
     /**
      * Attempts to request new authorization during cron for pending authorization items.
+     *
+     * @param OrderInterface $order
+     * @param OrderPaymentInterface $payment
+     * @param PendingAuthorizationInterface $pendingAuthorization
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function requestNewAuthorization(
         OrderInterface $order,
@@ -498,8 +505,7 @@ class Authorization extends AbstractOperation
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization
-    )
-    {
+    ) {
         $capture = true;
 
         try {
