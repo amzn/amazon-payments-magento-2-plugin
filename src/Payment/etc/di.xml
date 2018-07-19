@@ -113,7 +113,7 @@
 
 
     <!-- Authorize command -->
-    <virtualType name="AmazonAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonAuthorizeCommand" type="Amazon\Payment\Gateway\Command\AmazonAuthCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\AuthorizationRequest</argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\CompleteAuthHandler</argument>
@@ -131,7 +131,7 @@
     </type>
 
     <!-- Authorize and Capture command -->
-    <virtualType name="AmazonSaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonSaleCommand" type="Amazon\Payment\Gateway\Command\AmazonAuthCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\AuthorizationRequest</argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\CompleteSaleHandler</argument>
@@ -143,7 +143,7 @@
     </virtualType>
 
     <!-- Capture settlement command -->
-    <virtualType name="AmazonSettlementCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonSettlementCommand" type="Amazon\Payment\Gateway\Command\AmazonAuthCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\SettlementRequest</argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\SettlementHandler</argument>
@@ -278,7 +278,6 @@
     <type name="Magento\Framework\Webapi\ErrorProcessor">
         <plugin name="amazon_payment_webapi_error_processor" type="Amazon\Payment\Plugin\WebapiErrorProcessor" sortOrder="1" />
     </type>
-    <type name="Magento\Framework\Mail\MessageInterface" shared="false" />
     <type name="Amazon\Payment\Gateway\Config\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Amazon\Payment\Gateway\Config\Config::CODE</argument>

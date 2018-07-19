@@ -115,7 +115,6 @@ class AmazonPaymentAdapter
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
     }
 
-
     /**
      * Sets Amazon payment order data
      *
@@ -228,8 +227,9 @@ class AmazonPaymentAdapter
 
         $detailResponse = $this->setOrderReferenceDetails($storeId, $data);
 
-        if (isset($detailResponse['constraints'])) {
+        if (isset($detailResponse['constraints']) && !empty($detailResponse['constraints'])) {
             $response['constraints'] = $detailResponse['constraints'];
+            return $response;
         }
 
         if ($detailResponse['status'] == 200) {
@@ -241,47 +241,34 @@ class AmazonPaymentAdapter
                 $authorizeResponse = $this->getAuthorization($storeId, $authorizeData);
 
                 if ($authorizeResponse) {
-                    $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
+                    if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()) {
+                        $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
 
-                    if ($authorizeResponse->getStatus()->getState() == 'Pending') {
-                        $order = $this->subjectReader->getOrder();
-                        if ($captureNow) {
-                            try {
-                            $this->pendingCaptureFactory->create()
-                                ->setCaptureId($authorizeResponse->getCaptureTransactionId())
-                                ->setOrderId($order->getId())
-                                ->setPaymentId($order->getPayment()->getEntityId())
-                                ->save();
-                            } catch (\Exception $e) {
-                                $log['error'] = __('AmazonPaymentAdapter: Unable to capture pending information 
-                                for capture.');
-                                $this->logger->debug($log);
+                        if ($authorizeResponse->getStatus()->getState() == 'Pending' && $authMode == 'synchronous_possible') {
+                            if ($captureNow) {
+                                $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
                             }
+                            $response['response_code'] = 'TransactionTimedOut';
+                        } elseif (!in_array($authorizeResponse->getStatus()->getState(), self::SUCCESS_CODES)) {
+                            $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
                         } else {
-                            try {
-                            $this->pendingAuthorizationFactory->create()
-                                ->setOrderId($order->getId())
-                                ->setPaymentId($order->getPayment()->getEntityId())
-                                ->setAuthorizationId($authorizeResponse->getAuthorizeTransactionId())
-                                ->save();
-                            } catch (\Exception $e) {
-                                $log['error'] = __('AmazonPaymentAdapter: Unable to capture pending information 
-                                for authorization.');
-                                $this->logger->debug($log);
+                            $response['status'] = true;
+
+                            if ($captureNow) {
+                                $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
                             }
                         }
-                    } elseif (!in_array($authorizeResponse->getStatus()->getState(), self::SUCCESS_CODES)) {
-                        $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
                     } else {
-                        $response['status'] = true;
-
-                        if ($captureNow) {
-                            $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
-                        }
+                        $response['status'] = false;
+                        $response['response_status'] = $authorizeResponse->getStatus()->getState();
+                        $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
+                        $log['error'] = $authorizeResponse->getStatus()->getState() . ': ' . $authorizeResponse->getStatus()->getReasonCode();
+                        $this->logger->debug($log);
                     }
                 }
             } else {
                 // something went wrong, parse response body for use by authorization validator
+
                 $response['response_status'] = $confirmResponse->response['Status'];
 
                 $xml = simplexml_load_string($confirmResponse->response['ResponseBody']);
@@ -347,7 +334,6 @@ class AmazonPaymentAdapter
 
         return $response;
     }
-
 
     /**
      * @param $data

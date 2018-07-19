@@ -21,6 +21,7 @@ use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 
 class CompleteAuthHandler implements HandlerInterface
 {
@@ -41,20 +42,29 @@ class CompleteAuthHandler implements HandlerInterface
     private $subjectReader;
 
     /**
+     * @var PendingAuthorizationInterfaceFactory
+     */
+    private $pendingAuthorizationFactory;
+
+    /**
      * CompleteAuthHandler constructor.
      *
-     * @param Logger        $logger
+     * @param Logger $logger
      * @param SubjectReader $subjectReader
-     * @param Data          $coreHelper
+     * @param PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory
+     * @param Data $coreHelper
      */
     public function __construct(
         Logger $logger,
         SubjectReader $subjectReader,
+        PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         Data $coreHelper
-    ) {
+    )
+    {
         $this->logger = $logger;
         $this->subjectReader = $subjectReader;
         $this->coreHelper = $coreHelper;
+        $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
     }
 
     /**
@@ -66,16 +76,22 @@ class CompleteAuthHandler implements HandlerInterface
     {
 
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
-
         $amazonId = $this->subjectReader->getAmazonId();
-
         $payment = $paymentDO->getPayment();
-
         $order = $this->subjectReader->getOrder();
 
         if ($response['status']) {
+
             $payment->setTransactionId($response['authorize_transaction_id']);
             $payment->setIsTransactionClosed(false);
+
+            if ($response['timeout']) {
+                $pendingAuthorization = $this->pendingAuthorizationFactory->create()
+                    ->setAuthorizationId($response['authorize_transaction_id'])
+                    ->save();
+                $payment->setIsTransactionPending(true);
+                $order->setState($order::STATE_PAYMENT_REVIEW)->setStatus($order::STATE_PAYMENT_REVIEW);
+            }
 
             $quoteLink = $this->subjectReader->getQuoteLink();
             $quoteLink->setConfirmed(true)->save();
@@ -84,9 +100,6 @@ class CompleteAuthHandler implements HandlerInterface
             $message .= ' ' . __('Transaction ID: "%1"', $amazonId);
 
             $order->addStatusHistoryComment($message);
-
         }
-
     }
-
 }
