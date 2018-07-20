@@ -278,7 +278,6 @@
     <type name="Magento\Framework\Webapi\ErrorProcessor">
         <plugin name="amazon_payment_webapi_error_processor" type="Amazon\Payment\Plugin\WebapiErrorProcessor" sortOrder="1" />
     </type>
-    <type name="Magento\Framework\Mail\MessageInterface" shared="false" />
     <type name="Amazon\Payment\Gateway\Config\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Amazon\Payment\Gateway\Config\Config::CODE</argument>
