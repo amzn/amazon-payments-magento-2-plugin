@@ -248,7 +248,8 @@ class AmazonPaymentAdapter
                 }
 
                 if ($authorizeResponse) {
-                    if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()) {
+                    if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()
+                        && $authorizeResponse->getStatus()->getState() != 'Declined') {
                         $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
 
                         if ($authorizeResponse->getStatus()->getState() == 'Pending' && $authMode == 'synchronous_possible') {
