@@ -780,8 +780,8 @@ class Data extends AbstractHelper
         $isDisabled += $this->moduleList->has('Amazon_Login') ? 0 : 1;
         $isDisabled += $this->moduleList->has('Amazon_Core') ? 0 : 1;
 
-        // Make sure all of them are disabled
-        if ($isDisabled != 3) {
+        // Make sure all of them are disabled if any one of them is disabled.
+        if ($isDisabled > 0 && $isDisabled != 3) {
             $this->moduleStatusFactory->create()->setIsEnabled(false, ['Amazon_Payment', 'Amazon_Login', 'Amazon_Core']);
         }
     }
