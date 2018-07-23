@@ -22,6 +22,7 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\StatusFactory;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -52,6 +53,11 @@ class Data extends AbstractHelper
     private $moduleList;
 
     /**
+     * @var StatusFactory
+     */
+    private $moduleStatusFactory;
+
+    /**
      * Data constructor.
      *
      * @param ModuleListInterface $moduleList
@@ -59,13 +65,15 @@ class Data extends AbstractHelper
      * @param EncryptorInterface $encryptor
      * @param StoreManagerInterface $storeManager
      * @param ClientIp $clientIpHelper
+     * @param StatusFactory $moduleStatusFactory
      */
     public function __construct(
         ModuleListInterface $moduleList,
         Context $context,
         EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager,
-        ClientIp $clientIpHelper
+        ClientIp $clientIpHelper,
+        StatusFactory $moduleStatusFactory
     )
     {
         parent::__construct($context);
@@ -73,6 +81,7 @@ class Data extends AbstractHelper
         $this->encryptor = $encryptor;
         $this->storeManager = $storeManager;
         $this->clientIpHelper = $clientIpHelper;
+        $this->moduleStatusFactory = $moduleStatusFactory;
     }
 
     /*
@@ -205,7 +214,6 @@ class Data extends AbstractHelper
         return array_key_exists($paymentRegion, $widgetUrlMap) ? $widgetUrlMap[$paymentRegion] : '';
     }
 
-
     /**
      * Retrieves region path from config.xml settings
      *
@@ -274,6 +282,11 @@ class Data extends AbstractHelper
      */
     public function isPwaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
+        if (!$this->moduleList->has('Amazon_Payment') || !$this->moduleList->has('Amazon_Login')) {
+            $this->updateModuleStatus();
+            return false;
+        }
+
         if (!$this->clientIpHelper->clientHasAllowedIp()) {
             return false;
         }
@@ -290,6 +303,11 @@ class Data extends AbstractHelper
      */
     public function isLwaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
+        if (!$this->moduleList->has('Amazon_Payment') || !$this->moduleList->has('Amazon_Login')) {
+            $this->updateModuleStatus();
+            return false;
+        }
+
         if (!$this->clientIpHelper->clientHasAllowedIp()) {
             return false;
         }
@@ -306,6 +324,11 @@ class Data extends AbstractHelper
      */
     public function isEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
+        if (!$this->moduleList->has('Amazon_Payment') || !$this->moduleList->has('Amazon_Login')) {
+            $this->updateModuleStatus();
+            return false;
+        }
+
         return $this->isLwaEnabled($scope, $scopeCode) || $this->isPwaEnabled($scope, $scopeCode);
     }
 
@@ -744,6 +767,22 @@ class Data extends AbstractHelper
             return $version['setup_version'];
         } else {
             return null;
+        }
+    }
+
+    /**
+     * Ensures all modules are disabled if one of them is disabled. Amazon Payment or Amazon Login modules will cause
+     * the frontend to break if they are in different enabled states.
+     */
+    private function updateModuleStatus()
+    {
+        $isDisabled = $this->moduleList->has('Amazon_Payment') ? 0 : 1;
+        $isDisabled += $this->moduleList->has('Amazon_Login') ? 0 : 1;
+        $isDisabled += $this->moduleList->has('Amazon_Core') ? 0 : 1;
+
+        // Make sure all of them are disabled
+        if ($isDisabled != 3) {
+            $this->moduleStatusFactory->create()->setIsEnabled(false, ['Amazon_Payment', 'Amazon_Login', 'Amazon_Core']);
         }
     }
 }
