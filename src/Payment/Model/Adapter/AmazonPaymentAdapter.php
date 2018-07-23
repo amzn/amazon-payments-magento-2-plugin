@@ -240,6 +240,13 @@ class AmazonPaymentAdapter
 
                 $authorizeResponse = $this->getAuthorization($storeId, $authorizeData);
 
+                // try again if pending/timed out and is not synchronous
+                if ($authorizeResponse && $authMode == 'synchronous_possible'
+                    && $authorizeResponse->getStatus()->getState() == 'Pending') {
+                    sleep(1);
+                    $authorizeResponse = $this->getAuthorization($storeId, $authorizeData);
+                }
+
                 if ($authorizeResponse) {
                     if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()) {
                         $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
