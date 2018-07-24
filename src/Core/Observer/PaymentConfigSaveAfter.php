@@ -24,6 +24,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 
 class PaymentConfigSaveAfter implements ObserverInterface
 {
@@ -60,10 +61,20 @@ class PaymentConfigSaveAfter implements ObserverInterface
     private $request;
 
     /**
+     * @var WriterInterface
+     */
+    private $configWriter;
+
+    /**
+     * PaymentConfigSaveAfter constructor.
+     *
      * @param ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory
-     * @param ManagerInterface               $messageManager
-     * @param Json                           $jsonCredentials
-     * @param Data                           $amazonCoreHelper
+     * @param ManagerInterface $messageManager
+     * @param Json $jsonCredentials
+     * @param Data $amazonCoreHelper
+     * @param ReinitableConfigInterface $config
+     * @param RequestInterface $request
+     * @param WriterInterface $configWriter
      */
     public function __construct(
         ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory,
@@ -71,7 +82,8 @@ class PaymentConfigSaveAfter implements ObserverInterface
         Json $jsonCredentials,
         Data $amazonCoreHelper,
         ReinitableConfigInterface $config,
-        RequestInterface $request
+        RequestInterface $request,
+        WriterInterface $configWriter
     ) {
         $this->apiCredentialsValidatorFactory = $apiCredentialsValidatorFactory;
         $this->messageManager                 = $messageManager;
@@ -79,6 +91,7 @@ class PaymentConfigSaveAfter implements ObserverInterface
         $this->jsonCredentials                = $jsonCredentials;
         $this->appConfig                      = $config;
         $this->request                        = $request;
+        $this->configWriter                   = $configWriter;
     }
 
     /**
@@ -86,6 +99,9 @@ class PaymentConfigSaveAfter implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        // Make sure address captures 3 lines to be compatible with AP
+        $this->configWriter->save('customer/address/street_lines', 3);
+
         if (!$this->request->getParam('amazon_test_creds')) {
             return;
         }
