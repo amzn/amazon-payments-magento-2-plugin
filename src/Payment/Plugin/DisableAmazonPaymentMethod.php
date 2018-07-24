@@ -10,6 +10,10 @@ namespace Amazon\Payment\Plugin;
 
 use Magento\Checkout\Model\Session;
 
+/**
+ * Class DisableAmazonPaymentMethod
+ * Plugin removes Amazon Payment Method if cart contains only virtual products.
+ */
 class DisableAmazonPaymentMethod
 {
     /**
@@ -20,25 +24,22 @@ class DisableAmazonPaymentMethod
     /**
      * DisableAmazonPaymentMethod constructor.
      * @param Session $checkoutSession
-     * @param Quote $quoteSession
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession
-    )
-    {
+        Session $checkoutSession
+    ){
         $this->checkoutSession = $checkoutSession;
     }
 
     /**
-     * @param \Magento\Paypal\Model\Express $subject
+     * @param \Amazon\Payment\Model\Method\AmazonLoginMethod $subject
      * @param $result
      * @return bool
      */
     public function afterIsAvailable(
         \Amazon\Payment\Model\Method\AmazonLoginMethod $subject,
         $result
-    )
-    {
+    ){
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->checkoutSession->getQuote();
 
