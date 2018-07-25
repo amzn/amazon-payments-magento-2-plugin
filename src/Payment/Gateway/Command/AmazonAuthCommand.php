@@ -104,11 +104,15 @@ class AmazonAuthCommand implements CommandInterface
      * Executes command basing on business object
      *
      * @param array $commandSubject
-     * @return void
-     * @throws CommandException
+     * @return \Magento\Payment\Gateway\Command\ResultInterface|null|void
+     * @throws AmazonWebapiException
+     * @throws \Magento\Payment\Gateway\Http\ClientException
+     * @throws \Magento\Payment\Gateway\Http\ConverterException
      */
     public function execute(array $commandSubject)
     {
+        $isTimeout = 0;
+
         $transferO = $this->transferFactory->create(
             $this->requestBuilder->build($commandSubject)
         );
@@ -119,6 +123,8 @@ class AmazonAuthCommand implements CommandInterface
                 array_merge($commandSubject, ['response' => $response])
             );
             if (!$result->isValid()) {
+                // when Amazon Pay is set to receive asynchronous calls, we need to allow timeouts to pass validation and
+                // flag the handler to save the order for later processing.
                 $auth_mode = '';
                 if (isset($response['auth_mode'])) {
                     $auth_mode = $response['auth_mode'];

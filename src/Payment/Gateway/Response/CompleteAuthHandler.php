@@ -83,16 +83,16 @@ class CompleteAuthHandler implements HandlerInterface
         if ($response['status']) {
 
             $payment->setTransactionId($response['authorize_transaction_id']);
-            $payment->setIsTransactionClosed(false);
+
 
             if ($response['timeout']) {
-                $pendingAuthorization = $this->pendingAuthorizationFactory->create()
+                $payment->setIsTransactionPending(true);
+                $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)->setStatus(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
+                $this->pendingAuthorizationFactory->create()
                     ->setAuthorizationId($response['authorize_transaction_id'])
                     ->save();
-                $payment->setIsTransactionPending(true);
-                $order->setState($order::STATE_PAYMENT_REVIEW)->setStatus($order::STATE_PAYMENT_REVIEW);
             }
-
+            $payment->setIsTransactionClosed(false);
             $quoteLink = $this->subjectReader->getQuoteLink();
             $quoteLink->setConfirmed(true)->save();
 
