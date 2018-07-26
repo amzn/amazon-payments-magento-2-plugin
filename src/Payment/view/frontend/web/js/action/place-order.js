@@ -67,9 +67,13 @@ define(
             ).fail(
                 function (response) {
                     errorProcessor.process(response);
+                    console.log(response.responseJSON.code);
                     amazonStorage.amazonDeclineCode(response.responseJSON.code);
                     fullScreenLoader.stopLoader(true);
-                    window.location.replace(url.build('checkout/cart/'));
+                    var intervalId = setInterval(function () {
+                        clearInterval(intervalId);
+                        window.location.replace(url.build('checkout/cart/'));
+                    }, 3000);
                 }
             );
         };
