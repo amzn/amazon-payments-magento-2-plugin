@@ -19,6 +19,7 @@ namespace Amazon\Payment\Gateway\Validator;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Amazon\Payment\Gateway\Http\Client\Client;
+use Amazon\Payment\Domain\AmazonConstraint;
 
 class ConstraintValidator extends AbstractValidator
 {
@@ -34,16 +35,25 @@ class ConstraintValidator extends AbstractValidator
         $response = $validationSubject['response'];
 
         if (isset($response['constraints']) && $response['constraints']) {
+            $constraint = $response['constraints'][0];
             return $this->createResult(
                 false,
-                [__('Gateway rejected the transaction. Constraints found.')]
+                [$this->getConstraint($constraint)]
             );
         }
 
+        // if no constraints found, continue to other validators for more specific errors
         return $this->createResult(
             true,
-            ['status' => $response['status']]
+            ['status' => isset($response['status']) ? $response['status'] : __('No constraints detected.')]
         );
     }
 
+    /**
+     * @param AmazonConstraint $constraint
+     * @return string
+     */
+    private function getConstraint(AmazonConstraint $constraint) {
+        return $constraint->getId();
+    }
 }
