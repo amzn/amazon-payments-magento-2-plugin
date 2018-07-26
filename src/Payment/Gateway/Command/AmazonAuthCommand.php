@@ -155,6 +155,7 @@ class AmazonAuthCommand implements CommandInterface
      */
     private function processErrors(ResultInterface $result, $mode = '')
     {
+        $isDeline = false;
         $isTimeout = false;
         $code = false;
         $messages = [];
@@ -172,12 +173,20 @@ class AmazonAuthCommand implements CommandInterface
 
             if ($message == 'AmazonRejected' || $message == 'TransactionTimedOut') {
                 $code = (int)$this->config->getValue('hard_decline_code');
-                if ($mode == 'synchronous_possible' && $message == 'TransactionTimedOut') {
-                    $isTimeout = true;
-                }
-            } elseif ($message == 'InvalidPaymentMethod'  || $message == 'Declined') {
+                $isDecline = true;
+            } elseif ($message == 'InvalidPaymentMethod' || $message == 'Declined') {
                 $code = (int)$this->config->getValue('soft_decline_code');
+                $isDecline = true;
             }
+
+            if ($mode == 'synchronous_possible' && $message == 'TransactionTimedOut') {
+                $isTimeout = true;
+                $isDecline = false;
+            }
+        }
+
+        if ($isDecline) {
+            $messages[] = __("You will be redirected to the cart shortly.");
         }
 
         if ($isTimeout) {
