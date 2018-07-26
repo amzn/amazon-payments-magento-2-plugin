@@ -16,7 +16,7 @@ same directory as this `README.md` file.
 
 ## Extension Points
 
-Amazon Payment does not provide any specific extension points.
+Amazon Pay does not provide any specific extension points.
 
 ## Additional Information
 

@@ -106,7 +106,7 @@ class RefundHandler implements HandlerInterface
                     ->save();
             }
 
-            $this->messageManager->addSuccessMessage(__('Amazon Payment refund successful.'));
+            $this->messageManager->addSuccessMessage(__('Amazon Pay refund successful.'));
         }
     }
 

@@ -80,7 +80,7 @@ define(
             },
 
             /**
-             * render Amazon payment Widget
+             * render Amazon Pay Widget
              */
             renderPaymentWidget: function () {
                 new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
