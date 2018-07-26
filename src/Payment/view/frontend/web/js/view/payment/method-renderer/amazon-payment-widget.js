@@ -80,7 +80,7 @@ define(
             },
 
             /**
-             * render Amazon payment Widget
+             * render Amazon Pay Widget
              */
             renderPaymentWidget: function () {
                 new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
@@ -162,6 +162,12 @@ define(
 
                         selectBillingAddress(addressData);
                         amazonStorage.isPlaceOrderDisabled(false);
+                        if(window.checkoutConfig.amazonLogin.amazon_customer_email) {
+                            var customerField = $('#customer-email').val();
+                            if (!customerField) {
+                                $('#customer-email').val(window.checkoutConfig.amazonLogin.amazon_customer_email);
+                            }
+                        }
                     }
                 ).fail(
                     function (response) {

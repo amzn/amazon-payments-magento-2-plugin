@@ -6,7 +6,7 @@ Customers who have logged in via Login with Amazon previously, will be recognize
 
 Requirements
 ------------
-To offer the **Login with Amazon** service, you have to have a valid **Amazon Payments** merchant account (refer to the :ref:`prerequisites-amazon-account-setup` if you don't have one yet), registered application for **Login with Amazon** service (refer to the :ref:`prerequisites-registering-application-for-login-with-amazon` if you don't have one yet) and Magento 2 store with a valid SSL certificate installed and properly configured in your shop.
+To offer the **Login with Amazon** service, you have to have a valid **Amazon Pay** merchant account (refer to the :ref:`prerequisites-amazon-account-setup` if you don't have one yet), registered application for **Login with Amazon** service (refer to the :ref:`prerequisites-registering-application-for-login-with-amazon` if you don't have one yet) and Magento 2 store with a valid SSL certificate installed and properly configured in your shop.
 
 `Login with Amazon` button
 --------------------------

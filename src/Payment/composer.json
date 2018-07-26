@@ -8,8 +8,8 @@
   ],
   "require": {
     "php": "~7.0.13|~7.1.0",
-    "amzn/amazon-pay-and-login-with-amazon-core-module": "^2.0.14",
-    "amzn/login-with-amazon-module": "^2.0.14",
+    "amzn/amazon-pay-and-login-with-amazon-core-module": "^3.0.0",
+    "amzn/login-with-amazon-module": "^3.0.0",
     "magento/module-eav": "^100.1.0|^101.0.3",
     "magento/module-sales": "^100.1.0|^101.0.3",
     "magento/module-quote": "^100.1.0|^101.0.3",

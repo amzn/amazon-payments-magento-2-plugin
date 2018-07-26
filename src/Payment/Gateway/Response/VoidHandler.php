@@ -78,7 +78,7 @@ class VoidHandler implements HandlerInterface
             );
         }
         else {
-            $this->messageManager->addSuccessMessage(__('Successfully cancelled Amazon Payment.'));
+            $this->messageManager->addSuccessMessage(__('Successfully cancelled Amazon Pay.'));
         }
     }
 

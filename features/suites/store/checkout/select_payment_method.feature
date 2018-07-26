@@ -10,7 +10,7 @@ Feature: As a customer
     And I select a shipping address from my amazon account
     And I select a valid shipping method
     When I go to billing
-    Then the amazon payment widget should be displayed
+    Then the Amazon Pay widget should be displayed
 
   @javascript
   Scenario: customer not logged into amazon sees other payment methods
@@ -20,7 +20,7 @@ Feature: As a customer
     And I provide a valid shipping address
     And I select a valid shipping method
     When I go to billing
-    Then the amazon payment widget should not be displayed
+    Then the Amazon Pay widget should not be displayed
     And I should be able to select a payment method
 
   @javascript

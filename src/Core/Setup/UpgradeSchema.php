@@ -37,7 +37,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'default' => 0,
                     'nullable' => false,
                     'unsigned' => true,
-                    'comment' => 'Flags whether or not product is excluded from Amazon Payments'
+                    'comment' => 'Flags whether or not product is excluded from Amazon Pay'
                 ]
             );
         }
