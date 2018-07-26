@@ -68,6 +68,7 @@ define(
                 function (response) {
                     errorProcessor.process(response);
                     amazonStorage.amazonDeclineCode(response.responseJSON.code);
+                    fullScreenLoader.stopLoader(true);
                     window.location.replace(url.build('checkout/cart/'));
                 }
             );

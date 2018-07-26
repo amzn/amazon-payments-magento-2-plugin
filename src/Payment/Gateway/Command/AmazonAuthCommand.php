@@ -170,18 +170,27 @@ class AmazonAuthCommand implements CommandInterface
 
             $this->logger->critical('Payment Error: ' . $message . ': ' . $mapped);
 
+            $isLogout = false;
+
             if ($message == 'AmazonRejected' || $message == 'TransactionTimedOut') {
                 $code = (int)$this->config->getValue('hard_decline_code');
+                $isLogout = true;
                 if ($mode == 'synchronous_possible' && $message == 'TransactionTimedOut') {
                     $isTimeout = true;
+                    $isLogout = false;
                 }
             } elseif ($message == 'InvalidPaymentMethod'  || $message == 'Declined') {
                 $code = (int)$this->config->getValue('soft_decline_code');
+                $isLogout = true;
             }
         }
 
         if ($isTimeout) {
             return true;
+        }
+
+        if ($isLogout) {
+            $messages[] = __("You will be redirected to the cart shortly.");
         }
 
         throw new AmazonWebapiException(
