@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/error_mapping.xsd">
     <message_list>
-        <message code="AmazonRejected" translate="true">Rejected - unable to authorize this transaction.</message>
+        <message code="AmazonRejected" translate="true">Rejected - please choose a different payment method.</message>
         <message code="ProcessingFailure" translate="true">Processing Failure - unable to authorize transaction.</message>
         <message code="BillingAgreementConstraintsExist" translate="true">Unable to authorize transaction.</message>
         <message code="PaymentMethodNotUpdated" translate="true">Buyer did not specify valid Amazon Wallet payment method.</message>
@@ -11,7 +11,7 @@
         <message code="InvalidAddress" translate="true">Invalid values passed in request.</message>
         <message code="InvalidParameterValue" translate="true">Invalid values passed in request.</message>
         <message code="OrderReferenceCountExceeded" translate="true">You have attempted to create more than the maximum allowed limit of one Order Reference object on a Billing Agreement object that is in the Draft State.</message>
-        <message code="TransactionTimedOut" translate="true">Unable to complete this transaction.  Please try again later.</message>
+        <message code="TransactionTimedOut" translate="true">Unable to complete this transaction.  Please try again later or choose a different payment method.</message>
         <message code="TransactionCountExceeded" translate="true">Number of authorizations, captures or refunds has exceeded allowed limits.</message>
         <message code="TransactionAmountExceeded" translate="true">Number of authorizations, captures or refunds has exceeded allowed limits.</message>
         <message code="InvalidSandboxSimulationSpecified" translate="true">Invalid operation for sandbox environment.</message>
@@ -25,6 +25,7 @@
         <message code="InvalidBillingAgreementStatus" translate="true">Billing Agreement object cannot be modified.</message>
         <message code="BillingAgreementNotModifiable" translate="true">Billing Agreement object cannot be modified.</message>
         <message code="CaptureNotRefundable" translate="true">Capture not refundable.</message>
+        <message code="Declined" translate="true">Capture not refundable.</message>
         <message code="InvalidAuthorizationStatus" translate="true">You have attempted to capture or close an authorization for an Authorization object that is in a state where a capture or close is not allowed.</message>
         <message code="InvalidCancelAttempt" translate="true">Billing Agreement object cannot closed or canceled.</message>
         <message code="InvalidCloseAttempt" translate="true">Billing Agreement object cannot closed or canceled.</message>
@@ -32,6 +33,7 @@
         <message code="InternalServerError" translate="true">There was an unknown error in the service.</message>
         <message code="RequestThrottled" translate="true">Request rejected because request rate is higher than allocated throttling limits.</message>
         <message code="ServiceUnavailable" translate="true">The service is temporarily unavailable. Please try again later.</message>
-        <message code="InvalidPaymentMethod" translate="true">Invalid payment method.</message>
+        <message code="PaymentMethodNotAllowed" translate="true">Invalid payment method - please select a different payment method.</message>
+        <message code="InvalidPaymentMethod" translate="true">Invalid payment method - please select a different payment method.</message>
     </message_list>
 </mapping>
