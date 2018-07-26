@@ -16,13 +16,13 @@
 
 namespace Amazon\Login\Controller\Login;
 
-use Magento\Framework\App\Action\Action;
+use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
-use Magento\Customer\Model\Url;
-use Magento\Framework\App\Action\Context;
 use Magento\Checkout\Model\Session;
-use Amazon\Core\Client\ClientFactoryInterface;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Psr\Log\LoggerInterface;
 
 class Guest extends Action

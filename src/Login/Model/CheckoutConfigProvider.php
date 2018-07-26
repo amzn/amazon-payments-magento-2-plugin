@@ -36,8 +36,10 @@ class CheckoutConfigProvider implements ConfigProviderInterface
      * @param CustomerSession $customerSession
      * @param CheckoutSession $checkoutSession
      */
-    public function __construct(CustomerSession $customerSession, CheckoutSession $checkoutSession)
-    {
+    public function __construct(
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession
+    ) {
         $this->customerSession = $customerSession;
         $this->checkoutSession = $checkoutSession;
     }
