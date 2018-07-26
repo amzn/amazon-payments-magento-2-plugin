@@ -24,13 +24,13 @@
                 <de>https://static-eu.payments-amazon.com/OffAmazonPayments/de/lpa/js/Widgets.js?nomin</de>
                 <uk>https://static-eu.payments-amazon.com/OffAmazonPayments/uk/lpa/js/Widgets.js?nomin</uk>
                 <us>https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js?nomin</us>
-                <jp>https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?nomin</jp>
+                <jp>https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js?nomin</jp>
             </production>
             <sandbox>
                 <de>https://static-eu.payments-amazon.com/OffAmazonPayments/de/sandbox/lpa/js/Widgets.js?nomin</de>
                 <uk>https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/lpa/js/Widgets.js?nomin</uk>
                 <us>https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js?nomin</us>
-                <jp>https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?nomin</jp>
+                <jp>https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js?nomin</jp>
             </sandbox>
         </widget>
     </default>

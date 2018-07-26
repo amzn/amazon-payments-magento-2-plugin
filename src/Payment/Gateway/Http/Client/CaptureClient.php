@@ -30,6 +30,13 @@ class CaptureClient extends AbstractClient
      */
     protected function process(array $data)
     {
-        return $this->adapter->authorize($data, true);
+        $response = $this->adapter->authorize($data, true);
+
+        if (!$response['attempts'] && $response['auth_mode'] != 'synchronous' && isset($response['response_code'])
+            && $response['response_code'] == 'TransactionTimedOut') {
+            $response = $this->adapter->authorize($data, true, $attempts = 1);
+        }
+
+        return $response;
     }
 }

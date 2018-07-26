@@ -18,6 +18,7 @@ namespace Amazon\Payment\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
+use Amazon\Payment\Domain\AmazonConstraint;
 
 /**
  * Class AuthorizationValidator
@@ -39,20 +40,36 @@ class AuthorizationValidator extends AbstractValidator
 
         $response = $validationSubject['response'];
 
+        if (isset($response['sandbox']) && $response['sandbox']) {
+            $bits = explode(':', $response['sandbox']);
+            $messages[] = $bits[count($bits) - 1];
+            return $this->createResult(false, $messages);
+        }
 
-        if ($response['status']) {
+        if (isset($response['status']) && $response['status']) {
             return $this->createResult(
                 true,
                 ['status' => $response['status']]
             );
         }
 
-        if ($response['response_code']) {
+        if (isset($response['response_code']) && $response['response_code']) {
             $messages[] = $response['response_code'];
+        } elseif (isset($response['constraints']) && $response['constraints']) {
+            $messages[] = $this->getConstraint($response['constraints'][0]);
         }
 
-        return $this->createResult($response['status'], $messages);
+        return $this->createResult(false, $messages);
 
+    }
+
+    /**
+     * @param AmazonConstraint $constraint
+     * @return string
+     */
+    private function getConstraint(AmazonConstraint $constraint)
+    {
+        return $constraint->getId();
     }
 
 }

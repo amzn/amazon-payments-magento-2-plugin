@@ -115,7 +115,6 @@ class AmazonPaymentAdapter
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
     }
 
-
     /**
      * Sets Amazon Pay order data
      *
@@ -194,18 +193,20 @@ class AmazonPaymentAdapter
      * @param bool $captureNow
      * @return array
      */
-    public function authorize($data, $captureNow = false)
+    public function authorize($data, $captureNow = false, $attempts = 0)
     {
         $response = [];
-
+        $confirmResponse = null;
         $storeId = $this->subjectReader->getStoreId();
-
         $authMode = $this->coreHelper->getAuthorizationMode('store', $storeId);
 
         (isset($data['additional_information']) && $data['additional_information'] != 'default')
             ? $additionalInformation = $data['additional_information'] : $additionalInformation = '';
 
         if ($additionalInformation) {
+            if ($additionalInformation == 'TransactionTimedOut') {
+                $response['response_code'] = 'TransactionTimedOut';
+            }
             unset($data['additional_information']);
         }
 
@@ -213,63 +214,46 @@ class AmazonPaymentAdapter
             'amazon_order_reference_id' => $data['amazon_order_reference_id'],
             'authorization_amount' => $data['amount'],
             'currency_code' => $data['currency_code'],
-            'authorization_reference_id' => $data['amazon_order_reference_id'] . '-A' . time(),
-            'capture_now' => $captureNow
+            'authorization_reference_id' => $data['amazon_order_reference_id'] . '-A' . time().$attempts,
+            'capture_now' => $captureNow,
+            'transaction_timeout' => 0
         ];
 
-        if ($authMode == 'synchronous') {
-            $authorizeData['transaction_timeout'] = 0;
+        /** if first synchronous attempt failed, on second attempt try an asynchronous attempt. */
+        if ($authMode != 'synchronous' && $attempts) {
+            $authorizeData['transaction_timeout'] = 5;
         }
 
         $response['status'] = false;
+        $response['attempts'] = $attempts;
         $response['auth_mode'] = $authMode;
         $response['constraints'] = [];
         $response['amazon_order_reference_id'] = $data['amazon_order_reference_id'];
 
-        $detailResponse = $this->setOrderReferenceDetails($storeId, $data);
+        if (!$attempts) {
+            $detailResponse = $this->setOrderReferenceDetails($storeId, $data);
 
-        if (isset($detailResponse['constraints'])) {
-            $response['constraints'] = $detailResponse['constraints'];
+            if (isset($detailResponse['constraints']) && !empty($detailResponse['constraints'])) {
+                $response['constraints'] = $detailResponse['constraints'];
+                return $response;
+            }
         }
 
-        if ($detailResponse['status'] == 200) {
+        $confirmResponse = $this->confirmOrderReference($storeId, $data['amazon_order_reference_id']);
 
-            $confirmResponse = $this->confirmOrderReference($storeId, $data['amazon_order_reference_id']);
+        if ($confirmResponse->response['Status'] == 200) {
 
-            if ($confirmResponse->response['Status'] == 200) {
+            $authorizeResponse = $this->getAuthorization($storeId, $authorizeData);
 
-                $authorizeResponse = $this->getAuthorization($storeId, $authorizeData);
-
-                if ($authorizeResponse) {
+            if ($authorizeResponse) {
+                if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()) {
                     $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
 
-                    if ($authorizeResponse->getStatus()->getState() == 'Pending') {
-                        $order = $this->subjectReader->getOrder();
+                    if ($authorizeResponse->getStatus()->getState() == 'Pending' && $authMode == 'synchronous_possible') {
                         if ($captureNow) {
-                            try {
-                            $this->pendingCaptureFactory->create()
-                                ->setCaptureId($authorizeResponse->getCaptureTransactionId())
-                                ->setOrderId($order->getId())
-                                ->setPaymentId($order->getPayment()->getEntityId())
-                                ->save();
-                            } catch (\Exception $e) {
-                                $log['error'] = __('AmazonPaymentAdapter: Unable to capture pending information 
-                                for capture.');
-                                $this->logger->debug($log);
-                            }
-                        } else {
-                            try {
-                            $this->pendingAuthorizationFactory->create()
-                                ->setOrderId($order->getId())
-                                ->setPaymentId($order->getPayment()->getEntityId())
-                                ->setAuthorizationId($authorizeResponse->getAuthorizeTransactionId())
-                                ->save();
-                            } catch (\Exception $e) {
-                                $log['error'] = __('AmazonPaymentAdapter: Unable to capture pending information 
-                                for authorization.');
-                                $this->logger->debug($log);
-                            }
+                            $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
                         }
+                        $response['response_code'] = 'TransactionTimedOut';
                     } elseif (!in_array($authorizeResponse->getStatus()->getState(), self::SUCCESS_CODES)) {
                         $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
                     } else {
@@ -279,19 +263,25 @@ class AmazonPaymentAdapter
                             $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
                         }
                     }
-                }
-            } else {
-                // something went wrong, parse response body for use by authorization validator
-                $response['response_status'] = $confirmResponse->response['Status'];
-
-                $xml = simplexml_load_string($confirmResponse->response['ResponseBody']);
-                $code = $xml->Error->Code[0];
-                if ($code) {
-                    $response['response_code'] = (string)$code;
                 } else {
-                    $log['error'] = __('AmazonPaymentAdapter: Improperly formatted XML response, no response code available.');
+                    $response['status'] = false;
+                    $response['response_status'] = $authorizeResponse->getStatus()->getState();
+                    $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
+                    $log['error'] = $authorizeResponse->getStatus()->getState() . ': ' . $authorizeResponse->getStatus()->getReasonCode();
                     $this->logger->debug($log);
                 }
+            }
+        } else {
+            /** something went wrong, parse response body for use by authorization validator */
+            $response['response_status'] = $confirmResponse->response['Status'];
+
+            $xml = simplexml_load_string($confirmResponse->response['ResponseBody']);
+            $code = $xml->Error->Code[0];
+            if ($code) {
+                $response['response_code'] = (string)$code;
+            } else {
+                $log['error'] = __('AmazonPaymentAdapter: Improperly formatted XML response, no response code available.');
+                $this->logger->debug($log);
             }
         }
 
@@ -347,7 +337,6 @@ class AmazonPaymentAdapter
 
         return $response;
     }
-
 
     /**
      * @param $data

@@ -30,7 +30,14 @@ class AuthorizeClient extends AbstractClient
      */
     protected function process(array $data)
     {
-        return $this->adapter->authorize($data, false);
+        $response = $this->adapter->authorize($data, false);
+
+        if (!$response['attempts'] && $response['auth_mode'] != 'synchronous' && isset($response['response_code'])
+            && $response['response_code'] == 'TransactionTimedOut') {
+            $response = $this->adapter->authorize($data, false, $attempts = 1);
+        }
+
+        return $response;
     }
 
 }

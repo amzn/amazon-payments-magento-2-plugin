@@ -148,6 +148,9 @@ class AddressManagement implements AddressManagementInterface
 
             if (isset($data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'])) {
                 $billingAddress = $data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'];
+                if (!isset($billingAddress['Phone']) || !$billingAddress['Phone']) {
+                    $billingAddress['Phone'] = '000-000-0000';
+                }
 
                 return $this->convertToMagentoAddress($billingAddress);
             } elseif (isset($data['OrderReferenceDetails']['Destination']['PhysicalDestination'])) {
