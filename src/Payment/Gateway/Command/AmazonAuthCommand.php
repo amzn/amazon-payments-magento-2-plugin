@@ -156,7 +156,7 @@ class AmazonAuthCommand implements CommandInterface
     private function processErrors(ResultInterface $result, $mode = '')
     {
 
-        $isDeline = false;
+        $isDecline = false;
         $isTimeout = false;
         $code = false;
         $messages = [];
