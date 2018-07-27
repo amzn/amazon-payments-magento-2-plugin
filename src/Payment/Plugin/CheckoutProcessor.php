@@ -15,7 +15,8 @@
  */
 namespace Amazon\Payment\Plugin;
 
-use Amazon\Core\Helper\Data as AmazonHelper;
+use Amazon\Core\Helper\Data;
+use Magento\Checkout\Model\Session;
 
 class CheckoutProcessor
 {
@@ -25,14 +26,22 @@ class CheckoutProcessor
     private $amazonHelper;
 
     /**
+     * @var Session
+     */
+    private $checkoutSession;
+
+    /**
      * CheckoutProcessor constructor.
      *
-     * @param AmazonHelper $amazonHelper
+     * @param Data $amazonHelper
+     * @param Session $checkoutSession
      */
     public function __construct(
-        AmazonHelper $amazonHelper
+        Data $amazonHelper,
+        Session $checkoutSession
     ) {
         $this->amazonHelper = $amazonHelper;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
@@ -45,17 +54,19 @@ class CheckoutProcessor
      */
     public function afterProcess(\Magento\Checkout\Block\Checkout\LayoutProcessor $processor, $jsLayout)
     {
+        $quote = $this->checkoutSession->getQuote();
+
         $shippingConfig = &$jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
-            ['children']['shippingAddress'];
+        ['children']['shippingAddress'];
         $paymentConfig = &$jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment'];
 
-        if ($this->amazonHelper->isPwaEnabled()) {
+        if (!$quote->isVirtual() && $this->amazonHelper->isPwaEnabled()) {
             $shippingConfig['component'] = 'Amazon_Payment/js/view/shipping';
             $shippingConfig['children']['customer-email']['component'] = 'Amazon_Payment/js/view/form/element/email';
             $shippingConfig['children']['address-list']['component'] = 'Amazon_Payment/js/view/shipping-address/list';
             $shippingConfig['children']['shipping-address-fieldset']['children']
-                ['inline-form-manipulator']['component'] = 'Amazon_Payment/js/view/shipping-address/inline-form';
+            ['inline-form-manipulator']['component'] = 'Amazon_Payment/js/view/shipping-address/inline-form';
 
             $paymentConfig['children']['payments-list']['component'] = 'Amazon_Payment/js/view/payment/list';
         } else {

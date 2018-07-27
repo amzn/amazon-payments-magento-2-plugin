@@ -69,7 +69,7 @@ class BillingContext implements SnippetAcceptingContext
     }
 
     /**
-     * @Then the amazon payment widget should be displayed
+     * @Then the Amazon Pay widget should be displayed
      */
     public function theAmazonPaymentWidgetShouldBeDisplayed()
     {
@@ -79,7 +79,7 @@ class BillingContext implements SnippetAcceptingContext
 
 
     /**
-     * @Then the amazon payment widget should not be displayed
+     * @Then the Amazon Pay widget should not be displayed
      */
     public function theAmazonPaymentWidgetShouldNotBeDisplayed()
     {

@@ -1,5 +1,5 @@
 Feature: As a customer
-  I want to register with Amazon after I have purchased something using Amazon Payment
+  I want to register with Amazon after I have purchased something using Amazon Pay
 
   Background:
     Given Login with Amazon is disabled

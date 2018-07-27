@@ -7,12 +7,12 @@
     <event name="amazon_payment_authorize_before">
         <observer name="amazon_payment_sandbox_simulation_authorization" instance="Amazon\Payment\Observer\SandboxSimulation" />
     </event>
-    <!--event name="amazon_payment_capture_before">
+    <event name="amazon_payment_capture_before">
         <observer name="amazon_payment_sandbox_simulation_capture" instance="Amazon\Payment\Observer\SandboxSimulation" />
     </event>
     <event name="amazon_payment_refund_before">
         <observer name="amazon_payment_sandbox_simulation_refund" instance="Amazon\Payment\Observer\SandboxSimulation" />
-    </event-->
+    </event>
     <event name="payment_method_assign_data_amazon_payment">
         <observer name="amazon_payment_gateway_data_assign" instance="Amazon\Payment\Observer\DataAssignObserver" />
     </event>
