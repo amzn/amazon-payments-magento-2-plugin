@@ -69,11 +69,12 @@ define(
                     errorProcessor.process(response);
                     amazonStorage.amazonDeclineCode(response.responseJSON.code);
                     fullScreenLoader.stopLoader(true);
-                    window.location.replace(url.build('checkout/cart/'));
-                    var intervalId = setInterval(function () {
-                        clearInterval(intervalId);
-                        window.location.replace(url.build('checkout/cart/'));
-                    }, 3000);
+                    if (response.responseJSON.code == 4273) {
+                        var intervalId = setInterval(function () {
+                            clearInterval(intervalId);
+                            window.location.replace(url.build('checkout/cart/'));
+                        }, 3000);
+                    }
                 }
             );
         };

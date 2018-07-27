@@ -177,7 +177,6 @@ class AmazonAuthCommand implements CommandInterface
                 $isDecline = true;
             } elseif ($message == 'InvalidPaymentMethod' || $message == 'Declined') {
                 $code = (int)$this->config->getValue('soft_decline_code');
-                $isDecline = true;
             }
 
             if ($mode == 'synchronous_possible' && $message == 'TransactionTimedOut') {
