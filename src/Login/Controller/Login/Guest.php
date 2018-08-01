@@ -13,94 +13,79 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Login\Controller\Login;
 
 use Amazon\Core\Client\ClientFactoryInterface;
-use Amazon\Core\Domain\AmazonCustomer;
-use Amazon\Core\Domain\AmazonCustomerFactory;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
-use Amazon\Login\Model\Customer\Account\Redirect as AccountRedirect;
-use Magento\Customer\Model\Session;
+use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Exception\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 class Guest extends Action
 {
     /**
-     * @var AmazonCustomerFactory
-     */
-    protected $amazonCustomerFactory;
-
-    /**
-     * @var ClientFactoryInterface
-     */
-    protected $clientFactory;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var Session
-     */
-    protected $customerSession;
-
-    /**
      * @var AmazonCoreHelper
      */
-    protected $amazonCoreHelper;
+    private $amazonCoreHelper;
 
     /**
      * @var Url
      */
-    protected $customerUrl;
+    private $customerUrl;
 
     /**
      * @var AccessTokenRequestValidator
      */
-    protected $accessTokenRequestValidator;
+    private $accessTokenRequestValidator;
 
     /**
-     * @var AccountRedirect
+     * @var Session
      */
-    protected $accountRedirect;
+    private $session;
 
     /**
-     * @param Context                     $context
-     * @param AmazonCustomerFactory       $amazonCustomerFactory
-     * @param ClientFactoryInterface      $clientFactory
-     * @param LoggerInterface             $logger
-     * @param Session                     $customerSession
-     * @param AmazonCoreHelper            $amazonCoreHelper
-     * @param Url                         $customerUrl
+     * @var ClientFactoryInterface
+     */
+    private $clientFactory;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    private $quoteRepository;
+
+    /**
+     * Guest constructor.
+     * @param Context $context
+     * @param AmazonCoreHelper $amazonCoreHelper
+     * @param Url $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
-     * @param AccountRedirect             $accountRedirect
+     * @param Session $session
+     * @param ClientFactoryInterface $clientFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        AmazonCustomerFactory $amazonCustomerFactory,
-        ClientFactoryInterface $clientFactory,
-        LoggerInterface $logger,
-        Session $customerSession,
         AmazonCoreHelper $amazonCoreHelper,
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator,
-        AccountRedirect $accountRedirect
-    ) {
-        parent::__construct($context);
-        $this->amazonCustomerFactory = $amazonCustomerFactory;
-        $this->clientFactory = $clientFactory;
-        $this->logger = $logger;
-        $this->customerSession = $customerSession;
+        Session $session,
+        ClientFactoryInterface $clientFactory,
+        LoggerInterface $logger
+    )
+    {
         $this->amazonCoreHelper = $amazonCoreHelper;
         $this->customerUrl = $customerUrl;
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
-        $this->accountRedirect = $accountRedirect;
+        $this->session = $session;
+        $this->clientFactory = $clientFactory;
+        $this->logger = $logger;
+        parent::__construct($context);
     }
 
     /**
@@ -108,43 +93,70 @@ class Guest extends Action
      */
     public function execute()
     {
-        if ($this->amazonCoreHelper->isLwaEnabled()) {
-            throw new NotFoundException(__('Action is not available'));
+        if (!$this->isValidToken()) {
+            return $this->getRedirectLogin();
         }
 
-        if (! $this->accessTokenRequestValidator->isValid($this->getRequest())) {
-            return $this->_redirect($this->customerUrl->getLoginUrl());
-        }
+        $customerData = $this->getAmazonCustomer();
+        if ($customerData && isset($customerData['email'])) {
+            $quote = $this->session->getQuote();
 
-        try {
-            $userInfo = $this->clientFactory
-                             ->create()
-                             ->getUserInfo($this->getRequest()->getParam('access_token'));
-
-            if (is_array($userInfo) && isset($userInfo['user_id'])) {
-                $amazonCustomer = $this->amazonCustomerFactory->create([
-                    'id'    => $userInfo['user_id'],
-                    'email' => $userInfo['email'],
-                    'name'  => $userInfo['name'],
-                    'country' => $this->amazonCoreHelper->getRegion()
-                ]);
-
-                $this->storeUserInfoToSession($amazonCustomer);
+            if ($quote) {
+                $quote->setCustomerEmail($customerData['email']);
+                $quote->save();
             }
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-            $this->messageManager->addErrorMessage(__('Error processing Amazon Login'));
         }
 
-        return $this->accountRedirect->getRedirect();
+        return $this->_redirect('checkout');
     }
 
     /**
-     * @param AmazonCustomer $amazonCustomer
-     * @return void
+     * @return string
      */
-    protected function storeUserInfoToSession(AmazonCustomer $amazonCustomer)
+    private function getRedirectLogin()
     {
-        $this->customerSession->setAmazonCustomer($amazonCustomer);
+        return $this->_redirect($this->customerUrl->getLoginUrl());
+    }
+
+    /**
+     * @return bool
+     */
+    private function isValidToken()
+    {
+        $isValid = false;
+        try {
+            $isValid = $this->accessTokenRequestValidator->isValid($this->getRequest());
+        } catch (\Zend_Validate_Exception $e) {
+            $this->logger->error($e);
+        }
+
+        return $isValid;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAmazonCustomer()
+    {
+        try {
+            $userInfo = $this->clientFactory
+                ->create()
+                ->getUserInfo($this->getRequest()->getParam('access_token'));
+
+            if (is_array($userInfo) && isset($userInfo['user_id'])) {
+                $data = [
+                    'id' => $userInfo['user_id'],
+                    'email' => $userInfo['email'],
+                    'name' => $userInfo['name'],
+                    'country' => $this->amazonCoreHelper->getRegion(),
+                ];
+
+                return $data;
+            }
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+        }
+
+        return [];
     }
 }
