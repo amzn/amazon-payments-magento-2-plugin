@@ -17,7 +17,7 @@
 
   },
   "suggest": {
-    "magento/module-sales": "101.0.*",
+    "magento/module-sales": "101.0.*"
   },
   "autoload": {
     "files": ["registration.php"],
