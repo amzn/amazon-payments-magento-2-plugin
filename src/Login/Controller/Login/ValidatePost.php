@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Controller\Login;
 
-use Amazon\Login\Api\CustomerLinkManagementInterface;
+use Amazon\Login\Api\CustomerManagerInterface;
 use Amazon\Login\Domain\ValidationCredentials;
 use Amazon\Login\Helper\Session;
 use Amazon\Login\Model\Customer\Account\Redirect as AccountRedirect;
@@ -47,7 +47,7 @@ class ValidatePost extends Action
     private $encryptor;
 
     /**
-     * @var CustomerLinkManagement
+     * @var CustomerManagerInterface
      */
     private $customerLinkManagement;
 
@@ -67,7 +67,7 @@ class ValidatePost extends Action
         AccountRedirect $accountRedirect,
         CustomerRegistry $customerRegistry,
         Encryptor $encryptor,
-        CustomerLinkManagementInterface $customerLinkManagement
+        CustomerManagerInterface $customerLinkManagement
     ) {
         parent::__construct($context);
 

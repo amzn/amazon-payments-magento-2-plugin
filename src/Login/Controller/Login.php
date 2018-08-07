@@ -27,8 +27,8 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Psr\Log\LoggerInterface;
-use Amazon\Login\Model\Customer\MatcherInterface;
-use Amazon\Login\Api\CustomerLinkManagementInterface;
+use Amazon\Login\Api\CustomerManagerInterface;
+use Amazon\Login\Api\Customer\CompositeMatcherInterface;
 
 /**
  * Login with token controller
@@ -67,12 +67,12 @@ abstract class Login extends Action
     protected $accountRedirect;
 
     /**
-     * @var MatcherInterface
+     * @var CompositeMatcherInterface
      */
     protected $matcher;
 
     /**
-     * @var CustomerLinkManagementInterface
+     * @var CustomerManagerInterface
      */
     protected $customerLinkManagement;
 
@@ -99,7 +99,7 @@ abstract class Login extends Action
      * @param Url                         $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      * @param AccountRedirect $accountRedirect
-     * @param MatcherInterface $matcher
+     * @param CompositeMatcherInterface $matcher
      * @param CustomerLinkManagementInterface $customerLinkManagement
      * @param CustomerSession $customerSession
      * @param Session $session
@@ -114,8 +114,8 @@ abstract class Login extends Action
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator,
         AccountRedirect $accountRedirect,
-        MatcherInterface $matcher,
-        CustomerLinkManagementInterface $customerLinkManagement,
+        CompositeMatcherInterface $matcher,
+        CustomerManagerInterface $customerLinkManagement,
         CustomerSession $customerSession,
         Session $session,
         LoggerInterface $logger
