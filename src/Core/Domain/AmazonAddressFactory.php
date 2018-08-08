@@ -82,7 +82,7 @@ class AmazonAddressFactory
 
         $data = [
             AmazonAddressInterface::CITY => $this->escaper->escapeHtml($address['City']),
-            AmazonAddressInterface::POSTAL_CODE => $this->escaper->escapeHtml($address['PostalCode']),
+            AmazonAddressInterface::POSTAL_CODE => isset($address['PostalCode']) ? $this->escaper->escapeHtml($address['PostalCode']) : '',
             AmazonAddressInterface::COUNTRY_CODE => $this->escaper->escapeHtml($address['CountryCode']),
             AmazonAddressInterface::TELEPHONE => $this->escaper->escapeHtml($address['Phone']) ?? '',
             AmazonAddressInterface::STATE_OR_REGION => $this->escaper->escapeHtml($address['StateOrRegion']) ?? '',
