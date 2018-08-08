@@ -73,7 +73,7 @@ define(
                         var intervalId = setInterval(function () {
                             clearInterval(intervalId);
                             window.location.replace(url.build('checkout/cart/'));
-                        }, 3000);
+                        }, 2000);
                     }
                 }
             );
