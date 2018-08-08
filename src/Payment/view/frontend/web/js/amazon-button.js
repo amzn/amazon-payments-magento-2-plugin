@@ -20,7 +20,8 @@ define([
     'amazonCsrf',
     'modernizr/modernizr',
     'amazonCore',
-    'jquery/ui'
+    'jquery/ui',
+    'uiRegistry',
 ], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf) {
     'use strict';
     var _this,
