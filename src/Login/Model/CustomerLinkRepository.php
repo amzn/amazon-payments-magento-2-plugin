@@ -24,7 +24,6 @@ use Amazon\Login\Api\Data;
 use Amazon\Login\Api\Data\CustomerLinkInterface;
 use Amazon\Login\Api\Data\CustomerLinkSearchResultsInterfaceFactory;
 use Amazon\Login\Model\ResourceModel\CustomerLink as CustomerLinkResourceModel;
-use Amazon\Login\Model\ResourceModel\CustomerLink\Collection;
 use Amazon\Login\Model\ResourceModel\CustomerLink\CollectionFactory;
 
 /**
