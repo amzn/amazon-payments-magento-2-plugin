@@ -100,12 +100,6 @@ class SettlementHandler implements HandlerInterface
                 $quote = $this->quoteRepository->get($order->getQuoteId());
                 $quoteLink = $this->subjectReader->getQuoteLink($quote->getId());
                 $quoteLink->setConfirmed(true)->save();
-
-                $message = __('Captured amount of %1 online', $order->getGrandTotal());
-                $message .= ' ' . __('Transaction ID: "%1"', $quoteLink->getAmazonOrderReferenceId());
-
-                $order->addStatusHistoryComment($message);
-
             }
         }
         else {

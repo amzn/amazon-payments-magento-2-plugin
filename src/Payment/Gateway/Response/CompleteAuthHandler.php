@@ -95,11 +95,6 @@ class CompleteAuthHandler implements HandlerInterface
             $payment->setIsTransactionClosed(false);
             $quoteLink = $this->subjectReader->getQuoteLink();
             $quoteLink->setConfirmed(true)->save();
-
-            $message = __('Authorized amount of %1 online', $order->getGrandTotal());
-            $message .= ' ' . __('Transaction ID: "%1"', $amazonId);
-
-            $order->addStatusHistoryComment($message);
         }
     }
 }
