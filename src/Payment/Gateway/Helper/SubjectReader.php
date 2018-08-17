@@ -138,20 +138,6 @@ class SubjectReader
     }
 
     /**
-     * Adds status message - should be called after transaction and order are saved
-     * and ID exists.
-     *
-     * @param $message
-     */
-    public function setOrderMessage($message) 
-    {
-        $order = $this->getOrder();
-        if ($order) {
-            $order->addStatusHistoryComment($message);
-        }
-    }
-
-    /**
      * @return \Magento\Sales\Model\Order
      */
     public function getOrder() 
