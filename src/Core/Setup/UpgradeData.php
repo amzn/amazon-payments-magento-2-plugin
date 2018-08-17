@@ -33,7 +33,7 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         // Used update query because all scopes needed to have this value updated and this is a fast, simple approach
-        if (version_compare($context->getVersion(), '3.0.0', '<')) {
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
             $select = $setup->getConnection()->select()->from(
                 $setup->getTable('core_config_data'),
                 ['config_id', 'value']

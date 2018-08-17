@@ -81,11 +81,11 @@ class AmazonAddressFactory
         );
 
         $data = [
-            AmazonAddressInterface::CITY => $this->escaper->escapeHtml($address['City']),
-            AmazonAddressInterface::POSTAL_CODE => $this->escaper->escapeHtml($address['PostalCode']),
+            AmazonAddressInterface::CITY => isset($address['City']) ? $this->escaper->escapeHtml($address['City']) : '',
+            AmazonAddressInterface::POSTAL_CODE => isset($address['PostalCode']) ? $this->escaper->escapeHtml($address['PostalCode']) : '',
             AmazonAddressInterface::COUNTRY_CODE => $this->escaper->escapeHtml($address['CountryCode']),
-            AmazonAddressInterface::TELEPHONE => $this->escaper->escapeHtml($address['Phone']) ?? '',
-            AmazonAddressInterface::STATE_OR_REGION => $this->escaper->escapeHtml($address['StateOrRegion']) ?? '',
+            AmazonAddressInterface::TELEPHONE => isset($address['Phone']) ? $this->escaper->escapeHtml($address['Phone']) : '',
+            AmazonAddressInterface::STATE_OR_REGION => isset($address['StateOrRegion']) ? $this->escaper->escapeHtml($address['StateOrRegion']) : '',
             AmazonAddressInterface::FIRST_NAME => $this->escaper->escapeHtml($amazonName->getFirstName()),
             AmazonAddressInterface::LAST_NAME => $this->escaper->escapeHtml($amazonName->getLastName()),
             AmazonAddressInterface::LINES => $this->getLines($address)
