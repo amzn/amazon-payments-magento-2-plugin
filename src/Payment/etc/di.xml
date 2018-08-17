@@ -296,16 +296,17 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="amazonIpnLogger" type="Magento\Framework\Logger\Monolog">
+    <type name="Amazon\Core\Logger\IpnLogger">
         <arguments>
+            <argument name="name" xsi:type="string">amazonIpnLogger</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="debug" xsi:type="object">Amazon\Core\Logger\Handler\Ipn</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Amazon\Payment\Ipn\IpnHandlerFactoryInterface">
         <arguments>
-            <argument name="logger" xsi:type="object">amazonIpnLogger</argument>
+            <argument name="logger" xsi:type="object">Amazon\Core\Logger\IpnLogger</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Webapi\ErrorProcessor">
