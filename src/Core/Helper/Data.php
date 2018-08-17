@@ -559,9 +559,9 @@ class Data extends AbstractHelper
             'Authorization:Declined:InvalidPaymentMethod' => __('Authorization soft decline'),
             'Authorization:Declined:AmazonRejected' => __('Authorization hard decline'),
             'Authorization:Declined:TransactionTimedOut' => __('Authorization timed out'),
-            'Capture:Declined:AmazonRejected' => __('Capture declined'),
-            'Capture:Pending' => __('Capture pending'),
-            'Refund:Declined' => __('Refund declined')
+           // 'Capture:Declined:AmazonRejected' => __('Capture declined'),
+           // 'Capture:Pending' => __('Capture pending'),
+            //'Refund:Declined' => __('Refund declined')
         ];
 
         return $simulationlabels;
