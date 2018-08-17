@@ -16,7 +16,6 @@
 namespace Amazon\Core\Logger\Handler;
 
 use Magento\Framework\Logger\Handler\Base;
-use Monolog\Logger;
 
 class Ipn extends Base
 {
@@ -30,5 +29,5 @@ class Ipn extends Base
     /**
      * @var int
      */
-    protected $loggerType = Logger::DEBUG;
+    protected $loggerType = \Monolog\Logger::DEBUG;
 }

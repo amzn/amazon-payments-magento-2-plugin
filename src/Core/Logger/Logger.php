@@ -13,21 +13,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Core\Logger\Handler;
+namespace Amazon\Core\Logger;
 
-use Magento\Framework\Logger\Handler\Base;
-
-class Client extends Base
+/**
+ * Enables implementation of custom log file.
+ */
+class Logger extends \Monolog\Logger
 {
-    const FILENAME = '/var/log/paywithamazon.log';
-
-    /**
-     * @var string
-     */
-    protected $fileName = self::FILENAME;
-
-    /**
-     * @var int
-     */
-    protected $loggerType = \Monolog\Logger::DEBUG;
 }
