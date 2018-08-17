@@ -46,16 +46,17 @@
             <argument name="remoteAddress" xsi:type="object">Amazon_Core_RemoteAddressWithAdditionalIpHeaders</argument>
         </arguments>
     </type>
-    <virtualType name="amazonClientLogger" type="Magento\Framework\Logger\Monolog">
+    <type name="Amazon\Core\Logger\Logger">
         <arguments>
+            <argument name="name" xsi:type="string">amazonClientLogger</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="debug" xsi:type="object">Amazon\Core\Logger\Handler\Client</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Amazon\Core\Client\ClientFactory">
         <arguments>
-            <argument name="logger" xsi:type="object">amazonClientLogger</argument>
+            <argument name="logger" xsi:type="object">Amazon\Core\Logger\Logger</argument>
         </arguments>
     </type>
     <type name="Amazon\Core\Helper\CategoryExclusion">
