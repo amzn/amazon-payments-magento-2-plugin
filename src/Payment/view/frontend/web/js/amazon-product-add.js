@@ -43,7 +43,7 @@ define([
                 //only trigger the amazon button click if the user has chosen to add to cart via this method
                 if (addedViaAmazon) {
                     addedViaAmazon = false;
-                    $('.login-with-amazon img').trigger('click');
+                    $('.login-with-amazon-mini img').trigger('click');
                 }
             }, this);
 
@@ -52,6 +52,11 @@ define([
                 if ($(_this.options.addToCartForm).valid()) {
                     addedViaAmazon = true;
                     $(_this.options.addToCartForm).submit();
+                    var intervalId = setInterval(function () {
+                        clearInterval(intervalId);
+                        $('.login-with-amazon-mini img').trigger('click');
+                    }, 1000);
+                    return false;
                 }
             });
         }

@@ -29,27 +29,27 @@ class ValidatePost extends Action
     /**
      * @var Session
      */
-    protected $session;
+    private $session;
 
     /**
      * @var AccountRedirect
      */
-    protected $accountRedirect;
+    private $accountRedirect;
 
     /**
      * @var CustomerRegistry
      */
-    protected $customerRegistry;
+    private $customerRegistry;
 
     /**
      * @var Encryptor
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var CustomerManagerInterface
      */
-    protected $customerManager;
+    private $customerLinkManagement;
 
     /**
      * ValidatePost constructor.
@@ -59,7 +59,7 @@ class ValidatePost extends Action
      * @param AccountRedirect          $accountRedirect
      * @param CustomerRegistry         $customerRegistry
      * @param Encryptor                $encryptor
-     * @param CustomerManagerInterface $customerManager
+     * @param customerLinkManagement   $customerLinkManagement
      */
     public function __construct(
         Context $context,
@@ -67,15 +67,15 @@ class ValidatePost extends Action
         AccountRedirect $accountRedirect,
         CustomerRegistry $customerRegistry,
         Encryptor $encryptor,
-        CustomerManagerInterface $customerManager
+        CustomerManagerInterface $customerLinkManagement
     ) {
         parent::__construct($context);
 
-        $this->session          = $session;
-        $this->accountRedirect  = $accountRedirect;
-        $this->customerRegistry = $customerRegistry;
-        $this->encryptor        = $encryptor;
-        $this->customerManager  = $customerManager;
+        $this->session                = $session;
+        $this->accountRedirect        = $accountRedirect;
+        $this->customerRegistry       = $customerRegistry;
+        $this->encryptor              = $encryptor;
+        $this->customerLinkManagement = $customerLinkManagement;
     }
 
     public function execute()
@@ -87,7 +87,7 @@ class ValidatePost extends Action
             $hash     = $this->customerRegistry->retrieveSecureData($credentials->getCustomerId())->getPasswordHash();
 
             if ($this->encryptor->validateHash($password, $hash)) {
-                $this->customerManager->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
+                $this->customerLinkManagement->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
                 $this->session->loginById($credentials->getCustomerId());
             } else {
                 $this->messageManager->addErrorMessage('The password supplied was incorrect');

@@ -23,7 +23,7 @@ class ProcessAuthHash extends \Magento\Framework\App\Action\Action
     /**
      * @var PageFactory
      */
-    protected $pageFactory;
+    private $pageFactory;
 
     /**
      * @param Context     $context
