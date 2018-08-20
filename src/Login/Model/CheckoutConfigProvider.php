@@ -17,20 +17,31 @@ namespace Amazon\Login\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 class CheckoutConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CustomerSession
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
-     * @param CustomerSession $customerSession
+     * @var CheckoutSession
      */
-    public function __construct(CustomerSession $customerSession)
-    {
+    private $checkoutSession;
+
+    /**
+     * CheckoutConfigProvider constructor.
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
+     */
+    public function __construct(
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession
+    ) {
         $this->customerSession = $customerSession;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
@@ -40,9 +51,14 @@ class CheckoutConfigProvider implements ConfigProviderInterface
     {
         $config = [];
 
-        /** @var \Amazon\Core\Domain\AmazonCustomer $amazonCustomer */
+        /** @var \Amazon\Core\Api\Data\AmazonCustomerInterface $amazonCustomer */
         if ($amazonCustomer = $this->customerSession->getAmazonCustomer()) {
             $config['amazon_customer_email'] = $amazonCustomer->getEmail();
+        }
+
+        if (!isset($config['amazon_customer_email'])) {
+            $quote = $this->checkoutSession->getQuote();
+            $config['amazon_customer_email'] = $quote->getCustomerEmail();
         }
 
         // return a stdClass so that the resulting JSON is an empty object, not an empty array
