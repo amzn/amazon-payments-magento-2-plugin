@@ -13,28 +13,21 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Payment\Gateway\Request;
 
-use Amazon\Payment\Gateway\Config\Config;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
-use Magento\Payment\Model\Method\Logger;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
 
-class SettlementRequest implements BuilderInterface
+/**
+ * Class RefundRequestBuilder
+ * Builds refund request for Amazon Pay
+ */
+class RefundRequestBuilder implements BuilderInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
 
     /**
      * @var ProductMetadata
@@ -57,44 +50,28 @@ class SettlementRequest implements BuilderInterface
     private $orderRepository;
 
     /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
-     * SettlementRequest constructor.
+     * RefundRequestBuilder constructor.
      *
-     * @param Config                   $config
      * @param ProductMetadata          $productMetadata
-     * @param OrderRepositoryInterface $orderRepository
-     * @param CartRepositoryInterface  $quoteRepository
      * @param SubjectReader            $subjectReader
      * @param Data                     $coreHelper
-     * @param Logger                   $logger
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
-        Config $config,
         ProductMetaData $productMetadata,
-        OrderRepositoryInterface $orderRepository,
-        CartRepositoryInterface $quoteRepository,
         SubjectReader $subjectReader,
         Data $coreHelper,
-        Logger $logger
+        OrderRepositoryInterface $orderRepository
     ) {
-        $this->config = $config;
-        $this->orderRepository = $orderRepository;
-        $this->quoteRepository = $quoteRepository;
         $this->coreHelper = $coreHelper;
         $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
-        $this->logger = $logger;
+        $this->orderRepository = $orderRepository;
     }
-
 
     /**
      * @param array $buildSubject
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function build(array $buildSubject)
     {
@@ -102,33 +79,24 @@ class SettlementRequest implements BuilderInterface
 
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
+        $payment = $paymentDO->getPayment();
+
         $orderDO = $paymentDO->getOrder();
 
         $order = $this->orderRepository->get($orderDO->getId());
 
-        $quote = $this->quoteRepository->get($order->getQuoteId());
-
-        $quoteLink = $this->subjectReader->getQuoteLink($quote->getId());
+        $quoteLink = $this->subjectReader->getQuoteLink($order->getQuoteId());
 
         if ($quoteLink) {
-
             $data = [
-                'amazon_authorization_id' => $paymentDO->getPayment()->getParentTransactionId(),
-                'capture_amount' => $buildSubject['amount'],
-                'currency_code' => $order->getBaseCurrencyCode(),
-                'amazon_order_reference_id' => $quoteLink->getAmazonOrderReferenceId(),
-                'store_id' => $quote->getStoreId(),
-                'store_name' => $quote->getStore()->getName(),
-                'seller_order_id' => $order->getIncrementId(),
-                'custom_information' =>
-                    'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
-                    'Plugin Version : ' . $this->coreHelper->getVersion(),
-                'platform_id' => $this->config->getValue('platform_id'),
+                'amazon_capture_id' => $payment->getParentTransactionId(),
+                'refund_reference_id' => $quoteLink->getAmazonOrderReferenceId() . '-R' . time(),
+                'refund_amount' => $this->subjectReader->readAmount($buildSubject),
+                'currency_code' => $order->getOrderCurrencyCode(),
+                'store_id' => $order->getStoreId()
             ];
         }
 
         return $data;
     }
-
 }
-
