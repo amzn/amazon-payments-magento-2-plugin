@@ -24,8 +24,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * Class RefundRequest
- *
- * @package Amazon\Payment\Gateway\Request
+ * Builds refund request for Amazon Pay
  */
 class RefundRequest implements BuilderInterface
 {

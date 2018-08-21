@@ -24,7 +24,6 @@ use Amazon\Payment\Gateway\Config\Config;
  * Class AmazonAuthCommand
  *
  * Enables customized error handling for Amazon Payment
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AmazonAuthCommand implements CommandInterface

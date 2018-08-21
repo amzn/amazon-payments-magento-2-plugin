@@ -19,8 +19,7 @@ use Amazon\Core\Helper\Data as AmazonCoreHelper;
 
 /**
  * Class AmazonLoginMethod
- *
- * @package Amazon\Payment\Model\Method
+ * For display of Amazon Pay in payment method list
  */
 class AmazonLoginMethod extends \Magento\Payment\Model\Method\AbstractMethod
 {

@@ -23,7 +23,7 @@ use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Class IpnLog
- * @package Amazon\Core\Controller\Adminhtml\Download
+ * Enables custom IPN log file to be accessed via an admin link
  */
 class IpnLog extends System
 {
@@ -66,7 +66,7 @@ class IpnLog extends System
                 ]
             );
         } catch (\Exception $e) {
-            throw new NotFoundException(__($e->getMessage()));
+            throw new NotFoundException($e->getMessage());
         }
     }
 

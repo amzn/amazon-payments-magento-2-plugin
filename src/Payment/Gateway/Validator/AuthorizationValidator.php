@@ -22,8 +22,7 @@ use Amazon\Payment\Domain\AmazonConstraint;
 
 /**
  * Class AuthorizationValidator
- *
- * @package Amazon\Payment\Gateway\Validator
+ * Validates authorization calls during gateway payment
  */
 class AuthorizationValidator extends AbstractValidator
 {

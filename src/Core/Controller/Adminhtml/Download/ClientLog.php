@@ -23,7 +23,7 @@ use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Class ClientLog
- * @package Amazon\Core\Controller\Adminhtml\Download
+ * Enables custom client log file to be accessed via an admin link
  */
 class ClientLog extends System
 {
@@ -66,7 +66,7 @@ class ClientLog extends System
                 ]
             );
         } catch (\Exception $e) {
-            throw new NotFoundException(__($e->getMessage()));
+            throw new NotFoundException($e->getMessage());
         }
     }
 
