@@ -22,12 +22,7 @@ use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
-/**
- * Class RefundRequest
- *
- * @package Amazon\Payment\Gateway\Request
- */
-class RefundRequest implements BuilderInterface
+class VoidRequestBuilder implements BuilderInterface
 {
 
     /**
@@ -51,7 +46,7 @@ class RefundRequest implements BuilderInterface
     private $orderRepository;
 
     /**
-     * RefundRequest constructor.
+     * VoidRequestBuilder constructor.
      *
      * @param ProductMetadata          $productMetadata
      * @param SubjectReader            $subjectReader
@@ -71,7 +66,9 @@ class RefundRequest implements BuilderInterface
     }
 
     /**
-     * @param array $buildSubject
+     * Builds ENV request
+     *
+     * @param  array $buildSubject
      * @return array
      */
     public function build(array $buildSubject)
@@ -80,22 +77,19 @@ class RefundRequest implements BuilderInterface
 
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
-        $payment = $paymentDO->getPayment();
-
         $orderDO = $paymentDO->getOrder();
 
         $order = $this->orderRepository->get($orderDO->getId());
 
-        $quoteLink = $this->subjectReader->getQuoteLink($order->getQuoteId());
+        if ($order) {
+            $quoteLink = $this->subjectReader->getQuoteLink($order->getQuoteId());
 
-        if ($quoteLink) {
-            $data = [
-                'amazon_capture_id' => $payment->getParentTransactionId(),
-                'refund_reference_id' => $quoteLink->getAmazonOrderReferenceId() . '-R' . time(),
-                'refund_amount' => $this->subjectReader->readAmount($buildSubject),
-                'currency_code' => $order->getOrderCurrencyCode(),
-                'store_id' => $order->getStoreId()
-            ];
+            if ($quoteLink) {
+                $data = [
+                    'store_id' => $order->getStoreId(),
+                    'amazon_order_reference_id' => $quoteLink->getAmazonOrderReferenceId()
+                ];
+            }
         }
 
         return $data;

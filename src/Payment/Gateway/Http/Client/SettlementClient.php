@@ -20,8 +20,7 @@ use Amazon\Core\Exception\AmazonServiceUnavailableException;
 
 /**
  * Class SettlementClient
- *
- * @package Amazon\Payment\Gateway\Http\Client
+ * Amazon Pay capture client
  */
 class SettlementClient extends AbstractClient
 {
@@ -59,9 +58,4 @@ class SettlementClient extends AbstractClient
 
         return $response;
     }
-
-
-
-
-
 }

@@ -25,8 +25,7 @@ use Amazon\Payment\Api\Data\PendingRefundInterfaceFactory;
 
 /**
  * Class RefundHandler
- *
- * @package Amazon\Payment\Gateway\Response
+ * Handles refund behavior for Amazon Pay
  */
 class RefundHandler implements HandlerInterface
 {
@@ -55,7 +54,6 @@ class RefundHandler implements HandlerInterface
      * @var PendingRefundInterfaceFactory 
      */
     private $pendingRefundFactory;
-
 
     /**
      * RefundHandler constructor.
@@ -109,5 +107,4 @@ class RefundHandler implements HandlerInterface
             $this->messageManager->addSuccessMessage(__('Amazon Pay refund successful.'));
         }
     }
-
 }
