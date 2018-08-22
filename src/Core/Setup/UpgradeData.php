@@ -21,7 +21,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Class UpgradeData
- * @package Amazon\Core\Setup
+ * Ensures default authorization mode is set if upgrading from earlier versions
  */
 class UpgradeData implements UpgradeDataInterface
 {
