@@ -1,3 +1,19 @@
+<!--
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
 <?php
 $attributes = $block->getAmazonSp();
 ?>
@@ -22,10 +38,10 @@ $attributes = $block->getAmazonSp();
             <?= $block->escapeHtml(__('An unsupported currency is currently selected. ' .
                 'Please review our configuration guide.')); ?>
             <span class="note">
-            <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">
+                <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">
                 (<?= $block->escapeHtml(__('More Information')); ?>)
-            </a>
-        </span>
+                </a>
+            </span>
         </div>
 
     <?php else : ?>
@@ -38,22 +54,23 @@ $attributes = $block->getAmazonSp();
                 )
             ); ?>
             <span class="note">
-            <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">
-                (<?= $block->escapeHtml(__('More Information')); ?>)
-            </a>
-        </span>
+                <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">
+                    (<?= $block->escapeHtml(__('More Information')); ?>)
+                </a>
+            </span>
         </div>
 
         <span class="apsp-getstarted">
-        <button><span><?= $block->escapeHtml(__('Get started with account registration')); ?></span></button>
-    </span>
+          <button>
+              <span><?= $block->escapeHtml(__('Get started with account registration')); ?></span>
+          </button>
+        </span>
         <span class="apsp-or">
         &nbsp; <?= $block->escapeHtml(__('or')); ?> &nbsp;
-        <a href="#" id="simplepath-skip">
+          <a href="#" id="simplepath-skip">
             <?= $block->escapeHtml(__("I've already setup Pay with Amazon, I want to edit my settings")); ?>
-        </a>
-    </span>
-
+          </a>
+        </span>
         <p id="amazon_https_required">
             <?= $block->escapeHtml(__("In order to enable automatic account configuration using Amazon's secure key " .
                 'exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.')); ?>
@@ -75,9 +92,7 @@ $attributes = $block->getAmazonSp();
                 <?= $block->escapeHtml(__('Save Credentials')); ?>
             </button>
         </div>
-
     <?php endif; ?>
-
 </div>
 
 <div id="amazon_simplepath_back">
