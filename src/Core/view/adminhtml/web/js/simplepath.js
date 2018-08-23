@@ -45,9 +45,12 @@ define([
             var self = this;
             self.$amazonSimplepath = $('#amazon_simplepath');
             self.$amazonFields = $('#payment_' + self.getCountry() + '_' + self.selector + ' .form-list');
-            self.$amazonCredentialsHeader = $('#payment_' + self.getCountry() + '_' + self.selector + '_credentials-head');
-            self.$amazonCredentialJson = $('#payment_' + self.getCountry() + '_' + self.selector + '_credentials_credentials_json');
-            self.$amazonMerchantId = $('#payment_' + self.getCountry() + '_' + self.selector + '_credentials_merchant_id').val();
+            self.$amazonCredentialsHeader = $('#payment_' + self.getCountry() + '_' + self.selector
+                + '_credentials-head');
+            self.$amazonCredentialJson = $('#payment_' + self.getCountry() + '_' + self.selector
+                + '_credentials_credentials_json');
+            self.$amazonMerchantId = $('#payment_' + self.getCountry() + '_' + self.selector
+                + '_credentials_merchant_id').val();
             self.$amazonSpBack = $('#amazon_simplepath_back');
             self.$container = $('#' + self.container);
 
@@ -88,8 +91,8 @@ define([
                 self.setupWindowLaunch();
             });
 
-            self.$amazonCredentialJson.on('input', function(e) {
-               self.updateCredentials(self);
+            self.$amazonCredentialJson.on('input', function (e) {
+                self.updateCredentials(self);
             });
         },
 
@@ -99,7 +102,7 @@ define([
          *
          * @param self
          */
-        updateCredentials: function(self) {
+        updateCredentials: function (self) {
             var elJson = self.$amazonCredentialJson.val();
             var obj = null;
             try {
@@ -107,7 +110,10 @@ define([
             }
             catch (err) {
                 obj = null;
-                self.$amazonCredentialJson.val('').attr('placeholder', $t('Invalid JSON credentials entered, please try again.')).focus();
+                self.$amazonCredentialJson.val('').attr(
+                    'placeholder',
+                    $t('Invalid JSON credentials entered, please try again.')
+                ).focus();
             }
 
             if (obj && typeof obj === 'object') {
@@ -115,7 +121,8 @@ define([
                 for (var prop in obj) {
                     var item = $('#payment_' + self.getCountry() + '_amazon_payment_credentials_' + $.trim(prop));
                     if (item && item.length) {
-                        $('#payment_' + self.getCountry() + '_amazon_payment_credentials_' + $.trim(prop)).val($.trim(obj[prop]));
+                        $('#payment_' + self.getCountry() + '_amazon_payment_credentials_'
+                            + $.trim(prop)).val($.trim(obj[prop]));
                     }
                     else {
                         success = false;
@@ -123,11 +130,17 @@ define([
                 }
 
                 if (success) {
-                    self.$amazonCredentialJson.val('').attr('placeholder', $t('Credential fields successfully updated and being saved.')).focus();
+                    self.$amazonCredentialJson.val('').attr(
+                        'placeholder',
+                        $t('Credential fields successfully updated and being saved.')
+                    ).focus();
                     $('#save').click();
                 }
                 else {
-                    self.$amazonCredentialJson.val('').attr('placeholder', $t('One or more of your credential fields did not parse correctly. Please review your entry and try again.')).focus();
+                    self.$amazonCredentialJson.val('').attr(
+                        'placeholder',
+                        $t('One or more of your credential fields did not parse correctly. Please review your entry and try again.')
+                    ).focus();
                 }
             }
         },
@@ -168,7 +181,8 @@ define([
             if (self.region.indexOf('eu') != -1) {
                 region = 'de';
             }
-            var elCheckDefault = $('#payment_' + self.getCountry() + '_amazon_payment_credentials_payment_region_inherit:checked');
+            var elCheckDefault = $('#payment_' + self.getCountry()
+                + '_amazon_payment_credentials_payment_region_inherit:checked');
             if (elCheckDefault && elCheckDefault.length) {
                 elCheckDefault[0].click();
             }
