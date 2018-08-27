@@ -23,8 +23,7 @@ use Amazon\Core\Helper\Data;
 
 /**
  * Class CurrencyValidator
- *
- * @package Amazon\Payment\Gateway\Validator
+ * Validates allowable currencies for Amazon Pay
  */
 class CurrencyValidator extends AbstractValidator
 {
@@ -55,7 +54,6 @@ class CurrencyValidator extends AbstractValidator
         $this->config = $config;
         parent::__construct($resultFactory);
     }
-
 
     /**
      * @param array $validationSubject

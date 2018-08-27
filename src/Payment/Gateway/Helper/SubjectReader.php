@@ -25,10 +25,7 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class SubjectReader
- *
  * Consolidates commonly used calls
- *
- * @package Amazon\Payment\Gateway\Helper
  */
 class SubjectReader
 {
@@ -51,8 +48,9 @@ class SubjectReader
     /**
      * SubjectReader constructor.
      *
-     * @param Session                   $checkoutSession
+     * @param Session $checkoutSession
      * @param QuoteLinkInterfaceFactory $quoteLinkInterfaceFactory
+     * @param Data $coreHelper
      */
     public function __construct(
         Session $checkoutSession,
@@ -64,7 +62,6 @@ class SubjectReader
         $this->coreHelper = $coreHelper;
     }
 
-
     /**
      * Reads payment from subject
      *
@@ -75,7 +72,6 @@ class SubjectReader
     {
         return Helper\SubjectReader::readPayment($subject);
     }
-
 
     /**
      * Reads amount from subject
@@ -144,5 +140,4 @@ class SubjectReader
     {
         return $this->checkoutSession->getLastRealOrder();
     }
-
 }

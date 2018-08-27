@@ -24,7 +24,7 @@ use Amazon\Core\Helper\Data;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\Method\Logger;
 
-class CaptureRequest implements BuilderInterface
+class CaptureRequestBuilder implements BuilderInterface
 {
     /**
      * @var Config
@@ -52,7 +52,7 @@ class CaptureRequest implements BuilderInterface
     private $coreHelper;
 
     /**
-     * CaptureRequest constructor.
+     * CaptureRequestBuilder constructor.
      *
      * @param Config          $config
      * @param ProductMetadata $productMetadata
@@ -144,9 +144,4 @@ class CaptureRequest implements BuilderInterface
 
         return $data;
     }
-
-
-
-
 }
-

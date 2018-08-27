@@ -22,7 +22,8 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
- * @api
+ * Config
+ * Provides a block that displays links to available custom error logs in Amazon Pay admin/config section.
  */
 class Config extends Template
 {

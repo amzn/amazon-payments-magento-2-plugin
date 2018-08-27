@@ -26,12 +26,10 @@ use Amazon\Payment\Model\Adapter\AmazonPaymentAdapter;
 
 /**
  * Class AbstractClient
- *
- * @package Amazon\Payment\Gateway\Http\Client
+ * Base class for gateway client classes
  */
 abstract class AbstractClient implements ClientInterface
 {
-
     /**
      * @var SubjectReader
      */
@@ -47,7 +45,6 @@ abstract class AbstractClient implements ClientInterface
      */
     protected $clientFactory;
 
-
     /**
      * @var Data
      */
@@ -58,7 +55,14 @@ abstract class AbstractClient implements ClientInterface
      */
     protected $adapter;
 
-
+    /**
+     * AbstractClient constructor.
+     * @param Logger $logger
+     * @param ClientFactoryInterface $clientFactory
+     * @param SubjectReader $subjectReader
+     * @param Data $coreHelper
+     * @param AmazonPaymentAdapter $adapter
+     */
     public function __construct(
         Logger $logger,
         ClientFactoryInterface $clientFactory,
@@ -91,18 +95,13 @@ abstract class AbstractClient implements ClientInterface
         try {
             $response = $this->process($data);
         } catch (\Exception $e) {
-            $message = __($e->getMessage() ?: "Something went wrong during Gateway request.");
+            $message = $e->getMessage() ?: "Something went wrong during Gateway request.";
             $log['error'] = $message;
-            $this->logger->debug($log);
-        } finally {
-            $log['response'] = (array) $response;
             $this->logger->debug($log);
         }
 
         return $response;
     }
-
-
 
     /**
      * Process http request

@@ -21,7 +21,7 @@ use Amazon\Payment\Domain\Details\AmazonAuthorizationDetails;
 
 /**
  * Class AmazonAuthorization
- * @package Amazon\Payment\Domain\Validator
+ * validates Amazon Pay status during cron updates.
  */
 class AmazonAuthorization
 {

@@ -21,7 +21,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class Validate
- * @package Amazon\Login\Controller\Login
+ * Validates login behaviors with Amazon Pay
  */
 class Validate extends Action
 {

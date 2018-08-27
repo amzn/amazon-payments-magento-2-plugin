@@ -18,7 +18,7 @@ namespace Amazon\Core\Controller\Simplepath;
 
 /**
  * Class Listener
- * @package Amazon\Core\Controller\Simplepath
+ * Retrieves entered keys from Amazon Pay popup
  */
 class Listener extends \Magento\Framework\App\Action\Action
 {
@@ -41,10 +41,11 @@ class Listener extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory,
         \Amazon\Core\Model\Config\SimplePath $simplepath,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
-        $this->simplepath        = $simplepath;
+    )
+    {
+        $this->simplepath = $simplepath;
         $this->jsonResultFactory = $jsonResultFactory;
-        $this->scopeConfig       = $scopeConfig;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -55,7 +56,7 @@ class Listener extends \Magento\Framework\App\Action\Action
     {
         $url = parse_url($this->simplepath->getEndpointRegister());
         $host = trim(preg_replace("/\r|\n/", "", $url['host']));
-        $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' .$host );
+        $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
         $this->getResponse()->setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         $this->getResponse()->setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
 

@@ -19,8 +19,7 @@ namespace Amazon\Payment\Gateway\Http\Client;
 
 /**
  * Class Client
- *
- * @package Amazon\Payment\Gateway\Http\Client
+ * Amazon Pay gateway capture client
  */
 class CaptureClient extends AbstractClient
 {

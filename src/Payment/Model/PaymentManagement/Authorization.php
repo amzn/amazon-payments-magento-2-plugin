@@ -341,12 +341,11 @@ class Authorization extends AbstractOperation
             $invoice = $this->getInvoice($transactionId, $order);
             $this->setPaymentReview($order);
             $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
-            $message = __('Declined amount of %1 online', $formattedAmount);
         } else {
             $formattedAmount = $order->getBaseCurrency()->formatTxt($payment->getBaseAmountAuthorized());
-            $message = __('Declined amount of %1 online', $formattedAmount);
         }
 
+        $message = __('Declined amount of %1 online', $formattedAmount);
         $transaction = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
         $payment->addTransactionCommentsToOrder($transaction, $message);
         $this->paymentManagement->closeTransaction($transactionId, $payment, $order);
@@ -386,15 +385,13 @@ class Authorization extends AbstractOperation
         if ($capture) {
             $invoice = $this->getInvoiceAndSetCancelled($transactionId, $order);
             $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
-            $message = __('Declined amount of %1 online', $formattedAmount);
             $this->addCaptureDeclinedNotice($order);
         } else {
             $formattedAmount = $order->getBaseCurrency()->formatTxt($payment->getBaseAmountAuthorized());
-            $message = __('Declined amount of %1 online', $formattedAmount);
         }
 
+        $message = __('Declined amount of %1 online', $formattedAmount);
         $this->setOnHold($order);
-
         $transaction = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
         $payment->addTransactionCommentsToOrder($transaction, $message);
         $this->paymentManagement->closeTransaction($transactionId, $payment, $order);
@@ -505,7 +502,8 @@ class Authorization extends AbstractOperation
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization
-    ) {
+    )
+    {
         $capture = true;
 
         try {

@@ -26,7 +26,7 @@ use Magento\Framework\DataObject;
 use Amazon\Payment\Plugin\AdditionalInformation;
 use Amazon\Core\Helper\CategoryExclusion;
 
-class AuthorizationRequest implements BuilderInterface
+class AuthorizationRequestBuilder implements BuilderInterface
 {
     /**
      * @var ConfigInterface
@@ -59,7 +59,7 @@ class AuthorizationRequest implements BuilderInterface
     private $categoryExclusion;
 
     /**
-     * AuthorizationRequest constructor.
+     * AuthorizationRequestBuilder constructor.
      *
      * @param ConfigInterface $config
      * @param ProductMetadata $productMetadata
