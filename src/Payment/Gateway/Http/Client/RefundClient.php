@@ -24,8 +24,7 @@ use Amazon\Payment\Domain\AmazonRefundResponseFactory;
 
 /**
  * Class RefundClient
- *
- * @package Amazon\Payment\Gateway\Http\Client
+ * Amazon Pay refund client
  */
 class RefundClient implements ClientInterface
 {
@@ -41,7 +40,6 @@ class RefundClient implements ClientInterface
      * @var Logger
      */
     private $logger;
-
 
     /**
      * @var AmazonRefundResponseFactory
@@ -128,5 +126,4 @@ class RefundClient implements ClientInterface
         // Gateway expects response to be in form of array
         return $response;
     }
-
 }

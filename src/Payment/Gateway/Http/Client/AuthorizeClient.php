@@ -19,8 +19,7 @@ namespace Amazon\Payment\Gateway\Http\Client;
 
 /**
  * Class Client
- *
- * @package Amazon\Payment\Gateway\Http\Client
+ * Amazon Pay authorization gateway client
  */
 class AuthorizeClient extends AbstractClient
 {
@@ -39,5 +38,4 @@ class AuthorizeClient extends AbstractClient
 
         return $response;
     }
-
 }

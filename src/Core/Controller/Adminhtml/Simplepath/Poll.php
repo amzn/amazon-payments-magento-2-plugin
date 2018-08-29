@@ -20,6 +20,22 @@ use Magento\Backend\Controller\Adminhtml\System;
 
 class Poll extends System
 {
+
+    /**
+     * @var \Amazon\Core\Model\Config\SimplePath
+     */
+    private $simplePath;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    private $jsonResultFactory;
+
     public function __construct(
         Context $context,
         \Amazon\Core\Model\Config\SimplePath $simplePath,
