@@ -54,6 +54,10 @@ define([
             self.$amazonSpBack = $('#amazon_simplepath_back');
             self.$container = $('#' + self.container);
 
+            $('#row_payment_' + self.getCountry() + '_' + self.selector + ' .section-config').addClass('active');
+            $('#payment_' + self.getCountry() + '_' + self.selector + '-section').show();
+            $('#payment_' + self.getCountry() + '_' + self.selector + '-section-head').addClass('open');
+
             if (self.$amazonMerchantId) {
                 self.hideAmazonConfig();
             }
