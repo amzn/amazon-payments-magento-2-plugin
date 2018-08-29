@@ -19,7 +19,6 @@
     "ciaranmcnulty/behat-stepthroughextension": "dev-master"
   },
   "require": {
-    "php": "~7.0.13|~7.1.0",
     "magento/framework": "101.0.*",
     "magento/module-sales": "101.0.*",
     "magento/module-checkout": "100.2.*",

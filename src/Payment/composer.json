@@ -7,7 +7,6 @@
     "Apache-2.0"
   ],
   "require": {
-    "php": "~7.0.13|~7.1.0",
     "amzn/amazon-pay-and-login-with-amazon-core-module": "^2.1.0",
     "amzn/login-with-amazon-module": "^2.1.0",
     "magento/module-eav": "101.0.*",
