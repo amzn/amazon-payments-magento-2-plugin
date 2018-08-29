@@ -14,34 +14,32 @@
  * permissions and limitations under the License.
  */
 -->
-<!-- ko if: isPwaVisible() -->
-
-<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
-    <div class="payment-method-title field choice">
-        <input type="radio"
-               name="payment[method]"
-               class="radio"
-               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
-        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
-    </div>
-
-    <div class="payment-method-content">
-
-        <div class="amazon-button-container" data-bind="visible: true">
-            <div class="amazon-button-container__cell">
-                <div id="PayWithAmazon" class="login-with-amazon" data-bind="mageInit: {'amazonButton':{'buttonType': 'PwA'}}"></div>
-            </div>
-
-            <div class="amazon-button-container__cell">
-                <div class="field-tooltip toggle">
-                    <span class="field-tooltip-action action-help" data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-                    <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
-                        <!-- ko i18n: 'Securely login into our website using your existing Amazon details.'--><!-- /ko -->
+<if args="isPwaVisible()">
+    <div class="payment-method" css="_active : (getCode() == isChecked())">
+        <div class="payment-method-title field choice">
+            <input type="radio"
+                   name="payment[method]"
+                   class="radio"
+                   ko-checked="isChecked" ko-value="getCode()" attr="{'id': getCode()}, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+            <label attr="for : getCode()" class="label"><span text="getTitle()"></span></label>
+        </div>
+        <div class="payment-method-content">
+            <div class="amazon-button-container" data-bind="visible: true">
+                <div class="amazon-button-container__cell">
+                    <div id="PayWithAmazon" class="login-with-amazon"
+                         data-bind="mageInit: {'amazonButton':{'buttonType': 'PwA'}}"></div>
+                </div>
+                <div class="amazon-button-container__cell">
+                    <div class="field-tooltip toggle">
+                        <span class="field-tooltip-action action-help"
+                              data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}" data-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false"></span>
+                        <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
+                            <translate args="'Securely login into our website using your existing Amazon details.'" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-</div>
-<!--/ko-->
+</if>

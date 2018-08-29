@@ -120,7 +120,7 @@
     <!-- Authorize command -->
     <virtualType name="AmazonAuthorizeCommand" type="Amazon\Payment\Gateway\Command\AmazonAuthCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\AuthorizationRequest
+            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\AuthorizationRequestBuilder
             </argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\CompleteAuthHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Payment\Gateway\Http\TransferFactory</argument>
@@ -132,7 +132,7 @@
         </arguments>
     </virtualType>
 
-    <type name="Amazon\Payment\Gateway\Request\AuthorizationRequest">
+    <type name="Amazon\Payment\Gateway\Request\AuthorizationRequestBuilder">
         <arguments>
             <argument name="config" xsi:type="object">AmazonGatewayConfig</argument>
         </arguments>
@@ -141,7 +141,7 @@
     <!-- Authorize and Capture command -->
     <virtualType name="AmazonSaleCommand" type="Amazon\Payment\Gateway\Command\AmazonAuthCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\AuthorizationRequest
+            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\AuthorizationRequestBuilder
             </argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\CompleteSaleHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Payment\Gateway\Http\TransferFactory</argument>
@@ -156,7 +156,7 @@
     <!-- Capture settlement command -->
     <virtualType name="AmazonSettlementCommand" type="Amazon\Payment\Gateway\Command\AmazonAuthCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\SettlementRequest
+            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\SettlementRequestBuilder
             </argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\SettlementHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Payment\Gateway\Http\TransferFactory</argument>
@@ -169,7 +169,7 @@
     </virtualType>
 
     <!-- Capture Request -->
-    <type name="Amazon\Payment\Gateway\Request\CaptureRequest">
+    <type name="Amazon\Payment\Gateway\Request\CaptureRequestBuilder">
         <arguments>
             <argument name="config" xsi:type="object">AmazonGatewayConfig</argument>
             <argument name="coreHelper" xsi:type="object">Amazon\Core\Helper\Data</argument>
@@ -180,7 +180,7 @@
     <!-- Refund Command -->
     <virtualType name="AmazonRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\RefundRequest</argument>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\RefundRequestBuilder</argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\RefundHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Payment\Gateway\Http\TransferFactory</argument>
             <argument name="validator" xsi:type="object">Amazon\Payment\Gateway\Validator\AuthorizationValidator
@@ -195,7 +195,7 @@
     <!-- Void command -->
     <virtualType name="AmazonVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\VoidRequest</argument>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Payment\Gateway\Request\VoidRequestBuilder</argument>
             <argument name="handler" xsi:type="object">Amazon\Payment\Gateway\Response\VoidHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Payment\Gateway\Http\TransferFactory</argument>
             <argument name="validator" xsi:type="object">Amazon\Payment\Gateway\Validator\AuthorizationValidator
@@ -208,7 +208,7 @@
     </virtualType>
 
     <!-- Void Request -->
-    <type name="Amazon\Payment\Gateway\Request\VoidRequest">
+    <type name="Amazon\Payment\Gateway\Request\VoidRequestBuilder">
         <arguments>
             <argument name="config" xsi:type="object">AmazonGatewayConfig</argument>
         </arguments>
