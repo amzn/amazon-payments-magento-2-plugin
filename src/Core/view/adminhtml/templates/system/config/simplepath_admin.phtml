@@ -14,9 +14,6 @@
  * permissions and limitations under the License.
  */
 -->
-<?php
-$attributes = $block->getJsonConfig();
-?>
 <br/>
 <div data-mage-init='{
         "Amazon_Core/js/simplepath": <?php echo /* @noEscape */ $block->getJsonConfig() ?> }'
@@ -57,7 +54,7 @@ $attributes = $block->getJsonConfig();
         <span class="apsp-or">
         &nbsp; <?= $block->escapeHtml(__('or')); ?> &nbsp;
           <a href="#" id="simplepath-skip">
-            <?= $block->escapeHtml(__("I've already setup Pay with Amazon, I want to edit my settings")); ?>
+            <?= $block->escapeHtml(__("I've already setup Amazon Pay, I want to edit my settings")); ?>
           </a>
         </span>
         <p id="amazon_https_required">
