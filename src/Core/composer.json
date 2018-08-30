@@ -7,7 +7,6 @@
     "Apache-2.0"
   ],
   "require": {
-    "php": "~7.0.13|~7.1.0",
     "magento/framework": "101.0.*",
     "magento/module-config": "101.0.*",
     "magento/module-store": "^100.1",
