@@ -115,7 +115,7 @@ class CaptureStrategyCommand implements CommandInterface
         }
 
         // capture on settlement/invoice
-        if (!$isCaptured && $this->isAuthorized($payment)) {
+        if (!$isCaptured && $payment->getAuthorizationTransaction()) {
             return self::CAPTURE;
         }
 
@@ -125,32 +125,6 @@ class CaptureStrategyCommand implements CommandInterface
         }
 
         return self::AUTHORIZE_CAPTURE;
-    }
-
-    /**
-     * Check if auth transaction exists
-     *
-     * @param  OrderPaymentInterface $payment
-     * @return boolean
-     */
-    private function isAuthorized(OrderPaymentInterface $payment) 
-    {
-        $filters = [];
-        $this->filterBuilder->setField('transaction_id')
-            ->setValue($payment->getLastTransId())
-            ->create();
-
-        $this->filterBuilder->setField('txn_type')
-            ->setValue(TransactionInterface::TYPE_AUTH)
-            ->create();
-
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
-            ->create();
-
-        $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
-
-        return (boolean) $count;
-
     }
 
     /**
