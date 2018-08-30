@@ -15,22 +15,11 @@
  */
 -->
 <?php
-$attributes = $block->getAmazonSp();
+$attributes = $block->getJsonConfig();
 ?>
 <br/>
 <div data-mage-init='{
-        "Amazon_Core/js/simplepath": {
-            "container": "amazon_simplepath",
-            "co": "<?= /* @noEscape */ strtolower($attributes['co']); ?>",
-            "region": "<?= /* @noEscape */ $attributes['region']; ?>",
-            "currency": "<?= /* @noEscape */ $attributes['currency']; ?>",
-            "amazonUrl": "<?= /* @noEscape */ $attributes['amazonUrl']; ?>",
-            "pollUrl": "<?= /* @noEscape */ $attributes['pollUrl']; ?>",
-            "isSecure": "<?= /* @noEscape */ $attributes['isSecure']; ?>",
-            "hasOpenssl": "<?= /* @noEscape */ $attributes['hasOpenssl']; ?>",
-            "formParams": <?= /* @noEscape */ json_encode($attributes['formParams']); ?>
-        }
-    }'
+        "Amazon_Core/js/simplepath": <?php echo /* @noEscape */ $block->getJsonConfig() ?> }'
     id="amazon_simplepath">
 
     <?php if (!$block->getCurrency()) : // SimplePath not supported ?>
