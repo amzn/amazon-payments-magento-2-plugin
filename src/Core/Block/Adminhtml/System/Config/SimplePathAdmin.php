@@ -42,9 +42,9 @@ class SimplePathAdmin extends \Magento\Framework\View\Element\Template
     /**
      * Return SimplePath settings
      */
-    public function getAmazonSp()
+    public function getJsonConfig()
     {
-        return $this->simplePath->getJsonAmazonSpConfig();
+        return json_encode($this->simplePath->getJsonAmazonSpConfig());
     }
 
     /**

@@ -52,7 +52,7 @@ define([
             self.$amazonMerchantId = $('#payment_' + self.getCountry() + '_' + self.selector
                 + '_credentials_merchant_id').val();
             self.$amazonSpBack = $('#amazon_simplepath_back');
-            self.$container = $('#' + self.container);
+            self.$container = $('#amazon_simplepath');
 
             if (self.$amazonMerchantId) {
                 self.hideAmazonConfig();
@@ -295,7 +295,7 @@ define([
          * @returns {String}
          */
         getCountry: function () {
-            return this.co;
+            return this.co.toLowerCase();
         },
 
         /**
