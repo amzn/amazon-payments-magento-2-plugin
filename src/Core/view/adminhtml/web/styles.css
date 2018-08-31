@@ -9,3 +9,4 @@
 .complex.amazon-payment-section .button-container { float:right; }
 .complex.amazon-payment-section .amazon-payment-byline { display: inline-block; vertical-align: middle; width: 50%; }
 .simplepath-wrapper-set.active .admin__collapsible-block { display:none; }
+.amazon-payment-section.section-config.active > .admin__collapsible-block + input + fieldset { margin-left: 40px; }
