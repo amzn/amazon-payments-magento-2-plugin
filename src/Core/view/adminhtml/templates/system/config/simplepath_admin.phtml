@@ -15,23 +15,9 @@
  * permissions and limitations under the License.
  */
 -->
-<?php
-$attributes = $block->getAmazonSp();
-?>
 <br/>
 <div data-mage-init='{
-        "Amazon_Core/js/simplepath": {
-            "container": "amazon_simplepath",
-            "co": "<?= /* @noEscape */ strtolower($attributes['co']); ?>",
-            "region": "<?= /* @noEscape */ $attributes['region']; ?>",
-            "currency": "<?= /* @noEscape */ $attributes['currency']; ?>",
-            "amazonUrl": "<?= /* @noEscape */ $attributes['amazonUrl']; ?>",
-            "pollUrl": "<?= /* @noEscape */ $attributes['pollUrl']; ?>",
-            "isSecure": "<?= /* @noEscape */ $attributes['isSecure']; ?>",
-            "hasOpenssl": "<?= /* @noEscape */ $attributes['hasOpenssl']; ?>",
-            "formParams": <?= /* @noEscape */ json_encode($attributes['formParams']); ?>
-        }
-    }'
+        "Amazon_Core/js/simplepath": <?php echo /* @noEscape */ $block->getJsonConfig() ?> }'
     id="amazon_simplepath">
 
     <?php if (!$block->getCurrency()) : // SimplePath not supported ?>
@@ -69,7 +55,7 @@ $attributes = $block->getAmazonSp();
         <span class="apsp-or">
         &nbsp; <?= $block->escapeHtml(__('or')); ?> &nbsp;
           <a href="#" id="simplepath-skip">
-            <?= $block->escapeHtml(__("I've already setup Pay with Amazon, I want to edit my settings")); ?>
+            <?= $block->escapeHtml(__("I've already setup Amazon Pay, I want to edit my settings")); ?>
           </a>
         </span>
         <p id="amazon_https_required">

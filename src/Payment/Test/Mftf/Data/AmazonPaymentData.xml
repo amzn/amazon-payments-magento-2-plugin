@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SampleAmazonPaymentConfig" type="amazon_payment_config_state">
+        <requiredEntity type="merchant_id">SampleMerchantId</requiredEntity>
+        <requiredEntity type="access_key">SampleAccessKey</requiredEntity>
+        <requiredEntity type="secret_key">SampleSecretKey</requiredEntity>
+        <requiredEntity type="client_id">SampleClientId</requiredEntity>
+        <requiredEntity type="client_secret">SampleClientSecret</requiredEntity>
+        <requiredEntity type="payment_region">SamplePaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">SampleSandbox</requiredEntity>
+        <requiredEntity type="payment_action">SamplePaymentAction</requiredEntity>
+        <requiredEntity type="authorization_mode">SampleAuthorizationMode</requiredEntity>
+    </entity>
+    <entity name="SampleMerchantId" type="merchant_id">
+        <data key="value">someMerchantId</data>
+    </entity>
+    <entity name="SampleAccessKey" type="access_key">
+        <data key="value">someAccessKey</data>
+    </entity>
+    <entity name="SampleSecretKey" type="secret_key">
+        <data key="value">somePrivateKey</data>
+    </entity>
+    <entity name="SampleClientId" type="client_id">
+        <data key="value">someClientId</data>
+    </entity>
+    <entity name="SampleClientSecret" type="client_secret">
+        <data key="value">someClientSecret</data>
+    </entity>
+    <entity name="SamplePaymentRegion" type="payment_region">
+        <data key="value">us</data>
+    </entity>
+    <entity name="SampleSandbox" type="sandbox">
+        <data key="value">1</data>
+    </entity>
+    <entity name="SamplePaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="SampleAuthorizationMode" type="authorization_mode">
+        <data key="value">synchronous</data>
+    </entity>
+    <!-- default configuration used to restore Magento config -->
+    <entity name="DefaultAmazonPaymentConfig" type="amazon_payment_config_state">
+        <requiredEntity type="merchant_id">DefaultMerchantId</requiredEntity>
+        <requiredEntity type="access_key">DefaultAccessKey</requiredEntity>
+        <requiredEntity type="secret_key">DefaultSecretKey</requiredEntity>
+        <requiredEntity type="client_id">DefaultClientId</requiredEntity>
+        <requiredEntity type="client_secret">DefaultClientSecret</requiredEntity>
+        <requiredEntity type="payment_region">DefaultPaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">DefaultSandbox</requiredEntity>
+        <requiredEntity type="payment_action">DefaultPaymentAction</requiredEntity>
+        <requiredEntity type="authorization_mode">DefaultAuthorizationMode</requiredEntity>
+    </entity>
+    <entity name="DefaultMerchantId" type="merchant_id">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultAccessKey" type="access_key">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultSecretKey" type="secret_key">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultClientId" type="client_id">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultClientSecret" type="client_secret">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaymentRegion" type="payment_region">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultSandbox" type="sandbox">
+        <data key="value"/>
+    </entity>
+    <entity name="DefaultPaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="DefaultAuthorizationMode" type="authorization_mode">
+        <data key="value">synchronous</data>
+    </entity>
+</entities>
