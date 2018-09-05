@@ -110,19 +110,23 @@ define([
                 return Modernizr.touch !== undefined ? Modernizr.touch : Modernizr.touchevents;
             },
 
-            /**
-             * Should we use the pop up login flow?
-             *  - are we on an HTTPS page (required for popup)
-             *  - confirm we are not on the product detail page (items are added asynchronously to the cart,
-             *    hence popups will be blocked)
-             *  - confirm we are not using a touch device (redirect provides a better mobile experience)
-             * @returns {Boolean}
-             * @public
-             */
-            usePopUp: function () {
-                return window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view') &&
-                    !_this._touchSupported();
-            },
+        /**
+         * Should we use the pop up login flow?
+         *  - are we on an HTTPS page (required for popup)
+         *  - confirm we are not on the product detail page (items are added asynchronously to the cart,
+         *    hence popups will be blocked)
+         *  - confirm we are not using a touch device (redirect provides a better mobile experience)
+         * @returns {Boolean}
+         * @public
+         */
+        usePopUp: function () {
+            if (!amazonPaymentConfig.getValue('allowAmLoginLoading')) {
+                return false;
+            }
+
+            return window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view') &&
+                !_this._touchSupported();
+        },
 
             /**
              * onAmazonPaymentsReady
