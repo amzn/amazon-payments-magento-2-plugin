@@ -16,7 +16,6 @@
 namespace Amazon\Login\Controller;
 
 use Amazon\Core\Client\ClientFactoryInterface;
-use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Core\Domain\AmazonCustomerFactory;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
@@ -137,7 +136,7 @@ abstract class Login extends Action
     /**
      * Load userinfo from access token
      *
-     * @return AmazonCustomerInterface
+     * @return AmazonCustomer|bool
      */
     protected function getAmazonCustomer()
     {
