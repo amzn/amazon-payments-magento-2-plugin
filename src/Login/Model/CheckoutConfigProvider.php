@@ -51,7 +51,7 @@ class CheckoutConfigProvider implements ConfigProviderInterface
     {
         $config = [];
 
-        /** @var \Amazon\Core\Api\Data\AmazonCustomerInterface $amazonCustomer */
+        /** @var \Amazon\Core\Api\Data\AmazonCustomer $amazonCustomer */
         if ($amazonCustomer = $this->customerSession->getAmazonCustomer()) {
             $config['amazon_customer_email'] = $amazonCustomer->getEmail();
         }
