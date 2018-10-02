@@ -8,15 +8,7 @@
   ],
   "require-dev": {
     "guzzlehttp/guzzle": "^6.2.0",
-    "phpunit/phpunit": "4.1.0",
-    "behat/behat": "^3.1.0",
-    "behat/mink": "^1.7.1",
-    "behat/mink-extension": "^2.2",
-    "behat/mink-goutte-driver": "^1.2.1",
-    "behat/mink-selenium2-driver": "^1.3.1",
-    "sensiolabs/behat-page-object-extension": "^2.0.0",
-    "bex/behat-magento2-init": "dev-master",
-    "ciaranmcnulty/behat-stepthroughextension": "dev-master"
+    "phpunit/phpunit": "4.1.0"
   },
   "require": {
     "php": "~7.0.13|~7.1.0",
@@ -37,10 +29,6 @@
     {
       "type": "composer",
       "url": "https://repo.magento.com/"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/jamescowie/behat-magento2-init.git"
     }
   ],
   "config": {
