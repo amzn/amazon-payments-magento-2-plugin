@@ -112,12 +112,12 @@
                             <config_path>payment/amazon_payment/button_size</config_path>
                         </field>
                         <field id="pwa_pp_button_is_visible" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Amazon Pay button on Product Page</label>
+                            <label>Show Amazon Pay button on product page</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/pwa_pp_button_is_visible</config_path>
                         </field>
                         <field id="minicart_button_is_visible" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Amazon Pay button in minicart</label>
+                            <label>Show Amazon Pay button in minicart</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/minicart_button_is_visible</config_path>
                         </field>
