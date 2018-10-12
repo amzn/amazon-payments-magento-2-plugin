@@ -7,8 +7,8 @@
     "Apache-2.0"
   ],
   "require": {
-    "amzn/amazon-pay-and-login-with-amazon-core-module": "2.2.0",
-    "amzn/login-with-amazon-module": "2.2.0",
-    "amzn/amazon-pay-module": "2.2.0"
+    "amzn/amazon-pay-and-login-with-amazon-core-module": "2.2.1",
+    "amzn/login-with-amazon-module": "2.2.1",
+    "amzn/amazon-pay-module": "2.2.1"
   }
 }
