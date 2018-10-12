@@ -280,8 +280,8 @@
     </type>
     <type name="Amazon\Payment\Model\QueuedRefundUpdater">
         <arguments>
-            <argument name="adminNotifier" xsi:type="object">Magento\Framework\Notification\NotifierInterface\Proxy
-            </argument>
+            <argument name="adminNotifier"
+                  xsi:type="object">Magento\Framework\Notification\NotifierInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Amazon\Payment\Api\Ipn\CompositeProcessorInterface">
