@@ -16,7 +16,6 @@
 namespace Amazon\Payment\Ipn;
 
 use Amazon\Core\Helper\Data;
-use Amazon\Core\Model\EnvironmentChecker;
 use Magento\Framework\ObjectManagerInterface;
 use AmazonPay\IpnHandlerInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -35,11 +34,6 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
     private $instanceName;
 
     /**
-     * @var EnvironmentChecker
-     */
-    private $environmentChecker;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -51,14 +45,12 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
 
     public function __construct(
         ObjectManagerInterface $objectManager,
-        EnvironmentChecker $environmentChecker,
         LoggerInterface $logger,
         Data $coreHelper,
         $instanceName = '\\AmazonPay\\IpnHandlerInterface'
     ) {
         $this->objectManager      = $objectManager;
         $this->instanceName       = $instanceName;
-        $this->environmentChecker = $environmentChecker;
         $this->logger             = $logger;
         $this->coreHelper         = $coreHelper;
     }
@@ -68,13 +60,6 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
      */
     public function create($headers, $body)
     {
-        if ($this->environmentChecker->isTestMode()) {
-            return $this->objectManager->create(
-                MockIpnHandler::class,
-                ['requestHeaders' => $headers, 'requestBody' => $body]
-            );
-        }
-
         $handler = $this->objectManager->create(
             $this->instanceName,
             ['requestHeaders' => $headers, 'requestBody' => $body]

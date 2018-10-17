@@ -44,84 +44,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '1.1.0', '<')) {
-            $linkTables = [
-                'quote_id' => QuoteLink::TABLE_NAME,
-                'order_id' => OrderLink::TABLE_NAME
-            ];
 
-            foreach ($linkTables as $fieldName => $tableName) {
-                $table = $setup->getConnection()->newTable($setup->getTable($tableName));
-
-                $table
-                    ->addColumn(
-                        'entity_id',
-                        Table::TYPE_INTEGER,
-                        null,
-                        [
-                            'identity' => true,
-                            'unsigned' => true,
-                            'primary'  => true,
-                            'nullable' => false
-                        ]
-                    )
-                    ->addColumn(
-                        $fieldName,
-                        Table::TYPE_INTEGER,
-                        null,
-                        [
-                            'unsigned' => true,
-                            'nullable' => false
-                        ]
-                    )
-                    ->addColumn(
-                        'amazon_order_reference_id',
-                        Table::TYPE_TEXT,
-                        255,
-                        [
-                            'nullable' => false
-                        ]
-                    )
-                    ->addIndex(
-                        $setup->getIdxName(
-                            $tableName,
-                            [$fieldName],
-                            AdapterInterface::INDEX_TYPE_UNIQUE
-                        ),
-                        [$fieldName],
-                        ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
-                    );
-
-                $setup->getConnection()->createTable($table);
-            }
-        }
-
-        if (version_compare($context->getVersion(), '1.2.0', '<')) {
-            $setup->getConnection()->addColumn(
-                $setup->getTable(QuoteLink::TABLE_NAME),
-                'sandbox_simulation_reference',
-                [
-                    'type'     => Table::TYPE_TEXT,
-                    'length'   => 255,
-                    'nullable' => true,
-                    'comment'  => 'Sandbox simulation reference'
-                ]
-            );
-        }
-
-        if (version_compare($context->getVersion(), '1.3.0', '<')) {
-            $setup->getConnection()->addColumn(
-                $setup->getTable(QuoteLink::TABLE_NAME),
-                'confirmed',
-                [
-                    'unsigned' => true,
-                    'nullable' => false,
-                    'default'  => 0,
-                    'type'     => Table::TYPE_SMALLINT,
-                    'comment'  => 'Quote confirmed with Amazon'
-                ]
-            );
-        }
 
         if (version_compare($context->getVersion(), '1.4.0', '<')) {
             $table = $setup->getConnection()->newTable($setup->getTable(PendingCapture::TABLE_NAME));
@@ -167,25 +90,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->createTable($table);
         }
 
-        if (version_compare($context->getVersion(), '1.6.0', '<')) {
-            $setup->getConnection()->addForeignKey(
-                $setup->getFkName(QuoteLink::TABLE_NAME, 'quote_id', $setup->getTable('quote'), 'entity_id'),
-                $setup->getTable(QuoteLink::TABLE_NAME),
-                'quote_id',
-                $setup->getTable('quote'),
-                'entity_id',
-                AdapterInterface::FK_ACTION_CASCADE
-            );
-
-            $setup->getConnection()->addForeignKey(
-                $setup->getFkName(OrderLink::TABLE_NAME, 'order_id', $setup->getTable('sales_order'), 'entity_id'),
-                $setup->getTable(OrderLink::TABLE_NAME),
-                'order_id',
-                $setup->getTable('sales_order'),
-                'entity_id',
-                AdapterInterface::FK_ACTION_CASCADE
-            );
-        }
 
         if (version_compare($context->getVersion(), '1.7.0', '<')) {
             $this->addColumnsToPendingCaptureQueue($setup);
