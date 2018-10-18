@@ -3,7 +3,9 @@
     <system>
         <section id="payment">
             <group id="amazon_payment" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Amazon Pay</label>
+                <label><![CDATA[<div class="amazon-payment-logo"></div><div class="amazon-payment-byline">The convenient, trusted way to pay.<br/>Let your customers check out in just a few clicks or taps using the shipping and payment info already stored in their Amazon account.</div>]]></label>
+                <fieldset_css>complex amazon-payment-section</fieldset_css>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <field id="simplepath" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\SimplepathConfig</frontend_model>
                 </field>
@@ -112,17 +114,17 @@
                             <config_path>payment/amazon_payment/button_size</config_path>
                         </field>
                         <field id="pwa_pp_button_is_visible" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Amazon Pay button on Product Page</label>
+                            <label>Show Amazon Pay button on product page</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/pwa_pp_button_is_visible</config_path>
                         </field>
                         <field id="minicart_button_is_visible" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Amazon Pay button in minicart</label>
+                            <label>Show Amazon Pay button in minicart</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/minicart_button_is_visible</config_path>
                         </field>
                         <field id="amazonloggin" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Display Amazon Pay Method</label>
+                            <label>Show Amazon Pay in payment methods</label>
                             <comment><![CDATA[If enabled, Amazon Pay is presented as an option in the list of available payment methods during the final step of checkout.]]></comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazonlogin/active</config_path>

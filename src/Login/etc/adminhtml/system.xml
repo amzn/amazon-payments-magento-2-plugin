@@ -22,9 +22,10 @@
                 <group id="advanced">
                     <group id="frontend">
                         <field id="amazon_login_in_popup" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Login with Amazon available in authentication popup</label>
+                            <label>Show Login with Amazon in authentication popup</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/amazon_login_in_popup</config_path>
+                            <comment><![CDATA[Displays Login with Amazon Pay option in Magento's account login popup.]]></comment>
                         </field>
                     </group>
                 </group>
