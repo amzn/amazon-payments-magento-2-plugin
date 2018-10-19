@@ -55,7 +55,7 @@ class QuoteLinkManagement implements QuoteLinkManagementInterface
         $amazonQuote->load($cart->getId(), 'quote_id');
 
         if ($amazonQuote->getId()) {
-            $cartExtension->setAmazonOrderReferenceId($amazonQuote->getAmazonOrderReferenceId());
+            $cartExtension->setAmazonOrderReferenceId($amazonQuote);
         }
 
         $cart->setExtensionAttributes($cartExtension);
