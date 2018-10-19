@@ -66,7 +66,7 @@ class LoadOrder implements ObserverInterface
             $amazonOrder->load($order->getId(), 'order_id');
 
             if ($amazonOrder->getId()) {
-                $orderExtension->setAmazonOrderReferenceId($amazonOrder->getAmazonOrderReferenceId());
+                $orderExtension->setAmazonOrderReferenceId($amazonOrder);
             }
         }
 
