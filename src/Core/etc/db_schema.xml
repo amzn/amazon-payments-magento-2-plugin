@@ -9,12 +9,12 @@
         <column xsi:type="varchar" name="sandbox_simulation_reference" nullable="true" length="255" comment="Sandbox simulation reference"/>
         <column xsi:type="smallint" name="confirmed" padding="5" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Quote confirmed with Amazon"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="AMAZON_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID" table="amazon_quote"
+        <constraint xsi:type="foreign" referenceId="AMAZON_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID" table="amazon_quote"
                     column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="AMAZON_QUOTE_QUOTE_ID" indexType="btree">
+        <index referenceId="AMAZON_QUOTE_QUOTE_ID" indexType="btree">
             <column name="quote_id"/>
         </index>
     </table>
@@ -24,12 +24,12 @@
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
         <column xsi:type="varchar" name="amazon_order_reference_id" nullable="false" length="255" comment="Amazon Order Reference ID"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="AMAZON_SALES_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID" table="amazon_sales_order"
+        <constraint xsi:type="foreign" referenceId="AMAZON_SALES_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID" table="amazon_sales_order"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="AMAZON_SALES_ORDER_ORDER_ID" indexType="btree">
+        <index referenceId="AMAZON_SALES_ORDER_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
     </table>
