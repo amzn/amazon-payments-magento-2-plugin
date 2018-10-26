@@ -20,7 +20,6 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 
 class CompleteAuthHandler implements HandlerInterface
@@ -76,7 +75,6 @@ class CompleteAuthHandler implements HandlerInterface
     {
 
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
-        $amazonId = $this->subjectReader->getAmazonId();
         $payment = $paymentDO->getPayment();
         $order = $this->subjectReader->getOrder();
 

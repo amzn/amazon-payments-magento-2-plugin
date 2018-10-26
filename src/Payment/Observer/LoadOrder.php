@@ -21,6 +21,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
+use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
+use Amazon\Payment\Model\Adapter\AmazonPaymentAdapter;
 
 class LoadOrder implements ObserverInterface
 {
@@ -39,14 +41,22 @@ class LoadOrder implements ObserverInterface
      */
     private $coreHelper;
 
+    private $quoteLinkFactory;
+
+    private $adapter;
+
     public function __construct(
         OrderExtensionFactory $orderExtensionFactory,
         OrderLinkInterfaceFactory $orderLinkFactory,
-        Data $coreHelper
+        Data $coreHelper,
+        QuoteLinkInterfaceFactory $quoteLinkFactory,
+        AmazonPaymentAdapter $adapter
     ) {
         $this->orderExtensionFactory = $orderExtensionFactory;
         $this->orderLinkFactory      = $orderLinkFactory;
         $this->coreHelper            = $coreHelper;
+        $this->quoteLinkFactory = $quoteLinkFactory;
+        $this->adapter = $adapter;
     }
 
     public function execute(Observer $observer)
@@ -62,11 +72,26 @@ class LoadOrder implements ObserverInterface
         $orderExtension = ($order->getExtensionAttributes()) ?: $this->orderExtensionFactory->create();
 
         if ($order->getId()) {
+
             $amazonOrder = $this->orderLinkFactory->create();
             $amazonOrder->load($order->getId(), 'order_id');
 
             if ($amazonOrder->getId()) {
                 $orderExtension->setAmazonOrderReferenceId($amazonOrder);
+            }
+            else {
+                if ($order->getQuoteId()) {
+                    $quoteLink = $this->quoteLinkFactory->create();
+                    $quoteLink->load($order->getQuoteId(), 'quote_id');
+
+                    if ($quoteLink->getAmazonOrderReferenceId()) {
+                        $amazonOrder->setAmazonOrderReferenceId($quoteLink->getAmazonOrderReferenceId())
+                            ->setOrderId($order->getId())
+                            ->save();
+
+                        $this->adapter->setOrderAttributes($order->getStoreId(), $quoteLink->getAmazonOrderReferenceId(), $order->getIncrementId());
+                    }
+                }
             }
         }
 

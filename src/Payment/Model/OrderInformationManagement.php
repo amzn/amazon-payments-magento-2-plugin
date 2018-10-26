@@ -131,7 +131,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'amazon_order_reference_id' => $amazonOrderReferenceId,
                 'amount'                    => $quote->getGrandTotal(),
                 'currency_code'             => $quote->getQuoteCurrencyCode(),
-                'seller_order_id'           => $quote->getReservedOrderId(),
                 'store_name'                => $storeName,
                 'custom_information'        =>
                     'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
