@@ -1,36 +1,29 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="amazon_quote" resource="checkout" engine="innodb" comment="amazon_quote">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity ID"/>
-        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Quote ID"/>
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Quote ID"/>
         <column xsi:type="varchar" name="amazon_order_reference_id" nullable="false" length="255" comment="Amazon Order Reference ID"/>
         <column xsi:type="varchar" name="sandbox_simulation_reference" nullable="true" length="255" comment="Sandbox simulation reference"/>
-        <column xsi:type="smallint" name="confirmed" padding="5" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Quote confirmed with Amazon"/>
+        <column xsi:type="smallint" name="confirmed" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Quote confirmed with Amazon"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="AMAZON_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID" table="amazon_quote"
-                    column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index referenceId="AMAZON_QUOTE_QUOTE_ID" indexType="btree">
+        <constraint xsi:type="foreign" referenceId="AMAZON_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID" table="amazon_quote" column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="AMAZON_QUOTE_QUOTE_ID">
             <column name="quote_id"/>
-        </index>
+        </constraint>
     </table>
     <table name="amazon_sales_order" resource="sales" engine="innodb" comment="amazon_sales_order">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity ID"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Order ID"/>
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Order ID"/>
         <column xsi:type="varchar" name="amazon_order_reference_id" nullable="false" length="255" comment="Amazon Order Reference ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="AMAZON_SALES_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID" table="amazon_sales_order"
-                    column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index referenceId="AMAZON_SALES_ORDER_ORDER_ID" indexType="btree">
+        <constraint xsi:type="foreign" referenceId="AMAZON_SALES_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID" table="amazon_sales_order" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="AMAZON_SALES_ORDER_ORDER_ID">
             <column name="order_id"/>
-        </index>
+        </constraint>
     </table>
 </schema>
