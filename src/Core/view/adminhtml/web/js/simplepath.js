@@ -107,7 +107,7 @@ define(
                  * @param self
                  */
                 updateCredentials: function (self) {
-                    var elJson = self.$amazonCredentialJson.val(), obj = null;
+                    var elJson = self.$amazonCredentialJson.val(), obj = null, success = true, item = null;
 
                     try {
                         obj = $.parseJSON($.trim(elJson));
@@ -121,11 +121,10 @@ define(
                     }
 
                     if (obj && typeof obj === 'object') {
-                        var success = true;
 
                         for (var prop in obj) {
-                            if ($.trim(prop)) {
-                                var item = $('#payment_' + self.getCountry() + '_amazon_payment_credentials_'
+                            if (obj.hasOwnProperty(prop)) {
+                                item = $('#payment_' + self.getCountry() + '_amazon_payment_credentials_'
                                     + $.trim(prop));
 
                                 if (item && item.length) {
