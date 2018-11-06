@@ -154,16 +154,17 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function (data) {
-                        var amazonAddress = data.shift(),
-                            addressData;
+                        var amazonAddress = data.shift(), addressData;
 
                         addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress);
                         addressData.telephone = !addressData.telephone ? '0000000000' : addressData.telephone;
 
                         selectBillingAddress(addressData);
                         amazonStorage.isPlaceOrderDisabled(false);
+
                         if(window.checkoutConfig.amazonLogin.amazon_customer_email) {
                             var customerField = $('#customer-email').val();
+
                             if (!customerField) {
                                 $('#customer-email').val(window.checkoutConfig.amazonLogin.amazon_customer_email);
                             }

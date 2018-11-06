@@ -21,11 +21,11 @@ define([
     'modernizr/modernizr',
     'amazonCore',
     'jquery/ui',
-    'uiRegistry',
+    'uiRegistry'
 ], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf) {
     'use strict';
-    var _this,
-        $button;
+    var _this, $button;
+
     if (amazonPaymentConfig.isDefined()) {
         $.widget('amazon.AmazonButton', {
             options: {
@@ -97,7 +97,8 @@ define([
              * @return {String}
              */
             _popupCallback: function () {
-                return _this.usePopUp() ? _this.secureHttpsCallback : amazonPaymentConfig.getValue('oAuthHashRedirectUrl');
+                return _this.usePopUp() ? _this.secureHttpsCallback :
+                    amazonPaymentConfig.getValue('oAuthHashRedirectUrl');
             },
 
             /**
