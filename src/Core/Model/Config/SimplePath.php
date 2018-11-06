@@ -52,7 +52,15 @@ class SimplePath
     private $_scope;
     private $_scopeId;
 
+    /**
+     * @var CoreHelper
+     */
     private $coreHelper;
+
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
 
     /**
      * SimplePath constructor.
@@ -70,6 +78,7 @@ class SimplePath
      * @param UrlInterface $backendUrl
      * @param \Magento\Paypal\Model\Config $paypal
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Escaper $escaper
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,7 +96,8 @@ class SimplePath
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Paypal\Model\Config $paypal,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Escaper $escaper
     ) {
         $this->coreHelper    = $coreHelper;
         $this->config        = $config;
@@ -102,6 +112,7 @@ class SimplePath
         $this->storeManager  = $storeManager;
         $this->paypal        = $paypal;
         $this->logger        = $logger;
+        $this->escaper       = $escaper;
 
         $this->messageManager = $messageManager;
 
@@ -484,7 +495,7 @@ class SimplePath
             'spId'        => isset($this->_spIds[$currency]) ? $this->_spIds[$currency] : '',
             'spSoftwareVersion'           => $this->productMeta->getVersion(),
             'spAmazonPluginVersion'       => $coreVersion,
-            'merchantStoreDescription'    => $this->getConfig('general/store_information/name'),
+            'merchantStoreDescription'    => $this->escaper->escapeQuote($this->getConfig('general/store_information/name')),
             'merchantLoginDomains[]'      => $baseUrls,
             'merchantLoginRedirectURLs[]' => $urlArray,
         ];
