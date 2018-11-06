@@ -16,12 +16,12 @@
 var registry = require('uiRegistry');
 
 if (registry.get('amazonPayment') !== undefined) {
-
     var amazonPayment = registry.get('amazonPayment');
 
     define([amazonPayment.widgetUrl], function () {
         'use strict';
 
         //after amazon widgets file as loaded
+
     });
 }
