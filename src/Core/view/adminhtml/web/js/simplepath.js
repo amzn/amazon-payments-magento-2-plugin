@@ -107,7 +107,7 @@ define(
                  * @param self
                  */
                 updateCredentials: function (self) {
-                    var elJson = self.$amazonCredentialJson.val(), obj = null;
+                    var elJson = self.$amazonCredentialJson.val(), obj = null, success = true, item = null;
 
                     try {
                         obj = $.parseJSON($.trim(elJson));
@@ -121,11 +121,10 @@ define(
                     }
 
                     if (obj && typeof obj === 'object') {
-                        var success = true;
 
                         for (var prop in obj) {
-                            if ($.trim(prop)) {
-                                var item = $('#payment_' + self.getCountry() + '_amazon_payment_credentials_'
+                            if (obj.hasOwnProperty(prop)) {
+                                item = $('#payment_' + self.getCountry() + '_amazon_payment_credentials_'
                                     + $.trim(prop));
 
                                 if (item && item.length) {
@@ -245,7 +244,6 @@ define(
                  * Sets up dynamic form for capturing popup/form input for simple path setup.
                  */
                 generateSimplePathForm: function () {
-                    var spElement = null;
 
                     this.$form = new Element('form', {
                         method: 'post',
@@ -259,28 +257,24 @@ define(
 
                     // Convert formParams JSON to hidden inputs
                     for (var key in this.formParams) {
-                        if (typeof this.formParams[key] == 'object' || typeof this.formParams[key] === 'array') {
+                        if ( $.isPlainObject(this.formParams[key]) || $.isArray(this.formParams[key])) {
                             for (var i in this.formParams[key]) {
                                 if (typeof this.formParams[key][i] !== 'function') {
-                                    spElement = new Element('input', {
+                                    $(new Element('input', {
                                         type: 'hidden',
                                         name: key,
                                         value: this.formParams[key][i],
                                         novalidate: 'novalidate'
-                                    });
-
-                                    $(spElement).appendTo($("#simplepath_form"));
+                                    })).appendTo($("#simplepath_form"));
                                 }
                             }
                         } else {
-                            spElement = new Element('input', {
+                            $(new Element('input', {
                                 type: 'hidden',
                                 name: key,
                                 novalidate: 'novalidate',
                                 value: this.formParams[key]
-                            });
-
-                            $(spElement).appendTo($("#simplepath_form"));
+                            })).appendTo($("#simplepath_form"));
                         }
                     }
 
@@ -370,13 +364,9 @@ define(
                  * @returns {number}
                  */
                 windowWidth: function () {
-                    if (window.innerWidth) {
-                        return window.innerWidth;
-                    } else if (document.documentElement.clientWidth) {
-                        return document.documentElement.clientWidth;
-                    }
-
-                    return screen.width;
+                    return window.innerWidth
+                        || document.documentElement.clientWidth
+                        || screen.width;
                 },
 
                 /**
@@ -384,13 +374,9 @@ define(
                  * @returns {number}
                  */
                 windowHeight: function () {
-                    if (window.innerHeight) {
-                        return window.innerHeight;
-                    } else if (document.documentElement.clientHeight) {
-                        return document.documentElement.clientHeight;
-                    }
-
-                    return screen.height;
+                    return window.innerHeight
+                        || document.documentElement.clientHeight
+                        || screen.height;
                 }
             }
         );
