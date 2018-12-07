@@ -18,10 +18,11 @@ define([
     'amazonCore',
     'amazonPaymentConfig',
     'amazonCsrf',
+    'Magento_Customer/js/customer-data',
     'mage/loader',
     'jquery/ui',
     'mage/cookies'
-], function ($, amazonCore, amazonPaymentConfig, amazonCsrf) {
+], function ($, amazonCore, amazonPaymentConfig, amazonCsrf, customerData) {
     'use strict';
 
     var self;
@@ -49,8 +50,18 @@ define([
                 amazonCore.verifyAmazonLoggedIn().then(function (loggedIn) {
                     if (loggedIn) {
                         self.redirect();
+                    } else {
+                        window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
                     }
-                }, 0);
+                }, function(error) {
+                    $('body').trigger('processStop');
+                    customerData.set('messages', {
+                        messages: [{
+                            type: 'error',
+                            text: error
+                        }]
+                    });
+                });
             }, this);
         },
 
