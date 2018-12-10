@@ -26,7 +26,9 @@ define([
     var clientId = amazonPaymentConfig.getValue('clientId'),
         amazonDefined = ko.observable(false),
         amazonLoginError = ko.observable(false),
-        accessToken = ko.observable(null);
+        accessToken = ko.observable(null),
+        // Match region config to amazon.Login.Region
+        regions = {'us': 'NA', 'de': 'EU', 'uk': 'EU', 'jp': 'APAC'};
 
     if (typeof amazon === 'undefined') {
         /**
@@ -35,6 +37,12 @@ define([
         window.onAmazonLoginReady = function () {
             setClientId(clientId);  //eslint-disable-line no-use-before-define
             doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
+
+            var sandboxMode = amazonPaymentConfig.getValue('isSandboxEnabled', false);
+            amazon.Login.setSandboxMode(sandboxMode); //eslint-disable-line no-undef
+
+            var region = regions[amazonPaymentConfig.getValue('region')];
+            amazon.Login.setRegion(region); //eslint-disable-line no-undef
         };
     } else {
         setClientId(clientId);  //eslint-disable-line no-use-before-define
