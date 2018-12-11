@@ -107,7 +107,6 @@ class CaptureRequestBuilder implements BuilderInterface
                 'amazon_order_reference_id' => $amazonId,
                 'amount' => $order->getGrandTotalAmount(),
                 'currency_code' => $order->getCurrencyCode(),
-                'seller_order_id' => $order->getOrderIncrementId(),
                 'store_name' => $quote->getStore()->getName(),
                 'custom_information' =>
                     'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .

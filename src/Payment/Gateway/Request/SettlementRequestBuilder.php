@@ -119,7 +119,6 @@ class SettlementRequestBuilder implements BuilderInterface
                 'amazon_order_reference_id' => $quoteLink->getAmazonOrderReferenceId(),
                 'store_id' => $quote->getStoreId(),
                 'store_name' => $quote->getStore()->getName(),
-                'seller_order_id' => $order->getIncrementId(),
                 'custom_information' =>
                     'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
                     'Plugin Version : ' . $this->coreHelper->getVersion(),

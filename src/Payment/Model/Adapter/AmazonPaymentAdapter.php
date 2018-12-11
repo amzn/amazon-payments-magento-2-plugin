@@ -346,6 +346,20 @@ class AmazonPaymentAdapter
     }
 
     /**
+     * @param $storeId
+     * @param $amazonId
+     * @param $orderId
+     */
+    public function setOrderAttributes($storeId, $amazonId, $orderId) {
+        $orderAttributes = [
+            'amazon_order_reference_id' => $amazonId,
+            'seller_order_id' => $orderId
+        ];
+
+        $this->clientFactory->create($storeId)->setOrderAttributes($orderAttributes);
+    }
+
+    /**
      * @param $data
      * @return bool
      */
