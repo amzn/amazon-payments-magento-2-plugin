@@ -13,19 +13,18 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Payment\Observer;
+namespace Amazon\Login\Controller\Logout;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer;
-use Amazon\Core\Helper\Data;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Amazon\Login\Helper\Session;
 
-class KlarnaKcoOverride implements ObserverInterface
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var Data
+     * @var JsonFactory
      */
-    private $coreHelper;
+    private $jsonFactory;
 
     /**
      * @var Session
@@ -33,22 +32,20 @@ class KlarnaKcoOverride implements ObserverInterface
     private $sessionHelper;
 
     /**
-     * @param Data $coreHelper
-     * @param Session $sessionHelper
+     * @param Context     $context
+     * @param JsonFactory $jsonFactory
+     * @param Session     $sessionHelper
      */
-    public function __construct(
-        Data $coreHelper,
-        Session $sessionHelper
-    ) {
-        $this->coreHelper    = $coreHelper;
+    public function __construct(Context $context, JsonFactory $jsonFactory, Session $sessionHelper)
+    {
+        parent::__construct($context);
+        $this->jsonFactory   = $jsonFactory;
         $this->sessionHelper = $sessionHelper;
     }
 
-    public function execute(Observer $observer)
+    public function execute()
     {
-        if ($this->coreHelper->isPwaEnabled() && $this->sessionHelper->isAmazonLoggedIn()) {
-            // Force customer to use default (Amazon) checkout
-            $observer->getOverrideObject()->setForceDisabled(true);
-        }
+        $this->sessionHelper->setIsAmazonLoggedIn(false);
+        return $this->jsonFactory->create();
     }
 }

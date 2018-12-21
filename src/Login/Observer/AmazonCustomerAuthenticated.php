@@ -19,7 +19,7 @@ use Amazon\Login\Helper\Session as SessionHelper;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-class ClearAmazonCustomer implements ObserverInterface
+class AmazonCustomerAuthenticated implements ObserverInterface
 {
     /**
      * @var SessionHelper
@@ -39,6 +39,7 @@ class ClearAmazonCustomer implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        $this->sessionHelper->setIsAmazonLoggedIn(true);
         $this->sessionHelper->clearAmazonCustomer();
     }
 }

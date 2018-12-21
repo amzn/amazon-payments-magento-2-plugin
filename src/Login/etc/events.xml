@@ -17,7 +17,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="amazon_customer_authenticated">
-        <observer name="clear_amazon_customer" instance="Amazon\Login\Observer\ClearAmazonCustomer" />
+        <observer name="amazon_login_customer_authenticated" instance="Amazon\Login\Observer\AmazonCustomerAuthenticated" />
     </event>
     <event name="amazon_login_authorize_error">
         <observer name="amazon_login_set_cookie_on_authorize_error" instance="Amazon\Login\Observer\SetAuthorizeErrorCookie" />
