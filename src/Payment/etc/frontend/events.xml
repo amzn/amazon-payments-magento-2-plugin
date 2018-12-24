@@ -19,4 +19,7 @@
     <event name="shortcut_buttons_container">
         <observer name="amazon_buttons" instance="Amazon\Payment\Observer\AddAmazonButton"/>
     </event>
+    <event name="kco_override_load_checkout">
+        <observer name="amazon_core_klarna_kco_override" instance="Amazon\Payment\Observer\KlarnaKcoOverride" />
+    </event>
 </config>

@@ -62,8 +62,9 @@ class Session
      */
     public function login(CustomerInterface $customerData)
     {
+        $this->dispatchAuthenticationEvent();
+
         if ($customerData->getId() != $this->session->getId() || !$this->session->isLoggedIn()) {
-            $this->dispatchAuthenticationEvent();
             $this->session->setCustomerDataAsLoggedIn($customerData);
             $this->session->regenerateId();
             $this->checkoutSession->loadCustomerQuote();
@@ -121,6 +122,28 @@ class Session
     public function isLoggedIn()
     {
         return $this->session->isLoggedIn();
+    }
+
+    /**
+     * Check if user is logged in to Amazon
+     *
+     * @return bool
+     */
+    public function isAmazonLoggedIn()
+    {
+        return $this->session->getIsAmazonLoggedIn();
+    }
+
+    /**
+     * @return void
+     */
+    public function setIsAmazonLoggedIn($isLoggedIn)
+    {
+        if ($isLoggedIn) {
+            $this->session->setIsAmazonLoggedIn(true);
+        } else {
+            $this->session->unsIsAmazonLoggedIn();
+        }
     }
 
     /**

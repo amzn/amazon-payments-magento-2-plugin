@@ -16,11 +16,12 @@
 define([
     'jquery',
     'ko',
+    'mage/url',
     'amazonPaymentConfig',
     'amazonWidgetsLoader',
     'bluebird',
     'jquery/jquery-storageapi'
-], function ($, ko, amazonPaymentConfig) {
+], function ($, ko, url, amazonPaymentConfig) {
     'use strict';
 
     var clientId = amazonPaymentConfig.getValue('clientId'),
@@ -62,16 +63,21 @@ define([
      * Log user out of amazon
      */
     function amazonLogout() {
-        if (amazonDefined()) {
-            amazon.Login.logout(); //eslint-disable-line no-undef
-        } else {
-            var logout = amazonDefined.subscribe(function (defined) { //eslint-disable-line vars-on-top
-                if (defined) {
-                    amazon.Login.logout(); // eslint-disable-line no-undef
-                    logout.dispose(); //remove subscribe
-                }
-            });
-        }
+        $.ajax({
+            url: url.build('amazon/logout'),
+            context: this
+        }).always(function () {
+            if (amazonDefined()) {
+                amazon.Login.logout(); //eslint-disable-line no-undef
+            } else {
+                var logout = amazonDefined.subscribe(function (defined) { //eslint-disable-line vars-on-top
+                    if (defined) {
+                        amazon.Login.logout(); // eslint-disable-line no-undef
+                        logout.dispose(); //remove subscribe
+                    }
+                });
+            }
+        });
     }
 
     /**
