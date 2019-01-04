@@ -581,13 +581,28 @@ class Data extends AbstractHelper
     {
         return ($this->isLwaEnabled() && $this->isPwaEnabled() && $this->isCurrentCurrencySupportedByAmazon());
     }
+    
+    /**
+     * Retrieves the base currency of the store.
+     *
+     * @param null $store
+     * @return mixed
+     */
+    public function getBaseCurrencyCode($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            'currency/options/base',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }    
 
     /**
      * @return bool
      */
     public function isCurrentCurrencySupportedByAmazon()
     {
-        return $this->getCurrentCurrencyCode() == $this->getCurrencyCode();
+        return $this->getBaseCurrencyCode() == $this->getCurrencyCode();
     }
 
     /**
