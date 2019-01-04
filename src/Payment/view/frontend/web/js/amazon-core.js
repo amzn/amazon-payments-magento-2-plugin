@@ -50,6 +50,11 @@ define([
         doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
     }
 
+    // Widgets.js ready callback
+    window.onAmazonPaymentsReady = function() {
+        $(window).trigger('OffAmazonPayments');
+    }
+
     /**
      * Set Client ID
      * @param {String} cid
