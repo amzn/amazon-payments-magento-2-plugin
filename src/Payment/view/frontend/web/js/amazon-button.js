@@ -24,9 +24,10 @@ define([
     'uiRegistry'
 ], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf) {
     'use strict';
-    var _this, $button;
+    var _this;
 
     if (amazonPaymentConfig.isDefined()) {
+
         $.widget('amazon.AmazonButton', {
             options: {
                 merchantId: null,
@@ -42,9 +43,16 @@ define([
              */
             _create: function () {
                 _this = this;
-                $button = this.element;
+                var __this = this;
                 this._verifyAmazonConfig();
-                _this._renderAmazonButton();
+
+                if (typeof OffAmazonPayments === 'undefined') {
+                    $(window).on('OffAmazonPayments', function() {
+                        __this._renderAmazonButton();
+                    });
+                } else {
+                    this._renderAmazonButton();
+                }
             },
 
             /**
@@ -53,15 +61,15 @@ define([
              */
             _verifyAmazonConfig: function () {
                 if (amazonPaymentConfig.isDefined()) {
-                    _this.options.merchantId = amazonPaymentConfig.getValue('merchantId');
-                    _this.options.buttonType = _this.options.buttonType === 'LwA' ?
+                    this.options.merchantId = amazonPaymentConfig.getValue('merchantId');
+                    this.options.buttonType = this.options.buttonType === 'LwA' ?
                         amazonPaymentConfig.getValue('buttonTypeLwa') : amazonPaymentConfig.getValue('buttonTypePwa');
-                    _this.options.buttonColor = amazonPaymentConfig.getValue('buttonColor');
-                    _this.options.buttonSize = amazonPaymentConfig.getValue('buttonSize');
-                    _this.options.redirectUrl = amazonPaymentConfig.getValue('redirectUrl');
-                    _this.options.loginPostUrl = amazonPaymentConfig.getValue('loginPostUrl');
-                    _this.options.loginScope = amazonPaymentConfig.getValue('loginScope');
-                    _this.options.buttonLanguage = amazonPaymentConfig.getValue('displayLanguage');
+                    this.options.buttonColor = amazonPaymentConfig.getValue('buttonColor');
+                    this.options.buttonSize = amazonPaymentConfig.getValue('buttonSize');
+                    this.options.redirectUrl = amazonPaymentConfig.getValue('redirectUrl');
+                    this.options.loginPostUrl = amazonPaymentConfig.getValue('loginPostUrl');
+                    this.options.loginScope = amazonPaymentConfig.getValue('loginScope');
+                    this.options.buttonLanguage = amazonPaymentConfig.getValue('displayLanguage');
                 }
             },
 
@@ -123,7 +131,7 @@ define([
              */
             usePopUp: function () {
                 return window.location.protocol === 'https:' && !$('body').hasClass('catalog-product-view') &&
-                    !_this._touchSupported();
+                    !this._touchSupported();
             },
 
             /**
@@ -131,11 +139,11 @@ define([
              * @private
              */
             _renderAmazonButton: function () {
-                OffAmazonPayments.Button($button.attr('id'), _this.options.merchantId, { //eslint-disable-line no-undef
-                    type: _this.options.buttonType,
-                    color: _this.options.buttonColor,
-                    size: _this.options.buttonSize,
-                    language: _this.options.buttonLanguage,
+                OffAmazonPayments.Button(this.element[0].id, this.options.merchantId, { //eslint-disable-line no-undef
+                    type: this.options.buttonType,
+                    color: this.options.buttonColor,
+                    size: this.options.buttonSize,
+                    language: this.options.buttonLanguage,
 
                     /**
                      * Authorization callback
@@ -155,8 +163,8 @@ define([
              */
             _getLoginOptions: function () {
                 return {
-                    scope: _this.options.loginScope,
-                    popup: _this.usePopUp(),
+                    scope: this.options.loginScope,
+                    popup: this.usePopUp(),
                     state: amazonCsrf.generateNewValue()
                 };
             }
