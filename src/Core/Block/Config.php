@@ -83,6 +83,7 @@ class Config extends Template
             'loginScope'               => $this->coreHelper->getLoginScope(),
             'allowAmLoginLoading'      => $this->coreHelper->allowAmLoginLoading(),
             'isEuPaymentRegion'        => $this->coreHelper->isEuPaymentRegion(),
+            'presentmentCurrency'      => $this->coreHelper->getPresentmentCurrency(),
             'oAuthHashRedirectUrl'     => $this->coreHelper->getOAuthRedirectUrl(),
             'isQuoteDirty'             => $this->categoryExclusionHelper->isQuoteDirty(),
             'region'                   => $this->coreHelper->getRegion()

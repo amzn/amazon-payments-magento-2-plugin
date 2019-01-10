@@ -86,6 +86,7 @@ define(
                 new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
                     sellerId: self.options.sellerId,
                     scope: self.options.widgetScope,
+                    presentmentCurrency: self.options.presentmentCurrency,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
 
                     /**
