@@ -85,8 +85,6 @@ abstract class AbstractClient implements ClientInterface
 
         $data = $transferObject->getBody();
 
-        $this->adapter->updateMultiCurrencyInfo($data);
-
         $log = [
             'request' => $transferObject->getBody(),
             'client' => static::class

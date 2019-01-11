@@ -52,9 +52,9 @@ class RefundRequestBuilder implements BuilderInterface
     /**
      * RefundRequestBuilder constructor.
      *
-     * @param ProductMetadata          $productMetadata
-     * @param SubjectReader            $subjectReader
-     * @param Data                     $coreHelper
+     * @param ProductMetadata $productMetadata
+     * @param SubjectReader $subjectReader
+     * @param Data $coreHelper
      * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
@@ -62,7 +62,8 @@ class RefundRequestBuilder implements BuilderInterface
         SubjectReader $subjectReader,
         Data $coreHelper,
         OrderRepositoryInterface $orderRepository
-    ) {
+    )
+    {
         $this->coreHelper = $coreHelper;
         $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
@@ -88,11 +89,26 @@ class RefundRequestBuilder implements BuilderInterface
         $quoteLink = $this->subjectReader->getQuoteLink($order->getQuoteId());
 
         if ($quoteLink) {
+            $currencyCode = $order->getBaseCurrencyCode();
+
+            if ($this->coreHelper->useMultiCurrency()) {
+                if ($order->getOrderCurrencyCode() != $order->getBaseCurrencyCode()) {
+                    $baseToGlobalRate = $order->getBaseToGlobalRate();
+                    $baseToOrderRate = $order->getBaseToOrderRate();
+                    $amount = $buildSubject['amount'];
+                    $buildSubject['amount'] = round(($amount * $baseToGlobalRate) * $baseToOrderRate, 2, PHP_ROUND_HALF_DOWN);
+                    if ($buildSubject['amount'] > $order->getGrandTotal()) {
+                        $buildSubject['amount'] = $order->getGrandTotal();
+                    }
+                    $currencyCode = $order->getOrderCurrencyCode();
+                }
+            }
+
             $data = [
                 'amazon_capture_id' => $payment->getParentTransactionId(),
                 'refund_reference_id' => $quoteLink->getAmazonOrderReferenceId() . '-R' . time(),
                 'refund_amount' => $this->subjectReader->readAmount($buildSubject),
-                'currency_code' => $order->getOrderCurrencyCode(),
+                'currency_code' => $currencyCode,
                 'store_id' => $order->getStoreId()
             ];
         }

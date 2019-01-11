@@ -103,6 +103,14 @@ class AuthorizationRequestBuilder implements BuilderInterface
 
         $quote = $this->subjectReader->getQuote();
 
+        $currencyCode = $order->getCurrencyCode();
+
+        if ($this->coreHelper->useMultiCurrency($quote->getStoreId())) {
+            $buildSubject['amount'] = $quote->getGrandTotal();
+            $currencyCode = $quote->getQuoteCurrencyCode();
+        }
+
+
         if (!$this->categoryExclusion->isQuoteDirty()) {
             if (!$quote->getReservedOrderId()) {
                 try {
@@ -119,7 +127,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
                 $data = [
                     'amazon_order_reference_id' => $amazonId,
                     'amount' => $buildSubject['amount'],
-                    'currency_code' => $order->getCurrencyCode(),
+                    'currency_code' => $currencyCode,
                     'store_name' => $quote->getStore()->getName(),
                     'custom_information' =>
                         'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .

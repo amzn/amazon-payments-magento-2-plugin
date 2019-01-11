@@ -289,10 +289,6 @@ class Data extends AbstractHelper
     public function useMultiCurrency($store = null)
     {
         if ($this->multiCurrencyEnabled()) {
-            // ignore if base and current are the same
-            if ($this->getBaseCurrencyCode() == $this->getCurrentCurrencyCode()) {
-                return false;
-            }
 
             // get allowed presentment currencies from config.xml
             $currencies = $this->scopeConfig->getValue(
@@ -663,10 +659,15 @@ class Data extends AbstractHelper
     }
 
 
+
     /**
+     * Gets customer's current currency
+     *
+     * @param null $store
      * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getCurrentCurrencyCode()
+    protected function getCurrentCurrencyCode($store = null)
     {
         return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
     }

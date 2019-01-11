@@ -147,23 +147,6 @@ class AmazonPaymentAdapter
     }
 
     /**
-     * If multi-currency is enabled, update data object to reflect presentment currency settings
-     * @param $data
-     * @return mixed
-     */
-    public function updateMultiCurrencyInfo(&$data) {
-        if ($this->coreHelper->useMultiCurrency()) {        // TODO determine if multi-currency is in use.
-            $quote = $this->subjectReader->getQuote();
-
-            if ($quote) {
-                $data['amount'] = $quote->getGrandTotal();
-                $data['currency_code'] = $quote->getQuoteCurrencyCode();
-            }
-        }
-        return $data;
-    }
-
-    /**
      * Confirms that payment has been created for Amazon Pay
      *
      * @param  $storeId

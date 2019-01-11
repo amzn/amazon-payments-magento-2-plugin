@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Payment\Gateway\Request;
 
 use Amazon\Payment\Gateway\Config\Config;
@@ -64,13 +65,13 @@ class SettlementRequestBuilder implements BuilderInterface
     /**
      * SettlementRequestBuilder constructor.
      *
-     * @param Config                   $config
-     * @param ProductMetadata          $productMetadata
+     * @param Config $config
+     * @param ProductMetadata $productMetadata
      * @param OrderRepositoryInterface $orderRepository
-     * @param CartRepositoryInterface  $quoteRepository
-     * @param SubjectReader            $subjectReader
-     * @param Data                     $coreHelper
-     * @param Logger                   $logger
+     * @param CartRepositoryInterface $quoteRepository
+     * @param SubjectReader $subjectReader
+     * @param Data $coreHelper
+     * @param Logger $logger
      */
     public function __construct(
         Config $config,
@@ -80,7 +81,8 @@ class SettlementRequestBuilder implements BuilderInterface
         SubjectReader $subjectReader,
         Data $coreHelper,
         Logger $logger
-    ) {
+    )
+    {
         $this->config = $config;
         $this->orderRepository = $orderRepository;
         $this->quoteRepository = $quoteRepository;
@@ -111,11 +113,25 @@ class SettlementRequestBuilder implements BuilderInterface
         $quoteLink = $this->subjectReader->getQuoteLink($quote->getId());
 
         if ($quoteLink) {
+            $currencyCode = $order->getBaseCurrencyCode();
 
+            if ($this->coreHelper->useMultiCurrency()) {
+                if ($order->getOrderCurrencyCode() != $order->getBaseCurrencyCode()) {
+                    $baseToGlobalRate = $order->getBaseToGlobalRate();
+                    $baseToOrderRate = $order->getBaseToOrderRate();
+                    $amount = $buildSubject['amount'];
+                    $buildSubject['amount'] = round(($amount * $baseToGlobalRate) * $baseToOrderRate, 2, PHP_ROUND_HALF_DOWN);
+                    if ($buildSubject['amount'] > $order->getGrandTotal()) {
+                        $buildSubject['amount'] = $order->getGrandTotal();
+                    }
+                    $currencyCode = $order->getOrderCurrencyCode();
+                }
+            }
+        
             $data = [
                 'amazon_authorization_id' => $paymentDO->getPayment()->getParentTransactionId(),
                 'capture_amount' => $buildSubject['amount'],
-                'currency_code' => $order->getBaseCurrencyCode(),
+                'currency_code' => $currencyCode,
                 'amazon_order_reference_id' => $quoteLink->getAmazonOrderReferenceId(),
                 'store_id' => $quote->getStoreId(),
                 'store_name' => $quote->getStore()->getName(),
