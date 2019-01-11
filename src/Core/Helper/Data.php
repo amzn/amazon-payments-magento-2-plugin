@@ -262,6 +262,55 @@ class Data extends AbstractHelper
         return (in_array($paymentRegion, ['uk', 'de']));
     }
 
+    /**
+     * Multi-currency is only supported in EU or UK
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
+    public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        if ($this->isEuPaymentRegion($scope)) {
+            return (bool)$this->scopeConfig->getValue(
+                'payment/amazon_payment/multicurrency',
+                $scope,
+                $scopeCode
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * Only certain currency codes are allowed to be used with multi-currency
+     * @param null $store
+     * @return bool
+     */
+    public function useMultiCurrency($store = null)
+    {
+        if ($this->multiCurrencyEnabled()) {
+            // ignore if base and current are the same
+            if ($this->getBaseCurrencyCode() == $this->getCurrentCurrencyCode()) {
+                return false;
+            }
+
+            // get allowed presentment currencies from config.xml
+            $currencies = $this->scopeConfig->getValue(
+                'client/paths/multicurrency',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
+            );
+
+            if ($currencies) {
+                $allowedCurrencies = explode(',', $currencies);
+
+                if (in_array($this->getCurrentCurrencyCode(), $allowedCurrencies)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /*
      * @return bool
      */

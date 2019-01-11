@@ -49,7 +49,6 @@ class AddAmazonButton implements ObserverInterface
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
-        // TODO: change logic based on region/endpoint and base currency
         if ($this->coreHelper->isPwaEnabled() && $this->coreHelper->isCurrentCurrencySupportedByAmazon()) {
             $params = [
                 'shortcutValidator' => $this->shortcutFactory->create($observer->getEvent()->getCheckoutSession()),

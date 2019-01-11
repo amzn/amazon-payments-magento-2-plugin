@@ -34,6 +34,7 @@
                 <clientsecret>client_secret</clientsecret>
                 <amazonregion>region</amazonregion>
                 <amazonsandbox>sandbox</amazonsandbox>
+                <multicurrency>AUD,GBP,DKK,EUR,HKD,JPY,NZD,NOK,ZAR,SEK,CHF,USD</multicurrency>
             </paths>
         </client>
         <widget>

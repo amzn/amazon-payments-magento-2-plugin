@@ -51,7 +51,9 @@ define(
             options: {
                 sellerId: registry.get('amazonPayment').merchantId,
                 paymentWidgetDOMId: 'walletWidgetDiv',
-                widgetScope: registry.get('amazonPayment').loginScope
+                widgetScope: registry.get('amazonPayment').loginScope,
+                presentmentCurrency: registry.get('amazonPayment').presentmentCurrency,
+                useMultiCurrency: registry.get('amazonPayment').useMultiCurrency
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
@@ -83,10 +85,9 @@ define(
              * render Amazon Pay Widget
              */
             renderPaymentWidget: function () {
-                new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
+                var widget = new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
                     sellerId: self.options.sellerId,
                     scope: self.options.widgetScope,
-                    presentmentCurrency: self.options.presentmentCurrency,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
 
                     /**
@@ -106,7 +107,11 @@ define(
                     onError: function (error) {
                         errorProcessor.process(error);
                     }
-                }).bind(self.options.paymentWidgetDOMId);
+                });
+                if (self.options.useMultiCurrency) {
+                    widget.setPresentmentCurrency(self.options.presentmentCurrency);
+                }
+                widget.bind(self.options.paymentWidgetDOMId);
             },
 
             /**
@@ -163,7 +168,7 @@ define(
                         selectBillingAddress(addressData);
                         amazonStorage.isPlaceOrderDisabled(false);
 
-                        if(window.checkoutConfig.amazonLogin.amazon_customer_email) {
+                        if (window.checkoutConfig.amazonLogin.amazon_customer_email) {
                             var customerField = $('#customer-email').val();
 
                             if (!customerField) {

@@ -86,7 +86,8 @@ class Config extends Template
             'presentmentCurrency'      => $this->coreHelper->getPresentmentCurrency(),
             'oAuthHashRedirectUrl'     => $this->coreHelper->getOAuthRedirectUrl(),
             'isQuoteDirty'             => $this->categoryExclusionHelper->isQuoteDirty(),
-            'region'                   => $this->coreHelper->getRegion()
+            'region'                   => $this->coreHelper->getRegion(),
+            'useMultiCurrency'         => $this->coreHelper->useMultiCurrency()
         ];
 
         if ($this->coreHelper->isSandboxEnabled()) {
