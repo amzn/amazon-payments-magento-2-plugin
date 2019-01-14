@@ -263,19 +263,32 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Multi-currency is only supported in EU or UK
+     * Check to see if multicurrency is enabled and if it's available for given endpoint/region
      * @param string $scope
      * @param null $scopeCode
      * @return bool
      */
-    public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
     {
-        if ($this->isEuPaymentRegion($scope)) {
-            return (bool)$this->scopeConfig->getValue(
-                'payment/amazon_payment/multicurrency',
-                $scope,
-                $scopeCode
+        $enabled = $this->scopeConfig->getValue(
+            'payment/amazon_payment/multicurrency',
+            $scope,
+            $scopeCode
+        );
+
+        if ($enabled) {
+            $mcRegions = $this->scopeConfig->getValue(
+                'multicurrency/regions',
+                $scope, $store
             );
+
+            if ($mcRegions) {
+                $allowedRegions = explode(',', $mcRegions);
+
+                if (in_array($this->getPaymentRegion(), $allowedRegions)) {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -292,7 +305,7 @@ class Data extends AbstractHelper
 
             // get allowed presentment currencies from config.xml
             $currencies = $this->scopeConfig->getValue(
-                'client/paths/multicurrency',
+                'multicurrency/currencies',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
             );
 
