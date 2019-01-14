@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Begin checkout to final step-->
+    <actionGroup name="AmazonCheckoutBeginActionGroup">
+        <waitForElement selector="{{AmazonCheckoutSection.shipping}}" time="20" stepKey="apWaitForShipping"/>
+        <waitForPageLoad stepKey="apWaitPageLoadShipping" />
+
+        <click selector="{{AmazonCheckoutSection.shippingRadio}}" stepKey="clickShippingMethod"/>
+        <waitForPageLoad stepKey="waitForPageLoadPayment1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+
+        <click selector="{{AmazonCheckoutSection.continue}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadPayment2" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+    </actionGroup>
+    <!--Place order-->
+    <actionGroup name="AmazonCheckoutSubmitActionGroup" extends="AmazonCheckoutBeginActionGroup">
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+
+        <!--See success messages-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
+
+</actionGroups>
