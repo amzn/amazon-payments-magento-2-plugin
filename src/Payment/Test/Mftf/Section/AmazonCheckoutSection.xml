@@ -17,5 +17,6 @@
         <element name="shipping" type="button" selector=".table-checkout-shipping-method"/>
         <element name="shippingRadio" type="radio" selector=".table-checkout-shipping-method input[type=radio]"/>
         <element name="continue" type="button" selector="#shipping-method-buttons-container button"/>
+        <element name="messageError" type="div" selector=".message-error div"/>
     </section>
 </sections>
