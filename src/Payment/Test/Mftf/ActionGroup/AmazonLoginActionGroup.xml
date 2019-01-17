@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Open login popup and complete form-->
+    <actionGroup name="AmazonLoginPopupActionGroup">
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
+        <waitForPageLoad stepKey="waitForPageLoadPopup"/>
+        <switchToWindow userInput="amazonloginpopup" stepKey="switchToWindowLoginpopup"/>
+
+        <!-- Fill in login form -->
+        <waitForElement selector="{{AmazonLoginSection.apEmail}}" time="10" stepKey="apWaitForLogin"/>
+        <fillField selector="{{AmazonLoginSection.apEmail}}" userInput="{{AmazonLogin.email}}" stepKey="apEnterEmail"/>
+        <fillField selector="{{AmazonLoginSection.apPassword}}" userInput="{{AmazonLogin.password}}" stepKey="apEnterPassword"/>
+        <click selector="{{AmazonLoginSection.apSignin}}" stepKey="clickSigninButton"/>
+
+        <!--Prevent "NoSuchWindowException: window was already closed"-->
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
+    </actionGroup>
+
+    <!--Fill in login from redirect form and submit-->
+    <actionGroup name="AmazonLoginRedirectActionGroup">
+        <waitForElement selector="{{AmazonLoginSection.apEmail}}" time="10" stepKey="apWaitForLogin"/>
+        <fillField selector="{{AmazonLoginSection.apEmail}}" userInput="{{AmazonLogin.email}}" stepKey="apEnterEmail"/>
+        <fillField selector="{{AmazonLoginSection.apPassword}}" userInput="{{AmazonLogin.password}}" stepKey="apEnterPassword"/>
+        <click selector="{{AmazonLoginSection.apSignin}}" stepKey="clickSigninButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadLogin"/>
+        <conditionalClick selector="{{AmazonLoginSection.apConsent}}" dependentSelector="{{AmazonLoginSection.apConsent}}" visible="true" stepKey="clickLoginConsent"/>
+    </actionGroup>
+</actionGroups>
