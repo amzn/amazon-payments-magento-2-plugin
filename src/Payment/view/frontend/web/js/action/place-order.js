@@ -28,7 +28,7 @@ define(
         'use strict';
 
         return function (paymentData, redirectOnSuccess) {
-            var serviceUrl, payload;
+            var serviceUrl, payload, intervalId;
 
             redirectOnSuccess = redirectOnSuccess !== false;
 
@@ -69,7 +69,7 @@ define(
                     amazonStorage.amazonDeclineCode(response.responseJSON.code);
                     fullScreenLoader.stopLoader(true);
                     if (response.responseJSON.code === 4273) {
-                        var intervalId = setInterval(function () {
+                        intervalId = setInterval(function () {
                             clearInterval(intervalId);
                             window.location.replace(url.build('checkout/cart/'));
                         }, 5000);
