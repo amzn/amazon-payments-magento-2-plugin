@@ -57,6 +57,15 @@ define(
                     self.$amazonSpBack = $('#amazon_simplepath_back');
                     self.$container = $('#amazon_simplepath');
 
+                    if (this.isMultiCurrencyRegion) {
+                        $('#row_payment_' + self.getCountry() + '_amazon_payment_advanced_sales_options_multicurrency').show();
+                        $('#row_payment_other_amazon_payment_advanced_sales_options_multicurrency').show();
+                    }
+                    else {
+                        $('#row_payment_' + self.getCountry() + '_amazon_payment_advanced_sales_options_multicurrency').hide();
+                        $('#row_payment_other_amazon_payment_advanced_sales_options_multicurrency').hide();
+                    }
+                    
                     if (self.$amazonMerchantId) {
                         self.hideAmazonConfig();
                     }
