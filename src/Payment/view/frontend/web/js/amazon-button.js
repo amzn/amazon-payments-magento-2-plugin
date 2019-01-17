@@ -43,7 +43,8 @@ define([
              */
             _create: function () {
                 _this = this;
-                var __this = this;
+                var __this = this;  //eslint-disable-line
+
                 this._verifyAmazonConfig();
 
                 if (typeof OffAmazonPayments === 'undefined') {

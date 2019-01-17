@@ -14,11 +14,11 @@
  */
 
 define(['uiRegistry', 'Amazon_Login/js/view/login-button', 'uiComponent'], function(registry, login, component) {
+    'use strict';
     var amazonPayment = registry.get('amazonPayment');
 
     if (amazonPayment !== undefined && amazonPayment.allowAmLoginLoading === true) {
         return login;
-    } else {
-        return component;
     }
+    return component;
 });

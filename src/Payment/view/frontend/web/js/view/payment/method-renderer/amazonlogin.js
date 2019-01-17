@@ -13,15 +13,9 @@ define(
         $,
         Component,
         ko,
-        amazonStorage,
-        storage,
-        amazonPaymentConfig,
-        registry,
-        loginButton
+        amazonStorage
     ) {
         'use strict';
-
-        var self;
 
         return Component.extend(
             {
