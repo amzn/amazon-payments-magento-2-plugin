@@ -110,6 +110,10 @@ define(
                 });
                 if (self.options.useMultiCurrency) {
                     widget.setPresentmentCurrency(self.options.presentmentCurrency);
+                    $('tr.totals.charge').hide();
+                }
+                else {
+                    $('tr.totals.charge').show();
                 }
                 widget.bind(self.options.paymentWidgetDOMId);
             },

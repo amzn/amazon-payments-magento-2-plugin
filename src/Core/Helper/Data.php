@@ -263,6 +263,30 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Checks to see if store's selected region is a multicurrency region.
+     * @param string $scope
+     * @param null $scopeCode
+     * @param null $store
+     * @return bool
+     */
+    public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)  {
+        $mcRegions = $this->scopeConfig->getValue(
+            'multicurrency/regions',
+            $scope, $store
+        );
+
+        if ($mcRegions) {
+            $allowedRegions = explode(',', $mcRegions);
+
+            if (in_array($this->getPaymentRegion(), $allowedRegions)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Check to see if multicurrency is enabled and if it's available for given endpoint/region
      * @param string $scope
      * @param null $scopeCode
@@ -277,18 +301,7 @@ class Data extends AbstractHelper
         );
 
         if ($enabled) {
-            $mcRegions = $this->scopeConfig->getValue(
-                'multicurrency/regions',
-                $scope, $store
-            );
-
-            if ($mcRegions) {
-                $allowedRegions = explode(',', $mcRegions);
-
-                if (in_array($this->getPaymentRegion(), $allowedRegions)) {
-                    return true;
-                }
-            }
+            return $this->isMulticurrencyRegion($scope, $scopeCode, $store);
         }
 
         return false;
