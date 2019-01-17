@@ -308,23 +308,12 @@ class SimplePath
                     OPENSSL_PKCS1_OAEP_PADDING
                 );
 
-                // Decrypt final payload (AES 128-bit CBC)
-                if (function_exists('mcrypt_decrypt')) {
-                    $finalPayload = @mcrypt_decrypt(
-                        MCRYPT_RIJNDAEL_128,
-                        $decryptedKey,
-                        base64_decode($payload->encryptedPayload),
-                        MCRYPT_MODE_CBC,
-                        base64_decode($payload->iv)
-                    );
-                } else {
-                    // This library uses openssl_decrypt, which may have issues
-                    $aes = new AES();
-                    $aes->setKey($decryptedKey);
-                    $aes->setIV(base64_decode($payload->iv, true));
-                    $aes->setKeyLength(128);
-                    $finalPayload = $aes->decrypt($payload->encryptedPayload);
-                }
+                // Decrypt final payload (AES 256-bit CBC)
+                $aes = new AES();
+                $aes->setKey($decryptedKey);
+                $aes->setIV(base64_decode($payload->iv, true));
+                $aes->setKeyLength(256);
+                $finalPayload = $aes->decrypt(base64_decode($payload->encryptedPayload));
 
                 // Remove binary characters
                 $finalPayload = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $finalPayload);
