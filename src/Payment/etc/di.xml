@@ -165,15 +165,6 @@
         </arguments>
     </virtualType>
 
-    <!-- Capture Request -->
-    <type name="Amazon\Payment\Gateway\Request\CaptureRequestBuilder">
-        <arguments>
-            <argument name="config" xsi:type="object">AmazonGatewayConfig</argument>
-            <argument name="coreHelper" xsi:type="object">Amazon\Core\Helper\Data</argument>
-            <argument name="productMetadata" xsi:type="object">Magento\Framework\App\ProductMetadata</argument>
-        </arguments>
-    </type>
-
     <!-- Refund Command -->
     <virtualType name="AmazonRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>

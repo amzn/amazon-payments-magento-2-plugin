@@ -106,40 +106,36 @@ class SettlementRequestBuilder implements BuilderInterface
 
         $orderDO = $paymentDO->getOrder();
 
-        $order = $this->orderRepository->get($orderDO->getId());
+        $currencyCode = $orderDO->getCurrencyCode();
+        $total = $buildSubject['amount'];
 
-        $quote = $this->quoteRepository->get($order->getQuoteId());
+        if ($buildSubject['multicurrency']['multicurrency']) {
+            $currencyCode = $buildSubject['multicurrency']['order_currency'];
+            $total = $buildSubject['multicurrency']['total'];
+        }
 
-        $quoteLink = $this->subjectReader->getQuoteLink($quote->getId());
 
-        if ($quoteLink) {
-            $currencyCode = $order->getBaseCurrencyCode();
+        if (isset($buildSubject['amazon_order_id']) && $buildSubject['amazon_order_id']) {
 
-            if ($this->coreHelper->useMultiCurrency()) {
-                if ($order->getOrderCurrencyCode() != $order->getBaseCurrencyCode()) {
-                    $baseToGlobalRate = $order->getBaseToGlobalRate();
-                    $baseToOrderRate = $order->getBaseToOrderRate();
-                    $amount = $buildSubject['amount'];
-                    $buildSubject['amount'] = round(($amount * $baseToGlobalRate) * $baseToOrderRate, 2, PHP_ROUND_HALF_DOWN);
-                    if ($buildSubject['amount'] > $order->getGrandTotal()) {
-                        $buildSubject['amount'] = $order->getGrandTotal();
-                    }
-                    $currencyCode = $order->getOrderCurrencyCode();
-                }
+
+                $data = [
+                    'amazon_authorization_id' => $paymentDO->getPayment()->getParentTransactionId(),
+                    'capture_amount' => $total,
+                    'currency_code' => $currencyCode,
+                    'amazon_order_reference_id' => $buildSubject['amazon_order_id'],
+                    'store_id' => $buildSubject['multicurrency']['store_id'],
+                    'store_name' => $buildSubject['multicurrency']['store_name'],
+                    'custom_information' =>
+                        'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
+                        'Plugin Version : ' . $this->coreHelper->getVersion(),
+                    'platform_id' => $this->config->getValue('platform_id'),
+                    'request_payment_authorization' => false
+                ];
+
+            if (isset($buildSubject['request_payment_authorization']) && $buildSubject['request_payment_authorization']) {
+                $data['request_payment_authorization'] = true;
             }
-        
-            $data = [
-                'amazon_authorization_id' => $paymentDO->getPayment()->getParentTransactionId(),
-                'capture_amount' => $buildSubject['amount'],
-                'currency_code' => $currencyCode,
-                'amazon_order_reference_id' => $quoteLink->getAmazonOrderReferenceId(),
-                'store_id' => $quote->getStoreId(),
-                'store_name' => $quote->getStore()->getName(),
-                'custom_information' =>
-                    'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
-                    'Plugin Version : ' . $this->coreHelper->getVersion(),
-                'platform_id' => $this->config->getValue('platform_id'),
-            ];
+
         }
 
         return $data;

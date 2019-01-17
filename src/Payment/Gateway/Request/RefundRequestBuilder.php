@@ -21,6 +21,7 @@ use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 
 /**
  * Class RefundRequestBuilder
@@ -50,24 +51,32 @@ class RefundRequestBuilder implements BuilderInterface
     private $orderRepository;
 
     /**
+     * @var OrderAdapterFactory
+     */
+    private $orderAdapterFactory;
+
+    /**
      * RefundRequestBuilder constructor.
      *
      * @param ProductMetadata $productMetadata
      * @param SubjectReader $subjectReader
      * @param Data $coreHelper
      * @param OrderRepositoryInterface $orderRepository
+     * @param OrderAdapterFactory $orderAdapterFactory
      */
     public function __construct(
         ProductMetaData $productMetadata,
         SubjectReader $subjectReader,
         Data $coreHelper,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        OrderAdapterFactory $orderAdapterFactory
     )
     {
         $this->coreHelper = $coreHelper;
         $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
         $this->orderRepository = $orderRepository;
+        $this->orderAdapterFactory = $orderAdapterFactory;
     }
 
     /**
@@ -79,37 +88,37 @@ class RefundRequestBuilder implements BuilderInterface
         $data = [];
 
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-
         $payment = $paymentDO->getPayment();
 
         $orderDO = $paymentDO->getOrder();
 
-        $order = $this->orderRepository->get($orderDO->getId());
+        $currencyCode = $orderDO->getCurrencyCode();
+        $total = $buildSubject['amount'];
+        $storeId = $orderDO->getStoreId();
 
-        $quoteLink = $this->subjectReader->getQuoteLink($order->getQuoteId());
+        // The magento order adapter doesn't expose everything we need to send a request to the AP API so we
+        // need to use our own version with the details we need exposed in custom methods.
+        $orderAdapter = $this->orderAdapterFactory->create(
+            ['order' => $payment->getOrder()]
+        );
 
-        if ($quoteLink) {
-            $currencyCode = $order->getBaseCurrencyCode();
+        $amazonId = $orderAdapter->getAmazonOrderID();
+        $multicurrency = $orderAdapter->getMulticurrencyDetails($total);
 
-            if ($this->coreHelper->useMultiCurrency()) {
-                if ($order->getOrderCurrencyCode() != $order->getBaseCurrencyCode()) {
-                    $baseToGlobalRate = $order->getBaseToGlobalRate();
-                    $baseToOrderRate = $order->getBaseToOrderRate();
-                    $amount = $buildSubject['amount'];
-                    $buildSubject['amount'] = round(($amount * $baseToGlobalRate) * $baseToOrderRate, 2, PHP_ROUND_HALF_DOWN);
-                    if ($buildSubject['amount'] > $order->getGrandTotal()) {
-                        $buildSubject['amount'] = $order->getGrandTotal();
-                    }
-                    $currencyCode = $order->getOrderCurrencyCode();
-                }
-            }
+        if ($multicurrency['multicurrency']) {
+            $currencyCode = $multicurrency['order_currency'];
+            $total = $multicurrency['total'];
+            $storeId = $multicurrency['store_id'];
+        }
+
+        if ($amazonId) {
 
             $data = [
                 'amazon_capture_id' => $payment->getParentTransactionId(),
-                'refund_reference_id' => $quoteLink->getAmazonOrderReferenceId() . '-R' . time(),
-                'refund_amount' => $this->subjectReader->readAmount($buildSubject),
+                'refund_reference_id' => $amazonId . '-R' . time(),
+                'refund_amount' => $total,
                 'currency_code' => $currencyCode,
-                'store_id' => $order->getStoreId()
+                'store_id' => $storeId
             ];
         }
 
