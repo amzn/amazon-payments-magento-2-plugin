@@ -27,7 +27,7 @@ class DisableAmazonPaymentMethod
      */
     public function __construct(
         Session $checkoutSession
-    ){
+    ) {
         $this->checkoutSession = $checkoutSession;
     }
 
@@ -39,7 +39,7 @@ class DisableAmazonPaymentMethod
     public function afterIsAvailable(
         \Amazon\Payment\Model\Method\AmazonLoginMethod $subject,
         $result
-    ){
+    ) {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->checkoutSession->getQuote();
 

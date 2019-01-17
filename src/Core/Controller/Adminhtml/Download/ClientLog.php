@@ -40,8 +40,7 @@ class ClientLog extends System
     public function __construct(
         Context $context,
         FileFactory $fileFactory
-    )
-    {
+    ) {
         $this->fileFactory = $fileFactory;
 
         parent::__construct($context);

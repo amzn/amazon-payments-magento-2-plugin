@@ -93,12 +93,11 @@ class CompleteSaleHandler implements HandlerInterface
                 $payment->setIsTransactionPending(true);
                 $order->setState($order::STATE_PAYMENT_REVIEW)->setStatus($order::STATE_PAYMENT_REVIEW);
                 $payment->setIsTransactionClosed(false);
-            }
-            else {
+            } else {
                 $payment->setIsTransactionClosed(true);
             }
 
-            if (!isset($handlingSubject['partial_capture']) || !$handlingSubject['partial_capture'] ) {
+            if (!isset($handlingSubject['partial_capture']) || !$handlingSubject['partial_capture']) {
                 $quoteLink = $this->subjectReader->getQuoteLink();
                 $quoteLink->setConfirmed(true)->save();
             }

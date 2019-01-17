@@ -76,10 +76,8 @@ class VoidHandler implements HandlerInterface
             $this->messageManager->addErrorMessage(
                 __('Unable to cancel the order or the Amazon Order ID is incorrect.')
             );
-        }
-        else {
+        } else {
             $this->messageManager->addSuccessMessage(__('Successfully cancelled Amazon Pay.'));
         }
     }
-
 }

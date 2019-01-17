@@ -77,8 +77,7 @@ class Guest extends Action
         Session $session,
         ClientFactoryInterface $clientFactory,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->amazonCoreHelper = $amazonCoreHelper;
         $this->customerUrl = $customerUrl;
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;

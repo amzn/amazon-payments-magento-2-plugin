@@ -22,7 +22,7 @@ namespace Amazon\Payment\Helper\Shortcut;
 class Validator implements ValidatorInterface
 {
     /**
-     * @var \Amazon\Payment\Gateway\Config\Config 
+     * @var \Amazon\Payment\Gateway\Config\Config
      */
     private $amazonConfig;
 

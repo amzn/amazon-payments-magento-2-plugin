@@ -144,8 +144,7 @@ class Authorization extends AbstractOperation
         StoreManagerInterface $storeManager,
         PaymentManagement $paymentManagement,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->clientFactory = $clientFactory;
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
         $this->amazonAuthorizationDetailsResponseFactory = $amazonAuthorizationDetailsResponseFactory;
@@ -178,8 +177,7 @@ class Authorization extends AbstractOperation
         $pendingAuthorizationId,
         AmazonAuthorizationDetails $authorizationDetails = null,
         AmazonOrderDetails $orderDetails = null
-    )
-    {
+    ) {
         try {
             $pendingAuthorization = $this->pendingAuthorizationFactory->create();
             $pendingAuthorization->getResource()->beginTransaction();
@@ -216,8 +214,7 @@ class Authorization extends AbstractOperation
     protected function processUpdateAuthorization(
         PendingAuthorizationInterface $pendingAuthorization,
         AmazonAuthorizationDetails $authorizationDetails = null
-    )
-    {
+    ) {
         $order = $this->orderRepository->get($pendingAuthorization->getOrderId());
         $payment = $this->orderPaymentRepository->get($pendingAuthorization->getPaymentId());
         $order->setPayment($payment);
@@ -283,8 +280,7 @@ class Authorization extends AbstractOperation
         PendingAuthorizationInterface $pendingAuthorization,
         $capture,
         TransactionInterface $newTransaction = null
-    )
-    {
+    ) {
         $transactionId = ($capture) ? $pendingAuthorization->getCaptureId()
             : $pendingAuthorization->getAuthorizationId();
 
@@ -332,8 +328,7 @@ class Authorization extends AbstractOperation
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization,
         $capture
-    )
-    {
+    ) {
         $transactionId = ($capture) ? $pendingAuthorization->getCaptureId()
             : $pendingAuthorization->getAuthorizationId();
 
@@ -377,8 +372,7 @@ class Authorization extends AbstractOperation
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization,
         $capture
-    )
-    {
+    ) {
         $transactionId = ($capture) ? $pendingAuthorization->getCaptureId()
             : $pendingAuthorization->getAuthorizationId();
 
@@ -418,8 +412,7 @@ class Authorization extends AbstractOperation
     protected function processNewAuthorization(
         PendingAuthorizationInterface $pendingAuthorization,
         AmazonOrderDetails $orderDetails = null
-    )
-    {
+    ) {
         $order = $this->orderRepository->get($pendingAuthorization->getOrderId());
         $payment = $this->orderPaymentRepository->get($pendingAuthorization->getPaymentId());
         $order->setPayment($payment);
@@ -462,8 +455,7 @@ class Authorization extends AbstractOperation
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization
-    )
-    {
+    ) {
         $capture = false;
 
         try {
@@ -502,8 +494,7 @@ class Authorization extends AbstractOperation
         OrderInterface $order,
         OrderPaymentInterface $payment,
         PendingAuthorizationInterface $pendingAuthorization
-    )
-    {
+    ) {
         $capture = true;
 
         try {

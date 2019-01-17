@@ -79,7 +79,8 @@ class AuthorizationProcessor implements ProcessorInterface
         $collection = $this->collectionFactory
             ->create()
             ->addFieldToFilter(
-                PendingAuthorizationInterface::AUTHORIZATION_ID, [
+                PendingAuthorizationInterface::AUTHORIZATION_ID,
+                [
                 'eq' => $details->getAuthorizeTransactionId()
                 ]
             )

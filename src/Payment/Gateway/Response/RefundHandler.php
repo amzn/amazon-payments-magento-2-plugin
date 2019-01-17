@@ -51,7 +51,7 @@ class RefundHandler implements HandlerInterface
     private $coreHelper;
 
     /**
-     * @var PendingRefundInterfaceFactory 
+     * @var PendingRefundInterfaceFactory
      */
     private $pendingRefundFactory;
 

@@ -120,7 +120,8 @@ class GetAmazonCaptureUpdates
      * amazon_pending_capture table have these IDs if they are not set by matching them to a transaction that
      * has matching transaction or parent transaction IDs.
      */
-    private function updateIds() {
+    private function updateIds()
+    {
         // only get items that have no order ID set since we don't want to have to keep repeating this
         $collection = $this->collectionFactory
             ->create()
@@ -188,8 +189,7 @@ class GetAmazonCaptureUpdates
         foreach ($pendingCaptureIds as $pendingCaptureId) {
             try {
                 $this->capture->updateCapture($pendingCaptureId);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->error($e);
             }
         }

@@ -85,9 +85,7 @@ class SettlementHandler implements HandlerInterface
 
         // if reauthorized, treat as end of auth + capture process
         if ($response['reauthorized']) {
-
             if ($response['status']) {
-
                 $orderDO = $paymentDO->getOrder();
                 $order = $this->orderRepository->get($orderDO->getId());
 
@@ -99,11 +97,9 @@ class SettlementHandler implements HandlerInterface
                 $quoteLink = $this->subjectReader->getQuoteLink($quote->getId());
                 $quoteLink->setConfirmed(true)->save();
             }
-        }
-        else {
+        } else {
             // finish capture
             $payment->setTransactionId($response['transaction_id']);
         }
     }
-
 }
