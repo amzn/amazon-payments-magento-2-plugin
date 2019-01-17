@@ -72,14 +72,12 @@ class LoadOrder implements ObserverInterface
         $orderExtension = ($order->getExtensionAttributes()) ?: $this->orderExtensionFactory->create();
 
         if ($order->getId()) {
-
             $amazonOrder = $this->orderLinkFactory->create();
             $amazonOrder->load($order->getId(), 'order_id');
 
             if ($amazonOrder->getId()) {
                 $orderExtension->setAmazonOrderReferenceId($amazonOrder);
-            }
-            else {
+            } else {
                 if ($order->getQuoteId()) {
                     $quoteLink = $this->quoteLinkFactory->create();
                     $quoteLink->load($order->getQuoteId(), 'quote_id');

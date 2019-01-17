@@ -295,7 +295,8 @@ class SimplePath
             // Retrieve Amazon public key to verify signature
             try {
                 $client = new \Zend_Http_Client(
-                    $this->getEndpointPubkey(), [
+                    $this->getEndpointPubkey(),
+                    [
                         'maxredirects' => 2,
                         'timeout'      => 30,
                     ]
@@ -356,7 +357,8 @@ class SimplePath
             $this->messageManager->addError(
                 __(
                     "If you're experiencing consistent errors with transferring keys, " .
-                    "click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.", $link
+                    "click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.",
+                    $link
                 )
             );
         }

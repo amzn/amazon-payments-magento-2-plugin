@@ -55,8 +55,7 @@ class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
         DirectoryList $directoryList,
         UrlInterface $urlBuilder,
         $data = []
-    )
-    {
+    ) {
         $this->directoryList = $directoryList;
         $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $data);

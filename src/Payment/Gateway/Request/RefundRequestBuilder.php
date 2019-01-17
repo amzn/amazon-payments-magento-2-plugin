@@ -70,8 +70,7 @@ class RefundRequestBuilder implements BuilderInterface
         Data $coreHelper,
         OrderRepositoryInterface $orderRepository,
         OrderAdapterFactory $orderAdapterFactory
-    )
-    {
+    ) {
         $this->coreHelper = $coreHelper;
         $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
@@ -112,7 +111,6 @@ class RefundRequestBuilder implements BuilderInterface
         }
 
         if ($amazonId) {
-
             $data = [
                 'amazon_capture_id' => $payment->getParentTransactionId(),
                 'refund_reference_id' => $amazonId . '-R' . time(),

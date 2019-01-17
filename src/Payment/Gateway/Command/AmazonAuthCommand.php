@@ -87,8 +87,7 @@ class AmazonAuthCommand implements CommandInterface
         ValidatorInterface $validator = null,
         ErrorMessageMapperInterface $errorMessageMapper = null,
         Config $config
-    )
-    {
+    ) {
         $this->requestBuilder = $requestBuilder;
         $this->transferFactory = $transferFactory;
         $this->client = $client;

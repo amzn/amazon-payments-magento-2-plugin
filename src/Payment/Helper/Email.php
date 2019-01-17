@@ -41,9 +41,9 @@ class Email extends AbstractHelper
      * @param AmazonCoreHelper        $amazonCoreHelper
      */
     public function __construct(
-        Context                 $context,
+        Context $context,
         TransportBuilderFactory $emailTransportBuilderFactory,
-        AmazonCoreHelper        $amazonCoreHelper
+        AmazonCoreHelper $amazonCoreHelper
     ) {
         parent::__construct($context);
         $this->emailTransportBuilderFactory = $emailTransportBuilderFactory;
