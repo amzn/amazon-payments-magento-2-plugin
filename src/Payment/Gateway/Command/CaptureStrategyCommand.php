@@ -25,6 +25,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Amazon\Core\Helper\Data;
+use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 
 class CaptureStrategyCommand implements CommandInterface
 {
@@ -33,7 +34,7 @@ class CaptureStrategyCommand implements CommandInterface
 
     const CAPTURE = 'settlement';
 
-    const AUTHORIZE_CAPTURE = 'capture';
+    const PARTIAL_CAPTURE = 'partial_capture';
 
     /**
      * @var CommandPoolInterface
@@ -56,22 +57,39 @@ class CaptureStrategyCommand implements CommandInterface
     private $filterBuilder;
 
     /**
+     * @var OrderAdapterFactory
+     */
+    private $orderAdapterFactory;
+
+    /**
      * @var Data
      */
     private $coreHelper;
 
+    /**
+     * CaptureStrategyCommand constructor.
+     *
+     * @param CommandPoolInterface $commandPool
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     * @param Data $coreHelper
+     * @param OrderAdapterFactory $orderAdapterFactory
+     */
     public function __construct(
         CommandPoolInterface $commandPool,
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        Data $coreHelper
+        Data $coreHelper,
+        OrderAdapterFactory $orderAdapterFactory
     ) {
         $this->commandPool = $commandPool;
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->coreHelper = $coreHelper;
+        $this->orderAdapterFactory = $orderAdapterFactory;
     }
 
     /**
@@ -82,17 +100,33 @@ class CaptureStrategyCommand implements CommandInterface
         if (isset($commandSubject['payment'])) {
             $paymentDO = $commandSubject['payment'];
             $paymentInfo = $paymentDO->getPayment();
+
+            // The magento order adapter doesn't expose everything we need to send a request to the AP API so we
+            // need to use our own version with the details we need exposed in custom methods.
+            $orderAdapter = $this->orderAdapterFactory->create(
+                ['order' => $paymentInfo->getOrder()]
+            );
+
+            $commandSubject['partial_capture'] = false;
+            $commandSubject['amazon_order_id'] = $orderAdapter->getAmazonOrderID();
+            $commandSubject['multicurrency'] = $orderAdapter->getMulticurrencyDetails($commandSubject['amount']);
+
             ContextHelper::assertOrderPayment($paymentInfo);
 
             $command = $this->getCommand($paymentInfo);
             if ($command) {
+                if ($command == self::PARTIAL_CAPTURE) {
+                    $commandSubject['partial_capture'] = true;
+                    $command = self::SALE;
+                }
                 $this->commandPool->get($command)->execute($commandSubject);
             }
         }
     }
 
     /**
-     * Get execution command name
+     * Get execution command name - if there's an authorization, this is just a settlement, if not, could be
+     * a partial capture situation where we need to completely auth and capture again against the same order
      *
      * @param  OrderPaymentInterface $payment
      * @return string
@@ -101,30 +135,18 @@ class CaptureStrategyCommand implements CommandInterface
     {
         $isCaptured = $this->captureTransactionExists($payment);
 
-        // check if a transaction has happened and is captured
-        if (!$payment->getAuthorizationTransaction() && !$isCaptured) {
-
-            if ($this->coreHelper->getPaymentAction() == 'authorize_capture') {
-                // charge on order
-                return self::SALE;
-            }
-            else {
-                // charge on invoice/shipment
-                return self::AUTHORIZE_CAPTURE;
-            }
-        }
-
-        // capture on settlement/invoice
+        // If an authorization exists, we're going to settle it with a capture
         if (!$isCaptured && $payment->getAuthorizationTransaction()) {
             return self::CAPTURE;
         }
 
-        // failed to determine action from prior tests, so use module settings
-        if ($this->coreHelper->getPaymentAction() == 'authorize_capture') {
-            self::SALE;
+        // Item has already been captured - need to reauthorize and capture (partial capture)
+        if ($isCaptured) {
+            return self::PARTIAL_CAPTURE;
         }
 
-        return self::AUTHORIZE_CAPTURE;
+        // We're in a situation where we need a reauth and capture.
+        return self::SALE;
     }
 
     /**
@@ -156,6 +178,6 @@ class CaptureStrategyCommand implements CommandInterface
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
         $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
-        return (boolean) $count;
+        return (boolean)$count;
     }
 }

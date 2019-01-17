@@ -25,6 +25,10 @@
                 <jp>https://payments.amazon.co.jp/overview</jp>
             </country>
         </region>
+        <multicurrency>
+            <regions>uk,de</regions>
+            <currencies>AUD,GBP,DKK,EUR,HKD,JPY,NZD,NOK,ZAR,SEK,CHF,USD</currencies>
+        </multicurrency>
         <client>
             <paths>
                 <secretkey>secret_key</secretkey>
