@@ -13,6 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\Payment\Gateway\Request;
 
 use Amazon\Payment\Gateway\Config\Config;
@@ -64,13 +65,13 @@ class SettlementRequestBuilder implements BuilderInterface
     /**
      * SettlementRequestBuilder constructor.
      *
-     * @param Config                   $config
-     * @param ProductMetadata          $productMetadata
+     * @param Config $config
+     * @param ProductMetadata $productMetadata
      * @param OrderRepositoryInterface $orderRepository
-     * @param CartRepositoryInterface  $quoteRepository
-     * @param SubjectReader            $subjectReader
-     * @param Data                     $coreHelper
-     * @param Logger                   $logger
+     * @param CartRepositoryInterface $quoteRepository
+     * @param SubjectReader $subjectReader
+     * @param Data $coreHelper
+     * @param Logger $logger
      */
     public function __construct(
         Config $config,
@@ -80,7 +81,8 @@ class SettlementRequestBuilder implements BuilderInterface
         SubjectReader $subjectReader,
         Data $coreHelper,
         Logger $logger
-    ) {
+    )
+    {
         $this->config = $config;
         $this->orderRepository = $orderRepository;
         $this->quoteRepository = $quoteRepository;
@@ -104,26 +106,36 @@ class SettlementRequestBuilder implements BuilderInterface
 
         $orderDO = $paymentDO->getOrder();
 
-        $order = $this->orderRepository->get($orderDO->getId());
+        $currencyCode = $orderDO->getCurrencyCode();
+        $total = $buildSubject['amount'];
 
-        $quote = $this->quoteRepository->get($order->getQuoteId());
+        if ($buildSubject['multicurrency']['multicurrency']) {
+            $currencyCode = $buildSubject['multicurrency']['order_currency'];
+            $total = $buildSubject['multicurrency']['total'];
+        }
 
-        $quoteLink = $this->subjectReader->getQuoteLink($quote->getId());
 
-        if ($quoteLink) {
+        if (isset($buildSubject['amazon_order_id']) && $buildSubject['amazon_order_id']) {
 
-            $data = [
-                'amazon_authorization_id' => $paymentDO->getPayment()->getParentTransactionId(),
-                'capture_amount' => $buildSubject['amount'],
-                'currency_code' => $order->getBaseCurrencyCode(),
-                'amazon_order_reference_id' => $quoteLink->getAmazonOrderReferenceId(),
-                'store_id' => $quote->getStoreId(),
-                'store_name' => $quote->getStore()->getName(),
-                'custom_information' =>
-                    'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
-                    'Plugin Version : ' . $this->coreHelper->getVersion(),
-                'platform_id' => $this->config->getValue('platform_id'),
-            ];
+
+                $data = [
+                    'amazon_authorization_id' => $paymentDO->getPayment()->getParentTransactionId(),
+                    'capture_amount' => $total,
+                    'currency_code' => $currencyCode,
+                    'amazon_order_reference_id' => $buildSubject['amazon_order_id'],
+                    'store_id' => $buildSubject['multicurrency']['store_id'],
+                    'store_name' => $buildSubject['multicurrency']['store_name'],
+                    'custom_information' =>
+                        'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
+                        'Plugin Version : ' . $this->coreHelper->getVersion(),
+                    'platform_id' => $this->config->getValue('platform_id'),
+                    'request_payment_authorization' => false
+                ];
+
+            if (isset($buildSubject['request_payment_authorization']) && $buildSubject['request_payment_authorization']) {
+                $data['request_payment_authorization'] = true;
+            }
+
         }
 
         return $data;
