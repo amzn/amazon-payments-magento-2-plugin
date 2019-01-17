@@ -25,7 +25,7 @@ In case you are not able or willing to use the web installation, you can install
 * Upgrade the Magento installation: `php bin/magento setup:upgrade`
 * Follow any advice the upgrade routine provides
 
-.. note:: `composer require amzn/amazon-payments-magento-2-plugin:^3.0.1` will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please remove the `^`
+.. note:: `composer require amzn/amazon-payments-magento-2-plugin:^3.0.2` will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please remove the `^`
 
 In production mode, you will also have to compile the code and the dependency injection (DI) configuration and deploy static content
 
