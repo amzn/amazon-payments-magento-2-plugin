@@ -105,7 +105,7 @@ define(
                      * Error callback
                      */
                     onError: function (error) {
-                        console.log(error);
+                        console.log('OffAmazonPayments.Widgets.AddressBook', error.getErrorCode(), error.getErrorMessage());
                     }
                 }).bind(self.options.addressWidgetDOMId);
             },

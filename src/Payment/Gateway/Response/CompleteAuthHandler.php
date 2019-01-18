@@ -58,8 +58,7 @@ class CompleteAuthHandler implements HandlerInterface
         SubjectReader $subjectReader,
         PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         Data $coreHelper
-    )
-    {
+    ) {
         $this->logger = $logger;
         $this->subjectReader = $subjectReader;
         $this->coreHelper = $coreHelper;
@@ -79,7 +78,6 @@ class CompleteAuthHandler implements HandlerInterface
         $order = $this->subjectReader->getOrder();
 
         if ($response['status']) {
-
             $payment->setTransactionId($response['authorize_transaction_id']);
 
 

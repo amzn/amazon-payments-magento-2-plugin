@@ -29,7 +29,9 @@ define([
         amazonLoginError = ko.observable(false),
         accessToken = ko.observable(null),
         // Match region config to amazon.Login.Region
-        regions = {'us': 'NA', 'de': 'EU', 'uk': 'EU', 'jp': 'APAC'};
+        regions = {'us': 'NA', 'de': 'EU', 'uk': 'EU', 'jp': 'APAC'},
+        sandboxMode,
+        region;
 
     if (typeof amazon === 'undefined') {
         /**
@@ -39,10 +41,10 @@ define([
             setClientId(clientId);  //eslint-disable-line no-use-before-define
             doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
 
-            var sandboxMode = amazonPaymentConfig.getValue('isSandboxEnabled', false);
+            sandboxMode = amazonPaymentConfig.getValue('isSandboxEnabled', false);
             amazon.Login.setSandboxMode(sandboxMode); //eslint-disable-line no-undef
 
-            var region = regions[amazonPaymentConfig.getValue('region')];
+            region = regions[amazonPaymentConfig.getValue('region')];
             amazon.Login.setRegion(region); //eslint-disable-line no-undef
         };
     } else {
@@ -53,7 +55,7 @@ define([
     // Widgets.js ready callback
     window.onAmazonPaymentsReady = function() {
         $(window).trigger('OffAmazonPayments');
-    }
+    };
 
     /**
      * Set Client ID

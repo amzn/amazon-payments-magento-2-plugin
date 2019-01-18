@@ -81,8 +81,7 @@ class SettlementRequestBuilder implements BuilderInterface
         SubjectReader $subjectReader,
         Data $coreHelper,
         Logger $logger
-    )
-    {
+    ) {
         $this->config = $config;
         $this->orderRepository = $orderRepository;
         $this->quoteRepository = $quoteRepository;
@@ -116,8 +115,6 @@ class SettlementRequestBuilder implements BuilderInterface
 
 
         if (isset($buildSubject['amazon_order_id']) && $buildSubject['amazon_order_id']) {
-
-
                 $data = [
                     'amazon_authorization_id' => $paymentDO->getPayment()->getParentTransactionId(),
                     'capture_amount' => $total,
@@ -132,13 +129,11 @@ class SettlementRequestBuilder implements BuilderInterface
                     'request_payment_authorization' => false
                 ];
 
-            if (isset($buildSubject['request_payment_authorization']) && $buildSubject['request_payment_authorization']) {
-                $data['request_payment_authorization'] = true;
-            }
-
+                if (isset($buildSubject['request_payment_authorization']) && $buildSubject['request_payment_authorization']) {
+                    $data['request_payment_authorization'] = true;
+                }
         }
 
         return $data;
     }
-
 }

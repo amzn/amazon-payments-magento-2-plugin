@@ -52,8 +52,7 @@ class OrderAdapter implements OrderAdapterInterface
         Order $order,
         \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory $addressAdapterFactory,
         Data $coreHelper
-    )
-    {
+    ) {
         $this->order = $order;
         $this->addressAdapterFactory = $addressAdapterFactory;
         $this->coreHelper = $coreHelper;

@@ -48,7 +48,8 @@ class ResetPassword extends Template
         return $this;
     }
 
-    public function displayAmazonInfo() {
+    public function displayAmazonInfo()
+    {
         $id = $this->session->getCustomer()->getId();
 
         $amazon = $this->customerLink->get($id);
@@ -60,10 +61,10 @@ class ResetPassword extends Template
         return false;
     }
 
-    public function getLink() {
+    public function getLink()
+    {
         $url = $this->urlModel->getUrl('customer/account/forgotpassword');
 
         return $url;
     }
-
 }

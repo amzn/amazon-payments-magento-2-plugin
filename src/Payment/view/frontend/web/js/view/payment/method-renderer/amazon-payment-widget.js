@@ -42,7 +42,14 @@ define(
         'use strict';
 
         var self,
-            countryData = customerData.get('directory-data');
+            countryData = customerData.get('directory-data'),
+            $amazonPayment,
+            serviceUrl,
+            placeOrder,
+            payload,
+            amazonAddress,
+            addressData,
+            customerField;
 
         return Component.extend({
             defaults: {
@@ -74,7 +81,7 @@ define(
              * Init payment widget
              */
             initPaymentWidget: function () {
-                var $amazonPayment = $('#amazon_payment');
+                $amazonPayment = $('#amazon_payment');
 
                 self.renderPaymentWidget();
                 $amazonPayment.trigger('click'); //activate Amazon Pay method on render
@@ -105,6 +112,7 @@ define(
                      * Error callback
                      */
                     onError: function (error) {
+                        console.log('OffAmazonPayments.Widgets.Wallet', error.getErrorCode(), error.getErrorMessage());
                         errorProcessor.process(error);
                     }
                 });
@@ -150,7 +158,7 @@ define(
              * Save billing address
              */
             setBillingAddressFromAmazon: function () {
-                var serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {
+                serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {
                         amazonOrderReference: amazonStorage.getOrderReference()
                     }),
                     payload = {
@@ -164,7 +172,7 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function (data) {
-                        var amazonAddress = data.shift(), addressData;
+                        amazonAddress = data.shift();
 
                         addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress);
                         addressData.telephone = !addressData.telephone ? '0000000000' : addressData.telephone;
@@ -173,7 +181,7 @@ define(
                         amazonStorage.isPlaceOrderDisabled(false);
 
                         if (window.checkoutConfig.amazonLogin.amazon_customer_email) {
-                            var customerField = $('#customer-email').val();
+                            customerField = $('#customer-email').val();
 
                             if (!customerField) {
                                 $('#customer-email').val(window.checkoutConfig.amazonLogin.amazon_customer_email);
@@ -207,8 +215,6 @@ define(
              * Save order
              */
             placeOrder: function (data, event) {
-                var placeOrder;
-
                 self = this;
 
                 if (event) {

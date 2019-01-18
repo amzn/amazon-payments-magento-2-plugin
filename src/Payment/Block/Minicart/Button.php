@@ -15,7 +15,6 @@
  */
 namespace Amazon\Payment\Block\Minicart;
 
-
 use Magento\Checkout\Model\Session;
 use Amazon\Payment\Helper\Data;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;

@@ -16,7 +16,6 @@
 
 namespace Amazon\Payment\Gateway\Http\Client;
 
-
 /**
  * Class SettlementClient
  * Amazon Pay capture client

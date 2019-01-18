@@ -74,8 +74,7 @@ class Data extends AbstractHelper
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper,
         StatusFactory $moduleStatusFactory
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->moduleList = $moduleList;
         $this->encryptor = $encryptor;
@@ -269,10 +268,12 @@ class Data extends AbstractHelper
      * @param null $store
      * @return bool
      */
-    public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)  {
+    public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
+    {
         $mcRegions = $this->scopeConfig->getValue(
             'multicurrency/regions',
-            $scope, $store
+            $scope,
+            $store
         );
 
         if ($mcRegions) {
@@ -315,11 +316,11 @@ class Data extends AbstractHelper
     public function useMultiCurrency($store = null)
     {
         if ($this->multiCurrencyEnabled()) {
-
             // get allowed presentment currencies from config.xml
             $currencies = $this->scopeConfig->getValue(
                 'multicurrency/currencies',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
             );
 
             if ($currencies) {

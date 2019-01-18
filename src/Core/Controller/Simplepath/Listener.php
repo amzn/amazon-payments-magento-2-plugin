@@ -41,8 +41,7 @@ class Listener extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory,
         \Amazon\Core\Model\Config\SimplePath $simplepath,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    )
-    {
+    ) {
         $this->simplepath = $simplepath;
         $this->jsonResultFactory = $jsonResultFactory;
         $this->scopeConfig = $scopeConfig;
@@ -69,7 +68,7 @@ class Listener extends \Magento\Framework\App\Action\Action
         try {
             if (strpos($payload, 'encryptedKey') === false) {
                 $return = ['result' => 'error', 'message' => 'Invalid payload: ' . $payload];
-            } else if ($payload) {
+            } elseif ($payload) {
                 $json = $this->simplepath->decryptPayload($payload, false);
 
                 if ($json) {
