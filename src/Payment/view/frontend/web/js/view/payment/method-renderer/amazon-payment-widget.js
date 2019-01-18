@@ -112,6 +112,7 @@ define(
                      * Error callback
                      */
                     onError: function (error) {
+                        console.log('OffAmazonPayments.Widgets.Wallet', error.getErrorCode(), error.getErrorMessage());
                         errorProcessor.process(error);
                     }
                 });
