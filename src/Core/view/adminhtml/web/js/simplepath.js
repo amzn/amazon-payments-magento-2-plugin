@@ -37,6 +37,8 @@ define(
                     $container: null,
                     pollInterval: 1500,
                     $form: null,
+                    apSimplePathDOMId: '#amazon_simplepath',
+                    apSimplePathBackDOMId: '#amazon_simplepath_back',
                 },
 
                 /**
@@ -46,7 +48,7 @@ define(
                 initObservable: function () {
                     var self = this;
 
-                    self.$amazonSimplepath = $('#amazon_simplepath');
+                    self.$amazonSimplepath = $(self.apSimplePathDOMId);
                     self.$amazonFields = $('#payment_' + self.getCountry() + '_' + self.selector + ' .form-list');
                     self.$amazonCredentialsHeader = $('#payment_' + self.getCountry() + '_' + self.selector
                         + '_credentials-head');
@@ -54,8 +56,8 @@ define(
                         + '_credentials_credentials_json');
                     self.$amazonMerchantId = $('#payment_' + self.getCountry() + '_' + self.selector
                         + '_credentials_merchant_id').val();
-                    self.$amazonSpBack = $('#amazon_simplepath_back');
-                    self.$container = $('#amazon_simplepath');
+                    self.$amazonSpBack = $(self.apSimplePathBackDOMId);
+                    self.$container = $(self.apSimplePathDOMId);
 
                     if (this.isMultiCurrencyRegion) {
                         $('#row_payment_' + self.getCountry() + '_amazon_payment_advanced_sales_options_multicurrency').show();
