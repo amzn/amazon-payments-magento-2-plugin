@@ -41,7 +41,7 @@ define(
     ) {
         'use strict';
 
-        var self,
+        var context,
             countryData = customerData.get('directory-data'),
             $amazonPayment,
             serviceUrl,
@@ -53,14 +53,14 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Amazon_Payment/payment/amazon-payment-widget'
-            },
-            options: {
+                template: 'Amazon_Payment/payment/amazon-payment-widget',
                 sellerId: registry.get('amazonPayment').merchantId,
                 paymentWidgetDOMId: 'walletWidgetDiv',
                 widgetScope: registry.get('amazonPayment').loginScope,
                 presentmentCurrency: registry.get('amazonPayment').presentmentCurrency,
-                useMultiCurrency: registry.get('amazonPayment').useMultiCurrency
+                useMultiCurrency: registry.get('amazonPayment').useMultiCurrency,
+                presentmentDOMId: 'tr.totals.charge',
+                apInputDOMId: 'amazon_payment'
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
@@ -73,17 +73,16 @@ define(
              * Inits
              */
             initialize: function () {
-                self = this;
+                context = this;
                 this._super();
             },
 
             /**
              * Init payment widget
              */
-            initPaymentWidget: function () {
-                $amazonPayment = $('#amazon_payment');
-
-                self.renderPaymentWidget();
+            initPaymentWidget: function () {;
+                $amazonPayment = $(context.apInputDOMId);
+                context.renderPaymentWidget();
                 $amazonPayment.trigger('click'); //activate Amazon Pay method on render
                 $amazonPayment.trigger('rendered');
             },
@@ -93,8 +92,8 @@ define(
              */
             renderPaymentWidget: function () {
                 var widget = new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
-                    sellerId: self.options.sellerId,
-                    scope: self.options.widgetScope,
+                    sellerId: context.sellerId,
+                    scope: context.widgetScope,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
 
                     /**
@@ -102,7 +101,7 @@ define(
                      */
                     onPaymentSelect: function () { // orderReference
                         amazonStorage.isPlaceOrderDisabled(true);
-                        self.setBillingAddressFromAmazon();
+                        context.setBillingAddressFromAmazon();
                     },
                     design: {
                         designMode: 'responsive'
@@ -116,14 +115,14 @@ define(
                         errorProcessor.process(error);
                     }
                 });
-                if (self.options.useMultiCurrency) {
-                    widget.setPresentmentCurrency(self.options.presentmentCurrency);
-                    $('tr.totals.charge').hide();
+                if (context.useMultiCurrency) {
+                    widget.setPresentmentCurrency(context.presentmentCurrency);
+                    $(context.presentmentDOMId).hide();
                 }
                 else {
-                    $('tr.totals.charge').show();
+                    $(context.presentmentDOMId).show();
                 }
-                widget.bind(self.options.paymentWidgetDOMId);
+                widget.bind(context.paymentWidgetDOMId);
             },
 
             /**
@@ -158,7 +157,7 @@ define(
              * Save billing address
              */
             setBillingAddressFromAmazon: function () {
-                serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {
+                var serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {
                         amazonOrderReference: amazonStorage.getOrderReference()
                     }),
                     payload = {
@@ -215,7 +214,7 @@ define(
              * Save order
              */
             placeOrder: function (data, event) {
-                self = this;
+                context = this;
 
                 if (event) {
                     event.preventDefault();
@@ -226,7 +225,7 @@ define(
                     placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
                     $.when(placeOrder).fail(function () {
-                        self.isPlaceOrderActionAllowed(true);
+                        context.isPlaceOrderActionAllowed(true);
                     }).done(this.afterPlaceOrder.bind(this));
 
                     return true;
