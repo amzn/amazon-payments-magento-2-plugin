@@ -17,6 +17,7 @@ namespace Amazon\Core\Block;
 
 use Amazon\Core\Helper\CategoryExclusion;
 use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\Config as AmazonConfig;
 use Magento\Customer\Model\Url;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -45,14 +46,21 @@ class Config extends Template
      */
     private $categoryExclusionHelper;
 
+    /**
+     * @var AmazonConfig
+     */
+    private $config;
+
     public function __construct(
         Context $context,
         Data $coreHelper,
+        AmazonConfig $config,
         Url $url,
         CategoryExclusion $categoryExclusionHelper
     ) {
         parent::__construct($context);
         $this->coreHelper = $coreHelper;
+        $this->config = $config;
         $this->url = $url;
         $this->categoryExclusionHelper = $categoryExclusionHelper;
     }
@@ -83,11 +91,11 @@ class Config extends Template
             'loginScope'               => $this->coreHelper->getLoginScope(),
             'allowAmLoginLoading'      => $this->coreHelper->allowAmLoginLoading(),
             'isEuPaymentRegion'        => $this->coreHelper->isEuPaymentRegion(),
-            'presentmentCurrency'      => $this->coreHelper->getPresentmentCurrency(),
+            'presentmentCurrency'      => $this->config->getPresentmentCurrency(),
             'oAuthHashRedirectUrl'     => $this->coreHelper->getOAuthRedirectUrl(),
             'isQuoteDirty'             => $this->categoryExclusionHelper->isQuoteDirty(),
             'region'                   => $this->coreHelper->getRegion(),
-            'useMultiCurrency'         => $this->coreHelper->useMultiCurrency()
+            'useMultiCurrency'         => $this->config->useMultiCurrency()
         ];
 
         if ($this->coreHelper->isSandboxEnabled()) {

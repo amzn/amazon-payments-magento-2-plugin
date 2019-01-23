@@ -21,6 +21,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\Config as AmazonConfig;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 use Amazon\Payment\Plugin\AdditionalInformation;
@@ -49,6 +50,11 @@ class AuthorizationRequestBuilder implements BuilderInterface
     private $coreHelper;
 
     /**
+     * @var AmazonConfig
+     */
+    private $amazonConfig;
+
+    /**
      * @var ManagerInterface
      */
     private $eventManager;
@@ -65,6 +71,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
      * @param ProductMetadata $productMetadata
      * @param SubjectReader $subjectReader
      * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param ManagerInterface $eventManager
      * @param CategoryExclusion $categoryExclusion
      */
@@ -73,11 +80,13 @@ class AuthorizationRequestBuilder implements BuilderInterface
         ProductMetaData $productMetadata,
         SubjectReader $subjectReader,
         Data $coreHelper,
+        AmazonConfig $amazonConfig,
         ManagerInterface $eventManager,
         CategoryExclusion $categoryExclusion
     ) {
         $this->config = $config;
         $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
         $this->eventManager = $eventManager;
@@ -111,7 +120,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
             $storeId = $buildSubject['multicurrency']['store_id'];
         } else {
             // auth has not happened for this order yet
-            if ($this->coreHelper->useMultiCurrency($storeId)) {
+            if ($this->config->useMultiCurrency($storeId)) {
                 $quote = $this->subjectReader->getQuote();
                 $total = $quote->getGrandTotal();
                 $currencyCode = $quote->getQuoteCurrencyCode();
