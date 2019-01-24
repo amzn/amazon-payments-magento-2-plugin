@@ -17,7 +17,7 @@ namespace Amazon\Core\Block;
 
 use Amazon\Core\Helper\CategoryExclusion;
 use Amazon\Core\Helper\Data;
-use Amazon\Core\Model\Config as AmazonConfig;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Customer\Model\Url;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -51,6 +51,14 @@ class Config extends Template
      */
     private $config;
 
+    /**
+     * Config constructor.
+     * @param Context $context
+     * @param Data $coreHelper
+     * @param AmazonConfig $config
+     * @param Url $url
+     * @param CategoryExclusion $categoryExclusionHelper
+     */
     public function __construct(
         Context $context,
         Data $coreHelper,

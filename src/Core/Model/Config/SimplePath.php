@@ -17,7 +17,7 @@
 namespace Amazon\Core\Model\Config;
 
 use Amazon\Core\Helper\Data as CoreHelper;
-use Amazon\Core\Model\Config as AmazonConfig;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;

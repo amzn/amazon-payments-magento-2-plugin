@@ -20,7 +20,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-class Config
+class AmazonConfig
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

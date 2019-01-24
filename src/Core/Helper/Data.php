@@ -23,7 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\StatusFactory;
-use Amazon\Core\Model\Config;
+use Amazon\Core\Model\AmazonConfig;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -72,7 +72,7 @@ class Data extends AbstractHelper
      * @param StoreManagerInterface $storeManager
      * @param ClientIp $clientIpHelper
      * @param StatusFactory $moduleStatusFactory
-     * @param Config $config
+     * @param AmazonConfig $config
      */
     public function __construct(
         ModuleListInterface $moduleList,
@@ -81,7 +81,7 @@ class Data extends AbstractHelper
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper,
         StatusFactory $moduleStatusFactory,
-        Config $config
+        AmazonConfig $config
     ) {
         parent::__construct($context);
         $this->moduleList = $moduleList;
@@ -161,7 +161,7 @@ class Data extends AbstractHelper
     /*
      * @return string
      *
-     * @deprecated - use \Amazon\Core\Model\Config::getPaymentRegion() instead
+     * @deprecated - use \Amazon\Core\Model\AmazonConfig::getPaymentRegion() instead
      */
     public function getPaymentRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {

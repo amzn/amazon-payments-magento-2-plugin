@@ -219,8 +219,6 @@ define(
             placeOrder: function (data, event) {
                 var placeOrder;
 
-                context = this;
-
                 if (event) {
                     event.preventDefault();
                 }

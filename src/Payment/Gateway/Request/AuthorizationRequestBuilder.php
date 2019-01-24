@@ -21,7 +21,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
-use Amazon\Core\Model\Config as AmazonConfig;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 use Amazon\Payment\Plugin\AdditionalInformation;
@@ -120,7 +120,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
             $storeId = $buildSubject['multicurrency']['store_id'];
         } else {
             // auth has not happened for this order yet
-            if ($this->config->useMultiCurrency($storeId)) {
+            if ($this->amazonConfig->useMultiCurrency($storeId)) {
                 $quote = $this->subjectReader->getQuote();
                 $total = $quote->getGrandTotal();
                 $currencyCode = $quote->getQuoteCurrencyCode();
