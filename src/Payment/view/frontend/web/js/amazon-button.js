@@ -42,14 +42,15 @@ define([
              * Create button
              */
             _create: function () {
-                _this = this; //eslint-disable-line
+                _this = this;
 
                 this._verifyAmazonConfig();
 
                 if (typeof OffAmazonPayments === 'undefined') {
-                    $(window).on('OffAmazonPayments', function() {
-                        _this._renderAmazonButton();
-                    });
+                    // async render
+                    $(window).on('OffAmazonPayments', $.proxy(function () {
+                        this._renderAmazonButton();
+                    }, this));
                 } else {
                     this._renderAmazonButton();
                 }
