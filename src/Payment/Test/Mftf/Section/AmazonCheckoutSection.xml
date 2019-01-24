@@ -14,9 +14,5 @@
         <element name="productPayButton" type="div" selector="#amazon-addtoCart-amazon-pay-button-product"/>
         <element name="checkoutPayButton" type="img" selector=".amazon-button-container img"/>
         <element name="loginButton" type="img" selector="#LoginWithAmazon-amazon-login img"/>
-        <element name="shipping" type="button" selector=".table-checkout-shipping-method"/>
-        <element name="shippingRadio" type="radio" selector=".table-checkout-shipping-method input[type=radio]"/>
-        <element name="continue" type="button" selector="#shipping-method-buttons-container button"/>
-        <element name="messageError" type="div" selector=".message-error div"/>
     </section>
 </sections>

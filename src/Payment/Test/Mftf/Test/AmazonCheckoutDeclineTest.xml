@@ -23,7 +23,7 @@
             <argument name="cc" value="4545" />
         </actionGroup>
         <!--Decline Error Message-->
-        <waitForText userInput="Invalid payment method" selector="{{AmazonCheckoutSection.messageError}}" stepKey="waitForText"/>
+        <waitForText userInput="Invalid payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
         <!--Use default CC#-->
         <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
         <!--See success message-->
@@ -44,7 +44,7 @@
             <argument name="cc" value="3434" />
         </actionGroup>
         <!--Decline Error Message-->
-        <waitForText userInput="There has been a problem with the selected payment method" selector="{{AmazonCheckoutSection.messageError}}" stepKey="waitForText"/>
+        <waitForText userInput="There has been a problem with the selected payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
         <!--Verify iframe wallet message-->
         <executeJS function="return window.name;" stepKey="topName"/>
         <executeJS function="return jQuery('#walletWidgetDiv iframe').attr('name');" stepKey="iframeName"/>
@@ -71,7 +71,7 @@
             <argument name="cc" value="2323" />
         </actionGroup>
         <!--Decline Error Message-->
-        <waitForText userInput="please choose another payment method" selector="{{AmazonCheckoutSection.messageError}}" stepKey="waitForText"/>        <!--Verify iframe wallet message-->
+        <waitForText userInput="please choose another payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>        <!--Verify iframe wallet message-->
         <!--Wait for redirect to cart-->
         <wait time="5" stepKey="waitRedirect"/>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
@@ -98,7 +98,7 @@
             <argument name="cc" value="5656" />
         </actionGroup>
         <!--Timeout Error Message-->
-        <waitForText userInput="please choose another payment method" selector="{{AmazonCheckoutSection.messageError}}" stepKey="waitForText"/>
+        <waitForText userInput="please choose another payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
         <!--Wait for redirect to cart-->
         <wait time="5" stepKey="waitRedirect"/>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
@@ -124,6 +124,6 @@
             <argument name="cc" value="5656" />
         </actionGroup>
         <!--Transaction declined error message-->
-        <waitForText userInput="Transaction has been declined" selector="{{AmazonCheckoutSection.messageError}}" stepKey="waitForText"/>
+        <waitForText userInput="Transaction has been declined" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
     </test>
 </tests>
