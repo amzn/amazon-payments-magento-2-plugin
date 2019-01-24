@@ -23,6 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\StatusFactory;
+use Amazon\Core\Model\AmazonConfig;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -58,6 +59,11 @@ class Data extends AbstractHelper
     private $moduleStatusFactory;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * Data constructor.
      *
      * @param ModuleListInterface $moduleList
@@ -66,6 +72,7 @@ class Data extends AbstractHelper
      * @param StoreManagerInterface $storeManager
      * @param ClientIp $clientIpHelper
      * @param StatusFactory $moduleStatusFactory
+     * @param AmazonConfig $config
      */
     public function __construct(
         ModuleListInterface $moduleList,
@@ -73,7 +80,8 @@ class Data extends AbstractHelper
         EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper,
-        StatusFactory $moduleStatusFactory
+        StatusFactory $moduleStatusFactory,
+        AmazonConfig $config
     ) {
         parent::__construct($context);
         $this->moduleList = $moduleList;
@@ -81,6 +89,7 @@ class Data extends AbstractHelper
         $this->storeManager = $storeManager;
         $this->clientIpHelper = $clientIpHelper;
         $this->moduleStatusFactory = $moduleStatusFactory;
+        $this->config = $config;
     }
 
     /*
@@ -151,6 +160,8 @@ class Data extends AbstractHelper
 
     /*
      * @return string
+     *
+     * @deprecated - use \Amazon\Core\Model\AmazonConfig::getPaymentRegion() instead
      */
     public function getPaymentRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
@@ -259,79 +270,6 @@ class Data extends AbstractHelper
         $paymentRegion = $this->getPaymentRegion($scope);
 
         return (in_array($paymentRegion, ['uk', 'de']));
-    }
-
-    /**
-     * Checks to see if store's selected region is a multicurrency region.
-     * @param string $scope
-     * @param null $scopeCode
-     * @param null $store
-     * @return bool
-     */
-    public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
-    {
-        $mcRegions = $this->scopeConfig->getValue(
-            'multicurrency/regions',
-            $scope,
-            $store
-        );
-
-        if ($mcRegions) {
-            $allowedRegions = explode(',', $mcRegions);
-
-            if (in_array($this->getPaymentRegion(), $allowedRegions)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Check to see if multicurrency is enabled and if it's available for given endpoint/region
-     * @param string $scope
-     * @param null $scopeCode
-     * @return bool
-     */
-    public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
-    {
-        $enabled = $this->scopeConfig->getValue(
-            'payment/amazon_payment/multicurrency',
-            $scope,
-            $scopeCode
-        );
-
-        if ($enabled) {
-            return $this->isMulticurrencyRegion($scope, $scopeCode, $store);
-        }
-
-        return false;
-    }
-
-    /**
-     * Only certain currency codes are allowed to be used with multi-currency
-     * @param null $store
-     * @return bool
-     */
-    public function useMultiCurrency($store = null)
-    {
-        if ($this->multiCurrencyEnabled()) {
-            // get allowed presentment currencies from config.xml
-            $currencies = $this->scopeConfig->getValue(
-                'multicurrency/currencies',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            );
-
-            if ($currencies) {
-                $allowedCurrencies = explode(',', $currencies);
-
-                if (in_array($this->getCurrentCurrencyCode(), $allowedCurrencies)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /*
@@ -654,49 +592,12 @@ class Data extends AbstractHelper
         return ($this->isLwaEnabled() && $this->isPwaEnabled() && $this->isCurrentCurrencySupportedByAmazon());
     }
 
-    /*
-     * @return string
-    */
-    public function getPresentmentCurrency()
-    {
-        return $this->getCurrentCurrencyCode();
-    }
-
     /**
      * @return bool
      */
     public function isCurrentCurrencySupportedByAmazon()
     {
-        return $this->getBaseCurrencyCode() == $this->getCurrencyCode();
-    }
-
-    /**
-     * Retrieves the base currency of the store.
-     *
-     * @param null $store
-     * @return mixed
-     */
-    public function getBaseCurrencyCode($store = null)
-    {
-        return $this->scopeConfig->getValue(
-            'currency/options/base',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        );
-    }
-
-
-
-    /**
-     * Gets customer's current currency
-     *
-     * @param null $store
-     * @return mixed
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    protected function getCurrentCurrencyCode($store = null)
-    {
-        return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
+        return $this->config->getBaseCurrencyCode() == $this->getCurrencyCode();
     }
 
     /**
