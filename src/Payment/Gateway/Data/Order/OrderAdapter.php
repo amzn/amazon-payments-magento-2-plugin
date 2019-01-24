@@ -20,6 +20,7 @@ use Magento\Payment\Gateway\Data\Order\AddressAdapterFactory;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Model\Order;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Helper\Data;
 
 /**
@@ -43,19 +44,28 @@ class OrderAdapter implements OrderAdapterInterface
     private $coreHelper;
 
     /**
+     * @var AmazonConfig
+     */
+    private $config;
+
+    /**
      * OrderAdapter constructor.
+     *
      * @param Order $order
      * @param AddressAdapterFactory $addressAdapterFactory
      * @param Data $coreHelper
+     * @param \Amazon\Core\Model\AmazonConfig $config
      */
     public function __construct(
         Order $order,
         \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory $addressAdapterFactory,
-        Data $coreHelper
+        Data $coreHelper,
+        AmazonConfig $config
     ) {
         $this->order = $order;
         $this->addressAdapterFactory = $addressAdapterFactory;
         $this->coreHelper = $coreHelper;
+        $this->config = $config;
     }
 
     /**
@@ -179,7 +189,7 @@ class OrderAdapter implements OrderAdapterInterface
     {
         $values = ['multicurrency' => false];
 
-        if ($this->coreHelper->useMultiCurrency()) {
+        if ($this->config->useMultiCurrency()) {
             $invoices = $this->order->getInvoiceCollection();
 
             foreach ($invoices->getItems() as $key => $invoice) {

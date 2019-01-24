@@ -41,26 +41,16 @@ define(
     ) {
         'use strict';
 
-        var self,
-            countryData = customerData.get('directory-data'),
-            $amazonPayment,
-            serviceUrl,
-            placeOrder,
-            payload,
-            amazonAddress,
-            addressData,
-            customerField;
+        var context,
+            countryData = customerData.get('directory-data');
 
         return Component.extend({
             defaults: {
-                template: 'Amazon_Payment/payment/amazon-payment-widget'
-            },
-            options: {
-                sellerId: registry.get('amazonPayment').merchantId,
+                template: 'Amazon_Payment/payment/amazon-payment-widget',
                 paymentWidgetDOMId: 'walletWidgetDiv',
-                widgetScope: registry.get('amazonPayment').loginScope,
-                presentmentCurrency: registry.get('amazonPayment').presentmentCurrency,
-                useMultiCurrency: registry.get('amazonPayment').useMultiCurrency
+                presentmentDOMId: 'tr.totals.charge',
+                apInputDOMId: '#amazon_payment',
+                customerEmail: '#customer-email'
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonAccountLoggedIn: amazonStorage.isAmazonAccountLoggedIn,
@@ -73,7 +63,7 @@ define(
              * Inits
              */
             initialize: function () {
-                self = this;
+                context = this;
                 this._super();
             },
 
@@ -81,11 +71,24 @@ define(
              * Init payment widget
              */
             initPaymentWidget: function () {
-                $amazonPayment = $('#amazon_payment');
+                var $amazonPayment = $(context.apInputDOMId);
 
-                self.renderPaymentWidget();
+                context.initDefaultValues();
+                context.renderPaymentWidget();
                 $amazonPayment.trigger('click'); //activate Amazon Pay method on render
                 $amazonPayment.trigger('rendered');
+            },
+
+            /**
+             * Init potentially asynchronous values
+             */
+            initDefaultValues: function () {
+                registry.get('amazonPayment', function (amazonPayment) {
+                    context.widgetScope = amazonPayment.loginScope;
+                    context.sellerId = amazonPayment.merchantId;
+                    context.presentmentCurrency = amazonPayment.presentmentCurrency;
+                    context.useMultiCurrency = amazonPayment.useMultiCurrency;
+                });
             },
 
             /**
@@ -93,8 +96,8 @@ define(
              */
             renderPaymentWidget: function () {
                 var widget = new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
-                    sellerId: self.options.sellerId,
-                    scope: self.options.widgetScope,
+                    sellerId: context.sellerId,
+                    scope: context.widgetScope,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
 
                     /**
@@ -102,7 +105,7 @@ define(
                      */
                     onPaymentSelect: function () { // orderReference
                         amazonStorage.isPlaceOrderDisabled(true);
-                        self.setBillingAddressFromAmazon();
+                        context.setBillingAddressFromAmazon();
                     },
                     design: {
                         designMode: 'responsive'
@@ -112,18 +115,17 @@ define(
                      * Error callback
                      */
                     onError: function (error) {
-                        console.log('OffAmazonPayments.Widgets.Wallet', error.getErrorCode(), error.getErrorMessage());
                         errorProcessor.process(error);
                     }
                 });
-                if (self.options.useMultiCurrency) {
-                    widget.setPresentmentCurrency(self.options.presentmentCurrency);
-                    $('tr.totals.charge').hide();
+                if (context.useMultiCurrency) {
+                    widget.setPresentmentCurrency(context.presentmentCurrency);
+                    $(context.presentmentDOMId).hide();
                 }
                 else {
-                    $('tr.totals.charge').show();
+                    $(context.presentmentDOMId).show();
                 }
-                widget.bind(self.options.paymentWidgetDOMId);
+                widget.bind(context.paymentWidgetDOMId);
             },
 
             /**
@@ -158,7 +160,7 @@ define(
              * Save billing address
              */
             setBillingAddressFromAmazon: function () {
-                serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {
+                var serviceUrl = urlBuilder.createUrl('/amazon-billing-address/:amazonOrderReference', {
                         amazonOrderReference: amazonStorage.getOrderReference()
                     }),
                     payload = {
@@ -172,7 +174,7 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function (data) {
-                        amazonAddress = data.shift();
+                        var amazonAddress = data.shift(), addressData;
 
                         addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress);
                         addressData.telephone = !addressData.telephone ? '0000000000' : addressData.telephone;
@@ -181,10 +183,10 @@ define(
                         amazonStorage.isPlaceOrderDisabled(false);
 
                         if (window.checkoutConfig.amazonLogin.amazon_customer_email) {
-                            customerField = $('#customer-email').val();
+                            var customerField = $(context.customerEmail).val();
 
                             if (!customerField) {
-                                $('#customer-email').val(window.checkoutConfig.amazonLogin.amazon_customer_email);
+                                $(context.customerEmail).val(window.checkoutConfig.amazonLogin.amazon_customer_email);
                             }
                         }
                     }
@@ -215,7 +217,7 @@ define(
              * Save order
              */
             placeOrder: function (data, event) {
-                self = this;
+                var placeOrder;
 
                 if (event) {
                     event.preventDefault();
@@ -226,7 +228,7 @@ define(
                     placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
                     $.when(placeOrder).fail(function () {
-                        self.isPlaceOrderActionAllowed(true);
+                        context.isPlaceOrderActionAllowed(true);
                     }).done(this.afterPlaceOrder.bind(this));
 
                     return true;

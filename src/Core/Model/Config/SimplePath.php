@@ -17,6 +17,7 @@
 namespace Amazon\Core\Model\Config;
 
 use Amazon\Core\Helper\Data as CoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
@@ -74,8 +75,14 @@ class SimplePath
     private $coreHelper;
 
     /**
+     * @var AmazonConfig
+     */
+    private $amazonConfig;
+
+    /**
      * SimplePath constructor.
      * @param CoreHelper $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ProductMetadataInterface $productMeta
@@ -94,6 +101,7 @@ class SimplePath
      */
     public function __construct(
         CoreHelper $coreHelper,
+        AmazonConfig $amazonConfig,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMeta,
@@ -109,6 +117,7 @@ class SimplePath
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->coreHelper    = $coreHelper;
+        $this->amazonConfig  = $amazonConfig;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -559,7 +568,7 @@ class SimplePath
             'isSecure'      => (int) ($this->request->isSecure()),
             'hasOpenssl'    => (int) (extension_loaded('openssl')),
             'formParams'    => $this->getFormParams(),
-            'isMultiCurrencyRegion' => (int) $this->coreHelper->isMulticurrencyRegion(),
+            'isMultiCurrencyRegion' => (int) $this->amazonConfig->isMulticurrencyRegion(),
         ];
     }
 }
