@@ -90,7 +90,7 @@ class AmazonAddressFactory
             AmazonAddressInterface::LINES => $this->getLines($address)
         ];
 
-        if(isset($address['City'])) {
+        if (isset($address['City'])) {
             $data[AmazonAddressInterface::CITY] = $this->escaper->escapeHtml($address['City']);
         }
 

@@ -43,7 +43,7 @@ class Address
     /**
      * @var ScopeConfigInterface
      */
-    private $_scopeConfig;
+    private $scopeConfig;
 
     public function __construct(
         AddressInterfaceFactory $addressFactory,
@@ -54,7 +54,7 @@ class Address
         $this->addressFactory    = $addressFactory;
         $this->regionFactory     = $regionFactory;
         $this->regionDataFactory = $regionDataFactory;
-        $this->_scopeConfig = $config;
+        $this->scopeConfig = $config;
     }
 
     /**
@@ -66,7 +66,10 @@ class Address
      */
     public function convertToMagentoEntity(AmazonAddressInterface $amazonAddress)
     {
-        $addressLinesAllowed = (int)$this->_scopeConfig->getValue('customer/address/street_lines', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $addressLinesAllowed = (int)$this->scopeConfig->getValue(
+            'customer/address/street_lines',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
 
         $address = $this->addressFactory->create();
         $address->setFirstname($amazonAddress->getFirstName());
@@ -76,16 +79,15 @@ class Address
         $address->setTelephone($amazonAddress->getTelephone());
         $address->setCountryId($this->getCountryId($amazonAddress));
 
-
         /*
          * The number of lines in a street address is configurable via 'customer/address/street_lines'.
          * To avoid discarding information, we'll concatenate additional lines so that they fit within the configured
          *  address length.
          */
         $lines = [];
-        for($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 4; $i++) {
             $line = (string) $amazonAddress->getLine($i);
-            if($i <= $addressLinesAllowed) {
+            if ($i <= $addressLinesAllowed) {
                 $lines[] = $line;
             } else {
                 $lines[count($lines)-1] = trim($lines[count($lines)-1] . ' ' . $line);
