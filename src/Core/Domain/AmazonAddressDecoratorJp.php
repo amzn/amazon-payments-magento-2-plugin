@@ -16,7 +16,6 @@
 namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonAddressInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class AmazonAddressDecoratorJp implements AmazonAddressInterface
 {
@@ -24,18 +23,14 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
      * @var AmazonAddressInterface
      */
     private $amazonAddress;
-    private $_scopeConfig;
 
     /**
      * @param AmazonAddressInterface $amazonAddress
-     * @param ScopeConfigInterface $config
      */
     public function __construct(
-        AmazonAddressInterface $amazonAddress,
-        ScopeConfigInterface $config
+        AmazonAddressInterface $amazonAddress
     ) {
         $this->amazonAddress = $amazonAddress;
-        $this->_scopeConfig = $config;
     }
 
     /**
@@ -43,32 +38,13 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
      */
     public function getLines()
     {
-        $addressLinesAllowed = (int)$this->_scopeConfig->getValue('customer/address/street_lines', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $city = $this->amazonAddress->getCity();
-
 
         /*
          * AmazonAddressDecoratorJp->getCity() returns address line 1 when city is empty.
          * Omit line 1 from the street address in this case.
          */
-        $offset = empty($city) ? 1 : 0;
-
-        /*
-         * The number of lines in a street address is configurable via 'customer/address/street_lines'.
-         * To avoid discarding information, we'll concatenate additional lines so that they fit within the configured
-         *  address length.
-         */
-        $lines = [];
-        for($i = 1; $i <= 4; $i++) {
-            $line = (string) $this->amazonAddress->getLine($i+$offset);
-            if($i <= $addressLinesAllowed) {
-                $lines[] = $line;
-            } else {
-                $lines[count($lines)-1] = trim($lines[count($lines)-1] . ' ' . $line);
-            }
-        }
-
-        return $lines;
+        return array_slice($this->amazonAddress->getLines(), empty($city) ? 1 : 0);
     }
 
     /**
@@ -140,6 +116,10 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
      */
     public function getLine($lineNumber)
     {
-        $this->amazonAddress->getLine($lineNumber);
+        $lines = $this->getLines();
+        if (isset($lines[$lineNumber-1])) {
+            return $lines[$lineNumber-1];
+        }
+        return null;
     }
 }
