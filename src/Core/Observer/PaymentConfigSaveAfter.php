@@ -99,9 +99,6 @@ class PaymentConfigSaveAfter implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        // Make sure address captures 3 lines to be compatible with AP
-        $this->configWriter->save('customer/address/street_lines', 3);
-
         if (!$this->request->getParam('amazon_test_creds')) {
             return;
         }
