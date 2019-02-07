@@ -119,11 +119,25 @@ Sales Options
 Use Multi-currency
 ..................
 	
-Enables the multi-currency feature of Amazon Pay for Magento 2. Currencies supported include: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF USD.
+Enables the multi-currency feature of Amazon Pay for Magento 2. Currencies supported include:
+
+* Australian Dollar (AUD)
+* British Pound (GBP)
+* Danish Krone (DKK)
+* Euro (EUR)
+* Hong Kong Dollar (HKD)
+* Japanese Yen (JPY)
+* New Zealand Dollar (NZD)
+* Norwegian Krone (NOK)
+* South African Rand (ZAR)
+* Swedish Krone (SEK)
+* Swiss Franc (CHF)
+* United States Dollar (USD)
 
 The Amazon Pay multi-currency feature is designed for international merchants who list prices in more than one currency on their website and charge their customers the exact amount quoted on the site. When you enable multi-currency, you are not limited by the currency associated with your Amazon Payments merchant account (the ledger currency in which you receive disbursements from Amazon Payments). The multi-currency feature is offered by Amazon Services Europe SARL.
 
 The benefit to your customers is that they don’t need to worry about currency conversion or rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out on your website with their existing Amazon account.
+
 .. note:: Multi-currency is currently supported for payment region EU and UK only. If you have configured a payment region different than this, this option will not be available. 
 
 Store Name

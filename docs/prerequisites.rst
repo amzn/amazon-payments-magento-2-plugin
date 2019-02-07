@@ -4,7 +4,7 @@ Prerequisites
 System requirements
 -------------------
 
-+The **Amazon Pay and Login with Amazon** Magento 2 extension requires you to have a valid **Amazon Pay** merchant account (refer to the :ref:`prerequisites-amazon-account-setup` if you don't have one yet) and a webserver running a Magento 2 store instance with following conditions met:
+The **Amazon Pay and Login with Amazon** Magento 2 extension requires you to have a valid **Amazon Pay** merchant account (refer to the :ref:`prerequisites-amazon-account-setup` if you don't have one yet) and a webserver running a Magento 2 store instance with following conditions met:
 
 * Magento CE (2.1.0 or higher)
 * cURL for PHP
