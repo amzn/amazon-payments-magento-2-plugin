@@ -109,13 +109,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#frontend">Frontend</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#button-display-language">Button Display Language</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#button-color">Button Color</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#button-size">Button Size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#login-with-amazon-available-in-authentication-popup">Login with Amazon available in authentication popup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#amazon-pay-button-is-visible-on-product-page">Amazon Pay button is visible on Product Page</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#amazon-pay-button-is-visible-on-minicart">Amazon Pay button is visible on minicart</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#login-with-amazon-available-in-authentication-popup">Login with Amazon available in authentication popup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#show-amazon-pay-in-payment-methods">Show Amazon Pay in payment methods</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#sales-options">Sales Options</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#new-order-status">New Order Status</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#use-multi-currency">Use Multi-currency</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#store-name">Store Name</a></li>
 </ul>
 </li>
@@ -250,14 +252,13 @@
 <div class="section" id="authorization-mode">
 <h4>Authorization Mode<a class="headerlink" href="#authorization-mode" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
-<li><cite>Synchronous</cite> (default) - The authorization is processed during the checkout.</li>
-<li><cite>Asynchronous</cite> - The authorization is processed after the checkout was completed.</li>
-<li><cite>Synchronous if possible</cite> - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards.</li>
+<li><cite>Immediate</cite> (default) - The authorization is processed during the checkout.</li>
+<li><cite>Automatic</cite> - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards.</li>
 </ul>
 <p>Independent of the mode you decide for, make sure to only orders which are successfully authorized by Amazon Pay (order state: <cite>Processing</cite>).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you expect high order values, the <strong>asynchronous</strong> authorization might be the best chioce for your business.</p>
+<p class="last">If you expect high order values, please use <strong>Automatic</strong> Authorization mode.</p>
 </div>
 </div>
 <div class="section" id="update-mechanism">
@@ -281,28 +282,35 @@
 <h4>Button Color<a class="headerlink" href="#button-color" title="Permalink to this headline">¶</a></h4>
 <p>Allows selection of button color from a pre determined list.</p>
 </div>
-<div class="section" id="amazon-pay-button-is-visible-on-product-page">
-<h4>Amazon Pay button is visible on Product Page<a class="headerlink" href="#amazon-pay-button-is-visible-on-product-page" title="Permalink to this headline">¶</a></h4>
-<p>toggles whether to show <strong>Amazon Pay</strong> on product pages</p>
-</div>
-<div class="section" id="amazon-pay-button-is-visible-on-minicart">
-<h4>Amazon Pay button is visible on minicart<a class="headerlink" href="#amazon-pay-button-is-visible-on-minicart" title="Permalink to this headline">¶</a></h4>
-<p>toggles whether to show <strong>Amazon Pay</strong> in the minicart</p>
+<div class="section" id="button-size">
+<h4>Button Size<a class="headerlink" href="#button-size" title="Permalink to this headline">¶</a></h4>
+<p>Allows selection of button size from a pre determined list.</p>
 </div>
 <div class="section" id="login-with-amazon-available-in-authentication-popup">
 <h4>Login with Amazon available in authentication popup<a class="headerlink" href="#login-with-amazon-available-in-authentication-popup" title="Permalink to this headline">¶</a></h4>
-<p>toggles whether to show <strong>Login with Amazon</strong> in the authentication popup</p>
+<p>Toggles whether to show <strong>Login with Amazon</strong> in Magento&#8217;s account login popup.</p>
+</div>
+<div class="section" id="amazon-pay-button-is-visible-on-product-page">
+<h4>Amazon Pay button is visible on Product Page<a class="headerlink" href="#amazon-pay-button-is-visible-on-product-page" title="Permalink to this headline">¶</a></h4>
+<p>Toggles whether to show <strong>Amazon Pay</strong> on the product pages.</p>
+</div>
+<div class="section" id="amazon-pay-button-is-visible-on-minicart">
+<h4>Amazon Pay button is visible on minicart<a class="headerlink" href="#amazon-pay-button-is-visible-on-minicart" title="Permalink to this headline">¶</a></h4>
+<p>Toggles whether to show <strong>Amazon Pay</strong> in the minicart.</p>
+</div>
+<div class="section" id="show-amazon-pay-in-payment-methods">
+<h4>Show Amazon Pay in payment methods<a class="headerlink" href="#show-amazon-pay-in-payment-methods" title="Permalink to this headline">¶</a></h4>
+<p>If enabled, Amazon Pay is presented as an option in the list of available payment methods during the final step of checkout.</p>
 </div>
 </div>
 <div class="section" id="sales-options">
 <h3>Sales Options<a class="headerlink" href="#sales-options" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="new-order-status">
-<h4>New Order Status<a class="headerlink" href="#new-order-status" title="Permalink to this headline">¶</a></h4>
-<p>Allows selection of a custom status for orders with a <cite>Processing</cite> state made using the Amazon Pay payment method.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This status indicates, if a payment for the order was authorized by Amazon Pay</p>
-</div>
+<div class="section" id="use-multi-currency">
+<h4>Use Multi-currency<a class="headerlink" href="#use-multi-currency" title="Permalink to this headline">¶</a></h4>
+<p>Enables the multi-currency feature of Amazon Pay for Magento 2. Currencies supported include: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF USD.</p>
+<p>The Amazon Pay multi-currency feature is designed for international merchants who list prices in more than one currency on their website and charge their customers the exact amount quoted on the site. When you enable multi-currency, you are not limited by the currency associated with your Amazon Payments merchant account (the ledger currency in which you receive disbursements from Amazon Payments). The multi-currency feature is offered by Amazon Services Europe SARL.</p>
+<p>The benefit to your customers is that they don’t need to worry about currency conversion or rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out on your website with their existing Amazon account.
+.. note:: Multi-currency is currently supported for payment region EU and UK only. If you have configured a payment region different than this, this option will not be available.</p>
 </div>
 <div class="section" id="store-name">
 <h4>Store Name<a class="headerlink" href="#store-name" title="Permalink to this headline">¶</a></h4>

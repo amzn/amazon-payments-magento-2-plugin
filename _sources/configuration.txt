@@ -65,13 +65,12 @@ Payment Action
 
 Authorization Mode
 ..................
-* `Synchronous` (default) - The authorization is processed during the checkout. 
-* `Asynchronous` - The authorization is processed after the checkout was completed.
-* `Synchronous if possible` - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards. 
+* `Immediate` (default) - The authorization is processed during the checkout.
+* `Automatic` - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards. 
 
 Independent of the mode you decide for, make sure to only orders which are successfully authorized by Amazon Pay (order state: `Processing`).
 
-.. note:: If you expect high order values, the **asynchronous** authorization might be the best chioce for your business.
+.. note:: If you expect high order values, please use **Automatic** Authorization mode.
 
 Update Mechanism
 ................
@@ -93,26 +92,39 @@ Button Color
 ............
 Allows selection of button color from a pre determined list.
 
-Amazon Pay button is visible on Product Page
-.................................................
-toggles whether to show **Amazon Pay** on product pages
-
-Amazon Pay button is visible on minicart
-.................................................
-toggles whether to show **Amazon Pay** in the minicart
+Button Size
+............
+Allows selection of button size from a pre determined list.
 
 Login with Amazon available in authentication popup
 .................................................
-toggles whether to show **Login with Amazon** in the authentication popup
+Toggles whether to show **Login with Amazon** in Magento's account login popup.
+
+Amazon Pay button is visible on Product Page
+.................................................
+Toggles whether to show **Amazon Pay** on the product pages.
+
+Amazon Pay button is visible on minicart
+.................................................
+Toggles whether to show **Amazon Pay** in the minicart.
+
+Show Amazon Pay in payment methods
+.................................................
+If enabled, Amazon Pay is presented as an option in the list of available payment methods during the final step of checkout.
+
 
 Sales Options
 '''''''''''''
 
-New Order Status
-................
-Allows selection of a custom status for orders with a `Processing` state made using the Amazon Pay payment method. 
+Use Multi-currency
+..................
+	
+Enables the multi-currency feature of Amazon Pay for Magento 2. Currencies supported include: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF USD.
 
-.. note:: This status indicates, if a payment for the order was authorized by Amazon Pay
+The Amazon Pay multi-currency feature is designed for international merchants who list prices in more than one currency on their website and charge their customers the exact amount quoted on the site. When you enable multi-currency, you are not limited by the currency associated with your Amazon Payments merchant account (the ledger currency in which you receive disbursements from Amazon Payments). The multi-currency feature is offered by Amazon Services Europe SARL.
+
+The benefit to your customers is that they don’t need to worry about currency conversion or rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out on your website with their existing Amazon account.
+.. note:: Multi-currency is currently supported for payment region EU and UK only. If you have configured a payment region different than this, this option will not be available. 
 
 Store Name
 ................
