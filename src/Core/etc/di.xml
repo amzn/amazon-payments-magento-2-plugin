@@ -82,4 +82,24 @@
     <type name="Magento\Checkout\CustomerData\Cart">
         <plugin name="amazon_core_cart_section" type="Amazon\Core\Plugin\CartSection" />
     </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="payment/amazon_payments/simplepath/privatekey" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/client_secret" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/secret_key" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/credentials_json" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="payment/amazon_payments/simplepath/publickey" xsi:type="string">1</item>
+                <item name="payment/amazon_payments/simplepath/privatekey" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/merchant_id" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/client_id" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/client_secret" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/access_key" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/secret_key" xsi:type="string">1</item>
+                <item name="payment/amazon_payment/sandbox" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
