@@ -23,6 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\StatusFactory;
+use Magento\Framework\App\Cache\TypeListInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -73,7 +74,8 @@ class Data extends AbstractHelper
         EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper,
-        StatusFactory $moduleStatusFactory
+        StatusFactory $moduleStatusFactory,
+        TypeListInterface $cacheTypeList
     )
     {
         parent::__construct($context);
@@ -82,6 +84,7 @@ class Data extends AbstractHelper
         $this->storeManager = $storeManager;
         $this->clientIpHelper = $clientIpHelper;
         $this->moduleStatusFactory = $moduleStatusFactory;
+        $this->cacheTypeList = $cacheTypeList;
     }
 
     /*
@@ -777,6 +780,7 @@ class Data extends AbstractHelper
         // Make sure all of them are disabled if any one of them is disabled.
         if ($isDisabled > 0 && $isDisabled != 3) {
             $this->moduleStatusFactory->create()->setIsEnabled(false, ['Amazon_Payment', 'Amazon_Login', 'Amazon_Core']);
+            $this->cacheTypeList->cleanType('config');
         }
     }
 }
