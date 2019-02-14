@@ -68,7 +68,6 @@ class AmazonAddressFactory
         );
 
         $data = [
-            AmazonAddressInterface::CITY => $address['City'],
             AmazonAddressInterface::POSTAL_CODE => $address['PostalCode'],
             AmazonAddressInterface::COUNTRY_CODE => $address['CountryCode'],
             AmazonAddressInterface::TELEPHONE => $address['Phone'] ?? '',
@@ -77,6 +76,10 @@ class AmazonAddressFactory
             AmazonAddressInterface::LAST_NAME => $amazonName->getLastName(),
             AmazonAddressInterface::LINES => $this->getLines($address)
         ];
+
+        if (isset($address['City'])) {
+            $data[AmazonAddressInterface::CITY] = $address['City'];
+        }
 
         $amazonAddress = $this->objectManager->create(AmazonAddress::class, ['data' => $data]);
 
