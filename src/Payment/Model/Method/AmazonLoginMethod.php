@@ -51,4 +51,18 @@ class AmazonLoginMethod extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected $_isOffline = true;
 
+    /**
+     * Is active
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isActive($storeId = null)
+    {
+        return (bool)(int)$this->_scopeConfig->getValue(
+            'payment/amazon_pay/active',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        ) && (bool)(int)$this->getConfigData('active', $storeId);
+    }
 }
