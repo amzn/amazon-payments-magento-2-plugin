@@ -33,5 +33,10 @@
                 <jp>https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js?nomin</jp>
             </sandbox>
         </widget>
+        <customer>
+            <address>
+                <street_lines>3</street_lines>
+            </address>
+        </customer>
     </default>
 </config>
