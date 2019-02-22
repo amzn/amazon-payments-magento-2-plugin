@@ -21,6 +21,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Address
 {
@@ -39,14 +40,21 @@ class Address
      */
     private $regionDataFactory;
 
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
     public function __construct(
         AddressInterfaceFactory $addressFactory,
         RegionFactory $regionFactory,
-        RegionInterfaceFactory $regionDataFactory
+        RegionInterfaceFactory $regionDataFactory,
+        ScopeConfigInterface $config
     ) {
         $this->addressFactory    = $addressFactory;
         $this->regionFactory     = $regionFactory;
         $this->regionDataFactory = $regionDataFactory;
+        $this->scopeConfig = $config;
     }
 
     /**
@@ -58,14 +66,34 @@ class Address
      */
     public function convertToMagentoEntity(AmazonAddressInterface $amazonAddress)
     {
+        $addressLinesAllowed = (int)$this->scopeConfig->getValue(
+            'customer/address/street_lines',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
         $address = $this->addressFactory->create();
         $address->setFirstname($amazonAddress->getFirstName());
         $address->setLastname($amazonAddress->getLastName());
         $address->setCity($amazonAddress->getCity());
-        $address->setStreet(array_values($amazonAddress->getLines()));
         $address->setPostcode($amazonAddress->getPostCode());
         $address->setTelephone($amazonAddress->getTelephone());
         $address->setCountryId($this->getCountryId($amazonAddress));
+
+        /*
+         * The number of lines in a street address is configurable via 'customer/address/street_lines'.
+         * To avoid discarding information, we'll concatenate additional lines so that they fit within the configured
+         *  address length.
+         */
+        $lines = [];
+        for ($i = 1; $i <= 4; $i++) {
+            $line = (string) $amazonAddress->getLine($i);
+            if ($i <= $addressLinesAllowed) {
+                $lines[] = $line;
+            } else {
+                $lines[count($lines)-1] = trim($lines[count($lines)-1] . ' ' . $line);
+            }
+        }
+        $address->setStreet(array_values($lines));
 
         $company = !empty($amazonAddress->getCompany()) ? $amazonAddress->getCompany() : '';
         $address->setCompany($company);

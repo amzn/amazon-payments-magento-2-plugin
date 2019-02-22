@@ -37,20 +37,13 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
      */
     public function getLines()
     {
-        $line1 = (string) $this->amazonAddress->getLine(1);
-        $line2 = (string) $this->amazonAddress->getLine(2);
-        $line3 = (string) $this->amazonAddress->getLine(3);
-        $city = (string) $this->amazonAddress->getCity();
+        $city = $this->amazonAddress->getCity();
 
-        $lines = [];
-        if (empty($city)) {
-            $lines[] = trim($line1 . ' ' . $line2);
-        } else {
-            $lines[] = $line2;
-        }
-        $lines[] = $line3;
-
-        return $lines;
+        /*
+         * AmazonAddressDecoratorJp->getCity() returns address line 1 when city is empty.
+         * Omit line 1 from the street address in this case.
+         */
+        return array_slice($this->amazonAddress->getLines(), empty($city) ? 1 : 0);
     }
 
     /**
@@ -122,6 +115,10 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
      */
     public function getLine($lineNumber)
     {
-        $this->amazonAddress->getLine($lineNumber);
+        $lines = $this->getLines();
+        if (isset($lines[$lineNumber-1])) {
+            return $lines[$lineNumber-1];
+        }
+        return null;
     }
 }

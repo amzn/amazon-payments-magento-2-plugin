@@ -61,11 +61,6 @@ class PaymentConfigSaveAfter implements ObserverInterface
     private $request;
 
     /**
-     * @var WriterInterface
-     */
-    private $configWriter;
-
-    /**
      * PaymentConfigSaveAfter constructor.
      *
      * @param ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory
@@ -74,7 +69,6 @@ class PaymentConfigSaveAfter implements ObserverInterface
      * @param Data $amazonCoreHelper
      * @param ReinitableConfigInterface $config
      * @param RequestInterface $request
-     * @param WriterInterface $configWriter
      */
     public function __construct(
         ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory,
@@ -82,8 +76,7 @@ class PaymentConfigSaveAfter implements ObserverInterface
         Json $jsonCredentials,
         Data $amazonCoreHelper,
         ReinitableConfigInterface $config,
-        RequestInterface $request,
-        WriterInterface $configWriter
+        RequestInterface $request
     ) {
         $this->apiCredentialsValidatorFactory = $apiCredentialsValidatorFactory;
         $this->messageManager                 = $messageManager;
@@ -91,7 +84,6 @@ class PaymentConfigSaveAfter implements ObserverInterface
         $this->jsonCredentials                = $jsonCredentials;
         $this->appConfig                      = $config;
         $this->request                        = $request;
-        $this->configWriter                   = $configWriter;
     }
 
     /**
@@ -99,9 +91,6 @@ class PaymentConfigSaveAfter implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        // Make sure address captures 3 lines to be compatible with AP
-        $this->configWriter->save('customer/address/street_lines', 3);
-
         if (!$this->request->getParam('amazon_test_creds')) {
             return;
         }
