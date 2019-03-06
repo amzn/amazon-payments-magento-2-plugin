@@ -41,8 +41,7 @@ define(
     ) {
         'use strict';
 
-        var self,
-            countryData = customerData.get('directory-data');
+        var countryData = customerData.get('directory-data');
 
         return Component.extend({
             defaults: {
@@ -64,7 +63,6 @@ define(
              * Inits
              */
             initialize: function () {
-                self = this;
                 this._super();
             },
 
@@ -74,7 +72,7 @@ define(
             initPaymentWidget: function () {
                 var $amazonPayment = $('#amazon_payment');
 
-                self.renderPaymentWidget();
+                this.renderPaymentWidget();
                 $amazonPayment.trigger('click'); //activate Amazon Pay method on render
                 $amazonPayment.trigger('rendered');
             },
@@ -84,8 +82,8 @@ define(
              */
             renderPaymentWidget: function () {
                 new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
-                    sellerId: self.options.sellerId,
-                    scope: self.options.widgetScope,
+                    sellerId: this.options.sellerId,
+                    scope: this.options.widgetScope,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
 
                     /**
@@ -93,8 +91,8 @@ define(
                      */
                     onPaymentSelect: function () { // orderReference
                         amazonStorage.isPlaceOrderDisabled(true);
-                        self.setBillingAddressFromAmazon();
-                    },
+                        this.setBillingAddressFromAmazon();
+                    }.bind(this),
                     design: {
                         designMode: 'responsive'
                     },
@@ -105,7 +103,7 @@ define(
                     onError: function (error) {
                         errorProcessor.process(error);
                     }
-                }).bind(self.options.paymentWidgetDOMId);
+                }).bind(this.options.paymentWidgetDOMId);
             },
 
             /**
@@ -198,8 +196,6 @@ define(
             placeOrder: function (data, event) {
                 var placeOrder;
 
-                self = this;
-
                 if (event) {
                     event.preventDefault();
                 }
@@ -209,8 +205,8 @@ define(
                     placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
                     $.when(placeOrder).fail(function () {
-                        self.isPlaceOrderActionAllowed(true);
-                    }).done(this.afterPlaceOrder.bind(this));
+                        this.isPlaceOrderActionAllowed(true);
+                    }.bind(this)).done(this.afterPlaceOrder.bind(this));
 
                     return true;
                 }
