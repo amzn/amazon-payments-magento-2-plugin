@@ -63,9 +63,9 @@ class AmazonAuthorization
     {
         switch ($status->getReasonCode()) {
             case AmazonAuthorizationStatus::REASON_TRANSACTION_TIMEOUT:
-                return 'timeout';
-            case AmazonAuthorizationStatus::REASON_AMAZON_REJECTED:
             case AmazonAuthorizationStatus::REASON_PROCESSING_FAILURE:
+                return 'temporary';
+            case AmazonAuthorizationStatus::REASON_AMAZON_REJECTED:
                 return 'hard_decline';
             case AmazonAuthorizationStatus::REASON_INVALID_PAYMENT_METHOD:
                 return 'soft_decline';
