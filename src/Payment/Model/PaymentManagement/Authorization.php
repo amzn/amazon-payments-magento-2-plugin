@@ -485,11 +485,12 @@ class Authorization extends AbstractOperation
         $capture = false
     ) {
         try {
-            $invoice = $this->getInvoice($pendingAuthorization->getCaptureId(), $order);
-
-            $baseAmount = $capture
-                ? $payment->formatAmount($invoice->getBaseGrandTotal())
-                : $payment->formatAmount($payment->getBaseAmountAuthorized());
+            if ($capture) {
+                $invoice = $this->getInvoice($pendingAuthorization->getCaptureId(), $order);
+                $baseAmount = $payment->formatAmount($invoice->getBaseGrandTotal());
+            } else {
+                $baseAmount = $payment->formatAmount($payment->getBaseAmountAuthorized());
+            }
 
             $data = [
                 'amazon_order_reference_id' => $order->getExtensionAttributes()
@@ -505,7 +506,7 @@ class Authorization extends AbstractOperation
             $newAuthorization = $this->pendingAuthorizationFactory->create()
                 ->setAuthorizationId($response['authorize_transaction_id'])
                 ->setCapture($capture);
-            if($capture) {
+            if ($capture) {
                 $newAuthorization->setCaptureId($response['capture_transaction_id']);
                 $invoice->setTransactionId($response['capture_transaction_id'])
                     ->save();
@@ -515,7 +516,7 @@ class Authorization extends AbstractOperation
                     ->save();
             } else {
                 $payment->setTransactionId($response['authorize_transaction_id']);
-                $payment->addTransaction(Transaction::TYPE_AUTH, $invoice, true)
+                $payment->addTransaction(Transaction::TYPE_AUTH, null, true)
                     ->save();
             }
             $payment->save();
