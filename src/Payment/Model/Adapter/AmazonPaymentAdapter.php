@@ -216,6 +216,9 @@ class AmazonPaymentAdapter
     {
         $orderLink = $this->orderLinkFactory->create()->load($amazonOrderReferenceId, 'amazon_order_reference_id');
         $orderId = $orderLink->getOrderId();
+        if ($orderId === null) {
+            return null;
+        }
         return $this->orderRepository->get($orderId);
     }
 
@@ -228,7 +231,12 @@ class AmazonPaymentAdapter
     {
         $response = [];
         $confirmResponse = null;
-        $storeId = $this->getOrderByReference($data['amazon_order_reference_id'])->getStoreId();
+        $order = $this->getOrderByReference($data['amazon_order_reference_id']);
+        if ($order) {
+            $storeId = $order->getStoreId();
+        } else {
+            $storeId = $this->subjectReader->getStoreId();
+        }
         $authMode = $this->coreHelper->getAuthorizationMode('store', $storeId);
 
         (isset($data['additional_information']) && $data['additional_information'] != 'default')
