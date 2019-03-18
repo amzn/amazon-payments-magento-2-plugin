@@ -24,6 +24,10 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroup;
 
 class PendingAuthorization extends AbstractModel implements PendingAuthorizationInterface
 {
@@ -53,6 +57,10 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
         DateTimeFactory $dateFactory,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
+        TransactionRepositoryInterface $transactionRepository,
+        SearchCriteriaBuilder $searchBuilder,
+        FilterBuilder $filterBuilder,
+        FilterGroup $filterGroup,
         array $data = []
     ) {
         parent::__construct(
@@ -64,6 +72,10 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
         );
 
         $this->dateFactory = $dateFactory;
+        $this->transactionRepository = $transactionRepository;
+        $this->searchBuilder = $searchBuilder;
+        $this->filterBuilder = $filterBuilder;
+        $this->filterGroup = $filterGroup;
     }
 
     /**
@@ -75,10 +87,46 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
     }
 
     /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function updateReferenceIds() {
+        $parent = $this->filterBuilder
+            ->setField('parent_txn_id')
+            ->setValue($this->getAuthorizationId())
+            ->setConditionType('eq')
+            ->create();
+        $child = $this->filterBuilder
+            ->setField('txn_id')
+            ->setValue($this->getAuthorizationId())
+            ->setConditionType('eq')
+            ->create();
+
+        $filterOr = $this->filterGroup->setFilters([$parent, $child]);
+
+        $searchCriteria = $this->searchBuilder->setFilterGroups([$filterOr])->create();
+
+        $transactionList = $this->transactionRepository->getList($searchCriteria);
+
+        foreach ($transactionList->getItems() as $transaction) {
+            if ($transaction) {
+                $this->setPaymentId($transaction->getPaymentId());
+                $this->setOrderId($transaction->getOrderId());
+                $this->save();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getOrderId()
     {
+        if (!$this->getData(PendingAuthorizationInterface::ORDER_ID)) {
+            $this->updateReferenceIds();
+        }
         return $this->getData(PendingAuthorizationInterface::ORDER_ID);
     }
 
@@ -127,6 +175,9 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
      */
     public function getPaymentId()
     {
+        if (!$this->getData(PendingAuthorizationInterface::PAYMENT_ID)) {
+            $this->updateReferenceIds();
+        }
         return $this->getData(PendingAuthorizationInterface::PAYMENT_ID);
     }
 

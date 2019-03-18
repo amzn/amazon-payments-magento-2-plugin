@@ -134,31 +134,7 @@ class GetAmazonAuthorizationUpdates
             if ($item) {
                 $hasTransaction = false;
 
-                $parent = $this->filterBuilder
-                    ->setField('parent_txn_id')
-                    ->setValue($item->getAuthorizationId())
-                    ->setConditionType('eq')
-                    ->create();
-                $child = $this->filterBuilder
-                    ->setField('txn_id')
-                    ->setValue($item->getAuthorizationId())
-                    ->setConditionType('eq')
-                    ->create();
-
-                $filterOr = $this->filterGroup->setFilters([$parent, $child]);
-
-                $searchCriteria = $this->searchBuilder->setFilterGroups([$filterOr])->create();
-
-                $transactionList = $this->transactionRepository->getList($searchCriteria);
-
-                foreach ($transactionList->getItems() as $transaction) {
-                    if ($transaction) {
-                        $item->setPaymentId($transaction->getPaymentId());
-                        $item->setOrderId($transaction->getOrderId());
-                        $item->save();
-                        $hasTransaction = true;
-                    }
-                }
+                $hasTransaction = $item->updateReferenceIds();
 
                 // If there's no match, get rid of this item in the table so the cron job will not error out.
                 if (!$hasTransaction) {
