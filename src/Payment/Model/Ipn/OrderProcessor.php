@@ -77,13 +77,10 @@ class OrderProcessor implements ProcessorInterface
 
         $collection = $this->collectionFactory
             ->create()
-            ->addFieldToFilter(PendingAuthorizationInterface::PROCESSED, ['eq' => 1])
             ->setPageSize(1)
             ->setCurPage(1);
 
         $collection->getSelect()
-            ->join(['so' => $collection->getTable('sales_order')], 'main_table.order_id = so.entity_id', [])
-            ->where('so.store_id = ?', $this->storeManager->getStore()->getId())
             ->join(['ao' => $collection->getTable(OrderLink::TABLE_NAME)], 'main_table.order_id = ao.order_id', [])
             ->where('ao.amazon_order_reference_id = ?', $details->getOrderReferenceId());
 

@@ -79,10 +79,6 @@ class CaptureProcessor implements ProcessorInterface
             ->setPageSize(1)
             ->setCurPage(1);
 
-        $collection->getSelect()
-            ->join(['so' => $collection->getTable('sales_order')], 'main_table.order_id = so.entity_id', [])
-            ->where('so.store_id = ?', $this->storeManager->getStore()->getId());
-
         if (count($items = $collection->getItems())) {
             $pendingCapture = current($items);
             $this->capture->setThrowExceptions(true);
