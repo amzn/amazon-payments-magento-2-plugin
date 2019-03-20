@@ -16,27 +16,27 @@
 namespace Amazon\Core\Block\Adminhtml\System\Config\Form;
 
 use Magento\Backend\Block\Template\Context;
-use Amazon\Core\Helper\Data as CoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 
 class Version extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @var CoreHelper
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * Version constructor.
-     * @param CoreHelper $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param Context $context
      * @param array $data
      */
     public function __construct(
         Context $context,
-        CoreHelper $coreHelper,
+        AmazonConfig $amazonConfig,
         array $data = []
     ) {
-        $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         parent::__construct($context, $data);
     }
 
@@ -49,7 +49,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $version = $this->coreHelper->getVersion();
+        $version = $this->amazonConfig->getVersion();
         if (!$version) {
             $version = __('--');
         }

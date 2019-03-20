@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Cron;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Model\Config\Source\UpdateMechanism;
 use Amazon\Payment\Api\Data\PendingCaptureInterface;
 use Amazon\Payment\Model\PaymentManagement\Capture;
@@ -45,9 +45,9 @@ class GetAmazonCaptureUpdates
     private $capture;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var TransactionRepositoryInterface
@@ -78,7 +78,7 @@ class GetAmazonCaptureUpdates
      * GetAmazonCaptureUpdates constructor.
      * @param CollectionFactory $collectionFactory
      * @param Capture $capture
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param TransactionRepositoryInterface $transactionRepository
      * @param SearchCriteriaBuilder $searchBuilder
      * @param FilterBuilder $filterBuilder
@@ -89,7 +89,7 @@ class GetAmazonCaptureUpdates
     public function __construct(
         CollectionFactory $collectionFactory,
         Capture $capture,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchBuilder,
         FilterBuilder $filterBuilder,
@@ -99,7 +99,7 @@ class GetAmazonCaptureUpdates
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->capture           = $capture;
-        $this->coreHelper        = $coreHelper;
+        $this->amazonConfig      = $amazonConfig;
         $this->transactionRepository = $transactionRepository;
         $this->searchBuilder = $searchBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -173,7 +173,7 @@ class GetAmazonCaptureUpdates
      */
     public function execute()
     {
-        if (UpdateMechanism::IPN === $this->coreHelper->getUpdateMechanism()) {
+        if (UpdateMechanism::IPN === $this->amazonConfig->getUpdateMechanism()) {
             return;
         }
 

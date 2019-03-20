@@ -17,7 +17,6 @@
 namespace Amazon\Payment\Gateway\Response;
 
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Amazon\Core\Helper\Data;
 use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Magento\Framework\Message\ManagerInterface;
@@ -46,11 +45,6 @@ class RefundHandler implements HandlerInterface
     private $subjectReader;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * @var PendingRefundInterfaceFactory
      */
     private $pendingRefundFactory;
@@ -60,20 +54,17 @@ class RefundHandler implements HandlerInterface
      *
      * @param Logger                        $logger
      * @param SubjectReader                 $subjectReader
-     * @param Data                          $coreHelper
      * @param ManagerInterface              $messageManager
      * @param PendingRefundInterfaceFactory $pendingRefundFactory
      */
     public function __construct(
         Logger $logger,
         SubjectReader $subjectReader,
-        Data $coreHelper,
         ManagerInterface $messageManager,
         PendingRefundInterfaceFactory $pendingRefundFactory
     ) {
         $this->logger = $logger;
         $this->subjectReader = $subjectReader;
-        $this->coreHelper = $coreHelper;
         $this->messageManager = $messageManager;
         $this->pendingRefundFactory = $pendingRefundFactory;
     }

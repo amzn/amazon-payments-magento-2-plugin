@@ -16,7 +16,8 @@
 namespace Amazon\Payment\Test\Unit\Gateway\Command;
 
 use Amazon\Payment\Gateway\Command\CaptureStrategyCommand;
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
+use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
@@ -73,9 +74,14 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var Data|MockObject
+     * @var AmazonConfig|MockObject
      */
-    private $coreHelper;
+    private $amazonConfig;
+
+    /**
+     * @var OrderAdapterFactory|MockObject
+     */
+    private $orderAdapterFactory;
 
     /**
      * Sets up base classes needed to mock the command strategy class
@@ -91,8 +97,9 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->initTransactionRepositoryMock();
         $this->initFilterBuilderMock();
         $this->initSearchCriteriaBuilderMock();
+        $this->initOrderAdapterFactoryMock();
 
-        $this->coreHelper = $this->getMockBuilder(\Amazon\Core\Helper\Data::class)
+        $this->amazonConfig = $this->getMockBuilder(\Amazon\Core\Model\AmazonConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -101,7 +108,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             $this->transactionRepository,
             $this->searchCriteriaBuilder,
             $this->filterBuilder,
-            $this->coreHelper
+            $this->orderAdapterFactory
         );
     }
 
@@ -120,7 +127,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->payment->method('getId')
             ->willReturn(1);
 
-        $this->coreHelper->method('getPaymentAction')->willReturn('authorize_capture');
+        $this->amazonConfig->method('getPaymentAction')->willReturn('authorize_capture');
 
         $this->buildSearchCriteria();
 
@@ -262,6 +269,17 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList', 'getTotalCount', 'delete', 'get', 'save', 'create', '__wakeup'])
+            ->getMock();
+    }
+
+    /**
+     * Create mock for order adapter factory
+     */
+    private function initOrderAdapterFactoryMock()
+    {
+        $this->orderAdapterFactory = $this->getMockBuilder(OrderAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create', '__wakeup'])
             ->getMock();
     }
 }

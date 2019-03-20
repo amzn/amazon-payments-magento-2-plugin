@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Observer;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
@@ -36,23 +36,23 @@ class SetLogoutCookie implements ObserverInterface
     private $cookieMetadataFactory;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory  $cookieMetadataFactory
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      */
     public function __construct(
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
-        Data $coreHelper
+        AmazonConfig $amazonConfig
     ) {
         $this->cookieManager         = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->coreHelper            = $coreHelper;
+        $this->amazonConfig          = $amazonConfig;
     }
 
     /**
@@ -60,7 +60,7 @@ class SetLogoutCookie implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->coreHelper->isLwaEnabled()) {
+        if ($this->amazonConfig->isLwaEnabled()) {
             $cookieMeta = $this->cookieMetadataFactory
                 ->createPublicCookieMetadata()
                 ->setDuration(86400)

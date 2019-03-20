@@ -28,7 +28,7 @@ class Authorize extends \Amazon\Login\Controller\Login
      */
     public function execute()
     {
-        if (!$this->amazonCoreHelper->isLwaEnabled()) {
+        if (!$this->amazonConfig->isLwaEnabled()) {
             throw new NotFoundException(__('Action is not available'));
         }
 

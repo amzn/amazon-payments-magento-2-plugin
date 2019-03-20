@@ -16,7 +16,7 @@
 namespace Amazon\Payment\Block;
 
 use Amazon\Core\Helper\CategoryExclusion;
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
@@ -39,19 +39,19 @@ class ProductPagePaymentLink extends PaymentLink
 
     /**
      * @param Context           $context
-     * @param Data              $coreHelper
+     * @param AmazonConfig      $amazonConfig
      * @param CategoryExclusion $categoryExclusionHelper
      * @param Registry          $registry
      * @param array             $data
      */
     public function __construct(
         Context $context,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         CategoryExclusion $categoryExclusionHelper,
         Registry $registry,
         array $data = []
     ) {
-        parent::__construct($context, $coreHelper, $categoryExclusionHelper, $data);
+        parent::__construct($context, $amazonConfig, $categoryExclusionHelper, $data);
         $this->registry = $registry;
     }
 
@@ -60,7 +60,7 @@ class ProductPagePaymentLink extends PaymentLink
      */
     protected function _toHtml()
     {
-        if (! $this->coreHelper->isPwaButtonVisibleOnProductPage()) {
+        if (! $this->amazonConfig->isPwaButtonVisibleOnProductPage()) {
             return '';
         }
 

@@ -18,7 +18,6 @@ namespace Amazon\Payment\Gateway\Helper;
 
 use Magento\Checkout\Model\Session;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
-use Amazon\Core\Helper\Data;
 use Magento\Quote\Model\Quote;
 use Magento\Payment\Gateway\Helper;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
@@ -41,25 +40,17 @@ class SubjectReader
     private $checkoutSession;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * SubjectReader constructor.
      *
      * @param Session $checkoutSession
      * @param QuoteLinkInterfaceFactory $quoteLinkInterfaceFactory
-     * @param Data $coreHelper
      */
     public function __construct(
         Session $checkoutSession,
-        QuoteLinkInterfaceFactory $quoteLinkInterfaceFactory,
-        Data $coreHelper
+        QuoteLinkInterfaceFactory $quoteLinkInterfaceFactory
     ) {
         $this->quoteLinkFactory = $quoteLinkInterfaceFactory;
         $this->checkoutSession = $checkoutSession;
-        $this->coreHelper = $coreHelper;
     }
 
     /**

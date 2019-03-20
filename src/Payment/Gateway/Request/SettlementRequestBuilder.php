@@ -20,7 +20,6 @@ use Amazon\Payment\Gateway\Config\Config;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
-use Amazon\Core\Helper\Data;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -48,11 +47,6 @@ class SettlementRequestBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
@@ -70,7 +64,6 @@ class SettlementRequestBuilder implements BuilderInterface
      * @param OrderRepositoryInterface $orderRepository
      * @param CartRepositoryInterface $quoteRepository
      * @param SubjectReader $subjectReader
-     * @param Data $coreHelper
      * @param Logger $logger
      */
     public function __construct(
@@ -79,7 +72,6 @@ class SettlementRequestBuilder implements BuilderInterface
         OrderRepositoryInterface $orderRepository,
         CartRepositoryInterface $quoteRepository,
         SubjectReader $subjectReader,
-        Data $coreHelper,
         Logger $logger
     ) {
         $this->config = $config;

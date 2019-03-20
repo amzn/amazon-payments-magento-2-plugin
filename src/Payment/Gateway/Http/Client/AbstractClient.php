@@ -21,7 +21,6 @@ use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
-use Amazon\Core\Helper\Data;
 use Amazon\Payment\Model\Adapter\AmazonPaymentAdapter;
 
 /**
@@ -46,11 +45,6 @@ abstract class AbstractClient implements ClientInterface
     protected $clientFactory;
 
     /**
-     * @var Data
-     */
-    protected $coreHelper;
-
-    /**
      * @var AmazonPaymentAdapter
      */
     protected $adapter;
@@ -60,20 +54,17 @@ abstract class AbstractClient implements ClientInterface
      * @param Logger $logger
      * @param ClientFactoryInterface $clientFactory
      * @param SubjectReader $subjectReader
-     * @param Data $coreHelper
      * @param AmazonPaymentAdapter $adapter
      */
     public function __construct(
         Logger $logger,
         ClientFactoryInterface $clientFactory,
         SubjectReader $subjectReader,
-        Data $coreHelper,
         AmazonPaymentAdapter $adapter
     ) {
         $this->subjectReader = $subjectReader;
         $this->clientFactory = $clientFactory;
         $this->logger = $logger;
-        $this->coreHelper = $coreHelper;
         $this->adapter = $adapter;
     }
 

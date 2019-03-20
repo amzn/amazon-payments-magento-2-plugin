@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Ipn;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\ObjectManagerInterface;
 use AmazonPay\IpnHandlerInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -39,20 +39,20 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
     private $logger;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     public function __construct(
         ObjectManagerInterface $objectManager,
         LoggerInterface $logger,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         $instanceName = '\\AmazonPay\\IpnHandlerInterface'
     ) {
         $this->objectManager      = $objectManager;
         $this->instanceName       = $instanceName;
         $this->logger             = $logger;
-        $this->coreHelper         = $coreHelper;
+        $this->amazonConfig       = $amazonConfig;
     }
 
     /**
@@ -65,7 +65,7 @@ class IpnHandlerFactory implements IpnHandlerFactoryInterface
             ['requestHeaders' => $headers, 'requestBody' => $body]
         );
 
-        if ($handler instanceof LoggerAwareInterface && $this->coreHelper->isLoggingEnabled()) {
+        if ($handler instanceof LoggerAwareInterface && $this->amazonConfig->isLoggingEnabled()) {
             $handler->setLogger($this->logger);
         }
 

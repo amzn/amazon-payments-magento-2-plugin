@@ -19,7 +19,7 @@ namespace Amazon\Payment\Gateway\Validator;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 
 /**
  * Class CurrencyValidator
@@ -34,23 +34,23 @@ class CurrencyValidator extends AbstractValidator
     private $config;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * CurrencyValidator constructor.
      *
      * @param ResultInterfaceFactory $resultFactory
      * @param ConfigInterface        $config
-     * @param Data                   $coreHelper
+     * @param AmazonConfig           $amazonConfig
      */
     public function __construct(
         ResultInterfaceFactory $resultFactory,
         ConfigInterface $config,
-        Data $coreHelper
+        AmazonConfig $amazonConfig
     ) {
-        $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->config = $config;
         parent::__construct($resultFactory);
     }
@@ -62,7 +62,7 @@ class CurrencyValidator extends AbstractValidator
     public function validate(array $validationSubject)
     {
 
-        $allowedCurrency = $this->coreHelper->getCurrencyCode('store', $validationSubject['storeId']);
+        $allowedCurrency = $this->amazonConfig->getCurrencyCode('store', $validationSubject['storeId']);
 
         if ($allowedCurrency == $validationSubject['currency']) {
             return $this->createResult(

@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Helper;
 
-use Amazon\Core\Helper\Data as AmazonCoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -31,23 +31,23 @@ class Email extends AbstractHelper
     private $emailTransportBuilderFactory;
 
     /**
-     * @var AmazonCoreHelper
+     * @var AmazonConfig
      */
-    private $amazonCoreHelper;
+    private $amazonConfig;
 
     /**
      * @param Context                 $context
      * @param TransportBuilderFactory $emailTransportBuilderFactory
-     * @param AmazonCoreHelper        $amazonCoreHelper
+     * @param AmazonConfig            $amazonConfig
      */
     public function __construct(
         Context $context,
         TransportBuilderFactory $emailTransportBuilderFactory,
-        AmazonCoreHelper $amazonCoreHelper
+        AmazonConfig $amazonConfig
     ) {
         parent::__construct($context);
         $this->emailTransportBuilderFactory = $emailTransportBuilderFactory;
-        $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->amazonConfig = $amazonConfig;
     }
 
     /**
@@ -69,18 +69,18 @@ class Email extends AbstractHelper
             ]
         );
 
-        $paymentRegionByOrderStore = $this->amazonCoreHelper->getPaymentRegion(
+        $paymentRegionByOrderStore = $this->amazonConfig->getPaymentRegion(
             ScopeInterface::SCOPE_STORE,
             $order->getStoreId()
         );
 
-        $storeName = $this->amazonCoreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
+        $storeName = $this->amazonConfig->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
         if (!$storeName) {
-            $storeName = $this->amazonCoreHelper->getStoreFrontName($order->getStoreId());
+            $storeName = $this->amazonConfig->getStoreFrontName($order->getStoreId());
         }
 
         $vars = [
-            'amazonAccountUrl' => $this->amazonCoreHelper
+            'amazonAccountUrl' => $this->amazonConfig
                                        ->getAmazonAccountUrlByPaymentRegion($paymentRegionByOrderStore),
             'storeName' => $storeName,
         ];
@@ -99,9 +99,9 @@ class Email extends AbstractHelper
     {
         $emailTransportBuilder = $this->emailTransportBuilderFactory->create();
 
-        $storeName = $this->amazonCoreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
+        $storeName = $this->amazonConfig->getStoreName(ScopeInterface::SCOPE_STORE, $order->getStoreId());
         if (!$storeName) {
-            $storeName = $this->amazonCoreHelper->getStoreFrontName($order->getStoreId());
+            $storeName = $this->amazonConfig->getStoreFrontName($order->getStoreId());
         }
 
         $emailTransportBuilder->addTo($order->getCustomerEmail(), $order->getCustomerName());

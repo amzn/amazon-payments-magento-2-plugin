@@ -24,7 +24,6 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Sales\Api\Data\TransactionInterface;
-use Amazon\Core\Helper\Data;
 use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 
 class CaptureStrategyCommand implements CommandInterface
@@ -62,18 +61,12 @@ class CaptureStrategyCommand implements CommandInterface
     private $orderAdapterFactory;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * CaptureStrategyCommand constructor.
      *
      * @param CommandPoolInterface $commandPool
      * @param TransactionRepositoryInterface $transactionRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
-     * @param Data $coreHelper
      * @param OrderAdapterFactory $orderAdapterFactory
      */
     public function __construct(
@@ -81,14 +74,12 @@ class CaptureStrategyCommand implements CommandInterface
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        Data $coreHelper,
         OrderAdapterFactory $orderAdapterFactory
     ) {
         $this->commandPool = $commandPool;
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
-        $this->coreHelper = $coreHelper;
         $this->orderAdapterFactory = $orderAdapterFactory;
     }
 

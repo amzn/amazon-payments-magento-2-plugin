@@ -15,7 +15,7 @@
  */
 namespace Amazon\Core\Observer;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Model\Validation\ApiCredentialsValidatorFactory;
 use Amazon\Core\Model\Config\Credentials\Json;
 use Magento\Framework\Event\Observer;
@@ -44,9 +44,9 @@ class PaymentConfigSaveAfter implements ObserverInterface
     private $jsonCredentials;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $amazonCoreHelper;
+    private $amazonConfig;
 
     /**
      * Application config
@@ -66,7 +66,7 @@ class PaymentConfigSaveAfter implements ObserverInterface
      * @param ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory
      * @param ManagerInterface $messageManager
      * @param Json $jsonCredentials
-     * @param Data $amazonCoreHelper
+     * @param AmazonConfig $amazonConfig
      * @param ReinitableConfigInterface $config
      * @param RequestInterface $request
      */
@@ -74,13 +74,13 @@ class PaymentConfigSaveAfter implements ObserverInterface
         ApiCredentialsValidatorFactory $apiCredentialsValidatorFactory,
         ManagerInterface $messageManager,
         Json $jsonCredentials,
-        Data $amazonCoreHelper,
+        AmazonConfig $amazonConfig,
         ReinitableConfigInterface $config,
         RequestInterface $request
     ) {
         $this->apiCredentialsValidatorFactory = $apiCredentialsValidatorFactory;
         $this->messageManager                 = $messageManager;
-        $this->amazonCoreHelper               = $amazonCoreHelper;
+        $this->amazonConfig                   = $amazonConfig;
         $this->jsonCredentials                = $jsonCredentials;
         $this->appConfig                      = $config;
         $this->request                        = $request;
@@ -96,7 +96,7 @@ class PaymentConfigSaveAfter implements ObserverInterface
         }
 
         $scopeData = $this->getScopeData($observer);
-        $jsonCredentials = $this->amazonCoreHelper->getCredentialsJson($scopeData['scope'], $scopeData['scope_id']);
+        $jsonCredentials = $this->amazonConfig->getCredentialsJson($scopeData['scope'], $scopeData['scope_id']);
 
         if (!empty($jsonCredentials)) {
             $this->appConfig->reinit();

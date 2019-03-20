@@ -20,7 +20,6 @@ use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
-use Amazon\Core\Helper\Data;
 use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
@@ -45,11 +44,6 @@ class AuthorizationRequestBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * @var AmazonConfig
      */
     private $amazonConfig;
@@ -70,7 +64,6 @@ class AuthorizationRequestBuilder implements BuilderInterface
      * @param ConfigInterface $config
      * @param ProductMetadata $productMetadata
      * @param SubjectReader $subjectReader
-     * @param Data $coreHelper
      * @param AmazonConfig $amazonConfig
      * @param ManagerInterface $eventManager
      * @param CategoryExclusion $categoryExclusion
@@ -79,13 +72,11 @@ class AuthorizationRequestBuilder implements BuilderInterface
         ConfigInterface $config,
         ProductMetaData $productMetadata,
         SubjectReader $subjectReader,
-        Data $coreHelper,
         AmazonConfig $amazonConfig,
         ManagerInterface $eventManager,
         CategoryExclusion $categoryExclusion
     ) {
         $this->config = $config;
-        $this->coreHelper = $coreHelper;
         $this->amazonConfig = $amazonConfig;
         $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
@@ -153,13 +144,13 @@ class AuthorizationRequestBuilder implements BuilderInterface
                     'store_name' => $storeName,
                     'custom_information' =>
                         'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
-                        'Plugin Version : ' . $this->coreHelper->getVersion(),
+                        'Plugin Version : ' . $this->amazonConfig->getVersion(),
                     'platform_id' => $this->config->getValue('platform_id'),
                     'request_payment_authorization' => true
                 ];
         }
 
-        if ($this->coreHelper->isSandboxEnabled('store', $storeId)) {
+        if ($this->amazonConfig->isSandboxEnabled('store', $storeId)) {
             $data['additional_information'] =
                 $payment->getAdditionalInformation(AdditionalInformation::KEY_SANDBOX_SIMULATION_REFERENCE);
 

@@ -17,7 +17,7 @@
 namespace Amazon\Login\Controller\Login;
 
 use Amazon\Core\Client\ClientFactoryInterface;
-use Amazon\Core\Helper\Data as AmazonCoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\Url;
@@ -28,9 +28,9 @@ use Psr\Log\LoggerInterface;
 class Guest extends Action
 {
     /**
-     * @var AmazonCoreHelper
+     * @var AmazonConfig
      */
-    private $amazonCoreHelper;
+    private $amazonConfig;
 
     /**
      * @var Url
@@ -62,7 +62,7 @@ class Guest extends Action
     /**
      * Guest constructor.
      * @param Context $context
-     * @param AmazonCoreHelper $amazonCoreHelper
+     * @param AmazonConfig $amazonConfig
      * @param Url $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      * @param Session $session
@@ -71,14 +71,14 @@ class Guest extends Action
      */
     public function __construct(
         Context $context,
-        AmazonCoreHelper $amazonCoreHelper,
+        AmazonConfig $amazonConfig,
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator,
         Session $session,
         ClientFactoryInterface $clientFactory,
         LoggerInterface $logger
     ) {
-        $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->customerUrl = $customerUrl;
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
         $this->session = $session;
@@ -147,7 +147,7 @@ class Guest extends Action
                     'id' => $userInfo['user_id'],
                     'email' => $userInfo['email'],
                     'name' => $userInfo['name'],
-                    'country' => $this->amazonCoreHelper->getRegion(),
+                    'country' => $this->amazonConfig->getRegion(),
                 ];
 
                 return $data;

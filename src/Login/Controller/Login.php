@@ -18,7 +18,7 @@ namespace Amazon\Login\Controller;
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Core\Domain\AmazonCustomerFactory;
-use Amazon\Core\Helper\Data as AmazonCoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Login\Model\Validator\AccessTokenRequestValidator;
 use Amazon\Login\Model\Customer\Account\Redirect as AccountRedirect;
 use Amazon\Login\Helper\Session;
@@ -47,9 +47,9 @@ abstract class Login extends Action
     protected $clientFactory;
 
     /**
-     * @var AmazonCoreHelper
+     * @var AmazonConfig
      */
-    protected $amazonCoreHelper;
+    protected $amazonConfig;
 
     /**
      * @var Url
@@ -97,7 +97,7 @@ abstract class Login extends Action
      * @param AmazonCustomerFactory $amazonCustomerFactory
      * @param ClientFactoryInterface $clientFactory
      * @param LoggerInterface             $logger
-     * @param AmazonCoreHelper            $amazonCoreHelper
+     * @param AmazonConfig                $amazonConfig
      * @param Url                         $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      * @param AccountRedirect $accountRedirect
@@ -112,7 +112,7 @@ abstract class Login extends Action
         Context $context,
         AmazonCustomerFactory $amazonCustomerFactory,
         ClientFactoryInterface $clientFactory,
-        AmazonCoreHelper $amazonCoreHelper,
+        AmazonConfig $amazonConfig,
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator,
         AccountRedirect $accountRedirect,
@@ -124,7 +124,7 @@ abstract class Login extends Action
     ) {
         $this->amazonCustomerFactory       = $amazonCustomerFactory;
         $this->clientFactory               = $clientFactory;
-        $this->amazonCoreHelper            = $amazonCoreHelper;
+        $this->amazonConfig                = $amazonConfig;
         $this->customerUrl                 = $customerUrl;
         $this->accessTokenRequestValidator = $accessTokenRequestValidator;
         $this->accountRedirect             = $accountRedirect;
@@ -153,7 +153,7 @@ abstract class Login extends Action
                     'id'      => $userInfo['user_id'],
                     'email'   => $userInfo['email'],
                     'name'    => $userInfo['name'],
-                    'country' => $this->amazonCoreHelper->getRegion(),
+                    'country' => $this->amazonConfig->getRegion(),
                 ];
                 $amazonCustomer = $this->amazonCustomerFactory->create($data);
 

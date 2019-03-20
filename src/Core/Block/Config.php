@@ -16,7 +16,6 @@
 namespace Amazon\Core\Block;
 
 use Amazon\Core\Helper\CategoryExclusion;
-use Amazon\Core\Helper\Data;
 use Amazon\Core\Model\AmazonConfig;
 use Magento\Customer\Model\Url;
 use Magento\Framework\View\Element\Template;
@@ -31,11 +30,6 @@ use Magento\Framework\View\Element\Template\Context;
  */
 class Config extends Template
 {
-    /**
-     * @var Data
-     */
-    private $coreHelper;
-
     /**
      * @var Url
      */
@@ -54,20 +48,17 @@ class Config extends Template
     /**
      * Config constructor.
      * @param Context $context
-     * @param Data $coreHelper
      * @param AmazonConfig $config
      * @param Url $url
      * @param CategoryExclusion $categoryExclusionHelper
      */
     public function __construct(
         Context $context,
-        Data $coreHelper,
         AmazonConfig $config,
         Url $url,
         CategoryExclusion $categoryExclusionHelper
     ) {
         parent::__construct($context);
-        $this->coreHelper = $coreHelper;
         $this->config = $config;
         $this->url = $url;
         $this->categoryExclusionHelper = $categoryExclusionHelper;
@@ -79,34 +70,34 @@ class Config extends Template
     public function getConfig()
     {
         $config = [
-            'widgetUrl'                => $this->coreHelper->getWidgetUrl(),
-            'merchantId'               => $this->coreHelper->getMerchantId(),
-            'clientId'                 => $this->coreHelper->getClientId(),
-            'isPwaEnabled'             => $this->coreHelper->isPaymentButtonEnabled(),
-            'isLwaEnabled'             => $this->coreHelper->isLoginButtonEnabled(),
-            'isSandboxEnabled'         => $this->coreHelper->isSandboxEnabled(),
+            'widgetUrl'                => $this->config->getWidgetUrl(),
+            'merchantId'               => $this->config->getMerchantId(),
+            'clientId'                 => $this->config->getClientId(),
+            'isPwaEnabled'             => $this->config->isPaymentButtonEnabled(),
+            'isLwaEnabled'             => $this->config->isLoginButtonEnabled(),
+            'isSandboxEnabled'         => $this->config->isSandboxEnabled(),
             'chargeOnOrder'            => $this->sanitizePaymentAction(),
-            'authorizationMode'        => $this->coreHelper->getAuthorizationMode(),
-            'displayLanguage'          => $this->coreHelper->getButtonDisplayLanguage(),
-            'buttonTypePwa'            => $this->coreHelper->getButtonTypePwa(),
-            'buttonTypeLwa'            => $this->coreHelper->getButtonTypeLwa(),
-            'buttonColor'              => $this->coreHelper->getButtonColor(),
-            'buttonSize'               => $this->coreHelper->getButtonSize(),
-            'redirectUrl'              => $this->coreHelper->getRedirectUrl(),
+            'authorizationMode'        => $this->config->getAuthorizationMode(),
+            'displayLanguage'          => $this->config->getButtonDisplayLanguage(),
+            'buttonTypePwa'            => $this->config->getButtonTypePwa(),
+            'buttonTypeLwa'            => $this->config->getButtonTypeLwa(),
+            'buttonColor'              => $this->config->getButtonColor(),
+            'buttonSize'               => $this->config->getButtonSize(),
+            'redirectUrl'              => $this->config->getRedirectUrl(),
             'loginPostUrl'             => $this->url->getLoginPostUrl(),
             'customerLoginPageUrl'     => $this->url->getLoginUrl(),
             'sandboxSimulationOptions' => [],
-            'loginScope'               => $this->coreHelper->getLoginScope(),
-            'allowAmLoginLoading'      => $this->coreHelper->allowAmLoginLoading(),
-            'isEuPaymentRegion'        => $this->coreHelper->isEuPaymentRegion(),
+            'loginScope'               => $this->config->getLoginScope(),
+            'allowAmLoginLoading'      => $this->config->allowAmLoginLoading(),
+            'isEuPaymentRegion'        => $this->config->isEuPaymentRegion(),
             'presentmentCurrency'      => $this->config->getPresentmentCurrency(),
-            'oAuthHashRedirectUrl'     => $this->coreHelper->getOAuthRedirectUrl(),
+            'oAuthHashRedirectUrl'     => $this->config->getOAuthRedirectUrl(),
             'isQuoteDirty'             => $this->categoryExclusionHelper->isQuoteDirty(),
-            'region'                   => $this->coreHelper->getRegion(),
+            'region'                   => $this->config->getRegion(),
             'useMultiCurrency'         => $this->config->useMultiCurrency()
         ];
 
-        if ($this->coreHelper->isSandboxEnabled()) {
+        if ($this->config->isSandboxEnabled()) {
             $config['sandboxSimulationOptions'] = $this->transformSandboxSimulationOptions();
         }
 
@@ -118,7 +109,7 @@ class Config extends Template
      */
     public function isBadgeEnabled()
     {
-        return ($this->coreHelper->isPwaEnabled());
+        return ($this->config->isPwaEnabled());
     }
 
     /**
@@ -126,7 +117,7 @@ class Config extends Template
      */
     public function isExtensionEnabled()
     {
-        return ($this->coreHelper->isPwaEnabled() || $this->coreHelper->isLwaEnabled());
+        return ($this->config->isPwaEnabled() || $this->config->isLwaEnabled());
     }
 
     /**
@@ -134,7 +125,7 @@ class Config extends Template
      */
     public function sanitizePaymentAction()
     {
-        return ($this->coreHelper->getPaymentAction() === 'authorize_capture');
+        return ($this->config->getPaymentAction() === 'authorize_capture');
     }
 
     /**
@@ -142,7 +133,7 @@ class Config extends Template
      */
     public function transformSandboxSimulationOptions()
     {
-        $sandboxSimulationOptions = $this->coreHelper->getSandboxSimulationOptions();
+        $sandboxSimulationOptions = $this->config->getSandboxSimulationOptions();
         $output = [];
 
         foreach ($sandboxSimulationOptions as $key => $value) {

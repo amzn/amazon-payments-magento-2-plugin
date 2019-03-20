@@ -23,7 +23,7 @@ use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Domain\AmazonAuthorizationResponseFactory;
 use Amazon\Payment\Domain\AmazonCaptureResponseFactory;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
 use Magento\Sales\Model\OrderRepository;
@@ -68,9 +68,9 @@ class AmazonPaymentAdapter
     private $subjectReader;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var PendingCaptureInterfaceFactory
@@ -101,7 +101,7 @@ class AmazonPaymentAdapter
      * @param PendingCaptureInterfaceFactory $pendingCaptureFactory
      * @param PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory
      * @param SubjectReader $subjectReader
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param Logger $logger
      * @param OrderLinkFactory $orderLinkFactory
      * @param OrderRepository $orderRepository
@@ -114,7 +114,7 @@ class AmazonPaymentAdapter
         PendingCaptureInterfaceFactory $pendingCaptureFactory,
         PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         SubjectReader $subjectReader,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         Logger $logger,
         OrderLinkFactory $orderLinkFactory,
         OrderRepository $orderRepository
@@ -126,7 +126,7 @@ class AmazonPaymentAdapter
         $this->amazonCaptureResponseFactory = $amazonCaptureResponseFactory;
         $this->amazonAuthorizationResponseFactory = $amazonAuthorizationResponseFactory;
         $this->subjectReader = $subjectReader;
-        $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->pendingCaptureFactory = $pendingCaptureFactory;
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
         $this->orderLinkFactory = $orderLinkFactory;
@@ -237,7 +237,7 @@ class AmazonPaymentAdapter
         } else {
             $storeId = $this->subjectReader->getStoreId();
         }
-        $authMode = $this->coreHelper->getAuthorizationMode('store', $storeId);
+        $authMode = $this->amazonConfig->getAuthorizationMode('store', $storeId);
 
         (isset($data['additional_information']) && $data['additional_information'] != 'default')
             ? $additionalInformation = $data['additional_information'] : $additionalInformation = '';

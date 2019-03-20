@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Block;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
@@ -31,12 +31,12 @@ class OAuthRedirect extends Template
 
     /**
      * @param Context $context
-     * @param Data    $amazonCoreHelper
+     * @param AmazonConfig $amazonConfig
      */
-    public function __construct(Context $context, Data $amazonCoreHelper)
+    public function __construct(Context $context, AmazonConfig $amazonConfig)
     {
         parent::__construct($context);
-        $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->amazonConfig = $amazonConfig;
     }
 
     /**
@@ -44,6 +44,6 @@ class OAuthRedirect extends Template
      */
     public function getRedirectUrl()
     {
-        return $this->amazonCoreHelper->getRedirectUrl();
+        return $this->amazonConfig->getRedirectUrl();
     }
 }

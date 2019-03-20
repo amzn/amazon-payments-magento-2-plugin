@@ -21,7 +21,6 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Model\Order;
 use Amazon\Core\Model\AmazonConfig;
-use Amazon\Core\Helper\Data;
 
 /**
  * Class OrderAdapter
@@ -39,11 +38,6 @@ class OrderAdapter implements OrderAdapterInterface
     private $addressAdapterFactory;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * @var AmazonConfig
      */
     private $config;
@@ -53,18 +47,15 @@ class OrderAdapter implements OrderAdapterInterface
      *
      * @param Order $order
      * @param AddressAdapterFactory $addressAdapterFactory
-     * @param Data $coreHelper
      * @param \Amazon\Core\Model\AmazonConfig $config
      */
     public function __construct(
         Order $order,
         \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory $addressAdapterFactory,
-        Data $coreHelper,
         AmazonConfig $config
     ) {
         $this->order = $order;
         $this->addressAdapterFactory = $addressAdapterFactory;
-        $this->coreHelper = $coreHelper;
         $this->config = $config;
     }
 

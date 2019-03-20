@@ -15,15 +15,15 @@
  */
 namespace Amazon\Payment\Plugin;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Checkout\Model\Session;
 
 class CheckoutProcessor
 {
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $amazonHelper;
+    private $amazonConfig;
 
     /**
      * @var Session
@@ -33,14 +33,14 @@ class CheckoutProcessor
     /**
      * CheckoutProcessor constructor.
      *
-     * @param Data $amazonHelper
+     * @param AmazonConfig $amazonConfig
      * @param Session $checkoutSession
      */
     public function __construct(
-        Data $amazonHelper,
+        AmazonConfig $amazonConfig,
         Session $checkoutSession
     ) {
-        $this->amazonHelper = $amazonHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->checkoutSession = $checkoutSession;
     }
 
@@ -61,7 +61,7 @@ class CheckoutProcessor
         $paymentConfig = &$jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment'];
 
-        if (!$quote->isVirtual() && $this->amazonHelper->isPwaEnabled()) {
+        if (!$quote->isVirtual() && $this->amazonConfig->isPwaEnabled()) {
             $shippingConfig['component'] = 'Amazon_Payment/js/view/shipping';
             $shippingConfig['children']['customer-email']['component'] = 'Amazon_Payment/js/view/form/element/email';
             $shippingConfig['children']['address-list']['component'] = 'Amazon_Payment/js/view/shipping-address/list';

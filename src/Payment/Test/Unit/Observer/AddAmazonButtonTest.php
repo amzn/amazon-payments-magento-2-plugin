@@ -33,7 +33,7 @@ class AddAmazonButtonTest extends \PHPUnit\Framework\TestCase
     {
 
         $objectManager = new ObjectManager($this);
-        $data = $objectManager->getObject(\Amazon\Core\Helper\Data::class);
+        $data = $objectManager->getObject(\Amazon\Core\Model\AmazonConfig::class);
         $shortcutFactory = $objectManager->getObject(\Amazon\Payment\Helper\Shortcut\Factory::class);
         $addAmazonButton = new AddAmazonButton($data, $shortcutFactory);
 

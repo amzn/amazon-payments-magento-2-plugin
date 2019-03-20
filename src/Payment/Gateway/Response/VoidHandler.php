@@ -17,7 +17,6 @@
 namespace Amazon\Payment\Gateway\Response;
 
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Amazon\Core\Helper\Data;
 use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Magento\Framework\Message\ManagerInterface;
@@ -40,29 +39,21 @@ class VoidHandler implements HandlerInterface
      */
     private $subjectReader;
 
-    /**
-     * @var Data
-     */
-    private $coreHelper;
-
 
     /**
      * RefundHandler constructor.
      *
      * @param Logger         $logger
      * @param SubjectReader  $subjectReader
-     * @param Data           $coreHelper
      * @param $messageManager
      */
     public function __construct(
         Logger $logger,
         SubjectReader $subjectReader,
-        Data $coreHelper,
         ManagerInterface $messageManager
     ) {
         $this->logger = $logger;
         $this->subjectReader = $subjectReader;
-        $this->coreHelper = $coreHelper;
         $this->messageManager = $messageManager;
     }
 

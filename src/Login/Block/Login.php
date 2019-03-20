@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Block;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
@@ -25,18 +25,18 @@ use Magento\Framework\View\Element\Template\Context;
 class Login extends Template
 {
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * Login constructor.
      * @param Context $context
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      */
-    public function __construct(Context $context, Data $coreHelper)
+    public function __construct(Context $context, AmazonConfig $amazonConfig)
     {
-        $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         parent::__construct($context);
     }
 
@@ -45,7 +45,7 @@ class Login extends Template
      */
     protected function _toHtml()
     {
-        if (!$this->coreHelper->isLoginButtonEnabled()) {
+        if (!$this->amazonConfig->isLoginButtonEnabled()) {
             return '';
         }
 

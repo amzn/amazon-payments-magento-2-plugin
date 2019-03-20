@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Plugin;
 
-use Amazon\Core\Helper\Data as AmazonHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Login\Api\CustomerManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -28,22 +28,22 @@ class CustomerRepository
     private $customerManagement;
 
     /**
-     * @var AmazonHelper
+     * @var AmazonConfig
      */
-    private $amazonHelper;
+    private $amazonConfig;
 
     /**
      * CustomerRepository constructor.
      *
      * @param CustomerManagementInterface  $customerManagement
-     * @param AmazonHelper $amazonHelper
+     * @param AmazonConfig $amazonConfig
      */
     public function __construct(
         CustomerManagementInterface $customerManagement,
-        AmazonHelper $amazonHelper
+        AmazonConfig $amazonConfig
     ) {
         $this->customerManagement       = $customerManagement;
-        $this->amazonHelper             = $amazonHelper;
+        $this->amazonConfig             = $amazonConfig;
     }
 
     /**
@@ -57,7 +57,7 @@ class CustomerRepository
      */
     public function afterGetById(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        if ($this->amazonHelper->isEnabled()) {
+        if ($this->amazonConfig->isEnabled()) {
             $this->customerManagement->setAmazonIdExtensionAttribute($customer);
         }
 
@@ -75,7 +75,7 @@ class CustomerRepository
      */
     public function afterGet(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        if ($this->amazonHelper->isEnabled()) {
+        if ($this->amazonConfig->isEnabled()) {
             $this->customerManagement->setAmazonIdExtensionAttribute($customer);
         }
 

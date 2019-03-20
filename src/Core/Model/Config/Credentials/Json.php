@@ -15,7 +15,7 @@
  */
 namespace Amazon\Core\Model\Config\Credentials;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Model\Validation\JsonConfigDataValidatorFactory;
 use Amazon\Core\Model\Config\SimplePath;
 use Magento\Config\Model\ResourceModel\Config as ConfigWriter;
@@ -29,9 +29,9 @@ class Json
     const AMAZON_CREDENTIALS_JSON = 'credentials_json';
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $amazonCoreHelper;
+    private $amazonConfig;
 
     /**
      * @var JsonConfigDataValidatorFactory
@@ -64,7 +64,7 @@ class Json
     private $simplePath;
 
     /**
-     * @param Data                           $amazonCoreHelper
+     * @param AmazonConfig                   $amazonConfig
      * @param JsonConfigDataValidatorFactory $jsonConfigDataValidator
      * @param ConfigWriter                   $configWriter
      * @param MessageManager                 $messageManager
@@ -72,7 +72,7 @@ class Json
      * @param EncryptorInterface             $encryptor
      */
     public function __construct(
-        Data $amazonCoreHelper,
+        AmazonConfig $amazonConfig,
         JsonConfigDataValidatorFactory $jsonConfigDataValidator,
         ConfigWriter $configWriter,
         MessageManager $messageManager,
@@ -80,7 +80,7 @@ class Json
         EncryptorInterface $encryptor,
         SimplePath $simplePath
     ) {
-        $this->amazonCoreHelper               = $amazonCoreHelper;
+        $this->amazonConfig                   = $amazonConfig;
         $this->jsonConfigDataValidatorFactory = $jsonConfigDataValidator;
         $this->configWriter                   = $configWriter;
         $this->messageManager                 = $messageManager;
@@ -122,9 +122,9 @@ class Json
             );
         }
 
-        foreach ($this->amazonCoreHelper->getAmazonCredentialsFields() as $mandatoryField) {
+        foreach ($this->amazonConfig->getAmazonCredentialsFields() as $mandatoryField) {
             $valueToSave     = $arrayCredentials[$mandatoryField];
-            $encryptedFields = array_flip($this->amazonCoreHelper->getAmazonCredentialsEncryptedFields());
+            $encryptedFields = array_flip($this->amazonConfig->getAmazonCredentialsEncryptedFields());
 
             if (isset($encryptedFields[$mandatoryField])) {
                 $valueToSave = $this->encryptor->encrypt($valueToSave);

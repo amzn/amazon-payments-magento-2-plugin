@@ -17,7 +17,7 @@ namespace Amazon\Payment\Model;
 
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
-use Amazon\Core\Helper\Data as CoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Gateway\Config\Config;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Api\OrderInformationManagementInterface;
@@ -49,9 +49,9 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     private $clientFactory;
 
     /**
-     * @var CoreHelper
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var AmazonSetOrderDetailsResponseFactory
@@ -82,7 +82,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
      * OrderInformationManagement constructor.
      * @param Session $session
      * @param ClientFactoryInterface $clientFactory
-     * @param CoreHelper $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param Config $config
      * @param AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory
      * @param QuoteLinkInterfaceFactory $quoteLinkFactory
@@ -92,7 +92,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     public function __construct(
         Session $session,
         ClientFactoryInterface $clientFactory,
-        CoreHelper $coreHelper,
+        AmazonConfig $amazonConfig,
         Config $config,
         AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory,
         QuoteLinkInterfaceFactory $quoteLinkFactory,
@@ -101,7 +101,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     ) {
         $this->session                              = $session;
         $this->clientFactory                        = $clientFactory;
-        $this->coreHelper                           = $coreHelper;
+        $this->amazonConfig                         = $amazonConfig;
         $this->config                               = $config;
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
         $this->quoteLinkFactory                     = $quoteLinkFactory;
@@ -122,7 +122,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
 
             $this->setReservedOrderId($quote);
 
-            $storeName = $this->coreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $storeId);
+            $storeName = $this->amazonConfig->getStoreName(ScopeInterface::SCOPE_STORE, $storeId);
             if (!$storeName) {
                 $storeName = $quote->getStore()->getName();
             }
@@ -134,7 +134,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'store_name'                => $storeName,
                 'custom_information'        =>
                     'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
-                    'Plugin Version : ' . $this->coreHelper->getVersion()
+                    'Plugin Version : ' . $this->amazonConfig->getVersion()
                 ,
                 'platform_id'               => $this->config->getValue('platform_id')
             ];
@@ -157,7 +157,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
 
     protected function validateCurrency($code)
     {
-        if ($this->coreHelper->getCurrencyCode() !== $code) {
+        if ($this->amazonConfig->getCurrencyCode() !== $code) {
             throw new LocalizedException(__('The currency selected is not supported by Amazon Pay'));
         }
     }

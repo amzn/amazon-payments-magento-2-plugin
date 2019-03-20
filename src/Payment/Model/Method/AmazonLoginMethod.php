@@ -15,8 +15,6 @@
  */
 namespace Amazon\Payment\Model\Method;
 
-use Amazon\Core\Helper\Data as AmazonCoreHelper;
-
 /**
  * Class AmazonLoginMethod
  * For display of Amazon Pay in payment method list

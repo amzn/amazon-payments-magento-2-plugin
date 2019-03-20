@@ -16,7 +16,6 @@
 
 namespace Amazon\Core\Model\Config;
 
-use Amazon\Core\Helper\Data as CoreHelper;
 use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
@@ -70,18 +69,12 @@ class SimplePath
     private $_scopeId;
 
     /**
-     * @var CoreHelper
-     */
-    private $coreHelper;
-
-    /**
      * @var AmazonConfig
      */
     private $amazonConfig;
 
     /**
      * SimplePath constructor.
-     * @param CoreHelper $coreHelper
      * @param AmazonConfig $amazonConfig
      * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -100,7 +93,6 @@ class SimplePath
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        CoreHelper $coreHelper,
         AmazonConfig $amazonConfig,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -116,7 +108,6 @@ class SimplePath
         \Magento\Paypal\Model\Config $paypal,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->coreHelper    = $coreHelper;
         $this->amazonConfig  = $amazonConfig;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
@@ -492,7 +483,7 @@ class SimplePath
         $urlArray = array_unique($urlArray);
         $baseUrls = array_unique($baseUrls);
 
-        $coreVersion = $this->coreHelper->getVersion();
+        $coreVersion = $this->amazonConfig->getVersion();
         if (!$coreVersion) {
             $coreVersion = '--';
         }

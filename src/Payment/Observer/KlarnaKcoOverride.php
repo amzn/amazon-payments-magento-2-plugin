@@ -17,15 +17,15 @@ namespace Amazon\Payment\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Login\Helper\Session;
 
 class KlarnaKcoOverride implements ObserverInterface
 {
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var Session
@@ -33,20 +33,20 @@ class KlarnaKcoOverride implements ObserverInterface
     private $sessionHelper;
 
     /**
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param Session $sessionHelper
      */
     public function __construct(
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         Session $sessionHelper
     ) {
-        $this->coreHelper    = $coreHelper;
+        $this->amazonConfig  = $amazonConfig;
         $this->sessionHelper = $sessionHelper;
     }
 
     public function execute(Observer $observer)
     {
-        if ($this->coreHelper->isPwaEnabled() && $this->sessionHelper->isAmazonLoggedIn()) {
+        if ($this->amazonConfig->isPwaEnabled() && $this->sessionHelper->isAmazonLoggedIn()) {
             // Force customer to use default (Amazon) checkout
             $observer->getOverrideObject()->setForceDisabled(true);
         }

@@ -16,7 +16,6 @@
 namespace Amazon\Core\Model\Validation;
 
 use Amazon\Core\Client\ClientFactoryInterface;
-use Amazon\Core\Helper\Data;
 use Magento\Framework\DataObject;
 use Magento\Framework\Validator\AbstractValidator;
 use AmazonPay\ResponseInterface;
@@ -31,20 +30,12 @@ class ApiCredentialsValidator extends AbstractValidator
     private $amazonHttpClientFactory;
 
     /**
-     * @var Data
-     */
-    private $amazonCoreHelper;
-
-    /**
      * @param ClientFactoryInterface $amazonHttpClientFactory
-     * @param Data                   $amazonCoreHelper
      */
     public function __construct(
-        ClientFactoryInterface $amazonHttpClientFactory,
-        Data $amazonCoreHelper
+        ClientFactoryInterface $amazonHttpClientFactory
     ) {
         $this->amazonHttpClientFactory = $amazonHttpClientFactory;
-        $this->amazonCoreHelper = $amazonCoreHelper;
     }
 
     /**

@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Cron;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Model\Config\Source\UpdateMechanism;
 use Amazon\Payment\Api\Data\PendingRefundInterface;
 use Amazon\Payment\Model\QueuedRefundUpdaterFactory;
@@ -40,9 +40,9 @@ class ProcessAmazonRefunds
     private $queuedRefundUpdater;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @param CollectionFactory          $collectionFactory
@@ -52,12 +52,12 @@ class ProcessAmazonRefunds
     public function __construct(
         CollectionFactory $collectionFactory,
         QueuedRefundUpdaterFactory $queuedRefundUpdater,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         $limit = 100
     ) {
         $this->queuedRefundsCollectionFactory = $collectionFactory;
         $this->queuedRefundUpdater            = $queuedRefundUpdater;
-        $this->coreHelper                     = $coreHelper;
+        $this->amazonConfig                   = $amazonConfig;
 
         $limit = (int)$limit;
 
@@ -70,7 +70,7 @@ class ProcessAmazonRefunds
 
     public function execute()
     {
-        if (UpdateMechanism::IPN === $this->coreHelper->getUpdateMechanism()) {
+        if (UpdateMechanism::IPN === $this->amazonConfig->getUpdateMechanism()) {
             return;
         }
 

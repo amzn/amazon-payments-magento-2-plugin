@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Observer;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -24,9 +24,9 @@ use Magento\Payment\Model\InfoInterface;
 class SandboxSimulation implements ObserverInterface
 {
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var QuoteLinkInterfaceFactory
@@ -34,20 +34,20 @@ class SandboxSimulation implements ObserverInterface
     private $quoteLinkFactory;
 
     /**
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param QuoteLinkInterfaceFactory $quoteLinkFactory
      */
     public function __construct(
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         QuoteLinkInterfaceFactory $quoteLinkFactory
     ) {
-        $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->quoteLinkFactory = $quoteLinkFactory;
     }
 
     public function execute(Observer $observer)
     {
-        if ($this->coreHelper->isSandboxEnabled()) {
+        if ($this->amazonConfig->isSandboxEnabled()) {
             $context = $observer->getEvent()->getContext();
             $payment = $observer->getEvent()->getPayment();
 
@@ -169,7 +169,7 @@ class SandboxSimulation implements ObserverInterface
     {
         $simulationString = null;
 
-        $simulationStrings = $this->coreHelper->getSandboxSimulationStrings($context);
+        $simulationStrings = $this->amazonConfig->getSandboxSimulationStrings($context);
         if (array_key_exists($simulationReference, $simulationStrings)) {
             $simulationString = $simulationStrings[$simulationReference];
         }

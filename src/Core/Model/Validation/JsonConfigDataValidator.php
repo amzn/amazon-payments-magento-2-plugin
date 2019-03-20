@@ -15,7 +15,7 @@
  */
 namespace Amazon\Core\Model\Validation;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Framework\Json\DecoderInterface;
 
@@ -27,19 +27,19 @@ class JsonConfigDataValidator extends AbstractValidator
     private $jsonDecoder;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $amazonCoreHelper;
+    private $amazonConfig;
 
     /**
      * @param DecoderInterface $jsonDecoder
-     * @param Data $amazonCoreHelper
+     * @param AmazonConfig $amazonConfig
      */
     public function __construct(
-        Data $amazonCoreHelper,
+        AmazonConfig $amazonConfig,
         DecoderInterface $jsonDecoder
     ) {
-        $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->amazonConfig     = $amazonConfig;
         $this->jsonDecoder      = $jsonDecoder;
     }
 
@@ -71,7 +71,7 @@ class JsonConfigDataValidator extends AbstractValidator
             return true;
         }
 
-        foreach ($this->amazonCoreHelper->getAmazonCredentialsFields() as $mandatoryField) {
+        foreach ($this->amazonConfig->getAmazonCredentialsFields() as $mandatoryField) {
             if (!isset($decodedCredentials[$mandatoryField])) {
                 return false;
             }

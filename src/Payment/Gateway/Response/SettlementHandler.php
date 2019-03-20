@@ -19,7 +19,6 @@ namespace Amazon\Payment\Gateway\Response;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
-use Amazon\Core\Helper\Data;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
@@ -37,11 +36,6 @@ class SettlementHandler implements HandlerInterface
     private $subjectReader;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
@@ -56,20 +50,17 @@ class SettlementHandler implements HandlerInterface
      *
      * @param Logger                   $logger
      * @param SubjectReader            $subjectReader
-     * @param Data                     $coreHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param CartRepositoryInterface  $quoteRepository
      */
     public function __construct(
         Logger $logger,
         SubjectReader $subjectReader,
-        Data $coreHelper,
         OrderRepositoryInterface $orderRepository,
         CartRepositoryInterface $quoteRepository
     ) {
         $this->logger = $logger;
         $this->subjectReader = $subjectReader;
-        $this->coreHelper = $coreHelper;
         $this->orderRepository = $orderRepository;
         $this->quoteRepository = $quoteRepository;
     }

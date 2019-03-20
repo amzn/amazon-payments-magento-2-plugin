@@ -16,10 +16,9 @@
 namespace Amazon\Payment\Block;
 
 use Amazon\Core\Helper\CategoryExclusion;
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Catalog\Model\Product;
 
 /**
  * @api
@@ -29,7 +28,7 @@ class PaymentLink extends Template
     /**
      * @var Data
      */
-    protected $coreHelper;
+    protected $amazonConfig;
 
     /**
      * @var CategoryExclusion
@@ -38,18 +37,18 @@ class PaymentLink extends Template
 
     /**
      * @param Context           $context
-     * @param Data              $coreHelper
+     * @param AmazonConfig      $amazonConfig
      * @param CategoryExclusion $categoryExclusionHelper
      * @param array             $data
      */
     public function __construct(
         Context $context,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         CategoryExclusion $categoryExclusionHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->coreHelper              = $coreHelper;
+        $this->amazonConfig            = $amazonConfig;
         $this->categoryExclusionHelper = $categoryExclusionHelper;
     }
 
@@ -58,7 +57,7 @@ class PaymentLink extends Template
      */
     protected function _toHtml()
     {
-        if (! $this->coreHelper->isPaymentButtonEnabled() || $this->categoryExclusionHelper->isQuoteDirty()) {
+        if (! $this->amazonConfig->isPaymentButtonEnabled() || $this->categoryExclusionHelper->isQuoteDirty()) {
             return '';
         }
 

@@ -17,15 +17,15 @@ namespace Amazon\Payment\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Helper\Shortcut\Factory as ShortcutFactory;
 
 class AddAmazonButton implements ObserverInterface
 {
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var ShortcutFactory
@@ -33,14 +33,14 @@ class AddAmazonButton implements ObserverInterface
     private $shortcutFactory;
 
     /**
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param ShortcutFactory $shortcutFactory
      */
     public function __construct(
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         ShortcutFactory $shortcutFactory
     ) {
-        $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->shortcutFactory = $shortcutFactory;
     }
 
@@ -49,7 +49,7 @@ class AddAmazonButton implements ObserverInterface
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
-        if ($this->coreHelper->isPwaEnabled() && $this->coreHelper->isCurrentCurrencySupportedByAmazon()) {
+        if ($this->amazonConfig->isPwaEnabled() && $this->amazonConfig->isCurrentCurrencySupportedByAmazon()) {
             $params = [
                 'shortcutValidator' => $this->shortcutFactory->create($observer->getEvent()->getCheckoutSession()),
             ];

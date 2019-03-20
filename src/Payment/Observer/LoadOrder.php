@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Observer;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Api\Data\OrderLinkInterfaceFactory;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -37,9 +37,9 @@ class LoadOrder implements ObserverInterface
     private $orderLinkFactory;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     private $quoteLinkFactory;
 
@@ -48,20 +48,20 @@ class LoadOrder implements ObserverInterface
     public function __construct(
         OrderExtensionFactory $orderExtensionFactory,
         OrderLinkInterfaceFactory $orderLinkFactory,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         QuoteLinkInterfaceFactory $quoteLinkFactory,
         AmazonPaymentAdapter $adapter
     ) {
         $this->orderExtensionFactory = $orderExtensionFactory;
         $this->orderLinkFactory      = $orderLinkFactory;
-        $this->coreHelper            = $coreHelper;
+        $this->amazonConfig          = $amazonConfig;
         $this->quoteLinkFactory = $quoteLinkFactory;
         $this->adapter = $adapter;
     }
 
     public function execute(Observer $observer)
     {
-        if ($this->coreHelper->isPwaEnabled()) {
+        if ($this->amazonConfig->isPwaEnabled()) {
             $order = $observer->getOrder();
             $this->setAmazonOrderReferenceIdExtensionAttribute($order);
         }

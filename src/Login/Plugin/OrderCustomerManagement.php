@@ -15,7 +15,7 @@
  */
 namespace Amazon\Login\Plugin;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Amazon\Login\Helper\Session as LoginSessionHelper;
 use Amazon\Payment\Gateway\Config\Config;
@@ -41,26 +41,26 @@ class OrderCustomerManagement
     private $customerLinkManagement;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @param LoginSessionHelper $loginSessionHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param CustomerLinkManagementInterface $customerLinkManagement
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      */
     public function __construct(
         LoginSessionHelper $loginSessionHelper,
         OrderRepositoryInterface $orderRepository,
         CustomerLinkManagementInterface $customerLinkManagement,
-        Data $coreHelper
+        AmazonConfig $amazonConfig
     ) {
         $this->loginSessionHelper     = $loginSessionHelper;
         $this->orderRepository        = $orderRepository;
         $this->customerLinkManagement = $customerLinkManagement;
-        $this->coreHelper             = $coreHelper;
+        $this->amazonConfig           = $amazonConfig;
     }
 
     /**
@@ -72,7 +72,7 @@ class OrderCustomerManagement
      */
     public function afterCreate(OrderCustomerManagementInterface $subject, $result, $orderId)
     {
-        if ($this->coreHelper->isLwaEnabled()) {
+        if ($this->amazonConfig->isLwaEnabled()) {
             $paymentMethodName = $this->orderRepository->get($orderId)->getPayment()->getMethod();
             $isAmazonPayment   = $paymentMethodName === Config::CODE;
             $amazonCustomer    = $this->loginSessionHelper->getAmazonCustomer();

@@ -19,7 +19,6 @@ namespace Amazon\Payment\Gateway\Request;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
-use Amazon\Core\Helper\Data;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 
@@ -41,11 +40,6 @@ class RefundRequestBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * @var Data
-     */
-    private $coreHelper;
-
-    /**
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
@@ -60,18 +54,15 @@ class RefundRequestBuilder implements BuilderInterface
      *
      * @param ProductMetadata $productMetadata
      * @param SubjectReader $subjectReader
-     * @param Data $coreHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param OrderAdapterFactory $orderAdapterFactory
      */
     public function __construct(
         ProductMetaData $productMetadata,
         SubjectReader $subjectReader,
-        Data $coreHelper,
         OrderRepositoryInterface $orderRepository,
         OrderAdapterFactory $orderAdapterFactory
     ) {
-        $this->coreHelper = $coreHelper;
         $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
         $this->orderRepository = $orderRepository;

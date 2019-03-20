@@ -15,7 +15,7 @@
  */
 namespace Amazon\Core\Client;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -29,9 +29,9 @@ class ClientFactory implements ClientFactoryInterface
     private $objectManager;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var string
@@ -47,18 +47,18 @@ class ClientFactory implements ClientFactoryInterface
      * ClientFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @param Data                   $coreHelper
+     * @param AmazonConfig           $amazonConfig
      * @param LoggerInterface        $logger
      * @param string                 $instanceName
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         LoggerInterface $logger,
         $instanceName = '\\AmazonPay\\ClientInterface'
     ) {
         $this->objectManager = $objectManager;
-        $this->coreHelper    = $coreHelper;
+        $this->amazonConfig  = $amazonConfig;
         $this->instanceName  = $instanceName;
         $this->logger        = $logger;
     }
@@ -69,17 +69,17 @@ class ClientFactory implements ClientFactoryInterface
     public function create($scopeId = null, $scope = ScopeInterface::SCOPE_STORE)
     {
         $config = [
-            $this->coreHelper->getClientPath('secretkey')  => $this->coreHelper->getSecretKey($scope, $scopeId),
-            $this->coreHelper->getClientPath('accesskey')  => $this->coreHelper->getAccessKey($scope, $scopeId),
-            $this->coreHelper->getClientPath('merchantid') => $this->coreHelper->getMerchantId($scope, $scopeId),
-            $this->coreHelper->getClientPath('amazonregion')     => $this->coreHelper->getRegion($scope, $scopeId),
-            $this->coreHelper->getClientPath('amazonsandbox')    => $this->coreHelper->isSandboxEnabled($scope, $scopeId),
-            $this->coreHelper->getClientPath('clientid')   => $this->coreHelper->getClientId($scope, $scopeId)
+            $this->amazonConfig->getClientPath('secretkey')  => $this->amazonConfig->getSecretKey($scope, $scopeId),
+            $this->amazonConfig->getClientPath('accesskey')  => $this->amazonConfig->getAccessKey($scope, $scopeId),
+            $this->amazonConfig->getClientPath('merchantid') => $this->amazonConfig->getMerchantId($scope, $scopeId),
+            $this->amazonConfig->getClientPath('amazonregion')     => $this->amazonConfig->getRegion($scope, $scopeId),
+            $this->amazonConfig->getClientPath('amazonsandbox')    => $this->amazonConfig->isSandboxEnabled($scope, $scopeId),
+            $this->amazonConfig->getClientPath('clientid')   => $this->amazonConfig->getClientId($scope, $scopeId)
         ];
 
         $client = $this->objectManager->create($this->instanceName, ['amazonConfig' => $config]);
 
-        if ($client instanceof LoggerAwareInterface && $this->coreHelper->isLoggingEnabled($scope, $scopeId)) {
+        if ($client instanceof LoggerAwareInterface && $this->amazonConfig->isLoggingEnabled($scope, $scopeId)) {
             $client->setLogger($this->logger);
         }
 

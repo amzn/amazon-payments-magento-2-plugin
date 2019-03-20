@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Plugin;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Api\QuoteLinkManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -28,16 +28,16 @@ class QuoteRepository
     private $quoteLinkManagement;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     public function __construct(
         QuoteLinkManagementInterface $quoteLinkManagement,
-        Data $coreHelper
+        AmazonConfig $amazonConfig
     ) {
         $this->quoteLinkManagement  = $quoteLinkManagement;
-        $this->coreHelper           = $coreHelper;
+        $this->amazonConfig         = $amazonConfig;
     }
 
     /**
@@ -45,7 +45,7 @@ class QuoteRepository
      */
     public function afterGet(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        if ($this->coreHelper->isPwaEnabled()) {
+        if ($this->amazonConfig->isPwaEnabled()) {
             $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
         }
 
@@ -57,7 +57,7 @@ class QuoteRepository
      */
     public function afterGetForCustomer(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        if ($this->coreHelper->isPwaEnabled()) {
+        if ($this->amazonConfig->isPwaEnabled()) {
             $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
         }
 
@@ -69,7 +69,7 @@ class QuoteRepository
      */
     public function afterGetActive(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        if ($this->coreHelper->isPwaEnabled()) {
+        if ($this->amazonConfig->isPwaEnabled()) {
             $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
         }
 
@@ -81,7 +81,7 @@ class QuoteRepository
      */
     public function afterGetActiveForCustomer(CartRepositoryInterface $cartRepository, CartInterface $cart)
     {
-        if ($this->coreHelper->isPwaEnabled()) {
+        if ($this->amazonConfig->isPwaEnabled()) {
             $this->quoteLinkManagement->setAmazonOrderReferenceIdExtensionAttribute($cart);
         }
 

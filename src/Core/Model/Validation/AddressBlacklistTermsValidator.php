@@ -15,22 +15,22 @@
  */
 namespace Amazon\Core\Model\Validation;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\Validator\AbstractValidator;
 
 class AddressBlacklistTermsValidator extends AbstractValidator
 {
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $amazonCoreHelper;
+    private $amazonConfig;
 
     /**
-     * @param Data $amazonCoreHelper
+     * @param AmazonConfig $amazonConfig
      */
-    public function __construct(Data $amazonCoreHelper)
+    public function __construct(AmazonConfig $amazonConfig)
     {
-        $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->amazonConfig = $amazonConfig;
     }
 
     /**
@@ -38,14 +38,14 @@ class AddressBlacklistTermsValidator extends AbstractValidator
      */
     public function isValid($entity)
     {
-        if (!$this->amazonCoreHelper->isBlacklistedTermValidationEnabled()) {
+        if (!$this->amazonConfig->isBlacklistedTermValidationEnabled()) {
             return true;
         }
 
         /** @var $entity \Magento\Customer\Api\Data\AddressInterface */
         $addressLines = (array) $entity->getStreet();
 
-        foreach ($this->amazonCoreHelper->getBlackListedTerms() as $term) {
+        foreach ($this->amazonConfig->getBlackListedTerms() as $term) {
             foreach ($addressLines as $addressLine) {
                 if (stripos($addressLine, $term) !== false) {
                     $this->_addMessages(['Unfortunately, we don’t deliver to lockers/packing stations.']);

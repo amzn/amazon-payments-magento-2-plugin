@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Cron;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Model\Config\Source\UpdateMechanism;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;
 use Amazon\Payment\Model\PaymentManagement\Authorization;
@@ -45,9 +45,9 @@ class GetAmazonAuthorizationUpdates
     private $authorization;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var TransactionRepositoryInterface
@@ -78,7 +78,7 @@ class GetAmazonAuthorizationUpdates
      * GetAmazonAuthorizationUpdates constructor.
      * @param CollectionFactory $collectionFactory
      * @param Authorization $authorization
-     * @param Data $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param TransactionRepositoryInterface $transactionRepository
      * @param SearchCriteriaBuilder $searchBuilder
      * @param FilterBuilder $filterBuilder
@@ -89,7 +89,7 @@ class GetAmazonAuthorizationUpdates
     public function __construct(
         CollectionFactory $collectionFactory,
         Authorization $authorization,
-        Data $coreHelper,
+        AmazonConfig $amazonConfig,
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchBuilder,
         FilterBuilder $filterBuilder,
@@ -99,7 +99,7 @@ class GetAmazonAuthorizationUpdates
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->authorization     = $authorization;
-        $this->coreHelper        = $coreHelper;
+        $this->amazonConfig      = $amazonConfig;
         $this->transactionRepository = $transactionRepository;
         $this->searchBuilder = $searchBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -149,7 +149,7 @@ class GetAmazonAuthorizationUpdates
      */
     public function execute()
     {
-        if (UpdateMechanism::IPN === $this->coreHelper->getUpdateMechanism()) {
+        if (UpdateMechanism::IPN === $this->amazonConfig->getUpdateMechanism()) {
             return;
         }
 

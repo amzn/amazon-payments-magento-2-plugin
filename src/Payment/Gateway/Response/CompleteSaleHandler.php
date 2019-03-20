@@ -19,16 +19,10 @@ namespace Amazon\Payment\Gateway\Response;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
-use Amazon\Core\Helper\Data;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 
 class CompleteSaleHandler implements HandlerInterface
 {
-
-    /**
-     * @var Data
-     */
-    private $coreHelper;
 
     /**
      * @var Logger
@@ -51,17 +45,14 @@ class CompleteSaleHandler implements HandlerInterface
      * @param Logger $logger
      * @param SubjectReader $subjectReader
      * @param PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory
-     * @param Data $coreHelper
      */
     public function __construct(
         Logger $logger,
         SubjectReader $subjectReader,
-        PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
-        Data $coreHelper
+        PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory
     ) {
         $this->logger = $logger;
         $this->subjectReader = $subjectReader;
-        $this->coreHelper = $coreHelper;
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
     }
 

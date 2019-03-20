@@ -15,7 +15,7 @@
  */
 namespace Amazon\Payment\Controller\Payment;
 
-use Amazon\Core\Helper\Data;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Model\Config\Source\UpdateMechanism;
 use Amazon\Payment\Api\Ipn\CompositeProcessorInterface;
 use Amazon\Payment\Ipn\IpnHandlerFactoryInterface;
@@ -38,25 +38,25 @@ class Ipn extends Action
     private $compositeProcessor;
 
     /**
-     * @var Data
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     public function __construct(
         Context $context,
         IpnHandlerFactoryInterface $ipnHandlerFactory,
         CompositeProcessorInterface $compositeProcessor,
-        Data $coreHelper
+        AmazonConfig $amazonConfig
     ) {
         parent::__construct($context);
         $this->ipnHandlerFactory  = $ipnHandlerFactory;
         $this->compositeProcessor = $compositeProcessor;
-        $this->coreHelper         = $coreHelper;
+        $this->amazonConfig       = $amazonConfig;
     }
 
     public function execute()
     {
-        if (UpdateMechanism::IPN !== $this->coreHelper->getUpdateMechanism()) {
+        if (UpdateMechanism::IPN !== $this->amazonConfig->getUpdateMechanism()) {
             throw new NotFoundException(__('IPN not enabled.'));
         }
 

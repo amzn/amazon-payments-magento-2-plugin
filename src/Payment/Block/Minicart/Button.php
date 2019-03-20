@@ -17,7 +17,7 @@ namespace Amazon\Payment\Block\Minicart;
 
 use Magento\Checkout\Model\Session;
 use Amazon\Payment\Helper\Data;
-use Amazon\Core\Helper\Data as AmazonCoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Gateway\Config\Config;
 use Magento\Paypal\Block\Express\InContext;
 use Magento\Framework\View\Element\Template;
@@ -63,9 +63,9 @@ class Button extends Template implements ShortcutInterface
     private $session;
 
     /**
-     * @var AmazonCoreHelper
+     * @var AmazonConfig
      */
-    private $coreHelper;
+    private $amazonConfig;
 
     /**
      * @var Http
@@ -80,7 +80,7 @@ class Button extends Template implements ShortcutInterface
      * @param Data              $mainHelper
      * @param Session           $session
      * @param Config            $payment
-     * @param AmazonCoreHelper  $coreHelper
+     * @param AmazonConfig      $amazonConfig
      * @param Http              $request
      * @param array             $data
      */
@@ -90,7 +90,7 @@ class Button extends Template implements ShortcutInterface
         Data $mainHelper,
         Session $session,
         Config $payment,
-        AmazonCoreHelper $coreHelper,
+        AmazonConfig $amazonConfig,
         Http $request,
         array $data = []
     ) {
@@ -99,7 +99,7 @@ class Button extends Template implements ShortcutInterface
         $this->mainHelper = $mainHelper;
         $this->payment = $payment;
         $this->session = $session;
-        $this->coreHelper = $coreHelper;
+        $this->amazonConfig = $amazonConfig;
         $this->request = $request;
         $this->payment->setMethodCode($this->payment::CODE);
     }
@@ -112,7 +112,7 @@ class Button extends Template implements ShortcutInterface
         if ($this->getIsCart() && $this->payment->isActive($this->session->getQuote()->getStoreId())) {
             return true;
         }
-        return $this->coreHelper->isPayButtonAvailableInMinicart()
+        return $this->amazonConfig->isPayButtonAvailableInMinicart()
             && $this->payment->isActive($this->session->getQuote()->getStoreId())
             && $this->isMiniCart;
     }
