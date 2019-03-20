@@ -42,6 +42,26 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
     private $lockOnLoad = false;
 
     /**
+     * @var TransactionRepositoryInterface
+     */
+    private $transactionRepository;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchBuilder;
+
+    /**
+     * @var FilterGroup
+     */
+    private $filterGroup;
+
+    /**
      * PendingCapture constructor.
      *
      * @param Context               $context
@@ -49,6 +69,10 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
      * @param DateTimeFactory       $dateFactory
      * @param AbstractResource|null $resource
      * @param AbstractDb|null       $resourceCollection
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param SearchCriteriaBuilder $searchBuilder
+     * @param FilterBuilder         $filterBuilder
+     * @param FilterGroup           $filterGroup
      * @param array                 $data
      */
     public function __construct(
@@ -87,10 +111,13 @@ class PendingAuthorization extends AbstractModel implements PendingAuthorization
     }
 
     /**
+     * Populate order and payment ID properties
+     *
      * @return bool
      * @throws \Exception
      */
-    public function updateReferenceIds() {
+    public function updateReferenceIds()
+    {
         $parent = $this->filterBuilder
             ->setField('parent_txn_id')
             ->setValue($this->getAuthorizationId())

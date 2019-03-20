@@ -132,12 +132,8 @@ class GetAmazonAuthorizationUpdates
 
         foreach ($collection->getItems() as $item) {
             if ($item) {
-                $hasTransaction = false;
-
-                $hasTransaction = $item->updateReferenceIds();
-
                 // If there's no match, get rid of this item in the table so the cron job will not error out.
-                if (!$hasTransaction) {
+                if (!$item->updateReferenceIds()) {
                     $item->delete();
                 }
             }
