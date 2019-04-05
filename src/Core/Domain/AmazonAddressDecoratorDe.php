@@ -178,6 +178,6 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
      */
     public function getLine($lineNumber)
     {
-        $this->amazonAddress->getLine($lineNumber);
+        return $this->amazonAddress->getLine($lineNumber);
     }
 }
