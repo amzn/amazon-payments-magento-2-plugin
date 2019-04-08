@@ -183,10 +183,6 @@ class AmazonAuthCommand implements CommandInterface
             }
         }
 
-        if ($isDecline) {
-            $messages[] = __("You will be redirected to the cart shortly.");
-        }
-
         if ($isTimeout) {
             return true;
         }

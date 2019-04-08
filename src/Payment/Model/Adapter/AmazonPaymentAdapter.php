@@ -25,6 +25,7 @@ use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class AmazonPaymentAdapter
@@ -81,6 +82,11 @@ class AmazonPaymentAdapter
     private $pendingAuthorizationFactory;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * AmazonPaymentAdapter constructor.
      * @param ClientFactoryInterface $clientFactory
      * @param AmazonCaptureResponseFactory $amazonCaptureResponseFactory
@@ -91,6 +97,7 @@ class AmazonPaymentAdapter
      * @param SubjectReader $subjectReader
      * @param Data $coreHelper
      * @param Logger $logger
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,
@@ -101,7 +108,8 @@ class AmazonPaymentAdapter
         PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         SubjectReader $subjectReader,
         Data $coreHelper,
-        Logger $logger
+        Logger $logger,
+        UrlInterface $urlBuilder
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
@@ -112,6 +120,7 @@ class AmazonPaymentAdapter
         $this->coreHelper = $coreHelper;
         $this->pendingCaptureFactory = $pendingCaptureFactory;
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -152,13 +161,15 @@ class AmazonPaymentAdapter
      * @param  $amazonOrderReferenceId
      * @return array
      */
-    private function confirmOrderReference($storeId, $amazonOrderReferenceId)
+    public function confirmOrderReference($storeId, $amazonOrderReferenceId)
     {
         $response = [];
 
         $response = $this->clientFactory->create($storeId)->confirmOrderReference(
             [
-                'amazon_order_reference_id' => $amazonOrderReferenceId
+                'amazon_order_reference_id' => $amazonOrderReferenceId,
+                'success_url' => $this->urlBuilder->getUrl('amazonpayments/payment/completecheckout'),
+                'failure_url' => $this->urlBuilder->getUrl('amazonpayments/payment/completecheckout')
             ]
         );
 
@@ -228,15 +239,6 @@ class AmazonPaymentAdapter
         $response['auth_mode'] = $authMode;
         $response['constraints'] = [];
         $response['amazon_order_reference_id'] = $data['amazon_order_reference_id'];
-
-        if (!$attempts) {
-            $detailResponse = $this->setOrderReferenceDetails($storeId, $data);
-
-            if (isset($detailResponse['constraints']) && !empty($detailResponse['constraints'])) {
-                $response['constraints'] = $detailResponse['constraints'];
-                return $response;
-            }
-        }
 
         $confirmResponse = $this->confirmOrderReference($storeId, $data['amazon_order_reference_id']);
 
