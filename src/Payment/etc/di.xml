@@ -242,6 +242,9 @@
     <type name="Amazon\Payment\Model\Method\AmazonLoginMethod">
         <plugin name="disable_amazon_payment_method" type="Amazon\Payment\Plugin\DisableAmazonPaymentMethod" sortOrder="10" disabled="false"/>
     </type>
+    <type name="Magento\Quote\Model\PaymentMethodManagement">
+        <plugin name="confirm_order_reference_on_payment_details_save" type="Amazon\Payment\Plugin\ConfirmOrderReference" sortOrder="10" disabled="false"/>
+    </type>
 
     <type name="Amazon\Payment\Cron\ProcessAmazonRefunds">
         <arguments>
