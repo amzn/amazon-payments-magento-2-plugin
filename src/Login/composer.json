@@ -9,10 +9,11 @@
   "require": {
     "php": "~7.1.3||~7.2.0",
     "amzn/amazon-pay-and-login-with-amazon-core-module": "^3.1.7",
-    "magento/module-customer": "*",
-    "magento/module-store": "*",
-    "magento/module-eav": "*",
-    "magento/module-checkout": "*",
+    "magento/framework": "^102",
+    "magento/module-customer": "^102",
+    "magento/module-store": "^101",
+    "magento/module-eav": "^102",
+    "magento/module-checkout": "^100.3",
     "magento/module-checkout-agreements": "*"
 
   },
