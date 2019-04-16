@@ -26,6 +26,7 @@ use Amazon\Core\Helper\Data;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class AmazonPaymentAdapter
@@ -109,7 +110,7 @@ class AmazonPaymentAdapter
         SubjectReader $subjectReader,
         Data $coreHelper,
         Logger $logger,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder = null
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
@@ -120,7 +121,7 @@ class AmazonPaymentAdapter
         $this->coreHelper = $coreHelper;
         $this->pendingCaptureFactory = $pendingCaptureFactory;
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
-        $this->urlBuilder = $urlBuilder;
+        $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
     }
 
     /**
