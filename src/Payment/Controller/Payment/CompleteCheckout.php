@@ -91,17 +91,17 @@ class CompleteCheckout extends Action
                 }
                 break;
             case 'Failure':
-                $this->checkoutSession->getQuote()->addMessage(
+                $this->checkoutSession->getQuote()->addMessage(__(
                     'Amazon Pay was unable to authenticate the payment instrument.  '
                     . 'Please try again, or use a different payment method.'
-                );
+                ));
                 break;
             case 'Abandoned':
             default:
-                $this->checkoutSession->getQuote()->addMessage(
+                $this->checkoutSession->getQuote()->addMessage(__(
                     'The SCA challenge was not completed successfully.  '
                     . 'Please try again, or use a different payment method.'
-                );
+                ));
         }
         return $this->pageFactory->create();
     }
