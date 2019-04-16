@@ -87,18 +87,18 @@ class CompleteCheckout extends Action
                     $this->cartManagement->placeOrder($this->checkoutSession->getQuoteId());
                     return $this->_redirect('checkout/onepage/success');
                 } catch (AmazonWebapiException $e) {
-                    $this->checkoutSession->getQuote()->setError($e->getMessage());
+                    $this->checkoutSession->getQuote()->addMessage($e->getMessage());
                 }
                 break;
             case 'Failure':
-                $this->checkoutSession->getQuote()->setError(
+                $this->checkoutSession->getQuote()->addMessage(
                     'Amazon Pay was unable to authenticate the payment instrument.  '
                     . 'Please try again, or use a different payment method.'
                 );
                 break;
             case 'Abandoned':
             default:
-                $this->checkoutSession->getQuote()->setError(
+                $this->checkoutSession->getQuote()->addMessage(
                     'The SCA challenge was not completed successfully.  '
                     . 'Please try again, or use a different payment method.'
                 );

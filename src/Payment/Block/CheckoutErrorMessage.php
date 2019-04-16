@@ -18,7 +18,11 @@ class CheckoutErrorMessage extends Template
     }
 
     public function getError() {
-        return $this->checkoutSession->getQuote()->getError();
+        $errorString = '';
+        foreach($this->checkoutSession->getQuote()->getErrors() as $error) {
+            $errorString .= $error->getText() . "\n";
+        }
+        return $errorString;
     }
 
     public function getCheckoutUrl() {
