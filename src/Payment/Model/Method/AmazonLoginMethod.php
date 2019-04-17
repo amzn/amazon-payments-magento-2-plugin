@@ -60,7 +60,7 @@ class AmazonLoginMethod extends \Magento\Payment\Model\Method\AbstractMethod
     public function isActive($storeId = null)
     {
         return (bool)(int)$this->_scopeConfig->getValue(
-            'payment/amazon_pay/active',
+            AmazonCoreHelper::AMAZON_ACTIVE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         ) && (bool)(int)$this->getConfigData('active', $storeId);
