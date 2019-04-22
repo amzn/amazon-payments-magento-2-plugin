@@ -162,7 +162,7 @@ class AmazonPaymentAdapter
      * @param  $amazonOrderReferenceId
      * @return array
      */
-    public function confirmOrderReference($storeId, $amazonOrderReferenceId)
+    private function confirmOrderReference($storeId, $amazonOrderReferenceId)
     {
         $response = [];
 
