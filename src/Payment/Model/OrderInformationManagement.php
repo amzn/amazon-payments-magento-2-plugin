@@ -33,6 +33,7 @@ use Magento\Store\Model\ScopeInterface;
 use AmazonPay\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -99,7 +100,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         QuoteLinkInterfaceFactory $quoteLinkFactory,
         LoggerInterface $logger,
         ProductMetadata $productMetadata,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder = null
     ) {
         $this->session                              = $session;
         $this->clientFactory                        = $clientFactory;
@@ -109,7 +110,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         $this->quoteLinkFactory                     = $quoteLinkFactory;
         $this->logger                               = $logger;
         $this->productMetadata                      = $productMetadata;
-        $this->urlBuilder                           = $urlBuilder;
+        $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
     }
 
     /**
