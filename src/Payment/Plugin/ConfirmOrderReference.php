@@ -43,11 +43,6 @@ class ConfirmOrderReference
     private $checkoutSession;
 
     /**
-     * @var AmazonPaymentAdapter
-     */
-    private $adapter;
-
-    /**
      * @var OrderInformationManagement
      */
     private $orderInformationManagement;
@@ -60,18 +55,15 @@ class ConfirmOrderReference
     /**
      * ConfirmOrderReference constructor.
      * @param Session $checkoutSession
-     * @param AmazonPaymentAdapter $adapter
      * @param OrderInformationManagement $orderInformationManagement
      * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         Session $checkoutSession,
-        AmazonPaymentAdapter $adapter,
         OrderInformationManagement $orderInformationManagement,
         CartRepositoryInterface $quoteRepository
     ) {
         $this->checkoutSession = $checkoutSession;
-        $this->adapter = $adapter;
         $this->orderInformationManagement = $orderInformationManagement;
         $this->quoteRepository = $quoteRepository;
     }
