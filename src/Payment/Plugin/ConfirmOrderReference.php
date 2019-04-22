@@ -16,6 +16,8 @@
 
 namespace Amazon\Payment\Plugin;
 
+use Amazon\Core\Exception\AmazonWebapiException;
+use Amazon\Payment\Api\Data\QuoteLinkInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
@@ -82,16 +84,18 @@ class ConfirmOrderReference
     ) {
         if($paymentMethod->getMethod() == GatewayConfig::CODE) {
             $quote = $this->checkoutSession->getQuote();
-            $amazonOrderReferenceId = $quote
-                ->getExtensionAttributes()
-                ->getAmazonOrderReferenceId()
-                ->getAmazonOrderReferenceId();
+            $quoteExtensionAttributes = $quote->getExtensionAttributes();
+            if ($quoteExtensionAttributes) {
+                $amazonOrderReferenceId = $quoteExtensionAttributes
+                    ->getAmazonOrderReferenceId()
+                    ->getAmazonOrderReferenceId();
 
-            $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId);
-            $this->orderInformationManagement->confirmOrderReference(
-                $amazonOrderReferenceId,
-                $quote->getStoreId()
-            );
+                $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId);
+                $this->orderInformationManagement->confirmOrderReference(
+                    $amazonOrderReferenceId,
+                    $quote->getStoreId()
+                );
+            }
         }
 
         return $result;
