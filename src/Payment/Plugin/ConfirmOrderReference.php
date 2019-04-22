@@ -27,6 +27,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Amazon\Payment\Gateway\Config\Config as GatewayConfig;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 
 /**
@@ -52,19 +53,27 @@ class ConfirmOrderReference
     private $orderInformationManagement;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
      * ConfirmOrderReference constructor.
      * @param Session $checkoutSession
      * @param AmazonPaymentAdapter $adapter
      * @param OrderInformationManagement $orderInformationManagement
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         Session $checkoutSession,
         AmazonPaymentAdapter $adapter,
-        OrderInformationManagement $orderInformationManagement
+        OrderInformationManagement $orderInformationManagement,
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->adapter = $adapter;
         $this->orderInformationManagement = $orderInformationManagement;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -83,7 +92,7 @@ class ConfirmOrderReference
         PaymentInterface $paymentMethod
     ) {
         if($paymentMethod->getMethod() == GatewayConfig::CODE) {
-            $quote = $this->checkoutSession->getQuote();
+            $quote = $this->quoteRepository->get($cartId);
             $quoteExtensionAttributes = $quote->getExtensionAttributes();
             if ($quoteExtensionAttributes) {
                 $amazonOrderReferenceId = $quoteExtensionAttributes
