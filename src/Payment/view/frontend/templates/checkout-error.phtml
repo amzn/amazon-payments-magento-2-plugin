@@ -13,16 +13,9 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Core\Exception;
-
-use Magento\Framework\Exception\LocalizedException;
-
-class AmazonServiceUnavailableException extends LocalizedException
-{
-    const ERROR_MESSAGE = 'Amazon could not process your request.';
-
-    public function __construct()
-    {
-        parent::__construct(__('Amazon could not process your request.'));
-    }
-}
+?>
+<h1><?=__('An error has occurred.')?></h1>
+<p>
+    <?=__($block->getError())?><br/>
+    <a href="<?=$block->getCheckoutUrl()?>"><?=__('Click here to return to checkout.')?></a>
+</p>
