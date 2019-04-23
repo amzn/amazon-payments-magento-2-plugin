@@ -16,6 +16,8 @@
 
 namespace Amazon\Payment\Plugin;
 
+use Amazon\Core\Exception\AmazonWebapiException;
+use Amazon\Payment\Api\Data\QuoteLinkInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
@@ -25,6 +27,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Amazon\Payment\Gateway\Config\Config as GatewayConfig;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 
 /**
@@ -40,29 +43,29 @@ class ConfirmOrderReference
     private $checkoutSession;
 
     /**
-     * @var AmazonPaymentAdapter
-     */
-    private $adapter;
-
-    /**
      * @var OrderInformationManagement
      */
     private $orderInformationManagement;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
      * ConfirmOrderReference constructor.
      * @param Session $checkoutSession
-     * @param AmazonPaymentAdapter $adapter
      * @param OrderInformationManagement $orderInformationManagement
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         Session $checkoutSession,
-        AmazonPaymentAdapter $adapter,
-        OrderInformationManagement $orderInformationManagement
+        OrderInformationManagement $orderInformationManagement,
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->checkoutSession = $checkoutSession;
-        $this->adapter = $adapter;
         $this->orderInformationManagement = $orderInformationManagement;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -81,17 +84,19 @@ class ConfirmOrderReference
         PaymentInterface $paymentMethod
     ) {
         if($paymentMethod->getMethod() == GatewayConfig::CODE) {
-            $quote = $this->checkoutSession->getQuote();
-            $amazonOrderReferenceId = $quote
-                ->getExtensionAttributes()
-                ->getAmazonOrderReferenceId()
-                ->getAmazonOrderReferenceId();
+            $quote = $this->quoteRepository->get($cartId);
+            $quoteExtensionAttributes = $quote->getExtensionAttributes();
+            if ($quoteExtensionAttributes) {
+                $amazonOrderReferenceId = $quoteExtensionAttributes
+                    ->getAmazonOrderReferenceId()
+                    ->getAmazonOrderReferenceId();
 
-            $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId);
-            $this->orderInformationManagement->confirmOrderReference(
-                $amazonOrderReferenceId,
-                $quote->getStoreId()
-            );
+                $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId);
+                $this->orderInformationManagement->confirmOrderReference(
+                    $amazonOrderReferenceId,
+                    $quote->getStoreId()
+                );
+            }
         }
 
         return $result;
