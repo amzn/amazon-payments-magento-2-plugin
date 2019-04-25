@@ -9,7 +9,6 @@ Amazon Pay and Login with Amazon extension for Magento 2
    :maxdepth: 3
 
    overview
-   prerequisites
    installation
    configuration
    login

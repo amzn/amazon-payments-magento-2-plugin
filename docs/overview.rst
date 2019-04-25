@@ -30,10 +30,12 @@ Prerequisites
 * cURL for PHP
 * DOM / XML for PHP
 * valid SSL certificate
-* A verified Amazon Pay merchant account - [sign up here](https://pay.amazon.com/signup)!
+* A verified Amazon Pay merchant account - `sign up here`_!
+
+.. _`sign up here`: https://pay.amazon.com/signup
 
 Installation and Configuration
----------------------
+------------------------------
 
 The extension is available via composer, Magento Marketplace or, with Magento 2.2.4 and higher, already pre-installed as bundled extension.
 
@@ -44,9 +46,19 @@ Branch information
 
 The following table provides an overview on which Git branch is compatible to which Magento 2 version.
 
-| Magento Version  | Github Branch |
-| ------------- | ------------- |
-| 2.1.0 - 2.2.3  | [1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x) |
-| 2.2.4 - 2.2.5  | [2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x) |
-| 2.2.6 - 2.2.x  | [2.1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x) |
-| 2.3.0 and above  | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) |
++---------------------+-------------------+
+| **Magento Version** | **Github Branch** |
++---------------------+-------------------+
+| 2.1.0 - 2.2.3       | `1.x`_            |
++---------------------+-------------------+
+| 2.2.4 - 2.2.5       | `2.x`_            |
++---------------------+-------------------+
+| 2.2.6 - 2.2.x       | `2.1.x`_          |
++---------------------+-------------------+
+| 2.3.0 and above     | `master`_         |
++---------------------+-------------------+
+
+.. _`1.x`: https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x
+.. _`2.x`: https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x
+.. _`2.1.x`: https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x
+.. _`master`: https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master
