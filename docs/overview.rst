@@ -1,28 +1,28 @@
 Overview
 ========
+This extension provides an official integration of your Magento 2 store with **Amazon Pay and Login with Amazon** services. The extension is a checkout and payment solution that does not share any item level information (product information, prices, basket content, etc) with Amazon. The extension integrates Amazon Pay seamlessly into the Magento 2 shop backend (configuration, order management, billing, etc.).
 
-This extension provides an official integration of your Magento 2 store with **Amazon Pay and Login with Amazon** services. They help your customers shop quickly, safely and securely. Your customers can pay on your website without re-entering their payment and address details. All Amazon Pay transactions are protected by Amazon's A-to-z Guarantee.
+About Amazon Pay
+----------------
 
-The extension is a pure payment solution. No item level is communicated to Amazon Pay and it allows you to manage your orders directly from Magento 2.
+Amazon Pay offers a familiar and convenient buying experience that can help your customers spend more time shopping and less time checking out. Amazon Pay is used by large and small companies. From years of shopping safely with Amazon, customers trust their personal information will remain secure and know many transactions are covered by the Amazon A-to-z Guarantee. Businesses have the reassurance of our advanced fraud protection and payment protection policy.
 
 Extension features
 ------------------
 
 * `Amazon Pay` button in the shopping cart, on product pages and in the 1st step of checkout
 * `Login with Amazon` button on the customer login and registration page
-* Customization of **Amazon Pay** widgets from within Magento admin
+* `Amazon Pay` in the list of available payment methods during the final step of checkout
+* Configuration of `Amazon Pay` extension from within Magento admin
 * Support for payment authorizations, captures and refunds (also partial refunds)
 * Support for synchronous and asynchronous authorization
-* Supports Amazon Pay Instant Payment Notifications
+* Supports `Amazon Pay` Instant Payment Notifications
 * Live & sandbox modes available
 * Options for simulating payment states in sandbox mode
 
 Getting the extension
 ---------------------
 
-The extension can be installed using the following methods:
+The extension is available via composer, Magento Marketplace or, with Magento 2.2.4 and higher, already pre-installed as bundled extension.
 
-* Preferred Method - From the Magento Marketplace using the Web Setup Wizard
-* Manually using composer from the command line
-
-Refer to the :doc:`installation` section to get more details concerning installation procedure.
+Please refer to the :doc:`installation` section to get more details concerning installation procedure.
