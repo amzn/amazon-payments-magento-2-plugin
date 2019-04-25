@@ -262,6 +262,9 @@
                 sortOrder="10"
                 disabled="false"/>
     </type>
+    <type name="Magento\Quote\Model\PaymentMethodManagement">
+        <plugin name="confirm_order_reference_on_payment_details_save" type="Amazon\Payment\Plugin\ConfirmOrderReference" sortOrder="10" disabled="false"/>
+    </type>
 
     <type name="Amazon\Payment\Cron\ProcessAmazonRefunds">
         <arguments>
