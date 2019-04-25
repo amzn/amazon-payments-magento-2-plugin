@@ -19,6 +19,9 @@ use Magento\Framework\View\Element\Template;
 use \Magento\Checkout\Model\Session as CheckoutSession;
 use \Magento\Framework\View\Element\Template\Context;
 
+/**
+ * @api
+ */
 class CheckoutErrorMessage extends Template
 {
     public function __construct(
@@ -27,9 +30,6 @@ class CheckoutErrorMessage extends Template
     ) {
         parent::__construct($context);
         $this->checkoutSession = $checkoutSession;
-    }
-    protected function _prepareLayout()
-    {
     }
 
     public function getError() {
