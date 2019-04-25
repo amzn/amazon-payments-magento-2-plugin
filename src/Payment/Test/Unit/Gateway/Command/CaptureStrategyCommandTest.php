@@ -97,6 +97,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->initTransactionRepositoryMock();
         $this->initFilterBuilderMock();
         $this->initSearchCriteriaBuilderMock();
+        $this->initOrderAdapterFactoryMock();
 
         $this->coreHelper = $this->getMockBuilder(\Amazon\Core\Helper\Data::class)
             ->disableOriginalConstructor()
@@ -270,5 +271,27 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getList', 'getTotalCount', 'delete', 'get', 'save', 'create', '__wakeup'])
             ->getMock();
+    }
+
+    /**
+     * Create mock for Order Adapter Factory
+     */
+    public function initOrderAdapterFactoryMock()
+    {
+        $this->orderAdapterFactory = $this->getMockBuilder(OrderAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAmazonOrderID'])
+            ->getMock();
+
+        $orderMock->method('getAmazonOrderID')
+            ->willReturn('123456');
+
+        $this->orderAdapterFactory->method('create')
+            ->willReturn($orderMock);
     }
 }
