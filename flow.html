@@ -90,9 +90,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#amazon-pay-button"><cite>Amazon Pay</cite> button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#placing-an-order">Placing an order</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#payment-authorization">Payment authorization</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#synchronous">Synchronous</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#asynchronous">Asynchronous</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#synchronous-if-possible">Synchronous if possible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#immediate">Immediate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic">Automatic</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#payment-capture">Payment capture</a></li>
@@ -103,6 +102,7 @@
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to Magento 2</a></li>
 </ul>
 
             
@@ -178,9 +178,9 @@
 </div>
 <div class="section" id="payment-authorization">
 <h2>Payment authorization<a class="headerlink" href="#payment-authorization" title="Permalink to this headline">¶</a></h2>
-<p>An authorization is automatically requested on order placement there are 3 authorization flows, Synchronous, Asynchronous and a combination of both as defined in <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>.</p>
-<div class="section" id="synchronous">
-<h3>Synchronous<a class="headerlink" href="#synchronous" title="Permalink to this headline">¶</a></h3>
+<p>An authorization is automatically requested on order placement. There are two different authorization flows, Immediate and Automatic, as defined in <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>.</p>
+<div class="section" id="immediate">
+<h3>Immediate<a class="headerlink" href="#immediate" title="Permalink to this headline">¶</a></h3>
 <p>The customer will get instant feedback there are 3 possible outcomes</p>
 <ol class="arabic simple">
 <li><cite>Authorization OK</cite> - Order is placed with a state of <cite>Processing</cite>, Customer is redirected to the standard Magento 2 confirmation screen</li>
@@ -188,9 +188,9 @@
 <li><cite>Hard Decline</cite> - Order is not placed, the Amazon Pay specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order</li>
 </ol>
 </div>
-<div class="section" id="asynchronous">
-<h3>Asynchronous<a class="headerlink" href="#asynchronous" title="Permalink to this headline">¶</a></h3>
-<p>Orders placed when in Asychronous mode should always complete as if authorization was OK however they will be in a <cite>Pending</cite> state with a <cite>Payment Review</cite> status.</p>
+<div class="section" id="automatic">
+<h3>Automatic<a class="headerlink" href="#automatic" title="Permalink to this headline">¶</a></h3>
+<p>In this mode, the extension will try to authorize the order immediate (as described above). If this fails due to a timeout, it will fallback to an asynchronous authorization (returns <cite>Pending</cite> state with a <cite>Payment Review</cite> status).</p>
 <p>The customer will always be redirected to the standard Magento 2 confirmation screen as authorization state will be processed by Amazon Pay after the order is placed.</p>
 <p>A status update on the state of the authorization will be delivered by IPN or Cron depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> there are 3 possible outcomes of this process</p>
 <ol class="arabic simple">
@@ -198,10 +198,6 @@
 <li><cite>Soft Decline</cite> - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised</li>
 <li><cite>Hard Decline</cite> - Authorization is closed, customer is emailed with instructions to contact the merchant</li>
 </ol>
-</div>
-<div class="section" id="synchronous-if-possible">
-<h3>Synchronous if possible<a class="headerlink" href="#synchronous-if-possible" title="Permalink to this headline">¶</a></h3>
-<p>The customer will get instant feedback for all final states of the authorization like with the synchronous authorization while the customer benefits from the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with the asynchronous workflow, the module automatically requests an asynchronous authorization and optimistically shows the customer the order confirmation page.</p>
 </div>
 </div>
 <div class="section" id="payment-capture">

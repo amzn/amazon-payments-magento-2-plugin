@@ -75,7 +75,7 @@ Authorization Mode
 
 Independent of the mode you decide for, make sure to only orders which are successfully authorized by Amazon Pay (order state: `Processing`).
 
-.. note:: If you expect high order values, the **Automatic** authorization mode might be the best chioce for your business.
+.. note:: If you expect high order values, the **Automatic** authorization mode might be the best choice for your business.
 
 Update Mechanism
 ................
