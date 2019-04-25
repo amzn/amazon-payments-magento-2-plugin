@@ -31,7 +31,7 @@
 
   
     <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 3.2.2 documentation" href="index.html"/>
-        <link rel="next" title="Prerequisites" href="prerequisites.html"/>
+        <link rel="next" title="Installation" href="installation.html"/>
         <link rel="prev" title="Amazon Pay and Login with Amazon extension for Magento 2" href="index.html"/> 
 
   
@@ -83,11 +83,13 @@
             
                 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#about-amazon-pay">About Amazon Pay</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#extension-features">Extension features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#getting-the-extension">Getting the extension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-and-configuration">Installation and Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branch-information">Branch information</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
@@ -142,29 +144,54 @@
             
   <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>This extension provides an official integration of your Magento 2 store with <strong>Amazon Pay and Login with Amazon</strong> services. They help your customers shop quickly, safely and securely. Your customers can pay on your website without re-entering their payment and address details. All Amazon Pay transactions are protected by Amazon&#8217;s A-to-z Guarantee.</p>
-<p>The extension is a pure payment solution. No item level is communicated to Amazon Pay and it allows you to manage your orders directly from Magento 2.</p>
+<p>This extension provides an official integration of your Magento 2 store with <strong>Amazon Pay and Login with Amazon</strong> services. The extension is a checkout and payment solution that does not share any item level information (product information, prices, basket content, etc) with Amazon. The extension integrates Amazon Pay seamlessly into the Magento 2 shop backend (configuration, order management, billing, etc.).</p>
+<div class="section" id="about-amazon-pay">
+<h2>About Amazon Pay<a class="headerlink" href="#about-amazon-pay" title="Permalink to this headline">¶</a></h2>
+<p>Amazon Pay offers a familiar and convenient buying experience that can help your customers spend more time shopping and less time checking out. Amazon Pay is used by large and small companies. From years of shopping safely with Amazon, customers trust their personal information will remain secure and know many transactions are covered by the Amazon A-to-z Guarantee. Businesses have the reassurance of our advanced fraud protection and payment protection policy.</p>
+</div>
 <div class="section" id="extension-features">
 <h2>Extension features<a class="headerlink" href="#extension-features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><cite>Amazon Pay</cite> button in the shopping cart, on product pages and in the 1st step of checkout</li>
+<li><cite>Amazon Pay</cite> button in the shopping cart, mini-cart, on product pages and in the 1st step of checkout</li>
 <li><cite>Login with Amazon</cite> button on the customer login and registration page</li>
-<li>Customization of <strong>Amazon Pay</strong> widgets from within Magento admin</li>
+<li><cite>Amazon Pay</cite> in the list of available payment methods during the final step of checkout</li>
+<li>Configuration of <cite>Amazon Pay</cite> extension from within Magento admin</li>
 <li>Support for payment authorizations, captures and refunds (also partial refunds)</li>
-<li>Support for synchronous and asynchronous authorization</li>
-<li>Supports Amazon Pay Instant Payment Notifications</li>
+<li>Support for synchronous and asynchronous authorization mode</li>
+<li>Supports <cite>Amazon Pay</cite> Instant Payment Notifications</li>
 <li>Live &amp; sandbox modes available</li>
 <li>Options for simulating payment states in sandbox mode</li>
+<li>[EU/UK only] Multi-currency support</li>
+<li>[EU/UK only] Support for Strong Customer Authorization (PSD2 compliant)</li>
 </ul>
 </div>
-<div class="section" id="getting-the-extension">
-<h2>Getting the extension<a class="headerlink" href="#getting-the-extension" title="Permalink to this headline">¶</a></h2>
-<p>The extension can be installed using the following methods:</p>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Preferred Method - From the Magento Marketplace using the Web Setup Wizard</li>
-<li>Manually using composer from the command line</li>
+<li>PHP 7.1 (or higher) when using the latest version of the extension. Older versions of the extension may support older PHP versions.</li>
+<li>Magento CE (2.1.0 or higher)</li>
+<li>cURL for PHP</li>
+<li>DOM / XML for PHP</li>
+<li>valid SSL certificate</li>
+<li>A verified Amazon Pay merchant account - [sign up here](<a class="reference external" href="https://pay.amazon.com/signup">https://pay.amazon.com/signup</a>)!</li>
 </ul>
-<p>Refer to the <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> section to get more details concerning installation procedure.</p>
+</div>
+<div class="section" id="installation-and-configuration">
+<h2>Installation and Configuration<a class="headerlink" href="#installation-and-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The extension is available via composer, Magento Marketplace or, with Magento 2.2.4 and higher, already pre-installed as bundled extension.</p>
+<p>Please refer to the <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> section to get more details concerning installation procedure.</p>
+</div>
+<div class="section" id="branch-information">
+<h2>Branch information<a class="headerlink" href="#branch-information" title="Permalink to this headline">¶</a></h2>
+<p>The following table provides an overview on which Git branch is compatible to which Magento 2 version.</p>
+<div class="line-block">
+<div class="line">Magento Version  | Github Branch |</div>
+<div class="line">&#8212;&#8212;&#8212;&#8212;- | &#8212;&#8212;&#8212;&#8212;- |</div>
+<div class="line">2.1.0 - 2.2.3  | [1.x](<a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x">https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x</a>) |</div>
+<div class="line">2.2.4 - 2.2.5  | [2.x](<a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x">https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x</a>) |</div>
+<div class="line">2.2.6 - 2.2.x  | [2.1.x](<a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x">https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x</a>) |</div>
+<div class="line">2.3.0 and above  | [master](<a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master">https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master</a>) |</div>
+</div>
 </div>
 </div>
 
@@ -175,7 +202,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="prerequisites.html" class="btn btn-neutral float-right" title="Prerequisites" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Amazon Pay and Login with Amazon extension for Magento 2" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
