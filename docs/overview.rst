@@ -10,19 +10,43 @@ Amazon Pay offers a familiar and convenient buying experience that can help your
 Extension features
 ------------------
 
-* `Amazon Pay` button in the shopping cart, on product pages and in the 1st step of checkout
+* `Amazon Pay` button in the shopping cart, mini-cart, on product pages and in the 1st step of checkout
 * `Login with Amazon` button on the customer login and registration page
 * `Amazon Pay` in the list of available payment methods during the final step of checkout
 * Configuration of `Amazon Pay` extension from within Magento admin
 * Support for payment authorizations, captures and refunds (also partial refunds)
-* Support for synchronous and asynchronous authorization
+* Support for synchronous and asynchronous authorization mode
 * Supports `Amazon Pay` Instant Payment Notifications
 * Live & sandbox modes available
 * Options for simulating payment states in sandbox mode
+* [EU/UK only] Multi-currency support
+* [EU/UK only] Support for Strong Customer Authorization (PSD2 compliant)
 
-Getting the extension
+Prerequisites
+-------------
+
+* PHP 7.1 (or higher) when using the latest version of the extension. Older versions of the extension may support older PHP versions. 
+* Magento CE (2.1.0 or higher)
+* cURL for PHP
+* DOM / XML for PHP
+* valid SSL certificate
+* A verified Amazon Pay merchant account - [sign up here](https://pay.amazon.com/signup)!
+
+Installation and Configuration
 ---------------------
 
 The extension is available via composer, Magento Marketplace or, with Magento 2.2.4 and higher, already pre-installed as bundled extension.
 
 Please refer to the :doc:`installation` section to get more details concerning installation procedure.
+
+Branch information
+------------------
+
+The following table provides an overview on which Git branch is compatible to which Magento 2 version.
+
+| Magento Version  | Github Branch |
+| ------------- | ------------- |
+| 2.1.0 - 2.2.3  | [1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x) |
+| 2.2.4 - 2.2.5  | [2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x) |
+| 2.2.6 - 2.2.x  | [2.1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x) |
+| 2.3.0 and above  | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) |
