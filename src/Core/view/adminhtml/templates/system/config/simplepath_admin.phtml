@@ -17,7 +17,7 @@
 -->
 <br/>
 <div data-mage-init='{
-        "Amazon_Core/js/simplepath": <?php echo /* @noEscape */ $block->getJsonConfig() ?> }'
+        "Amazon_Core/js/simplepath": <?php echo $block->escapeHtml($block->getJsonConfig()) ?> }'
     id="amazon_simplepath">
 
     <?php if (!$block->getCurrency()) : // SimplePath not supported ?>
