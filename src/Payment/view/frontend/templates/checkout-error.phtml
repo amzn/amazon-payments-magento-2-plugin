@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,12 +13,9 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Amazon_Payment" setup_version="3.2.2" >
-        <sequence>
-            <module name="Amazon_Core"/>
-            <module name="Amazon_Login"/>
-        </sequence>
-    </module>
-</config>
+?>
+<h1><?=__('An error has occurred.')?></h1>
+<p>
+    <span id="checkoutError"><?=__($block->getError())?></span><br/>
+    <a href="<?=$block->getCheckoutUrl()?>"><?=__('Click here to return to checkout.')?></a>
+</p>

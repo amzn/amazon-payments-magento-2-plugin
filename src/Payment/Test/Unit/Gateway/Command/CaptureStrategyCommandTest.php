@@ -16,7 +16,7 @@
 namespace Amazon\Payment\Test\Unit\Gateway\Command;
 
 use Amazon\Payment\Gateway\Command\CaptureStrategyCommand;
-use Amazon\Core\Model\AmazonConfig;
+use Amazon\Core\Helper\Data;
 use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -273,13 +273,24 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Create mock for order adapter factory
+     * Create mock for Order Adapter Factory
      */
-    private function initOrderAdapterFactoryMock()
+    public function initOrderAdapterFactoryMock()
     {
         $this->orderAdapterFactory = $this->getMockBuilder(OrderAdapterFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', '__wakeup'])
+            ->setMethods(['create'])
             ->getMock();
+
+        $orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAmazonOrderID'])
+            ->getMock();
+
+        $orderMock->method('getAmazonOrderID')
+            ->willReturn('123456');
+
+        $this->orderAdapterFactory->method('create')
+            ->willReturn($orderMock);
     }
 }

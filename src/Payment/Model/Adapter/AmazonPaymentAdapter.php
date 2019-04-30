@@ -27,6 +27,8 @@ use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
 use Magento\Sales\Model\OrderRepository;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class AmazonPaymentAdapter
@@ -93,6 +95,11 @@ class AmazonPaymentAdapter
     private $orderRepository;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * AmazonPaymentAdapter constructor.
      * @param ClientFactoryInterface $clientFactory
      * @param AmazonCaptureResponseFactory $amazonCaptureResponseFactory
@@ -105,6 +112,7 @@ class AmazonPaymentAdapter
      * @param Logger $logger
      * @param OrderLinkFactory $orderLinkFactory
      * @param OrderRepository $orderRepository
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,
@@ -116,8 +124,9 @@ class AmazonPaymentAdapter
         SubjectReader $subjectReader,
         AmazonConfig $amazonConfig,
         Logger $logger,
-        OrderLinkFactory $orderLinkFactory,
-        OrderRepository $orderRepository
+        OrderLinkFactory $orderLinkFactory = null,
+        OrderRepository $orderRepository = null,
+        UrlInterface $urlBuilder = null
     )
     {
         $this->clientFactory = $clientFactory;
@@ -129,8 +138,9 @@ class AmazonPaymentAdapter
         $this->amazonConfig = $amazonConfig;
         $this->pendingCaptureFactory = $pendingCaptureFactory;
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
-        $this->orderLinkFactory = $orderLinkFactory;
-        $this->orderRepository = $orderRepository;
+        $this->orderLinkFactory = $orderLinkFactory ?: ObjectManager::getInstance()->get(OrderLinkFactory::class);
+        $this->orderRepository = $orderRepository ?: ObjectManager::getInstance()->get(OrderRepository::class);
+        $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
     }
 
     /**
@@ -177,7 +187,9 @@ class AmazonPaymentAdapter
 
         $response = $this->clientFactory->create($storeId)->confirmOrderReference(
             [
-                'amazon_order_reference_id' => $amazonOrderReferenceId
+                'amazon_order_reference_id' => $amazonOrderReferenceId,
+                'success_url' => $this->urlBuilder->getUrl('amazonpayments/payment/completecheckout'),
+                'failure_url' => $this->urlBuilder->getUrl('amazonpayments/payment/completecheckout')
             ]
         );
 
@@ -268,15 +280,6 @@ class AmazonPaymentAdapter
         $response['auth_mode'] = $authMode;
         $response['constraints'] = [];
         $response['amazon_order_reference_id'] = $data['amazon_order_reference_id'];
-
-        if (!$attempts) {
-            $detailResponse = $this->setOrderReferenceDetails($storeId, $data);
-
-            if (isset($detailResponse['constraints']) && !empty($detailResponse['constraints'])) {
-                $response['constraints'] = $detailResponse['constraints'];
-                return $response;
-            }
-        }
 
         $confirmResponse = $this->confirmOrderReference($storeId, $data['amazon_order_reference_id']);
 
