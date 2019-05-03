@@ -80,7 +80,9 @@ class ShippingInformationManagement
             return $return;
         }
 
-        $amazonOrderReferenceId = $quote->getExtensionAttributes()->getAmazonOrderReferenceId();
+        $amazonOrderReferenceId = $quote->getExtensionAttributes()
+            ->getAmazonOrderReferenceId()
+            ->getAmazonOrderReferenceId();
 
         if ($amazonOrderReferenceId) {
             $this->orderInformationManagement->saveOrderInformation(
