@@ -92,6 +92,16 @@ class ShippingInformationManagement
             );
         }
 
+        /*
+         * Magento\Quote\Model\Quote::setShippingAddress merges into the existing shipping address,
+         *  rather than replacing it.  Because not all addresses have a region_id, make sure that
+         *  the region_id is explicitly emptied, to prevent the old one being used.
+         */
+        $shippingAddress = $shippingInformation->getShippingAddress();
+        if(!$shippingAddress->hasData('region_id')) {
+            $shippingAddress->setRegionId("");
+        }
+
         return $return;
     }
 }
