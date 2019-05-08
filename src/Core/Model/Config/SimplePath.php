@@ -167,6 +167,19 @@ class SimplePath
     }
 
     /**
+     * Return listener origins
+     */
+    public function getListenerOrigins()
+    {
+        return [
+            'payments.amazon.com',
+            'payments-eu.amazon.com',
+            'sellercentral.amazon.com',
+            'sellercentral-europe.amazon.com'
+        ];
+    }
+
+    /**
      * Generate and save RSA keys
      */
     public function generateKeys()

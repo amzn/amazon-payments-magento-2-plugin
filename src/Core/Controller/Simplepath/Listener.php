@@ -54,9 +54,10 @@ class Listener extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $url = parse_url($this->simplepath->getEndpointRegister());
-        $host = trim(preg_replace("/\r|\n/", "", $url['host']));
-        $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
+        $host = parse_url($this->getRequest()->getHeader('Origin'))['host'];
+        if(in_array($host, $this->simplepath->getListenerOrigins())) {
+            $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
+        }
         $this->getResponse()->setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         $this->getResponse()->setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
 
