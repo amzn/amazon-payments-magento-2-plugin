@@ -16,11 +16,15 @@
 
 namespace Amazon\Core\Controller\Simplepath;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+
 /**
  * Class Listener
  * Retrieves entered keys from Amazon Pay popup
  */
-class Listener extends \Magento\Framework\App\Action\Action
+class Listener extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
 
     // @var \Magento\Framework\Controller\Result\JsonFactory
@@ -123,6 +127,26 @@ class Listener extends \Magento\Framework\App\Action\Action
             }
             return false;
         }
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * Disable Magento's CSRF validation.
+     *
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
         return true;
     }
 }
