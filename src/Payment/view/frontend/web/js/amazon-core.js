@@ -100,6 +100,7 @@ define([
                     interactive: 'never'
                 };
 
+            amazon.Login.setUseCookie(true);
             // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             amazon.Login.authorize(loginOptions, function (response) { //eslint-disable-line no-undef
                 if (response.error) {
