@@ -150,6 +150,7 @@ define([
                      * Authorization callback
                      */
                     authorization: function () {
+                        amazon.Login.setUseCookie(true);
                         //eslint-disable-next-line no-undef
                         amazon.Login.authorize(_this._getLoginOptions(), _this._popupCallback());
                     }
