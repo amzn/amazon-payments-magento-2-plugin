@@ -51,7 +51,7 @@ define([
                         self.redirect();
                     }
                 }, 0);
-            }, this);
+            };
             if (amazonCore.amazonDefined()) {
                 onAmazonDefined();
             } else {
