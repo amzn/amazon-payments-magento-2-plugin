@@ -15,7 +15,13 @@
  */
 ?>
 <?php /** @var $block \Amazon\Login\Block\OAuthRedirect */ ?>
-<div><?= $block->escapeHtml(__('You will be redirected shortly...')); ?></div>
+<div>
+    <?= $block->escapeHtml(__('You will be redirected shortly...')); ?><br/>
+    <?= $block->escapeHtml(__(
+            'If you are not redirected automatically, try refreshing the page,'
+            . ' or return to your cart and use another payment method.'
+        )); ?>
+</div>
 <script>
 require([
     'jquery',
