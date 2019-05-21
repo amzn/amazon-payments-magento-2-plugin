@@ -31,7 +31,7 @@ define([
          * Show/hide inline form
          */
         hideInlineForm: function(hide) {
-            let elem = document.getElementById(this.formSelector);
+            var elem = document.getElementById(this.formSelector);
 
             if (elem) {
                 document.getElementById(this.formSelector).style.display = hide ? 'none' : 'block';
