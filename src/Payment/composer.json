@@ -2,14 +2,14 @@
   "name": "amzn/amazon-pay-module",
   "description": "Amazon Pay module",
   "type": "magento2-module",
-  "version": "2.2.13",
+  "version": "2.2.14",
   "license": [
     "Apache-2.0"
   ],
   "require": {
     "php": "~7.0.13|~7.1.0|~7.2.0",
-    "amzn/amazon-pay-and-login-with-amazon-core-module": "^2.2.13",
-    "amzn/login-with-amazon-module": "^2.2.13",
+    "amzn/amazon-pay-and-login-with-amazon-core-module": "^2.2.14",
+    "amzn/login-with-amazon-module": "^2.2.14",
     "magento/module-eav": "*",
     "magento/module-sales": "*",
     "magento/module-quote": "*",
