@@ -16,11 +16,15 @@
 
 namespace Amazon\Core\Controller\Simplepath;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
+
 /**
  * Class Listener
  * Retrieves entered keys from Amazon Pay popup
  */
-class Listener extends \Magento\Framework\App\Action\Action
+class Listener extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
 
     // @var \Magento\Framework\Controller\Result\JsonFactory
@@ -53,11 +57,13 @@ class Listener extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $url = parse_url($this->simplepath->getEndpointRegister());
-        $host = trim(preg_replace("/\r|\n/", "", $url['host']));
-        $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
+        $host = parse_url($this->getRequest()->getHeader('Origin'))['host'];
+        if(in_array($host, $this->simplepath->getListenerOrigins())) {
+            $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
+        }
         $this->getResponse()->setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         $this->getResponse()->setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
+        $this->getResponse()->setHeader('Vary', 'Origin');
 
         $payload = $this->_request->getParam('payload');
 
@@ -122,6 +128,26 @@ class Listener extends \Magento\Framework\App\Action\Action
             }
             return false;
         }
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * Disable Magento's CSRF validation.
+     *
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
         return true;
     }
 }

@@ -15,6 +15,9 @@
             <description value="Test CC decline message and then success page elements for placed order with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -36,6 +39,9 @@
             <description value="Test CC decline message and then success page elements for placed order with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -63,6 +69,9 @@
             <description value="Test CC decline message, logout, and redirect to cart with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -90,6 +99,9 @@
             <description value="Test CC timeout message with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -116,6 +128,9 @@
             <description value="Test CC timeout message with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -134,6 +149,9 @@
             <description value="Perform checkout from cart page and ensure SCA Abandoned page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Go to Cart-->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
@@ -161,6 +179,9 @@
             <description value="Perform checkout from cart page and ensure SCA Failure page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Go to Cart-->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
