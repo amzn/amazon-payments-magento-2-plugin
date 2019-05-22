@@ -26,4 +26,14 @@ Amazon Pay Widgets are not surfaced
 -----------------------------------
 Please check if you are using a theme, which is not based on Magento's Luma or Blank theme first and follow the advice above.
 
-If this is not the case and you need help, please file an issue with us.
+If the widgets are still not surfaced correctly, please double check if the required div containers are available in the DOM tree of the website. For this, please go to the checkout and search for the container "amazon-widget-container" as shown below.
+
+.. image:: /images/amazon-widget-container.png
+
+As you can see, the container exists in this case and also contains the div container for the address book widget ("addressBookWidgetDiv"). 
+
+If these containers exist, but the widget is not visible, it is most likely because the required CSS style has not been included correctly. Like shown in the screenshot below, the height of the inspected container is 0 here, so there was no height associated with this container or any of its children. If you manually assign a height using the browser debug console, the widget will be shown correctly as shown below. If this is the case, please carefully check why the required CSS styles haven't been included. For more information on CSS styles and LESS files, please refer to Cascading style sheets (CSS) documentation of Magento 2.
+
+.. image:: /images/amazon-widget-container-2.png
+
+.. _`Cascading style sheets (CSS) documentation`: https://devdocs.magento.com/guides/v2.3/frontend-dev-guide/css-topics/css-overview.html

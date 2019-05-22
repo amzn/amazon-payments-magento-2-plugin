@@ -47,4 +47,4 @@ Copy to
 
 ``app/design/frontend/<your_namspace>/<your_theme>/Amazon_Payment/email/hard-declined-auth.html``
 
-You can then customise this new template however you wish by adding images and new text or additional styling. You can read more about customising the Magento 2 email templates in the official `Magento 2 documentation <http://devdocs.magento.com/guides/v2.1/frontend-dev-guide/templates/template-email.html>`_
+You can then customise this new template however you wish by adding images and new text or additional styling. You can read more about customising the Magento 2 email templates in the official `Magento 2 documentation (template email) <http://devdocs.magento.com/guides/v2.1/frontend-dev-guide/templates/template-email.html>`_
