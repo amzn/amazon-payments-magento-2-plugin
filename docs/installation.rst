@@ -27,10 +27,11 @@ When using Magento 2.2.4, the extension is probably already pre-installed. If no
 * Sign in to your server via SSH.
 * `cd` into you Magento installation directory.
 * Install the extension via composer. The right command is dependent on your Magento 2 version:
-  * Magento 2.1 - 2.2.3: `composer require amzn/amazon-payments-magento-2-plugin:1.2.*`
-  * Magento 2.2.4 - 2.2.5: `composer require amzn/amazon-payments-magento-2-plugin:2.0.*`
-  * Magento 2.2.6 - 2.2.x: `composer require amzn/amazon-payments-magento-2-plugin:2.2.*`
-  * Magento 2.3.0 and above: `composer require amzn/amazon-payments-magento-2-plugin:3.*`
+
+    * Magento 2.1 - 2.2.3: `composer require amzn/amazon-payments-magento-2-plugin:1.2.*`
+    * Magento 2.2.4 - 2.2.5: `composer require amzn/amazon-payments-magento-2-plugin:2.0.*`
+    * Magento 2.2.6 - 2.2.x: `composer require amzn/amazon-payments-magento-2-plugin:2.2.*`
+    * Magento 2.3.0 and above: `composer require amzn/amazon-payments-magento-2-plugin:3.*`
 * Enable the extension: `php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment`
 * Upgrade the Magento installation: `php bin/magento setup:upgrade`
 * Follow any advice the upgrade routine provides
