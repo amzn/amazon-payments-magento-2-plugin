@@ -168,20 +168,33 @@ Please follow the <a class="reference external" href="http://docs.magento.com/ma
 <p class="first admonition-title">Note</p>
 <p class="last">The composer require command below will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please replace the version behind the colon with the preferred version.</p>
 </div>
-<ul class="simple">
-<li>Sign in to your server via SSH.</li>
-<li><cite>cd</cite> into you Magento installation directory.</li>
-<li>Install the extension via composer. The right command is dependent on your Magento 2 version:
-* Magento 2.1 - 2.2.3: <cite>composer require amzn/amazon-payments-magento-2-plugin:1.2.*</cite>
-* Magento 2.2.4 - 2.2.5: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.0.*</cite>
-* Magento 2.2.6 - 2.2.x: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.2.*</cite>
-* Magento 2.3.0 and above: <cite>composer require amzn/amazon-payments-magento-2-plugin:3.*</cite></li>
-<li>Enable the extension: <cite>php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment</cite></li>
-<li>Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></li>
-<li>Follow any advice the upgrade routine provides</li>
-<li>Compile code and dependency injection: <cite>php bin/magento setup:di:compile</cite></li>
-<li>Deploy static view files (production mode only): <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</li>
-<li>Check permissions on directories and files and set them correctly if needed</li>
+<ul>
+<li><p class="first">Sign in to your server via SSH.</p>
+</li>
+<li><p class="first"><cite>cd</cite> into you Magento installation directory.</p>
+</li>
+<li><p class="first">Install the extension via composer. The right command is dependent on your Magento 2 version:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Magento 2.1 - 2.2.3: <cite>composer require amzn/amazon-payments-magento-2-plugin:1.2.*</cite></li>
+<li>Magento 2.2.4 - 2.2.5: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.0.*</cite></li>
+<li>Magento 2.2.6 - 2.2.x: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.2.*</cite></li>
+<li>Magento 2.3.0 and above: <cite>composer require amzn/amazon-payments-magento-2-plugin:3.*</cite></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Enable the extension: <cite>php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment</cite></p>
+</li>
+<li><p class="first">Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></p>
+</li>
+<li><p class="first">Follow any advice the upgrade routine provides</p>
+</li>
+<li><p class="first">Compile code and dependency injection: <cite>php bin/magento setup:di:compile</cite></p>
+</li>
+<li><p class="first">Deploy static view files (production mode only): <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</p>
+</li>
+<li><p class="first">Check permissions on directories and files and set them correctly if needed</p>
+</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
