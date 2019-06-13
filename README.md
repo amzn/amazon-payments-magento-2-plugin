@@ -39,13 +39,13 @@ Please follow the instructions in the [User Guide](https://amzn.github.io/amazon
 
 ## Branch information
 
-The following table provides an overview on which Git branch is compatible to which Magento 2 version.
+The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column "Latest release" refers to the latest version of our extension that is compatible to the Magento 2 version in the first column.
 
-| Magento Version  | Github Branch |
-| ------------- | ------------- |
-| 2.1.0 - 2.2.3  | [1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x) |
-| 2.2.4 - 2.2.5  | [2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x) |
-| 2.2.6 - 2.2.x  | [2.1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x) |
-| 2.3.0 and above  | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) |
+| Magento Version  | Github Branch | Latest release |
+| ------------- | ------------- | ------------- |
+| 2.1.0 - 2.2.3  | [1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x) | 1.2.8 |
+| 2.2.4 - 2.2.5  | [2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x) | 2.0.16 |
+| 2.2.6 - 2.2.x  | [2.1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x) | 2.2.14 |
+| 2.3.0 and above  | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) | 3.2.9 |
 
 
