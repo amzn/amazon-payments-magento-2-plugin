@@ -98,19 +98,19 @@ Button Color
 Allows selection of button color from a pre determined list.
 
 Show Amazon Pay button on product page
---------------------------------------------
+--------------------------------------
 Toggles whether to show the **Amazon Pay** button on the product detail pages.
 
 Show Amazon Pay button in minicart
-----------------------------------------
+----------------------------------
 Toggles whether to show the **Amazon Pay** button in the Magento minicart.
 
 Show Login with Amazon in authentication popup
-----------------------------------------------------
+----------------------------------------------
 Toggles whether to show **Login with Amazon** button in the Magento authentication popup.
 
 Show Amazon Pay Method
-----------------------------------------------------
+----------------------
 If enabled, Amazon Pay is presented as an option in the list of available payment methods during the final step of checkout.
 
 Sales Options
@@ -121,9 +121,9 @@ Use Multi-currency
 	
 Enables the multi-currency feature of Amazon Pay for Magento 2.
 
-.. note:: Multi-currency is currently supported for payment region EU and UK only. If you have configured a payment region different than this, this option will not be available. 
+.. note:: Multi-currency is currently supported for payment region EU and UK only, and only on Magento 2.3 and higher. If you are using a different payment region or Magento 2 version, this option will not be available.
 
-This feature includes the following currencies:
+The feature includes the following currencies:
 
 * Australian Dollar (AUD)
 * British Pound (GBP)
