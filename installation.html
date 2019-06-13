@@ -85,7 +85,7 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pre-installation-steps">Pre-installation steps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#web-setup-wizard-magento-marketplace-install-method-preferred">Web Setup Wizard / Magento Marketplace Install Method (Preferred)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web-setup-wizard-magento-marketplace-install-method">Web Setup Wizard / Magento Marketplace Install Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-composer-install-method">Manual Composer Install Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#un-install-method">Un-install Method</a></li>
 </ul>
@@ -144,37 +144,43 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>The extension is available via composer, Magento Marketplace or, with Magento 2.2.4 and higher, already pre-installed as bundled extension.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are using Magento 2.2.4 or higher, the extension is probably already pre-installed and you can head straight to <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>.</p>
+</div>
 <div class="section" id="pre-installation-steps">
 <h2>Pre-installation steps<a class="headerlink" href="#pre-installation-steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Create a backup of your shop before proceeding to install.</li>
 </ul>
 </div>
-<div class="section" id="web-setup-wizard-magento-marketplace-install-method-preferred">
-<h2>Web Setup Wizard / Magento Marketplace Install Method (Preferred)<a class="headerlink" href="#web-setup-wizard-magento-marketplace-install-method-preferred" title="Permalink to this headline">¶</a></h2>
-<p>The installation via the Web Setup Wizard is the preferred method of installation.
+<div class="section" id="web-setup-wizard-magento-marketplace-install-method">
+<h2>Web Setup Wizard / Magento Marketplace Install Method<a class="headerlink" href="#web-setup-wizard-magento-marketplace-install-method" title="Permalink to this headline">¶</a></h2>
+<p>The installation via the Web Setup Wizard is the recomennded method of installation for our extension when using Magento 2.1 - 2.2.3. For shops using Magento 2.2.4 or higher, the composer method outlined below is recommended.
 Please follow the <a class="reference external" href="http://docs.magento.com/marketplace/user_guide/quick-tour/install-extension.html">Magento Marketplace User Guide</a> to learn how this works.</p>
 <p>Our extension can be found here: <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-and-login-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-and-login-magento-2-module.html</a></p>
 </div>
 <div class="section" id="manual-composer-install-method">
 <h2>Manual Composer Install Method<a class="headerlink" href="#manual-composer-install-method" title="Permalink to this headline">¶</a></h2>
-<p>In case you are not able or willing to use the web installation, you can install the extension using composer.</p>
+<p>When using Magento 2.2.4, the extension is probably already pre-installed. If not, please follow this procedure to install the extension.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The composer require command below will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please replace the version behind the colon with the preferred version.</p>
+</div>
 <ul class="simple">
-<li>Sign in to your server via SSH</li>
-<li><cite>cd</cite> into you Magento installation directory</li>
-<li>Install the extension via composer: <cite>composer require amzn/amazon-payments-magento-2-plugin:^3.2.9</cite></li>
+<li>Sign in to your server via SSH.</li>
+<li><cite>cd</cite> into you Magento installation directory.</li>
+<li>Install the extension via composer. The right command is dependent on your Magento 2 version:
+* Magento 2.1 - 2.2.3: <cite>composer require amzn/amazon-payments-magento-2-plugin:1.2.*</cite>
+* Magento 2.2.4 - 2.2.5: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.0.*</cite>
+* Magento 2.2.6 - 2.2.x: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.2.*</cite>
+* Magento 2.3.0 and above: <cite>composer require amzn/amazon-payments-magento-2-plugin:3.*</cite></li>
 <li>Enable the extension: <cite>php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment</cite></li>
 <li>Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></li>
 <li>Follow any advice the upgrade routine provides</li>
-</ul>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><cite>composer require amzn/amazon-payments-magento-2-plugin:^3.2.9</cite> will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please remove the <cite>^</cite></p>
-</div>
-<p>In production mode, you will also have to compile the code and the dependency injection (DI) configuration and deploy static content</p>
-<ul class="simple">
-<li>Compile code and DI: <cite>php bin/magento setup:di:compile</cite></li>
-<li>Deploy static view files: <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</li>
+<li>Compile code and dependency injection: <cite>php bin/magento setup:di:compile</cite></li>
+<li>Deploy static view files (production mode only): <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</li>
 <li>Check permissions on directories and files and set them correctly if needed</li>
 </ul>
 <div class="admonition note">
