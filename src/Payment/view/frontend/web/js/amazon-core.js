@@ -19,7 +19,6 @@ define([
     'mage/url',
     'amazonPaymentConfig',
     'amazonWidgetsLoader',
-    'bluebird',
     'jquery/jquery-storageapi'
 ], function ($, ko, url, amazonPaymentConfig) {
     'use strict';
