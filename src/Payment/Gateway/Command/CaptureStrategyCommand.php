@@ -24,7 +24,9 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Framework\App\ObjectManager;
 use Amazon\Core\Helper\Data;
+use Amazon\Core\Logger\ExceptionLogger;
 
 class CaptureStrategyCommand implements CommandInterface
 {
@@ -60,12 +62,28 @@ class CaptureStrategyCommand implements CommandInterface
      */
     private $coreHelper;
 
+    /**
+     * @var ExceptionLogger
+     */
+    private $exceptionLogger;
+
+    /**
+     * CaptureStrategyCommand constructor.
+     *
+     * @param CommandPoolInterface $commandPool
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     * @param Data $coreHelper
+     * @param ExceptionLogger $exceptionLogger
+     */
     public function __construct(
         CommandPoolInterface $commandPool,
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        Data $coreHelper
+        Data $coreHelper,
+        ExceptionLogger $exceptionLogger = null
     ) {
         $this->commandPool = $commandPool;
         $this->transactionRepository = $transactionRepository;
@@ -79,15 +97,20 @@ class CaptureStrategyCommand implements CommandInterface
      */
     public function execute(array $commandSubject)
     {
-        if (isset($commandSubject['payment'])) {
-            $paymentDO = $commandSubject['payment'];
-            $paymentInfo = $paymentDO->getPayment();
-            ContextHelper::assertOrderPayment($paymentInfo);
+        try {
+            if (isset($commandSubject['payment'])) {
+                $paymentDO = $commandSubject['payment'];
+                $paymentInfo = $paymentDO->getPayment();
+                ContextHelper::assertOrderPayment($paymentInfo);
 
-            $command = $this->getCommand($paymentInfo);
-            if ($command) {
-                $this->commandPool->get($command)->execute($commandSubject);
+                $command = $this->getCommand($paymentInfo);
+                if ($command) {
+                    $this->commandPool->get($command)->execute($commandSubject);
+                }
             }
+        } catch(\Exception $e) {
+            $this->exceptionLogger->logException($e);
+            throw $e;
         }
     }
 
