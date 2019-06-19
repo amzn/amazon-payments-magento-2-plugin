@@ -284,6 +284,11 @@
             <argument name="logger" xsi:type="object">Amazon\Core\Logger\IpnLogger</argument>
         </arguments>
     </type>
+    <type name="Amazon\Core\Logger\ExceptionLogger">
+        <arguments>
+            <argument name="logger" xsi:type="object">Amazon\Core\Logger\Logger</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Webapi\ErrorProcessor">
         <plugin name="amazon_payment_webapi_error_processor" type="Amazon\Payment\Plugin\WebapiErrorProcessor" sortOrder="1"/>
     </type>

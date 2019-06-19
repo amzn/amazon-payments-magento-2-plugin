@@ -24,7 +24,9 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Framework\App\ObjectManager;
 use Amazon\Core\Helper\Data;
+use Amazon\Core\Logger\ExceptionLogger;
 use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 
 class CaptureStrategyCommand implements CommandInterface
@@ -67,6 +69,11 @@ class CaptureStrategyCommand implements CommandInterface
     private $coreHelper;
 
     /**
+     * @var ExceptionLogger
+     */
+    private $exceptionLogger;
+
+    /**
      * CaptureStrategyCommand constructor.
      *
      * @param CommandPoolInterface $commandPool
@@ -75,6 +82,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param FilterBuilder $filterBuilder
      * @param Data $coreHelper
      * @param OrderAdapterFactory $orderAdapterFactory
+     * @param ExceptionLogger $exceptionLogger
      */
     public function __construct(
         CommandPoolInterface $commandPool,
@@ -82,7 +90,8 @@ class CaptureStrategyCommand implements CommandInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         Data $coreHelper,
-        OrderAdapterFactory $orderAdapterFactory
+        OrderAdapterFactory $orderAdapterFactory,
+        ExceptionLogger $exceptionLogger = null
     ) {
         $this->commandPool = $commandPool;
         $this->transactionRepository = $transactionRepository;
@@ -90,6 +99,7 @@ class CaptureStrategyCommand implements CommandInterface
         $this->filterBuilder = $filterBuilder;
         $this->coreHelper = $coreHelper;
         $this->orderAdapterFactory = $orderAdapterFactory;
+        $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
     }
 
     /**
@@ -97,30 +107,36 @@ class CaptureStrategyCommand implements CommandInterface
      */
     public function execute(array $commandSubject)
     {
-        if (isset($commandSubject['payment'])) {
-            $paymentDO = $commandSubject['payment'];
-            $paymentInfo = $paymentDO->getPayment();
+        try {
+            throw new \Exception('failed');
+            if (isset($commandSubject['payment'])) {
+                $paymentDO = $commandSubject['payment'];
+                $paymentInfo = $paymentDO->getPayment();
 
-            // The magento order adapter doesn't expose everything we need to send a request to the AP API so we
-            // need to use our own version with the details we need exposed in custom methods.
-            $orderAdapter = $this->orderAdapterFactory->create(
-                ['order' => $paymentInfo->getOrder()]
-            );
+                // The magento order adapter doesn't expose everything we need to send a request to the AP API so we
+                // need to use our own version with the details we need exposed in custom methods.
+                $orderAdapter = $this->orderAdapterFactory->create(
+                    ['order' => $paymentInfo->getOrder()]
+                );
 
-            $commandSubject['partial_capture'] = false;
-            $commandSubject['amazon_order_id'] = $orderAdapter->getAmazonOrderID();
-            $commandSubject['multicurrency'] = $orderAdapter->getMulticurrencyDetails($commandSubject['amount']);
+                $commandSubject['partial_capture'] = false;
+                $commandSubject['amazon_order_id'] = $orderAdapter->getAmazonOrderID();
+                $commandSubject['multicurrency'] = $orderAdapter->getMulticurrencyDetails($commandSubject['amount']);
 
-            ContextHelper::assertOrderPayment($paymentInfo);
+                ContextHelper::assertOrderPayment($paymentInfo);
 
-            $command = $this->getCommand($paymentInfo);
-            if ($command) {
-                if ($command == self::PARTIAL_CAPTURE) {
-                    $commandSubject['partial_capture'] = true;
-                    $command = self::SALE;
+                $command = $this->getCommand($paymentInfo);
+                if ($command) {
+                    if ($command == self::PARTIAL_CAPTURE) {
+                        $commandSubject['partial_capture'] = true;
+                        $command = self::SALE;
+                    }
+                    $this->commandPool->get($command)->execute($commandSubject);
                 }
-                $this->commandPool->get($command)->execute($commandSubject);
             }
+        } catch(\Exception $e) {
+            $this->exceptionLogger->logException($e);
+            throw $e;
         }
     }
 
