@@ -18,6 +18,7 @@ namespace Amazon\Payment\Model\Adapter;
 
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Payment\Domain\AmazonSetOrderDetailsResponseFactory;
+use Amazon\Payment\Model\OrderLinkFactory;
 use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Domain\AmazonAuthorizationResponseFactory;
 use Amazon\Payment\Domain\AmazonCaptureResponseFactory;
@@ -26,6 +27,7 @@ use Amazon\Core\Helper\Data;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
 use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
 use Magento\Framework\UrlInterface;
+use Magento\Sales\Model\OrderRepository;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -88,6 +90,16 @@ class AmazonPaymentAdapter
     private $urlBuilder;
 
     /**
+     * @var OrderLinkFactory
+     */
+    private $orderLinkFactory;
+
+    /**
+     * @var OrderRepository
+     */
+    private $orderRepository;
+
+    /**
      * AmazonPaymentAdapter constructor.
      * @param ClientFactoryInterface $clientFactory
      * @param AmazonCaptureResponseFactory $amazonCaptureResponseFactory
@@ -99,6 +111,8 @@ class AmazonPaymentAdapter
      * @param Data $coreHelper
      * @param Logger $logger
      * @param UrlInterface $urlBuilder
+     * @param OrderLinkFactory $orderLinkFactory
+     * @param OrderRepository $orderRepository
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,
@@ -110,7 +124,9 @@ class AmazonPaymentAdapter
         SubjectReader $subjectReader,
         Data $coreHelper,
         Logger $logger,
-        UrlInterface $urlBuilder = null
+        UrlInterface $urlBuilder = null,
+        OrderLinkFactory $orderLinkFactory = null,
+        OrderRepository $orderRepository = null
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
@@ -122,6 +138,8 @@ class AmazonPaymentAdapter
         $this->pendingCaptureFactory = $pendingCaptureFactory;
         $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
         $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
+        $this->orderLinkFactory = $orderLinkFactory ?: ObjectManager::getInstance()->get(OrderLinkFactory::class);
+        $this->orderRepository = $orderRepository ?: ObjectManager::getInstance()->get(OrderRepository::class);
     }
 
     /**
@@ -200,6 +218,22 @@ class AmazonPaymentAdapter
     }
 
     /**
+     * @param $amazonOrderReferenceId
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getOrderByReference($amazonOrderReferenceId)
+    {
+        $orderLink = $this->orderLinkFactory->create()->load($amazonOrderReferenceId, 'amazon_order_reference_id');
+        $orderId = $orderLink->getOrderId();
+        if ($orderId === null) {
+            return null;
+        }
+        return $this->orderRepository->get($orderId);
+    }
+
+    /**
      * @param $data
      * @param bool $captureNow
      * @return array
@@ -208,7 +242,12 @@ class AmazonPaymentAdapter
     {
         $response = [];
         $confirmResponse = null;
-        $storeId = $this->subjectReader->getStoreId();
+        $order = $this->getOrderByReference($data['amazon_order_reference_id']);
+        if ($order) {
+            $storeId = $order->getStoreId();
+        } else {
+            $storeId = $this->subjectReader->getStoreId();
+        }
         $authMode = $this->coreHelper->getAuthorizationMode('store', $storeId);
 
         (isset($data['additional_information']) && $data['additional_information'] != 'default')
