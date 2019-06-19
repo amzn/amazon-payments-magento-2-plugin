@@ -2,7 +2,7 @@
   "name": "amzn/amazon-pay-and-login-with-amazon-core-module",
   "description": "Shared functionality for Amazon Pay and Login with Amazon modules",
   "type": "magento2-module",
-  "version": "3.1.2",
+  "version": "3.2.9",
   "license": [
     "Apache-2.0"
   ],
@@ -20,6 +20,7 @@
     "magento/module-backend": "*",
     "magento/module-payment": "*",
     "magento/module-paypal": "*",
+    "magento/module-eav": "*",
     "amzn/amazon-pay-sdk-php": "^3.2.0"
   },
   "autoload": {

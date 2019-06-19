@@ -22,9 +22,10 @@ define(
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Amazon_Payment/js/model/storage'
+        'Amazon_Payment/js/model/storage',
+        'Amazon_Payment/js/model/amazonPaymentConfig'
     ],
-    function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader, amazonStorage) {
+    function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader, amazonStorage, amazonPaymentConfig) {
         'use strict';
 
         return function (paymentData, redirectOnSuccess) {
@@ -34,7 +35,7 @@ define(
 
             /** Checkout for guest and registered customer. */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/set-payment-information', {
                     quoteId: quote.getQuoteId()
                 });
                 payload = {
@@ -44,7 +45,7 @@ define(
                     billingAddress: quote.billingAddress()
                 };
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
                 payload = {
                     cartId: quote.getQuoteId(),
                     paymentMethod: paymentData,
@@ -53,30 +54,55 @@ define(
             }
 
             fullScreenLoader.startLoader();
-
-            return storage.post(
-                serviceUrl,
-                JSON.stringify(payload)
-            ).done(
-                function () {
-                    if (redirectOnSuccess) {
-                        window.location.replace(url.build('checkout/onepage/success/'));
+            if(['de', 'uk'].indexOf(amazonPaymentConfig.getValue('region')) !== -1) {
+                console.log('SCA enabled for region: ' + amazonPaymentConfig.getValue('region'));
+                return OffAmazonPayments.initConfirmationFlow(amazonPaymentConfig.getValue('merchantId'), amazonStorage.getOrderReference(), function(confirmationFlow) {
+                    return storage.post(
+                        serviceUrl,
+                        JSON.stringify(payload)
+                    ).done(
+                        function () {
+                            confirmationFlow.success();
+                        }
+                    ).fail(
+                        function (response) {
+                            confirmationFlow.error();
+                            errorProcessor.process(response);
+                            amazonStorage.amazonDeclineCode(response.responseJSON.code);
+                            fullScreenLoader.stopLoader(true);
+                            if (response.responseJSON.code === 4273) {
+                                setTimeout(function () {
+                                    window.location.replace(url.build('checkout/cart/'));
+                                }, 5000);
+                            }
+                        }
+                    );
+                });
+            } else {
+                console.log('SCA disabled for region: ' + amazonPaymentConfig.getValue('region'));
+                return storage.post(
+                    serviceUrl,
+                    JSON.stringify(payload)
+                ).done(
+                    function () {
+                        if(redirectOnSuccess) {
+                            window.location.replace(url.build('amazonpayments/payment/completecheckout/?AuthenticationStatus=Success'));
+                        }
                     }
-                }
-            ).fail(
-                function (response) {
-                    errorProcessor.process(response);
-                    amazonStorage.amazonDeclineCode(response.responseJSON.code);
-                    fullScreenLoader.stopLoader(true);
-                    if (response.responseJSON.code === 4273) {
-                        intervalId = setInterval(function () {
-                            clearInterval(intervalId);
-                            window.location.replace(url.build('checkout/cart/'));
-                        }, 5000);
-
+                ).fail(
+                    function (response) {
+                        errorProcessor.process(response);
+                        amazonStorage.amazonDeclineCode(response.responseJSON.code);
+                        fullScreenLoader.stopLoader(true);
+                        if (response.responseJSON.code === 4273) {
+                            intervalId = setInterval(function () {
+                                clearInterval(intervalId);
+                                window.location.replace(url.build('checkout/cart/'));
+                            }, 5000);
+                        }
                     }
-                }
-            );
+                );
+            }
         };
     }
 );

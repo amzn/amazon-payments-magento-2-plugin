@@ -15,6 +15,9 @@
             <description value="Test CC decline message and then success page elements for placed order with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -36,6 +39,9 @@
             <description value="Test CC decline message and then success page elements for placed order with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -63,6 +69,9 @@
             <description value="Test CC decline message, logout, and redirect to cart with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -90,6 +99,9 @@
             <description value="Test CC timeout message with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -116,6 +128,9 @@
             <description value="Test CC timeout message with Amazon Pay"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
         <!--Begin checkout-->
         <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
@@ -125,5 +140,65 @@
         </actionGroup>
         <!--Transaction declined error message-->
         <waitForText userInput="Transaction has been declined" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+    </test>
+    <test name="AmazonCheckoutSCAAbandoned" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="(SCA) Amazon SCA Abandoned"/>
+            <title value="(SCA) Amazon SCA Abandoned"/>
+            <description value="Perform checkout from cart page and ensure SCA Abandoned page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_sca"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
+        </annotations>
+        <!--Go to Cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Login (popup)-->
+        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with SCA Abandoned CC-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="4440" />
+        </actionGroup>
+        <!--Transaction declined error message-->
+        <waitForText userInput="The SCA challenge was not completed successfully." selector="#checkoutError" stepKey="waitForText"/>
+    </test>
+    <test name="AmazonCheckoutSCAFailure" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="(SCA) Amazon SCA Failed"/>
+            <title value="(SCA) Amazon SCA Failed"/>
+            <description value="Perform checkout from cart page and ensure SCA Failure page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_sca"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
+        </annotations>
+        <!--Go to Cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Login (popup)-->
+        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with SCA Failure CC-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="8320" />
+        </actionGroup>
+        <!--Transaction declined error message-->
+        <waitForText userInput="Amazon Pay was unable to authenticate the payment instrument." selector="#checkoutError" stepKey="waitForText"/>
     </test>
 </tests>

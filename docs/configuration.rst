@@ -1,9 +1,15 @@
 Configuration
 =============
-After the successful installation you can proceed to the configuration. In Magento 2 admin go to :menuselection:`Stores --> Configuration --> Sales --> Payment Methods --> Amazon Pay`
 
-General
--------
+After the successful installation you can proceed to the configuration. In Magento 2 admin go to `Stores --> Configuration --> Sales --> Payment Methods`. Click the **Configure** button next to the Amazon Pay logo.
+
+.. image:: /images/configuration_amazon_pay.png
+
+You now have to choose whether you already have an existing Amazon Pay merchant account or if you want to register a new account. Please be aware that the base currency of the shop is used to decide in which region (US, UK, EU, etc.) the account will be registered. If you do have questions on the registration process, please contact Amazon Pay merchant support at https://sellercentral-europe.amazon.com/cu/contact-us
+
+.. image:: /images/configuration_amazon_pay_new-or-existing.png
+
+After completing the account registration, or if you already have an existing account, you can continue with the plugin configuration as described in the following sections. 
 
 Credentials
 '''''''''''
@@ -26,7 +32,6 @@ The credentials can be found in Seller Central at :menuselection:`Integration --
 Payment Region
 ..............
 Select the region where you registered your seller account from the provided list. If you're unsure about this information, please consult the Amazon Pay merchant support. Supported regions are:
-
 * Euro (use for countries that use EUR as their currency, e.g. Germany, France, Italy, Spain, etc.)
 * United Kingdom
 * United States
@@ -54,7 +59,7 @@ By switching this option you can enable or disable **Amazon Pay**. This option m
 
 Enable Login with Amazon
 ........................
-By switching this option you can toggle **Login with Amazon**. When enabled this will log customers into Magento via their Amazon account.
+By switching this option you can toggle **Login with Amazon**. When enabled this will log customers into Magento via their Amazon account. If disabled, customers using Amazon Pay will be handled as guests.
 
 .. note:: Login with Amazon requires that Amazon Pay is enabled in order to function.
 
@@ -65,13 +70,12 @@ Payment Action
 
 Authorization Mode
 ..................
-* `Synchronous` (default) - The authorization is processed during the checkout. 
-* `Asynchronous` - The authorization is processed after the checkout was completed.
-* `Synchronous if possible` - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards. 
+* `Immediate` (default) - The authorization is processed immediately during the checkout.
+* `Automatic` - The authorization is processed during the checkout. In case this call times out, an asynchronous authorization will be done afterwards.
 
 Independent of the mode you decide for, make sure to only orders which are successfully authorized by Amazon Pay (order state: `Processing`).
 
-.. note:: If you expect high order values, the **asynchronous** authorization might be the best chioce for your business.
+.. note:: If you expect high order values, the **Automatic** authorization mode might be the best choice for your business.
 
 Update Mechanism
 ................
@@ -80,55 +84,83 @@ Update Mechanism
 
  
 Advanced
---------
-
-Frontend
 ''''''''
 
+Frontend
+........
+
 Button Display Language
-.......................
+-----------------------
 Allows input of a locale string to control button language should be in the format `en-gb`. By default the language of the store view is used.
 
 Button Color
-............
+------------
 Allows selection of button color from a pre determined list.
 
-Amazon Pay button is visible on Product Page
-.................................................
-toggles whether to show **Amazon Pay** on product pages
+Show Amazon Pay button on product page
+--------------------------------------
+Toggles whether to show the **Amazon Pay** button on the product detail pages.
 
-Amazon Pay button is visible on minicart
-.................................................
-toggles whether to show **Amazon Pay** in the minicart
+Show Amazon Pay button in minicart
+----------------------------------
+Toggles whether to show the **Amazon Pay** button in the Magento minicart.
 
-Login with Amazon available in authentication popup
-.................................................
-toggles whether to show **Login with Amazon** in the authentication popup
+Show Login with Amazon in authentication popup
+----------------------------------------------
+Toggles whether to show **Login with Amazon** button in the Magento authentication popup.
+
+Show Amazon Pay Method
+----------------------
+If enabled, Amazon Pay is presented as an option in the list of available payment methods during the final step of checkout.
 
 Sales Options
-'''''''''''''
+.............
 
-New Order Status
-................
-Allows selection of a custom status for orders with a `Processing` state made using the Amazon Pay payment method. 
+Use Multi-currency
+------------------
+	
+Enables the multi-currency feature of Amazon Pay for Magento 2.
 
-.. note:: This status indicates, if a payment for the order was authorized by Amazon Pay
+.. note:: Multi-currency is currently supported for payment region EU and UK only, and only on Magento 2.3 and higher. If you are using a different payment region or Magento 2 version, this option will not be available.
+
+The feature includes the following currencies:
+
+* Australian Dollar (AUD)
+* British Pound (GBP)
+* Danish Krone (DKK)
+* Euro (EUR)
+* Hong Kong Dollar (HKD)
+* Japanese Yen (JPY)
+* New Zealand Dollar (NZD)
+* Norwegian Krone (NOK)
+* South African Rand (ZAR)
+* Swedish Krone (SEK)
+* Swiss Franc (CHF)
+* United States Dollar (USD)
+
+The Amazon Pay multi-currency feature is designed for international merchants who list prices in more than one currency on their website and charge their customers the exact amount quoted on the site. When you enable multi-currency, you are not limited by the currency associated with your Amazon Payments merchant account (the ledger currency in which you receive disbursements from Amazon Payments). The multi-currency feature is offered by Amazon Services Europe SARL.
+
+The benefit to your customers is that they don’t need to worry about currency conversion or rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out on your website with their existing Amazon account.
 
 Store Name
-................
+----------
 Allows setting the store name submitted to Amazon Pay per Store View. 
 
 .. note:: Store View name is provided by default.
 
 Developer Options
-'''''''''''''''''
+.................
 
 Logging
-.......
+-------
 Enabled by default. This toggles whether to log all API calls and IPN notifications or not. The log files can be retrieved directly via the Magento 2 admin at :menuselection:`System --> Amazon Pay Logs --> Client`, respectively :menuselection:`System --> Amazon Pay Logs --> IPN`
 
 Allowed IPs
-...........
+-----------
 For testing or debugging purposes you can restrict access to **Amazon Pay** checkout in your shop to certain IP addresses only. **Amazon Pay** button will be shown only for the visitors coming from allowed IPs. You can set more than one allowed IP, separated with commas.
 
 .. note:: Due to caching restrictions this setting is not reflected on Product pages, Please  disable `Amazon Pay button is visible on Product Page` in this instance
+
+Developer Logs
+--------------
+Downloads a copy of the developer logs of the extension.

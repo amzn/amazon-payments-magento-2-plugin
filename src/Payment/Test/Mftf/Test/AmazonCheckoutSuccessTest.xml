@@ -16,6 +16,9 @@
             <description value="Creates and loads simple product and adds it to cart using Amazon Pay button on product detail page."/>
             <severity value="BLOCKER"/>
             <group value="amazon_checkout"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
 
         <before>
@@ -46,6 +49,9 @@
             <description value="Adds product to cart."/>
             <severity value="BLOCKER"/>
             <group value="amazon_checkout"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
 
         <before>
@@ -74,6 +80,9 @@
             <description value="Perform checkout from product details page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
 
         <!--Place order-->
@@ -87,6 +96,9 @@
             <description value="Perform checkout from cart page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
 
         <!--Go to Cart-->
@@ -109,6 +121,9 @@
             <description value="Perform checkout from minicart and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
 
         <!--Open minicart-->
@@ -131,6 +146,9 @@
             <description value="Perform checkout from checkout page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
 
         <!--Go to Checkout-->
@@ -153,6 +171,9 @@
             <description value="Perform checkout after logging in from customer account page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
         </annotations>
 
         <!--Go to Customer page-->
@@ -160,6 +181,31 @@
 
         <!--Login (popup)-->
         <click selector="{{AmazonCheckoutSection.loginButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
+    <test name="AmazonCheckoutSCASuccess" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="(SCA) Success page elements are presented for placed order with Amazon Pay"/>
+            <title value="(SCA) Amazon Pay Checkout from Cart"/>
+            <description value="Perform checkout from cart page and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_sca"/>
+            <skip>
+                <issueId>AmazonPayCredentialSupport</issueId>
+            </skip>
+        </annotations>
+
+        <!--Go to Cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Login (popup)-->
+        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
         <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
 
         <!--Place order-->

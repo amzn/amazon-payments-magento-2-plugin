@@ -36,19 +36,19 @@ The actual order flow other than this remains the same, as it is for the standar
 
 Payment authorization
 ---------------------
-An authorization is automatically requested on order placement there are 3 authorization flows, Synchronous, Asynchronous and a combination of both as defined in :doc:`configuration`.
+An authorization is automatically requested on order placement. There are two different authorization flows, Immediate and Automatic, as defined in :doc:`configuration`.
 
-Synchronous
-''''''''''''
+Immediate
+'''''''''
 The customer will get instant feedback there are 3 possible outcomes
 
 1. `Authorization OK` - Order is placed with a state of `Processing`, Customer is redirected to the standard Magento 2 confirmation screen
 2. `Soft Decline` - Order is not placed and customer is asked to select an alternative payment instrument from the Amazon Pay widget
 3. `Hard Decline` - Order is not placed, the Amazon Pay specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order
 
-Asynchronous
-''''''''''''
-Orders placed when in Asychronous mode should always complete as if authorization was OK however they will be in a `Pending` state with a `Payment Review` status. 
+Automatic
+'''''''''
+In this mode, the extension will try to authorize the order immediate (as described above). If this fails due to a timeout, it will fallback to an asynchronous authorization (returns `Pending` state with a `Payment Review` status).
 
 The customer will always be redirected to the standard Magento 2 confirmation screen as authorization state will be processed by Amazon Pay after the order is placed. 
 
@@ -57,11 +57,6 @@ A status update on the state of the authorization will be delivered by IPN or Cr
 1. `Authorization OK` - Order moves to state `Processing`
 2. `Soft Decline` - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised
 3. `Hard Decline` - Authorization is closed, customer is emailed with instructions to contact the merchant
-
-Synchronous if possible 
-'''''''''''''''''''''''
-The customer will get instant feedback for all final states of the authorization like with the synchronous authorization while the customer benefits from the lower decline rate of the asynchronous authorization. In cases where a synchronous authorization would result in a decline but could be handled with the asynchronous workflow, the module automatically requests an asynchronous authorization and optimistically shows the customer the order confirmation page.
-
 
 Payment capture
 ---------------

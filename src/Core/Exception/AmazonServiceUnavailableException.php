@@ -15,9 +15,9 @@
  */
 namespace Amazon\Core\Exception;
 
-use Magento\Framework\Exception\RemoteServiceUnavailableException;
+use Magento\Framework\Exception\LocalizedException;
 
-class AmazonServiceUnavailableException extends RemoteServiceUnavailableException
+class AmazonServiceUnavailableException extends LocalizedException
 {
     const ERROR_MESSAGE = 'Amazon could not process your request.';
 

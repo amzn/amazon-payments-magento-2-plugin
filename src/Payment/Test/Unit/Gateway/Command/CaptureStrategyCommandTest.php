@@ -17,6 +17,7 @@ namespace Amazon\Payment\Test\Unit\Gateway\Command;
 
 use Amazon\Payment\Gateway\Command\CaptureStrategyCommand;
 use Amazon\Core\Helper\Data;
+use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
@@ -78,6 +79,11 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
     private $coreHelper;
 
     /**
+     * @var OrderAdapterFactory|MockObject
+     */
+    private $orderAdapterFactory;
+
+    /**
      * Sets up base classes needed to mock the command strategy class
      */
     protected function setUp()
@@ -91,6 +97,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->initTransactionRepositoryMock();
         $this->initFilterBuilderMock();
         $this->initSearchCriteriaBuilderMock();
+        $this->initOrderAdapterFactoryMock();
 
         $this->coreHelper = $this->getMockBuilder(\Amazon\Core\Helper\Data::class)
             ->disableOriginalConstructor()
@@ -101,7 +108,8 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             $this->transactionRepository,
             $this->searchCriteriaBuilder,
             $this->filterBuilder,
-            $this->coreHelper
+            $this->coreHelper,
+            $this->orderAdapterFactory
         );
     }
 
@@ -263,5 +271,27 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getList', 'getTotalCount', 'delete', 'get', 'save', 'create', '__wakeup'])
             ->getMock();
+    }
+
+    /**
+     * Create mock for Order Adapter Factory
+     */
+    public function initOrderAdapterFactoryMock()
+    {
+        $this->orderAdapterFactory = $this->getMockBuilder(OrderAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAmazonOrderID'])
+            ->getMock();
+
+        $orderMock->method('getAmazonOrderID')
+            ->willReturn('123456');
+
+        $this->orderAdapterFactory->method('create')
+            ->willReturn($orderMock);
     }
 }
