@@ -25,6 +25,7 @@ use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\StatusFactory;
 use Amazon\Core\Model\AmazonConfig;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -65,6 +66,11 @@ class Data extends AbstractHelper
     private $config;
 
     /**
+     * @var TypeListInterface
+     */
+    private $cacheTypeList;
+
+    /**
      * Data constructor.
      *
      * @param ModuleListInterface $moduleList
@@ -84,7 +90,7 @@ class Data extends AbstractHelper
         ClientIp $clientIpHelper,
         StatusFactory $moduleStatusFactory,
         AmazonConfig $config,
-        TypeListInterface $cacheTypeList
+        TypeListInterface $cacheTypeList = null
     ) {
         parent::__construct($context);
         $this->moduleList = $moduleList;
@@ -93,7 +99,7 @@ class Data extends AbstractHelper
         $this->clientIpHelper = $clientIpHelper;
         $this->moduleStatusFactory = $moduleStatusFactory;
         $this->config = $config;
-        $this->cacheTypeList = $cacheTypeList;
+        $this->cacheTypeList = $cacheTypeList ?: ObjectManager::getInstance()->get(TypeListInterface::class);
     }
 
     /*
