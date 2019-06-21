@@ -15,8 +15,10 @@
  */
 namespace Amazon\Payment\Controller\Payment;
 
+use Amazon\Core\Exception\AmazonWebapiException;
 use Amazon\Core\Helper\Data;
 use Amazon\Core\Model\Config\Source\UpdateMechanism;
+use Amazon\Core\Logger\ExceptionLogger;
 use Amazon\Payment\Api\Ipn\CompositeProcessorInterface;
 use Amazon\Payment\Ipn\IpnHandlerFactoryInterface;
 use Magento\Framework\App\Action\Action;
@@ -24,6 +26,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\App\ObjectManager;
 
 class Ipn extends Action
 {
@@ -42,29 +45,41 @@ class Ipn extends Action
      */
     private $coreHelper;
 
+    /**
+     * @var ExceptionLogger
+     */
+    private $exceptionLogger;
+
     public function __construct(
         Context $context,
         IpnHandlerFactoryInterface $ipnHandlerFactory,
         CompositeProcessorInterface $compositeProcessor,
-        Data $coreHelper
+        Data $coreHelper,
+        ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
         $this->ipnHandlerFactory  = $ipnHandlerFactory;
         $this->compositeProcessor = $compositeProcessor;
         $this->coreHelper         = $coreHelper;
+        $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
     }
 
     public function execute()
     {
-        if (UpdateMechanism::IPN !== $this->coreHelper->getUpdateMechanism()) {
-            throw new NotFoundException(__('IPN not enabled.'));
+        try {
+            if (UpdateMechanism::IPN !== $this->coreHelper->getUpdateMechanism()) {
+                throw new NotFoundException(__('IPN not enabled.'));
+            }
+
+            $headers = $this->_request->getHeaders()->toArray();
+            $body = $this->_request->getContent();
+
+            $ipnHandler = $this->ipnHandlerFactory->create($headers, $body);
+            $ipnData = $ipnHandler->toArray();
+            $this->compositeProcessor->process($ipnData);
+        } catch (\Exception $e) {
+            $this->exceptionLogger->logException($e);
+            throw $e;
         }
-
-        $headers = $this->_request->getHeaders()->toArray();
-        $body    = $this->_request->getContent();
-
-        $ipnHandler = $this->ipnHandlerFactory->create($headers, $body);
-        $ipnData    = $ipnHandler->toArray();
-        $this->compositeProcessor->process($ipnData);
     }
 }
