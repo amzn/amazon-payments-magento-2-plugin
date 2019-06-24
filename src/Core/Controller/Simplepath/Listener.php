@@ -74,7 +74,7 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
             $this->getResponse()->setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
             $this->getResponse()->setHeader('Vary', 'Origin');
 
-            $payload = $this->_request->getContent();
+            $payload = $this->_request->getParam('payload');
 
             $result = $this->jsonResultFactory->create();
 
