@@ -16,9 +16,11 @@
 
 namespace Amazon\Core\Controller\Simplepath;
 
+use Amazon\Core\Logger\ExceptionLogger;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Listener
@@ -33,22 +35,28 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
     // @var \Amazon\Core\Model\Config\SimplePath
     private $simplepath;
 
+    // @var \Amazon\Core\Logger\ExceptionLogger
+    private $exceptionLogger;
+
     /**
      * Listener constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory
      * @param \Amazon\Core\Model\Config\SimplePath $simplepath
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Amazon\Core\Logger\ExceptionLogger $exceptionLogger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory,
         \Amazon\Core\Model\Config\SimplePath $simplepath,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        ExceptionLogger $exceptionLogger = null
     ) {
         $this->simplepath = $simplepath;
         $this->jsonResultFactory = $jsonResultFactory;
         $this->scopeConfig = $scopeConfig;
+        $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
         parent::__construct($context);
     }
 
@@ -57,43 +65,48 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
      */
     public function execute()
     {
-        $host = parse_url($this->getRequest()->getHeader('Origin'))['host'];
-        if(in_array($host, $this->simplepath->getListenerOrigins())) {
-            $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
-        }
-        $this->getResponse()->setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-        $this->getResponse()->setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
-        $this->getResponse()->setHeader('Vary', 'Origin');
-
-        $payload = $this->_request->getParam('payload');
-
-        $result = $this->jsonResultFactory->create();
-
-        $return = ['result' => 'error', 'message' => 'Empty payload'];
-
         try {
-            if (strpos($payload, 'encryptedKey') === false) {
-                $return = ['result' => 'error', 'message' => 'Invalid payload: ' . $payload];
-            } elseif ($payload) {
-                $json = $this->simplepath->decryptPayload($payload, false);
-
-                if ($json) {
-                    $return = ['result' => 'success'];
-                }
-            } else {
-                $return = ['result' => 'error', 'message' => 'payload parameter not found.'];
+            $host = parse_url($this->getRequest()->getHeader('Origin'))['host'];
+            if (in_array($host, $this->simplepath->getListenerOrigins())) {
+                $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
             }
-        } catch (\Exception $e) {
-            $return = ['result' => 'error', 'message' => $e->getMessage()];
+            $this->getResponse()->setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            $this->getResponse()->setHeader('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
+            $this->getResponse()->setHeader('Vary', 'Origin');
+
+            $payload = $this->_request->getParam('payload');
+
+            $result = $this->jsonResultFactory->create();
+
+            $return = ['result' => 'error', 'message' => 'Empty payload'];
+
+            try {
+                if (strpos($payload, 'encryptedKey') === false) {
+                    $return = ['result' => 'error', 'message' => 'Invalid payload: ' . $payload];
+                } elseif ($payload) {
+                    $json = $this->simplepath->decryptPayload($payload, false);
+
+                    if ($json) {
+                        $return = ['result' => 'success'];
+                    }
+                } else {
+                    $return = ['result' => 'error', 'message' => 'payload parameter not found.'];
+                }
+            } catch (\Exception $e) {
+                $return = ['result' => 'error', 'message' => $e->getMessage()];
+            }
+
+            if ($this->_request->isPost() && (empty($return['result']) || $return['result'] == 'error')) {
+                $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
+            }
+
+            $result->setData($return);
+
+            return $result;
+        } catch(\Exception $e) {
+            $this->exceptionLogger->logException($e);
+            throw $e;
         }
-
-        if ($this->_request->isPost() && (empty($return['result']) || $return['result'] == 'error')) {
-            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
-        }
-
-        $result->setData($return);
-
-        return $result;
     }
 
     /**

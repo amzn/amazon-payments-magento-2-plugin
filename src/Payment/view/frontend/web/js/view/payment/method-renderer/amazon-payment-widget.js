@@ -41,8 +41,7 @@ define(
     ) {
         'use strict';
 
-        var context,
-            countryData = customerData.get('directory-data');
+        var countryData = customerData.get('directory-data');
 
         return Component.extend({
             defaults: {
@@ -63,7 +62,6 @@ define(
              * Inits
              */
             initialize: function () {
-                context = this;
                 this._super();
             },
 
@@ -71,10 +69,10 @@ define(
              * Init payment widget
              */
             initPaymentWidget: function () {
-                var $amazonPayment = $(context.apInputDOMId);
+                var $amazonPayment = $(this.apInputDOMId);
 
-                context.initDefaultValues();
-                context.renderPaymentWidget();
+                this.initDefaultValues();
+                this.renderPaymentWidget();
                 $amazonPayment.trigger('click'); //activate Amazon Pay method on render
                 $amazonPayment.trigger('rendered');
             },
@@ -84,11 +82,11 @@ define(
              */
             initDefaultValues: function () {
                 registry.get('amazonPayment', function (amazonPayment) {
-                    context.widgetScope = amazonPayment.loginScope;
-                    context.sellerId = amazonPayment.merchantId;
-                    context.presentmentCurrency = amazonPayment.presentmentCurrency;
-                    context.useMultiCurrency = amazonPayment.useMultiCurrency;
-                });
+                    this.widgetScope = amazonPayment.loginScope;
+                    this.sellerId = amazonPayment.merchantId;
+                    this.presentmentCurrency = amazonPayment.presentmentCurrency;
+                    this.useMultiCurrency = amazonPayment.useMultiCurrency;
+                }.bind(this));
             },
 
             /**
@@ -96,8 +94,8 @@ define(
              */
             renderPaymentWidget: function () {
                 var widget = new OffAmazonPayments.Widgets.Wallet({ // eslint-disable-line no-undef
-                    sellerId: context.sellerId,
-                    scope: context.widgetScope,
+                    sellerId: this.sellerId,
+                    scope: this.widgetScope,
                     amazonOrderReferenceId: amazonStorage.getOrderReference(),
 
                     /**
@@ -105,8 +103,8 @@ define(
                      */
                     onPaymentSelect: function () { // orderReference
                         amazonStorage.isPlaceOrderDisabled(true);
-                        context.setBillingAddressFromAmazon();
-                    },
+                        this.setBillingAddressFromAmazon();
+                    }.bind(this),
                     design: {
                         designMode: 'responsive'
                     },
@@ -118,14 +116,14 @@ define(
                         errorProcessor.process(error);
                     }
                 });
-                if (context.useMultiCurrency) {
-                    widget.setPresentmentCurrency(context.presentmentCurrency);
-                    $(context.presentmentDOMId).hide();
+                if (this.useMultiCurrency) {
+                    widget.setPresentmentCurrency(this.presentmentCurrency);
+                    $(this.presentmentDOMId).hide();
                 }
                 else {
-                    $(context.presentmentDOMId).show();
+                    $(this.presentmentDOMId).show();
                 }
-                widget.bind(context.paymentWidgetDOMId);
+                widget.bind(this.paymentWidgetDOMId);
             },
 
             /**
@@ -183,10 +181,10 @@ define(
                         amazonStorage.isPlaceOrderDisabled(false);
 
                         if (window.checkoutConfig.amazonLogin.amazon_customer_email) {
-                            var customerField = $(context.customerEmail).val();
+                            var customerField = $(this.customerEmail).val();
 
                             if (!customerField) {
-                                $(context.customerEmail).val(window.checkoutConfig.amazonLogin.amazon_customer_email);
+                                $(this.customerEmail).val(window.checkoutConfig.amazonLogin.amazon_customer_email);
                             }
                         }
                     }
@@ -228,8 +226,8 @@ define(
                     placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
                     $.when(placeOrder).fail(function () {
-                        context.isPlaceOrderActionAllowed(true);
-                    }).done(this.afterPlaceOrder.bind(this));
+                        this.isPlaceOrderActionAllowed(true);
+                    }.bind(this)).done(this.afterPlaceOrder.bind(this));
 
                     return true;
                 }
