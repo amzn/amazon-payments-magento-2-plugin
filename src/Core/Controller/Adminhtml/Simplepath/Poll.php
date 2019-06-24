@@ -17,6 +17,8 @@ namespace Amazon\Core\Controller\Adminhtml\Simplepath;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Controller\Adminhtml\System;
+use Magento\Framework\App\ObjectManager;
+use Amazon\Core\Logger\ExceptionLogger;
 
 class Poll extends System
 {
@@ -36,16 +38,23 @@ class Poll extends System
      */
     private $jsonResultFactory;
 
+    /**
+     * @var \Amazon\Core\Logger\ExceptionLogger
+     */
+    private $exceptionLogger;
+
     public function __construct(
         Context $context,
         \Amazon\Core\Model\Config\SimplePath $simplePath,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory
+        \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory,
+        \Amazon\Core\Logger\ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
         $this->simplePath = $simplePath;
         $this->scopeConfig = $scopeConfig;
         $this->jsonResultFactory = $jsonResultFactory;
+        $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
     }
 
     /**
@@ -53,19 +62,24 @@ class Poll extends System
      */
     public function execute()
     {
-        // Keypair is destroyed when credentials are saved
-        $shouldRefresh = !($this->scopeConfig->getValue(
-            \Amazon\Core\Model\Config\SimplePath::CONFIG_XML_PATH_PUBLIC_KEY,
-            'default',
-            0
-        ));
+        try {
+            // Keypair is destroyed when credentials are saved
+            $shouldRefresh = !($this->scopeConfig->getValue(
+                \Amazon\Core\Model\Config\SimplePath::CONFIG_XML_PATH_PUBLIC_KEY,
+                'default',
+                0
+            ));
 
-        if ($shouldRefresh) {
-            $this->simplePath->autoEnable();
+            if ($shouldRefresh) {
+                $this->simplePath->autoEnable();
+            }
+
+            $result = $this->jsonResultFactory->create();
+            $result->setData((int)$shouldRefresh);
+            return $result;
+        } catch(\Exception $e) {
+            $this->exceptionLogger->logException($e);
+            throw $e;
         }
-
-        $result = $this->jsonResultFactory->create();
-        $result->setData((int)$shouldRefresh);
-        return $result;
     }
 }

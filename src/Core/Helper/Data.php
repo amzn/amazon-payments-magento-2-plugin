@@ -23,6 +23,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\StatusFactory;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -58,6 +60,11 @@ class Data extends AbstractHelper
     private $moduleStatusFactory;
 
     /**
+     * @var TypeListInterface
+     */
+    private $cacheTypeList;
+
+    /**
      * Data constructor.
      *
      * @param ModuleListInterface $moduleList
@@ -66,6 +73,7 @@ class Data extends AbstractHelper
      * @param StoreManagerInterface $storeManager
      * @param ClientIp $clientIpHelper
      * @param StatusFactory $moduleStatusFactory
+     * @param TypeListInterface $cacheTypeList
      */
     public function __construct(
         ModuleListInterface $moduleList,
@@ -73,7 +81,8 @@ class Data extends AbstractHelper
         EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper,
-        StatusFactory $moduleStatusFactory
+        StatusFactory $moduleStatusFactory,
+        TypeListInterface $cacheTypeList = null
     )
     {
         parent::__construct($context);
@@ -82,6 +91,7 @@ class Data extends AbstractHelper
         $this->storeManager = $storeManager;
         $this->clientIpHelper = $clientIpHelper;
         $this->moduleStatusFactory = $moduleStatusFactory;
+        $this->cacheTypeList = $cacheTypeList ?: ObjectManager::getInstance()->get(TypeListInterface::class);
     }
 
     /*
@@ -777,6 +787,7 @@ class Data extends AbstractHelper
         // Make sure all of them are disabled if any one of them is disabled.
         if ($isDisabled > 0 && $isDisabled != 3) {
             $this->moduleStatusFactory->create()->setIsEnabled(false, ['Amazon_Payment', 'Amazon_Login', 'Amazon_Core']);
+            $this->cacheTypeList->cleanType('config');
         }
     }
 }

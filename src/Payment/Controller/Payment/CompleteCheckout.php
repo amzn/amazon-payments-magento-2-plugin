@@ -16,6 +16,7 @@
 namespace Amazon\Payment\Controller\Payment;
 
 use Amazon\Core\Exception\AmazonWebapiException;
+use Amazon\Core\Logger\ExceptionLogger;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Quote\Api\CartManagementInterface;
@@ -23,7 +24,8 @@ use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
-use \Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class CompleteCheckout
@@ -49,6 +51,11 @@ class CompleteCheckout extends Action
     private $pageFactory;
 
     /**
+     * @var ExceptionLogger
+     */
+    private $exceptionLogger;
+
+    /**
      * CompleteCheckout constructor.
      *
      * @param Context $context
@@ -57,6 +64,8 @@ class CompleteCheckout extends Action
      * @param CheckoutSession $checkoutSession
      * @param Session $session
      * @param PageFactory $pageFactory
+     * @param MessageManager $messageManager
+     * @param ExceptionLogger $exceptionLogger
      */
     public function __construct(
         Context $context,
@@ -65,7 +74,8 @@ class CompleteCheckout extends Action
         CheckoutSession $checkoutSession,
         Session $session,
         PageFactory $pageFactory,
-        MessageManager $messageManager
+        MessageManager $messageManager,
+        ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
         $this->cartManagement = $cartManagement;
@@ -73,6 +83,7 @@ class CompleteCheckout extends Action
         $this->session = $session;
         $this->pageFactory = $pageFactory;
         $this->messageManager = $messageManager;
+        $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
     }
 
     /*
@@ -80,32 +91,38 @@ class CompleteCheckout extends Action
      */
     public function execute()
     {
-        $authenticationStatus = $this->getRequest()->getParam('AuthenticationStatus');
-        switch ($authenticationStatus) {
-            case 'Success':
-                try {
-                    if (!$this->session->isLoggedIn()) {
-                        $this->checkoutSession->getQuote()->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
+        try {
+            $authenticationStatus = $this->getRequest()->getParam('AuthenticationStatus');
+            switch ($authenticationStatus) {
+                case 'Success':
+                    try {
+                        if (!$this->session->isLoggedIn()) {
+                            $this->checkoutSession->getQuote()->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
+                        }
+                        $this->cartManagement->placeOrder($this->checkoutSession->getQuoteId());
+                        return $this->_redirect('checkout/onepage/success');
+                    } catch (AmazonWebapiException $e) {
+                        $this->exceptionLogger->logException($e);
+                        $this->messageManager->addErrorMessage($e->getMessage());
                     }
-                    $this->cartManagement->placeOrder($this->checkoutSession->getQuoteId());
-                    return $this->_redirect('checkout/onepage/success');
-                } catch (AmazonWebapiException $e) {
-                    $this->messageManager->addErrorMessage($e->getMessage());
-                }
-                break;
-            case 'Failure':
-                $this->messageManager->addErrorMessage(__(
-                    'Amazon Pay was unable to authenticate the payment instrument.  '
-                    . 'Please try again, or use a different payment method.'
-                ));
-                break;
-            case 'Abandoned':
-            default:
-                $this->messageManager->addErrorMessage(__(
-                    'The SCA challenge was not completed successfully.  '
-                    . 'Please try again, or use a different payment method.'
-                ));
+                    break;
+                case 'Failure':
+                    $this->messageManager->addErrorMessage(__(
+                        'Amazon Pay was unable to authenticate the payment instrument.  '
+                        . 'Please try again, or use a different payment method.'
+                    ));
+                    break;
+                case 'Abandoned':
+                default:
+                    $this->messageManager->addErrorMessage(__(
+                        'The SCA challenge was not completed successfully.  '
+                        . 'Please try again, or use a different payment method.'
+                    ));
+            }
+            return $this->_redirect('checkout/cart');
+        } catch(\Exception $e) {
+            $this->exceptionLogger->logException($e);
+            throw $e;
         }
-        return $this->_redirect('checkout/cart');
     }
 }
