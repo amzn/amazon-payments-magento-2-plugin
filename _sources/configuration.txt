@@ -121,7 +121,7 @@ Use Multi-currency
 	
 Enables the multi-currency feature of Amazon Pay for Magento 2.
 
-.. note:: Multi-currency is currently supported for payment region EU and UK only, and only on Magento 2.3 and higher. If you are using a different payment region or Magento 2 version, this option will not be available.
+.. note:: Multi-currency is currently supported for payment region EU and UK only, and only on Magento 2.3.1 and higher. If you are using a different payment region or Magento 2 version, this option will not be available.
 
 The feature includes the following currencies:
 
