@@ -113,7 +113,14 @@ define(
                      * Error callback
                      */
                     onError: function (error) {
-                        errorProcessor.process(error);
+                        console.log('OffAmazonPayments.Widgets.Wallet', error.getErrorCode(), error.getErrorMessage());
+                        switch (error.getErrorCode()) {
+                            case 'BuyerSessionExpired':
+                                window.location = amazonPaymentConfig.getValue('customerLoginPageUrl');
+                                break;                        
+                            default:
+                                errorProcessor.process(error);
+                            }
                     }
                 });
                 if (this.useMultiCurrency) {
