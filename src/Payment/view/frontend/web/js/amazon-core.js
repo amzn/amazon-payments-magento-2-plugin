@@ -23,8 +23,7 @@ define([
 ], function ($, ko, url, amazonPaymentConfig) {
     'use strict';
 
-    var clientId = amazonPaymentConfig.getValue('clientId'),
-        amazonDefined = ko.observable(false),
+    var amazonDefined = ko.observable(false),
         amazonLoginError = ko.observable(false),
         accessToken = ko.observable(null),
         // Match region config to amazon.Login.Region
@@ -37,19 +36,13 @@ define([
          * Amazon login ready callback
          */
         window.onAmazonLoginReady = function () {
-            setClientId(clientId);  //eslint-disable-line no-use-before-define
-            doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
-
-            sandboxMode = amazonPaymentConfig.getValue('isSandboxEnabled', false);
-            amazon.Login.setSandboxMode(sandboxMode); //eslint-disable-line no-undef
-
-            region = regions[amazonPaymentConfig.getValue('region')];
-            amazon.Login.setRegion(region); //eslint-disable-line no-undef
+            initializeAmazon();  //eslint-disable-line no-use-before-define
         };
     } else {
-        setClientId(clientId);  //eslint-disable-line no-use-before-define
-        doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
+        initializeAmazon();  //eslint-disable-line no-use-before-define
     }
+
+    
 
     // Widgets.js ready callback
     window.onAmazonPaymentsReady = function() {
@@ -57,11 +50,21 @@ define([
     };
 
     /**
-     * Set Client ID
+     * Initialize the 'amazon' object with client ID, sandbox and region setting
      * @param {String} cid
      */
-    function setClientId(cid) {
-        amazon.Login.setClientId(cid); //eslint-disable-line no-undef
+    function initializeAmazon() {
+        clientId = amazonPaymentConfig.getValue('clientId')
+        amazon.Login.setClientId(clientId); //eslint-disable-line no-undef
+
+        sandboxMode = amazonPaymentConfig.getValue('isSandboxEnabled', false);
+        amazon.Login.setSandboxMode(sandboxMode); //eslint-disable-line no-undef
+
+        region = regions[amazonPaymentConfig.getValue('region')];
+        amazon.Login.setRegion(region); //eslint-disable-line no-undef        
+
+        doLogoutOnFlagCookie(); //eslint-disable-line no-use-before-define
+
         amazonDefined(true);
     }
 
