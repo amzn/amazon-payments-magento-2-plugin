@@ -37,10 +37,10 @@ define([
          * Amazon login ready callback
          */
         window.onAmazonLoginReady = function () {
-            initializeAmazon(amazonPaymentConfig);  //eslint-disable-line no-use-before-define
+            initializeAmazon();  //eslint-disable-line no-use-before-define
         };
     } else {
-        initializeAmazon(amazonPaymentConfig);  //eslint-disable-line no-use-before-define
+        initializeAmazon();  //eslint-disable-line no-use-before-define
     }
 
     
@@ -54,7 +54,7 @@ define([
      * Initialize the 'amazon' object with client ID, sandbox and region setting
      * @param {String} cid
      */
-    function initializeAmazon(amazonPaymentConfig) {
+    function initializeAmazon() {
         clientId = amazonPaymentConfig.getValue('clientId')
         amazon.Login.setClientId(clientId); //eslint-disable-line no-undef
 
