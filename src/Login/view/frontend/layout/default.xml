@@ -30,7 +30,7 @@
                                     <item name="config" xsi:type="array">
                                         <item name="tooltip" xsi:type="string" translate="true">Securely login into our website using your existing Amazon details.</item>
                                         <item name="componentDisabled" xsi:type="helper"
-                                              helper="Amazon\Core\Helper\Data::isLwaDisabled"/>
+                                              helper="Amazon\Core\Model\AmazonConfig::isLwaDisabled"/>
                                     </item>
                                 </item>
                             </item>
