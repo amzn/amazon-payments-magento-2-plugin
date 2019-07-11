@@ -28,6 +28,7 @@ define([
         accessToken = ko.observable(null),
         // Match region config to amazon.Login.Region
         regions = {'us': 'NA', 'de': 'EU', 'uk': 'EU', 'jp': 'APAC'},
+        clientId,
         sandboxMode,
         region;
 
@@ -36,10 +37,10 @@ define([
          * Amazon login ready callback
          */
         window.onAmazonLoginReady = function () {
-            initializeAmazon();  //eslint-disable-line no-use-before-define
+            initializeAmazon(amazonPaymentConfig);  //eslint-disable-line no-use-before-define
         };
     } else {
-        initializeAmazon();  //eslint-disable-line no-use-before-define
+        initializeAmazon(amazonPaymentConfig);  //eslint-disable-line no-use-before-define
     }
 
     
@@ -53,7 +54,7 @@ define([
      * Initialize the 'amazon' object with client ID, sandbox and region setting
      * @param {String} cid
      */
-    function initializeAmazon() {
+    function initializeAmazon(amazonPaymentConfig) {
         clientId = amazonPaymentConfig.getValue('clientId')
         amazon.Login.setClientId(clientId); //eslint-disable-line no-undef
 
