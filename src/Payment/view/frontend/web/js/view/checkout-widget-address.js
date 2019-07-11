@@ -11,6 +11,7 @@ define(
         'Magento_Checkout/js/model/shipping-rate-processor/new-address',
         'Magento_Checkout/js/action/set-shipping-information',
         'Amazon_Payment/js/model/storage',
+        'amazonCore',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/address-converter',
         'mage/storage',
@@ -31,6 +32,7 @@ define(
         shippingProcessor,
         setShippingInformationAction,
         amazonStorage,
+        amazonCore,
         shippingService,
         addressConverter,
         storage,
@@ -71,7 +73,16 @@ define(
              * Call when component template is rendered
              */
             initAddressWidget: function () {
-                self.renderAddressWidget();
+                if(amazonStorage.amazonDefined()) {
+                    self.renderAddressWidget();
+                } else {
+                    var subscription = amazonStorage.amazonDefined.subscribe(function (defined) { //eslint-disable-line vars-on-top
+                        if (defined) {
+                            self.renderAddressWidget();
+                            subscription.dispose();
+                        }
+                    });
+                }
             },
 
             /**
@@ -104,9 +115,7 @@ define(
                     /**
                      * Error callback
                      */
-                    onError: function (error) {
-                        console.log(error);
-                    }
+                    onError: amazonCore.handleWidgetError
                 }).bind(self.options.addressWidgetDOMId);
             },
 

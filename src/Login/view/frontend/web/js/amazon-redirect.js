@@ -43,20 +43,7 @@ define([
             // we don't have the customer's consent or invalid request
             this.redirectOnRequestWithError();
             this.setAuthStateCookies();
-            var onAmazonDefined = function () {
-                //only set this on the redirect page
-                amazon.Login.setUseCookie(true); //eslint-disable-line no-undef
-                amazonCore.verifyAmazonLoggedIn().then(function (loggedIn) {
-                    if (loggedIn) {
-                        self.redirect();
-                    }
-                }, 0);
-            };
-            if (amazonCore.amazonDefined()) {
-                onAmazonDefined();
-            } else {
-                amazonCore.amazonDefined.subscribe(onAmazonDefined, this);
-            }
+            self.redirect();
         },
 
         /**
