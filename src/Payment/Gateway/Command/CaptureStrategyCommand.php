@@ -108,7 +108,6 @@ class CaptureStrategyCommand implements CommandInterface
     public function execute(array $commandSubject)
     {
         try {
-            throw new \Exception('failed');
             if (isset($commandSubject['payment'])) {
                 $paymentDO = $commandSubject['payment'];
                 $paymentInfo = $paymentDO->getPayment();
