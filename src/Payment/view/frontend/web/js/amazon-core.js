@@ -56,13 +56,6 @@ define([
     };
 
     /**
-     * Set Client ID
-     * @param {String} cid
-     */
-    function setClientId(cid) {
-    }
-
-    /**
      * Log user out of amazon
      */
     function amazonLogout() {
