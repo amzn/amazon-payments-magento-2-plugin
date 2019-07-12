@@ -44,6 +44,7 @@ class AmazonAddressFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param AmazonNameFactory $amazonNameFactory
+     * @param null $escaper Deprecated, do not remove for backward compatibility
      * @param array $addressDecoratorPool Per-country custom decorators of incoming address data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
@@ -51,6 +52,7 @@ class AmazonAddressFactory
     public function __construct(
         ObjectManagerInterface $objectManager,
         AmazonNameFactory $amazonNameFactory,
+        $escaper = null,
         array $addressDecoratorPool = []
     ) {
         $this->objectManager = $objectManager;
