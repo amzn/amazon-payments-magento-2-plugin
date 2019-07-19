@@ -15,16 +15,10 @@
  * permissions and limitations under the License.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="admin">
-        <route id="amazonlogs" frontName="amazonlogs">
-            <module name="Amazon_Core" />
-        </route>
-        <route id="amazonsp" frontName="amazonsp">
-            <module name="Amazon_Core" />
-        </route>
-        <route id="amazon" frontName="amazon">
-            <module name="Amazon_Core" />
-        </route>
-    </router>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_shipment_track_save_after">
+        <observer name="amazon_core_sales_order_shipment_track_save_after"
+                  instance="Amazon\Core\Observer\SalesOrderShipmentTrackAfter" />
+    </event>
 </config>

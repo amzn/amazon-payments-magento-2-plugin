@@ -21,7 +21,8 @@
     "magento/module-payment": "*",
     "magento/module-paypal": "*",
     "magento/module-eav": "*",
-    "amzn/amazon-pay-sdk-php": "^3.2.0"
+    "amzn/amazon-pay-sdk-php": "^3.2.0",
+    "amzn/amazon-pay-sdk-v2-php": "~4.0"
   },
   "autoload": {
     "files": ["registration.php"],

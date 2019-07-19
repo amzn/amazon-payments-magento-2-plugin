@@ -384,6 +384,54 @@ class Data extends AbstractHelper
         return $this->config->getRedirectUrl();
     }
 
+    /*
+     * @return bool
+     */
+    public function isAlexaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_active',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /*
+     * @return string
+     */
+    public function getAlexaPrivateKey($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->encryptor->decrypt($this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_private_key',
+            $scope,
+            $scopeCode
+        ));
+    }
+
+    /*
+     * @return string
+     */
+    public function getAlexaPublicKey($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_public_key',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /*
+     * @return string
+     */
+    public function getAlexaPublicKeyId($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_public_key_id',
+            $scope,
+            $scopeCode
+        );
+    }
+
     /**
      * @param string|null $context
      *
