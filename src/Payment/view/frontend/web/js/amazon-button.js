@@ -18,11 +18,13 @@ define([
     'Magento_Customer/js/section-config',
     'Amazon_Payment/js/model/amazonPaymentConfig',
     'amazonCsrf',
+    'Magento_Checkout/js/model/full-screen-loader',
     'modernizr/modernizr',
     'amazonCore',
     'jquery/ui',
     'uiRegistry',
-], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf) {
+    'mage/cookies'
+], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf, fullScreenLoader) {
     'use strict';
     var _this,
         $button;
@@ -44,7 +46,15 @@ define([
                 _this = this;
                 $button = this.element;
                 this._verifyAmazonConfig();
-                _this._renderAmazonButton();
+
+                if (typeof OffAmazonPayments === 'undefined') {
+                    // async render
+                    $(window).on('OffAmazonPayments', $.proxy(function () {
+                        this._renderAmazonButton();
+                    }, this));
+                } else {
+                    this._renderAmazonButton();
+                }
             },
 
             /**
@@ -87,6 +97,7 @@ define([
                 if (sections) {
                     customerData.invalidate(sections);
                 }
+                $.mage.cookies.set('amazon_Login_accessToken', event.access_token);
                 window.location = _this.options.redirectUrl + '?access_token=' + event.access_token;
                 // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
             },
@@ -140,6 +151,7 @@ define([
                      * Authorization callback
                      */
                     authorization: function () {
+                        fullScreenLoader.startLoader();
                         //eslint-disable-next-line no-undef
                         amazon.Login.authorize(_this._getLoginOptions(), _this._popupCallback());
                     }
