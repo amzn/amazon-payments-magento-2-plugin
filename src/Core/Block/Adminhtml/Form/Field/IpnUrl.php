@@ -30,16 +30,13 @@ class IpnUrl extends BaseField
      */
     protected function _renderValue(AbstractElement $element)
     {
-        $stores = $this->_storeManager->getStores();
+        $store = $this->_storeManager->getDefaultStoreView();
         $valueReturn = '';
 
-        if ($store = reset($stores))
-        {
-            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
-            if ($baseUrl) {
-                $value       = $baseUrl . 'amazonpayments/payment/ipn/';
-                $valueReturn = "<div>".$this->escapeHtml($value)."</div>";
-            }
+        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+        if ($baseUrl) {
+            $value       = $baseUrl . 'amazonpayments/payment/ipn/';
+            $valueReturn = "<div>".$this->escapeHtml($value)."</div>";
         }
 
         return '<td class="value">' . $valueReturn . '</td>';
