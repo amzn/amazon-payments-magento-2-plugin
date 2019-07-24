@@ -16,7 +16,7 @@
 
 namespace Amazon\Login\Domain;
 use Magento\Framework\Model\AbstractModel;
-use Amazon\Core\Model\AmazonConfig;
+use Amazon\Core\Helper\Data as CoreHelper;
 
 
 /**
@@ -25,18 +25,18 @@ use Amazon\Core\Model\AmazonConfig;
 class LayoutConfig
 {
     /**
-     * @var AmazonConfig
+     * @var CoreHelper
      */
-    private $amazonConfig;
+    private $coreHelper;
 
     /**
      * LayoutConfig constructor.
-     * @param AmazonConfig $amazonConfig
+     * @param CoreHelper $coreHelper
      */
     public function __construct(
-        AmazonConfig $amazonConfig
+        CoreHelper $coreHelper
     ) {
-        $this->amazonConfig = $amazonConfig;
+        $this->coreHelper = $coreHelper;
     }
 
     /**
@@ -46,7 +46,7 @@ class LayoutConfig
      */
     public function isLwaLayoutDisabled()
     {
-        return !$this->amazonConfig->isLwaEnabled();
+        return !$this->coreHelper->isLwaEnabled();
     }
 
 }
