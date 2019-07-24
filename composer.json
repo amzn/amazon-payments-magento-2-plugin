@@ -31,7 +31,7 @@
     "magento/module-quote": "101.0.*",
     "magento/module-customer": "^101.0",
     "magento/module-store": "^100.1",
-    "amzn/amazon-pay-sdk-php": "^3.2.0"
+    "amzn/amazon-pay-sdk-php": "^3.4.1"
   },
   "repositories": [
     {
