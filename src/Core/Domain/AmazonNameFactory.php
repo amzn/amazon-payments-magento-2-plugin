@@ -38,20 +38,28 @@ class AmazonNameFactory
     private $perCountryNameHandlers;
 
     /**
+     * @var array
+     */
+    private $nameDecoratorPool;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param AmazonNameInterface $amazonName
      * @param array $perCountryNameHandlers Per-country custom handlers of incoming name data.
      *                                         The key as an "ISO 3166-1 alpha-2" country code and
      *                                         the value as an FQCN of a child of AmazonAddress.
+     * @param array $nameDecoratorPool
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         AmazonNameInterface $amazonName,
-        array $perCountryNameHandlers = []
+        array $perCountryNameHandlers = [],
+        array $nameDecoratorPool = []
     ) {
         $this->objectManager          = $objectManager;
         $this->amazonName             = $amazonName;
         $this->perCountryNameHandlers = $perCountryNameHandlers;
+        $this->nameDecoratorPool      = $nameDecoratorPool;
     }
 
     /**
