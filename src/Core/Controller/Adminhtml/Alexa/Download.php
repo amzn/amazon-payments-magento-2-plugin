@@ -18,6 +18,7 @@ namespace Amazon\Core\Controller\Adminhtml\Alexa;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Backend\Controller\Adminhtml\System;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 
@@ -58,6 +59,6 @@ class Download extends System
     public function execute()
     {
         $pubkey = $this->amazonCoreHelper->getAlexaPublicKey();
-        return $this->fileFactory->create('amazon_public_key.pub', $pubkey);
+        return $this->fileFactory->create('amazon_public_key.pub', $pubkey, DirectoryList::TMP);
     }
 }
