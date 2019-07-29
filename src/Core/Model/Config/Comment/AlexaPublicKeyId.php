@@ -79,7 +79,7 @@ class AlexaPublicKeyId implements CommentInterface
                 $merchantId = $this->amazonCoreHelper->getMerchantId();
                 $subject = rawurlencode('Request for Amazon Pay Public Key ID for ' . $merchantId);
                 $body = rawurlencode("Merchant ID: $merchantId\n\nPublic Key:\n\n$pubkey");
-                return __('Please <a href="%1">contact</a> Amazon Pay to receive the Public Key ID.',
+                $comment = __('Please <a href="%1">contact</a> Amazon Pay to receive the Public Key ID.',
                     'mailto:Amazon-pay-delivery-notifications@amazon.com?subject=' . $subject . '&body=' . $body);
             }
         }
