@@ -18,6 +18,7 @@ namespace Amazon\Core\Model\Config\Comment;
 use Magento\Config\Model\Config\CommentInterface;
 use Amazon\Core\Helper\Data as AmazonCoreHelper;
 use Amazon\Core\Model\Alexa;
+use Amazon\Core\Logger\Handler\Alexa as AlexaLoggerHandler;
 use Magento\Store\Model\StoreManagerInterface;
 
 class AlexaPublicKeyId implements CommentInterface
@@ -62,10 +63,11 @@ class AlexaPublicKeyId implements CommentInterface
      */
     public function getCommentText($elementValue)
     {
-
         $pubkeyid = $this->amazonCoreHelper->getAlexaPublicKeyId();
         $pubkey   = $this->amazonCoreHelper->getAlexaPublicKey();
         $privkey  = $this->amazonCoreHelper->getAlexaPrivateKey();
+
+        $comment = '';
 
         if (!$pubkeyid) {
             if (!$pubkey) {
@@ -81,5 +83,8 @@ class AlexaPublicKeyId implements CommentInterface
                     'mailto:Amazon-pay-delivery-notifications@amazon.com?subject=' . $subject . '&body=' . $body);
             }
         }
+        $comment .= '<br/><br/>' . __('Alexa Delivery Notifications logs will be saved at %1',
+                AlexaLoggerHandler::FILENAME);
+        return $comment;
     }
 }
