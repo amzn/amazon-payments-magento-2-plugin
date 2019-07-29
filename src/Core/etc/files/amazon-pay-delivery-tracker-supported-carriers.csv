@@ -1,0 +1,511 @@
+carrierName,carrierCode
+007EX,EX_007
+17 Post Service,POSTSERVICE_17
+2GO,GO_2
+360 Lion Express,LION_360
+4PX,PX_4
+Best Express,BESTEX_800
+AAA Cooper,AAA_COOPER
+AB Custom Group,ABCUSTOM
+ABF Freight,ABF
+ABX Express,ABXEXPRESS_MY
+aCommerce,ACOMMERCE
+ACS Courier,ACSCOURIER
+ACS Worldwide Express,ACSWORLDWIDE
+Adicional Logistics,ADICIONAL
+ADSOne,ADSONE
+A Duie Pyle,ADUIEPYLE
+Mexico AeroFlash,AEROFLASH
+Aersure,AERSURE
+AIR21,AIR21
+Airpak Express,AIRPAK_EXPRESS
+Airspeed International Corporation,AIRSPEED
+AlfaTrex,ALFATREX
+Allied Express,ALLIEDEXPRESS
+ALLJOY SUPPLY CHAIN CO.,ALLJOY
+alphaFAST,ALPHAFAST
+Amazon FBA USA,AMZN
+An Post,AN_POST
+APC Postal Logistics,APC
+APC Overnight,APC_OVERNIGHT
+APC Overnight Consignment Number,APC_OVERNIGHT_CONNUM
+Aprisa Express,APRISAEXPRESS
+Aramex,ARAMEX
+Arrow XL,ARROWXL
+Asendia Germany,ASENDIA_DE
+Asendia HK,ASENDIA_HK
+Asendia UK,ASENDIA_UK
+Asendia USA,ASENDIA_USA
+ASM,ASM
+AuPost China,AUPOST_CHINA
+Australia Post,AUSTRALIA_POST
+Austrian Post (Express),AUSTRIAN_POST
+Austrian Post (Registered),AUSTRIAN_POST_REGISTERED
+B2C Europe,B2CEUROPE
+Belpost,BELPOST
+Bert Transport,BERT_FR
+Best Way Parcel,BESTWAYPARCEL
+Bulgarian Posts,BGPOST
+JP BH Pošta,BH_POSTA
+B&H Worldwide,BH_WORLDWIDE
+BirdSystem,BIRDSYSTEM
+BJS Distribution,BJSHOMEDELIVERY
+Bluecare Express Ltd,BLUECARE
+Bluedart,BLUEDART
+Blue Star,BLUESTAR
+Bneed,BNEED
+Bonds Couriers,BONDSCOURIERS
+BoxC,BOXC
+Bpost,BPOST
+Bpost international,BPOST_INTERNATIONAL
+Brazil Correios,BRAZIL_CORREIOS
+BRT Bartolini,BRT_IT
+BRT Bartolini(Parcel ID),BRT_IT_PARCELID
+Buylogic,BUYLOGIC
+Cambodia Post,CAMBODIA_POST
+Canada Post,CANADA_POST
+Canpar Courier,CANPAR
+CBL Logistics,CBL_LOGISTICA
+Celeritas Transporte,CELERITAS
+Česká Pošta,CESKA_POSTA
+Champion Logistics,CHAMPION_LOGISTICS
+China EMS (ePacket),CHINA_EMS
+China Post,CHINA_POST
+Chit Chats,CHITCHATS
+C.H. Robinson Worldwide,CHROBINSON
+Chronopost France,CHRONOPOST_FRANCE
+Chronopost Portugal,CHRONOPOST_PORTUGAL
+City-Link Express,CITYLINKEXPRESS
+CJ GLS,CJ_GLS
+CJ Korea Express,CJ_KOREA_THAI
+CJ Century,CJ_MALAYSIA
+CJ Century (International),CJ_MALAYSIA_INTERNATIONAL
+CJ Transnational Philippines,CJ_PHILIPPINES
+CJ Logistics International,CJLOGISTICS
+Clevy Links,CLEVY_LINKS
+Cloudwish Asia,CLOUDWISH_ASIA
+CNE Express,CNEXPS
+Colis Privé,COLIS_PRIVE
+Colissimo,COLISSIMO
+CollectCo,COLLECTCO
+Collect+,COLLECTPLUS
+MDS Collivery Pty (Ltd),COLLIVERY
+Con-way Freight,CON_WAY
+Copa Airlines Courier,COPA_COURIER
+Correos Chile,CORREOS_CHILE
+Correos de Mexico,CORREOS_DE_MEXICO
+Correos Express,CORREOSEXPRESS
+Cosmetics Now,COSTMETICSNOW
+Urbanfox,COUREX
+Courier Plus,COURIER_PLUS
+Courier IT,COURIERIT
+CourierPost,COURIERPOST
+Couriers Please,COURIERS_PLEASE
+cPacket,CPACKET
+Cuckoo Express,CUCKOOEXPRESS
+Cyprus Post,CYPRUS_POST
+PostNord Denmark,DANMARK_POST
+Danske Fragtmænd,DANSKE_FRAGT
+Dawn Wing,DAWNWING
+DB Schenker,DBSCHENKER_SE
+DB Schenker Sweden,DBSCHENKER_SV
+DD Express Courier,DDEXPRESS
+Delcart,DELCART_IN
+Delhivery,DELHIVERY
+DELIVERYONTIME LOGISTICS PVT LTD,DELIVERYONTIME
+Deltec Courier,DELTEC_COURIER
+DemandShip,DEMANDSHIP
+Innovel,DESCARTES
+Detrack,DETRACK
+Deutsche Post Mail,DEUTSCH_POST
+DEX-I,DEX_I
+DHL Express,DHL
+DHL Active Tracing,DHL_ACTIVE_TRACING
+DHL Benelux,DHL_BENELUX
+DHL 2-Mann-Handling,DHL_DELIVERIT
+DHL Spain Domestic,DHL_ES
+Deutsche Post DHL,DHL_DE
+DHL Global Forwarding,DHL_GLOBAL_FORWARDING
+DHL eCommerce US,DHL_GLOBAL_MAIL
+DHL eCommerce Asia,DHL_GLOBAL_MAIL_ASIA
+DHL Hong Kong,DHL_HK
+DHL Netherlands,DHL_NL
+DHL Express (Piece ID),DHL_PIECEID
+DHL Poland Domestic,DHL_POLAND
+DHL Parcel Spain,DHLPARCEL_ES
+DHL Parcel NL,DHLPARCEL_NL
+Dimerco Express Group,DIMERCO
+Direct Freight Express,DIRECTFREIGHT_AU
+Direct Link,DIRECTLINK
+Directlog,DIRECTLOG
+DMM Network,DMM_NETWORK
+Doora Logistics,DOORA
+Dotzot,DOTZOT
+DPD,DPD
+DPD Germany,DPD_DE
+DPD HK,DPD_HK
+DPD Ireland,DPD_IRELAND
+DPD Poland,DPD_POLAND
+DPD Romania,DPD_RO
+DPD Russia,DPD_RU
+DPD UK,DPD_UK
+DPE Express,DPE_EXPRESS
+DPE South Africa,DPE_ZA
+DPEX,DPEX
+DSV,DSV
+DTDC India,DTDC
+DTDC Australia,DTDC_AU
+DTDC Express Global PTE LTD,DTDC_EXPRESS
+Daylight Transport,DYLT
+Dynamic Logistics,DYNAMIC_LOGISTICS
+Easy Mail,EASY_MAIL
+EC-Firstclass,EC_FIRSTCLASS
+Ecargo,ECARGO_ASIA
+Echo,ECHO
+ECMS International Logistics Co.,ECMS
+Ecom Express,ECOM_EXPRESS
+eFEx (E-Commerce Fulfillment & Express),EFEX
+EFS (E-commerce Fulfillment Service),EFS
+Ekart,EKART
+ELTA Hellenic Post,ELTA_COURIER
+Emirates Post,EMIRATES_POST
+EMPS Express,EMPSEXPRESS
+Endeavour Delivery,ENDEAVOUR_DELIVERY
+Ensenda,ENSENDA
+Envialia,ENVIALIA
+EP-Box,EP_BOX
+eParcel Korea,EPARCEL_KR
+Equick China,EQUICK_CN
+Estafeta,ESTAFETA
+Estes,ESTES
+eTotal Solution Limited,ETOTAL
+Eurodis,EURODIS
+DPD France,EXAPAQ
+Expeditors,EXPEDITORS
+Expeditors API,EXPEDITORS_API
+EZship,EZSHIP
+Fastrak Services,FASTRAK_TH
+Fastway Australia,FASTWAY_AU
+Fastway Ireland,FASTWAY_IRELAND
+Fastway New Zealand,FASTWAY_NZ
+Fastway South Africa,FASTWAY_ZA
+FedEx,FEDEX
+Fedex Cross Border,FEDEX_CROSSBORDER
+FedEx International MailService,FEDEX_FIMS
+FedEx Freight,FEDEX_FREIGHT
+FedEx UK,FEDEX_UK
+FERCAM Logistics & Transport,FERCAM
+First Flight Couriers,FIRST_FLIGHT
+First Logistics,FIRST_LOGISTICS
+Flyt Express,FLYTEXPRESS
+Gati-KWE,GATI_KWE
+GDEX,GDEX
+GEODIS - Distribution & Express,GEODIS_CALBERSON_FR
+Geodis E-space,GEODIS_ESPACE
+Giao hàng nhanh,GHN
+Globegistics Inc.,GLOBEGISTICS
+GLS,GLS
+GLS Czech Republic,GLS_CZ
+GLS Italy,GLS_ITALY
+GLS Netherlands,GLS_NETHERLANDS
+GoFly,GOFLY
+GoJavas,GOJAVAS
+Greyhound,GREYHOUND
+GSI EXPRESS,GSI_EXPRESS
+GSO,GSO
+Hermesworld,HERMES
+Hermes Germany,HERMES_DE
+Hermes Italy,HERMES_IT
+Hua Han Logistics,HH_EXP
+Holisol,HOLISOL
+Hong Kong Post,HONG_KONG_POST
+Hrvatska Pošta,HRVATSKA_POSTA
+Hunter Express,HUNTER_EXPRESS
+i-parcel,I_PARCEL
+IDEX,IDEXPRESS
+IMEX Global Solutions,IMEXGLOBALSOLUTIONS
+IMX Mail,IMXMAIL
+India Post Domestic,INDIA_POST
+India Post International,INDIA_POST_INT
+InPost Paczkomaty,INPOST_PACZKOMATY
+INSTANT (Tiong Nam Ebiz Express Sdn Bhd),INSTANT
+DPD Local,INTERLINK_EXPRESS
+DPD Local reference,INTERLINK_EXPRESS_REFERENCE
+International Seur,INTERNATIONAL_SEUR
+Internet Express,INTEXPRESS
+Israel Post,ISRAEL_POST
+Israel Post Domestic,ISRAEL_POST_DOMESTIC
+Italy SDA,ITALY_SDA
+J-Net,J_NET
+Jam Express,JAM_EXPRESS
+Janco Ecommerce,JANCO
+Japan Post,JAPAN_POST
+Jayon Express (JEX),JAYONEXPRESS
+JCEX,JCEX
+Jersey Post,JERSEY_POST
+Jet-Ship Worldwide,JET_SHIP
+JINSUNG TRADING,JINSUNG
+JNE,JNE
+Jocom,JOCOM
+J&T EXPRESS MALAYSIA,JTEXPRESS
+JX,JX
+K1 Express,K1_EXPRESS
+Kangaroo Worldwide Express,KANGAROO_MY
+Kerry Express Thailand,KERRY_LOGISTICS
+Kerry TJ Logistics,KERRYTJ
+Kerry Express (Vietnam) Co Ltd,KERRYTTC_VN
+KGM Hub,KGMHUB
+Kiala,KIALA
+Kuehne + Nagel,KN
+Korea Post EMS,KOREA_POST
+Korea Post,KPOST
+Shenzhen Jinghuada Logistics Co.,KWT
+La Poste,LA_POSTE_COLISSIMO
+Landmark Global,LANDMARK_GLOBAL
+Lao Post,LAO_POST
+LaserShip,LASERSHIP
+Latvijas Pasts,LATVIJAS_PASTS
+LBC Express,LBCEXPRESS
+LHT Express,LHT_EXPRESS
+Lietuvos Paštas,LIETUVOS_PASTAS
+Line Clear Express & Logistics Sdn Bhd,LINE
+Link Bridge(BeiJing)international logistics co.,LINKBRIDGE
+Lion Parcel,LION_PARCEL
+Lone Star Overnight,LONESTAR
+Logistic Worldwide Express,LWE_HK
+M Xpress Sdn Bhd,M_XPRESS
+Magyar Posta,MAGYAR_POSTA
+MailAmericas,MAILAMERICAS
+MailPlus,MAILPLUS
+Mainfreight,MAINFREIGHT
+Malaysia Post EMS / Pos Laju,MALAYSIA_POST
+Malaysia Post - Registered,MALAYSIA_POST_POSDAFTAR
+Mara Xpress,MARA_XPRESS
+Matdespatch,MATDESPATCH
+Matkahuolto,MATKAHUOLTO
+Megasave,MEGASAVE
+Mexico Redpack,MEXICO_REDPACK
+Mexico Senda Express,MEXICO_SENDA_EXPRESS
+PT MGLOBAL LOGISTICS INDONESIA,MGLOBAL
+Mikropakket,MIKROPAKKET
+Mondial Relay,MONDIALRELAY
+MRW,MRW_SPAIN
+MXE Express,MXE
+myHermes UK,MYHERMES_UK
+Mypostonline,MYPOSTONLINE
+NACEX Spain,NACEX_SPAIN
+Nanjing Woyuan,NANJINGWOYUAN
+National Sameday,NATIONAL_SAMEDAY
+Nationwide Express,NATIONWIDE_MY
+New Zealand Post,NEW_ZEALAND_POST
+Newgistics,NEWGISTICS
+Nhans Solutions,NHANS_SOLUTIONS
+Nightline,NIGHTLINE
+Nim Express,NIM_EXPRESS
+Ninja Van,NINJAVAN
+Ninja Van Indonesia,NINJAVAN_ID
+Ninja Van Malaysia,NINJAVAN_MY
+Ninja Van Philippines,NINJAVAN_PHILIPPINES
+Ninja Van Thailand,NINJAVAN_THAI
+NiPost,NIPOST
+Norsk Global,NORSK_GLOBAL
+Nova Poshta,NOVA_POSHTA
+Nova Poshta (International),NOVA_POSHTAINT
+OCA Argentina,OCA_AR
+OCS ANA Group,OCS
+Old Dominion Freight Line,OLD_DOMINION
+Omni Parcel,OMNIPARCEL
+Omniva,OMNIVA
+One World Express,ONEWORLDEXPRESS
+OnTrac,ONTRAC
+FedEx Poland Domestic,OPEK
+OSM Worldwide,OSM_WORLDWIDE
+Paack,PAACK_WEBHOOK
+Packlink,PACKLINK
+PAL Express Limited,PALEXPRESS
+Pandu Logistics,PANDULOGISTICS
+Panther,PANTHER
+Panther Order Number,PANTHER_ORDER_NUMBER
+Panther Reference,PANTHER_REFERENCE
+Paquetexpress,PAQUETEXPRESS
+Parcel Force,PARCEL_FORCE
+Parcel2Go,PARCEL2GO
+Parcelled.in,PARCELLED_IN
+ParcelPoint Pty Ltd,PARCELPOINT
+Parcel Post Singapore,PARCELPOST_SG
+PFC Express,PFCEXPRESS
+Pickupp,PICKUP
+PICK UPP,PICKUPP_MYS
+PICK UPP,PICKUPP_SGP
+Pilot Freight Services,PILOT_FREIGHT
+Pitney Bowes,PITNEY_BOWES
+PIXSELL LOGISTICS,PIXSELL
+Poczta Polska,POCZTA_POLSKA
+Portugal CTT,PORTUGAL_CTT
+Portugal Seur,PORTUGAL_SEUR
+Pos Indonesia Domestic,POS_INDONESIA
+Pos Indonesia Int'l,POS_INDONESIA_INT
+Post Serbia,POST_SERBIA
+Post of Slovenia,POST_SLOVENIA
+Post56,POST56
+Poșta Română,POSTA_ROMANA
+Poste Italiane,POSTE_ITALIANE
+Posten Norge / Bring,POSTEN_NORGE
+Posti,POSTI
+PostNL Domestic,POSTNL
+PostNL International 3S,POSTNL_3S
+PostNL International,POSTNL_INTERNATIONAL
+PostNord Logistics,POSTNORD
+Iceland Post,POSTUR_IS
+PayPal Package,PPBYB
+Professional Couriers,PROFESSIONAL_COURIERS
+PTT Posta,PTT_POSTA
+Purolator,PUROLATOR
+QualityPost,QUALITYPOST
+Quantium,QUANTIUM
+Qxpress,QXPRESS
+Raben Group,RABEN_GROUP
+RAF Philippines,RAF
+RaidereX,RAIDEREX
+RAM,RAMGROUP_ZA
+Red Carpet Logistics,RCL
+Redur Spain,REDUR_ES
+Rincos,RINCOS
+RL Carriers,RL_CARRIERS
+Roadbull Logistics,ROADBULL
+Rocket Parcel International,ROCKETPARCEL
+RPD2man Deliveries,RPD2MAN
+RPX Indonesia,RPX
+RPX Online,RPXONLINE
+RRD International Logistics U.S.A,RRDONNELLEY
+Russian Post,RUSSIAN_POST
+Ruston,RUSTON
+RZY Express,RZYEXPRESS
+Safexpress,SAFEXPRESS
+Sagawa,SAGAWA
+Saia LTL Freight,SAIA_FREIGHT
+SAILPOST,SAILPOST
+SAP EXPRESS,SAP_EXPRESS
+South African Post Office,SAPO
+Saudi Post,SAUDI_POST
+Scudex Express,SCUDEX_EXPRESS
+Southeastern Freight Lines,SEFL
+Seino,SEINO
+SEKO Logistics,SEKOLOGISTICS
+Sending Transporte Urgente y Comunicacion,SENDING
+Sendit,SENDIT
+Sendle,SENDLE
+S.F. Express,SF_EXPRESS
+SF Express (Webhook),SF_EXPRESS_WEBHOOK
+S.F International,SFB2C
+SFC Service,SFCSERVICE
+SGT Corriere Espresso,SGT_IT
+Shippit,SHIPPIT
+Shiptor,SHIPTOR
+ShopfansRU LLC,SHOPFANS
+Shree Maruti Courier Services Pvt Ltd,SHREE_MARUTI
+SHREE TIRUPATI COURIER SERVICES PVT. LTD.,SHREETIRUPATI
+Teliway SIC Express,SIC_TELIWAY
+SimplyPost,SIMPLYPOST
+Singapore Post,SINGAPORE_POST
+Singapore Speedpost,SINGAPORE_SPEEDPOST
+Siodemka,SIODEMKA
+SkyPostal,SKY_POSTAL
+SKYBOX,SKYBOX
+SkyNet Malaysia,SKYNET
+Skynet World Wide Express South Africa,SKYNET_ZA
+SkyNet Worldwide Express,SKYNETWORLDWIDE
+SkyNet Worldwide Express UAE,SKYNETWORLDWIDE_UAE
+Skynet Worldwide Express UK,SKYNETWORLDWIDE_UK
+Asendia HK – Premium Service (LATAM),SKYPOSTAL
+Smooth Couriers,SMOOTH
+SMSA Express,SMSA_EXPRESS
+Correos de España,SPAIN_CORREOS_ES
+Spanish Seur,SPANISH_SEUR
+Specialised Freight,SPECIALISEDFREIGHT_ZA
+Speed Couriers,SPEEDCOURIERS_GR
+Speedex Courier,SPEEDEXCOURIER
+SPOTON Logistics Pvt Ltd,SPOTON
+SRE Korea,SREKOREA
+StarTrack,STAR_TRACK
+Star Track Courier,STAR_TRACK_COURIER
+Star Track Express,STAR_TRACK_EXPRESS
+STO Express,STO
+PostNord Sweden,SWEDEN_POSTEN
+Swiss Post,SWISS_POST
+Sunyou Post,SYPOST
+DPEX China,SZDPEX
+Taiwan Post,TAIWAN_POST
+TAQBIN Hong Kong,TAQBIN_HK
+Yamato Japan,TAQBIN_JP
+TAQBIN Malaysia,TAQBIN_MY
+TAQBIN Singapore,TAQBIN_SG
+Geniki Taxydromiki,TAXYDROMIKI
+TCS,TCS
+Kerry Express Hong Kong,TGX
+Thailand Thai Post,THAILAND_POST
+The Courier Guy,THECOURIERGUY
+Tiki,TIKI
+TIPSA,TIPSA
+TNT,TNT
+TNT Australia,TNT_AU
+TNT-Click Italy,TNT_CLICK
+TNT France,TNT_FR
+TNT Italy,TNT_IT
+TNT Reference,TNT_REFERENCE
+TNT UK,TNT_UK
+TNT UK Reference,TNT_UK_REFERENCE
+Nexive (TNT Post Italy),TNTPOST_IT
+Toll IPEC,TOLL_IPEC
+Toll Priority,TOLL_PRIORITY
+Tolos,TOLOS
+Tophatter Express,TOPHATTEREXPRESS
+TrakPak,TRAKPAK
+Trans Kargo Internasional,TRANS_KARGO
+TransMission,TRANSMISSION_NL
+Tuffnells Parcels Express,TUFFNELLS
+UBI Smart Parcel,UBI_LOGISTICS
+United Delivery Service,UDS
+UK Mail,UK_MAIL
+UkrPoshta,UKRPOSHTA
+UPS,UPS
+UPS Freight,UPS_FREIGHT
+UPS Mail Innovations,UPS_MI
+USF Reddaway,USF_REDDAWAY
+USPS,USPS
+USPS Informed Visibility - Webhook,USPS_WEBHOOK
+ViettelPost,VIETTELPOST
+Vietnam Post,VNPOST
+Vietnam Post EMS,VNPOST_EMS
+Wahana,WAHANA
+WanbExpress,WANBEXPRESS
+Watkins Shepard,WATKINS_SHEPARD
+WeDo Logistics,WEDO
+WePost Logistics,WEPOST
+Whistl,WHISTL
+Wise Express,WISE_EXPRESS
+Wiseloads,WISELOADS
+WishPost,WISHPOST
+WMG Delivery,WMG
+wnDirect,WNDIRECT
+XDP Express,XDP_UK
+XDP Express Reference,XDP_UK_REFERENCE
+Xend Express,XEND
+XL Express,XL_EXPRESS
+Xpost.ph,XPOST
+XpressBees,XPRESSBEES
+XQ Express,XQ_EXPRESS
+Yakit,YAKIT
+Yanwen,YANWEN
+Yodel Domestic,YODEL
+Yodel International,YODEL_INTERNATIONAL
+YRC,YRC
+YTO Express,YTO
+Yunda Express,YUNDAEX
+Yun Express,YUNEXPRESS
+ZeptoExpress,ZEPTO_EXPRESS
+Zinc,ZINC
+ZJS International,ZJS_EXPRESS
+ZTO Express,ZTO_EXPRESS
+Zyllem,ZYLLEM
+United Parcel Service,UPS

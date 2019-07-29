@@ -23,9 +23,24 @@ use AmazonPayV2\Client as AmazonClient;
 class Alexa
 {
     /**
+     * Mappings of carrier titles to codes
+     */
+    const CSV = 'files/amazon-pay-delivery-tracker-supported-carriers.csv';
+
+    /**
      * @var \Amazon\Core\Helper\Data
      */
     protected $amazonCoreHelper;
+
+    /**
+     * @var \Amazon\Core\Logger\AlexaLogger
+     */
+    protected $alexaLogger;
+
+    /**
+     * @var \Magento\Framework\File\Csv
+     */
+    protected $csv;
 
     /**
      * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
@@ -58,40 +73,58 @@ class Alexa
     protected $messageManager;
 
     /**
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $moduleReader;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
+    /**
+     * Map of carrier titles to codes
+     */
+    private $carriers = [];
 
     /**
      * Config constructor.
      *
      * @param \Amazon\Core\Helper\Data $amazonCoreHelper
+     * @param \Amazon\Core\Logger\AlexaLogger $alexaLogger
+     * @param \Magento\Framework\File\Csv $csv
      * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\Manager $cacheManager
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Amazon\Core\Helper\Data $amazonCoreHelper,
+        \Amazon\Core\Logger\AlexaLogger $alexaLogger,
+        \Magento\Framework\File\Csv $csv,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Cache\Manager $cacheManager,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->amazonCoreHelper = $amazonCoreHelper;
+        $this->alexaLogger      = $alexaLogger;
+        $this->csv              = $csv;
         $this->config           = $config;
         $this->storeManager     = $storeManager;
         $this->scopeConfig      = $scopeConfig;
         $this->cacheManager     = $cacheManager;
         $this->encryptor        = $encryptor;
         $this->messageManager   = $messageManager;
+        $this->moduleReader     = $moduleReader;
         $this->logger           = $logger;
     }
 
@@ -113,10 +146,15 @@ class Alexa
         $orderReference = $orderLink->getAmazonOrderReferenceId();
 
         // Send to Amazon API
-        $result = $this->submitDeliveryTracker($orderReference, $track->getTrackNumber(), $track->getCarrierCode());
+        $result = $this->submitDeliveryTracker($orderReference, $track->getTrackNumber(), $track->getCarrierCode(),
+            $track->getTitle());
 
         if (!empty($result['status'])) {
             $response = json_decode($result['response'], true);
+
+            if ($this->amazonCoreHelper->isLoggingEnabled()) {
+                $this->alexaLogger->debug(print_r($result, true));
+            }
 
             if ($result['status'] == '200') {
                 $details = $response['deliveryDetails'][0];
@@ -129,8 +167,9 @@ class Alexa
                 $this->messageManager->addSuccessMessage($comment);
 
             } else {
-                $errorMessage = __('Alexa Delivery Tracker returned an error:') . ' (' . $result['status'] . ') ' .
-                    "\n" . $response['reasonCode'] . ': ' . $response['message'];
+                $errorMessage  = __('Alexa Delivery Tracker returned an error:') . ' (' . $result['status'] . ") \n";
+                $errorMessage .= !empty($response['reasonCode']) ? $response['reasonCode'] . ': ' : '';
+                $errorMessage .= !empty($response['message']) ? $response['message'] : '';
 
                 if (strpos($response['message'], 'missing key') !== false) {
                     $errorMessage = __('Please add the missing Private/Public key value in the Alexa Delivery Notification settings in Amazon Pay to enable Delivery Notifications.');
@@ -150,7 +189,7 @@ class Alexa
      * @param $trackingNumber string
      * @param $carrierCode string
      */
-    public function submitDeliveryTracker($orderReference, $trackingNumber, $carrierCode)
+    public function submitDeliveryTracker($orderReference, $trackingNumber, $carrierCode, $carrierTitle = '')
     {
         $publicKeyId = $this->amazonCoreHelper->getAlexaPublicKeyId();
         $privateKey  = $this->amazonCoreHelper->getAlexaPrivateKey();
@@ -171,7 +210,7 @@ class Alexa
             'amazonOrderReferenceId' => $orderReference,
             'deliveryDetails' => [[
                 'trackingNumber' => $trackingNumber,
-                'carrierCode' => strtoupper($carrierCode),
+                'carrierCode' => $this->mapCarrierCode($carrierCode, $carrierTitle),
             ]]
         ];
 
@@ -181,12 +220,51 @@ class Alexa
             $client = new AmazonClient($apiConfig);
             $result = $client->deliveryTrackers(json_encode($payload));
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical($e);
+            $this->alexaLogger->debug($e->getMessage());
             $this->messageManager->addNoticeMessage(__('Unable to submit Alexa Delivery Notification: %1',
                 $e->getMessage()));
         }
 
         return $result;
+    }
+
+    /**
+     * Return carrier code
+     */
+    private function mapCarrierCode($code, $title = '')
+    {
+        // Map carrier titles to codes
+        if (empty($this->carriers)) {
+            $fileDir = $this->moduleReader->getModuleDir(
+                \Magento\Framework\Module\Dir::MODULE_ETC_DIR,
+                'Amazon_Core'
+            );
+
+            try {
+                $this->carriers = $this->csv->getDataPairs($fileDir . DIRECTORY_SEPARATOR . self::CSV);
+                $this->carriers = array_change_key_case($this->carriers, CASE_LOWER);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
+        }
+
+        if (isset($this->carriers[strtolower($title)])) {
+            return $this->carriers[strtolower($title)];
+        }
+
+        if (stripos($code, 'usps') !== false) {
+            return 'USPS';
+        }
+
+        if (stripos($code, 'ups') !== false) {
+            return 'UPS';
+        }
+
+        if (stripos($code, 'fedex') !== false) {
+            return 'FEDEX';
+        }
+        return strtoupper($code);
     }
 
     /**
