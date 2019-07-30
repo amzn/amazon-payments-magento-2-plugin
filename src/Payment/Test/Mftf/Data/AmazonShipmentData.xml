@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AmazonShipment" type="amazon_shipment">
+        <data key="carrierTitle">United Parcel Service</data>
+        <data key="trackingNumber">1Z12345E1512345676</data>
+        <data key="row">1</data>
+    </entity>
+</entities>

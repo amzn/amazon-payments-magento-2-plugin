@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,17 +13,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="admin">
-        <route id="amazonlogs" frontName="amazonlogs">
-            <module name="Amazon_Core" />
-        </route>
-        <route id="amazonsp" frontName="amazonsp">
-            <module name="Amazon_Core" />
-        </route>
-        <route id="amazon" frontName="amazon">
-            <module name="Amazon_Core" />
-        </route>
-    </router>
-</config>
+namespace Amazon\Core\Logger;
+
+/**
+ * Enables implementation of custom log file.
+ */
+class AlexaLogger extends \Monolog\Logger
+{
+}

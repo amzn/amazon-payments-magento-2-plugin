@@ -30,8 +30,12 @@ use Amazon\Core\Model\AmazonConfig;
  */
 class Data extends AbstractHelper
 {
-
     const AMAZON_ACTIVE = 'payment/amazon_payment/active';
+
+    /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
 
     /**
      * @var Config
@@ -57,13 +61,14 @@ class Data extends AbstractHelper
     public function __construct(
         ModuleListInterface $moduleList = null,
         Context $context,
-        EncryptorInterface $encryptor = null,
+        EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager = null,
         ClientIp $clientIpHelper = null,
         StatusFactory $moduleStatusFactory = null,
         AmazonConfig $config
     ) {
         parent::__construct($context);
+        $this->encryptor = $encryptor;
         $this->config = $config;
     }
 
@@ -382,6 +387,54 @@ class Data extends AbstractHelper
     public function getRedirectUrl()
     {
         return $this->config->getRedirectUrl();
+    }
+
+    /*
+     * @return bool
+     */
+    public function isAlexaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_active',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /*
+     * @return string
+     */
+    public function getAlexaPrivateKey($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->encryptor->decrypt($this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_private_key',
+            $scope,
+            $scopeCode
+        ));
+    }
+
+    /*
+     * @return string
+     */
+    public function getAlexaPublicKey($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_public_key',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /*
+     * @return string
+     */
+    public function getAlexaPublicKeyId($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/alexa_public_key_id',
+            $scope,
+            $scopeCode
+        );
     }
 
     /**
