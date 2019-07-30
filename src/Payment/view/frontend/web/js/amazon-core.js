@@ -17,9 +17,10 @@ define([
     'jquery',
     'ko',
     'amazonPaymentConfig',
+    'Magento_Ui/js/model/messageList',
     'amazonWidgetsLoader',
     'jquery/jquery-storageapi'
-], function ($, ko, amazonPaymentConfig) {
+], function ($, ko, amazonPaymentConfig, messageList) {
     'use strict';
 
     var clientId = amazonPaymentConfig.getValue('clientId'),
@@ -83,11 +84,12 @@ define([
     }
 
     function handleWidgetError(error) {
-        console.log('OffAmazonPayments.Widgets.AddressBook', error.getErrorCode(), error.getErrorMessage());
+        console.log('OffAmazonPayments.Widgets', error.getErrorCode(), error.getErrorMessage());
         switch (error.getErrorCode()) {
             case 'BuyerSessionExpired':
                 messageList.addErrorMessage({message: $.mage.__('Your Amazon session has expired.  Please sign in again by clicking the Amazon Pay Button.')});
-                amazonStorage.amazonlogOut();
+                var storage = require('Amazon_Payment/js/model/storage'); //TODO: clean up this circular dependency
+                storage.amazonlogOut();
                 break;
             case 'ITP':
                 // ITP errors are how handled within the widget code
