@@ -319,14 +319,6 @@ class Data extends AbstractHelper
     /*
      * @return bool
      */
-    public function isLwaDisabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
-    {
-        return !$this->isLwaEnabled();
-    }
-
-    /*
-     * @return bool
-     */
     public function isEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         if (!$this->moduleList->has('Amazon_Payment') || !$this->moduleList->has('Amazon_Login')) {
