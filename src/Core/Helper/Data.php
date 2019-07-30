@@ -30,8 +30,12 @@ use Amazon\Core\Model\AmazonConfig;
  */
 class Data extends AbstractHelper
 {
-
     const AMAZON_ACTIVE = 'payment/amazon_payment/active';
+
+    /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
 
     /**
      * @var Config
@@ -57,13 +61,14 @@ class Data extends AbstractHelper
     public function __construct(
         ModuleListInterface $moduleList = null,
         Context $context,
-        EncryptorInterface $encryptor = null,
+        EncryptorInterface $encryptor,
         StoreManagerInterface $storeManager = null,
         ClientIp $clientIpHelper = null,
         StatusFactory $moduleStatusFactory = null,
         AmazonConfig $config
     ) {
         parent::__construct($context);
+        $this->encryptor = $encryptor;
         $this->config = $config;
     }
 
