@@ -103,6 +103,13 @@ define(
                     });
 
                     $('#simplepath_form').on('submit', function () {
+                        // Remove the numeric indices added by Magento's form validation logic
+                        $('#simplepath_form :input').each(function() {
+                            if($(this).attr('orig-name')) {
+                                $(this).attr('name', $(this).attr('orig-name'));
+                                $(this).removeAttr('orig-name');
+                            }
+                        });
                         self.setupWindowLaunch();
                     });
 
