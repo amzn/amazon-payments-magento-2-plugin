@@ -23,8 +23,5 @@
         <route id="amazonsp" frontName="amazonsp">
             <module name="Amazon_Core" />
         </route>
-        <route id="amazon" frontName="amazon">
-            <module name="Amazon_Core" />
-        </route>
     </router>
 </config>

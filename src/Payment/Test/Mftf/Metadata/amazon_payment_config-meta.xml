@@ -36,19 +36,6 @@
                             </object>
                         </object>
                     </object>
-                    <object key="alexa" dataType="amazon_payment_config_state">
-                        <object key="fields" dataType="amazon_payment_config_state">
-                            <object key="active" dataType="alexa_active">
-                                <field key="value">string</field>
-                            </object>
-                            <object key="private_key" dataType="alexa_private_key">
-                                <field key="value">string</field>
-                            </object>
-                            <object key="public_key_id" dataType="alexa_public_key_id">
-                                <field key="value">string</field>
-                            </object>
-                        </object>
-                    </object>
                 </object>
             </object>
         </object>

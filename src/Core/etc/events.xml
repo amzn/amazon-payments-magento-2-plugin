@@ -22,8 +22,4 @@
     <event name="sales_quote_product_add_after">
         <observer name="amazon_core_blacklist_category_addition" instance="Amazon\Core\Observer\ExcludedCategoryQuoteItemAddition" />
     </event>
-    <event name="sales_order_shipment_track_save_after">
-        <observer name="amazon_core_sales_order_shipment_track_save_after"
-                  instance="Amazon\Core\Observer\SalesOrderShipmentTrackAfter" />
-    </event>
 </config>

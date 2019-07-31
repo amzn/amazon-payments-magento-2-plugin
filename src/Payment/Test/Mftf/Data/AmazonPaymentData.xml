@@ -11,9 +11,6 @@
         <requiredEntity type="sandbox">SampleAmazonSandbox</requiredEntity>
         <requiredEntity type="payment_action">SampleAmazonPaymentAction</requiredEntity>
         <requiredEntity type="authorization_mode">SampleAmazonAuthorizationMode</requiredEntity>
-        <requiredEntity type="alexa_active">SampleAmazonAlexaActive</requiredEntity>
-        <requiredEntity type="alexa_private_key">SampleAmazonAlexaPrivateKey</requiredEntity>
-        <requiredEntity type="alexa_public_key_id">SampleAmazonAlexaPublicKeyId</requiredEntity>
     </entity>
     <entity name="SampleAmazonMerchantId" type="merchant_id">
         <data key="value">someMerchantId</data>
@@ -42,15 +39,6 @@
     <entity name="SampleAmazonAuthorizationMode" type="authorization_mode">
         <data key="value">synchronous</data>
     </entity>
-    <entity name="SampleAmazonAlexaActive" type="alexa_active">
-        <data key="value">1</data>
-    </entity>
-    <entity name="SampleAmazonAlexaPrivateKey" type="alexa_private_key">
-        <data key="value">somePrivateKey</data>
-    </entity>
-    <entity name="SampleAmazonAlexaPublicKeyId" type="alexa_public_key_id">
-        <data key="value">somePublicKey</data>
-    </entity>
     <!-- default configuration used to restore Magento config -->
     <entity name="DefaultAmazonPaymentConfig" type="amazon_payment_config_state">
         <requiredEntity type="merchant_id">DefaultAmazonMerchantId</requiredEntity>
@@ -62,9 +50,6 @@
         <requiredEntity type="sandbox">DefaultAmazonSandbox</requiredEntity>
         <requiredEntity type="payment_action">DefaultAmazonPaymentAction</requiredEntity>
         <requiredEntity type="authorization_mode">DefaultAmazonAuthorizationMode</requiredEntity>
-        <requiredEntity type="alexa_active">DefaultAmazonAlexaActive</requiredEntity>
-        <requiredEntity type="alexa_private_key">DefaultAmazonAlexaPrivateKey</requiredEntity>
-        <requiredEntity type="alexa_public_key_id">DefaultAmazonAlexaPublicKeyId</requiredEntity>
     </entity>
     <entity name="DefaultAmazonMerchantId" type="merchant_id">
         <data key="value"/>
@@ -92,14 +77,5 @@
     </entity>
     <entity name="DefaultAmazonAuthorizationMode" type="authorization_mode">
         <data key="value">synchronous</data>
-    </entity>
-    <entity name="DefaultAmazonAlexaActive" type="alexa_active">
-        <data key="value"/>
-    </entity>
-    <entity name="DefaultAmazonAlexaPrivateKey" type="alexa_private_key">
-        <data key="value"/>
-    </entity>
-    <entity name="DefaultAmazonAlexaPublicKeyId" type="alexa_public_key_id">
-        <data key="value"/>
     </entity>
 </entities>
