@@ -69,14 +69,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Amazon\Core\Logger\AlexaLogger">
-        <arguments>
-            <argument name="name" xsi:type="string">amazonAlexaLogger</argument>
-            <argument name="handlers" xsi:type="array">
-                <item name="debug" xsi:type="object">Amazon\Core\Logger\Handler\Alexa</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Amazon\Core\Client\ClientFactory">
         <arguments>
             <argument name="logger" xsi:type="object">Amazon\Core\Logger\Logger</argument>
