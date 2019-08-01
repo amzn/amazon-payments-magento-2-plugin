@@ -11,14 +11,6 @@
             <group value="amazon_alexa"/>
         </annotations>
 
-        <before>
-            <createData entity="SampleAmazonAlexaConfig" stepKey="SampleAmazonAlexaConfigData"/>
-        </before>
-
-        <after>
-            <createData entity="DefaultAmazonAlexaConfig" stepKey="DefaultAmazonAlexaConfig"/>
-        </after>
-
         <!--Place order-->
         <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
 
