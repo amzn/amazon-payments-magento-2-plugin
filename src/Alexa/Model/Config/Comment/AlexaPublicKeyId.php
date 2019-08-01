@@ -73,21 +73,14 @@ class AlexaPublicKeyId implements \Magento\Config\Model\Config\CommentInterface
 
         $comment = '';
 
-        if (!$pubkeyid) {
-            if (!$pubkey) {
-                $this->alexaModel->generateKeys();
-                $pubkey  = $this->alexaConfig->getAlexaPublicKey();
-                $privkey = $this->alexaConfig->getAlexaPrivateKey();
-            }
-            if ($privkey) {
-                $merchantId = $this->amazonConfig->getMerchantId();
-                $subject = rawurlencode('Request for Amazon Pay Public Key ID for ' . $merchantId);
-                $body = rawurlencode("Merchant ID: $merchantId\n\nPublic Key:\n\n$pubkey");
-                $comment = __(
-                    'Please <a href="%1">contact</a> Amazon Pay to receive the Public Key ID.',
-                    'mailto:Amazon-pay-delivery-notifications@amazon.com?subject=' . $subject . '&body=' . $body
-                );
-            }
+        if (!$pubkeyid && $privkey) {
+            $merchantId = $this->amazonConfig->getMerchantId();
+            $subject = rawurlencode('Request for Amazon Pay Public Key ID for ' . $merchantId);
+            $body = rawurlencode("Merchant ID: $merchantId\n\nPublic Key:\n\n$pubkey");
+            $comment = __(
+                'Please <a href="%1">contact</a> Amazon Pay to receive the Public Key ID.',
+                'mailto:Amazon-pay-delivery-notifications@amazon.com?subject=' . $subject . '&body=' . $body
+            );
         }
         $comment .= '<br/><br/>' . __(
             'Alexa Delivery Notifications logs will be saved at .%1',
