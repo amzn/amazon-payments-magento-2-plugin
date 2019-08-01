@@ -90,6 +90,7 @@ class CaptureStrategyCommand implements CommandInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->coreHelper = $coreHelper;
+        $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
     }
 
     /**
