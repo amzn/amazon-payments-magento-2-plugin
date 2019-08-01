@@ -72,6 +72,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * Load carriers from CSV file
+     *
      * @return array
      */
     private function getCarriersFromCsv()

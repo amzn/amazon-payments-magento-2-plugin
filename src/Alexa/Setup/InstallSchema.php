@@ -42,7 +42,6 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_TEXT,
                 255,
                 [
-                    //'identity' => true,
                     'primary'  => true,
                     'nullable' => false
                 ]
