@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonAlexaAddShipmentTracking" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <features value="Amazon Alexa"/>
+            <stories value="Add Amazon Alexa Delivery Notification"/>
+            <title value="Amazon Pay Create Order and Add Shipment Tracking for Alexa Delivery Notification"/>
+            <description value="Creates and loads simple product and adds it to cart using Amazon Pay button on product detail page, then loads admin and creates shipment with tracking details."/>
+            <severity value="MAJOR"/>
+            <group value="amazon_alexa"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonAlexaConfig" stepKey="SampleAmazonAlexaConfigData"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonAlexaConfig" stepKey="DefaultAmazonAlexaConfig"/>
+        </after>
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+
+        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+
+        <!--Load order grid-->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesOrderPage">
+            <argument name="menuUiId" value="{{AdminMenuSales.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSalesOrders.dataUiId}}"/>
+        </actionGroup>
+
+        <!--Open first order-->
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="openOrderViewPage"/>
+        <waitForPageLoad after="openOrderViewPage" stepKey="waitForOrderViewPageOpened"/>
+
+        <!--Open New Shipment page-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="openOrderShipPage"/>
+        <waitForPageLoad after="openOrderShipPage" stepKey="waitForOrderShipPageOpened"/>
+
+        <!--Add Tracking Information to shipment-->
+        <click selector="{{AdminShipmentPaymentShippingSection.AddTrackingNumber}}" stepKey="addTrackingNumberButton"/>
+        <fillField selector="{{AdminShipmentPaymentShippingSection.Title(AmazonAlexaShipment.row)}}" userInput="{{AmazonAlexaShipment.carrierTitle}}" stepKey="addCarrierTitle"/>
+        <!--Note: AdminShipmentPaymentShippingSection.Number selector is buggy with misplaced parentheses-->
+        <fillField selector="#tracking_numbers_table tr:nth-of-type({{AmazonAlexaShipment.row}}) .col-number input" userInput="{{AmazonAlexaShipment.trackingNumber}}" stepKey="addTrackingNumber"/>
+
+        <!--Submit Shipment-->
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}} div" userInput="Amazon Pay has received shipping tracking information" stepKey="waitForText"/>
+
+    </test>
+</tests>
