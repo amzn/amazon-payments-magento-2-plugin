@@ -19,3 +19,5 @@
 "Please select a payment method.","Sélectionnez un mode de paiement."
 "Your session has expired, please reload the page and try again.","Votre session a expiré. Actualisez la page et réessayez."
 "Return to standard checkout","Revenir à la commande standard"
+"Amazon Pay was unable to authenticate the payment instrument.  Please try again, or use a different payment method.","Un problème s’est produit avec votre paiement. Votre commande n'a pas été passée et vous n'avez pas été débité."
+"The SCA challenge was not completed successfully.  Please try again, or use a different payment method.","Un problème est survenu avec votre moyen de paiement. Pour passer votre commande, essayez un autre moyen de paiement."

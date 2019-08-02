@@ -116,3 +116,5 @@
 "With Amazon Pay and Login with Amazon, you can easily sign-in and use the shipping and payment information stored in your Amazon account to place an order on this shop.","With Amazon Pay and Login with Amazon, you can easily sign-in and use the shipping and payment information stored in your Amazon account to place an order on this shop."
 "You will be registering for a %1 account based on the base currency of your shop (%2).","You will be registering for a %1 account based on the base currency of your shop (%2)."
 "Your session has expired, please reload the page and try again.","Your session has expired, please reload the page and try again."
+"Amazon Pay was unable to authenticate the payment instrument.  Please try again, or use a different payment method.","There was a problem with your payment. Your order hasn't been placed, and you haven't been charged."
+"The SCA challenge was not completed successfully.  Please try again, or use a different payment method.","Something's wrong with your payment method. To place your order, try another."
