@@ -318,6 +318,8 @@ class Data extends AbstractHelper
 
     /*
      * @return bool
+     *
+     * @deprecated - invert isLwaEnabled() at the point of use, or use Amazon\Login\Domain\LayoutConfig
      */
     public function isLwaDisabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
