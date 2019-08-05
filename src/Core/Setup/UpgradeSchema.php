@@ -27,7 +27,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->startSetup();
 
         if (version_compare($context->getVersion(), '1.0.0', '<=')) {
-            $setup->getConnection()->addColumn(
+            $setup->getConnection('quote')->addColumn(
                 $setup->getTable('quote_item'),
                 'is_excluded_product',
                 [
