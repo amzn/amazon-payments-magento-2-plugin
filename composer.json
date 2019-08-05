@@ -23,7 +23,8 @@
     "magento/module-quote": "^101.1",
     "magento/module-customer": "^102",
     "magento/module-store": "^101",
-    "amzn/amazon-pay-sdk-php": "^3.4.1"
+    "amzn/amazon-pay-sdk-php": "^3.4.1",
+    "amzn/amazon-pay-sdk-v2-php": "~4.0"
   },
   "repositories": [
     {
@@ -38,12 +39,14 @@
     "files": [
       "src/Core/registration.php",
       "src/Login/registration.php",
-      "src/Payment/registration.php"
+      "src/Payment/registration.php",
+      "src/Alexa/registration.php"
     ],
     "psr-4": {
       "Amazon\\Core\\": "src/Core",
       "Amazon\\Login\\": "src/Login",
-      "Amazon\\Payment\\": "src/Payment"
+      "Amazon\\Payment\\": "src/Payment",
+      "Amazon\\Alexa\\": "src/Alexa"
     }
   }
 }
