@@ -24,7 +24,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\StatusFactory;
 use Amazon\Core\Model\AmazonConfig;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)

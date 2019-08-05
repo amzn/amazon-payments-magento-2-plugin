@@ -24,10 +24,12 @@
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
             <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
             <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>-->
         </after>
 
         <!--Go to product page-->
@@ -57,10 +59,12 @@
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
             <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
             <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
         <!--Go to product page-->

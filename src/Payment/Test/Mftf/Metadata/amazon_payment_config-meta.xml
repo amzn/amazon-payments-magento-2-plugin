@@ -36,6 +36,16 @@
                             </object>
                         </object>
                     </object>
+                    <object key="options" dataType="amazon_payment_config_state">
+                        <object key="fields" dataType="amazon_payment_config_state">
+                            <object key="active" dataType="amazon_pay_active">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="lwa_enabled" dataType="lwa_enabled">
+                                <field key="value">string</field>
+                            </object>
+                        </object>
+                    </object>
                 </object>
             </object>
         </object>
