@@ -114,9 +114,6 @@
         <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
     </test>
     <test name="AmazonCheckoutDeclineTransactionTimedOutInstant" extends="AmazonCheckoutAddProductDetail">
-        <before>
-            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode synchronous" />
-        </before>
         <annotations>
             <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
             <title value="Amazon Pay Decline TransactionTimedOut with Instant Authorization"/>
@@ -153,12 +150,6 @@
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
     </test>
     <test name="AmazonCheckoutDeclineTransactionTimedOutAutomatic" extends="AmazonCheckoutAddProductDetail">
-        <before>
-            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode asynchronous" />
-        </before>
-        <after>
-            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode synchronous" />
-        </after>
         <annotations>
             <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
             <title value="Amazon Pay Decline TransactionTimedOut with Automatic Authorization)"/>
