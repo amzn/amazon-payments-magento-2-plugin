@@ -17,7 +17,7 @@
             <severity value="BLOCKER"/>
             <group value="amazon_checkout"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -29,7 +29,7 @@
 
         <after>
             <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>-->
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
         <!--Go to product page-->
@@ -52,7 +52,7 @@
             <severity value="BLOCKER"/>
             <group value="amazon_checkout"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -85,7 +85,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -101,7 +101,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -126,7 +126,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -151,7 +151,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -176,7 +176,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -199,7 +199,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 

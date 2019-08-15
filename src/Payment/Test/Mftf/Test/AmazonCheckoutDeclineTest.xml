@@ -16,7 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -52,7 +52,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
         <!--Begin checkout-->
@@ -82,7 +82,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -124,7 +124,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -166,7 +166,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -201,7 +201,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
@@ -243,7 +243,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
             <skip>
-                <issueId>AmazonPayCredentialSupport</issueId>
+                <issueId value="AmazonPayCredentialSupport" />
             </skip>
         </annotations>
 
