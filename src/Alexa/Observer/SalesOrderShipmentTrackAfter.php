@@ -23,12 +23,13 @@ class SalesOrderShipmentTrackAfter implements ObserverInterface
     /**
      * @var \Amazon\Alexa\Model\AlexaConfig
      */
-    protected $alexaConfig;
+    private $alexaConfig;
 
     /**
      * @var \Amazon\Core\Model\AmazonConfig
      */
-    protected $amazonConfig;
+    private $amazonConfig;
+
     /**
      * @var \Amazon\Alexa\Model\Alexa
      */

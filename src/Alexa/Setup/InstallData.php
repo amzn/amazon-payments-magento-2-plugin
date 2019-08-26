@@ -33,12 +33,12 @@ class InstallData implements InstallDataInterface
     /**
      * @var \Magento\Framework\File\Csv
      */
-    protected $csv;
+    private $csv;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
      */
-    protected $moduleReader;
+    private $moduleReader;
 
     /**
      * InstallData constructor.

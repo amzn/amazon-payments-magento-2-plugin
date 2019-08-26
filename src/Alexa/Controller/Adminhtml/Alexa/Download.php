@@ -25,12 +25,12 @@ class Download extends \Magento\Backend\Controller\Adminhtml\System
     /**
      * @var \Amazon\Alexa\Model\AlexaConfig
      */
-    protected $alexaConfig;
+    private $alexaConfig;
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
-    protected $fileFactory;
+    private $fileFactory;
 
     /**
      * Download constructor.

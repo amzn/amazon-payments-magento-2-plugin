@@ -18,29 +18,29 @@ namespace Amazon\Alexa\Model;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
-use phpseclib\Crypt\RSA;
+use Zend\Crypt\PublicKey\RsaOptions;
 
 class AlexaConfig
 {
     /**
      * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
      */
-    protected $config;
+    private $config;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var \Magento\Framework\App\Cache\Manager
      */
-    protected $cacheManager;
+    private $cacheManager;
 
     /**
      * AlexaConfig constructor.
@@ -138,12 +138,15 @@ class AlexaConfig
      */
     public function generateKeys()
     {
-        $rsa = new RSA();
-        $keys = $rsa->createKey(2048);
-        $encrypt = $this->encryptor->encrypt($keys['privatekey']);
+        $rsa = new RsaOptions();
+        $rsa->generateKeys(array(
+            'private_key_bits' => 2048,
+        ));
+
+        $encrypt = $this->encryptor->encrypt((string) $rsa->getPrivateKey());
 
         $this->config
-            ->saveConfig('payment/amazon_payment/alexa_public_key', $keys['publickey'])
+            ->saveConfig('payment/amazon_payment/alexa_public_key', (string) $rsa->getPublicKey())
             ->saveConfig('payment/amazon_payment/alexa_private_key', $encrypt);
 
         $this->cacheManager->clean([CacheTypeConfig::TYPE_IDENTIFIER]);

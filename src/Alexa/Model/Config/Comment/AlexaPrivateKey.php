@@ -20,22 +20,22 @@ class AlexaPrivateKey implements \Magento\Config\Model\Config\CommentInterface
     /**
      * @var \Amazon\Alexa\Model\AlexaConfig
      */
-    protected $alexaConfig;
+    private $alexaConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \Amazon\Alexa\Model\Alexa
      */
-    protected $alexaModel;
+    private $alexaModel;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * AlexaPrivateKey constructor.
@@ -70,7 +70,7 @@ class AlexaPrivateKey implements \Magento\Config\Model\Config\CommentInterface
         $generateUrl = $this->urlBuilder->getUrl('amazon_alexa/alexa/generatekeys');
         $downloadUrl = $this->urlBuilder->getUrl('amazon_alexa/alexa/download');
 
-        if (!$privkey) {
+        if (!$privkey || !$pubkey) {
             return '<a href="' . $generateUrl . '">' . __('Generate a new public/private key pair for Amazon Pay') . '</a>';
         } elseif ($pubkey) {
             return '<a href="' . $downloadUrl . '">' . __('Download Public Key') . '</a>';

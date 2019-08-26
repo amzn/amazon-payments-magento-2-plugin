@@ -1,0 +1,11 @@
+{
+    "amazon_alexa_carrier": {
+        "column": {
+            "carrier_title": true,
+            "carrier_code": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

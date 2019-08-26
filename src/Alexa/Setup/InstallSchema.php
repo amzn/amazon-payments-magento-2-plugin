@@ -34,13 +34,15 @@ class InstallSchema implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+        // For Mage 2.2 (see etc/db_schema.xml for 2.3)
+
         $table = $setup->getConnection()->newTable($setup->getTable(AlexaCarrier::TABLE_NAME));
 
         $table
             ->addColumn(
                 'carrier_title',
                 Table::TYPE_TEXT,
-                255,
+                100,
                 [
                     'primary'  => true,
                     'nullable' => false
@@ -49,7 +51,7 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn(
                 'carrier_code',
                 Table::TYPE_TEXT,
-                255,
+                30,
                 [
                     'nullable' => false
                 ]

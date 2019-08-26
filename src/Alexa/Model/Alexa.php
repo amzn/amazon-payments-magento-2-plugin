@@ -23,37 +23,37 @@ class Alexa
     /**
      * @var AlexaConfig
      */
-    protected $alexaConfig;
+    private $alexaConfig;
 
     /**
      * @var \Amazon\Core\Model\AmazonConfig
      */
-    protected $amazonConfig;
+    private $amazonConfig;
 
     /**
      * @var \Amazon\Core\Logger\AlexaLogger
      */
-    protected $alexaLogger;
+    private $alexaLogger;
 
     /**
      * @var \Amazon\Alexa\Model\AlexaCarrierFactory
      */
-    protected $carrierFactory;
+    private $carrierFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * Alexa constructor.

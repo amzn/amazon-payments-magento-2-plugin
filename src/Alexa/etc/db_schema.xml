@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="amazon_alexa_carrier" resource="default" engine="innodb" comment="Amazon Alexa Carriers">
+        <column xsi:type="varchar" name="carrier_title" length="100" nullable="false" comment="Carrier Title"/>
+        <column xsi:type="varchar" name="carrier_code" length="30" nullable="false" comment="Carrier Code"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="carrier_title"/>
+        </constraint>
+    </table>
+</schema>

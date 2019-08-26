@@ -23,12 +23,12 @@ class GenerateKeys extends \Magento\Backend\Controller\Adminhtml\System
     /**
      * @var \Amazon\Alexa\Model\AlexaConfig
      */
-    protected $alexaConfig;
+    private $alexaConfig;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * GenerateKeys constructor.
