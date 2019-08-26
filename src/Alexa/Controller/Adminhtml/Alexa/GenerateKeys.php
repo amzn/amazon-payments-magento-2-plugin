@@ -26,23 +26,15 @@ class GenerateKeys extends \Magento\Backend\Controller\Adminhtml\System
     private $alexaConfig;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    private $messageManager;
-
-    /**
      * GenerateKeys constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Amazon\Alexa\Model\AlexaConfig $alexaConfig
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Amazon\Alexa\Model\AlexaConfig $alexaConfig,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        \Amazon\Alexa\Model\AlexaConfig $alexaConfig
     ) {
         $this->alexaConfig    = $alexaConfig;
-        $this->messageManager = $messageManager;
         parent::__construct($context);
     }
 
