@@ -38,7 +38,7 @@
             <argument name="cc" value="4545" />
         </actionGroup>
         <!--Decline Error Message-->
-        <waitForText userInput="Invalid payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+        <waitForText userInput="Please select a payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
         <!--Use default CC#-->
         <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
         <!--See success message-->
@@ -63,16 +63,6 @@
         </actionGroup>
         <!--Decline Error Message-->
         <waitForText userInput="There has been a problem with the selected payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
-        <!--Verify iframe wallet message-->
-        <executeJS function="return window.name;" stepKey="topName"/>
-        <executeJS function="return jQuery('#walletWidgetDiv iframe').attr('name');" stepKey="iframeName"/>
-        <switchToIFrame userInput="{$iframeName}" stepKey="switchToIFramePaymentWidget"/>
-        <see selector=".action a" userInput="Verify card info or use another card" stepKey="seeVerify"/>
-        <switchToWindow userInput="{$topName}" stepKey="switchToWindowTop" />
-        <!--Use default CC# using reloaded iframe-->
-        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
-        <!--See success message-->
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
     </test>
     <test name="AmazonCheckoutDeclineAmazonRejected" extends="AmazonCheckoutAddProductDetail">
         <annotations>
@@ -105,13 +95,7 @@
         </actionGroup>
         <!--Decline Error Message-->
         <waitForText userInput="please choose another payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>        <!--Verify iframe wallet message-->
-        <!--Wait for redirect to cart-->
-        <wait time="5" stepKey="waitRedirect"/>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-        <!--Confirm logged out from Amazon by logging in (popup)-->
-        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
-        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
     </test>
     <test name="AmazonCheckoutDeclineTransactionTimedOutInstant" extends="AmazonCheckoutAddProductDetail">
         <annotations>

@@ -37,7 +37,9 @@
         <waitForPageLoad stepKey="waitForPageLoadCatalog"/>
 
         <!--Add to cart via Amazon Pay button on product page-->
-        <waitForElement selector="{{AmazonCheckoutSection.productPayButton}}" time="5" stepKey="apWaitForPayButton"/>
+        <waitForElement selector="{{AmazonCheckoutSection.productPayButton}}" time="30" stepKey="apWaitForPayButton"/>
+        <waitForElement selector="#OffAmazonPaymentsWidgets0" time="30" stepKey="apWaitForPayButton2"/>
+        <waitForJS function="return document.getElementById('{{AmazonCheckoutSection.productPayButton}}'.substr(1)).clientHeight > 10;" stepKey="waitForPayButtonClickable" />
         <click selector="{{AmazonCheckoutSection.productPayButton}}" stepKey="clickProductPayButton"/>
 
         <!--Login (redirect)-->
