@@ -271,7 +271,7 @@ class AmazonPaymentAdapter
 
         /** if first synchronous attempt failed, on second attempt try an asynchronous attempt. */
         if ($authMode != 'synchronous' && $attempts) {
-            $authorizeData['transaction_timeout'] = 5;
+            $authorizeData['transaction_timeout'] = 1440;
         }
 
         $response['status'] = false;
