@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/error_mapping.xsd">
+    <message_list>
+        <!-- checkout -->
+        <message code="BuyerCanceled" translate="true">This transaction was cancelled. Please try again.</message>
+        <message code="InvalidCheckoutSessionStatus" translate="true">Operation on Checkout Session is in a state where the operation is not allowed.</message>
+        <!-- charge permission -->
+        <message code="ChargePermissionNotModifiable" translate="true">Operation on Charge Permission is in a state where it can't be modified.</message>
+        <message code="InvalidChargePermissionStatus" translate="true">Operation on Charge Permission is in a state where the operation is not allowed.</message>
+        <!-- charge -->
+        <message code="InvalidChargePermissionStatus" translate="true">Operation on a ChargePermission object is in a state where the operation cannot be called.</message>
+        <message code="SoftDeclined" translate="true">Charge was soft declined. Retry attempts may or may not by successful. If repeated retry attempts are unsuccessful, contact the buyer and have them choose a different payment instrument.</message>
+        <message code="HardDeclined" translate="true">Charge was hard declined. Retry attempts will not succeed. Please contact the buyer and have them choose a different payment instrument.</message>
+        <message code="PaymentMethodNotAllowed" translate="true">The payment method selected by is not allowed for this billing agreement.</message>
+        <message code="AmazonRejected" translate="true">Unfortunately it is not possible to use Amazon Pay for this order, please choose another payment method.</message>
+        <message code="MFANotCompleted" translate="true">Multi-factor authentication (MFA) is required to be complete by the buyer for this transaction to process.</message>
+        <message code="InvalidChargeStatus" translate="true">Operation on a Charge is in a state where the operation cannot be called.</message>
+        <!-- generic errors -->
+        <message code="Declined" translate="true">This transaction was declined. Please try again using a different payment method.</message>
+        <message code="TransactionCountExceeded" translate="true">Number of authorizations, captures or refunds has exceeded allowed limits.</message>
+        <message code="TransactionAmountExceeded" translate="true">Number of authorizations, captures or refunds has exceeded allowed limits.</message>
+        <message code="TransactionTimedOut" translate="true">Unfortunately it is not possible to use Amazon Pay for this order, please choose another payment method.</message>
+        <message code="CurrencyMismatch" translate="true">Currency code provided in Charge does not match the currency set during checkout.</message>
+        <message code="UnauthorizedAccess" translate="true">The specified merchant account is not authorized to execute this request.</message>
+        <message code="InvalidAccountStatus" translate="true">Your account or merchant's account is not in an appropriate state to execute this request.</message>
+        <message code="InvalidRequestSignature" translate="true">The signature in the Authorization header of your API call is invalid.</message>
+        <message code="RequestNotSupported" translate="true">HTTP method not supported.</message>
+        <message code="TooManyRequests" translate="true">The request is throttled, due to too many requests in a given amount of time.</message>
+        <message code="RequestThrottled" translate="true">Request rejected because request rate is higher than allocated throttling limits.</message>
+        <message code="ServiceUnavailable" translate="true">The service is temporarily unavailable. Please try again later.</message>
+        <message code="ProcessingFailure" translate="true">Amazon could not process the Charge because of an internal processing error.</message>
+        <message code="ResourceNotFound" translate="true">Cannot find requested resource.</message>
+        <message code="UnsupportedOperation" translate="true">Operation not supported.</message>
+        <message code="InvalidHeaderValue" translate="true">Invalid value for at least one of the header parameters of your API call.</message>
+        <message code="InvalidRequestFormat" translate="true">Invalid JSON format.</message>
+        <message code="MissingHeaderValue" translate="true">One of the header parameters is missing in the API call.</message>
+        <message code="MissingParameterValue" translate="true">One of the mandatory request parameters is missing in the API call.</message>
+        <message code="UnrecognizedField" translate="true">Invalid field in the request body.</message>
+        <message code="InvalidSandboxSimulationSpecified" translate="true">You have attempted an invalid operation for the Sandbox environment.</message>
+        <message code="DuplicateIdempotencyKey" translate="true">The IdempotencyKey specified in this request was already used in a different request, and cannot be reused.</message>
+    </message_list>
+</mapping>

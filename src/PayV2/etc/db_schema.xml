@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="amazon_payv2_async" resource="default" engine="innodb" comment="Amazon PayV2 Async Pending">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="true" identity="false" comment="Order ID"/>
+        <column xsi:type="tinyint" name="is_pending" unsigned="true" nullable="false" identity="false" default="1" comment="Is pending?"/>
+        <column xsi:type="varchar" name="pending_action" nullable="false" length="20" comment="Pending Action"/>
+        <column xsi:type="varchar" name="pending_id" nullable="true" length="50" comment="Pending Action"/>
+        <column xsi:type="datetime" name="created_at" nullable="true" comment="Created At"/>
+        <column xsi:type="datetime" name="updated_at" nullable="true" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <index referenceId="AMAZON_PAYV2_ASYNC_IS_PENDING" indexType="btree">
+            <column name="is_pending"/>
+        </index>
+    </table>
+</schema>
