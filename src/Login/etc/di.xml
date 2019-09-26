@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Amazon\Login\Api\CustomerLinkRepositoryInterface" type="Amazon\Login\Model\CustomerLinkRepository" />
+    <preference for="Amazon\Login\Api\CustomerLinkManagementInterface" type="Amazon\Login\Model\CustomerLinkManagement" />
+    <preference for="Amazon\Login\Api\CustomerManagementInterface" type="Amazon\Login\Model\CustomerManagement" />
+    <preference for="Amazon\Login\Api\Data\CustomerLinkInterface" type="Amazon\Login\Model\ResourceModel\CustomerLink" />
+    <preference for="Amazon\Login\Api\Data\CustomerLinkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <type name="Amazon\Login\Model\Customer\MatcherInterface">
+        <arguments>
+            <argument name="matchers" xsi:type="array">
+                <item name="sessionmatcher" xsi:type="object">Amazon\Login\Model\Customer\SessionMatcher</item>
+                <item name="idmatcher" xsi:type="object">Amazon\Login\Model\Customer\IdMatcher</item>
+                <item name="emailmatcher" xsi:type="object">Amazon\Login\Model\Customer\EmailMatcher</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="amazon_login_customer_repository" type="Amazon\Login\Plugin\CustomerRepository" sortOrder="1" />
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\Customer\Collection">
+        <plugin name="amazon_login_customer_collection" type="Amazon\Login\Plugin\CustomerCollection" sortOrder="1" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\Index">
+        <plugin name="amazon_login_cart_controller" type="Amazon\Login\Plugin\CartController" sortOrder="1" />
+    </type>
+    <type name="Magento\Checkout\Controller\Index\Index">
+        <plugin name="amazon_login_checkout_controller" type="Amazon\Login\Plugin\CheckoutController" sortOrder="1" />
+    </type>
+    <type name="Magento\Customer\Controller\Account\Login">
+        <plugin name="amazon_login_login_controller" type="Amazon\Login\Plugin\LoginController" sortOrder="1" />
+    </type>
+    <type name="Magento\Customer\Controller\Account\Create">
+        <plugin name="amazon_login_create_controller" type="Amazon\Login\Plugin\CreateController" sortOrder="1" />
+    </type>
+    <type name="Amazon\Login\Controller\Login\Authorize">
+        <arguments>
+            <argument name="matcher" xsi:type="object">Amazon\Login\Model\Customer\CompositeMatcher</argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Login\Helper\Session">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderCustomerManagementInterface">
+        <plugin name="amazon_login_order_customer_service" type="Amazon\Login\Plugin\OrderCustomerManagement" sortOrder="1" />
+    </type>
+    <type name="Amazon\Login\Model\Customer\Account\Redirect">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="minicart">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="minicart_content" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="amazon_minicart_pay" xsi:type="array">
+                                    <item name="config" xsi:type="array">
+                                        <item name="componentDisabled" xsi:type="boolean">true</item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.root">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="steps" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="shipping-step" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="shippingAddress" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="customer-email" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="amazon-button-region" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">uiComponent</item>
+                                                                    <item name="displayArea" xsi:type="string">amazon-button-region</item>
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="amazon-button" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">Amazon_Payment/js/view/checkout-button</item>
+                                                                            <item name="sortOrder" xsi:type="string">0</item>
+                                                                            <item name="displayArea" xsi:type="string">amazon-pay-button</item>
+                                                                            <item name="config" xsi:type="array">
+                                                                                <item name="tooltip" xsi:type="string" translate="true">Are you an Amazon customer? Pay now with address and payment details stored in your Amazon account.</item>
+                                                                            </item>
+                                                                            <item name="children" xsi:type="array">
+                                                                                <item name="before-amazon-button" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">uiComponent</item>
+                                                                                    <item name="displayArea" xsi:type="string">before-amazon-button</item>
+                                                                                    <item name="children" xsi:type="array">
+                                                                                        <!-- before amazon button -->
+                                                                                    </item>
+                                                                                </item>
+                                                                                <item name="after-amazon-button" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">uiComponent</item>
+                                                                                    <item name="displayArea" xsi:type="string">after-amazon-button</item>
+                                                                                    <item name="children" xsi:type="array">
+                                                                                        <!-- after amazon button -->
+                                                                                    </item>
+                                                                                </item>
+                                                                            </item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="before-form" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="amazon-widget-address" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/checkout-widget-address</item>
+                                                                    <item name="sortOrder" xsi:type="string">0</item>
+                                                                    <item name="displayArea" xsi:type="string">amazon-widget-address</item>
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="before-widget-address" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                                            <item name="displayArea" xsi:type="string">before-widget-address</item>
+                                                                            <item name="children" xsi:type="array">
+                                                                                <!-- before amazon address widget -->
+                                                                                <item name="amazon-checkout-revert" xsi:type="array">
+                                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/checkout-revert</item>
+                                                                                </item>
+                                                                            </item>
+                                                                        </item>
+                                                                        <item name="after-widget-address" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                                            <item name="displayArea" xsi:type="string">after-widget-address</item>
+                                                                            <item name="children" xsi:type="array">
+                                                                                <!-- after amazon address widget -->
+                                                                            </item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                        <item name="billing-step" xsi:type="array">
+                                            <item name="component" xsi:type="string">uiComponent</item>
+                                            <item name="children" xsi:type="array">
+                                                <item name="payment" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="beforeMethods" xsi:type="array">
+                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="amazon-sandbox-simulator" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/checkout-sandbox-simulator</item>
+                                                                    <item name="sortOrder" xsi:type="string">0</item>
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="before-sandbox-simulator" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                                            <item name="displayArea" xsi:type="string">before-sandbox-simulator</item>
+                                                                            <item name="children" xsi:type="array">
+                                                                                <!-- before amazon sandbox simulator -->
+                                                                            </item>
+                                                                        </item>
+                                                                        <item name="after-sandbox-simulator" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                                            <item name="displayArea" xsi:type="string">after-sandbox-simulator</item>
+                                                                            <item name="children" xsi:type="array">
+                                                                                <!-- after amazon sandbox simulator -->
+                                                                            </item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+
+                                                        <item name="renders" xsi:type="array">
+                                                            <!-- merge payment method renders here -->
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="amazon_payment" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/payment/amazon-pay</item>
+                                                                    <item name="config" xsi:type="array">
+                                                                        <item name="tooltip" xsi:type="string" translate="true">Are you an Amazon customer? Pay now with address and payment details stored in your Amazon account.</item>
+                                                                    </item>
+                                                                    <item name="methods" xsi:type="array">
+                                                                        <item name="amazon_payment" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                                <item name="amazonlogin" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/payment/amazonlogin</item>
+                                                                    <item name="methods" xsi:type="array">
+                                                                        <item name="amazonlogin" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

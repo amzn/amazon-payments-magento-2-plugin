@@ -1,0 +1,180 @@
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+& when (@media-common = true) {
+
+    /** mini cart styling **/
+    .product-social-links,
+    .amazon-minicart-container {
+        width: 100%;
+        display: block;
+        text-align: center;
+        .amazon-button-container {
+            display: inline-block;
+            margin: 12px 0 4px 0;
+        }
+
+        .field-tooltip {
+            .field-tooltip-content {
+                top: 38px;
+                left: -245px;
+
+                &:before {
+                    border: none;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid #666666;
+                    top: -10px;
+                    left: 244px;
+                }
+                &:after {
+                    border: none;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid #f4f4f4;
+                    top: -8px;
+                    left: 244px;
+                }
+            }
+        }
+    }
+
+    .amazon-addtoCart {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .revert-checkout {
+        margin-top: 20px;
+        display: block;
+    }
+
+    .centered-button {
+        text-align: center;
+        display: inline-block;
+        .catalog-product-view & {
+            display: table;
+        }
+    }
+
+    .checkout-payment-method {
+        .amazon-sandbox-simulator {
+            .lib-css(border-bottom, @checkout-payment-option-title__border);
+
+            .payment-option-title {
+                border-top: none;
+                padding-top: 0;
+            }
+
+            .amazon-sandbox-simulator-scenario {
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .checkout-methods-items {
+
+        .centered-button {
+            margin-bottom: 0;
+
+            @media all and (max-width: @screen__m) {
+                width: auto;
+            }
+        }
+
+        .field-tooltip {
+            display: none;
+
+            .field-tooltip-content {
+                @abs-checkout-tooltip-content-position-top();
+
+                @media all and (max-width: @screen__m) {
+
+                    @right-shift: 56px;
+                    right: -@right-shift;
+                    top: 38px;
+                    left: auto;
+
+                    &:before,
+                    &:after {
+                        right: @right-shift;
+                    }
+                }
+            }
+        }
+    }
+
+    .amazon-widget {
+        max-width: 400px;
+        height: 228px;
+    }
+
+    .amazon-widget--address {
+        margin-top: 20px;
+    }
+
+    .amazon-addresses {
+        margin-top: 20px;
+        .amazon-address {
+            margin-bottom: 20px;
+        }
+    }
+
+    .checkout-payment-method {
+        .amazon-payment-method {
+            .payment-method-title {
+                visibility: hidden; //hide the title for Amazon Pay methods only
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    /** Prevent movement after a soft decline to other payment steps **/
+    .opc-progress-bar-item._complete.lock-step {
+        cursor: none;
+        pointer-events: none;
+    }
+
+}
+
+@media all and (max-width: @screen__m) {
+    .amazon-minicart-container {
+        .amazon-button-container {
+            width: auto;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .checkout-payment-method {
+        .amazon-sandbox-simulator {
+            .lib-css(border-top, @checkout-payment-option-title__border);
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .amazon-addresses {
+        &:extend(.abs-add-clearfix-desktop all);
+        .amazon-address {
+            &:extend(.abs-blocks-2columns all);
+            margin-bottom: 0;
+        }
+    }
+}

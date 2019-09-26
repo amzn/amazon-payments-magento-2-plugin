@@ -1,0 +1,29 @@
+{
+  "name": "amzn/login-with-amazon-module",
+  "description": "Login with Amazon module",
+  "type": "magento2-module",
+  "version": "3.2.13",
+  "license": [
+    "Apache-2.0"
+  ],
+  "require": {
+    "php": "~7.1.3||~7.2.0||~7.3.0",
+    "amzn/amazon-pay-and-login-with-amazon-core-module": "^3.2.13",
+    "magento/framework": "^102",
+    "magento/module-customer": "^102",
+    "magento/module-store": "^101",
+    "magento/module-eav": "^102",
+    "magento/module-checkout": "^100.3",
+    "magento/module-checkout-agreements": "*"
+
+  },
+  "suggest": {
+    "magento/module-sales": "*"
+  },
+  "autoload": {
+    "files": ["registration.php"],
+    "psr-4": {
+      "Amazon\\Login\\": ""
+    }
+  }
+}

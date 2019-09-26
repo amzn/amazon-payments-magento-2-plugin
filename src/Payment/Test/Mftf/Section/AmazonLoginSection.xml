@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
+    <section name="AmazonLoginSection">
+        <element name="apEmail" type="input" selector="#ap_email"/>
+        <element name="apPassword" type="input" selector="#ap_password"/>
+        <element name="apSignin" type="button" selector="#signInSubmit button"/>
+        <element name="apConsent" type="button" selector="[name=consentApproved]"/>
+    </section>
+</sections>

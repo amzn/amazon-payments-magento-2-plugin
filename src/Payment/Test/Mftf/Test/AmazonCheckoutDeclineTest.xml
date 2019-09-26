@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutDeclinePaymentMethod" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline PaymentMethodNotAllowed"/>
+            <description value="Test CC decline message and then success page elements for placed order with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+            <skip>
+                <issueId value="AmazonPayCredentialSupport" />
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="4545" />
+        </actionGroup>
+        <!--Decline Error Message-->
+        <waitForText userInput="Invalid payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+        <!--Use default CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
+        <!--See success message-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </test>
+    <test name="AmazonCheckoutDeclineInvalidPaymentMethod" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline InvalidPaymentMethod"/>
+            <description value="Test CC decline message and then success page elements for placed order with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+            <skip>
+                <issueId value="AmazonPayCredentialSupport" />
+            </skip>
+        </annotations>
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="3434" />
+        </actionGroup>
+        <!--Decline Error Message-->
+        <waitForText userInput="There has been a problem with the selected payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+        <!--Verify iframe wallet message-->
+        <executeJS function="return window.name;" stepKey="topName"/>
+        <executeJS function="return jQuery('#walletWidgetDiv iframe').attr('name');" stepKey="iframeName"/>
+        <switchToIFrame userInput="{$iframeName}" stepKey="switchToIFramePaymentWidget"/>
+        <see selector=".action a" userInput="Verify card info or use another card" stepKey="seeVerify"/>
+        <switchToWindow userInput="{$topName}" stepKey="switchToWindowTop" />
+        <!--Use default CC# using reloaded iframe-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
+        <!--See success message-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </test>
+    <test name="AmazonCheckoutDeclineAmazonRejected" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline AmazonRejected"/>
+            <description value="Test CC decline message, logout, and redirect to cart with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+            <skip>
+                <issueId value="AmazonPayCredentialSupport" />
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="2323" />
+        </actionGroup>
+        <!--Decline Error Message-->
+        <waitForText userInput="please choose another payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>        <!--Verify iframe wallet message-->
+        <!--Wait for redirect to cart-->
+        <wait time="5" stepKey="waitRedirect"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <!--Confirm logged out from Amazon by logging in (popup)-->
+        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
+    </test>
+    <test name="AmazonCheckoutDeclineTransactionTimedOutInstant" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline TransactionTimedOut with Instant Authorization"/>
+            <description value="Test CC timeout message with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+            <skip>
+                <issueId value="AmazonPayCredentialSupport" />
+            </skip>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode synchronous" />
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="5656" />
+        </actionGroup>
+        <!--Timeout Error Message-->
+        <waitForText userInput="please choose another payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+        <!--Wait for redirect to cart-->
+        <wait time="5" stepKey="waitRedirect"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+    </test>
+    <test name="AmazonCheckoutDeclineTransactionTimedOutAutomatic" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline TransactionTimedOut with Automatic Authorization)"/>
+            <description value="Test CC timeout message with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+            <skip>
+                <issueId value="AmazonPayCredentialSupport" />
+            </skip>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode asynchronous" />
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode synchronous" />
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="5656" />
+        </actionGroup>
+        <!--Transaction declined error message-->
+        <waitForText userInput="Transaction has been declined" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+    </test>
+    <test name="AmazonCheckoutSCAAbandoned" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="(SCA) Amazon SCA Abandoned"/>
+            <title value="(SCA) Amazon SCA Abandoned"/>
+            <description value="Perform checkout from cart page and ensure SCA Abandoned page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_sca"/>
+            <skip>
+                <issueId value="AmazonPayCredentialSupport" />
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Go to Cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Login (popup)-->
+        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with SCA Abandoned CC-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="4440" />
+        </actionGroup>
+        <!--Transaction declined error message-->
+        <waitForText userInput="The SCA challenge was not completed successfully." selector="#checkoutError" stepKey="waitForText"/>
+    </test>
+    <test name="AmazonCheckoutSCAFailure" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="(SCA) Amazon SCA Failed"/>
+            <title value="(SCA) Amazon SCA Failed"/>
+            <description value="Perform checkout from cart page and ensure SCA Failure page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_sca"/>
+            <skip>
+                <issueId value="AmazonPayCredentialSupport" />
+            </skip>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Go to Cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Login (popup)-->
+        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with SCA Failure CC-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="8320" />
+        </actionGroup>
+        <!--Transaction declined error message-->
+        <waitForText userInput="Amazon Pay was unable to authenticate the payment instrument." selector="#checkoutError" stepKey="waitForText"/>
+    </test>
+</tests>

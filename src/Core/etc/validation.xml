@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="amazon_address">
+        <rules>
+            <rule name="amazon_check_blacklisted_terms">
+                <entity_constraints>
+                    <constraint alias="amazon_core_address_data_blacklist_terms_validator" class="Amazon\Core\Model\Validation\AddressBlacklistTermsValidator" />
+                </entity_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="on_select">
+                <uses>
+                    <use rule="amazon_check_blacklisted_terms"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

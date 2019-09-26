@@ -1,0 +1,57 @@
+<?php
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+/**
+ * @var \Amazon\Payment\Block\Minicart\Button $block
+ */
+$config = [
+    'Amazon_Payment/js/amazon-button' => [
+        'buttonType' => 'PwA'
+    ]
+];
+
+$tooltipConfig = [
+    'dropdown' => [
+        'activeClass' => '_active'
+    ]
+];
+?>
+
+<div id="minicart-amazon-pay-button" class="amazon-minicart-container">
+    <div class="amazon-button-container">
+        <div class="amazon-button-container__cell">
+            <div id="PayWithAmazon-<?= /* @noEscape */ $block->getParentBlock()->getJsId() ?>"
+                 class="login-with-amazon"
+                 data-mage-init='<?= /* @noEscape */ json_encode($config); ?>'>
+            </div>
+        </div>
+
+        <div class="amazon-button-container__cell">
+            <div class="field-tooltip toggle">
+                <span class="field-tooltip-action action-help"
+                      data-mage-init='<?= /* @noEscape */ json_encode($tooltipConfig); ?>'
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false">
+                </span>
+                <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
+                    <?= $block->escapeHtml(__('Are you an Amazon customer? ' .
+                        'Pay now with address and payment details stored in your Amazon account.')); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

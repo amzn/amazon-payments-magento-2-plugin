@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
+    <section name="AmazonCheckoutSection">
+        <element name="cartPayButton" type="button" selector="#PayWithAmazon-checkout-cart-shortcut-buttons img"/>
+        <element name="miniCartPayButton" type="button" selector="#minicart-amazon-pay-button img"/>
+        <element name="productPayButton" type="button" selector="#amazon-addtoCart-amazon-pay-button-product"/>
+        <element name="checkoutPayButton" type="button" selector=".amazon-button-container img"/>
+        <element name="loginButton" type="button" selector="#LoginWithAmazon-amazon-login img"/>
+    </section>
+</sections>

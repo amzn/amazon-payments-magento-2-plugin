@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateAmazonPaymentConfigState" dataType="amazon_payment_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="amazon_payment_config_state">
+            <object key="amazon_payment" dataType="amazon_payment_config_state">
+                <object key="groups" dataType="amazon_payment_config_state">
+                    <object key="credentials" dataType="amazon_payment_config_state">
+                        <object key="fields" dataType="amazon_payment_config_state">
+                            <object key="merchant_id" dataType="merchant_id">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="access_key" dataType="access_key">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="secret_key" dataType="secret_key">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="client_id" dataType="client_id">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="client_secret" dataType="client_secret">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="payment_region" dataType="payment_region">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="sandbox" dataType="sandbox">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="payment_action" dataType="payment_action">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="authorization_mode" dataType="authorization_mode">
+                                <field key="value">string</field>
+                            </object>
+                        </object>
+                    </object>
+                    <object key="options" dataType="amazon_payment_config_state">
+                        <object key="fields" dataType="amazon_payment_config_state">
+                            <object key="active" dataType="amazon_pay_active">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="lwa_enabled" dataType="lwa_enabled">
+                                <field key="value">string</field>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

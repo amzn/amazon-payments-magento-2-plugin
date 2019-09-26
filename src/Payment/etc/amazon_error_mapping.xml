@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/error_mapping.xsd">
+    <message_list>
+        <message code="AmazonRejected" translate="true">Unfortunately it is not possible to use Amazon Pay for this order, please choose another payment method.</message>
+        <message code="ProcessingFailure" translate="true">Processing Failure - unable to authorize transaction.</message>
+        <message code="BillingAgreementConstraintsExist" translate="true">Unable to authorize transaction.</message>
+        <message code="PaymentMethodNotUpdated" translate="true">Buyer did not specify valid Amazon Wallet payment method.</message>
+        <message code="DuplicateReferenceId" translate="true">Duplicate reference or payment amount already authorized.</message>
+        <message code="DuplicateRequest" translate="true">Duplicate reference or payment amount already authorized.</message>
+        <message code="PeriodicAmountExceeded" translate="true">Duplicate reference or payment amount already authorized.</message>
+        <message code="InvalidAddress" translate="true">Invalid values passed in request.</message>
+        <message code="InvalidParameterValue" translate="true">Invalid values passed in request.</message>
+        <message code="OrderReferenceCountExceeded" translate="true">You have attempted to create more than the maximum allowed limit of one Order Reference object on a Billing Agreement object that is in the Draft State.</message>
+        <message code="TransactionTimedOut" translate="true">Unfortunately it is not possible to use Amazon Pay for this order, please choose another payment method.</message>
+        <message code="TransactionCountExceeded" translate="true">Number of authorizations, captures or refunds has exceeded allowed limits.</message>
+        <message code="TransactionAmountExceeded" translate="true">Number of authorizations, captures or refunds has exceeded allowed limits.</message>
+        <message code="InvalidSandboxSimulationSpecified" translate="true">Invalid operation for sandbox environment.</message>
+        <message code="InvalidAddressConsentToken" translate="true">Request has an invalid signature.</message>
+        <message code="MissingAuthenticationToken" translate="true">Request has an invalid signature.</message>
+        <message code="InvalidOrderReferenceId" translate="true">Order reference ID is invalid.</message>
+        <message code="InvalidTransactionId" translate="true">Invalid transaction identifier.</message>
+        <message code="InvalidAccountStatus" translate="true">Specified seller account is not authorized to execute this request.</message>
+        <message code="UnauthorizedAccess" translate="true">Specified seller account is not authorized to execute this request.</message>
+        <message code="ConstraintsExist" translate="true">Order Reference submitted in this request has constraints and cannot be confirmed.</message>
+        <message code="InvalidBillingAgreementStatus" translate="true">Billing Agreement object cannot be modified.</message>
+        <message code="BillingAgreementNotModifiable" translate="true">Billing Agreement object cannot be modified.</message>
+        <message code="CaptureNotRefundable" translate="true">Capture not refundable.</message>
+        <message code="Declined" translate="true">Capture not refundable.</message>
+        <message code="InvalidAuthorizationStatus" translate="true">You have attempted to capture or close an authorization for an Authorization object that is in a state where a capture or close is not allowed.</message>
+        <message code="InvalidCancelAttempt" translate="true">Billing Agreement object cannot closed or canceled.</message>
+        <message code="InvalidCloseAttempt" translate="true">Billing Agreement object cannot closed or canceled.</message>
+        <message code="InvalidOrderReferenceStatus" translate="true">You have attempted to call an operation on an Order Reference object that is in a state where that operation is not allowed.</message>
+        <message code="InternalServerError" translate="true">There was an unknown error in the service.</message>
+        <message code="RequestThrottled" translate="true">Request rejected because request rate is higher than allocated throttling limits.</message>
+        <message code="ServiceUnavailable" translate="true">The service is temporarily unavailable. Please try again later.</message>
+        <message code="PaymentMethodNotAllowed" translate="true">Invalid payment method - please select a different payment method.</message>
+        <message code="InvalidPaymentMethod" translate="true">There has been a problem with the selected payment method on your Amazon account. Please choose another one.</message>
+    </message_list>
+</mapping>

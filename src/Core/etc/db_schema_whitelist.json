@@ -1,0 +1,28 @@
+{
+    "amazon_quote": {
+        "column": {
+            "entity_id": true,
+            "quote_id": true,
+            "amazon_order_reference_id": true,
+            "sandbox_simulation_reference": true,
+            "confirmed": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMAZON_QUOTE_QUOTE_ID_QUOTE_ENTITY_ID": true,
+            "AMAZON_QUOTE_QUOTE_ID": true
+        }
+    },
+    "amazon_sales_order": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "amazon_order_reference_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMAZON_SALES_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "AMAZON_SALES_ORDER_ORDER_ID": true
+        }
+    }
+}
