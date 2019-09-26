@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Amazon\PayV2\Block\Minicart\Button">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Amazon_PayV2::minicart-button.phtml</item>
+                <item name="alias" xsi:type="string">amazon.payv2.button.mini-cart</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="amazon-checkout-session" xsi:type="string">Amazon\PayV2\CustomerData\CheckoutSession</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="amazon_payv2_checkout_processor" type="Amazon\PayV2\Plugin\CheckoutProcessor" />
+    </type>
+    <type name="Amazon\Core\Helper\Data">
+        <plugin name="amazon_payv2_amazon_core_helper" type="Amazon\PayV2\Plugin\AmazonCoreHelperData" sortOrder="1" />
+    </type>
+</config>

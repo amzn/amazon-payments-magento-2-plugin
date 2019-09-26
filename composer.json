@@ -1,8 +1,8 @@
 {
-  "name": "amzn/amazon-pay-and-login-magento-2-module",
-  "description": "Official Magento2 Plugin to integrate with Amazon Pay and Login with Amazon",
+  "name": "amzn/amazon-pay-v2-magento-2-module",
+  "description": "Official Magento2 Plugin to integrate with Amazon Pay V2",
   "type": "magento2-module",
-  "version": "3.2.13",
+  "version": "1.0.0",
   "license": [
     "Apache-2.0"
   ],
@@ -23,7 +23,9 @@
     "magento/module-quote": "^101.1",
     "magento/module-customer": "^102",
     "magento/module-store": "^101",
-    "amzn/amazon-pay-sdk-php": "^3.4.1"
+    "zendframework/zend-crypt": "^2.6.0",
+    "amzn/amazon-pay-sdk-v2-php": "^4.2",
+    "aws/aws-php-sns-message-validator": "^1.5"
   },
   "repositories": [
     {
@@ -36,14 +38,10 @@
   },
   "autoload": {
     "files": [
-      "src/Core/registration.php",
-      "src/Login/registration.php",
-      "src/Payment/registration.php"
+      "src/PayV2/registration.php"
     ],
     "psr-4": {
-      "Amazon\\Core\\": "src/Core",
-      "Amazon\\Login\\": "src/Login",
-      "Amazon\\Payment\\": "src/Payment"
+      "Amazon\\PayV2\\": "src/PayV2"
     }
   }
 }

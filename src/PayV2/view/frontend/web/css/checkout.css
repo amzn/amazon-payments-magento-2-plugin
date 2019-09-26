@@ -1,0 +1,2 @@
+#amazon-payment.payment-method .billing-address-same-as-shipping-block { display: none; }
+.amazon-container + #co-shipping-form { margin-top: 0; }
