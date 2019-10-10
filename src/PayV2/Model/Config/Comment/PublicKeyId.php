@@ -56,6 +56,7 @@ class PublicKeyId implements \Magento\Config\Model\Config\CommentInterface
 
         $comment = '';
 
+/*  Hiding this for now.  To be reintroduced in a later version
         if (!$pubkeyid && $privkey) {
             $merchantId = $this->amazonConfig->getMerchantId();
             $subject = rawurlencode('Request for Amazon Pay Public Key ID for ' . $merchantId);
@@ -65,6 +66,7 @@ class PublicKeyId implements \Magento\Config\Model\Config\CommentInterface
                 'mailto:Amazon-pay-delivery-notifications@amazon.com?subject=' . $subject . '&body=' . $body
             );
         }
+*/
         return $comment;
     }
 }

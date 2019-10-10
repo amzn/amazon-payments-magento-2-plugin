@@ -21,7 +21,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Amazon_PayV2::PayV2" title="Amazon Pay" sortOrder="51">
                     <resource id="Amazon_PayV2::downloadlogs" title="Download Logs" translate="true"/>
-                    <resource id="Amazon_PayV2::download" title="Download Public Key" translate="true"/>
+                    <resource id="Amazon_PayV2::downloadKeys" title="Download Keys" translate="true"/>
                     <resource id="Amazon_PayV2::generatekeys" title="Generate Public/Private Key Pair" translate="true"/>
                 </resource>
             </resource>

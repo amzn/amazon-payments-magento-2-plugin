@@ -53,8 +53,16 @@ class Download extends \Magento\Backend\Controller\Adminhtml\System
      */
     public function execute()
     {
-        $publicKey = $this->amazonConfig->getPublicKey();
-        return $this->fileFactory->create('amazon_public_key.pub', $publicKey, DirectoryList::TMP);
+        switch($this->getRequest()->getParam('key')) {
+            case 'private':
+	        $key = $this->amazonConfig->getPrivateKey();
+                $file = $this->fileFactory->create('amazon_private_key.pem', $key, DirectoryList::TMP);
+            case 'public':
+            default:
+	        $key = $this->amazonConfig->getPublicKey();
+                $file = $this->fileFactory->create('amazon_public_key.pub', $key, DirectoryList::TMP);
+        }
+        return $file;
     }
 
     /**
@@ -63,6 +71,6 @@ class Download extends \Magento\Backend\Controller\Adminhtml\System
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Amazon_PayV2::download');
+        return $this->_authorization->isAllowed('Amazon_PayV2::downloadKeys');
     }
 }
