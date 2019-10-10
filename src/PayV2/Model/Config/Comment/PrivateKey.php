@@ -60,12 +60,15 @@ class PrivateKey implements \Magento\Config\Model\Config\CommentInterface
         $privkey = $this->amazonConfig->getPrivateKey();
 
         $generateUrl = $this->urlBuilder->getUrl('amazon_payv2/payv2/generatekeys');
-        $downloadUrl = $this->urlBuilder->getUrl('amazon_payv2/payv2/download');
+        $publicKeyUrl = $this->urlBuilder->getUrl('amazon_payv2/payv2/download/key/public');
+        $privateKeyUrl = $this->urlBuilder->getUrl('amazon_payv2/payv2/download/key/private');
 
         if (!$privkey) {
             return '<a href="' . $generateUrl . '">' . __('Generate a new public/private key pair for Amazon Pay') . '</a>';
         } elseif ($pubkey) {
-            return '<a href="' . $downloadUrl . '">' . __('Download Public Key') . '</a>';
+            $commentText = '<a href="' . $publicKeyUrl . '">' . __('Download Public Key') . '</a>';
+            $commentText .= '<br><a href="' . $privateKeyUrl . '">' . __('Download Private Key') . '</a>';
+            return $commentText;
         }
     }
 }
