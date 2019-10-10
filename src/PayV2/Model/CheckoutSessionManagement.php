@@ -89,8 +89,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $response = $this->amazonAdapter->updateCheckoutSession($quote, $amazonCheckoutSessionId);
 
         // Return final redirect URL to process payment on Amazon before redirecting to Magento success page
-        if (!empty($response['webCheckoutDetails']['amazonPayRedirectUrl'])) {
-            return $response['webCheckoutDetails']['amazonPayRedirectUrl'];
+        if (!empty($response['webCheckoutDetail']['amazonPayRedirectUrl'])) {
+            return $response['webCheckoutDetail']['amazonPayRedirectUrl'];
         }
         return false;
     }

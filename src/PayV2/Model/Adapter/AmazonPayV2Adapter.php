@@ -79,7 +79,7 @@ class AmazonPayV2Adapter
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
-            'webCheckoutDetails' => [
+            'webCheckoutDetail' => [
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
@@ -125,13 +125,13 @@ class AmazonPayV2Adapter
         }
 
         $payload = [
-            'webCheckoutDetails' => [
+            'webCheckoutDetail' => [
                 'checkoutResultReturnUrl' => $store->getUrl(
                     'amazon_payv2/payment/completeCheckout',
                     ['_forced_secure' => true]
                 )
             ],
-            'paymentDetails' => [
+            'paymentDetail' => [
                 'paymentIntent' => 'Authorize',
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
                 'chargeAmount' => [
