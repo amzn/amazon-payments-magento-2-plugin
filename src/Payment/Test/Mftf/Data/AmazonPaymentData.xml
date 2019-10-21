@@ -15,22 +15,22 @@
         <requiredEntity type="lwa_enabled">SampleAmazonLwaEnabled</requiredEntity>
     </entity>
     <entity name="SampleAmazonMerchantId" type="merchant_id">
-        <data key="value">someMerchantId</data>
+        <data key="value">{{_CREDS.amazon/v1_merchant_id}}</data>
     </entity>
     <entity name="SampleAmazonAccessKey" type="access_key">
-        <data key="value">someAccessKey</data>
+        <data key="value">{{_CREDS.amazon/v1_access_key}}</data>
     </entity>
     <entity name="SampleAmazonSecretKey" type="secret_key">
-        <data key="value">someSecretKey</data>
+        <data key="value">{{_CREDS.amazon/v1_secret_key}}</data>
     </entity>
     <entity name="SampleAmazonClientId" type="client_id">
-        <data key="value">someClientId</data>
+        <data key="value">{{_CREDS.amazon/v1_client_id}}</data>
     </entity>
     <entity name="SampleAmazonClientSecret" type="client_secret">
-        <data key="value">someClientSecretKey</data>
+        <data key="value">{{_CREDS.amazon/v1_client_secret}}</data>
     </entity>
     <entity name="SampleAmazonPaymentRegion" type="payment_region">
-        <data key="value">us</data>
+        <data key="value">{{_CREDS.amazon/v1_region}}</data>
     </entity>
     <entity name="SampleAmazonSandbox" type="sandbox">
         <data key="value">1</data>
@@ -93,5 +93,15 @@
     </entity>
     <entity name="DefaultAmazonLwaEnabled" type="lwa_enabled">
         <data key="value">0</data>
+    </entity>
+    <entity name="EuroCurrencyConfig" type="magento_currency_config_state">
+        <requiredEntity type="base_currency">EuroBaseCurrency</requiredEntity>
+        <requiredEntity type="default_currency">EuroBaseCurrency</requiredEntity>
+    </entity>
+    <entity name="EuroBaseCurrency" type="base_currency">
+        <data key="value">EUR</data>
+    </entity>
+    <entity name="EuroDefaultCurrency" type="default_currency">
+        <data key="value">EUR</data>
     </entity>
 </entities>

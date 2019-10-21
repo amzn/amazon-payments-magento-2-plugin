@@ -16,9 +16,6 @@
             <description value="Creates and loads simple product and adds it to cart using Amazon Pay button on product detail page."/>
             <severity value="BLOCKER"/>
             <group value="amazon_checkout"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
 
         <before>
@@ -34,7 +31,7 @@
 
         <!--Go to product page-->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoadCatalog"/>
+        <waitForPageLoad stepKey="waitForPageLoadCatalog" time="30"/>
 
         <!--Add to cart via Amazon Pay button on product page-->
         <waitForElement selector="{{AmazonCheckoutSection.productPayButton}}" time="30" stepKey="apWaitForPayButton"/>
@@ -53,9 +50,6 @@
             <description value="Adds product to cart."/>
             <severity value="BLOCKER"/>
             <group value="amazon_checkout"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
 
         <before>
@@ -86,9 +80,6 @@
             <description value="Perform checkout from product details page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
 
         <!--Place order-->
@@ -102,9 +93,6 @@
             <description value="Perform checkout from cart page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
 
         <!--Go to Cart-->
@@ -127,9 +115,6 @@
             <description value="Perform checkout from minicart and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
 
         <!--Open minicart-->
@@ -152,9 +137,6 @@
             <description value="Perform checkout from checkout page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
 
         <!--Go to Checkout-->
@@ -177,9 +159,6 @@
             <description value="Perform checkout after logging in from customer account page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
 
         <!--Go to Customer page-->
@@ -200,10 +179,12 @@
             <description value="Perform checkout from cart page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
-            <skip>
-                <issueId value="AmazonPayCredentialSupport" />
-            </skip>
         </annotations>
+
+        <before>
+            <createData entity="EuroCurrencyConfig" stepKey="EuroCurrencyConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
 
         <!--Go to Cart-->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
