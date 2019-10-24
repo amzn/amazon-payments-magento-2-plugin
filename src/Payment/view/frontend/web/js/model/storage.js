@@ -53,9 +53,7 @@ define(
          * Log out amazon user
          */
         function amazonLogOut() {
-            if (amazonCore.amazonDefined()) {
-                amazon.Login.logout(); // eslint-disable-line no-undef
-            }
+            amazonCore.AmazonLogout();
             this.isAmazonAccountLoggedIn(false);
         }
 
