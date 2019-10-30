@@ -165,7 +165,6 @@
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
             <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
-            <createData entity="EuroCurrencyConfig" stepKey="EuroCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
@@ -205,7 +204,6 @@
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
             <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
-            <createData entity="EuroCurrencyConfig" stepKey="EuroCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
