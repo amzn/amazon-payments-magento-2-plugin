@@ -85,6 +85,262 @@
         <!--Place order-->
         <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
     </test>
+    <test name="AmazonCheckoutDisplayLanguage" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Complete checkout with non-default display language setting"/>
+            <title value="Amazon Pay Checkout Display Language"/>
+            <description value="Perform checkout with non-default display language and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <magentoCLI command="config:set payment/amazon_payment/button_display_language de_DE" stepKey="setDeDisplayLanguage"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="config:set payment/amazon_payment/button_display_language ''" stepKey="setDeDisplayLanguage"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
+    <test name="AmazonCheckoutFreeShipping" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Complete checkout with free shipping"/>
+            <title value="Amazon Pay Checkout Free Shipping"/>
+            <description value="Perform checkout with free shipping"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <magentoCLI command="config:set carriers/freeshipping/active 1" stepKey="enableFreeShipping"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="config:set carriers/freeshipping/active 0" stepKey="disableFreeShipping"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
+    <test name="AmazonCheckoutConfigurableProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Complete checkout with configurable product"/>
+            <title value="Amazon Pay Checkout Configurable Product"/>
+            <description value="Perform checkout with configurable product and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <!-- Create Default Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create an attribute with three options to be used in the first child product -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the attribute just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Get the first option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the second option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the third option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <field key="price">10.00</field>
+            </createData>
+
+            <!--Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <field key="price">20.00</field>
+            </createData>
+
+            <!--Create a simple product and give it the attribute with the Third option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+                <field key="price">30.00</field>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <!-- Add the third simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+        </after>
+
+        <!-- Add Configurable Product to the cart -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption2.label$$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
+
+        <!--Open minicart-->
+        <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowMinicart" />
+        <waitForElement selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForCartLink" />
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart" />
+
+        <!--Login (redirect)-->
+        <click selector="{{AmazonCheckoutSection.miniCartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup" />
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
+    <test name="AmazonCheckoutGroupedProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Complete checkout with bundled product"/>
+            <title value="Amazon Pay Checkout Bundled Product"/>
+            <description value="Perform checkout with bundled product and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <!--Create Grouped product with three simple product -->
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="simple3">
+                <field key="price">200.00</field>
+            </createData>
+            <createData entity="ApiProductWithDescription" stepKey="simple3" before="product">
+                <field key="price">300.00</field>
+            </createData>
+            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductThree">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple3"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <deleteData createDataKey="simple1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simple2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="simple3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="product" stepKey="deleteGroupProduct"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!-- Fill Quantity and add Product to the cart -->
+        <actionGroup ref="StorefrontAddThreeGroupedProductToTheCartActionGroup" stepKey="addGropedProductsToTheCart">
+            <argument name="urlKey" value="$$product.custom_attributes[url_key]$$"/>
+            <argument name="product1" value="$$simple1.name$$"/>
+            <argument name="product2" value="$$simple2.name$$"/>
+            <argument name="product3" value="$$simple3.name$$"/>
+            <argument name="qty1" value="1"/>
+            <argument name="qty2" value="2"/>
+            <argument name="qty3" value="3"/>
+        </actionGroup>
+
+        <!--Open minicart-->
+        <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowMinicart" />
+        <waitForElement selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForCartLink" />
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart" />
+
+        <!--Login (redirect)-->
+        <click selector="{{AmazonCheckoutSection.miniCartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup" />
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
     <test name="AmazonCheckoutCart" extends="AmazonCheckoutAddProduct">
         <annotations>
             <features value="Amazon Pay"/>
@@ -180,11 +436,6 @@
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
         </annotations>
-
-        <before>
-            <createData entity="EuroCurrencyConfig" stepKey="EuroCurrencyConfig"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        </before>
 
         <!--Go to Cart-->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
