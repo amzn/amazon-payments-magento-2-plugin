@@ -153,7 +153,6 @@ define([
                      * Authorization callback
                      */
                     authorization: function () {
-                        fullScreenLoader.startLoader();
                         //eslint-disable-next-line no-undef
                         amazon.Login.authorize(_this._getLoginOptions(), _this._popupCallback());
                     }
