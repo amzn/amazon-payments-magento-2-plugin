@@ -82,7 +82,8 @@ class Config extends Template
             'isEuPaymentRegion'        => $this->coreHelper->isEuPaymentRegion(),
             'oAuthHashRedirectUrl'     => $this->coreHelper->getOAuthRedirectUrl(),
             'isQuoteDirty'             => $this->categoryExclusionHelper->isQuoteDirty(),
-            'region'                   => $this->coreHelper->getRegion()
+            'region'                   => $this->coreHelper->getRegion(),
+            'scaRegions'               => $this->coreHelper->getScaRegions()
         ];
 
         if ($this->coreHelper->isSandboxEnabled()) {

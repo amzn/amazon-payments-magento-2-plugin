@@ -38,6 +38,7 @@
                 <platform_id>AUGT0HMCLQVX1</platform_id>
                 <hard_decline_code>4273</hard_decline_code>
                 <soft_decline_code>7638</soft_decline_code>
+                <sca_regions>de,uk</sca_regions>
             </amazon_payment>
         </payment>
     </default>

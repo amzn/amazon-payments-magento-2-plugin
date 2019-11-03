@@ -17,17 +17,9 @@
 /**
  * @var \Amazon\Payment\Block\Minicart\Button $block
  */
-$config = [
-    'Amazon_Payment/js/amazon-button' => [
-        'buttonType' => 'PwA'
-    ]
-];
-
-$tooltipConfig = [
-    'dropdown' => [
-        'activeClass' => '_active'
-    ]
-];
+$config = ['buttonType' => 'PwA'];
+$tooltipConfig = ['activeClass' => '_active'];
+$jsonHelper = $this->helper(Magento\Framework\Json\Helper\Data::class);
 ?>
 
 <div id="minicart-amazon-pay-button" class="amazon-minicart-container">
@@ -35,14 +27,14 @@ $tooltipConfig = [
         <div class="amazon-button-container__cell">
             <div id="PayWithAmazon-<?= /* @noEscape */ $block->getParentBlock()->getJsId() ?>"
                  class="login-with-amazon"
-                 data-mage-init='<?= /* @noEscape */ json_encode($config); ?>'>
+                 data-mage-init='{"Amazon_Payment/js/amazon-button":<?= /* @noEscape */ $jsonHelper->jsonEncode($config) ?>}'>
             </div>
         </div>
 
         <div class="amazon-button-container__cell">
             <div class="field-tooltip toggle">
                 <span class="field-tooltip-action action-help"
-                      data-mage-init='<?= /* @noEscape */ json_encode($tooltipConfig); ?>'
+                      data-mage-init='{"dropdown":<?= /* @noEscape */ $jsonHelper->jsonEncode($tooltipConfig) ?>}'
                       data-toggle="dropdown"
                       aria-haspopup="true"
                       aria-expanded="false">

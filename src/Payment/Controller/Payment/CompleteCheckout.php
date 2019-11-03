@@ -15,10 +15,13 @@
  */
 namespace Amazon\Payment\Controller\Payment;
 
+use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Core\Exception\AmazonWebapiException;
 use Amazon\Core\Logger\ExceptionLogger;
+use Amazon\Payment\Api\OrderInformationManagementInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
@@ -56,6 +59,11 @@ class CompleteCheckout extends Action
     private $exceptionLogger;
 
     /**
+     * @var OrderInformationManagementInterface
+     */
+    private $orderInformationManagement;
+
+    /**
      * CompleteCheckout constructor.
      *
      * @param Context $context
@@ -66,6 +74,7 @@ class CompleteCheckout extends Action
      * @param PageFactory $pageFactory
      * @param MessageManager $messageManager
      * @param ExceptionLogger $exceptionLogger
+     * @param OrderInformationManagementInterface $orderInformationManagement
      */
     public function __construct(
         Context $context,
@@ -75,7 +84,8 @@ class CompleteCheckout extends Action
         Session $session,
         PageFactory $pageFactory,
         MessageManager $messageManager,
-        ExceptionLogger $exceptionLogger = null
+        ExceptionLogger $exceptionLogger = null,
+        OrderInformationManagementInterface $orderInformationManagement = null
     ) {
         parent::__construct($context);
         $this->cartManagement = $cartManagement;
@@ -84,6 +94,8 @@ class CompleteCheckout extends Action
         $this->pageFactory = $pageFactory;
         $this->messageManager = $messageManager;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
+        $this->orderInformationManagement = $orderInformationManagement ?: ObjectManager::getInstance()
+            ->get(OrderInformationManagementInterface::class);
     }
 
     /*
@@ -119,6 +131,23 @@ class CompleteCheckout extends Action
                         . 'Please try again, or use a different payment method.'
                     ));
             }
+
+            $quote = $this->checkoutSession->getQuote();
+            if(!$quote) {
+                throw new NotFoundException(__('Failed to retrieve quote from checkoutSession'));
+            }
+            $orderReferenceId = $quote
+                ->getExtensionAttributes()
+                ->getAmazonOrderReferenceId();
+            if($orderReferenceId) {
+                // Cancel the order to prevent confusion when the merchant views Transactions in Seller Central
+                try {
+                    $this->orderInformationManagement->cancelOrderReference($orderReferenceId, $quote->getStoreId());
+                } catch(AmazonServiceUnavailableException $e) {
+                    $this->exceptionLogger->logException($e);
+                }
+            }
+
             return $this->_redirect('checkout/cart');
         } catch(\Exception $e) {
             $this->exceptionLogger->logException($e);
