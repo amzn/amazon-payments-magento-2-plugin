@@ -29,7 +29,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Amazon\Payment\Gateway\Config\Config as GatewayConfig;
 use Magento\Quote\Api\CartRepositoryInterface;
 
-
 /**
  * Class ConfirmOrderReference
  *
@@ -83,7 +82,7 @@ class ConfirmOrderReference
         $cartId,
         PaymentInterface $paymentMethod
     ) {
-        if($paymentMethod->getMethod() == GatewayConfig::CODE) {
+        if ($paymentMethod->getMethod() == GatewayConfig::CODE) {
             $quote = $this->quoteRepository->get($cartId);
             $quoteExtensionAttributes = $quote->getExtensionAttributes();
             if ($quoteExtensionAttributes) {

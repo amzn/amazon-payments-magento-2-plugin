@@ -67,9 +67,9 @@ class AmazonConfig
     public function getPaymentRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->scopeConfig->getValue(
-          'payment/amazon_payment/payment_region',
-          $scope,
-          $scopeCode
+            'payment/amazon_payment/payment_region',
+            $scope,
+            $scopeCode
         );
     }
 
@@ -83,9 +83,9 @@ class AmazonConfig
     public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
     {
         $mcRegions = $this->scopeConfig->getValue(
-          'multicurrency/regions',
-          $scope,
-          $store
+            'multicurrency/regions',
+            $scope,
+            $store
         );
 
         if ($mcRegions) {
@@ -111,9 +111,9 @@ class AmazonConfig
     public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
     {
         $enabled = $this->scopeConfig->getValue(
-          'payment/amazon_payment/multicurrency',
-          $scope,
-          $scopeCode
+            'payment/amazon_payment/multicurrency',
+            $scope,
+            $scopeCode
         );
 
         if ($enabled) {
@@ -134,9 +134,9 @@ class AmazonConfig
         if ($this->multiCurrencyEnabled()) {
             // get allowed presentment currencies from config.xml
             $currencies = $this->scopeConfig->getValue(
-              'multicurrency/currencies',
-              ScopeInterface::SCOPE_STORE,
-              $store
+                'multicurrency/currencies',
+                ScopeInterface::SCOPE_STORE,
+                $store
             );
 
             if ($currencies) {
@@ -167,10 +167,9 @@ class AmazonConfig
     public function getBaseCurrencyCode($store = null)
     {
         return $this->scopeConfig->getValue(
-          'currency/options/base',
-          ScopeInterface::SCOPE_STORE,
-          $store
+            'currency/options/base',
+            ScopeInterface::SCOPE_STORE,
+            $store
         );
     }
-
 }

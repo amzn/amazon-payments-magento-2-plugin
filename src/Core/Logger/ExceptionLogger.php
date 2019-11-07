@@ -21,10 +21,12 @@ class ExceptionLogger
 {
     private $logger;
 
-    public function __construct(LoggerInterface $logger) {
+    public function __construct(LoggerInterface $logger)
+    {
         $this->logger = $logger;
     }
-    public function logException(\Exception $e) {
+    public function logException(\Exception $e)
+    {
         $message = (string) $e;
         $this->logger->addError($message);
     }

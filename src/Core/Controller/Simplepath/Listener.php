@@ -103,7 +103,7 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
             $result->setData($return);
 
             return $result;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             throw $e;
         }
@@ -149,8 +149,7 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
      */
     public function createCsrfValidationException(
         RequestInterface $request
-    ): ?InvalidRequestException
-    {
+    ): ?InvalidRequestException {
         return null;
     }
 

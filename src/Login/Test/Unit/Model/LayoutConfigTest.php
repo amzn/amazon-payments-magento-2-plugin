@@ -49,5 +49,4 @@ class LayoutConfigTest extends \PHPUnit\Framework\TestCase
             [false, true]
         ];
     }
-
 }

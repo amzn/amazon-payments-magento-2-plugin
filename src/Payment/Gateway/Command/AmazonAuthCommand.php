@@ -154,7 +154,7 @@ class AmazonAuthCommand implements CommandInterface
                     $response
                 );
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             throw $e;
         }
