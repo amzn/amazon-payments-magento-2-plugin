@@ -133,7 +133,7 @@ class CaptureStrategyCommand implements CommandInterface
                     $this->commandPool->get($command)->execute($commandSubject);
                 }
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             throw $e;
         }

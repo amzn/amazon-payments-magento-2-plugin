@@ -15,9 +15,9 @@
  */
 
 namespace Amazon\Login\Domain;
+
 use Magento\Framework\Model\AbstractModel;
 use Amazon\Core\Helper\Data as CoreHelper;
-
 
 /**
  * Used for accessing Amazon Login layout configuration
@@ -48,5 +48,4 @@ class LayoutConfig
     {
         return !$this->coreHelper->isLwaEnabled();
     }
-
 }
