@@ -52,7 +52,7 @@ define(
                 ).done(
                     function () {
                         amazonStorage.amazonlogOut();
-                        window.location.reload();
+                        fullScreenLoader.stopLoader();
                     }
                 ).fail(
                     function (response) {
