@@ -46,7 +46,18 @@ define(
             isAmazonCartInValid = ko.computed(function () {
                 return isAmazonAccountLoggedIn() && isQuoteDirty();
             }),
-            isLoginRedirectPage = $('body').hasClass('amazon-login-login-processauthhash');
+            isLoginRedirectPage = $('body').hasClass('amazon-login-login-processauthhash'),
+            amazonCustomerEmail = ko.computed(function () {
+                // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+                if (window.checkoutConfig.hasOwnProperty('amazonLogin') &&
+                    typeof window.checkoutConfig.amazonLogin.amazon_customer_email === 'string'
+                ) {
+                    return window.checkoutConfig.amazonLogin.amazon_customer_email;
+                }
+                // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+                return '';
+            });
+
 
 
         /**
@@ -96,6 +107,7 @@ define(
             isPwaVisible: isPwaVisible,
             amazonlogOut: amazonLogOut,
             amazonDefined: amazonCore.amazonDefined,
+            amazonCustomerEmail: amazonCustomerEmail,
 
             /**
              * Set order reference

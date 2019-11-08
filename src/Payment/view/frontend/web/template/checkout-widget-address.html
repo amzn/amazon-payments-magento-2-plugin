@@ -20,6 +20,10 @@
 <!--/ko-->
 
 <!-- ko if: (isAmazonAccountLoggedIn) -->
+    <label class="label" for="amazon-email-address">
+        <span data-bind="i18n: 'Email Address:'"></span>
+    </label>
+    <span id="amazon-email-address" data-bind="text: amazonCustomerEmail" />
     <div class="amazon-widget-container">
         <div id="addressBookWidgetDiv" class="amazon-widget amazon-widget--address" data-bind="afterRender: initAddressWidget"></div>
     </div>

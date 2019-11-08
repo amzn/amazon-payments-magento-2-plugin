@@ -16,7 +16,6 @@
 
 namespace Amazon\Payment\Gateway\Http\Client;
 
-
 /**
  * Class VoidClient
  * Amazon Pay client for gateway cancel and void
@@ -49,5 +48,4 @@ class VoidClient extends AbstractClient
 
         return $response;
     }
-
 }

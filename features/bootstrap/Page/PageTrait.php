@@ -59,7 +59,7 @@ trait PageTrait
     {
         $element = $this->getElementWithWait($elementName);
 
-        if ( ! $element) {
+        if (! $element) {
             throw new ElementNotFoundException;
         }
 

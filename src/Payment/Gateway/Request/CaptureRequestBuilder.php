@@ -93,8 +93,7 @@ class CaptureRequestBuilder implements BuilderInterface
         if (!$quote->getReservedOrderId()) {
             try {
                 $quote->reserveOrderId()->save();
-            }
-            catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage());
             }
         }

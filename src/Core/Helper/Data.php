@@ -74,8 +74,7 @@ class Data extends AbstractHelper
         StoreManagerInterface $storeManager,
         ClientIp $clientIpHelper,
         StatusFactory $moduleStatusFactory
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->moduleList = $moduleList;
         $this->encryptor = $encryptor;

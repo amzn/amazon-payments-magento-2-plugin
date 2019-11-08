@@ -59,7 +59,6 @@ class AuthorizationValidator extends AbstractValidator
         }
 
         return $this->createResult(false, $messages);
-
     }
 
     /**
@@ -70,5 +69,4 @@ class AuthorizationValidator extends AbstractValidator
     {
         return $constraint->getId();
     }
-
 }

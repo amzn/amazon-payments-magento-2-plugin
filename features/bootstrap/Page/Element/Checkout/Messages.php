@@ -31,7 +31,7 @@ class Messages extends Element
                 false
             );
 
-            if ( ! $element) {
+            if (! $element) {
                 return false;
             }
 
@@ -51,7 +51,7 @@ class Messages extends Element
                 false
             );
 
-            if ( ! $element) {
+            if (! $element) {
                 return false;
             }
 

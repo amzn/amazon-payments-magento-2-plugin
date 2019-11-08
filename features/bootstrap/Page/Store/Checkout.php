@@ -96,7 +96,7 @@ class Checkout extends Page
         $this->waitUntilElementDisappear('shipping-loader');
 
         $defaultShippingMethod = $this->getElementWithWait('first-shipping-method');
-        if ( ! $defaultShippingMethod->isChecked()) {
+        if (! $defaultShippingMethod->isChecked()) {
             $defaultShippingMethod->click();
         }
     }
@@ -108,7 +108,6 @@ class Checkout extends Page
         $this->waitUntilElementDisappear('full-screen-loader');
         $this->clickElement('go-to-billing');
         $this->waitUntilElementDisappear('full-screen-loader');
-
     }
 
     public function submitOrder()
@@ -189,7 +188,7 @@ class Checkout extends Page
             'require(\'uiRegistry\').get(\'checkout.steps.shipping-step.shippingAddress.before-form.amazon-widget-address\').getAmazonOrderReference();'
         );
 
-        if ( ! strlen($orderRef)) {
+        if (! strlen($orderRef)) {
             throw new \Exception('Could not locate amazon order reference');
         }
 
@@ -202,7 +201,7 @@ class Checkout extends Page
             'require(\'uiRegistry\').get(\'checkout.steps.shipping-step.shippingAddress.before-form.amazon-widget-address\').getAddressConsentToken();'
         );
 
-        if ( ! strlen($addressConsentToken)) {
+        if (! strlen($addressConsentToken)) {
             throw new \Exception('Could not locate address consent token');
         }
 
@@ -240,7 +239,7 @@ class Checkout extends Page
     {
         $input = $this->getElementWithWait('customer-email-input');
 
-        if ( ! $input) {
+        if (! $input) {
             throw new \Exception('No customer email input was found.');
         }
 

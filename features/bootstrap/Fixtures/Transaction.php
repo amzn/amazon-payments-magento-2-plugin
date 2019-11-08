@@ -54,7 +54,7 @@ class Transaction extends BaseFixture
 
         $transaction = $this->getByTransactionId($transactionId, $paymentId, $orderId);
 
-        if ( ! $transaction) {
+        if (! $transaction) {
             throw new \Exception('Last transaction not found for ' . $email);
         }
 

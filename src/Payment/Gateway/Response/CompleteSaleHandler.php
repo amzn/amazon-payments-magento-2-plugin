@@ -97,8 +97,7 @@ class CompleteSaleHandler implements HandlerInterface
                 $payment->setIsTransactionPending(true);
                 $order->setState($order::STATE_PAYMENT_REVIEW)->setStatus($order::STATE_PAYMENT_REVIEW);
                 $payment->setIsTransactionClosed(false);
-            }
-            else {
+            } else {
                 $payment->setIsTransactionClosed(true);
             }
 
@@ -106,5 +105,4 @@ class CompleteSaleHandler implements HandlerInterface
             $quoteLink->setConfirmed(true)->save();
         }
     }
-
 }

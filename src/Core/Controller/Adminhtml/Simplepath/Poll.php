@@ -77,7 +77,7 @@ class Poll extends System
             $result = $this->jsonResultFactory->create();
             $result->setData((int)$shouldRefresh);
             return $result;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             throw $e;
         }

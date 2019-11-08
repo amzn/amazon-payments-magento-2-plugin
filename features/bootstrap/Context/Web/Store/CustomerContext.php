@@ -70,7 +70,6 @@ class CustomerContext implements SnippetAcceptingContext
         $this->orderFixture = new OrderFixture;
         $this->amazonOrderFixture = new AmazonOrderFixture;
         $this->quoteLinkFixture = new QuoteLinkFixture;
-
     }
 
     /**

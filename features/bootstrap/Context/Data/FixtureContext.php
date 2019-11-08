@@ -38,7 +38,7 @@ class FixtureContext implements Context
         if (count(self::$fixtures)) {
             foreach (self::$fixtures as $fixture) {
                 try {
-                    if  (null !== $fixture['repository']) {
+                    if (null !== $fixture['repository']) {
                         $fixture['repository']->delete($fixture['entity']);
                     } else {
                         $fixture['entity']->delete();

@@ -75,8 +75,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
         Data $coreHelper,
         ManagerInterface $eventManager,
         CategoryExclusion $categoryExclusion
-    )
-    {
+    ) {
         $this->config = $config;
         $this->coreHelper = $coreHelper;
         $this->productMetaData = $productMetadata;

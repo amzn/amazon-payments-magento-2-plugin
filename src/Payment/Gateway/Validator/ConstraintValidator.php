@@ -53,7 +53,8 @@ class ConstraintValidator extends AbstractValidator
      * @param AmazonConstraint $constraint
      * @return string
      */
-    private function getConstraint(AmazonConstraint $constraint) {
+    private function getConstraint(AmazonConstraint $constraint)
+    {
         return $constraint->getId();
     }
 }
