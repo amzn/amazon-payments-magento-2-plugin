@@ -39,7 +39,7 @@ define([
                 shippingForm.style.display = hide ? 'none' : 'block';
             }
             if (accountForm) {
-                accountForm.style.display = hide ? 'none' : 'block';
+                accountForm.parentElement.style.display = hide ? 'none' : 'block';
             }
         }
     });
