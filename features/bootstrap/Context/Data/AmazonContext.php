@@ -93,7 +93,7 @@ class AmazonContext implements SnippetAcceptingContext
 
         $lastOrder = current($orders->getItems());
 
-        if ( ! $lastOrder) {
+        if (! $lastOrder) {
             throw new \Exception('Last order not found for ' . $email);
         }
 

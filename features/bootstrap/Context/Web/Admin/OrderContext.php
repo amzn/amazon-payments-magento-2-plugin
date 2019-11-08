@@ -58,7 +58,7 @@ class OrderContext implements SnippetAcceptingContext
     {
         $lastOrder = $this->orderFixture->getLastOrderForCustomer($email);
 
-        if ( ! $lastOrder) {
+        if (! $lastOrder) {
             throw new \Exception('Last order not found for ' . $email);
         }
 

@@ -109,7 +109,7 @@ class CaptureStrategyCommand implements CommandInterface
                     $this->commandPool->get($command)->execute($commandSubject);
                 }
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             throw $e;
         }
@@ -131,8 +131,7 @@ class CaptureStrategyCommand implements CommandInterface
             if ($this->coreHelper->getPaymentAction() == 'authorize_capture') {
                 // charge on order
                 return self::SALE;
-            }
-            else {
+            } else {
                 // charge on invoice/shipment
                 return self::AUTHORIZE_CAPTURE;
             }

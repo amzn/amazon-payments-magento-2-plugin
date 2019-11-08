@@ -39,7 +39,8 @@ class Order extends BaseFixture
     {
         $searchCriteriaBuilder = $this->createMagentoObject(SearchCriteriaBuilder::class);
         $searchCriteriaBuilder->addFilter(
-            'customer_id', $customer->getId()
+            'customer_id',
+            $customer->getId()
         );
 
         $sortOrder = $this->createMagentoObject(SortOrder::class, [
@@ -70,7 +71,7 @@ class Order extends BaseFixture
 
         $order = current($orders->getItems());
 
-        if ( ! $order) {
+        if (! $order) {
             throw new \Exception('Last order not found for ' . $email);
         }
 

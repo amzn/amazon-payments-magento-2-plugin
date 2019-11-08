@@ -59,8 +59,7 @@ class CompleteAuthHandler implements HandlerInterface
         SubjectReader $subjectReader,
         PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         Data $coreHelper
-    )
-    {
+    ) {
         $this->logger = $logger;
         $this->subjectReader = $subjectReader;
         $this->coreHelper = $coreHelper;

@@ -129,5 +129,4 @@ class SettlementRequestBuilder implements BuilderInterface
 
         return $data;
     }
-
 }

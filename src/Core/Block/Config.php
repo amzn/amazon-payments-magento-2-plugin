@@ -106,7 +106,7 @@ class Config extends Template
      */
     public function isExtensionEnabled()
     {
-	    return ($this->coreHelper->isPwaEnabled() || $this->coreHelper->isLwaEnabled());
+        return ($this->coreHelper->isPwaEnabled() || $this->coreHelper->isLwaEnabled());
     }
 
     /**

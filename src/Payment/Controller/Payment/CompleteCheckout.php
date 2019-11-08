@@ -133,23 +133,23 @@ class CompleteCheckout extends Action
             }
 
             $quote = $this->checkoutSession->getQuote();
-            if(!$quote) {
+            if (!$quote) {
                 throw new NotFoundException(__('Failed to retrieve quote from checkoutSession'));
             }
             $orderReferenceId = $quote
                 ->getExtensionAttributes()
                 ->getAmazonOrderReferenceId();
-            if($orderReferenceId) {
+            if ($orderReferenceId) {
                 // Cancel the order to prevent confusion when the merchant views Transactions in Seller Central
                 try {
                     $this->orderInformationManagement->cancelOrderReference($orderReferenceId, $quote->getStoreId());
-                } catch(AmazonServiceUnavailableException $e) {
+                } catch (AmazonServiceUnavailableException $e) {
                     $this->exceptionLogger->logException($e);
                 }
             }
 
             return $this->_redirect('checkout/cart');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             throw $e;
         }

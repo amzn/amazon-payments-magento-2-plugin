@@ -126,8 +126,7 @@ class SubjectReader
         if (!$quote_id) {
             $quote = $this->getQuote();
             $quoteLink->load($quote->getId(), 'quote_id');
-        }
-        else {
+        } else {
             $quoteLink->load($quote_id, 'quote_id');
         }
         return $quoteLink;
@@ -136,7 +135,7 @@ class SubjectReader
     /**
      * @return \Magento\Sales\Model\Order
      */
-    public function getOrder() 
+    public function getOrder()
     {
         return $this->checkoutSession->getLastRealOrder();
     }

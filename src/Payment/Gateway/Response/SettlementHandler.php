@@ -101,11 +101,9 @@ class SettlementHandler implements HandlerInterface
                 $quoteLink = $this->subjectReader->getQuoteLink($quote->getId());
                 $quoteLink->setConfirmed(true)->save();
             }
-        }
-        else {
+        } else {
             // finish capture
             $payment->setTransactionId($response['transaction_id']);
         }
     }
-
 }

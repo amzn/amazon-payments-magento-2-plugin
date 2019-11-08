@@ -37,7 +37,8 @@ class Invoice extends BaseFixture
     {
         $searchCriteriaBuilder = $this->createMagentoObject(SearchCriteriaBuilder::class);
         $searchCriteriaBuilder->addFilter(
-            'transaction_id', $transactionId
+            'transaction_id',
+            $transactionId
         );
 
         $searchCriteria = $searchCriteriaBuilder
@@ -47,7 +48,7 @@ class Invoice extends BaseFixture
 
         $invoice = current($invoices->getItems());
 
-        if ( ! $invoice) {
+        if (! $invoice) {
             throw new \Exception('Invoice not found for transaction id ' . $transactionId);
         }
 
@@ -58,7 +59,8 @@ class Invoice extends BaseFixture
     {
         $searchCriteriaBuilder = $this->createMagentoObject(SearchCriteriaBuilder::class);
         $searchCriteriaBuilder->addFilter(
-            'order_id', $orderid
+            'order_id',
+            $orderid
         );
 
         $sortOrder = $this->createMagentoObject(SortOrder::class, [
@@ -77,7 +79,7 @@ class Invoice extends BaseFixture
 
         $invoice = current($invoices->getItems());
 
-        if ( ! $invoice) {
+        if (! $invoice) {
             throw new \Exception('Invoice not found for order id ' . $orderid);
         }
 

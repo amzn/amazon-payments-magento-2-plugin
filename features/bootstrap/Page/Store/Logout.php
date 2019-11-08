@@ -30,7 +30,7 @@ class Logout extends Page
         $this->waitForCondition('true === false', 5000);
     }
 
-    protected function verifyUrl(array $urlParameters = array())
+    protected function verifyUrl(array $urlParameters = [])
     {
         return true;
     }

@@ -64,7 +64,7 @@ class Listener extends \Magento\Framework\App\Action\Action
     {
         try {
             $host = parse_url($this->getRequest()->getHeader('Origin'))['host'];
-            if(in_array($host, $this->simplepath->getListenerOrigins())) {
+            if (in_array($host, $this->simplepath->getListenerOrigins())) {
                 $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
             }
             $this->getResponse()->setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -80,7 +80,7 @@ class Listener extends \Magento\Framework\App\Action\Action
             try {
                 if (strpos($payload, 'encryptedKey') === false) {
                     $return = ['result' => 'error', 'message' => 'Invalid payload: ' . $payload];
-                } else if ($payload) {
+                } elseif ($payload) {
                     $json = $this->simplepath->decryptPayload($payload, false);
 
                     if ($json) {
@@ -100,7 +100,7 @@ class Listener extends \Magento\Framework\App\Action\Action
             $result->setData($return);
 
             return $result;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             throw $e;
         }

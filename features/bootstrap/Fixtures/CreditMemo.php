@@ -37,7 +37,8 @@ class CreditMemo extends BaseFixture
     {
         $searchCriteriaBuilder = $this->createMagentoObject(SearchCriteriaBuilder::class);
         $searchCriteriaBuilder->addFilter(
-            'order_id', $orderid
+            'order_id',
+            $orderid
         );
 
         $sortOrder = $this->createMagentoObject(SortOrder::class, [
@@ -56,7 +57,7 @@ class CreditMemo extends BaseFixture
 
         $creditMemo = current($creditMemos->getItems());
 
-        if ( ! $creditMemo) {
+        if (! $creditMemo) {
             throw new \Exception('Credit memo not found for order id ' . $orderid);
         }
 
