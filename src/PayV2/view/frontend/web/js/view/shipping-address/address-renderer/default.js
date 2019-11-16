@@ -1,8 +1,9 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/shipping-address/address-renderer/default',
-    'Amazon_PayV2/js/model/storage'
-], function ($, Component, amazonStorage) {
+    'Amazon_PayV2/js/model/storage',
+    'Amazon_PayV2/js/amazon-checkout'
+], function ($, Component, amazonStorage, amazonCheckout) {
     'use strict';
 
     var editSelector = '.edit-address-link';
@@ -17,9 +18,11 @@ define([
                 name: Component.defaults.template,
                 afterRender: function() {
                     if ($(editSelector).length) {
-                        amazon.Pay.bindChangeAction(editSelector, {
-                            amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
-                            changeAction: 'changeAddress'
+                        amazonCheckout.withAmazonCheckout(function(amazon) {
+                            amazon.Pay.bindChangeAction(editSelector, {
+                                amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
+                                changeAction: 'changeAddress'
+                            });
                         });
                     }
                 }
