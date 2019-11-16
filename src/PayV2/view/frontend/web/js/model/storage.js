@@ -78,6 +78,13 @@ define([
          */
         reloadCheckoutSessionId: function() {
             customerData.reload([sectionKey]);
+        },
+
+        /**
+         * Return the Amazon Pay region
+         */
+        getRegion: function() {
+            return amazonPayV2Config.getValue('region');
         }
     };
 });

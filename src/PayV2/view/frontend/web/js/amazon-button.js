@@ -18,8 +18,8 @@ define([
     'Amazon_PayV2/js/model/amazon-payv2-config',
     'Amazon_PayV2/js/model/storage',
     'mage/url',
-    'amazonPayV2Checkout',
-], function ($, customerData, amazonPayV2Config, amazonStorage, url) {
+    'Amazon_PayV2/js/amazon-checkout',
+], function ($, customerData, amazonPayV2Config, amazonStorage, url, amazonCheckout) {
     'use strict';
 
     if (amazonStorage.isEnabled) {
@@ -33,18 +33,20 @@ define([
              * Create button
              */
             _create: function () {
-                amazon.Pay.renderButton(this.options.selector, {
-                    merchantId: amazonPayV2Config.getValue('merchantId'),
-                    createCheckoutSession: {
-                        url: url.build('amazon_payv2/checkout/createSession'),
-                        method: 'PUT'
-                    },
-                    ledgerCurrency: amazonPayV2Config.getValue('currency'),
-                    checkoutLanguage: amazonPayV2Config.getValue('language'),
-                    placement: this.options.placement,
-                    sandbox: amazonPayV2Config.getValue('sandbox'),
-                });
-                $('.amazon-button-container-v2 .field-tooltip').fadeIn();
+                amazonCheckout.withAmazonCheckout(function(amazon, args) {
+                    amazon.Pay.renderButton(this.options.selector, {
+                        merchantId: amazonPayV2Config.getValue('merchantId'),
+                        createCheckoutSession: {
+                            url: url.build('amazon_payv2/checkout/createSession'),
+                            method: 'PUT'
+                        },
+                        ledgerCurrency: amazonPayV2Config.getValue('currency'),
+                        checkoutLanguage: amazonPayV2Config.getValue('language'),
+                        placement: this.options.placement,
+                        sandbox: amazonPayV2Config.getValue('sandbox'),
+                    });
+                    $('.amazon-button-container-v2 .field-tooltip').fadeIn();
+                }, this);
             }
         });
 
