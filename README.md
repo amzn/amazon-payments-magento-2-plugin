@@ -45,7 +45,7 @@ The following table provides an overview on which Git branch is compatible to wh
 | ------------- | ------------- | ------------- |
 | 2.1.0 - 2.2.3  | [1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/1.x) | 1.2.8 |
 | 2.2.4 - 2.2.5  | [2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.x) | 2.0.16 |
-| 2.2.6 - 2.2.x  | [2.1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x) | 2.2.14 |
-| 2.3.0 and above  | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) | 3.2.9 |
+| 2.2.6 - 2.2.x  | [2.1.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/2.1.x) | 2.3.1 |
+| 2.3.0 and above  | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) | 3.3.1 |
 
 
