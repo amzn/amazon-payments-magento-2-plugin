@@ -89,7 +89,6 @@ class BackendFieldDependence
     private function isAmazonField($fieldName)
     {
         return $this->request->getParam('section') == 'payment'
-            && $this->request->getParam('paypal_country')
             && strpos($fieldName, 'amazon') !== false;
     }
 
