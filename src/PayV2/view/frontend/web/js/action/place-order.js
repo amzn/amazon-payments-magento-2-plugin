@@ -23,9 +23,10 @@ define(
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
         'Amazon_PayV2/js/model/storage',
-        'mage/translate'
+        'mage/translate',
+        'Magento_CheckoutAgreements/js/model/agreements-assigner'
     ],
-    function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader, amazonStorage, $t) {
+    function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader, amazonStorage, $t, agreementsAssigner) {
         'use strict';
 
         return function (paymentData, redirectOnSuccess) {
@@ -54,6 +55,8 @@ define(
             }
 
             fullScreenLoader.startLoader();
+
+            agreementsAssigner(payload.paymentMethod);
 
             return storage.post(
                 serviceUrl,
