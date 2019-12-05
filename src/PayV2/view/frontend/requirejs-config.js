@@ -21,11 +21,9 @@ var config = {
         }
     },
     paths: {
-        amazonPayV2Checkout: 'https://static-na.payments-amazon.com/checkout'
-    },
-    shim: {
-        amazonPayV2Checkout: {
-            exports: 'amazon'
-        }
+        amazonPayV2CheckoutDE: 'https://static-eu.payments-amazon.com/checkout',
+        amazonPayV2CheckoutUK: 'https://static-eu.payments-amazon.com/checkout',
+        amazonPayV2CheckoutJP: 'https://static-fe.payments-amazon.com/checkout',
+        amazonPayV2CheckoutUS: 'https://static-na.payments-amazon.com/checkout'
     }
 };

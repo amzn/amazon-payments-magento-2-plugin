@@ -20,7 +20,8 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/model/address-list',
-        'uiRegistry'
+        'uiRegistry',
+        'Amazon_PayV2/js/amazon-checkout'
     ],
     function (
         $,
@@ -41,13 +42,15 @@ define(
         checkoutData,
         checkoutDataResolver,
         addressList,
-        registry
+        registry,
+        amazonCheckout
     ) {
         'use strict';
 
         var self;
 
-        require(['amazonPayV2Checkout']);
+        require([amazonCheckout.getCheckoutModuleName()]);
+
         amazonStorage.reloadCheckoutSessionId();
 
         return Component.extend({
