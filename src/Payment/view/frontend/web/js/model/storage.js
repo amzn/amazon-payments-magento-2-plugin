@@ -32,7 +32,6 @@ define(
             isAmazonEnabled = ko.observable(amazonPaymentConfig.getValue('isPwaEnabled')),
             orderReference,
             addressConsentToken = amazonCore.accessToken,
-            isAmazonDefined = amazonCore.amazonDefined.subscribe(checkAmazonDefined),
             amazonLoginError = amazonCore.amazonLoginError.subscribe(setAmazonLoggedOutIfLoginError),
             amazonDeclineCode = ko.observable(false),
             sandboxSimulationReference = ko.observable('default'),
@@ -46,18 +45,6 @@ define(
                 return isAmazonAccountLoggedIn() && isQuoteDirty() }),
             isLoginRedirectPage = $('body').hasClass('amazon-login-login-processauthhash');
 
-        /**
-         * Subscribes to amazonDefined observable which runs when amazon object becomes available
-         * @param amazonDefined
-         */
-            function checkAmazonDefined(amazonDefined)
-            {
-                if (amazonDefined && !isLoginRedirectPage) {
-                    verifyAmazonLoggedIn();
-                    //remove subscription to amazonDefined once loaded
-                    isAmazonDefined.dispose();
-                }
-            }
 
         /** log out amazon user **/
             function amazonLogOut()
@@ -84,8 +71,7 @@ define(
                 }
             });
 
-        //run this on loading storage model. If not defined subscribe will trigger when true
-            checkAmazonDefined(amazonCore.amazonDefined());
+            verifyAmazonLoggedIn();
             setAmazonLoggedOutIfLoginError(amazonCore.amazonLoginError());
 
         /**
@@ -93,11 +79,7 @@ define(
          */
             function verifyAmazonLoggedIn()
             {
-                amazonCore.verifyAmazonLoggedIn().then(function (response) {
-                    if (!amazonCore.amazonLoginError()) {
-                        isAmazonAccountLoggedIn(response);
-                    }
-                });
+                isAmazonAccountLoggedIn(!!amazonCore.accessToken());
             }
 
             return {
@@ -111,6 +93,7 @@ define(
                 isQuoteDirty: isQuoteDirty,
                 isPwaVisible: isPwaVisible,
                 amazonlogOut: amazonLogOut,
+                amazonDefined: amazonCore.amazonDefined,
                 setOrderReference: function (or) {
                     orderReference = or;
                 },

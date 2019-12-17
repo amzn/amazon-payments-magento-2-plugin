@@ -7,6 +7,7 @@ define(
         'Magento_Customer/js/customer-data',
         'Magento_Checkout/js/model/quote',
         'Amazon_Payment/js/model/storage',
+        'amazonCore',
         'mage/storage',
         'Magento_Checkout/js/model/full-screen-loader',
         'Amazon_Payment/js/action/place-order',
@@ -27,6 +28,7 @@ define(
         customerData,
         quote,
         amazonStorage,
+        amazonCore,
         storage,
         fullScreenLoader,
         placeOrderAction,
@@ -102,9 +104,7 @@ define(
                     /**
                      * Error callback
                      */
-                    onError: function (error) {
-                        errorProcessor.process(error);
-                    }
+                    onError: amazonCore.handleWidgetError
                 }).bind(self.options.paymentWidgetDOMId);
             },
 
