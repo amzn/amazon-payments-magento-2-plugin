@@ -35,7 +35,7 @@ For more information about Amazon Pay and Magento 2, please visit our [Amazon Pa
 
 The extension is available via composer, Magento Marketplace or, with Magento 2.2.4 and higher, already pre-installed as bundled extension.
 
-Please follow the instructions in the [User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin) get more details concerning installation procedure.
+Please follow the instructions in the [User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin) to get more details concerning installation procedure.
 
 ## Branch information
 
