@@ -19,7 +19,7 @@
     <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
 
-<div class="amazon-express-title" data-bind="i18n: 'Express Checkout'"></div>
+<div class="amazon-express-title" data-bind="i18n: 'Express Checkout', visible: !isAmazonAccountLoggedIn() && isPwaVisible()"></div>
 
 <div class="amazon-button-container" data-bind="visible: !isAmazonAccountLoggedIn() && isPwaVisible()">
     <div class="amazon-button-container__cell">
@@ -34,7 +34,7 @@
     </div>
 </div>
 
-<div class="amazon-divider">
+<div class="amazon-divider" data-bind="visible: !isAmazonAccountLoggedIn() && isPwaVisible()">
     <span data-bind="i18n: 'Or continue below to pay with a credit card'"></span>
 </div>
 
