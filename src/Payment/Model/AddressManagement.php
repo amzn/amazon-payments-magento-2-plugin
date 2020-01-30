@@ -23,6 +23,7 @@ use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Helper\Address;
 use Exception;
 use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\AddressFactory;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Validator\Exception as ValidatorException;
@@ -78,6 +79,11 @@ class AddressManagement implements AddressManagementInterface
     private $logger;
 
     /**
+     * @var AddressFactory
+     */
+    private $addressFactory;
+
+    /**
      * @param ClientFactoryInterface    $clientFactory
      * @param Address                   $addressHelper
      * @param QuoteLinkInterfaceFactory $quoteLinkFactory
@@ -86,6 +92,7 @@ class AddressManagement implements AddressManagementInterface
      * @param AmazonAddressFactory      $amazonAddressFactory
      * @param Factory                   $validatorFactory
      * @param LoggerInterface           $logger
+     * @param AddressFactory            $addressFactory
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,
@@ -95,7 +102,8 @@ class AddressManagement implements AddressManagementInterface
         CollectionFactory $countryCollectionFactory,
         AmazonAddressFactory $amazonAddressFactory,
         Factory $validatorFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        AddressFactory $addressFactory
     ) {
         $this->clientFactory            = $clientFactory;
         $this->addressHelper            = $addressHelper;
@@ -105,6 +113,7 @@ class AddressManagement implements AddressManagementInterface
         $this->amazonAddressFactory     = $amazonAddressFactory;
         $this->validatorFactory         = $validatorFactory;
         $this->logger                   = $logger;
+        $this->addressFactory           = $addressFactory;
     }
 
     /**
@@ -198,6 +207,13 @@ class AddressManagement implements AddressManagementInterface
 
             if (1 != $collectionSize) {
                 throw new WebapiException(__('the country for your address is not allowed for this store'));
+            }
+
+            // Validate address
+            $validate = $this->addressFactory->create()->updateData($magentoAddress)->validate();
+            if (is_array($validate)) {
+                $validate[] = __('Your address may be updated in your Amazon account.');
+                throw new ValidatorException(null, null, [$validate]);
             }
         }
 
