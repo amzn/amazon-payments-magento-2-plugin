@@ -16,8 +16,7 @@
 define([
     'jquery',
     'Magento_Customer/js/customer-data',
-    'amazonCore',
-    'jquery/ui'
+    'amazonCore'
 ], function ($, customerData) {
     'use strict';
 
