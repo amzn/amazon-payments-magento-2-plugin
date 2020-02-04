@@ -114,6 +114,8 @@ class CompleteCheckout extends Action
     {
         try {
             $authenticationStatus = $this->getRequest()->getParam('AuthenticationStatus');
+            // Bypass cache check in \Magento\PageCache\Model\DepersonalizeChecker
+            $this->getRequest()->setParams(['ajax' => 1]);
             switch ($authenticationStatus) {
                 case 'Success':
                     try {
