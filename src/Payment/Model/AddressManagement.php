@@ -21,6 +21,8 @@ use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Payment\Api\AddressManagementInterface;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Helper\Address;
+use Amazon\Payment\Domain\AmazonOrderStatus;
+use Amazon\Payment\Domain\AmazonAuthorizationStatus;
 use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
@@ -143,8 +145,19 @@ class AddressManagement implements AddressManagementInterface
     {
         try {
             $data = $this->getOrderReferenceDetails($amazonOrderReferenceId, $addressConsentToken);
+            $isAmazonSuspended = false;
 
             $this->updateQuoteLink($amazonOrderReferenceId);
+
+            $orderStatus = $data['OrderReferenceDetails']['OrderReferenceStatus'] ?? false;
+
+            // Re-open suspended InvalidPaymentMethod decline during ConfirmOrderReference
+            if ($orderStatus && $orderStatus['State'] == AmazonOrderStatus::STATE_SUSPENDED
+                && $orderStatus['ReasonCode'] == AmazonAuthorizationStatus::REASON_INVALID_PAYMENT_METHOD) {
+                $isAmazonSuspended = true;
+            }
+
+            $this->session->setData('is_amazon_suspended', $isAmazonSuspended);
 
             if (isset($data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'])) {
                 $billingAddress = $data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'];

@@ -123,6 +123,12 @@ class CompleteCheckout extends Action
                         $this->cartManagement->placeOrder($this->checkoutSession->getQuoteId());
                         return $this->_redirect('checkout/onepage/success');
                     } catch (AmazonWebapiException $e) {
+                        if ($this->amazonConfig->isSoftDecline($e->getCode())) {
+                            return $this->_redirect('checkout', [
+                                '_query' => 'orderReferenceId=' . $this->getOrderReferenceId(),
+                                '_fragment' => 'payment',
+                            ]);
+                        }
                         $this->exceptionLogger->logException($e);
                         $this->messageManager->addErrorMessage($e->getMessage());
                     }
@@ -141,18 +147,12 @@ class CompleteCheckout extends Action
                     ));
             }
 
-            $quote = $this->checkoutSession->getQuote();
-            if (!$quote) {
-                throw new NotFoundException(__('Failed to retrieve quote from checkoutSession'));
-            }
-            $orderReferenceId = $quote
-                ->getExtensionAttributes()
-                ->getAmazonOrderReferenceId()
-                ->getAmazonOrderReferenceId();
+            $orderReferenceId = $this->getOrderReferenceId();
+
             if ($orderReferenceId) {
                 // Cancel the order to prevent confusion when the merchant views Transactions in Seller Central
                 try {
-                    $this->orderInformationManagement->cancelOrderReference($orderReferenceId, $quote->getStoreId());
+                    $this->orderInformationManagement->cancelOrderReference($orderReferenceId, $this->checkoutSession->getQuote()->getStoreId());
                 } catch (AmazonServiceUnavailableException $e) {
                     $this->exceptionLogger->logException($e);
                 }
@@ -163,5 +163,25 @@ class CompleteCheckout extends Action
             $this->exceptionLogger->logException($e);
             throw $e;
         }
+    }
+
+    /**
+     * Return Amazon order reference ID
+     *
+     * @return string
+     * @throws NotFoundException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getOrderReferenceId()
+    {
+        $quote = $this->checkoutSession->getQuote();
+        if (!$quote) {
+            throw new NotFoundException(__('Failed to retrieve quote from checkoutSession'));
+        }
+        return $quote
+            ->getExtensionAttributes()
+            ->getAmazonOrderReferenceId()
+            ->getAmazonOrderReferenceId();
     }
 }
