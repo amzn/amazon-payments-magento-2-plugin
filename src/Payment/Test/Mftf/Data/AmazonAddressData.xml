@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!--"Fail Address" to trigger Magento shipping address validation error-->
+    <entity name="AmazonAddressFail" type="amazon_address">
+        <data key="country">BQ</data>
+        <data key="name">Bonaire International Airport</data>
+        <data key="address">Plasa Medardo SV Thielman 1</data>
+        <data key="city">Kralendijk</data>
+        <data key="region">Caribbean Netherlands</data>
+        <data key="postal">12345</data>
+        <data key="phone">+555 555 5555</data>
+    </entity>
+</entities>
