@@ -98,8 +98,7 @@ define(
                      * Order reference creation callback
                      */
                     onOrderReferenceCreate: function (orderReference) {
-                        var orderid = orderReference.getAmazonOrderReferenceId();
-
+                        var orderid = amazonStorage.orderReferenceId() || orderReference.getAmazonOrderReferenceId();
                         amazonStorage.setOrderReference(orderid);
                     },
 
@@ -109,6 +108,7 @@ define(
                     onAddressSelect: function () { // orderReference
                         self.getShippingAddressFromAmazon();
                     },
+                    displayMode: amazonStorage.orderReferenceId() ? 'Read' : '',
                     design: {
                         designMode: 'responsive'
                     },
