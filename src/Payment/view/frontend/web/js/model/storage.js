@@ -122,7 +122,7 @@ define(
              * Get order reference
              */
             getOrderReference: function () {
-                return orderReference;
+                return this.orderReferenceId() || orderReference;
             },
 
             /**

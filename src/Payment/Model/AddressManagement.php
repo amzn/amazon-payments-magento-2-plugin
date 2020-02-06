@@ -117,6 +117,11 @@ class AddressManagement implements AddressManagementInterface
         try {
             $data = $this->getOrderReferenceDetails($amazonOrderReferenceId, $addressConsentToken);
 
+            if ($this->isSuspendedStatus($data)) {
+                throw new WebapiException(__('There has been a problem with the selected payment method on your ' .
+                    'Amazon account. Please choose another one.'));
+            }
+
             $this->updateQuoteLink($amazonOrderReferenceId);
 
             if (isset($data['OrderReferenceDetails']['Destination']['PhysicalDestination'])) {
@@ -145,19 +150,11 @@ class AddressManagement implements AddressManagementInterface
     {
         try {
             $data = $this->getOrderReferenceDetails($amazonOrderReferenceId, $addressConsentToken);
-            $isAmazonSuspended = false;
 
             $this->updateQuoteLink($amazonOrderReferenceId);
 
-            $orderStatus = $data['OrderReferenceDetails']['OrderReferenceStatus'] ?? false;
-
             // Re-open suspended InvalidPaymentMethod decline during ConfirmOrderReference
-            if ($orderStatus && $orderStatus['State'] == AmazonOrderStatus::STATE_SUSPENDED
-                && $orderStatus['ReasonCode'] == AmazonAuthorizationStatus::REASON_INVALID_PAYMENT_METHOD) {
-                $isAmazonSuspended = true;
-            }
-
-            $this->session->setData('is_amazon_suspended', $isAmazonSuspended);
+            $this->session->setData('is_amazon_suspended', $this->isSuspendedStatus($data));
 
             if (isset($data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'])) {
                 $billingAddress = $data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'];
@@ -258,4 +255,13 @@ class AddressManagement implements AddressManagementInterface
                 ->save();
         }
     }
+
+    protected function isSuspendedStatus($data)
+    {
+        $orderStatus = $data['OrderReferenceDetails']['OrderReferenceStatus'] ?? false;
+
+        return ($orderStatus && $orderStatus['State'] == AmazonOrderStatus::STATE_SUSPENDED
+            && $orderStatus['ReasonCode'] == AmazonAuthorizationStatus::REASON_INVALID_PAYMENT_METHOD);
+    }
+
 }
