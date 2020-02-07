@@ -16,6 +16,7 @@
 namespace Amazon\Payment\Controller\Payment;
 
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
+use Amazon\Core\Helper\Data as AmazonHelper;
 use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Exception\AmazonWebapiException;
 use Amazon\Core\Logger\ExceptionLogger;
@@ -43,6 +44,11 @@ class CompleteCheckout extends Action
      * @var AmazonConfig
      */
     private $amazonConfig;
+
+    /**
+     * @var AmazonHelper
+     */
+    private $amazonHelper;
 
     /**
      * @var CheckoutSession
@@ -74,6 +80,7 @@ class CompleteCheckout extends Action
      *
      * @param Context $context
      * @param AmazonConfig $amazonConfig
+     * @param AmazonHelper $amazonHelper
      * @param CartManagementInterface $cartManagement
      * @param GuestCartManagementInterface $guestCartManagement
      * @param CheckoutSession $checkoutSession
@@ -86,6 +93,7 @@ class CompleteCheckout extends Action
     public function __construct(
         Context $context,
         AmazonConfig $amazonConfig,
+        AmazonHelper $amazonHelper,
         CartManagementInterface $cartManagement,
         GuestCartManagementInterface $guestCartManagement,
         CheckoutSession $checkoutSession,
@@ -97,6 +105,7 @@ class CompleteCheckout extends Action
     ) {
         parent::__construct($context);
         $this->amazonConfig = $amazonConfig;
+        $this->amazonHelper = $amazonHelper;
         $this->cartManagement = $cartManagement;
         $this->checkoutSession = $checkoutSession;
         $this->session = $session;
@@ -123,6 +132,12 @@ class CompleteCheckout extends Action
                             $this->checkoutSession->getQuote()->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
                         }
                         $this->cartManagement->placeOrder($this->checkoutSession->getQuoteId());
+                        if ($this->amazonHelper->getAuthorizationMode() == 'synchronous_possible') {
+                            $this->messageManager->addNoticeMessage(__(
+                                'Your transaction with Amazon Pay is currently being validated. ' .
+                                'Please be aware that we will inform you shortly as needed.'
+                            ));
+                        }
                         return $this->_redirect('checkout/onepage/success');
                     } catch (AmazonWebapiException $e) {
                         if ($this->amazonConfig->isSoftDecline($e->getCode())) {
