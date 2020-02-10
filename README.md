@@ -14,6 +14,10 @@ with Amazon services. This helps your customers shop quickly, safely and securel
 Your customers can pay on your website without re-entering their payment and address details. 
 All Amazon Pay transactions are protected by Amazon's A-to-z Guarantee.
 
+## Installation Steps
+
+Refer [here](https://gist.github.com/tarishah/9b12146925eb9b5dbe5a1a3936b9b382) for the V2 Checkout Installation steps.
+
 ## Dependencies
 
 You can find a list of modules in the require section of the `composer.json` file located in the
