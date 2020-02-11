@@ -21,7 +21,6 @@ define([
     'Magento_Checkout/js/model/full-screen-loader',
     'modernizr/modernizr',
     'amazonCore',
-    'jquery/ui',
     'uiRegistry',
     'mage/cookies'
 ], function ($, customerData, sectionConfig, amazonPaymentConfig, amazonCsrf, fullScreenLoader) {

@@ -172,4 +172,15 @@ class AmazonConfig
             $store
         );
     }
+
+    /**
+     * Is AmazonWebapiException code a soft decline error?
+     *
+     * @param $errorCode
+     * @return bool
+     */
+    public function isSoftDecline($errorCode)
+    {
+        return $errorCode == $this->scopeConfig->getValue('payment/amazon_payment/soft_decline_code');
+    }
 }

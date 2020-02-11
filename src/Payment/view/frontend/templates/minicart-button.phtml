@@ -24,6 +24,10 @@ $jsonHelper = $this->helper(Magento\Framework\Json\Helper\Data::class);
 ?>
 
 <div id="minicart-amazon-pay-button" class="amazon-minicart-container">
+    <div class="amazon-divider">
+        <span><?= __('or') ?></span>
+    </div>
+
     <div class="amazon-button-container">
         <div class="amazon-button-container__cell">
             <div id="PayWithAmazon-<?= /* @noEscape */ $block->getParentBlock()->getJsId() ?>"

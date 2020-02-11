@@ -27,6 +27,16 @@
     <div class="amazon-widget-container">
         <div id="addressBookWidgetDiv" class="amazon-widget amazon-widget--address" data-bind="afterRender: initAddressWidget"></div>
     </div>
+
+    <div class="methods-shipping" data-bind="visible: isShippingAddressReadOnly()">
+        <div class="actions-toolbar">
+            <button id="amazon-continue-payment" data-role="opc-continue" type="submit" class="button action primary"
+                    data-bind="click: continuePayment">
+                <span data-bind="i18n: 'Next'"></span>
+            </button>
+        </div>
+    </div>
+
 <!--/ko-->
 
 <!-- ko foreach: getRegion('after-widget-address') -->
