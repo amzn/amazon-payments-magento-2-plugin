@@ -33,9 +33,7 @@
     "magento/module-scalable-oms": "*"
   },
   "autoload": {
-    "files": [
-      "registration.php"
-    ],
+    "files": ["registration.php"],
     "psr-4": {
       "Amazon\\PayV2\\": ""
     }
