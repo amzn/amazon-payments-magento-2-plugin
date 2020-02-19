@@ -22,4 +22,4 @@ For more information about Amazon Pay and Magento 2, please visit our [Amazon Pa
 
 Please follow the instructions in the [User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin)
 Instructions to upgrade Amazon Pay in-core installation to latest release of this branch can be found [here](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/2.1.x/PATCH_INSTRUCTIONS.MD).
-**Please note that support for Magento Commerce 2.2.x ended on 31/12/2019 and no further developments are planned for this branch.
+**Please note that support for Magento Commerce 2.2.x ended on 31/12/2019 and no further developments are planned for this branch.**
