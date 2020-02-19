@@ -20,7 +20,8 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
-        'uiRegistry'
+        'uiRegistry',
+        'Amazon_Payment/js/messages'
     ],
     function (
         $,
@@ -41,7 +42,8 @@ define(
         urlBuilder,
         checkoutData,
         checkoutDataResolver,
-        registry
+        registry,
+        amazonMessages
     ) {
         'use strict';
 
@@ -122,6 +124,7 @@ define(
                      */
                     onError: amazonCore.handleWidgetError
                 }).bind(self.options.addressWidgetDOMId);
+                amazonMessages.displayMessages();
             },
 
             /**
