@@ -18,7 +18,8 @@ define(
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/url-builder',
         'amazonPaymentConfig',
-        'uiRegistry'
+        'uiRegistry',
+        'Amazon_Payment/js/messages'
     ],
     function (
         $,
@@ -39,7 +40,8 @@ define(
         additionalValidators,
         urlBuilder,
         amazonPaymentConfig,
-        registry
+        registry,
+        amazonMessages
     ) {
         'use strict';
 
@@ -124,6 +126,7 @@ define(
                     $(this.presentmentDOMId).show();
                 }
                 widget.bind(this.paymentWidgetDOMId);
+                amazonMessages.displayMessages();
             },
 
             /**
