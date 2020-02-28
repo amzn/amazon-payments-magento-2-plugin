@@ -162,6 +162,10 @@ class CompleteCheckout extends Action
                         'The SCA challenge was not completed successfully.  '
                         . 'Please try again, or use a different payment method.'
                     ));
+                    return $this->_redirect('checkout', [
+                        '_query' => 'orderReferenceId=' . $this->getOrderReferenceId(),
+                        '_fragment' => 'payment',
+                    ]);
             }
 
             $orderReferenceId = $this->getOrderReferenceId();
