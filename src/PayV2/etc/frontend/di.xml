@@ -34,6 +34,13 @@
     <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
         <plugin name="amazon_payv2_checkout_processor" type="Amazon\PayV2\Plugin\CheckoutProcessor" />
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="amazon_payv2_config_provider" xsi:type="object">Amazon\PayV2\Model\CheckoutConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Amazon\Core\Helper\Data">
         <plugin name="amazon_payv2_amazon_core_helper" type="Amazon\PayV2\Plugin\AmazonCoreHelperData" sortOrder="1" />
     </type>

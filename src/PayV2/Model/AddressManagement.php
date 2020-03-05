@@ -102,7 +102,30 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     /**
      * {@inheritdoc}
      */
+    public function getBillingAddress($amazonCheckoutSessionId)
+    {
+        return $this->fetchAddress($amazonCheckoutSessionId, false, function ($response) {
+            return $response['paymentPreferences'][0]['billingAddress'] ?? [];
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getShippingAddress($amazonCheckoutSessionId)
+    {
+        return $this->fetchAddress($amazonCheckoutSessionId, true, function ($response) {
+            return $response['shippingAddress'] ?? [];
+        });
+    }
+
+    /**
+     * @param string $amazonCheckoutSessionId
+     * @param bool $isShippingAddress
+     * @param mixed $addressDataExtractor
+     * @return mixed
+     */
+    protected function fetchAddress($amazonCheckoutSessionId, $isShippingAddress, $addressDataExtractor)
     {
         if (!$this->amazonConfig->isEnabled()) {
             return false;
@@ -114,16 +137,16 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
                 $amazonCheckoutSessionId
             );
 
-            if (isset($response['shippingAddress'])) {
-                $shippingAddress = $response['shippingAddress'];
-                $shippingAddress['state'] = $shippingAddress['stateOrRegion'];
+            $addressData = call_user_func($addressDataExtractor, $response);
+            if (!empty($addressData)) {
+                $addressData['state'] = $addressData['stateOrRegion'];
 
                 $address = array_combine(
-                    array_map('ucfirst', array_keys($shippingAddress)),
-                    array_values($shippingAddress)
+                    array_map('ucfirst', array_keys($addressData)),
+                    array_values($addressData)
                 );
 
-                $address = $this->convertToMagentoAddress($address, true);
+                $address = $this->convertToMagentoAddress($address, $isShippingAddress);
                 $address[0]['email'] = $response['buyer']['email'];
 
                 return $address;

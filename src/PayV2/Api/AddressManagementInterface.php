@@ -22,7 +22,12 @@ interface AddressManagementInterface
 {
     /**
      * @param string $amazonCheckoutSessionId
-     *
+     * @return mixed
+     */
+    public function getBillingAddress($amazonCheckoutSessionId);
+
+    /**
+     * @param string $amazonCheckoutSessionId
      * @return mixed
      */
     public function getShippingAddress($amazonCheckoutSessionId);

@@ -8,6 +8,7 @@ define([
     'Magento_Checkout/js/model/address-converter',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/action/select-payment-method',
+    'Amazon_PayV2/js/model/amazon-payv2-config',
     'Amazon_PayV2/js/model/storage'
 
 ], function (
@@ -20,6 +21,7 @@ define([
     addressConverter,
     quote,
     selectPaymentMethodAction,
+    amazonConfig,
     amazonStorage
 ) {
     'use strict';
@@ -60,7 +62,7 @@ define([
          * @private
          */
         _shouldRemovePaymentMethod: function (method) {
-            return amazonStorage.isAmazonCheckout() && method !== 'amazon_payment_v2' && method !== 'free';
+            return amazonStorage.isAmazonCheckout() && method !== amazonConfig.getCode() && method !== 'free';
         },
 
         /**

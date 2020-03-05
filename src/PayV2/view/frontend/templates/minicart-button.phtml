@@ -23,7 +23,11 @@
     <div class="amazon-button-column">
         <div id="PayWithAmazon-"
              class="amazon-checkout-button"
-             data-mage-init='{"Amazon_PayV2/js/amazon-button": {}}'>
+             data-mage-init='<?= json_encode([
+                 'Amazon_PayV2/js/amazon-button' => [
+                     'payOnly' => $block->isPayOnly(),
+                 ]
+             ]) ?>'>
         </div>
     </div>
     <div class="amazon-button-column amazon-button-column-tooltip">

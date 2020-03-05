@@ -2,19 +2,21 @@ define(
     [
         'uiComponent',
         'Magento_Checkout/js/model/payment/renderer-list',
+        'Amazon_PayV2/js/model/amazon-payv2-config',
         'Amazon_PayV2/js/model/storage'
     ],
     function (
         Component,
         rendererList,
+        amazonConfig,
         amazonStorage
     ) {
         'use strict';
 
-        if (amazonStorage.isAmazonCheckout()) {
+        if (amazonStorage.isAmazonCheckout() || window.checkoutConfig.payment[amazonConfig.getCode()]['isPayOnly']) {
             rendererList.push(
                 {
-                    type: 'amazon_payment_v2',
+                    type: amazonConfig.getCode(),
                     component: 'Amazon_PayV2/js/view/payment/method-renderer/amazon-payment-method'
                 }
             );

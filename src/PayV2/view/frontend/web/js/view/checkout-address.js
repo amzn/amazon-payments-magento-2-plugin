@@ -13,6 +13,8 @@ define(
         'Amazon_PayV2/js/model/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/address-converter',
+        'Magento_Checkout/js/action/create-billing-address',
+        'Magento_Checkout/js/action/create-shipping-address',
         'mage/storage',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/error-processor',
@@ -21,6 +23,7 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/model/address-list',
         'uiRegistry',
+        'Amazon_PayV2/js/model/amazon-payv2-config',
         'Amazon_PayV2/js/amazon-checkout'
     ],
     function (
@@ -35,6 +38,8 @@ define(
         amazonStorage,
         shippingService,
         addressConverter,
+        createBillingAddress,
+        createShippingAddress,
         storage,
         fullScreenLoader,
         errorProcessor,
@@ -43,6 +48,7 @@ define(
         checkoutDataResolver,
         addressList,
         registry,
+        amazonConfig,
         amazonCheckout
     ) {
         'use strict';
@@ -55,6 +61,7 @@ define(
 
         return Component.extend({
             defaults: {
+                isBillingAddress: false,
                 template: 'Amazon_PayV2/checkout-address'
             },
             isCustomerLoggedIn: customer.isLoggedIn,
@@ -68,7 +75,7 @@ define(
                 self = this;
                 this._super();
                 if (this.isAmazonCheckout) {
-                    this.getShippingAddressFromAmazon();
+                    this.getAddressFromAmazon();
                 }
             },
 
@@ -76,7 +83,7 @@ define(
              * Call when component template is rendered
              */
             initAddress: function () {
-                var addressDataList = $.extend({}, quote.shippingAddress());
+                var addressDataList = $.extend({}, this.isBillingAddress ? quote.billingAddress() : quote.shippingAddress());
 
                 // Only display one address from Amazon
                 addressList.removeAll();
@@ -88,22 +95,25 @@ define(
                     });
                 }
 
-                addressList.push(addressDataList);
-                this.setEmail(addressDataList.email);
+                if (!$.isEmptyObject(addressDataList)) {
+                    addressList.push(addressDataList);
+                    this.setEmail(addressDataList.email);
+                }
             },
 
             /**
-             * Retrieve shipping address from Amazon API
+             * Retrieve address from Amazon API
              */
-            getShippingAddressFromAmazon: function () {
+            getAddressFromAmazon: function () {
                 var serviceUrl, payload;
+                var addressType = this.isBillingAddress ? 'billing' : 'shipping';
 
                 // Only display one address from Amazon
                 addressList.removeAll();
 
                 amazonStorage.isShippingMethodsLoading(true);
                 shippingService.isLoading(true);
-                serviceUrl = urlBuilder.createUrl('/amazon-v2-shipping-address/:amazonCheckoutSessionId', {
+                serviceUrl = urlBuilder.createUrl('/amazon-v2-' + addressType + '-address/:amazonCheckoutSessionId', {
                     amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId()
                 }),
 
@@ -119,7 +129,7 @@ define(
                         }
 
                         var amazonAddress = data.shift(),
-                            addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress),
+                            addressData = self.isBillingAddress ? createBillingAddress(amazonAddress) : createShippingAddress(amazonAddress),
                             checkoutProvider = registry.get('checkoutProvider'),
                             addressConvert,
                             i;
@@ -137,19 +147,27 @@ define(
                         }
 
                         // Amazon does not return telephone or non-US regionIds, so use previous provider values
-                        if (checkoutProvider.shippingAddress) {
-                            addressData.telephone = checkoutProvider.shippingAddress.telephone;
+                        var checkoutAddress = checkoutProvider[addressType + 'Address'];
+                        if (checkoutAddress) {
+                            addressData.telephone = checkoutAddress.telephone;
                             if (!addressData.regionId) {
-                                addressData.regionId = checkoutProvider.shippingAddress.region_id;
+                                addressData.regionId = checkoutAddress.region_id;
                             }
                         }
 
-                        // Save shipping address
+                        // Save address
                         addressConvert = addressConverter.quoteAddressToFormAddressData(addressData);
-                        checkoutData.setShippingAddressFromData(addressConvert);
-                        checkoutProvider.set('shippingAddress', addressConvert);
+                        checkoutData['set' + addressType.charAt(0).toUpperCase() + addressType.slice(1) + 'AddressFromData'].call(checkoutData, addressConvert);
 
-                        checkoutDataResolver.resolveEstimationAddress();
+                        if (self.isBillingAddress) {
+                            checkoutProvider.set('billingAddress' + amazonConfig.getCode(), addressConvert);
+                            checkoutData.setSelectedBillingAddress(addressData.getKey());
+                            checkoutData.setNewCustomerBillingAddress(addressConvert);
+                            checkoutDataResolver.resolveBillingAddress();
+                        } else {
+                            checkoutProvider.set('shippingAddress', addressConvert);
+                            checkoutDataResolver.resolveEstimationAddress();
+                        }
 
                         self.initAddress();
                     }

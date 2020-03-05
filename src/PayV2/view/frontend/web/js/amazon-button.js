@@ -25,6 +25,7 @@ define([
     if (amazonStorage.isEnabled) {
         $.widget('amazon.AmazonButton', {
             options: {
+                payOnly: false,
                 placement: amazonPayV2Config.getValue('placement'),
                 selector: '.amazon-checkout-button'
             },
@@ -42,6 +43,7 @@ define([
                         },
                         ledgerCurrency: amazonPayV2Config.getValue('currency'),
                         checkoutLanguage: amazonPayV2Config.getValue('language'),
+                        productType: this.options.payOnly ? 'PayOnly' : 'PayAndShip',
                         placement: this.options.placement,
                         sandbox: amazonPayV2Config.getValue('sandbox'),
                     });

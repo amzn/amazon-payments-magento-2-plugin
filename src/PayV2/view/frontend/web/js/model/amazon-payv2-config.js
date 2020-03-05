@@ -21,6 +21,13 @@ define(
 
         return {
             /**
+             * @returns {string}
+             */
+            getCode: function () {
+                return 'amazon_payment_v2';
+            },
+
+            /**
              * Get config value
              */
             getValue: function (key, defaultValue) {

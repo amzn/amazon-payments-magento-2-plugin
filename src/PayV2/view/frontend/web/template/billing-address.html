@@ -1,0 +1,12 @@
+<div class="checkout-billing-address">
+    <!-- ko if: isAmazonButtonVisible -->
+        <render args="buttonTemplate"/>
+    <!-- /ko -->
+    <!-- ko ifnot: isAmazonButtonVisible -->
+        <render args="detailsTemplate"/>
+        <fieldset class="fieldset" data-bind="visible: isAddressFormVisible">
+            <render args="formTemplate"/>
+            <render args="actionsTemplate"/>
+        </fieldset>
+    <!-- /ko -->
+</div>
