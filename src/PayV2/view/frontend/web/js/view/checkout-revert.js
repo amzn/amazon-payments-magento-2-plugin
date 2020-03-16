@@ -2,10 +2,12 @@
 define(
     [
         'uiComponent',
+        'Amazon_PayV2/js/action/checkout-session-cancel',
         'Amazon_PayV2/js/model/storage'
     ],
     function (
         Component,
+        checkoutSessionCancelAction,
         amazonStorage
     ) {
         'use strict';
@@ -27,8 +29,10 @@ define(
              * Revert checkout
              */
             revertCheckout: function () {
-                amazonStorage.revertCheckout();
-                window.location.replace(window.checkoutConfig.checkoutUrl);
+                checkoutSessionCancelAction(function () {
+                    amazonStorage.revertCheckout();
+                    window.location.replace(window.checkoutConfig.checkoutUrl);
+                });
             }
         });
     }

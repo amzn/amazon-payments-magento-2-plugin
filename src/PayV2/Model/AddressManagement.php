@@ -15,6 +15,7 @@
  */
 namespace Amazon\PayV2\Model;
 
+use Amazon\PayV2\Api\CheckoutSessionManagementInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
@@ -24,6 +25,11 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var \Amazon\PayV2\Api\CheckoutSessionManagementInterface
+     */
+    private $checkoutSessionManagement;
 
     /**
      * @var AmazonConfig
@@ -68,6 +74,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     /**
      * AddressManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Amazon\PayV2\Api\CheckoutSessionManagementInterface $checkoutSessionManagement
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
      * @param \Amazon\Payment\Helper\Address $addressHelper
@@ -79,6 +86,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Amazon\PayV2\Api\CheckoutSessionManagementInterface $checkoutSessionManagement,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
         \Amazon\Payment\Helper\Address $addressHelper,
@@ -89,6 +97,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->storeManager = $storeManager;
+        $this->checkoutSessionManagement = $checkoutSessionManagement;
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
         $this->addressHelper = $addressHelper;
@@ -102,7 +111,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function getShippingAddress($amazonCheckoutSessionId)
+    public function getShippingAddress($cartId)
     {
         if (!$this->amazonConfig->isEnabled()) {
             return false;
@@ -111,7 +120,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
         try {
             $response = $this->amazonAdapter->getCheckoutSession(
                 $this->storeManager->getStore()->getId(),
-                $amazonCheckoutSessionId
+                $this->checkoutSessionManagement->getCheckoutSession($cartId)
             );
 
             if (isset($response['shippingAddress'])) {

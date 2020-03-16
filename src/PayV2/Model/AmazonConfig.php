@@ -60,7 +60,7 @@ class AmazonConfig
         $this->appState = $appState;
     }
 
-    /*
+    /**
      * Is PayV2 enabled?
      *
      * @return bool
@@ -99,7 +99,7 @@ class AmazonConfig
         );
     }
 
-    /*
+    /**
      * @return string
      */
     public function getRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -115,7 +115,7 @@ class AmazonConfig
         return $this->getBaseCurrencyCode() == $this->getCurrencyCode();
     }
 
-    /*
+    /**
      * @return string
      */
     public function getCurrencyCode($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -132,7 +132,7 @@ class AmazonConfig
         return array_key_exists($paymentRegion, $currencyCodeMap) ? $currencyCodeMap[$paymentRegion] : '';
     }
 
-    /*
+    /**
      * Is debug logging enabled?
      *
      * @return bool
@@ -181,7 +181,7 @@ class AmazonConfig
         );
     }
 
-    /*
+    /**
      * @return string
      */
     public function getStoreName($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -270,9 +270,9 @@ class AmazonConfig
         return false;
     }
 
-    /*
+    /**
      * @return string
-    */
+     */
     public function getPresentmentCurrency()
     {
         return $this->getCurrentCurrencyCode();
@@ -347,7 +347,7 @@ class AmazonConfig
         );
     }
 
-    /*
+    /**
      * @return string
      */
     public function getMerchantId($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -359,7 +359,7 @@ class AmazonConfig
         );
     }
 
-    /*
+    /**
      * @return string
      */
     public function getClientId($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -371,7 +371,7 @@ class AmazonConfig
         );
     }
 
-    /*
+    /**
      * @return string
      */
     public function getPaymentAction($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -383,7 +383,7 @@ class AmazonConfig
         );
     }
 
-    /*
+    /**
      * @return bool
      */
     public function canHandlePendingAuthorization($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -395,15 +395,31 @@ class AmazonConfig
         ) == 'synchronous_possible';
     }
 
-    /*
+    /**
      * @return string
      */
-    public function getCheckoutReviewReturnUrl()
+    public function getCheckoutReviewUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        return $this->storeManager->getStore()->getUrl('checkout', ['_forced_secure' => true]);
+        $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_review_url', $scope, $scopeCode);
+        if (empty($result)) {
+            $result = $this->storeManager->getStore()->getUrl('checkout', ['_forced_secure' => true]);
+        }
+        return $result;
     }
 
-    /*
+    /**
+     * @return string
+     */
+    public function getCheckoutResultUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_result_url', $scope, $scopeCode);
+        if (empty($result)) {
+            $result = $this->storeManager->getStore()->getUrl('amazon_payv2/checkout/completeSession', ['_forced_secure' => true]);
+        }
+        return $result;
+    }
+
+    /**
      * @return bool
      */
     public function isSandboxEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)

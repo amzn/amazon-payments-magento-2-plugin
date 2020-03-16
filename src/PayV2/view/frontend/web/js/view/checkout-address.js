@@ -103,11 +103,11 @@ define(
 
                 amazonStorage.isShippingMethodsLoading(true);
                 shippingService.isLoading(true);
-                serviceUrl = urlBuilder.createUrl('/amazon-v2-shipping-address/:amazonCheckoutSessionId', {
-                    amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId()
+                serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/shipping-address', {
+                    cartId: quote.getQuoteId()
                 }),
 
-                storage.put(
+                storage.get(
                     serviceUrl
                 ).done(
                     function (data) {

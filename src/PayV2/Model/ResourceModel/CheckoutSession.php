@@ -13,16 +13,18 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Api;
 
-/**
- * @api
- */
-interface AddressManagementInterface
+namespace Amazon\PayV2\Model\ResourceModel;
+
+use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+class CheckoutSession extends AbstractDb
 {
-    /**
-     * @param mixed $cartId
-     * @return mixed
-     */
-    public function getShippingAddress($cartId);
+    const TABLE_NAME = 'amazon_payv2_checkout_session';
+
+    protected function _construct()
+    {
+        $this->_init(static::TABLE_NAME, CheckoutSessionInterface::KEY_ID);
+    }
 }
