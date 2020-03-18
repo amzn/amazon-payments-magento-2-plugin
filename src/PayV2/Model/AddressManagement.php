@@ -71,6 +71,11 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     private $logger;
 
     /**
+     * @var array
+     */
+    private $checkoutSessions = [];
+
+    /**
      * AddressManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AmazonConfig $amazonConfig
@@ -112,11 +117,10 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
      */
     public function getBillingAddress($amazonCheckoutSessionId)
     {
-        if ($this->amazonHelper->isPayOnly()) {
-            $result = $this->fetchAddress($amazonCheckoutSessionId, false, function ($response) {
-                return $response['paymentPreferences'][0]['billingAddress'] ?? [];
-            });
-        } else {
+        $result = $this->fetchAddress($amazonCheckoutSessionId, false, function ($response) {
+            return $response['paymentPreferences'][0]['billingAddress'] ?? [];
+        });
+        if (empty($result) && !$this->amazonHelper->isPayOnly()) {
             $result = $this->getShippingAddress($amazonCheckoutSessionId);
         }
         return $result;
@@ -145,10 +149,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
         }
 
         try {
-            $response = $this->amazonAdapter->getCheckoutSession(
-                $this->storeManager->getStore()->getId(),
-                $amazonCheckoutSessionId
-            );
+            $response = $this->getCheckoutSession($amazonCheckoutSessionId);
 
             $addressData = call_user_func($addressDataExtractor, $response);
             if (!empty($addressData)) {
@@ -175,6 +176,21 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
             $this->logger->error($e);
             $this->throwUnknownErrorException();
         }
+    }
+
+    /**
+     * @param string $amazonCheckoutSessionId
+     * @return mixed
+     */
+    protected function getCheckoutSession($amazonCheckoutSessionId)
+    {
+        if (!isset($this->checkoutSessions[$amazonCheckoutSessionId])) {
+            $this->checkoutSessions[$amazonCheckoutSessionId] = $this->amazonAdapter->getCheckoutSession(
+                $this->storeManager->getStore()->getId(),
+                $amazonCheckoutSessionId
+            );
+        }
+        return $this->checkoutSessions[$amazonCheckoutSessionId];
     }
 
     protected function throwUnknownErrorException()
