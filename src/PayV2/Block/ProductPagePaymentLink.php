@@ -69,4 +69,14 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
 
         return parent::_toHtml();
     }
+
+    /**
+     * @return bool
+     */
+    public function isPayOnly()
+    {
+        $product = $this->registry->registry('product');
+        /* @var $product \Magento\Catalog\Model\Product */
+        return $product->isVirtual();
+    }
 }

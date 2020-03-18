@@ -13,7 +13,6 @@ define(
         'Amazon_PayV2/js/model/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/address-converter',
-        'Magento_Checkout/js/action/create-billing-address',
         'Magento_Checkout/js/action/create-shipping-address',
         'mage/storage',
         'Magento_Checkout/js/model/full-screen-loader',
@@ -23,7 +22,7 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/model/address-list',
         'uiRegistry',
-        'Amazon_PayV2/js/model/amazon-payv2-config',
+        'Amazon_PayV2/js/action/checkout-session-address-load',
         'Amazon_PayV2/js/amazon-checkout'
     ],
     function (
@@ -38,7 +37,6 @@ define(
         amazonStorage,
         shippingService,
         addressConverter,
-        createBillingAddress,
         createShippingAddress,
         storage,
         fullScreenLoader,
@@ -48,7 +46,7 @@ define(
         checkoutDataResolver,
         addressList,
         registry,
-        amazonConfig,
+        checkoutSessionAddressLoad,
         amazonCheckout
     ) {
         'use strict';
@@ -57,11 +55,8 @@ define(
 
         require([amazonCheckout.getCheckoutModuleName()]);
 
-        amazonStorage.reloadCheckoutSessionId();
-
         return Component.extend({
             defaults: {
-                isBillingAddress: false,
                 template: 'Amazon_PayV2/checkout-address'
             },
             isCustomerLoggedIn: customer.isLoggedIn,
@@ -74,8 +69,8 @@ define(
             initialize: function () {
                 self = this;
                 this._super();
-                if (this.isAmazonCheckout) {
-                    this.getAddressFromAmazon();
+                if (!amazonStorage.isPayOnly(true) && this.isAmazonCheckout) {
+                    this.getShippingAddressFromAmazon();
                 }
             },
 
@@ -83,7 +78,7 @@ define(
              * Call when component template is rendered
              */
             initAddress: function () {
-                var addressDataList = $.extend({}, this.isBillingAddress ? quote.billingAddress() : quote.shippingAddress());
+                var addressDataList = $.extend({}, quote.shippingAddress());
 
                 // Only display one address from Amazon
                 addressList.removeAll();
@@ -95,90 +90,47 @@ define(
                     });
                 }
 
-                if (!$.isEmptyObject(addressDataList)) {
-                    addressList.push(addressDataList);
-                    this.setEmail(addressDataList.email);
-                }
+                addressList.push(addressDataList);
+                this.setEmail(addressDataList.email);
             },
 
             /**
-             * Retrieve address from Amazon API
+             * Retrieve shipping address from Amazon API
              */
-            getAddressFromAmazon: function () {
-                var serviceUrl, payload;
-                var addressType = this.isBillingAddress ? 'billing' : 'shipping';
-
+            getShippingAddressFromAmazon: function () {
                 // Only display one address from Amazon
                 addressList.removeAll();
+                checkoutSessionAddressLoad('shipping', function (amazonAddress) {
+                    var addressData = createShippingAddress(amazonAddress),
+                        checkoutProvider = registry.get('checkoutProvider'),
+                        addressConvert;
 
-                amazonStorage.isShippingMethodsLoading(true);
-                shippingService.isLoading(true);
-                serviceUrl = urlBuilder.createUrl('/amazon-v2-' + addressType + '-address/:amazonCheckoutSessionId', {
-                    amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId()
-                }),
+                    self.setEmail(amazonAddress.email);
 
-                storage.put(
-                    serviceUrl
-                ).done(
-                    function (data) {
-
-                        // Invalid checkout session
-                        if (!data.length) {
-                            //self.resetCheckout();
-                            return;
+                    // Fill in blank street fields
+                    if ($.isArray(addressData.street)) {
+                        for (var i = addressData.street.length; i <= 2; i++) {
+                            addressData.street[i] = '';
                         }
-
-                        var amazonAddress = data.shift(),
-                            addressData = self.isBillingAddress ? createBillingAddress(amazonAddress) : createShippingAddress(amazonAddress),
-                            checkoutProvider = registry.get('checkoutProvider'),
-                            addressConvert,
-                            i;
-
-                        //console.log(amazonAddress);
-                        //console.log(addressData);
-
-                        self.setEmail(amazonAddress.email);
-
-                        // Fill in blank street fields
-                        if ($.isArray(addressData.street)) {
-                            for (i = addressData.street.length; i <= 2; i++) {
-                                addressData.street[i] = '';
-                            }
-                        }
-
-                        // Amazon does not return telephone or non-US regionIds, so use previous provider values
-                        var checkoutAddress = checkoutProvider[addressType + 'Address'];
-                        if (checkoutAddress) {
-                            addressData.telephone = checkoutAddress.telephone;
-                            if (!addressData.regionId) {
-                                addressData.regionId = checkoutAddress.region_id;
-                            }
-                        }
-
-                        // Save address
-                        addressConvert = addressConverter.quoteAddressToFormAddressData(addressData);
-                        checkoutData['set' + addressType.charAt(0).toUpperCase() + addressType.slice(1) + 'AddressFromData'].call(checkoutData, addressConvert);
-
-                        if (self.isBillingAddress) {
-                            checkoutProvider.set('billingAddress' + amazonConfig.getCode(), addressConvert);
-                            checkoutData.setSelectedBillingAddress(addressData.getKey());
-                            checkoutData.setNewCustomerBillingAddress(addressConvert);
-                            checkoutDataResolver.resolveBillingAddress();
-                        } else {
-                            checkoutProvider.set('shippingAddress', addressConvert);
-                            checkoutDataResolver.resolveEstimationAddress();
-                        }
-
-                        self.initAddress();
                     }
-                ).fail(
-                    function (response) {
-                        errorProcessor.process(response);
-                        //remove shipping loader and set shipping rates to 0 on a fail
-                        shippingService.setShippingRates([]);
-                        amazonStorage.isShippingMethodsLoading(false);
+
+                    // Amazon does not return telephone or non-US regionIds, so use previous provider values
+                    if (checkoutProvider.shippingAddress) {
+                        addressData.telephone = checkoutProvider.shippingAddress.telephone;
+                        if (!addressData.regionId) {
+                            addressData.regionId = checkoutProvider.shippingAddress.region_id;
+                        }
                     }
-                );
+
+                    // Save shipping address
+                    addressConvert = addressConverter.quoteAddressToFormAddressData(addressData);
+                    checkoutData.setShippingAddressFromData(addressConvert);
+                    checkoutProvider.set('shippingAddress', addressConvert);
+
+                    checkoutDataResolver.resolveEstimationAddress();
+
+                    self.initAddress();
+                });
             },
 
             /**
@@ -190,14 +142,6 @@ define(
                 checkoutData.setInputFieldEmailValue(email);
                 checkoutData.setValidatedEmailValue(email);
                 quote.guestEmail = email;
-            },
-
-            /**
-             * Revert to standard checkout
-             */
-            resetCheckout: function() {
-                amazonStorage.clearAmazonCheckout();
-                window.location =  window.checkoutConfig.checkoutUrl;
             }
         });
     }

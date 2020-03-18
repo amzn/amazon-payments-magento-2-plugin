@@ -28,6 +28,11 @@ class CheckoutSession implements SectionSourceInterface
     private $session;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var \Amazon\PayV2\Model\CheckoutSessionManagement
      */
     private $checkoutSessionManagement;
@@ -40,15 +45,18 @@ class CheckoutSession implements SectionSourceInterface
     /**
      * CheckoutSession constructor.
      * @param \Magento\Checkout\Model\Session $session
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
         \Magento\Checkout\Model\Session $session,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig
     ) {
         $this->session = $session;
+        $this->amazonHelper = $amazonHelper;
         $this->checkoutSessionManagement = $checkoutSessionManagement;
         $this->amazonConfig = $amazonConfig;
     }
@@ -60,7 +68,10 @@ class CheckoutSession implements SectionSourceInterface
     {
         $data = [];
         if ($this->amazonConfig->isEnabled()) {
-            $data = ['checkoutSessionId' => $this->getCheckoutSessionId()];
+            $data = [
+                'isPayOnly' => $this->amazonHelper->isPayOnly(),
+                'checkoutSessionId' => $this->getCheckoutSessionId()
+            ];
         }
         return $data;
     }
@@ -76,23 +87,19 @@ class CheckoutSession implements SectionSourceInterface
     /**
      * Get Amazon Checkout Session Id
      */
-    public function getCheckoutSessionId($reset = false)
+    public function getCheckoutSessionId()
     {
         if (!$this->amazonConfig->isEnabled()) {
             return false;
         }
 
-        $sessionId = $this->session->getAmazonCheckoutSessionId();
-        if (!$sessionId || $reset) {
-            $sessionId = $this->createCheckoutSessionId();
-        }
-        return $sessionId;
+        return $this->session->getAmazonCheckoutSessionId();
     }
 
     /**
      * Create and save Amazon Checkout Session Id
      */
-    protected function createCheckoutSessionId()
+    public function createCheckoutSessionId()
     {
         $response = $this->checkoutSessionManagement->createCheckoutSession();
         if ($response) {

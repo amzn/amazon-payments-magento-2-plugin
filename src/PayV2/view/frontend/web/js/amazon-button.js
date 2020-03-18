@@ -25,9 +25,21 @@ define([
     if (amazonStorage.isEnabled) {
         $.widget('amazon.AmazonButton', {
             options: {
-                payOnly: false,
+                payOnly: null,
                 placement: amazonPayV2Config.getValue('placement'),
                 selector: '.amazon-checkout-button'
+            },
+
+            /**
+             * @returns {boolean}
+             * @private
+             */
+            _isPayOnly: function () {
+                var result = amazonStorage.isPayOnly(true);
+                if (result && this.options.payOnly !== null) {
+                    result = this.options.payOnly;
+                }
+                return result;
             },
 
             /**
@@ -43,7 +55,7 @@ define([
                         },
                         ledgerCurrency: amazonPayV2Config.getValue('currency'),
                         checkoutLanguage: amazonPayV2Config.getValue('language'),
-                        productType: this.options.payOnly ? 'PayOnly' : 'PayAndShip',
+                        productType: this._isPayOnly() ? 'PayOnly' : 'PayAndShip',
                         placement: this.options.placement,
                         sandbox: amazonPayV2Config.getValue('sandbox'),
                     });

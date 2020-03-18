@@ -25,6 +25,7 @@ class Data extends AbstractHelper
      */
     public function isPayOnly()
     {
-        return $this->helperCheckout->getQuote()->isVirtual();
+        $quote = $this->helperCheckout->getQuote();
+        return $quote->hasItems() ? $quote->isVirtual() : true;
     }
 }

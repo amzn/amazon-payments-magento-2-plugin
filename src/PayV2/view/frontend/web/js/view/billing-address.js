@@ -14,6 +14,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Amazon_PayV2/billing-address',
+            isAddressFormVisible: false,
             isAmazonButtonVisible: !amazonStorage.isAmazonCheckout(),
             actionsTemplate: {
                 name: 'Amazon_PayV2/billing-address/actions',
@@ -28,20 +29,7 @@ define([
             },
             buttonTemplate: 'Amazon_PayV2/billing-address/button',
             detailsTemplate: 'Amazon_PayV2/billing-address/details',
-            formTemplate: {
-                name: 'Amazon_PayV2/billing-address/form',
-                afterRender: function () {
-                    var $form = $(formSelector);
-                    $form.find('.field').hide();
-
-                    var $errorFields = $form.find('.field._error');
-                    $errorFields.show();
-
-                    var isValid = $errorFields.length === 0;
-                    billingFormAddressState.isValid(isValid);
-                    self.isAddressFormVisible(!isValid);
-                }
-            },
+            formTemplate: 'Amazon_PayV2/billing-address/form',
         },
 
         /**
@@ -50,7 +38,29 @@ define([
         initialize: function () {
             this._super();
             self = this;
+            self.isAddressFormVisible(false);
+            billingFormAddressState.isLoaded.subscribe(function () {
+                self.triggerBillingDataValidateEvent();
+
+                var $form = $(formSelector);
+                $form.find('.field').hide();
+
+                var $errorFields = $form.find('.field._error');
+                $errorFields.show();
+
+                var isValid = $errorFields.length === 0;
+                billingFormAddressState.isValid(isValid);
+                self.isAddressFormVisible(!isValid);
+            });
             return this;
+        },
+
+        triggerBillingDataValidateEvent: function () {
+            this.source.trigger(this.dataScopePrefix + '.data.validate');
+
+            if (this.source.get(this.dataScopePrefix + '.custom_attributes')) {
+                this.source.trigger(this.dataScopePrefix + '.custom_attributes.data.validate');
+            }
         },
 
         updateAddress: function () {

@@ -27,7 +27,7 @@ define(
              * Revert checkout
              */
             revertCheckout: function () {
-                amazonStorage.revertCheckout();
+                amazonStorage.clearAmazonCheckout();
                 window.location.replace(window.checkoutConfig.checkoutUrl);
             }
         });

@@ -36,6 +36,11 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     private $amazonAdapter;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var \Amazon\Payment\Helper\Address
      */
     private $addressHelper;
@@ -70,6 +75,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\Payment\Helper\Address $addressHelper
      * @param \Magento\Checkout\Model\Session $session
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
@@ -81,6 +87,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\Payment\Helper\Address $addressHelper,
         \Magento\Checkout\Model\Session $session,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
@@ -91,6 +98,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
         $this->storeManager = $storeManager;
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
+        $this->amazonHelper = $amazonHelper;
         $this->addressHelper = $addressHelper;
         $this->session = $session;
         $this->countryCollectionFactory = $countryCollectionFactory;
@@ -104,9 +112,14 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
      */
     public function getBillingAddress($amazonCheckoutSessionId)
     {
-        return $this->fetchAddress($amazonCheckoutSessionId, false, function ($response) {
-            return $response['paymentPreferences'][0]['billingAddress'] ?? [];
-        });
+        if ($this->amazonHelper->isPayOnly()) {
+            $result = $this->fetchAddress($amazonCheckoutSessionId, false, function ($response) {
+                return $response['paymentPreferences'][0]['billingAddress'] ?? [];
+            });
+        } else {
+            $result = $this->getShippingAddress($amazonCheckoutSessionId);
+        }
+        return $result;
     }
 
     /**

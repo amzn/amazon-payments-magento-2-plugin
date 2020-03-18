@@ -66,7 +66,6 @@ class Button extends Template implements ShortcutInterface
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param array $data
      */
     public function __construct(
@@ -75,7 +74,6 @@ class Button extends Template implements ShortcutInterface
         \Magento\Framework\App\Request\Http $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Helper\Data $amazonHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -83,7 +81,6 @@ class Button extends Template implements ShortcutInterface
         $this->request = $request;
         $this->storeManager = $storeManager;
         $this->amazonConfig = $amazonConfig;
-        $this->amazonHelper = $amazonHelper;
     }
 
     /**
@@ -154,13 +151,5 @@ class Button extends Template implements ShortcutInterface
         $this->isMiniCart = !$isCatalog;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isPayOnly()
-    {
-        return $this->amazonHelper->isPayOnly();
     }
 }

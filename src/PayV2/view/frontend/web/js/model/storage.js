@@ -22,33 +22,19 @@ define([
     'use strict';
 
     var isEnabled = amazonPayV2Config.isDefined(),
-        isShippingMethodsLoading = ko.observable(false),
-        queryCheckoutSessionId = window.location.search.replace('?amazonCheckoutSessionId=', ''),
-        cacheKey = 'is-amazon-checkout',
+        sessionId,
         sectionKey = 'amazon-checkout-session';
 
     return {
         isEnabled: isEnabled,
-        isShippingMethodsLoading: isShippingMethodsLoading,
 
         /**
          * Is checkout using Amazon PAYV2?
          *
          * @returns {boolean}
          */
-        isAmazonCheckout: function() {
-            var isAmazon = window.location.search.indexOf('amazonCheckoutSessionId') != -1; // via redirect
-            if (isAmazon) {
-                customerData.set(cacheKey, true);
-            }
-            return customerData.get(cacheKey)() === true;
-        },
-
-        /**
-         * Revert to standard checkout (e.g. onepage)
-         */
-        revertCheckout: function() {
-            customerData.set(cacheKey, false);
+        isAmazonCheckout: function () {
+            return this.getCheckoutSessionId() !== null;
         },
 
         /**
@@ -56,7 +42,6 @@ define([
          */
         clearAmazonCheckout: function() {
             customerData.set(sectionKey, false);
-            this.revertCheckout();
         },
 
         /**
@@ -64,13 +49,16 @@ define([
          *
          * @returns {*}
          */
-        getCheckoutSessionId: function() {
-            var checkoutSessionData = customerData.get(sectionKey);
-            if (queryCheckoutSessionId) {
-                return queryCheckoutSessionId;
-            } else if (checkoutSessionData) {
-                return checkoutSessionData()['checkoutSessionId'];
+        getCheckoutSessionId: function () {
+            if (typeof sessionId === 'undefined') {
+                var sessionData = customerData.get(sectionKey);
+                sessionId = sessionData ? sessionData()['checkoutSessionId'] : null;
+                if (!sessionId && window.location.search.indexOf('?amazonCheckoutSessionId=') != -1) {
+                    sessionId = window.location.search.replace('?amazonCheckoutSessionId=', '');
+                    this.reloadCheckoutSessionId();
+                }
             }
+            return sessionId;
         },
 
         /**
@@ -85,6 +73,17 @@ define([
          */
         getRegion: function() {
             return amazonPayV2Config.getValue('region');
+        },
+
+        /**
+         * @param defaultResult
+         * @returns {boolean}
+         */
+        isPayOnly: function (defaultResult) {
+            var sessionData = customerData.get(sectionKey);
+            var sessionValue = sessionData ? sessionData()['isPayOnly'] : null;
+            var result = typeof sessionValue === 'boolean' ? sessionValue : defaultResult;
+            return result;
         }
     };
 });
