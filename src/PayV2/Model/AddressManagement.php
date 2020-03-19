@@ -154,6 +154,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
             $addressData = call_user_func($addressDataExtractor, $response);
             if (!empty($addressData)) {
                 $addressData['state'] = $addressData['stateOrRegion'];
+                $addressData['telephone'] = $addressData['phoneNumber'];
 
                 $address = array_combine(
                     array_map('ucfirst', array_keys($addressData)),

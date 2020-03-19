@@ -34,14 +34,16 @@ define([
          * @returns {boolean}
          */
         isAmazonCheckout: function () {
-            return this.getCheckoutSessionId() !== null;
+            return typeof this.getCheckoutSessionId() === 'string';
         },
 
         /**
          * Clear Amazon Checkout Session ID and revert checkout
          */
         clearAmazonCheckout: function() {
-            customerData.set(sectionKey, false);
+            var sessionData = customerData.get(sectionKey)();
+            sessionData['checkoutSessionId'] = null;
+            customerData.set(sectionKey, sessionData);
         },
 
         /**
@@ -51,8 +53,7 @@ define([
          */
         getCheckoutSessionId: function () {
             if (typeof sessionId === 'undefined') {
-                var sessionData = customerData.get(sectionKey);
-                sessionId = sessionData ? sessionData()['checkoutSessionId'] : null;
+                sessionId = customerData.get(sectionKey)()['checkoutSessionId'];
                 if (!sessionId && window.location.search.indexOf('?amazonCheckoutSessionId=') != -1) {
                     sessionId = window.location.search.replace('?amazonCheckoutSessionId=', '');
                     this.reloadCheckoutSessionId();
@@ -80,8 +81,7 @@ define([
          * @returns {boolean}
          */
         isPayOnly: function (defaultResult) {
-            var sessionData = customerData.get(sectionKey);
-            var sessionValue = sessionData ? sessionData()['isPayOnly'] : null;
+            var sessionValue = customerData.get(sectionKey)()['isPayOnly'];
             var result = typeof sessionValue === 'boolean' ? sessionValue : defaultResult;
             return result;
         }
