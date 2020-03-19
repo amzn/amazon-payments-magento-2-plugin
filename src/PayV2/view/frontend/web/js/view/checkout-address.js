@@ -116,7 +116,9 @@ define(
 
                     // Amazon does not return telephone or non-US regionIds, so use previous provider values
                     if (checkoutProvider.shippingAddress) {
-                        addressData.telephone = checkoutProvider.shippingAddress.telephone;
+                        if (!addressData.telephone) {
+                            addressData.telephone = checkoutProvider.shippingAddress.telephone;
+                        }
                         if (!addressData.regionId) {
                             addressData.regionId = checkoutProvider.shippingAddress.region_id;
                         }

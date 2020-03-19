@@ -78,7 +78,9 @@ define(
                     // Amazon does not return telephone or non-US regionIds, so use previous provider values
                     var checkoutShipping = $.extend(true, {}, checkoutProvider.shippingAddress);
                     var checkoutBilling = $.extend(true, {}, checkoutProvider.billingAddress);
-                    quoteAddress.telephone = checkoutBilling.telephone || checkoutShipping.telephone;
+                    if (!quoteAddress.telephone) {
+                        quoteAddress.telephone = checkoutBilling.telephone || checkoutShipping.telephone;
+                    }
                     if (!quoteAddress.regionId) {
                         quoteAddress.regionId = checkoutBilling.region_id;
                     }
