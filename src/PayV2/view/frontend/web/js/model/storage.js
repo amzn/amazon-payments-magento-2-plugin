@@ -84,6 +84,24 @@ define([
             var sessionValue = customerData.get(sectionKey)()['isPayOnly'];
             var result = typeof sessionValue === 'boolean' ? sessionValue : defaultResult;
             return result;
+        },
+
+        /**
+         * @param value
+         * @returns {exports}
+         */
+        setIsEditPaymentFlag: function (value) {
+            var sessionData = customerData.get(sectionKey)();
+            sessionData['IsEditBillingClicked'] = value;
+            customerData.set(sectionKey, sessionData);
+            return this;
+        },
+
+        /**
+         * @returns {boolean}
+         */
+        getIsEditPaymentFlag: function () {
+            return customerData.get(sectionKey)()['IsEditBillingClicked'];
         }
     };
 });

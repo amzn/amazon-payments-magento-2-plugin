@@ -21,6 +21,7 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/model/address-list',
+        'Magento_Checkout/js/model/step-navigator',
         'uiRegistry',
         'Amazon_PayV2/js/action/checkout-session-address-load',
         'Amazon_PayV2/js/amazon-checkout'
@@ -45,6 +46,7 @@ define(
         checkoutData,
         checkoutDataResolver,
         addressList,
+        stepNavigator,
         registry,
         checkoutSessionAddressLoad,
         amazonCheckout
@@ -71,6 +73,10 @@ define(
                 this._super();
                 if (!amazonStorage.isPayOnly(true) && this.isAmazonCheckout) {
                     this.getShippingAddressFromAmazon();
+                    if (amazonStorage.getIsEditPaymentFlag()) {
+                        amazonStorage.setIsEditPaymentFlag(false);
+                        stepNavigator.setHash('payment');
+                    }
                 }
             },
 

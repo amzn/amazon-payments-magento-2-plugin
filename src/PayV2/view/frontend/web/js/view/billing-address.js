@@ -75,6 +75,9 @@ define([
         },
 
         editAddress: function () {
+            if (!amazonStorage.isPayOnly(true)) {
+                amazonStorage.setIsEditPaymentFlag(true);
+            }
         }
     });
 });
