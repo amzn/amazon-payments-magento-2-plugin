@@ -37,6 +37,8 @@ define(
 
         return Component.extend({
             defaults: {
+                isAmazonButtonVisible: ko.observable(!amazonStorage.isAmazonCheckout()),
+                isBillingAddressVisible: ko.observable(false),
                 isPlaceOrderActionAllowed: ko.observable(false),
                 template: 'Amazon_PayV2/payment/amazon-payment-method'
             },
@@ -45,7 +47,7 @@ define(
                 self = this;
                 parentComponent.prototype.initialize.apply(this, arguments);
                 this.initChildren();
-                if (this.isAmazonCheckoutInitialized()) {
+                if (amazonStorage.isAmazonCheckout()) {
                     this.initBillingAddress();
                 }
             },
@@ -93,13 +95,8 @@ define(
                     checkoutProvider.set(billingAddressCode, formAddress);
                     checkoutDataResolver.resolveBillingAddress();
 
-                    // Trigger form validation
-                    billingFormAddressState.isLoaded(true);
+                    self.isBillingAddressVisible(true);
                 });
-            },
-
-            isAmazonCheckoutInitialized: function () {
-                return amazonStorage.isAmazonCheckout();
             },
 
             /**

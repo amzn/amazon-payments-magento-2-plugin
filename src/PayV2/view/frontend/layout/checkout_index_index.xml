@@ -116,17 +116,6 @@
                                                                         </item>
                                                                     </item>
                                                                 </item>
-                                                                <item name="amazon_payment_v2-button" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Amazon_PayV2/js/view/payment/amazon-payment-button</item>
-                                                                    <item name="config" xsi:type="array">
-                                                                        <item name="tooltip" xsi:type="string" translate="true">Are you an Amazon customer? Pay now with address and payment details stored in your Amazon account.</item>
-                                                                    </item>
-                                                                    <item name="methods" xsi:type="array">
-                                                                        <item name="amazon_payment_v2" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
-                                                                        </item>
-                                                                    </item>
-                                                                </item>
                                                             </item>
                                                         </item>
                                                     </item>

@@ -4,7 +4,6 @@ define([
     'use strict';
 
     return {
-        isLoaded: ko.observable(false),
         isValid: ko.observable(false)
     };
 });

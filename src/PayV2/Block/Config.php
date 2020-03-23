@@ -70,6 +70,8 @@ class Config extends \Magento\Framework\View\Element\Template
             'sandbox'                  => $this->amazonConfig->isSandboxEnabled(),
             'language'                 => $this->localeResolver->getLocale(),
             'placement'                => 'Cart',
+            'code'                     => \Amazon\PayV2\Gateway\Config\Config::CODE,
+            'is_method_available'      => $this->amazonConfig->isPayButtonAvailableAsPaymentMethod(),
         ];
 
         return $config;

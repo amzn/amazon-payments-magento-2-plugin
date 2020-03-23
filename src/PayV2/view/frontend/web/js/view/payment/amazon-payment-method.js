@@ -13,7 +13,7 @@ define(
     ) {
         'use strict';
 
-        if (amazonStorage.isAmazonCheckout() || amazonStorage.isPayOnly(false)) {
+        if (amazonStorage.isAmazonCheckout() || amazonConfig.getValue('is_method_available')) {
             rendererList.push(
                 {
                     type: amazonConfig.getCode(),

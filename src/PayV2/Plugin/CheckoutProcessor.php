@@ -79,17 +79,10 @@ class CheckoutProcessor
             $paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form']['component'] = 'Amazon_PayV2/js/view/billing-address';
 
             unset($paymentConfig['children']['renders']['children']['amazonlogin']); // legacy
-
-            // "Show Amazon Pay in payment methods"?
-            if (!$this->amazonConfig->isPayButtonAvailableAsPaymentMethod()) {
-                unset($paymentConfig['children']['renders']['children']['amazon_payment_v2-button']);
-            }
-
         } else {
             unset($shippingConfig['children']['customer-email']['children']['amazon-payv2-button-region']);
             unset($shippingConfig['children']['before-form']['children']['amazon-payv2-address']);
             unset($paymentConfig['children']['renders']['children']['amazon_payment_v2-method']);
-            unset($paymentConfig['children']['renders']['children']['amazon_payment_v2-button']);
         }
 
         return $jsLayout;

@@ -24,6 +24,7 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         'uiRegistry',
         'Amazon_PayV2/js/action/checkout-session-address-load',
+        'Amazon_PayV2/js/model/shipping-address/form-address-state',
         'Amazon_PayV2/js/amazon-checkout'
     ],
     function (
@@ -49,6 +50,7 @@ define(
         stepNavigator,
         registry,
         checkoutSessionAddressLoad,
+        shippingFormAddressState,
         amazonCheckout
     ) {
         'use strict';
@@ -123,10 +125,10 @@ define(
                     // Amazon does not return telephone or non-US regionIds, so use previous provider values
                     if (checkoutProvider.shippingAddress) {
                         if (!addressData.telephone) {
-                            addressData.telephone = checkoutProvider.shippingAddress.telephone;
+                            shippingFormAddressState.lastTelephone(checkoutProvider.shippingAddress.telephone);
                         }
                         if (!addressData.regionId) {
-                            addressData.regionId = checkoutProvider.shippingAddress.region_id;
+                            shippingFormAddressState.lastRegionId(checkoutProvider.shippingAddress.region_id);
                         }
                     }
 

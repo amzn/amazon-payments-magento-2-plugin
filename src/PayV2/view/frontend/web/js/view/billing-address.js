@@ -15,9 +15,9 @@ define([
         defaults: {
             template: 'Amazon_PayV2/billing-address',
             isAddressFormVisible: false,
-            isAmazonButtonVisible: !amazonStorage.isAmazonCheckout(),
-            actionsTemplate: {
-                name: 'Amazon_PayV2/billing-address/actions',
+            actionsTemplate: 'Amazon_PayV2/billing-address/actions',
+            detailsTemplate: {
+                name: 'Amazon_PayV2/billing-address/details',
                 afterRender: function () {
                     if ($(editSelector).length) {
                         amazon.Pay.bindChangeAction(editSelector, {
@@ -27,9 +27,22 @@ define([
                     }
                 }
             },
-            buttonTemplate: 'Amazon_PayV2/billing-address/button',
-            detailsTemplate: 'Amazon_PayV2/billing-address/details',
-            formTemplate: 'Amazon_PayV2/billing-address/form',
+            formTemplate: {
+                name: 'Amazon_PayV2/billing-address/form',
+                afterRender: function () {
+                    self.triggerBillingDataValidateEvent();
+
+                    var $form = $(formSelector);
+                    $form.find('.field').hide();
+
+                    var $errorFields = $form.find('.field._error');
+                    $errorFields.show();
+
+                    var isValid = $errorFields.length === 0;
+                    billingFormAddressState.isValid(isValid);
+                    self.isAddressFormVisible(!isValid);
+                }
+            },
         },
 
         /**
@@ -38,20 +51,6 @@ define([
         initialize: function () {
             this._super();
             self = this;
-            self.isAddressFormVisible(false);
-            billingFormAddressState.isLoaded.subscribe(function () {
-                self.triggerBillingDataValidateEvent();
-
-                var $form = $(formSelector);
-                $form.find('.field').hide();
-
-                var $errorFields = $form.find('.field._error');
-                $errorFields.show();
-
-                var isValid = $errorFields.length === 0;
-                billingFormAddressState.isValid(isValid);
-                self.isAddressFormVisible(!isValid);
-            });
             return this;
         },
 

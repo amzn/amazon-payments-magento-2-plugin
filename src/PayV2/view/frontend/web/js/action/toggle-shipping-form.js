@@ -16,8 +16,9 @@
 define([
     'jquery',
     'Magento_Checkout/js/model/quote',
+    'Amazon_PayV2/js/model/shipping-address/form-address-state',
     'Amazon_PayV2/js/model/storage'
-], function ($, quote, amazonStorage) {
+], function ($, quote, shippingFormAddressState, amazonStorage) {
     'use strict';
 
     var formSelector = '#co-shipping-form';
@@ -41,12 +42,20 @@ define([
             // Show error/failed validation fields
             $form.find('.field._error').show();
 
-            // Show phone number if required
-            $form.find('.field[name="shippingAddress.telephone"]._required').show();
+            // Show phone number if required and has no value
+            var $telephone = $form.find('.field[name="shippingAddress.telephone"]._required');
+            if ($telephone.length && !address['telephone']) {
+                $telephone.find('[name=telephone]').val(shippingFormAddressState.lastTelephone());
+                $telephone.show()
+            }
 
             // Show state/providence drop-down
             if (!address.regionId || address.countryId != 'US') {
-                $form.find('.field[name="shippingAddress.region_id"]').show();
+                var $region = $form.find('.field[name="shippingAddress.region_id"]');
+                if (!address.regionId) {
+                    $region.find('[name=region_id]').val(shippingFormAddressState.lastRegionId());
+                }
+                $region.show();
             }
         }
     };

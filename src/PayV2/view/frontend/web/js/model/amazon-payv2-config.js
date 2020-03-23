@@ -24,7 +24,7 @@ define(
              * @returns {string}
              */
             getCode: function () {
-                return 'amazon_payment_v2';
+                return this.getValue('code');
             },
 
             /**

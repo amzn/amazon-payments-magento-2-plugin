@@ -26,6 +26,7 @@ define([
         $.widget('amazon.AmazonButton', {
             options: {
                 payOnly: null,
+                forcePayOnly: false,
                 placement: amazonPayV2Config.getValue('placement'),
                 selector: '.amazon-checkout-button'
             },
@@ -35,7 +36,7 @@ define([
              * @private
              */
             _isPayOnly: function () {
-                var result = amazonStorage.isPayOnly(true);
+                var result = this.options.forcePayOnly || amazonStorage.isPayOnly(true);
                 if (result && this.options.payOnly !== null) {
                     result = this.options.payOnly;
                 }
