@@ -22,4 +22,10 @@
     <event name="kco_override_load_checkout">
         <observer name="amazon_payv2_klarna_kco_override" instance="Amazon\PayV2\Observer\KlarnaKcoOverride" />
     </event>
+    <event name="checkout_cart_product_add_after">
+        <observer name="amazon_payv2_checkout_session_clear" instance="Amazon\PayV2\Observer\CheckoutSessionClear"/>
+    </event>
+    <event name="sales_quote_remove_item">
+        <observer name="amazon_payv2_checkout_session_clear" instance="Amazon\PayV2\Observer\CheckoutSessionClear"/>
+    </event>
 </config>

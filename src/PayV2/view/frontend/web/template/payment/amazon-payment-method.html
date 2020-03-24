@@ -10,11 +10,22 @@
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <div class="payment-method-billing-address">
-            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-        </div>
+        <!-- ko if: isAmazonButtonVisible -->
+            <div class="amazon-button-container-v2">
+                <div class="amazon-button-column">
+                    <div id="PayWithAmazonButton"
+                         class="amazon-checkout-button"
+                         data-bind="mageInit: {'Amazon_PayV2/js/amazon-button':{'placement': 'Checkout', 'forcePayOnly': true}}"></div>
+                </div>
+            </div>
+        <!--/ko-->
+        <!-- ko if: isBillingAddressVisible -->
+            <div class="payment-method-billing-address">
+                <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+            </div>
+        <!--/ko-->
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->

@@ -47,7 +47,7 @@ class CreateSession extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $checkoutSessionId = $this->amazonCheckoutSession->getCheckoutSessionId(true);
+        $checkoutSessionId = $this->amazonCheckoutSession->createCheckoutSessionId();
         $data = [
             'checkoutSessionId' => $checkoutSessionId,
         ];

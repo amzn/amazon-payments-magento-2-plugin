@@ -21,6 +21,13 @@ define(
 
         return {
             /**
+             * @returns {string}
+             */
+            getCode: function () {
+                return this.getValue('code');
+            },
+
+            /**
              * Get config value
              */
             getValue: function (key, defaultValue) {

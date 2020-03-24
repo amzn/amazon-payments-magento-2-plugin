@@ -23,6 +23,11 @@ class CheckoutProcessor
     private $amazonConfig;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var  \Magento\Checkout\Model\Session
      */
     private $checkoutSession;
@@ -30,13 +35,16 @@ class CheckoutProcessor
     /**
      * CheckoutProcessor constructor.
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Magento\Checkout\Model\Session $checkoutSession
     ) {
         $this->amazonConfig = $amazonConfig;
+        $this->amazonHelper = $amazonHelper;
         $this->checkoutSession = $checkoutSession;
     }
 
@@ -68,19 +76,13 @@ class CheckoutProcessor
             ];
 
             $paymentConfig['children']['payments-list']['component'] = 'Amazon_PayV2/js/view/payment/list';
+            $paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form']['component'] = 'Amazon_PayV2/js/view/billing-address';
 
             unset($paymentConfig['children']['renders']['children']['amazonlogin']); // legacy
-
-            // "Show Amazon Pay in payment methods"?
-            if (!$this->amazonConfig->isPayButtonAvailableAsPaymentMethod()) {
-                unset($paymentConfig['children']['renders']['children']['amazon_payment_v2-button']);
-            }
-
         } else {
             unset($shippingConfig['children']['customer-email']['children']['amazon-payv2-button-region']);
             unset($shippingConfig['children']['before-form']['children']['amazon-payv2-address']);
             unset($paymentConfig['children']['renders']['children']['amazon_payment_v2-method']);
-            unset($paymentConfig['children']['renders']['children']['amazon_payment_v2-button']);
         }
 
         return $jsLayout;

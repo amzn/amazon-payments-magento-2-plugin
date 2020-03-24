@@ -16,7 +16,7 @@
 ?>
 <?php
 /**
- * @var \Amazon\PayV2\Block\Minicart\ProductPagePaymentLink $block
+ * @var \Amazon\PayV2\Block\ProductPagePaymentLink $block
  */
 ?>
 
@@ -24,7 +24,12 @@
     <div class="amazon-button-column">
         <div id="PayWithAmazon-"
              class="amazon-checkout-button"
-             data-mage-init='{"Amazon_PayV2/js/amazon-button": {"placement": "Product"}}'>
+             data-mage-init='<?= json_encode([
+                 'Amazon_PayV2/js/amazon-button' => [
+                     'payOnly' => $block->isPayOnly(),
+                     'placement' => 'Product',
+                 ]
+             ]) ?>'>
         </div>
         <a href="javascript:;"
            class="amazon-addtoCart"

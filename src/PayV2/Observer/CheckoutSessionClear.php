@@ -13,22 +13,28 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Api;
 
-/**
- * @api
- */
-interface AddressManagementInterface
+namespace Amazon\PayV2\Observer;
+
+use Magento\Framework\Event\Observer;
+
+class CheckoutSessionClear implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * @param string $amazonCheckoutSessionId
-     * @return mixed
+     * @var \Amazon\PayV2\CustomerData\CheckoutSession
      */
-    public function getBillingAddress($amazonCheckoutSessionId);
+    private $amazonCheckoutSession;
+
+    public function __construct(\Amazon\PayV2\CustomerData\CheckoutSession $amazonCheckoutSession)
+    {
+        $this->amazonCheckoutSession = $amazonCheckoutSession;
+    }
 
     /**
-     * @param string $amazonCheckoutSessionId
-     * @return mixed
+     * @inheritDoc
      */
-    public function getShippingAddress($amazonCheckoutSessionId);
+    public function execute(Observer $observer)
+    {
+        $this->amazonCheckoutSession->clearCheckoutSessionId();
+    }
 }

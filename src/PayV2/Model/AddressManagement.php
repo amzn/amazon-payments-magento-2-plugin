@@ -36,6 +36,11 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     private $amazonAdapter;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var \Amazon\Payment\Helper\Address
      */
     private $addressHelper;
@@ -66,10 +71,16 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     private $logger;
 
     /**
+     * @var array
+     */
+    private $checkoutSessions = [];
+
+    /**
      * AddressManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\Payment\Helper\Address $addressHelper
      * @param \Magento\Checkout\Model\Session $session
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
@@ -81,6 +92,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\Payment\Helper\Address $addressHelper,
         \Magento\Checkout\Model\Session $session,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
@@ -91,6 +103,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
         $this->storeManager = $storeManager;
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
+        $this->amazonHelper = $amazonHelper;
         $this->addressHelper = $addressHelper;
         $this->session = $session;
         $this->countryCollectionFactory = $countryCollectionFactory;
@@ -102,28 +115,53 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
     /**
      * {@inheritdoc}
      */
+    public function getBillingAddress($amazonCheckoutSessionId)
+    {
+        $result = $this->fetchAddress($amazonCheckoutSessionId, false, function ($response) {
+            return $response['paymentPreferences'][0]['billingAddress'] ?? [];
+        });
+        if (empty($result) && !$this->amazonHelper->isPayOnly()) {
+            $result = $this->getShippingAddress($amazonCheckoutSessionId);
+        }
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getShippingAddress($amazonCheckoutSessionId)
+    {
+        return $this->fetchAddress($amazonCheckoutSessionId, true, function ($response) {
+            return $response['shippingAddress'] ?? [];
+        });
+    }
+
+    /**
+     * @param string $amazonCheckoutSessionId
+     * @param bool $isShippingAddress
+     * @param mixed $addressDataExtractor
+     * @return mixed
+     */
+    protected function fetchAddress($amazonCheckoutSessionId, $isShippingAddress, $addressDataExtractor)
     {
         if (!$this->amazonConfig->isEnabled()) {
             return false;
         }
 
         try {
-            $response = $this->amazonAdapter->getCheckoutSession(
-                $this->storeManager->getStore()->getId(),
-                $amazonCheckoutSessionId
-            );
+            $response = $this->getCheckoutSession($amazonCheckoutSessionId);
 
-            if (isset($response['shippingAddress'])) {
-                $shippingAddress = $response['shippingAddress'];
-                $shippingAddress['state'] = $shippingAddress['stateOrRegion'];
+            $addressData = call_user_func($addressDataExtractor, $response);
+            if (!empty($addressData)) {
+                $addressData['state'] = $addressData['stateOrRegion'];
+                $addressData['phone'] = $addressData['phoneNumber'];
 
                 $address = array_combine(
-                    array_map('ucfirst', array_keys($shippingAddress)),
-                    array_values($shippingAddress)
+                    array_map('ucfirst', array_keys($addressData)),
+                    array_values($addressData)
                 );
 
-                $address = $this->convertToMagentoAddress($address, true);
+                $address = $this->convertToMagentoAddress($address, $isShippingAddress);
                 $address[0]['email'] = $response['buyer']['email'];
 
                 return $address;
@@ -139,6 +177,21 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
             $this->logger->error($e);
             $this->throwUnknownErrorException();
         }
+    }
+
+    /**
+     * @param string $amazonCheckoutSessionId
+     * @return mixed
+     */
+    protected function getCheckoutSession($amazonCheckoutSessionId)
+    {
+        if (!isset($this->checkoutSessions[$amazonCheckoutSessionId])) {
+            $this->checkoutSessions[$amazonCheckoutSessionId] = $this->amazonAdapter->getCheckoutSession(
+                $this->storeManager->getStore()->getId(),
+                $amazonCheckoutSessionId
+            );
+        }
+        return $this->checkoutSessions[$amazonCheckoutSessionId];
     }
 
     protected function throwUnknownErrorException()
