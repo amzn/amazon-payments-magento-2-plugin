@@ -48,19 +48,31 @@ define([
              */
             _create: function () {
                 amazonCheckout.withAmazonCheckout(function(amazon, args) {
-                    amazon.Pay.renderButton(this.options.selector, {
-                        merchantId: amazonPayV2Config.getValue('merchantId'),
-                        createCheckoutSession: {
-                            url: url.build('amazon_payv2/checkout/createSession'),
-                            method: 'PUT'
+                    var $buttonContainer = $(this.options.selector),
+                        buttonPreferences = {
+                            merchantId: amazonPayV2Config.getValue('merchantId'),
+                            createCheckoutSession: {
+                                url: url.build('amazon_payv2/checkout/createSession'),
+                                method: 'PUT'
+                            },
+                            ledgerCurrency: amazonPayV2Config.getValue('currency'),
+                            checkoutLanguage: amazonPayV2Config.getValue('language'),
+                            productType: this._isPayOnly() ? 'PayOnly' : 'PayAndShip',
+                            placement: this.options.placement,
+                            sandbox: amazonPayV2Config.getValue('sandbox'),
                         },
-                        ledgerCurrency: amazonPayV2Config.getValue('currency'),
-                        checkoutLanguage: amazonPayV2Config.getValue('language'),
-                        productType: this._isPayOnly() ? 'PayOnly' : 'PayAndShip',
-                        placement: this.options.placement,
-                        sandbox: amazonPayV2Config.getValue('sandbox'),
-                    });
-                    $('.amazon-button-container-v2 .field-tooltip').fadeIn();
+                        buttonPreferencesJson = JSON.stringify(buttonPreferences);
+                    if ($buttonContainer.data('button-preferences') !== buttonPreferencesJson) {
+                        $buttonContainer.empty();
+                        $buttonContainer.data('button-preferences', buttonPreferencesJson);
+
+                        var $buttonRoot = $('<div></div>');
+                        $buttonRoot.uniqueId();
+                        $buttonContainer.append($buttonRoot);
+
+                        amazon.Pay.renderButton('#' + $buttonRoot.attr('id'), buttonPreferences);
+                        $('.amazon-button-container-v2 .field-tooltip').fadeIn();
+                    }
                 }, this);
             }
         });
