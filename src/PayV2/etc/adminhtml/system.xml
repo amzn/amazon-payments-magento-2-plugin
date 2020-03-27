@@ -168,9 +168,9 @@
                     </field>
                 </group>
                 <group id="alexa" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Alexa Delivery Notifications</label>
+                    <label>Alexa Notifications</label>
                     <field id="active" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enable Alexa Delivery Notifications</label>
+                        <label>Enable Alexa Notifications</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>

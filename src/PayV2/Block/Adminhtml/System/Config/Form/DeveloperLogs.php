@@ -29,7 +29,7 @@ class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
     const LOGS = [
         'async' => ['name' => 'IPN V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\AsyncIpn::FILENAME],
         'client' => ['name' => 'Client V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\Client::FILENAME],
-        'alexa' => ['name' => 'Alexa Delivery Log', 'path' => \Amazon\PayV2\Logger\Handler\Alexa::FILENAME],
+        'alexa' => ['name' => 'Alexa V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\Alexa::FILENAME],
     ];
 
     /**

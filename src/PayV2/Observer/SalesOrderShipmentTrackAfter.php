@@ -70,7 +70,7 @@ class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverI
                 'ERROR: ' . $e->getMessage(),
             ]));
             $this->messageManager->addWarningMessage(__(
-                'Alexa Delivery Notification: %1',
+                'Alexa Notification: %1',
                 $e->getMessage()
             ));
         }
