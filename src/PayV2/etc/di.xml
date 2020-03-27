@@ -24,6 +24,14 @@
     <preference for="Amazon\PayV2\Api\Data\AsyncInterface" type="Amazon\PayV2\Model\Async" />
 
     <!-- Loggers -->
+    <type name="Amazon\PayV2\Logger\AlexaLogger">
+        <arguments>
+            <argument name="name" xsi:type="string">amazonAlexaLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Amazon\PayV2\Logger\Handler\Alexa</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Amazon\PayV2\Logger\Logger">
         <arguments>
             <argument name="name" xsi:type="string">amazonClientLoggerV2</argument>

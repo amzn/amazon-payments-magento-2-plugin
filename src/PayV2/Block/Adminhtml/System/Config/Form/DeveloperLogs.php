@@ -17,6 +17,8 @@
 
 namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Displays links to available custom logs
  */
@@ -25,31 +27,32 @@ class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
     const DOWNLOAD_PATH = 'amazon_payv2/payv2/downloadLog';
 
     const LOGS = [
-        ['name' => 'IPN V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\AsyncIpn::FILENAME, 'type' => 'async'],
-        ['name' => 'Client V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\Client::FILENAME, 'type' => 'client']
+        'async' => ['name' => 'IPN V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\AsyncIpn::FILENAME],
+        'client' => ['name' => 'Client V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\Client::FILENAME],
+        'alexa' => ['name' => 'Alexa Delivery Log', 'path' => \Amazon\PayV2\Logger\Handler\Alexa::FILENAME],
     ];
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var DirectoryList
      */
     private $directoryList;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     * @var \Magento\Backend\Model\UrlInterface
      */
     private $urlBuilder;
 
     /**
      * DeveloperLogs constructor.
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\UrlInterface $directoryList
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $urlBuilder
+     * @param \Magento\Backend\Model\UrlInterface $urlBuilder
+     * @param DirectoryList $directoryList
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\UrlInterface $urlBuilder,
-        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        DirectoryList $directoryList,
         $data = []
     ) {
         parent::__construct($context, $data);
@@ -124,13 +127,17 @@ class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
     private function getLogFiles()
     {
         $links = [];
-
+        $root = $this->directoryList->getPath(DirectoryList::ROOT);
         foreach (self::LOGS as $name => $data) {
-            $links[] = ['link' => $this->urlBuilder->getUrl(self::DOWNLOAD_PATH, [
-                'type' => $data['type']]),
-                'name' => $data['name']];
+            if (file_exists($root . $data['path'])) {
+                $links[] = [
+                    'name' => $data['name'],
+                    'link' => $this->urlBuilder->getUrl(self::DOWNLOAD_PATH, [
+                        'name' => $name,
+                    ]),
+                ];
+            }
         }
-
         return $links;
     }
 }
