@@ -167,6 +167,17 @@
                         </depends>
                     </field>
                 </group>
+                <group id="alexa" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Alexa Notifications</label>
+                    <field id="active" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Alexa Notifications</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/amazon_payment_v2/alexa_active</config_path>
+                    </field>
+                    <depends>
+                        <field id="payment/us/amazon_payment/api_version">2</field>
+                    </depends>
+                </group>
                 <group id="advanced" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced</label>
                     <field id="version" type="text" translate="label comment" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">

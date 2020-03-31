@@ -141,7 +141,7 @@ class AmazonPayV2Adapter
             ],
             'merchantMetadata' => [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
-                'merchantStoreName' => $store->getName(),
+                'merchantStoreName' => $this->amazonConfig->getStoreName() ?: $store->getName(),
                 //noteToBuyer => '',
                 //customInformation => '',
             ]

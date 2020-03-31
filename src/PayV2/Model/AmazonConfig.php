@@ -446,4 +446,18 @@ class AmazonConfig
     {
         return $this->scopeConfig->isSetFlag('payment/amazonlogin/active', $scope, $scopeCode);
     }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
+    public function isAlexaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/alexa_active',
+            $scope,
+            $scopeCode
+        );
+    }
 }

@@ -28,7 +28,6 @@ define([
                 payOnly: null,
                 forcePayOnly: false,
                 placement: amazonPayV2Config.getValue('placement'),
-                selector: '.amazon-checkout-button'
             },
 
             /**
@@ -47,9 +46,9 @@ define([
              * Create button
              */
             _create: function () {
-                amazonCheckout.withAmazonCheckout(function(amazon, args) {
-                    var $buttonContainer = $(this.options.selector),
-                        buttonPreferences = {
+                var $buttonContainer = this.element;
+                amazonCheckout.withAmazonCheckout(function (amazon, args) {
+                    var buttonPreferences = {
                             merchantId: amazonPayV2Config.getValue('merchantId'),
                             createCheckoutSession: {
                                 url: url.build('amazon_payv2/checkout/createSession'),
@@ -74,6 +73,10 @@ define([
                         $('.amazon-button-container-v2 .field-tooltip').fadeIn();
                     }
                 }, this);
+            },
+
+            click: function () {
+                this.element.children().first().trigger('click');
             }
         });
 

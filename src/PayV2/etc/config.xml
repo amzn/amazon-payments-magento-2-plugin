@@ -42,6 +42,7 @@
                 <can_refund>1</can_refund>
                 <can_use_checkout>1</can_use_checkout>
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <alexa_active>0</alexa_active>
             </amazon_payment_v2>
         </payment>
     </default>
