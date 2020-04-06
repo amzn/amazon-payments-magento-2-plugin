@@ -26,24 +26,30 @@ same directory as this `README.md` file.
 
 ### 1. Install module
 
-The module can be either installed via composer (recommend), or manually. The steps for each option are described below. 
+The module can be either installed via Composer (recommended), or manually. The steps for each option are described below. 
 
 #### Composer installation
+
+In `magento-root`, execute:
+
 ```
 $ composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout
+$ touch app/etc/.amazon_payv2_enable
 $ bin/magento module:enable Amazon_PayV2
 ```
-If composer installation didn't work, use the manual procedure below. If any of these were successful, please proceed with **2. Post-installation procedure**, otherwise reach out to Amazon Pay merchant support for additional assistance.
+
+If Composer installation didn't work, use the manual procedure below. If any of these were successful, please proceed with **2. Post-installation procedure**, otherwise reach out to Amazon Pay Merchant Support for additional assistance.
 
 #### Manual installation
-* Download the [Amazon Pay V2 checkout plugin](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) via `git clone` or 'Download ZIP'
+* Download the [Amazon Pay V2 checkout plugin](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) via `git clone` or "Download ZIP"
 * Copy src/PayV2 to app/code/Amazon/PayV2  
-(If `magento-root/app/code/Amazon/PayV2` path is not present, please create the folders Amazon and PayV2)  
+(If `magento-root/app/code/Amazon/PayV2` path is not present, please create the folders `Amazon` and `PayV2`)  
 
-In Magento root, execute:
+In `magento-root`, execute:
 ```
 $ composer require amzn/amazon-pay-sdk-v2-php
 $ composer require aws/aws-php-sns-message-validator
+$ touch app/etc/.amazon_payv2_enable
 $ bin/magento module:enable Amazon_PayV2
 ```
 
@@ -71,7 +77,7 @@ Amazon Pay does not provide any specific extension points.
 
 ### Amazon Pay V2 configuration ###
 
-After successfully installting the module, please follow the steps below for configuring it.
+Upon successful installation of the module, please follow the steps below for configuring it:
 
 1. Go to Stores -> Configuration -> Sales -> Payment Methods -> Amazon Pay -> Configure
 1. Switch to 'V2' under the Amazon Pay Product Version
@@ -79,6 +85,6 @@ After successfully installting the module, please follow the steps below for con
 1. Click 'Download Public Key' to save the Public Key locally
 1. To obtain the Public Key ID, please email your Amazon Pay POC with your Seller Central Merchant ID and Public key that you just downloaded (attached in the email)
 1. Amazon Pay will respond with the Public Key ID, which then you add in the Public Key ID field
-1. Merchant Id will be the same as you V1 credentails, please copy and paste it here
-1. Store Id refers to the Client Id in V1 settings, please copy and paste it here
-1. Rest of the settings are all similar to the V1 settings. We recommend to use the same settings as used in V1. [View V1 Confirgurations documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html)
+1. Merchant Id will be the same as your V1 credentails, please copy and paste it here
+1. Store Id refers to the Client Id in V1 settings, please copy it or retrieve it from "Login with Amazon" application in Seller Central and paste it here
+1. Rest of the settings are all similar to the V1 settings. We recommend to use the same settings as used in V1. [View V1 Configuration documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html)
