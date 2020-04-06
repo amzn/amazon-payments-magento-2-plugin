@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
+    <section name="AmazonPageSection">
+        <element name="emailField" type="input" selector="#ap_email"/>
+        <element name="passwordField" type="input" selector="#ap_password"/>
+        <element name="signInButton" type="button" selector="#signInSubmit"/>
+        <element name="checkoutButton" type="button" selector="#default-button-content input[type=submit]"/>
+    </section>
+</sections>
