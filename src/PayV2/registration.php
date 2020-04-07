@@ -18,7 +18,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 $registrar = new ComponentRegistrar();
 
 $moduleVisibilityFlag = 'AMAZON_PAYV2_ENABLE';
-$isModuleVisible = !empty($_ENV[$moduleVisibilityFlag]) || !empty($_SERVER[$moduleVisibilityFlag]);
+$isModuleVisible = !empty($_ENV[$moduleVisibilityFlag]) || !empty($_SERVER[$moduleVisibilityFlag]) || getenv($moduleVisibilityFlag);
 if (!$isModuleVisible && defined('BP')) {
     $isModuleVisible = file_exists(BP . '/app/etc/.' . strtolower($moduleVisibilityFlag));
 }
