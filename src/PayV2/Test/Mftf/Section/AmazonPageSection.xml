@@ -5,5 +5,10 @@
         <element name="passwordField" type="input" selector="#ap_password"/>
         <element name="signInButton" type="button" selector="#signInSubmit"/>
         <element name="checkoutButton" type="button" selector="#default-button-content input[type=submit]"/>
+        <element name="addressId" type="text" selector="#default .default_address .address_id"/>
+        <element name="addressDetails" type="text" selector="#change-buyer-details li[data-address_id='{{address_id}}']" parameterized="true"/>
+        <element name="changeAddressButton" type="button" selector="#change-address-button"/>
+        <element name="notSelectedAddress" type="button" selector="#maxo_addresses li[data-selected=false]"/>
+        <element name="useAddressButton" type="button" selector="#buyer-action-button-bottom .a-button-input"/>
     </section>
 </sections>
