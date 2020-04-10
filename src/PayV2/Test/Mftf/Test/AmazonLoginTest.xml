@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ProductAmazonLogin" extends="ProductAmazonButtonV2">
+        <annotations>
+            <stories value="Amazon Login"/>
+            <title value="User should be able to login to Amazon from the product page when enabled."/>
+            <description value="User should be able to login to Amazon from the product page when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_login"/>
+        </annotations>
+
+        <!--Add to cart via Amazon Pay button on product page and login-->
+        <click selector="{{AmazonButtonSection.v2Product}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
+    </test>
+    <test name="MiniCartAmazonLogin" extends="MiniCartAmazonButtonV2">
+        <annotations>
+            <stories value="Amazon Login"/>
+            <title value="User should be able to login to Amazon from the mini cart when enabled."/>
+            <description value="User should be able to login to Amazon from the mini cart when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_login"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the mini cart and login-->
+        <click selector="{{AmazonButtonSection.v2MiniCart}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
+    </test>
+    <test name="CheckoutAmazonLogin" extends="CheckoutAmazonButtonV2">
+        <annotations>
+            <stories value="Amazon Login"/>
+            <title value="User should be able to login to Amazon from the checkout when enabled."/>
+            <description value="User should be able to login to Amazon from the checkout when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_login"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+    </test>
+    <test name="PaymentAmazonLogin" extends="PaymentAmazonButtonV2">
+        <annotations>
+            <stories value="Amazon Login"/>
+            <title value="User should be able to login to Amazon from the payment method when enabled."/>
+            <description value="User should be able to login to Amazon from the payment method when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_login"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the payment method and login-->
+        <click selector="{{AmazonButtonSection.v2Payment}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+    </test>
+</tests>

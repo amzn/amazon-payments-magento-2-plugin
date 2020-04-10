@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateAmazonPaymentV2Config" dataType="amazon_payment_v2_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="amazon_payment_v2_config">
+            <object key="amazon_payment" dataType="amazon_payment_v2_config">
+                <object key="fields" dataType="amazon_payment_v2_config">
+                    <object key="api_version" dataType="api_version">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+                <object key="groups" dataType="amazon_payment_v2_config">
+                    <object key="credentials" dataType="amazon_payment_v2_config">
+                        <object key="fields" dataType="amazon_payment_v2_config">
+                            <object key="active_v2" dataType="active">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="private_key" dataType="private_key">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="public_key_id" dataType="public_key_id">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="merchant_id_v2" dataType="merchant_id">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="store_id" dataType="store_id">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="payment_region" dataType="payment_region">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="sandbox" dataType="sandbox">
+                                <field key="value">string</field>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>
