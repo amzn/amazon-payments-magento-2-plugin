@@ -35,6 +35,6 @@ class SimplepathConfig extends \Magento\Config\Block\System\Config\Form\Field
             ->setCacheable(false)
             ->toHtml();
 
-        return $html;
+        return '<div id="row_' . $element->getHtmlId() . '">' . $html . '</div>';
     }
 }
