@@ -50,7 +50,7 @@ class Note extends \Magento\Config\Block\System\Config\Form\Field
     protected function _renderValue($element)
     {
         $html = '<td class="value">';
-        if ($this->amazonConfig->getPrivateKey() && $this->amazonConfig->getPublicKeyId()) {
+        if (!$this->amazonConfig->getPrivateKey() || !$this->amazonConfig->getPublicKeyId()) {
             $html .= __('Go to Seller Central to get the keys');
         }
         $html .= '</td>';
