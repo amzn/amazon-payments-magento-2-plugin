@@ -30,6 +30,13 @@
                     </depends>
                 </field>
                 <group id="credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="note_v2" type="note" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label></label>
+                        <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\Note</frontend_model>
+                        <depends>
+                            <field id="payment/us/amazon_payment/api_version">2</field>
+                        </depends>
+                    </field>
                     <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enable Amazon Pay</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -49,7 +56,6 @@
                     <field id="private_key" translate="label comment" type="textarea" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Private Key</label>
                         <config_path>payment/amazon_payment_v2/private_key</config_path>
-                        <comment model="Amazon\PayV2\Model\Config\Comment\PrivateKey"/>
                         <frontend_model>Amazon\PayV2\Model\Config\Form\Privatekey</frontend_model>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
@@ -59,7 +65,6 @@
                     <field id="public_key_id" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Public Key ID</label>
                         <config_path>payment/amazon_payment_v2/public_key_id</config_path>
-                        <comment model="Amazon\PayV2\Model\Config\Comment\PublicKeyId"/>
                         <depends>
                             <field id="payment/us/amazon_payment/api_version">2</field>
                         </depends>
@@ -81,7 +86,7 @@
                     </field>
                     <field id="ipn_url_v2" type="note" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>IPN URL</label>
-                        <frontend_model>Amazon\PayV2\Block\Adminhtml\Form\Field\IpnUrl</frontend_model>
+                        <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\IpnUrl</frontend_model>
                         <comment><![CDATA[Add this url in SellerCentral to enable IPN.]]></comment>
                         <depends>
                             <field id="payment/us/amazon_payment/api_version">2</field>
@@ -180,8 +185,16 @@
                 </group>
                 <group id="advanced" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced</label>
-                    <field id="version" type="text" translate="label comment" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <frontend_model>Amazon\Core\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                    <field id="version">
+                        <depends>
+                            <field id="payment/us/amazon_payment/api_version">1</field>
+                        </depends>
+                    </field>
+                    <field id="version_v2" type="text" translate="label comment" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                        <depends>
+                            <field id="payment/us/amazon_payment/api_version">2</field>
+                        </depends>
                     </field>
                     <group id="frontend" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Frontend</label>
@@ -218,6 +231,20 @@
                         <field id="loglist" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                             <depends>
                                 <field id="payment/us/amazon_payment/api_version">1</field>
+                            </depends>
+                        </field>
+                        <field id="allowed_ips">
+                            <depends>
+                                <field id="payment/us/amazon_payment/api_version">1</field>
+                            </depends>
+                        </field>
+                        <field id="allowed_ips_v2" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Allowed IPs</label>
+                            <comment><![CDATA[Comma separated. The “Amazon Pay" button will only be rendered for clients having the above IPs. If the field is empty, the buttons will be visible to all clients.]]></comment>
+                            <config_path>payment/amazon_payment_v2/allowed_ips</config_path>
+                            <backend_model>Magento\Developer\Model\Config\Backend\AllowedIps</backend_model>
+                            <depends>
+                                <field id="payment/us/amazon_payment/api_version">2</field>
                             </depends>
                         </field>
                     </group>
