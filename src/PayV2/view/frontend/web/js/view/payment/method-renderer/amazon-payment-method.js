@@ -52,12 +52,6 @@ define(
                 }
             },
 
-            initObservable: function () {
-                this._super();
-                this.selectPaymentMethod();
-                return this;
-            },
-
             initBillingAddress: function () {
                 billingFormAddressState.isValid.subscribe(function (isValid) {
                     this.isPlaceOrderActionAllowed(isValid);
