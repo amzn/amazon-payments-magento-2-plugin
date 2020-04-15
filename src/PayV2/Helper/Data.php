@@ -11,12 +11,19 @@ class Data extends AbstractHelper
      */
     private $helperCheckout;
 
+    /**
+     * @var \Magento\Framework\Module\ModuleListInterface
+     */
+    private $moduleList;
+
     public function __construct(
         \Magento\Checkout\Helper\Data $helperCheckout,
+        \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\App\Helper\Context $context
     )
     {
         $this->helperCheckout = $helperCheckout;
+        $this->moduleList = $moduleList;
         parent::__construct($context);
     }
 
@@ -27,5 +34,14 @@ class Data extends AbstractHelper
     {
         $quote = $this->helperCheckout->getQuote();
         return $quote->hasItems() ? $quote->isVirtual() : true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        $module = $this->moduleList->getOne('Amazon_PayV2');
+        return $module['setup_version'] ?? __('--');
     }
 }
