@@ -52,16 +52,28 @@ define(
              * New setShipping Action for Amazon Pay to bypass validation
              */
             setShippingInformation: function () {
-                if (amazonStorage.isAmazonAccountLoggedIn()) {
-                    if (customer.isLoggedIn() || this.validateGuestEmail()) {
-                        setShippingInformationAction().done(
-                            function () {
-                                stepNavigator.next();
-                            }
-                        );
+
+                /**
+                 * Set Amazon shipping info
+                 */
+                function setShippingInformationAmazon() {
+                    setShippingInformationAction().done(
+                        function () {
+                            stepNavigator.next();
+                        }
+                    );
+                }
+
+                if (amazonStorage.isAmazonAccountLoggedIn() && customer.isLoggedIn()) {
+                    setShippingInformationAmazon();
+                } else if (amazonStorage.isAmazonAccountLoggedIn() && !customer.isLoggedIn()) {
+
+                    if (this.validateGuestEmail()) {
+                        setShippingInformationAmazon();
                     }
-                } else {
-                    this._super();
+                    //if using guest checkout or guest checkout with amazon pay we need to use the main validation
+                } else if (this.validateShippingInformation()) {
+                    setShippingInformationAmazon();
                 }
             }
         });

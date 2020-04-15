@@ -19,8 +19,6 @@
     <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
 
-<div class="amazon-express-title" data-bind="i18n: 'Express Checkout', visible: !isAmazonAccountLoggedIn() && isPwaVisible()"></div>
-
 <div class="amazon-button-container" data-bind="visible: !isAmazonAccountLoggedIn() && isPwaVisible()">
     <div class="amazon-button-container__cell">
         <div class="login-with-amazon" data-bind="attr: {id: 'PayWithAmazon_' + displayArea}, mageInit: {'amazonButton':{'buttonType': 'PwA'}}"></div>
@@ -32,10 +30,6 @@
             <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="text: tooltip"></div>
         </div>
     </div>
-</div>
-
-<div class="amazon-divider" data-bind="visible: !isAmazonAccountLoggedIn() && isPwaVisible()">
-    <span data-bind="i18n: 'Or continue below to pay with a credit card'"></span>
 </div>
 
 <!-- ko foreach: getRegion('after-amazon-button') -->

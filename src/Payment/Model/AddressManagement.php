@@ -21,11 +21,8 @@ use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Payment\Api\AddressManagementInterface;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Helper\Address;
-use Amazon\Payment\Domain\AmazonOrderStatus;
-use Amazon\Payment\Domain\AmazonAuthorizationStatus;
 use Exception;
 use Magento\Checkout\Model\Session;
-use Magento\Customer\Model\AddressFactory;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Validator\Exception as ValidatorException;
@@ -81,11 +78,6 @@ class AddressManagement implements AddressManagementInterface
     private $logger;
 
     /**
-     * @var AddressFactory
-     */
-    private $addressFactory;
-
-    /**
      * @param ClientFactoryInterface    $clientFactory
      * @param Address                   $addressHelper
      * @param QuoteLinkInterfaceFactory $quoteLinkFactory
@@ -94,7 +86,6 @@ class AddressManagement implements AddressManagementInterface
      * @param AmazonAddressFactory      $amazonAddressFactory
      * @param Factory                   $validatorFactory
      * @param LoggerInterface           $logger
-     * @param AddressFactory            $addressFactory
      */
     public function __construct(
         ClientFactoryInterface $clientFactory,
@@ -104,8 +95,7 @@ class AddressManagement implements AddressManagementInterface
         CollectionFactory $countryCollectionFactory,
         AmazonAddressFactory $amazonAddressFactory,
         Factory $validatorFactory,
-        LoggerInterface $logger,
-        AddressFactory $addressFactory
+        LoggerInterface $logger
     ) {
         $this->clientFactory            = $clientFactory;
         $this->addressHelper            = $addressHelper;
@@ -115,7 +105,6 @@ class AddressManagement implements AddressManagementInterface
         $this->amazonAddressFactory     = $amazonAddressFactory;
         $this->validatorFactory         = $validatorFactory;
         $this->logger                   = $logger;
-        $this->addressFactory           = $addressFactory;
     }
 
     /**
@@ -125,11 +114,6 @@ class AddressManagement implements AddressManagementInterface
     {
         try {
             $data = $this->getOrderReferenceDetails($amazonOrderReferenceId, $addressConsentToken);
-
-            if ($this->isSuspendedStatus($data)) {
-                throw new WebapiException(__('There has been a problem with the selected payment method on your ' .
-                    'Amazon account. Please choose another one.'));
-            }
 
             $this->updateQuoteLink($amazonOrderReferenceId);
 
@@ -161,9 +145,6 @@ class AddressManagement implements AddressManagementInterface
             $data = $this->getOrderReferenceDetails($amazonOrderReferenceId, $addressConsentToken);
 
             $this->updateQuoteLink($amazonOrderReferenceId);
-
-            // Re-open suspended InvalidPaymentMethod decline during ConfirmOrderReference
-            $this->session->setData('is_amazon_suspended', $this->isSuspendedStatus($data));
 
             if (isset($data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'])) {
                 $billingAddress = $data['OrderReferenceDetails']['BillingAddress']['PhysicalAddress'];
@@ -218,13 +199,6 @@ class AddressManagement implements AddressManagementInterface
             if (1 != $collectionSize) {
                 throw new WebapiException(__('the country for your address is not allowed for this store'));
             }
-
-            // Validate address
-            $validate = $this->addressFactory->create()->updateData($magentoAddress)->validate();
-            if (is_array($validate)) {
-                $validate[] = __('Your address may be updated in your Amazon account.');
-                throw new ValidatorException(null, null, [$validate]);
-            }
         }
 
         return [$this->addressHelper->convertToArray($magentoAddress)];
@@ -270,13 +244,5 @@ class AddressManagement implements AddressManagementInterface
                 ->setConfirmed(false)
                 ->save();
         }
-    }
-
-    protected function isSuspendedStatus($data)
-    {
-        $orderStatus = $data['OrderReferenceDetails']['OrderReferenceStatus'] ?? false;
-
-        return ($orderStatus && $orderStatus['State'] == AmazonOrderStatus::STATE_SUSPENDED
-            && $orderStatus['ReasonCode'] == AmazonAuthorizationStatus::REASON_INVALID_PAYMENT_METHOD);
     }
 }

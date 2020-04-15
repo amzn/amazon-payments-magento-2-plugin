@@ -21,53 +21,8 @@ class AmazonServiceUnavailableException extends LocalizedException
 {
     const ERROR_MESSAGE = 'Amazon could not process your request.';
 
-    /**
-     * @var string
-     */
-    private $apiErrorType;
-
-    /**
-     * @var string
-     */
-    private $apiErrorCode;
-
-    /**
-     * @var string
-     */
-    private $apiErrorMessage;
-
-    /**
-     * AmazonServiceUnavailableException constructor.
-     * @param string $apiErrorType
-     * @param string $apiErrorCode
-     * @param string $apiErrorMessage
-     */
-    public function __construct($apiErrorType = '', $apiErrorCode = '', $apiErrorMessage = '')
+    public function __construct()
     {
-        $this->apiErrorType = $apiErrorType;
-        $this->apiErrorCode = $apiErrorCode;
-        $this->apiErrorMessage = $apiErrorMessage;
         parent::__construct(__('Amazon could not process your request.'));
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiErrorType() {
-        return $this->apiErrorType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiErrorCode() {
-        return $this->apiErrorCode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiErrorMessage() {
-        return $this->apiErrorMessage;
     }
 }
