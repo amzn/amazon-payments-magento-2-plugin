@@ -144,11 +144,9 @@ class OrderInformationManagement implements OrderInformationManagementInterface
             ];
 
             $responseParser = $this->clientFactory->create($storeId)->setOrderReferenceDetails($data);
-            $response       = $this->amazonSetOrderDetailsResponseFactory->create(
-                [
+            $response = $this->amazonSetOrderDetailsResponseFactory->create([
                 'response' => $responseParser
-                ]
-            );
+            ]);
 
             $this->validateConstraints($response, $allowedConstraints);
         } catch (LocalizedException $e) {
