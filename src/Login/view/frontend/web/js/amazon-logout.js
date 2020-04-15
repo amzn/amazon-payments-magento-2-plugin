@@ -16,6 +16,7 @@
 define([
     'jquery',
     'amazonCore',
+    'jquery/ui',
     'mage/cookies'
 ], function ($, core) {
     'use strict';

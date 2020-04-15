@@ -26,7 +26,6 @@ class IgnoreBillingAddressValidation implements ObserverInterface
         $quote = $observer->getEvent()->getQuote();
         if (AmazonPayment::CODE === $quote->getPayment()->getMethod()) {
             $quote->getBillingAddress()->setShouldIgnoreValidation(true);
-            $quote->getShippingAddress()->setShouldIgnoreValidation(true);
         }
     }
 }
