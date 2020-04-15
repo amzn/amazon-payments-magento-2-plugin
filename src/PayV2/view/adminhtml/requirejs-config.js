@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<!--
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,15 +12,12 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
-    <acl>
-        <resources>
-            <resource id="Magento_Backend::admin">
-                <resource id="Amazon_PayV2::PayV2" title="Amazon Pay" sortOrder="51">
-                    <resource id="Amazon_PayV2::downloadlogs" title="Download Logs" translate="true"/>
-                </resource>
-            </resource>
-        </resources>
-    </acl>
-</config>
+var config = {
+    config: {
+        mixins: {
+            'Amazon_Core/js/simplepath': {
+                'Amazon_PayV2/js/simplepath-mixin': true
+            }
+        }
+    }
+};

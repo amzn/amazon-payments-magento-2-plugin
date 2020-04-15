@@ -19,6 +19,8 @@
     <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
 
+<div class="amazon-express-title" data-bind="i18n: 'Express Checkout', visible: isVisible"></div>
+
 <div class="amazon-button-container-v2" data-bind="visible: isVisible">
     <div class="amazon-button-column">
         <div id="PayWithAmazon-Checkout"
@@ -36,6 +38,10 @@
             <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true" data-bind="text: tooltip"></div>
         </div>
     </div>
+</div>
+
+<div class="amazon-divider" data-bind="visible: isVisible">
+    <span data-bind="i18n: 'Or continue below to pay with a credit card'"></span>
 </div>
 
 <!-- ko foreach: getRegion('after-amazon-button') -->

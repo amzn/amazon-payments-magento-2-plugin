@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,15 +13,20 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
-    <acl>
-        <resources>
-            <resource id="Magento_Backend::admin">
-                <resource id="Amazon_PayV2::PayV2" title="Amazon Pay" sortOrder="51">
-                    <resource id="Amazon_PayV2::downloadlogs" title="Download Logs" translate="true"/>
-                </resource>
-            </resource>
-        </resources>
-    </acl>
-</config>
+namespace Amazon\PayV2\Helper;
+
+use Magento\Store\Model\ScopeInterface;
+
+class ClientIp extends \Amazon\Core\Helper\ClientIp
+{
+    /**
+     * @param string $scope
+     * @param mixed $scopeCode
+     * @return array
+     */
+    public function getAllowedIps($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $allowedIpsString = $this->scopeConfig->getValue('payment/amazon_payment_v2/allowed_ips', $scope, $scopeCode);
+        return empty($allowedIpsString) ? [] : explode(',', $allowedIpsString);
+    }
+}

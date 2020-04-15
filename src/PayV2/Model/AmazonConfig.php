@@ -49,7 +49,7 @@ class AmazonConfig
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Amazon\Core\Helper\ClientIp $clientIpHelper,
+        \Amazon\PayV2\Helper\ClientIp $clientIpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\State $appState
     ) {
