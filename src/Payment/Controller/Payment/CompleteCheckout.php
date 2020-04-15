@@ -16,6 +16,7 @@
 namespace Amazon\Payment\Controller\Payment;
 
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
+use Amazon\Core\Helper\Data as AmazonHelper;
 use Amazon\Core\Model\AmazonConfig;
 use Amazon\Core\Exception\AmazonWebapiException;
 use Amazon\Core\Logger\ExceptionLogger;
@@ -43,6 +44,11 @@ class CompleteCheckout extends Action
      * @var AmazonConfig
      */
     private $amazonConfig;
+
+    /**
+     * @var AmazonHelper
+     */
+    private $amazonHelper;
 
     /**
      * @var CheckoutSession
@@ -74,6 +80,7 @@ class CompleteCheckout extends Action
      *
      * @param Context $context
      * @param AmazonConfig $amazonConfig
+     * @param AmazonHelper $amazonHelper
      * @param CartManagementInterface $cartManagement
      * @param GuestCartManagementInterface $guestCartManagement
      * @param CheckoutSession $checkoutSession
@@ -86,6 +93,7 @@ class CompleteCheckout extends Action
     public function __construct(
         Context $context,
         AmazonConfig $amazonConfig,
+        AmazonHelper $amazonHelper,
         CartManagementInterface $cartManagement,
         GuestCartManagementInterface $guestCartManagement,
         CheckoutSession $checkoutSession,
@@ -97,6 +105,7 @@ class CompleteCheckout extends Action
     ) {
         parent::__construct($context);
         $this->amazonConfig = $amazonConfig;
+        $this->amazonHelper = $amazonHelper;
         $this->cartManagement = $cartManagement;
         $this->checkoutSession = $checkoutSession;
         $this->session = $session;
@@ -114,6 +123,8 @@ class CompleteCheckout extends Action
     {
         try {
             $authenticationStatus = $this->getRequest()->getParam('AuthenticationStatus');
+            // Bypass cache check in \Magento\PageCache\Model\DepersonalizeChecker
+            $this->getRequest()->setParams(['ajax' => 1]);
             switch ($authenticationStatus) {
                 case 'Success':
                     try {
@@ -121,8 +132,20 @@ class CompleteCheckout extends Action
                             $this->checkoutSession->getQuote()->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
                         }
                         $this->cartManagement->placeOrder($this->checkoutSession->getQuoteId());
+                        if ($this->amazonHelper->getAuthorizationMode() == 'synchronous_possible') {
+                            $this->messageManager->addNoticeMessage(__(
+                                'Your transaction with Amazon Pay is currently being validated. ' .
+                                'Please be aware that we will inform you shortly as needed.'
+                            ));
+                        }
                         return $this->_redirect('checkout/onepage/success');
                     } catch (AmazonWebapiException $e) {
+                        if ($this->amazonConfig->isSoftDecline($e->getCode())) {
+                            return $this->_redirect('checkout', [
+                                '_query' => 'orderReferenceId=' . $this->getOrderReferenceId(),
+                                '_fragment' => 'payment',
+                            ]);
+                        }
                         $this->exceptionLogger->logException($e);
                         $this->messageManager->addErrorMessage($e->getMessage());
                     }
@@ -139,20 +162,18 @@ class CompleteCheckout extends Action
                         'The SCA challenge was not completed successfully.  '
                         . 'Please try again, or use a different payment method.'
                     ));
+                    return $this->_redirect('checkout', [
+                        '_query' => 'orderReferenceId=' . $this->getOrderReferenceId(),
+                        '_fragment' => 'payment',
+                    ]);
             }
 
-            $quote = $this->checkoutSession->getQuote();
-            if (!$quote) {
-                throw new NotFoundException(__('Failed to retrieve quote from checkoutSession'));
-            }
-            $orderReferenceId = $quote
-                ->getExtensionAttributes()
-                ->getAmazonOrderReferenceId()
-                ->getAmazonOrderReferenceId();
+            $orderReferenceId = $this->getOrderReferenceId();
+
             if ($orderReferenceId) {
                 // Cancel the order to prevent confusion when the merchant views Transactions in Seller Central
                 try {
-                    $this->orderInformationManagement->cancelOrderReference($orderReferenceId, $quote->getStoreId());
+                    $this->orderInformationManagement->cancelOrderReference($orderReferenceId, $this->checkoutSession->getQuote()->getStoreId());
                 } catch (AmazonServiceUnavailableException $e) {
                     $this->exceptionLogger->logException($e);
                 }
@@ -163,5 +184,25 @@ class CompleteCheckout extends Action
             $this->exceptionLogger->logException($e);
             throw $e;
         }
+    }
+
+    /**
+     * Return Amazon order reference ID
+     *
+     * @return string
+     * @throws NotFoundException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getOrderReferenceId()
+    {
+        $quote = $this->checkoutSession->getQuote();
+        if (!$quote) {
+            throw new NotFoundException(__('Failed to retrieve quote from checkoutSession'));
+        }
+        return $quote
+            ->getExtensionAttributes()
+            ->getAmazonOrderReferenceId()
+            ->getAmazonOrderReferenceId();
     }
 }

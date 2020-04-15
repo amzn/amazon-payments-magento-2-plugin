@@ -14,5 +14,6 @@
         <element name="productPayButton" type="button" selector="#amazon-addtoCart-amazon-pay-button-product"/>
         <element name="checkoutPayButton" type="button" selector=".amazon-button-container img"/>
         <element name="loginButton" type="button" selector="#LoginWithAmazon-amazon-login img"/>
+        <element name="addNewAddress" type="block" selector=".footer .info a"/>
     </section>
 </sections>

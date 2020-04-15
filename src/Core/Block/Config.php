@@ -111,6 +111,10 @@ class Config extends Template
             $config['sandboxSimulationOptions'] = $this->transformSandboxSimulationOptions();
         }
 
+        if ($orderReferenceId = $this->getRequest()->getParam('orderReferenceId')) {
+            $config['orderReferenceId'] = preg_replace('/[^A-Z0-9-]/', '', $orderReferenceId);
+        }
+
         return $config;
     }
 

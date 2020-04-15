@@ -30,6 +30,7 @@ define(
 
         var isAmazonAccountLoggedIn = ko.observable(false),
             isAmazonEnabled = ko.observable(amazonPaymentConfig.getValue('isPwaEnabled')),
+            orderReferenceId = ko.observable(amazonPaymentConfig.getValue('orderReferenceId')),
             orderReference,
             addressConsentToken = amazonCore.accessToken,
             //eslint-disable-next-line no-use-before-define
@@ -49,7 +50,8 @@ define(
             isLoginRedirectPage = $('body').hasClass('amazon-login-login-processauthhash'),
             amazonCustomerEmail = ko.computed(function () {
                 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-                if (window.checkoutConfig.hasOwnProperty('amazonLogin') &&
+                if (window.hasOwnProperty('checkoutConfig') &&
+                    window.checkoutConfig.hasOwnProperty('amazonLogin') &&
                     typeof window.checkoutConfig.amazonLogin.amazon_customer_email === 'string'
                 ) {
                     return window.checkoutConfig.amazonLogin.amazon_customer_email;
@@ -98,6 +100,7 @@ define(
         return {
             isAmazonAccountLoggedIn: isAmazonAccountLoggedIn,
             isAmazonEnabled: isAmazonEnabled,
+            orderReferenceId: orderReferenceId,
             amazonDeclineCode: amazonDeclineCode,
             sandboxSimulationReference: sandboxSimulationReference,
             isPlaceOrderDisabled: isPlaceOrderDisabled,
@@ -120,7 +123,7 @@ define(
              * Get order reference
              */
             getOrderReference: function () {
-                return orderReference;
+                return this.orderReferenceId() || orderReference;
             },
 
             /**

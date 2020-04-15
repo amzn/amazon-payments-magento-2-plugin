@@ -144,13 +144,24 @@ class OrderInformationManagement implements OrderInformationManagementInterface
             ];
 
             $responseParser = $this->clientFactory->create($storeId)->setOrderReferenceDetails($data);
-            $response       = $this->amazonSetOrderDetailsResponseFactory->create(
-                [
-                'response' => $responseParser
-                ]
-            );
+            try {
+                $response       = $this->amazonSetOrderDetailsResponseFactory->create(
+                    [
+                    'response' => $responseParser
+                    ]
+                );
 
-            $this->validateConstraints($response, $allowedConstraints);
+                $this->validateConstraints($response, $allowedConstraints);
+            } catch (AmazonServiceUnavailableException $e) {
+                if($e->getApiErrorCode() == 'OrderReferenceNotModifiable') {
+                    $this->logger->warning(
+                        "Could not modify Amazon order details for $amazonOrderReferenceId: "
+                        . $e->getApiErrorMessage()
+                    );
+                } else {
+                    throw $e;
+                }
+            }
         } catch (LocalizedException $e) {
             throw $e;
         } catch (Exception $e) {

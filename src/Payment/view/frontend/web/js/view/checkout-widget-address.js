@@ -20,7 +20,8 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
-        'uiRegistry'
+        'uiRegistry',
+        'Amazon_Payment/js/messages'
     ],
     function (
         $,
@@ -41,7 +42,8 @@ define(
         urlBuilder,
         checkoutData,
         checkoutDataResolver,
-        registry
+        registry,
+        amazonMessages
     ) {
         'use strict';
 
@@ -68,6 +70,10 @@ define(
             initialize: function () {
                 self = this;
                 this._super();
+                // Update checkoutUrl for step-navigator if orderReferenceId is set (e.g. InvaldPaymentMethod)
+                if (amazonStorage.orderReferenceId()) {
+                    window.checkoutConfig.checkoutUrl += '?orderReferenceId=' + amazonStorage.orderReferenceId()
+                }
             },
 
             /**
@@ -98,8 +104,7 @@ define(
                      * Order reference creation callback
                      */
                     onOrderReferenceCreate: function (orderReference) {
-                        var orderid = orderReference.getAmazonOrderReferenceId();
-
+                        var orderid = amazonStorage.orderReferenceId() || orderReference.getAmazonOrderReferenceId();
                         amazonStorage.setOrderReference(orderid);
                     },
 
@@ -109,6 +114,7 @@ define(
                     onAddressSelect: function () { // orderReference
                         self.getShippingAddressFromAmazon();
                     },
+                    displayMode: self.isShippingAddressReadOnly() ? 'Read' : '',
                     design: {
                         designMode: 'responsive'
                     },
@@ -118,6 +124,7 @@ define(
                      */
                     onError: amazonCore.handleWidgetError
                 }).bind(self.options.addressWidgetDOMId);
+                amazonMessages.displayMessages();
             },
 
             /**
@@ -164,6 +171,10 @@ define(
                         //remove shipping loader and set shipping rates to 0 on a fail
                         shippingService.setShippingRates([]);
                         amazonStorage.isShippingMethodsLoading(false);
+                        if (self.isShippingAddressReadOnly()) {
+                            shippingService.isLoading(false);
+                            $('.checkout-shipping-method').hide();
+                        }
                     }
                 );
             },
@@ -180,6 +191,20 @@ define(
              */
             getAddressConsentToken: function () {
                 return amazonStorage.getAddressConsentToken();
+            },
+
+            /**
+             * Is shipping widget set to read-only (orderReferenceId already set?)
+             */
+            isShippingAddressReadOnly: function() {
+                return (amazonStorage.orderReferenceId());
+            },
+
+            /**
+             * Continue to payment (e.g. if shipping address is read-only)
+             */
+            continuePayment: function() {
+                window.location = window.checkoutConfig.checkoutUrl + '#payment';
             }
         });
     }

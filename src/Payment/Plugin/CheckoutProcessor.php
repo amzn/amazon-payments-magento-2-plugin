@@ -62,12 +62,6 @@ class CheckoutProcessor
         ['children']['payment'];
 
         if (!$quote->isVirtual() && $this->amazonHelper->isPwaEnabled()) {
-            $shippingConfig['component'] = 'Amazon_Payment/js/view/shipping';
-            $shippingConfig['children']['customer-email']['component'] = 'Amazon_Payment/js/view/form/element/email';
-            $shippingConfig['children']['address-list']['component'] = 'Amazon_Payment/js/view/shipping-address/list';
-            $shippingConfig['children']['shipping-address-fieldset']['children']
-            ['inline-form-manipulator']['component'] = 'Amazon_Payment/js/view/shipping-address/inline-form';
-
             $paymentConfig['children']['payments-list']['component'] = 'Amazon_Payment/js/view/payment/list';
         } else {
             unset($shippingConfig['children']['customer-email']['children']['amazon-button-region']);

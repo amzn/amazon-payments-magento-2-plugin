@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="minicart">
             <arguments>
@@ -45,8 +45,20 @@
                                         <item name="shipping-step" xsi:type="array">
                                             <item name="children" xsi:type="array">
                                                 <item name="shippingAddress" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/shipping</item>
                                                     <item name="children" xsi:type="array">
+                                                        <item name="address-list" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Amazon_Payment/js/view/shipping-address/list</item>
+                                                        </item>
+                                                        <item name="shipping-address-fieldset" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="inline-form-manipulator" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Amazon_Payment/js/view/shipping-address/inline-form</item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
                                                         <item name="customer-email" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Amazon_Payment/js/view/form/element/email</item>
                                                             <item name="children" xsi:type="array">
                                                                 <item name="amazon-button-region" xsi:type="array">
                                                                     <item name="component" xsi:type="string">uiComponent</item>

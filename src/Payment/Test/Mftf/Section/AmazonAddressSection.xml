@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
+    <!--Amazon New Address Widget-->
+    <section name="AmazonAddressSection">
+        <element name="country" type="select" selector="address-ui-widgets-countryCode-dropdown-nativeId"/>
+        <element name="name" type="input" selector="#address-ui-widgets-enterAddressFullName"/>
+        <element name="address" type="input" selector="#address-ui-widgets-enterAddressLine1"/>
+        <element name="city" type="input" selector="#address-ui-widgets-enterAddressCity"/>
+        <element name="region" type="input" selector="#address-ui-widgets-enterAddressStateOrRegion"/>
+        <element name="postal" type="input" selector="#address-ui-widgets-enterAddressPostalCode"/>
+        <element name="phone" type="input" selector="#address-ui-widgets-enterAddressPhoneNumber"/>
+        <element name="submit" type="button" selector="[type=submit]"/>
+    </section>
+</sections>
