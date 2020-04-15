@@ -30,11 +30,7 @@ class AmazonSetOrderDetailsResponse
         $data = $response->toArray();
 
         if (200 != $data['ResponseStatus']) {
-            throw new AmazonServiceUnavailableException(
-                $data['Error']['Type'],
-                $data['Error']['Code'],
-                $data['Error']['Message']
-            );
+            throw new AmazonServiceUnavailableException();
         }
 
         $details = $data['SetOrderReferenceDetailsResult']['OrderReferenceDetails'];

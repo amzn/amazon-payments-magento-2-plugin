@@ -20,6 +20,7 @@ define([
     'amazonCsrf',
     'Magento_Customer/js/customer-data',
     'mage/loader',
+    'jquery/ui',
     'mage/cookies'
 ], function ($, amazonCore, amazonPaymentConfig, amazonCsrf, customerData) {
     'use strict';

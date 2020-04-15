@@ -10,7 +10,7 @@ namespace Amazon\Payment\Block\Widget;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Customer\Model\Url;
+use Magento\Framework\UrlFactory;
 use Magento\Customer\Model\Session;
 use Amazon\Login\Api\CustomerLinkRepositoryInterface;
 
@@ -28,13 +28,13 @@ class ResetPassword extends Template
 
     public function __construct(
         Context $context,
-        Url $urlModel,
+        UrlFactory $urlFactory,
         Session $session,
         CustomerLinkRepositoryInterface $customerLink,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->urlModel = $urlModel;
+        $this->urlModel = $urlFactory->create();
         $this->session = $session;
         $this->customerLink = $customerLink;
     }
@@ -63,7 +63,7 @@ class ResetPassword extends Template
 
     public function getLink()
     {
-        $url = $this->urlModel->getLogoutUrl();
+        $url = $this->urlModel->getUrl('customer/account/forgotpassword');
 
         return $url;
     }
