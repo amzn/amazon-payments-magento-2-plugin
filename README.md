@@ -83,8 +83,17 @@ Upon successful installation of the module, please follow the steps below for co
 1. Switch to 'V2' under the Amazon Pay Product Version
 1. Under 'Private Key' field, click on the 'Generate a new public/private key pair for Amazon Pay'. This saves the Private Key in the settings and displays the text [encrypted]
 1. Click 'Download Public Key' to save the Public Key locally
-1. To obtain the Public Key ID, please email your Amazon Pay POC with your Seller Central Merchant ID and Public key that you just downloaded (attached in the email)
-1. Amazon Pay will respond with the Public Key ID, which then you add in the Public Key ID field
-1. Merchant Id will be the same as your V1 credentails, please copy and paste it here
-1. Store Id refers to the Client Id in V1 settings, please copy it or retrieve it from "Login with Amazon" application in Seller Central and paste it here
+1. To obtain the Public Key ID, please log in to your Amazon Pay merchant account via Seller Central.
+1. In the dropdown box on top, select "Amazon Pay (Production View").
+1. In the menu, select "Integration" > "Integration Central"
+1. Under "Technical guidance and API credentials", apply the selection shown below.
+  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-wizard-selection.png?raw=true)
+1. In the "API access" section that will show up further down the page, copy the "Merchant ID" and "Store ID" and copy them into the corresponding fields of the plugin configuration.
+  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-merchantId-storeId.png?raw=true)
+1. Back in Seller Central, click "Create Keys".
+1. As shown below, chose to register an "existing public key" and copy/paste the content of the public key that the plugin has generated into the box. Then click "Create Keys".
+  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-key-registration.png?raw=true)
+1. Back on the previous screen, click "Copy" below the newly created entry to receive your Public Key ID.
+  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-copy-key.png?raw=true)
+1. Paste the Public Key ID into the corresponding field on the configurations screen of the plugin.
 1. Rest of the settings are all similar to the V1 settings. We recommend to use the same settings as used in V1. [View V1 Configuration documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html)
