@@ -47,11 +47,6 @@ class AmazonPayV2Adapter
     private $amazonHelper;
 
     /**
-     * @var \Magento\Framework\App\ProductMetadataInterface
-     */
-    private $productMetadata;
-
-    /**
      * @var \Amazon\PayV2\Logger\Logger
      */
     private $logger;
@@ -63,7 +58,6 @@ class AmazonPayV2Adapter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\PayV2\Helper\Data $amazonHelper
-     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Amazon\PayV2\Logger\Logger $logger
      */
     public function __construct(
@@ -72,7 +66,6 @@ class AmazonPayV2Adapter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\PayV2\Helper\Data $amazonHelper,
-        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Amazon\PayV2\Logger\Logger $logger
     ) {
         $this->clientFactory = $clientFactory;
@@ -80,7 +73,6 @@ class AmazonPayV2Adapter
         $this->storeManager = $storeManager;
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
-        $this->productMetadata = $productMetadata;
         $this->logger = $logger;
     }
 
@@ -89,7 +81,7 @@ class AmazonPayV2Adapter
      */
     protected function getMerchantCustomInformation()
     {
-        return sprintf('Magento Version: %s, Plugin Version: %s (v2)', $this->productMetadata->getVersion(), $this->amazonHelper->getVersion());
+        return sprintf('Magento Version: 2, Plugin Version: %s (v2)', $this->amazonHelper->getVersion());
     }
 
     /**
