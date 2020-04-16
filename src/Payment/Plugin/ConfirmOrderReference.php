@@ -25,6 +25,7 @@ use Amazon\Payment\Model\Adapter\AmazonPaymentAdapter;
 use Amazon\Payment\Model\OrderInformationManagement;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\Exception\LocalizedException;
 use Amazon\Payment\Gateway\Config\Config as GatewayConfig;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -42,6 +43,11 @@ class ConfirmOrderReference
     private $checkoutSession;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @var OrderInformationManagement
      */
     private $orderInformationManagement;
@@ -54,17 +60,29 @@ class ConfirmOrderReference
     /**
      * ConfirmOrderReference constructor.
      * @param Session $checkoutSession
+     * @param Request $request
      * @param OrderInformationManagement $orderInformationManagement
      * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         Session $checkoutSession,
+        Request $request,
         OrderInformationManagement $orderInformationManagement,
         CartRepositoryInterface $quoteRepository
     ) {
         $this->checkoutSession = $checkoutSession;
+        $this->request = $request;
         $this->orderInformationManagement = $orderInformationManagement;
         $this->quoteRepository = $quoteRepository;
+    }
+
+    /**
+     * @return boolean
+     */
+    protected function canConfirmOrderReference()
+    {
+        $data = $this->request->getRequestData();
+        return !empty($data['confirmOrder']);
     }
 
     /**
@@ -94,10 +112,12 @@ class ConfirmOrderReference
                     $this->orderInformationManagement->saveOrderInformation($amazonOrderReferenceId);
                 }
 
-                $this->orderInformationManagement->confirmOrderReference(
-                    $amazonOrderReferenceId,
-                    $quote->getStoreId()
-                );
+                if ($this->canConfirmOrderReference()) {
+                    $this->orderInformationManagement->confirmOrderReference(
+                        $amazonOrderReferenceId,
+                        $quote->getStoreId()
+                    );
+                }
             }
         }
 
