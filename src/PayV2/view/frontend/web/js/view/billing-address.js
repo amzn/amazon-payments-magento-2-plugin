@@ -2,9 +2,10 @@ define([
     'jquery',
     'Magento_Checkout/js/view/billing-address',
     'Magento_Checkout/js/model/quote',
+    'Amazon_PayV2/js/action/bind-amazon-change-action',
     'Amazon_PayV2/js/model/storage',
     'Amazon_PayV2/js/model/billing-address/form-address-state'
-], function ($, Component, quote, amazonStorage, billingFormAddressState) {
+], function ($, Component, quote, bindAmazonChangeAction, amazonStorage, billingFormAddressState) {
     'use strict';
 
     var self;
@@ -20,10 +21,7 @@ define([
                 name: 'Amazon_PayV2/billing-address/details',
                 afterRender: function () {
                     if ($(editSelector).length) {
-                        amazon.Pay.bindChangeAction(editSelector, {
-                            amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
-                            changeAction: 'changePayment'
-                        });
+                        bindAmazonChangeAction(editSelector, 'changePayment');
                     }
                 }
             },

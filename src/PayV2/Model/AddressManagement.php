@@ -224,7 +224,7 @@ class AddressManagement implements \Amazon\PayV2\Api\AddressManagementInterface
                 ->getSize();
 
             if (1 != $collectionSize) {
-                throw new WebapiException(__('the country for your address is not allowed for this store'));
+                throw new WebapiException(__('The country associated with your address is not allowed for this store. Please, <a href="#" class="edit-address-link">select a different address</a> from your Amazon account.'));
             }
         }
 

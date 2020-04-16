@@ -1,4 +1,3 @@
-<!--
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13,8 +12,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
 
-<!-- ko if: (isInitialized) -->
-    <div class="amazon-container" data-bind="afterRender: initAddress"></div>
-<!--/ko-->
+define([
+    'Magento_Ui/js/model/messages'
+], function (Messages) {
+    'use strict';
+
+    return new Messages();
+});

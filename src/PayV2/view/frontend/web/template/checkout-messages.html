@@ -15,6 +15,15 @@
  */
 -->
 
-<!-- ko if: (isInitialized) -->
-    <div class="amazon-container" data-bind="afterRender: initAddress"></div>
-<!--/ko-->
+<div data-role="checkout-messages" class="messages" data-bind="visible: isVisible()">
+    <!-- ko foreach: messageContainer.getErrorMessages() -->
+    <div role="alert" class="message message-error error">
+        <div data-bind="html: $data, afterRender: $parent.bindMessageObervers"></div>
+    </div>
+    <!--/ko-->
+    <!-- ko foreach: messageContainer.getSuccessMessages() -->
+    <div role="alert" class="message message-success success">
+        <div data-bind="html: $data, afterRender: $parent.bindMessageObervers"></div>
+    </div>
+    <!--/ko-->
+</div>

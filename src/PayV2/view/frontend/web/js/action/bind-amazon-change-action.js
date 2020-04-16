@@ -1,4 +1,3 @@
-<!--
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13,8 +12,19 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
 
-<!-- ko if: (isInitialized) -->
-    <div class="amazon-container" data-bind="afterRender: initAddress"></div>
-<!--/ko-->
+define([
+    'Amazon_PayV2/js/model/storage',
+    'Amazon_PayV2/js/amazon-checkout'
+], function (amazonStorage, amazonCheckout) {
+    'use strict';
+
+    return function (selector, changeAction) {
+        amazonCheckout.withAmazonCheckout(function (amazon) {
+            amazon.Pay.bindChangeAction(selector, {
+                amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
+                changeAction: changeAction
+            });
+        });
+    };
+});

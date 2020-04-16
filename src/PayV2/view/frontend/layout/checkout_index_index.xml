@@ -67,6 +67,9 @@
                                                                                     <item name="component" xsi:type="string">uiComponent</item>
                                                                                     <item name="displayArea" xsi:type="string">before-amazon-button</item>
                                                                                     <item name="children" xsi:type="array">
+                                                                                        <item name="amazon-checkout-messages" xsi:type="array">
+                                                                                            <item name="component" xsi:type="string">Amazon_PayV2/js/view/checkout-messages</item>
+                                                                                        </item>
                                                                                         <item name="amazon-checkout-revert" xsi:type="array">
                                                                                             <item name="component" xsi:type="string">Amazon_PayV2/js/view/checkout-revert</item>
                                                                                         </item>

@@ -15,11 +15,12 @@
 
 define([
     'Amazon_PayV2/js/model/storage',
+    'Amazon_PayV2/js/model/checkout-messages',
     'mage/storage',
     'Magento_Checkout/js/model/url-builder',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/error-processor'
-], function (amazonStorage, storage, urlBuilder, fullScreenLoader, errorProcessor) {
+], function (amazonStorage, messageContainer, storage, urlBuilder, fullScreenLoader, errorProcessor) {
     'use strict';
 
     return function (addressType, callback) {
@@ -35,7 +36,7 @@ define([
                 callback(data.shift());
             }
         }).fail(function (response) {
-            errorProcessor.process(response);
+            errorProcessor.process(response, messageContainer);
             fullScreenLoader.stopLoader(true);
         });
     };

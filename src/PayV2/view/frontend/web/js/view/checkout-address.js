@@ -5,19 +5,10 @@ define(
         'jquery',
         'uiComponent',
         'ko',
-        'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/action/select-shipping-address',
-        'Magento_Checkout/js/model/shipping-rate-processor/new-address',
-        'Magento_Checkout/js/action/set-shipping-information',
         'Amazon_PayV2/js/model/storage',
-        'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/address-converter',
         'Magento_Checkout/js/action/create-shipping-address',
-        'mage/storage',
-        'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Checkout/js/model/error-processor',
-        'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/model/address-list',
@@ -31,19 +22,10 @@ define(
         $,
         Component,
         ko,
-        customer,
         quote,
-        selectShippingAddress,
-        shippingProcessor,
-        setShippingInformationAction,
         amazonStorage,
-        shippingService,
         addressConverter,
         createShippingAddress,
-        storage,
-        fullScreenLoader,
-        errorProcessor,
-        urlBuilder,
         checkoutData,
         checkoutDataResolver,
         addressList,
@@ -63,9 +45,7 @@ define(
             defaults: {
                 template: 'Amazon_PayV2/checkout-address'
             },
-            isCustomerLoggedIn: customer.isLoggedIn,
-            isAmazonCheckout: amazonStorage.isAmazonCheckout(),
-            rates: shippingService.getShippingRates(),
+            isInitialized: ko.observable(false),
 
             /**
              * Init
@@ -73,7 +53,7 @@ define(
             initialize: function () {
                 self = this;
                 this._super();
-                if (!amazonStorage.isPayOnly(true) && this.isAmazonCheckout) {
+                if (!amazonStorage.isPayOnly(true) && amazonStorage.isAmazonCheckout()) {
                     this.getShippingAddressFromAmazon();
                     if (amazonStorage.getIsEditPaymentFlag()) {
                         amazonStorage.setIsEditPaymentFlag(false);
@@ -139,7 +119,7 @@ define(
 
                     checkoutDataResolver.resolveEstimationAddress();
 
-                    self.initAddress();
+                    self.isInitialized(true);
                 });
             },
 
