@@ -42,6 +42,11 @@ class AmazonPayV2Adapter
     private $quoteRepository;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var \Amazon\PayV2\Logger\Logger
      */
     private $logger;
@@ -52,6 +57,7 @@ class AmazonPayV2Adapter
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Logger\Logger $logger
      */
     public function __construct(
@@ -59,13 +65,23 @@ class AmazonPayV2Adapter
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Logger\Logger $logger
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
         $this->storeManager = $storeManager;
         $this->quoteRepository = $quoteRepository;
+        $this->amazonHelper = $amazonHelper;
         $this->logger = $logger;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getMerchantCustomInformation()
+    {
+        return sprintf('Magento Version: 2, Plugin Version: %s (v2)', $this->amazonHelper->getVersion());
     }
 
     /**
@@ -142,8 +158,7 @@ class AmazonPayV2Adapter
             'merchantMetadata' => [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
                 'merchantStoreName' => $this->amazonConfig->getStoreName() ?: $store->getName(),
-                //noteToBuyer => '',
-                //customInformation => '',
+                'customInformation' => $this->getMerchantCustomInformation(),
             ]
         ];
 

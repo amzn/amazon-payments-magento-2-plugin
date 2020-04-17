@@ -21,16 +21,16 @@ namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
 class Version extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface
+     * @var \Amazon\PayV2\Helper\Data
      */
-    protected $moduleList;
+    protected $helper;
 
     public function __construct(
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
+        \Amazon\PayV2\Helper\Data $helper,
         \Magento\Backend\Block\Template\Context $context,
         array $data = []
     ) {
-        $this->moduleList = $moduleList;
+        $this->helper = $helper;
         parent::__construct($context, $data);
     }
 
@@ -40,11 +40,8 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function render($element)
     {
-        $module = $this->moduleList->getOne('Amazon_PayV2');
-        $version = $module['setup_version'] ?? __('--');
-
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
-        $output .= __('Module version') . ': ' . $version;
+        $output .= __('Module version') . ': ' . $this->helper->getVersion();
         $output .= '</div>';
         return '<div id="row_' . $element->getHtmlId() . '">' . $output . '</div>';
     }
