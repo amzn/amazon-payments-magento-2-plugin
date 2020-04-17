@@ -38,7 +38,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render($element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $module = $this->moduleList->getOne('Amazon_PayV2');
         $version = $module['setup_version'] ?? __('--');
