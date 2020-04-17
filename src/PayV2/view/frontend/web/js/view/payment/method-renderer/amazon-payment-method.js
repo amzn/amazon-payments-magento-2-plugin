@@ -49,6 +49,7 @@ define(
                 this.initChildren();
                 if (amazonStorage.isAmazonCheckout()) {
                     this.initBillingAddress();
+                    this.selectPaymentMethod();
                 }
             },
 
