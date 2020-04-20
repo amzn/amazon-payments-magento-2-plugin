@@ -2,9 +2,10 @@ define([
     'jquery',
     'Magento_Checkout/js/view/billing-address',
     'Magento_Checkout/js/model/quote',
+    'Amazon_PayV2/js/action/toggle-form-fields',
     'Amazon_PayV2/js/model/storage',
     'Amazon_PayV2/js/model/billing-address/form-address-state'
-], function ($, Component, quote, amazonStorage, billingFormAddressState) {
+], function ($, Component, quote, toggleFormFields, amazonStorage, billingFormAddressState) {
     'use strict';
 
     var self;
@@ -31,14 +32,7 @@ define([
                 name: 'Amazon_PayV2/billing-address/form',
                 afterRender: function () {
                     self.triggerBillingDataValidateEvent();
-
-                    var $form = $(formSelector);
-                    $form.find('.field').hide();
-
-                    var $errorFields = $form.find('.field._error');
-                    $errorFields.show();
-
-                    var isValid = $errorFields.length === 0;
+                    var isValid = toggleFormFields(formSelector);
                     billingFormAddressState.isValid(isValid);
                     self.isAddressFormVisible(!isValid);
                 }
