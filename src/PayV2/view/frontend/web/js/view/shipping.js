@@ -2,27 +2,13 @@
 define(
     [
         'jquery',
-        'underscore',
-        'ko',
         'Magento_Checkout/js/view/shipping',
-        'Magento_Customer/js/model/customer',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/action/set-shipping-information',
-        'Magento_Checkout/js/model/step-navigator',
-        'Amazon_PayV2/js/model/storage',
-        'Amazon_PayV2/js/action/toggle-shipping-form'
+        'Amazon_PayV2/js/model/storage'
     ],
     function (
         $,
-        _,
-        ko,
         Component,
-        customer,
-        quote,
-        setShippingInformationAction,
-        stepNavigator,
-        amazonStorage,
-        toggleShippingForm
+        amazonStorage
     ) {
         'use strict';
 
@@ -48,14 +34,6 @@ define(
                 $(loginFormSelector).validation();
 
                 return $(loginFormSelector + ' input[type=email]').valid();
-            },
-
-            /**
-             * "Next"
-             */
-            setShippingInformation: function () {
-                toggleShippingForm.toggleFields(); // Display error fields if needed
-                this._super();
             }
         });
     }
