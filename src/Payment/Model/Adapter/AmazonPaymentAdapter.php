@@ -241,7 +241,6 @@ class AmazonPaymentAdapter
     public function authorize($data, $captureNow = false, $attempts = 0)
     {
         $response = [];
-        $confirmResponse = null;
         $order = $this->getOrderByReference($data['amazon_order_reference_id']);
         if ($order) {
             $storeId = $order->getStoreId();
@@ -280,56 +279,38 @@ class AmazonPaymentAdapter
         $response['constraints'] = [];
         $response['amazon_order_reference_id'] = $data['amazon_order_reference_id'];
 
-        $confirmResponse = $this->confirmOrderReference($storeId, $data['amazon_order_reference_id']);
+        $authorizeResponse = $this->getAuthorization($storeId, $authorizeData);
 
-        if ($confirmResponse->response['Status'] == 200) {
-            $authorizeResponse = $this->getAuthorization($storeId, $authorizeData);
+        if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()) {
+            $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
 
-            if ($authorizeResponse) {
-                if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()) {
-                    $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
+            if ($authorizeResponse->getStatus()->getState() == 'Pending' && $authMode == 'synchronous_possible') {
+                if ($captureNow) {
+                    $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
+                }
+                $response['response_code'] = 'TransactionTimedOut';
+            } elseif (!in_array($authorizeResponse->getStatus()->getState(), self::SUCCESS_CODES)) {
+                $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
+                if ($authMode == 'synchronous' && $authorizeResponse->getStatus()->getReasonCode() == 'TransactionTimedOut') {
+                    $cancelData = [
+                        'store_id' => $storeId,
+                        'amazon_order_reference_id' => $data['amazon_order_reference_id']
+                    ];
+                    $this->clientFactory->create($storeId)->cancelOrderReference($cancelData);
+                }
+            } else {
+                $response['status'] = true;
 
-                    if ($authorizeResponse->getStatus()->getState() == 'Pending' && $authMode == 'synchronous_possible') {
-                        if ($captureNow) {
-                            $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
-                        }
-                        $response['response_code'] = 'TransactionTimedOut';
-                    } elseif (!in_array($authorizeResponse->getStatus()->getState(), self::SUCCESS_CODES)) {
-                        $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
-                        if ($authMode == 'synchronous' && $authorizeResponse->getStatus()->getReasonCode() == 'TransactionTimedOut') {
-                            $cancelData = [
-                                'store_id' => $storeId,
-                                'amazon_order_reference_id' => $data['amazon_order_reference_id']
-                            ];
-                            $this->clientFactory->create($storeId)->cancelOrderReference($cancelData);
-                        }
-                    } else {
-                        $response['status'] = true;
-
-                        if ($captureNow) {
-                            $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
-                        }
-                    }
-                } else {
-                    $response['status'] = false;
-                    $response['response_status'] = $authorizeResponse->getStatus()->getState();
-                    $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
-                    $log['error'] = $authorizeResponse->getStatus()->getState() . ': ' . $authorizeResponse->getStatus()->getReasonCode();
-                    $this->logger->debug($log);
+                if ($captureNow) {
+                    $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
                 }
             }
         } else {
-            /** something went wrong, parse response body for use by authorization validator */
-            $response['response_status'] = $confirmResponse->response['Status'];
-
-            $xml = simplexml_load_string($confirmResponse->response['ResponseBody']);
-            $code = $xml->Error->Code[0];
-            if ($code) {
-                $response['response_code'] = (string)$code;
-            } else {
-                $log['error'] = __('AmazonPaymentAdapter: Improperly formatted XML response, no response code available.');
-                $this->logger->debug($log);
-            }
+            $response['status'] = false;
+            $response['response_status'] = $authorizeResponse->getStatus()->getState();
+            $response['response_code'] = $authorizeResponse->getStatus()->getReasonCode();
+            $log['error'] = $authorizeResponse->getStatus()->getState() . ': ' . $authorizeResponse->getStatus()->getReasonCode();
+            $this->logger->debug($log);
         }
 
         if ($additionalInformation) {
