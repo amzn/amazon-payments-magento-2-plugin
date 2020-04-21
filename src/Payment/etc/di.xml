@@ -95,9 +95,6 @@
 
     <!-- Configuration reader -->
     <virtualType name="AmazonGatewayConfig" type="Amazon\Payment\Gateway\Config\Config">
-        <arguments>
-            <argument name="methodCode" xsi:type="const">Amazon\Payment\Gateway\Config\Config::CODE</argument>
-        </arguments>
     </virtualType>
 
     <virtualType name="AmazonCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
