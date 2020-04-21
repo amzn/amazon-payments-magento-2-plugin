@@ -18,7 +18,6 @@ namespace Amazon\Payment\Gateway\Request;
 
 use Amazon\Payment\Gateway\Config\Config;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
 use Magento\Payment\Model\Method\Logger;
@@ -36,11 +35,6 @@ class SettlementRequestBuilder implements BuilderInterface
      * @var Logger
      */
     private $logger;
-
-    /**
-     * @var ProductMetadata
-     */
-    private $productMetaData;
 
     /**
      * @var SubjectReader
@@ -66,7 +60,6 @@ class SettlementRequestBuilder implements BuilderInterface
      * SettlementRequestBuilder constructor.
      *
      * @param Config $config
-     * @param ProductMetadata $productMetadata
      * @param OrderRepositoryInterface $orderRepository
      * @param CartRepositoryInterface $quoteRepository
      * @param SubjectReader $subjectReader
@@ -75,7 +68,6 @@ class SettlementRequestBuilder implements BuilderInterface
      */
     public function __construct(
         Config $config,
-        ProductMetaData $productMetadata,
         OrderRepositoryInterface $orderRepository,
         CartRepositoryInterface $quoteRepository,
         SubjectReader $subjectReader,
@@ -86,7 +78,6 @@ class SettlementRequestBuilder implements BuilderInterface
         $this->orderRepository = $orderRepository;
         $this->quoteRepository = $quoteRepository;
         $this->coreHelper = $coreHelper;
-        $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
         $this->logger = $logger;
     }
@@ -123,7 +114,7 @@ class SettlementRequestBuilder implements BuilderInterface
                     'store_id' => $buildSubject['multicurrency']['store_id'],
                     'store_name' => $buildSubject['multicurrency']['store_name'],
                     'custom_information' =>
-                        'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
+                        'Magento Version : 2, ' .
                         'Plugin Version : ' . $this->coreHelper->getVersion(),
                     'platform_id' => $this->config->getValue('platform_id'),
                     'request_payment_authorization' => false
