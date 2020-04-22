@@ -18,6 +18,7 @@ namespace Amazon\PayV2\Model;
 
 use Amazon\PayV2\Client\ClientFactoryInterface;
 use Magento\Framework\Module\Dir;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 
 class Alexa
@@ -31,6 +32,11 @@ class Alexa
      * @var ClientFactoryInterface
      */
     private $clientFactory;
+
+    /**
+     * @var Payment\Transaction\Repository
+     */
+    private $transactionRepository;
 
     /**
      * @var Dir
@@ -50,12 +56,14 @@ class Alexa
     /**
      * @param AmazonConfig $amazonConfig
      * @param ClientFactoryInterface $clientFactory
+     * @param Payment\Transaction\Repository $transactionRepository
      * @param Dir $moduleDir
      * @param \Magento\Framework\File\Csv $csv
      */
     public function __construct(
         AmazonConfig $amazonConfig,
         ClientFactoryInterface $clientFactory,
+        Payment\Transaction\Repository $transactionRepository,
         Dir $moduleDir,
         \Magento\Framework\File\Csv $csv,
         \Magento\Framework\Config\CacheInterface $cache
@@ -63,6 +71,7 @@ class Alexa
     {
         $this->amazonConfig = $amazonConfig;
         $this->clientFactory = $clientFactory;
+        $this->transactionRepository = $transactionRepository;
         $this->moduleDir = $moduleDir;
         $this->csv = $csv;
         $this->cache = $cache;
@@ -97,8 +106,13 @@ class Alexa
     protected function getChargePermissionId($order)
     {
         $payment = $order->getPayment();
-        /* @var $payment \Magento\Sales\Model\Order\Payment */
-        $transaction = $payment->getAuthorizationTransaction();
+        /* @var $payment Payment */
+        if ($this->amazonConfig->getPaymentAction(ScopeInterface::SCOPE_STORE, $order->getStoreId()) == \Amazon\Core\Model\Config\Source\PaymentAction::AUTHORIZE) {
+            $transationType = Payment\Transaction::TYPE_AUTH;
+        } else {
+            $transationType = Payment\Transaction::TYPE_CAPTURE;
+        }
+        $transaction = $this->transactionRepository->getByTransactionType($transationType, $payment->getId());
         if (!$transaction) {
             throw new \Exception('Failed to lookup order transaction');
         }
