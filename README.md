@@ -38,15 +38,14 @@ The module can be either installed via Composer (recommended), or manually. The 
 In `magento-root`, execute:
 
 ```
-$ composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout
-$ touch app/etc/.amazon_payv2_enable
+$ composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout-1.2.x
 $ bin/magento module:enable Amazon_PayV2
 ```
 
 If Composer installation didn't work, use the manual procedure below. If any of these were successful, please proceed with **2. Post-installation procedure**, otherwise reach out to Amazon Pay Merchant Support for additional assistance.
 
 #### Manual installation
-* Download the [Amazon Pay V2 checkout plugin](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) via `git clone` or "Download ZIP"
+* Download the [Amazon Pay V2 checkout plugin](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) via `git clone` or "Download ZIP"
 * Copy src/PayV2 to app/code/Amazon/PayV2  
 (If `magento-root/app/code/Amazon/PayV2` path is not present, please create the folders `Amazon` and `PayV2`)  
 
@@ -54,7 +53,6 @@ In `magento-root`, execute:
 ```
 $ composer require amzn/amazon-pay-sdk-v2-php
 $ composer require aws/aws-php-sns-message-validator
-$ touch app/etc/.amazon_payv2_enable
 $ bin/magento module:enable Amazon_PayV2
 ```
 
@@ -86,9 +84,7 @@ Upon successful installation of the module, please follow the steps below for co
 
 1. Go to Stores -> Configuration -> Sales -> Payment Methods -> Amazon Pay -> Configure
 1. Switch to 'V2' under the Amazon Pay Product Version
-1. Under 'Private Key' field, click on the 'Generate a new public/private key pair for Amazon Pay'. This saves the Private Key in the settings and displays the text [encrypted]
-1. Click 'Download Public Key' to save the Public Key locally
-1. To obtain the Public Key ID, please log in to your Amazon Pay merchant account via Seller Central.
+1. To obtain the required keys, please log in to your Amazon Pay merchant account via Seller Central.
 1. In the dropdown box on top, select "Amazon Pay (Production View").
 1. In the menu, select "Integration" > "Integration Central"
 1. Under "Technical guidance and API credentials", apply the selection shown below.
