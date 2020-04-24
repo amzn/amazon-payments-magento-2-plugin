@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SingleCountryAllowConfig" type="amazon_country_allow_config">
+        <requiredEntity type="allow">SingleCountryAllowValue</requiredEntity>
+    </entity>
+    <entity name="SingleCountryAllowValue" type="allow">
+        <data key="value">US</data>
+    </entity>
+    <entity name="DefaultCountryAllowConfig" type="default_amazon_country_allow_config">
+        <requiredEntity type="amazonCountryAllowFlagZero">DefaultCountryAllowFlagZero</requiredEntity>
+    </entity>
+    <entity name="DefaultCountryAllowFlagZero" type="amazonCountryAllowFlagZero">
+        <data key="value">1</data>
+    </entity>
+</entities>
