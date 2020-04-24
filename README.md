@@ -26,5 +26,13 @@ same directory as this `README.md` file.
 
 ## Installation and Configuration
 This section will be released once Magento 2.4.0 is widely available in June 2020.
-
 If you are on M2.2.x or M2.3.x, please use the [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) branch. The [README.md](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#amazon-pay-checkout-v2) contains all the installation and configuration information.
+
+## Branch information
+
+The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column "Latest release" refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. 
+
+| Magento Version | Github Branch | Latest release |
+| ------------- | ------------- | ------------- |
+| 2.2.4 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.2.0 |
+| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.0.0 |
