@@ -98,3 +98,11 @@ Upon successful installation of the module, please follow the steps below for co
   ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-copy-key.png?raw=true)
 1. Paste the Public Key ID into the corresponding field on the configurations screen of the plugin.
 1. Rest of the settings are all similar to the V1 settings. We recommend to use the same settings as used in V1. [View V1 Configuration documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html)
+
+## Branch information
+
+The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column "Latest release" refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. 
+
+| Magento Version | Github Branch | Latest release |
+| ------------- | ------------- | ------------- |
+| 2.2.4 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.2.0 |
