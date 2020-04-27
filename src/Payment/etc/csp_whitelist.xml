@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="connect-src">
+            <values>
+                <value id="api_amazon" type="host">api.amazon.com</value>
+                <value id="payments_amazon" type="host">payments.amazon.com</value>
+                <value id="payments_sandbox_amazon" type="host">payments-sandbox.amazon.com</value>
+            </values>
+        </policy>
+        <policy id="script-src">
+            <values>
+                <value id="amazon_payment_widget" type="host">*.payments-amazon.com</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="cloudfront" type="host">*.cloudfront.net</value>
+                <value id="ssl_images_amazon" type="host">*.ssl-images-amazon.com</value>
+                <value id="media_amazon" type="host">*.media-amazon.com</value>
+            </values>
+        </policy>
+        <policy id="form-action">
+            <values>
+                <value id="payments_amazon" type="host">payments.amazon.com</value>
+                <value id="payments_sandbox_amazon" type="host">payments-sandbox.amazon.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="api_cdn_amazon" type="host">api-cdn.amazon.com</value>
+                <value id="payments_amazon" type="host">payments.amazon.com</value>
+                <value id="payments_sandbox_amazon" type="host">payments-sandbox.amazon.com</value>
+                <value id="amazon_payment_widget" type="host">*.payments-amazon.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>
