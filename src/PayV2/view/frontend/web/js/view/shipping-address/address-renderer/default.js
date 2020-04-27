@@ -27,16 +27,23 @@ define([
                             });
                         });
                     }
-
-                    var checkoutProvider = registry.get('checkoutProvider');
-                    checkoutProvider.trigger('shippingAddress.data.validate');
-                    if (checkoutProvider.get('shippingAddress.custom_attributes')) {
-                        checkoutProvider.trigger('shippingAddress.custom_attributes.data.validate');
-                    }
-
-                    toggleFormFields('#co-shipping-form')
                 }
             }
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            this._super();
+            this.address.subscribe(function () {
+                var checkoutProvider = registry.get('checkoutProvider');
+                checkoutProvider.trigger('shippingAddress.data.validate');
+                if (checkoutProvider.get('shippingAddress.custom_attributes')) {
+                    checkoutProvider.trigger('shippingAddress.custom_attributes.data.validate');
+                }
+
+                toggleFormFields('#co-shipping-form');
+            });
+            return this;
         },
 
         /**

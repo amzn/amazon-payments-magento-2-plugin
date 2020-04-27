@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="connect-src">
+            <values>
+                <value id="amazon_payment_v2_us" type="host">apay-us.amazon.com</value>
+                <value id="amazon_payment_v2_eu" type="host">payments-eu.amazon.com</value>
+                <value id="amazon_payment_v2_jp" type="host">payments.amazon.co.jp</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>
