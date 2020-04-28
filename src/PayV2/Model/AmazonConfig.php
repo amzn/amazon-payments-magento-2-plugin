@@ -460,4 +460,12 @@ class AmazonConfig
             $scopeCode
         );
     }
+
+    /**
+     * @return string
+     */
+    public function getPlatformId()
+    {
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2/platform_id');
+    }
 }
