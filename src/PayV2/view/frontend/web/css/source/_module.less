@@ -31,12 +31,24 @@
             margin-bottom: 2em;
         }
     }
+    .checkout-methods-items,
     .block-minicart {
         .amazon-button-container-v2 {
             flex-wrap: wrap;
         }
         .amazon-divider {
             flex-basis: 100%;
+        }
+    }
+    .checkout-methods-items {
+        .amazon-divider {
+            margin-top: 0;
+            span {
+                .lib-css(background, @sidebar__background-color);
+            }
+        }
+        .amazon-button-column-tooltip {
+            display: none;
         }
     }
     .product-info-main {
