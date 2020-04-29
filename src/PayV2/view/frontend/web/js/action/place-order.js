@@ -22,10 +22,11 @@ define(
         'Magento_Customer/js/customer-data',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
+        'Amazon_PayV2/js/action/checkout-session-update',
         'Amazon_PayV2/js/model/storage',
         'Magento_CheckoutAgreements/js/model/agreements-assigner'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customerData, customer, fullScreenLoader, amazonStorage, agreementsAssigner) {
+    function (quote, urlBuilder, storage, errorProcessor, customerData, customer, fullScreenLoader, checkoutSessionUpdateAction, amazonStorage, agreementsAssigner) {
         'use strict';
 
         return function (paymentData, redirectOnSuccess) {
@@ -63,10 +64,12 @@ define(
             ).done(
                 function (response) {
                     // Redirect URL
-                    if (response !== true && response.indexOf('http') == 0) {
-                        customerData.invalidate(['cart']);
-                        amazonStorage.clearAmazonCheckout();
-                        window.location.replace(response);
+                    if (response === true) {
+                        checkoutSessionUpdateAction(function (redirectUrl) {
+                            customerData.invalidate(['cart']);
+                            amazonStorage.clearAmazonCheckout();
+                            window.location.replace(redirectUrl);
+                        });
                     } else {
                         fullScreenLoader.stopLoader(true);
                         console.log('Invalid Amazon RedirectUrl:');

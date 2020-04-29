@@ -16,26 +16,38 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/amazon-v2-checkout-session/:amazonCheckoutSessionId/billing-address" method="GET">
+    <route url="/V1/amazon-v2-checkout-session/:cartId/billing-address" method="GET">
         <service class="Amazon\PayV2\Api\AddressManagementInterface" method="getBillingAddress"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-v2-checkout-session/:amazonCheckoutSessionId/shipping-address" method="GET">
+    <route url="/V1/amazon-v2-checkout-session/:cartId/shipping-address" method="GET">
         <service class="Amazon\PayV2\Api\AddressManagementInterface" method="getShippingAddress"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-v2-complete-checkout/:amazonCheckoutSessionId" method="PUT">
-        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="completeCheckout"/>
+    <route url="/V1/amazon-v2-checkout-session/:cartId" method="PUT">
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="createCheckoutSession"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-v2-checkout-session" method="PUT">
-        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="createCheckoutSession"/>
+    <route url="/V1/amazon-v2-checkout-session/:cartId/cancel" method="POST">
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="cancelCheckoutSession"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/amazon-v2-checkout-session/:cartId/update" method="POST">
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="updateCheckoutSession"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/amazon-v2-checkout-session/:cartId/complete" method="POST">
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="completeCheckoutSession"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
