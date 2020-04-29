@@ -99,6 +99,7 @@ class AmazonPayV2Adapter
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
+            'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $response = $this->clientFactory->create($storeId)->createCheckoutSession($payload, $headers);
@@ -159,7 +160,8 @@ class AmazonPayV2Adapter
                 'merchantReferenceId' => $quote->getReservedOrderId(),
                 'merchantStoreName' => $this->amazonConfig->getStoreName() ?: $store->getName(),
                 'customInformation' => $this->getMerchantCustomInformation(),
-            ]
+            ],
+            'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload);

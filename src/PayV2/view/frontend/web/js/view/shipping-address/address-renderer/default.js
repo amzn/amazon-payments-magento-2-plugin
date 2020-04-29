@@ -8,6 +8,7 @@ define([
 ], function ($, Component, registry, toggleFormFields, amazonStorage, amazonCheckout) {
     'use strict';
 
+    var self;
     var editSelector = '.edit-address-link';
 
     if (!amazonStorage.isAmazonCheckout()) {
@@ -27,16 +28,29 @@ define([
                             });
                         });
                     }
-
-                    var checkoutProvider = registry.get('checkoutProvider');
-                    checkoutProvider.trigger('shippingAddress.data.validate');
-                    if (checkoutProvider.get('shippingAddress.custom_attributes')) {
-                        checkoutProvider.trigger('shippingAddress.custom_attributes.data.validate');
-                    }
-
-                    toggleFormFields('#co-shipping-form')
+                    self.toggleShippingAddressFormFields();
                 }
             }
+        },
+
+        /** @inheritdoc */
+        initObservable: function () {
+            self = this;
+            this._super();
+            this.address.subscribe(function () {
+                self.toggleShippingAddressFormFields();
+            });
+            return this;
+        },
+
+        toggleShippingAddressFormFields: function() {
+            var checkoutProvider = registry.get('checkoutProvider');
+            checkoutProvider.trigger('shippingAddress.data.validate');
+            if (checkoutProvider.get('shippingAddress.custom_attributes')) {
+                checkoutProvider.trigger('shippingAddress.custom_attributes.data.validate');
+            }
+
+            toggleFormFields('#co-shipping-form');
         },
 
         /**
