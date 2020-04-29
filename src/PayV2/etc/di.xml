@@ -20,8 +20,10 @@
     <preference for="AmazonPayV2\ClientInterface" type="Amazon\PayV2\Client\Client" />
 
     <preference for="Amazon\PayV2\Api\CheckoutSessionManagementInterface" type="Amazon\PayV2\Model\CheckoutSessionManagement" />
+    <preference for="Amazon\PayV2\Api\CheckoutSessionRepositoryInterface" type="Amazon\PayV2\Model\CheckoutSessionRepository" />
     <preference for="Amazon\PayV2\Api\AddressManagementInterface" type="Amazon\PayV2\Model\AddressManagement" />
     <preference for="Amazon\PayV2\Api\Data\AsyncInterface" type="Amazon\PayV2\Model\Async" />
+    <preference for="Amazon\PayV2\Api\Data\CheckoutSessionInterface" type="Amazon\PayV2\Model\CheckoutSession" />
 
     <!-- Loggers -->
     <type name="Amazon\PayV2\Logger\AlexaLogger">
@@ -57,13 +59,6 @@
         <arguments>
             <argument name="logger" xsi:type="object">Amazon\PayV2\Logger\Logger</argument>
         </arguments>
-    </type>
-
-    <type name="Magento\Checkout\Model\PaymentInformationManagement">
-        <plugin name="amazon_payv2_save_payment_info" type="Amazon\PayV2\Plugin\SavePaymentInformation" sortOrder="100" disabled="false"/>
-    </type>
-    <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
-        <plugin name="amazon_payv2_save_payment_info" type="Amazon\PayV2\Plugin\SaveGuestPaymentInformation" sortOrder="100" disabled="false"/>
     </type>
 
     <!-- Payment Method Facade configuration -->

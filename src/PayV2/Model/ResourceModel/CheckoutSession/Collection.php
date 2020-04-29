@@ -13,22 +13,17 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Api;
 
-/**
- * @api
- */
-interface AddressManagementInterface
+namespace Amazon\PayV2\Model\ResourceModel\CheckoutSession;
+
+use Amazon\PayV2\Model\CheckoutSession as CheckoutSessionModel;
+use Amazon\PayV2\Model\ResourceModel\CheckoutSession as CheckoutSessionResourceModel;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+
+class Collection extends AbstractCollection
 {
-    /**
-     * @param mixed $cartId
-     * @return mixed
-     */
-    public function getBillingAddress($cartId);
-
-    /**
-     * @param mixed $cartId
-     * @return mixed
-     */
-    public function getShippingAddress($cartId);
+    protected function _construct()
+    {
+        $this->_init(CheckoutSessionModel::class, CheckoutSessionResourceModel::class);
+    }
 }

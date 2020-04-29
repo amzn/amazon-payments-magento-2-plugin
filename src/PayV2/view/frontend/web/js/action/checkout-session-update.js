@@ -22,17 +22,21 @@ define([
 ], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor) {
     'use strict';
 
-    return function (addressType, callback) {
-        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/' + addressType + '-address', {
+    return function (callback) {
+        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/update', {
             cartId: quote.getQuoteId()
         });
 
         fullScreenLoader.startLoader();
 
-        return storage.get(serviceUrl).done(function (data) {
+        return storage.post(serviceUrl).done(function (response) {
             fullScreenLoader.stopLoader(true);
-            if (data.length) {
-                callback(data.shift());
+            if (response.indexOf('http') == 0) {
+                callback(response);
+            } else {
+                console.log('Invalid Amazon RedirectUrl:');
+                console.log(response);
+                errorProcessor.process(response);
             }
         }).fail(function (response) {
             errorProcessor.process(response);

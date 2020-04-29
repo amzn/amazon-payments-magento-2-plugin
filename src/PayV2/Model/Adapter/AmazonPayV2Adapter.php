@@ -96,7 +96,7 @@ class AmazonPayV2Adapter
 
         $payload = [
             'webCheckoutDetail' => [
-                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
+                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
         ];
@@ -132,37 +132,44 @@ class AmazonPayV2Adapter
         $storeId = $quote->getStoreId();
         $store = $quote->getStore();
 
-        if (!$quote->getReservedOrderId()) {
-            try {
-                $quote->reserveOrderId()->save();
-            } catch (\Exception $e) {
-                $this->logger->debug($e->getMessage());
-            }
-        }
-
         $payload = [
             'webCheckoutDetail' => [
-                'checkoutResultReturnUrl' => $store->getUrl(
-                    'amazon_payv2/payment/completeCheckout',
-                    ['_forced_secure' => true]
-                )
+                'checkoutResultReturnUrl' => $this->amazonConfig->getCheckoutResultUrl()
             ],
             'paymentDetail' => [
                 'paymentIntent' => 'Authorize',
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
                 'chargeAmount' => [
-                    'amount' => $quote->getGrandTotal(),
+                    'amount' => (float) $quote->getGrandTotal(),
                     'currencyCode' => $store->getCurrentCurrency()->getCode(),
                 ],
-            ],
+            ]
+        ];
+
+        $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload);
+
+        return $this->processResponse($response, __FUNCTION__);
+    }
+
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param string $chargePermissionId
+     * @param array
+     */
+    public function updateChargePermission($order, $chargePermissionId)
+    {
+        $storeId = $order->getStoreId();
+        $store = $this->storeManager->getStore($storeId);
+
+        $payload = [
             'merchantMetadata' => [
-                'merchantReferenceId' => $quote->getReservedOrderId(),
+                'merchantReferenceId' => $order->getIncrementId(),
                 'merchantStoreName' => $this->amazonConfig->getStoreName() ?: $store->getName(),
                 'customInformation' => $this->getMerchantCustomInformation(),
             ]
         ];
 
-        $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload);
+        $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
 
         return $this->processResponse($response, __FUNCTION__);
     }
