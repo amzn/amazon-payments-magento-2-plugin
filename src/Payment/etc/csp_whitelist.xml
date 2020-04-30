@@ -3,17 +3,23 @@
     <policies>
         <policy id="connect-src">
             <values>
-                <value id="api_amazon" type="host">api.amazon.com</value>
-                <value id="payments_amazon" type="host">payments.amazon.com</value>
-                <value id="payments_sandbox_amazon" type="host">payments-sandbox.amazon.com</value>
+                <value id="amazon_com" type="host">*.amazon.com</value>
+                <value id="amazon_co_uk" type="host">*.amazon.co.uk</value>
+                <value id="amazon_co_jp" type="host">*.amazon.co.jp</value>
+                <value id="amazon_jp" type="host">*.amazon.jp</value>
+                <value id="amazon_it" type="host">*.amazon.it</value>
+                <value id="amazon_fr" type="host">*.amazon.fr</value>
+                <value id="amazon_es" type="host">*.amazon.es</value>
                 <value id="amazonpay_com" type="host">*.amazonpay.com</value>
-                <value id="amazonpay_uk" type="host">*.amazonpay.co.uk</value>
+                <value id="amazonpay_co_uk" type="host">*.amazonpay.co.uk</value>
+                <value id="amazonpay_co_jp" type="host">*.amazonpay.co.jp</value>
                 <value id="amazonpay_jp" type="host">*.amazonpay.jp</value>
                 <value id="amazonpay_it" type="host">*.amazonpay.it</value>
                 <value id="amazonpay_fr" type="host">*.amazonpay.fr</value>
                 <value id="amazonpay_es" type="host">*.amazonpay.es</value>
                 <value id="amazonservices_com" type="host">mws.amazonservices.com</value>
-                <value id="amazonservices_uk" type="host">mws.amazonservices.co.uk</value>
+                <value id="amazonservices_co_uk" type="host">mws.amazonservices.co.uk</value>
+                <value id="amazonservices_co_jp" type="host">mws.amazonservices.co.jp</value>
                 <value id="amazonservices_jp" type="host">mws.amazonservices.jp</value>
                 <value id="amazonservices_it" type="host">mws.amazonservices.it</value>
                 <value id="amazonservices_fr" type="host">mws.amazonservices.fr</value>
@@ -22,7 +28,13 @@
         </policy>
         <policy id="script-src">
             <values>
-                <value id="amazon_payment_widget" type="host">*.payments-amazon.com</value>
+                <value id="amazon_payment_widget_com" type="host">*.payments-amazon.com</value>
+                <value id="amazon_payment_widget_co_uk" type="host">*.payments-amazon.co.uk</value>
+                <value id="amazon_payment_widget_co_jp" type="host">*.payments-amazon.co.jp</value>
+                <value id="amazon_payment_widget_jp" type="host">*.payments-amazon.jp</value>
+                <value id="amazon_payment_widget_it" type="host">*.payments-amazon.it</value>
+                <value id="amazon_payment_widget_fr" type="host">*.payments-amazon.fr</value>
+                <value id="amazon_payment_widget_es" type="host">*.payments-amazon.es</value>
             </values>
         </policy>
         <policy id="img-src">
@@ -48,22 +60,49 @@
                 <value id="amazon_cloudfront19" type="host">dr6hdp4s5yzfc.cloudfront.net</value>
                 <value id="amazon_cloudfront20" type="host">d2bomicxw8p7ii.cloudfront.net</value>
                 <value id="amazon_cloudfront21" type="host">d3aypcdgvjnnam.cloudfront.net</value>
-                <value id="ssl_images_amazon" type="host">*.ssl-images-amazon.com</value>
-                <value id="media_amazon" type="host">*.media-amazon.com</value>
+                <value id="ssl_images_amazon_com" type="host">*.ssl-images-amazon.com</value>
+                <value id="ssl_images_amazon_co_uk" type="host">*.ssl-images-amazon.co.uk</value>
+                <value id="ssl_images_amazon_co_jp" type="host">*.ssl-images-amazon.co.jp</value>
+                <value id="ssl_images_amazon_jp" type="host">*.ssl-images-amazon.jp</value>
+                <value id="ssl_images_amazon_it" type="host">*.ssl-images-amazon.it</value>
+                <value id="ssl_images_amazon_fr" type="host">*.ssl-images-amazon.fr</value>
+                <value id="ssl_images_amazon_es" type="host">*.ssl-images-amazon.es</value>
+                <value id="media_amazon_com" type="host">*.media-amazon.com</value>
+                <value id="media_amazon_co_uk" type="host">*.media-amazon.co.uk</value>
+                <value id="media_amazon_co_jp" type="host">*.media-amazon.co.jp</value>
+                <value id="media_amazon_jp" type="host">*.media-amazon.jp</value>
+                <value id="media_amazon_it" type="host">*.media-amazon.it</value>
+                <value id="media_amazon_fr" type="host">*.media-amazon.fr</value>
+                <value id="media_amazon_es" type="host">*.media-amazon.es</value>
             </values>
         </policy>
         <policy id="form-action">
             <values>
-                <value id="payments_amazon" type="host">payments.amazon.com</value>
-                <value id="payments_sandbox_amazon" type="host">payments-sandbox.amazon.com</value>
+                <value id="amazon_com" type="host">*.amazon.com</value>
+                <value id="amazon_co_uk" type="host">*.amazon.co.uk</value>
+                <value id="amazon_co_jp" type="host">*.amazon.co.jp</value>
+                <value id="amazon_jp" type="host">*.amazon.jp</value>
+                <value id="amazon_it" type="host">*.amazon.it</value>
+                <value id="amazon_fr" type="host">*.amazon.fr</value>
+                <value id="amazon_es" type="host">*.amazon.es</value>
             </values>
         </policy>
         <policy id="frame-src">
             <values>
-                <value id="api_cdn_amazon" type="host">api-cdn.amazon.com</value>
-                <value id="payments_amazon" type="host">payments.amazon.com</value>
-                <value id="payments_sandbox_amazon" type="host">payments-sandbox.amazon.com</value>
-                <value id="amazon_payment_widget" type="host">*.payments-amazon.com</value>
+                <value id="amazon_com" type="host">*.amazon.com</value>
+                <value id="amazon_co_uk" type="host">*.amazon.co.uk</value>
+                <value id="amazon_co_jp" type="host">*.amazon.co.jp</value>
+                <value id="amazon_jp" type="host">*.amazon.jp</value>
+                <value id="amazon_it" type="host">*.amazon.it</value>
+                <value id="amazon_fr" type="host">*.amazon.fr</value>
+                <value id="amazon_es" type="host">*.amazon.es</value>
+                <value id="amazon_payment_widget_com" type="host">*.payments-amazon.com</value>
+                <value id="amazon_payment_widget_co_uk" type="host">*.payments-amazon.co.uk</value>
+                <value id="amazon_payment_widget_co_jp" type="host">*.payments-amazon.co.jp</value>
+                <value id="amazon_payment_widget_jp" type="host">*.payments-amazon.jp</value>
+                <value id="amazon_payment_widget_it" type="host">*.payments-amazon.it</value>
+                <value id="amazon_payment_widget_fr" type="host">*.payments-amazon.fr</value>
+                <value id="amazon_payment_widget_es" type="host">*.payments-amazon.es</value>
             </values>
         </policy>
     </policies>
