@@ -38,11 +38,10 @@ The following table provides an overview on which Git branch is compatible to wh
 | 2.2.4 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.2.0 |
 | 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.0.0 |
 
-### Pre-Requisites for Alexa Notifications
-* Amazon Pay module enabled
 
 ## Alexa Notifications
-The Alexa Notifications feature lets you provide shipment tracking information to Amazon Pay so that Amazon Pay can notify your customers on their Alexa device when shipments are out for delivery, as well as when they are delivered.
+
+The Alexa Notifications feature lets you provide shipment tracking information to Amazon Pay, for the Amazon Pay orders, so that Amazon Pay can notify your customers on their Alexa device when shipments are out for delivery, as well as when they are delivered.
 
 Click [here](https://developer.amazon.com/docs/amazon-pay-onetime/delivery-notifications.html#heres-what-your-customer-will-experience) to listen to the customer experience.
 
