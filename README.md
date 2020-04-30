@@ -10,6 +10,7 @@ This module will enable "Amazon Pay Checkout v2" on your Magento 2 installation.
 * Supports virtual goods
 * Automatic, graceful handling of declined authorization, increasing checkout conversion rate
 * Integrated support for PSD2/SCA (Strong Customer Authentication)
+* Alexa Notifications feature support
 
 ## About Amazon Pay
 
@@ -36,3 +37,22 @@ The following table provides an overview on which Git branch is compatible to wh
 | ------------- | ------------- | ------------- |
 | 2.2.4 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.2.0 |
 | 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.0.0 |
+
+### Pre-Requisites for Alexa Notifications
+* Amazon Pay module enabled
+
+## Alexa Notifications
+The Alexa Notifications feature lets you provide shipment tracking information to Amazon Pay so that Amazon Pay can notify your customers on their Alexa device when shipments are out for delivery, as well as when they are delivered.
+
+Click [here](https://developer.amazon.com/docs/amazon-pay-onetime/delivery-notifications.html#heres-what-your-customer-will-experience) to listen to the customer experience.
+
+Alexa Notifications feature is inbuilt with the Amazon Pay checkout Version 2 module. There are not additional keys required to activate this feature. Once you have enabled Alexa Notifications, your store is ready to use this feature.
+
+Alexa Delivery Notifiaction API is called when:
+
+- A shipment is submitted with the carrier code, name and tracking number
+- On a successful API call, you will see its status as ‘Amazon Pay has received shipping tracking information for carrier <carrier_name> and tracking number <tracking_number>’.
+
+The status will show under:
+* ‘Comments History’ in the Order view.
+* Under individual Shipment -> Shipment History.
