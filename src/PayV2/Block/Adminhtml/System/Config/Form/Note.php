@@ -53,7 +53,7 @@ class Note extends \Magento\Config\Block\System\Config\Form\Field
     {
         $html = '<td class="value">';
         if (!$this->amazonConfig->getPrivateKey() || !$this->amazonConfig->getPublicKeyId()) {
-            $html .= __('Go to Seller Central to get the keys');
+            $html .= __('Log in to Seller Central. Navigate to Integration Central, to access the below required keys');
         }
         $html .= '</td>';
         return $html;
