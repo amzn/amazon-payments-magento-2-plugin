@@ -18,6 +18,8 @@
 
 namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
 
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
 class Note extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
@@ -35,19 +37,19 @@ class Note extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _renderScopeLabel($element)
+    protected function _renderScopeLabel(AbstractElement $element)
     {
         return '';
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _renderValue($element)
+    protected function _renderValue(AbstractElement $element)
     {
         $html = '<td class="value">';
         if (!$this->amazonConfig->getPrivateKey() || !$this->amazonConfig->getPublicKeyId()) {
