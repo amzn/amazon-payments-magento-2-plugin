@@ -85,6 +85,27 @@ class AmazonPayV2Adapter
     }
 
     /**
+     * @param mixed $amount
+     * @param string $currencyCode
+     * @return array
+     */
+    protected function createPrice($amount, $currencyCode)
+    {
+        switch ($currencyCode) {
+            case 'JPY':
+                $amount = round($amount);
+                break;
+            default:
+                $amount = (float) $amount;
+                break;
+        }
+        return [
+            'amount' => $amount,
+            'currencyCode' => $currencyCode,
+        ];
+    }
+
+    /**
      * Create new Amazon Checkout Session
      *
      * @param $storeId
@@ -151,10 +172,7 @@ class AmazonPayV2Adapter
             'paymentDetail' => [
                 'paymentIntent' => 'Authorize',
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
-                'chargeAmount' => [
-                    'amount' => $quote->getGrandTotal(),
-                    'currencyCode' => $store->getCurrentCurrency()->getCode(),
-                ],
+                'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
@@ -197,10 +215,7 @@ class AmazonPayV2Adapter
 
         $payload = [
             'chargePermissionId' => $chargePermissionId,
-            'chargeAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currency,
-            ]
+            'chargeAmount' => $this->createPrice($amount, $currency),
         ];
 
         $response = $this->clientFactory->create($storeId)->createCharge($payload, $headers);
@@ -222,10 +237,7 @@ class AmazonPayV2Adapter
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
-            'captureAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currency,
-            ]
+            'captureAmount' => $this->createPrice($amount, $currency),
         ];
 
         $response = $this->clientFactory->create($storeId)->captureCharge($chargeId, $payload, $headers);
@@ -248,10 +260,7 @@ class AmazonPayV2Adapter
 
         $payload = [
             'chargeId' => $chargeId,
-            'refundAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currency,
-            ]
+            'refundAmount' => $this->createPrice($amount, $currency),
         ];
 
         $response = $this->clientFactory->create($storeId)->createRefund($payload, $headers);
