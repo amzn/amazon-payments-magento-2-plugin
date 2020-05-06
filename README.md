@@ -99,6 +99,23 @@ Upon successful installation of the module, please follow the steps below for co
 1. Paste the Public Key ID into the corresponding field on the configurations screen of the plugin.
 1. Rest of the settings are all similar to the V1 settings. We recommend to use the same settings as used in V1. [View V1 Configuration documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html)
 
+## Alexa Notifications
+
+The Alexa Notifications feature lets you provide shipment tracking information to Amazon Pay, for the Amazon Pay orders, so that Amazon Pay can notify your customers on their Alexa device when shipments are out for delivery, as well as when they are delivered.
+
+Click [here](https://developer.amazon.com/docs/amazon-pay-onetime/delivery-notifications.html#heres-what-your-customer-will-experience) to listen to the customer experience.
+
+Alexa Notifications feature is inbuilt with the Amazon Pay checkout Version 2 module. There are not additional keys required to activate this feature. Once you have enabled Alexa Notifications, your store is ready to use this feature.
+
+Alexa Delivery Notifiaction API is called when:
+
+- A shipment is submitted with the carrier code, name and tracking number
+- On a successful API call, you will see its status as ‘Amazon Pay has received shipping tracking information for carrier <carrier_name> and tracking number <tracking_number>’.
+
+The status will show under:
+* ‘Comments History’ in the Order view.
+* Under individual Shipment -> Shipment History.
+
 ## Branch information
 
 The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column "Latest release" refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. 
