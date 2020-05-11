@@ -176,6 +176,7 @@
                     <label>Alexa Notifications</label>
                     <field id="active" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enable Alexa Notifications</label>
+                        <comment><![CDATA[Once enabled, Amazon Pay will deliver Alexa notifications to the customer’s Alexa device, when the order is ‘out for delivery' and when it’s 'delivered'. <a href="https://developer.amazon.com/docs/alexa/amazon-pay-alexa/amazon-pay-apis-for-alexa.html#delivery-notifications" target="_blank">Click here</a> for the customer experience.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>
