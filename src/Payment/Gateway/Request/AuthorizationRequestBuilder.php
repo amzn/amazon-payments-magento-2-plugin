@@ -154,15 +154,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
             $data['additional_information'] =
                 $payment->getAdditionalInformation(AdditionalInformation::KEY_SANDBOX_SIMULATION_REFERENCE);
 
-            $eventData = [
-                'amazon_order_reference_id' => $amazonId,
-                'authorization_amount' => $total,
-                'currency_code' => $currencyCode,
-                'authorization_reference_id' => $amazonId . '-A' . time(),
-                'capture_now' => false,
-            ];
-
-            $transport = new DataObject($eventData);
+            $transport = new DataObject($data);
             $this->eventManager->dispatch(
                 'amazon_payment_authorize_before',
                 [
@@ -171,6 +163,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
                     'transport' => $transport
                 ]
             );
+            $data = $transport->getData();
         }
 
         return $data;
