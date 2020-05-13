@@ -20,7 +20,7 @@
         <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
         <!--Verify only Amazon Pay method is visible-->
         <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
-        <seeElement selector="{{CheckoutPaymentSection.paymentMethodByName(AmazonPayment.v2MethodName)}}" stepKey="seeAmazonPaymentMethod"/>
+        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
         <!--Place order-->
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
