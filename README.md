@@ -92,7 +92,7 @@ Upon successful installation of the module, please follow the steps below for co
 1. In the "API access" section that will show up further down the page, copy the "Merchant ID" and "Store ID" and copy them into the corresponding fields of the plugin configuration.
   ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-merchantId-storeId.png?raw=true)
 1. Back in Seller Central, click "Create Keys".
-1. As shown below, chose to register an "existing public key" and copy/paste the content of the public key that the plugin has generated into the box. Then click "Create Keys".
+1. As shown below, you can either choose to generate a complete set of new API credentials or to use an existing public key to create them. Then click "Create Keys".
   ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-key-registration.png?raw=true)
 1. Back on the previous screen, click "Copy" below the newly created entry to receive your Public Key ID.
   ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-copy-key.png?raw=true)
