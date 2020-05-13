@@ -53,6 +53,7 @@
         </annotations>
 
         <!--Go to Amazon Pay from the payment method and login-->
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
         <click selector="{{AmazonButtonSection.v2Payment}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
     </test>

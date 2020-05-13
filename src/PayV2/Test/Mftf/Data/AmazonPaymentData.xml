@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="AmazonPayment" type="amazon_payment">
-        <data key="v1MethodName">Amazon Pay</data>
-        <data key="v2MethodName">AmazonPay</data>
-    </entity>
-</entities>
