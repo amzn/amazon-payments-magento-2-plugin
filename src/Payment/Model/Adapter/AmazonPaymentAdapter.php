@@ -268,6 +268,10 @@ class AmazonPaymentAdapter
             'transaction_timeout' => 0
         ];
 
+        if (isset($data['seller_authorization_note'])) {
+            $authorizeData['seller_authorization_note'] = $data['seller_authorization_note'];
+        }
+
         /** if first synchronous attempt failed, on second attempt try an asynchronous attempt. */
         if ($authMode != 'synchronous' && $attempts) {
             $authorizeData['transaction_timeout'] = 1440;
