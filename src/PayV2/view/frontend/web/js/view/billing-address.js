@@ -10,31 +10,19 @@ define([
 
     var self;
     var formSelector = '#amazon-payment form';
-    var editSelector = '#amazon-payment .action-edit-address';
 
     return Component.extend({
         defaults: {
             template: 'Amazon_PayV2/billing-address',
-            isAddressFormVisible: false,
             actionsTemplate: 'Amazon_PayV2/billing-address/actions',
-            detailsTemplate: {
-                name: 'Amazon_PayV2/billing-address/details',
-                afterRender: function () {
-                    if ($(editSelector).length) {
-                        amazon.Pay.bindChangeAction(editSelector, {
-                            amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
-                            changeAction: 'changePayment'
-                        });
-                    }
-                }
-            },
+            detailsTemplate: 'Amazon_PayV2/billing-address/details',
             formTemplate: {
                 name: 'Amazon_PayV2/billing-address/form',
                 afterRender: function () {
                     self.triggerBillingDataValidateEvent();
-                    var isValid = toggleFormFields(formSelector);
+                    var isValid = toggleFormFields(formSelector, false);
                     billingFormAddressState.isValid(isValid);
-                    self.isAddressFormVisible(!isValid);
+                    self.isAddressDetailsVisible(isValid);
                 }
             },
         },
@@ -61,15 +49,16 @@ define([
             billingFormAddressState.isValid(!this.source.get('params.invalid'));
         },
 
-        cancelAddressEdit: function () {
-            quote.billingAddress(null);
-            amazonStorage.clearAmazonCheckout();
-            window.location = window.checkoutConfig.checkoutUrl;
-        },
-
-        editAddress: function () {
+        bindEditPaymentAction: function (elem) {
+            var $elem = $(elem);
+            amazon.Pay.bindChangeAction('#' + $elem.uniqueId().attr('id'), {
+                amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
+                changeAction: 'changePayment'
+            });
             if (!amazonStorage.isPayOnly(true)) {
-                amazonStorage.setIsEditPaymentFlag(true);
+                $elem.click(function () {
+                    amazonStorage.setIsEditPaymentFlag(true);
+                });
             }
         }
     });

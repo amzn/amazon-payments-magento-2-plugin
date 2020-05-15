@@ -50,7 +50,7 @@ define([
                 checkoutProvider.trigger('shippingAddress.custom_attributes.data.validate');
             }
 
-            toggleFormFields('#co-shipping-form');
+            toggleFormFields('#co-shipping-form', true);
         },
 
         /**
