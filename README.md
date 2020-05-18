@@ -84,20 +84,8 @@ Upon successful installation of the module, please follow the steps below for co
 
 1. Go to Stores -> Configuration -> Sales -> Payment Methods -> Amazon Pay -> Configure
 1. Switch to 'V2' under the Amazon Pay Product Version
-1. To obtain the required keys, please log in to your Amazon Pay merchant account via Seller Central.
-1. In the dropdown box on top, select "Amazon Pay (Production View").
-1. In the menu, select "Integration" > "Integration Central"
-1. Under "Technical guidance and API credentials", apply the selection shown below.
-  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-wizard-selection.png?raw=true)
-1. In the "API access" section that will show up further down the page, copy the "Merchant ID" and "Store ID" and copy them into the corresponding fields of the plugin configuration.
-  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-merchantId-storeId.png?raw=true)
-1. Back in Seller Central, click "Create Keys".
-1. As shown below, chose to register an "existing public key" and copy/paste the content of the public key that the plugin has generated into the box. Then click "Create Keys".
-  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-key-registration.png?raw=true)
-1. Back on the previous screen, click "Copy" below the newly created entry to receive your Public Key ID.
-  ![](https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/docs/images/seller-central-copy-key.png?raw=true)
-1. Paste the Public Key ID into the corresponding field on the configurations screen of the plugin.
-1. Rest of the settings are all similar to the V1 settings. We recommend to use the same settings as used in V1. [View V1 Configuration documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html)
+1. To obtain the required keys, please log in to your Amazon Pay merchant account via Seller Central and follow [these instructions](http://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/get-set-up-for-integration.html#4-get-your-public-key-id) to receive your Public Key Id. You will also need the associated secret key in order to configure the plugin.
+1. The rest of the settings are all similar to the V1 module settings. We recommend to use the same settings as used in V1 module, with the only difference that "clientId" is referenced as "storeId" in V2 module.[View V1 Configuration documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html).
 
 ## Alexa Notifications
 
