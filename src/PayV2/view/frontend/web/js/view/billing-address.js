@@ -1,11 +1,10 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/billing-address',
-    'Magento_Checkout/js/model/quote',
     'Amazon_PayV2/js/action/toggle-form-fields',
     'Amazon_PayV2/js/model/storage',
     'Amazon_PayV2/js/model/billing-address/form-address-state'
-], function ($, Component, quote, toggleFormFields, amazonStorage, billingFormAddressState) {
+], function ($, Component, toggleFormFields, amazonStorage, billingFormAddressState) {
     'use strict';
 
     var self;
@@ -20,11 +19,15 @@ define([
                 name: 'Amazon_PayV2/billing-address/form',
                 afterRender: function () {
                     self.triggerBillingDataValidateEvent();
-                    var isValid = toggleFormFields(formSelector, false);
+                    var isValid = toggleFormFields(formSelector, !self.isAddressEditable);
                     billingFormAddressState.isValid(isValid);
-                    self.isAddressDetailsVisible(isValid);
+                    self.isAddressFormVisible(!isValid);
+                    if (self.isAddressEditable) {
+                        self.isAddressDetailsVisible(isValid);
+                    }
                 }
             },
+            isAddressEditable: true,
         },
 
         /**
@@ -44,9 +47,27 @@ define([
             }
         },
 
+        editAddress: function () {
+            this._super();
+            this.isAddressFormVisible(true);
+        },
+
+        cancelAddressEdit: function () {
+            this._super();
+            this.isAddressFormVisible(false);
+        },
+
         updateAddress: function () {
             this._super();
-            billingFormAddressState.isValid(!this.source.get('params.invalid'));
+            var isValid = !this.source.get('params.invalid');
+            if (this.isAddressEditable) {
+                this.isAddressFormVisible(!isValid);
+            }
+            billingFormAddressState.isValid(isValid);
+        },
+
+        canUseCancelBillingAddress: function () {
+            return this.isAddressEditable ? this._super() : false;
         },
 
         bindEditPaymentAction: function (elem) {

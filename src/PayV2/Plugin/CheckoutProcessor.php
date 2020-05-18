@@ -72,6 +72,7 @@ class CheckoutProcessor
 
             $paymentConfig['children']['payments-list']['component'] = 'Amazon_PayV2/js/view/payment/list';
             $paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form']['component'] = 'Amazon_PayV2/js/view/billing-address';
+            $paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form']['isAddressEditable'] = $this->amazonConfig->isBillingAddressEditable();
 
             unset($paymentConfig['children']['renders']['children']['amazonlogin']); // legacy
         } else {
