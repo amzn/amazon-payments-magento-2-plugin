@@ -18,7 +18,8 @@
             data-bind="afterRender: bindEditPaymentAction($element)">
         <span translate="'Edit Payment Method'"></span>
     </button>
-    <button class="action action-edit-address"
+    <button if="isAddressEditable"
+            class="action action-edit-address"
             type="button"
             click="editAddress">
         <span translate="'Edit Billing Address'"></span>
