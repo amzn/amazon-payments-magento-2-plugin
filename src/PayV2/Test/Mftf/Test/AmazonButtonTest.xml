@@ -194,9 +194,9 @@
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
         <!--Verify only Amazon Payment Button V1 is present-->
-        <click selector="{{CheckoutPaymentSection.paymentMethodByName(AmazonPayment.v1MethodName)}}" stepKey="selectEnabledAmazonPaymentMethod"/>
+        <click selector="{{AmazonCheckoutSection.v1Method}}" stepKey="selectEnabledAmazonPaymentMethod"/>
         <seeElement selector="{{AmazonButtonSection.v1Payment}}" stepKey="seeEnabledAmazonButton"/>
-        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName(AmazonPayment.v2MethodName)}}" stepKey="dontSeeDisabledAmazonPaymentMethod"/>
+        <dontSee selector="{{AmazonCheckoutSection.v2Method}}" stepKey="dontSeeDisabledAmazonPaymentMethod"/>
         <dontSeeElement selector="{{AmazonButtonSection.v2Payment}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>
     <test name="PaymentAmazonButtonV2">
@@ -229,9 +229,9 @@
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
         <!--Verify only Amazon Payment Button V2 is present-->
-        <click selector="{{CheckoutPaymentSection.paymentMethodByName(AmazonPayment.v2MethodName)}}" stepKey="selectEnabledAmazonPaymentMethod"/>
+        <click selector="{{AmazonCheckoutSection.v2Method}}" stepKey="selectEnabledAmazonPaymentMethod"/>
         <seeElement selector="{{AmazonButtonSection.v2Payment}}" stepKey="seeEnabledAmazonButton"/>
-        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName(AmazonPayment.v1MethodName)}}" stepKey="dontSeeDisabledAmazonPaymentMethod"/>
+        <dontSee selector="{{AmazonCheckoutSection.v1Method}}" stepKey="dontSeeDisabledAmazonPaymentMethod"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Payment}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>
 </tests>

@@ -294,6 +294,19 @@ class AmazonConfig
     }
 
     /**
+     * @param string $scope
+     * @param string $scopeCode
+     * @return boolean
+     */
+    public function isBillingAddressEditable($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return in_array($this->getPaymentRegion($scope, $scopeCode), [
+            'de',
+            'uk',
+        ]);
+    }
+
+    /**
      * Return Private Key
      *
      * @param string $scope

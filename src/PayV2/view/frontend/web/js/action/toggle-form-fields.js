@@ -19,15 +19,15 @@ define([
 ], function ($, amazonStorage) {
     'use strict';
 
-    return function (formSelector) {
+    return function (formSelector, hideValid) {
         var result = true;
         if (amazonStorage.isAmazonCheckout()) {
             var $form = $(formSelector);
-            $form.find('.field').hide();
-
             var $errorFields = $form.find('.field._error');
-            $errorFields.show();
-
+            if (hideValid) {
+                $form.find('.field').hide();
+                $errorFields.show();
+            }
             result = $errorFields.length === 0;
         }
         return result;

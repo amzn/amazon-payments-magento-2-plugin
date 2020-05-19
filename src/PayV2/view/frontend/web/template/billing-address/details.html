@@ -1,4 +1,4 @@
-<div if="currentBillingAddress()" class="billing-address-details">
+<div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
     <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
     <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
     <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
@@ -13,10 +13,16 @@
         <br/>
     </each>
 
-    <button class="action action-edit-address"
+    <button class="action action-edit-payment"
+            type="button"
+            data-bind="afterRender: bindEditPaymentAction($element)">
+        <span translate="'Edit Payment Method'"></span>
+    </button>
+    <button if="isAddressEditable"
+            class="action action-edit-address"
             type="button"
             click="editAddress">
-        <span translate="'Edit'"></span>
+        <span translate="'Edit Billing Address'"></span>
     </button>
     <br/><br/>
 </div>
