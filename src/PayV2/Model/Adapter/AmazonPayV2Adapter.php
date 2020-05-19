@@ -186,7 +186,6 @@ class AmazonPayV2Adapter
                 'merchantStoreName' => $this->amazonConfig->getStoreName() ?: $store->getName(),
                 'customInformation' => $this->getMerchantCustomInformation(),
             ],
-            'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
