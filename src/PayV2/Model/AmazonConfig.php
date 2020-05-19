@@ -409,20 +409,30 @@ class AmazonConfig
     }
 
     /**
+     * @param string $scope
+     * @param string $scopeCode
      * @return string
      */
     public function getCheckoutReviewUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        $result = $this->storeManager->getStore()->getUrl('checkout', ['_forced_secure' => true]);
+        $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_review_url', $scope, $scopeCode);
+        if (empty($result)) {
+            $result = $this->storeManager->getStore()->getUrl('checkout', ['_forced_secure' => true]);
+        }
         return $result;
     }
 
     /**
+     * @param string $scope
+     * @param string $scopeCode
      * @return string
      */
     public function getCheckoutResultUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        $result = $this->storeManager->getStore()->getUrl('amazon_payv2/checkout/completeSession', ['_forced_secure' => true]);
+        $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_result_url', $scope, $scopeCode);
+        if (empty($result)) {
+            $result = $this->storeManager->getStore()->getUrl('amazon_payv2/checkout/completeSession', ['_forced_secure' => true]);
+        }
         return $result;
     }
 

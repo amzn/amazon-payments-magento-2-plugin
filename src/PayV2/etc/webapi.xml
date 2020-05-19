@@ -28,7 +28,7 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-v2-checkout-session/:cartId" method="PUT">
+    <route url="/V1/amazon-v2-checkout-session/:cartId" method="POST">
         <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="createCheckoutSession"/>
         <resources>
             <resource ref="anonymous" />
