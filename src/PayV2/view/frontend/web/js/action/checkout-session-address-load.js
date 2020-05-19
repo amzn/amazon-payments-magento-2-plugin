@@ -14,17 +14,17 @@
  */
 
 define([
-    'Amazon_PayV2/js/model/storage',
+    'Magento_Checkout/js/model/quote',
     'mage/storage',
     'Magento_Checkout/js/model/url-builder',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/error-processor'
-], function (amazonStorage, storage, urlBuilder, fullScreenLoader, errorProcessor) {
+], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor) {
     'use strict';
 
     return function (addressType, callback) {
-        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:amazonCheckoutSessionId/' + addressType + '-address', {
-            amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId()
+        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/' + addressType + '-address', {
+            cartId: quote.getQuoteId()
         });
 
         fullScreenLoader.startLoader();
