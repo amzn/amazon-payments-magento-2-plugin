@@ -30,7 +30,7 @@ define(
              */
             revertCheckout: function () {
                 checkoutSessionCancelAction(function () {
-                    amazonStorage.revertCheckout();
+                    amazonStorage.clearAmazonCheckout();
                     window.location.replace(window.checkoutConfig.checkoutUrl);
                 });
             }

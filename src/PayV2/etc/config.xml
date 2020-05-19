@@ -17,6 +17,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <dev>
+            <js>
+                <minify_exclude>
+                    <payments_amazon_checkout>\.payments-amazon\.com/checkout</payments_amazon_checkout>
+                </minify_exclude>
+            </js>
+        </dev>
         <payment>
             <amazon_payment_v2>
                 <active>0</active>
@@ -35,6 +42,8 @@
                 <can_refund>1</can_refund>
                 <can_use_checkout>1</can_use_checkout>
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <alexa_active>0</alexa_active>
+                <platform_id>AUGT0HMCLQVX1</platform_id>
             </amazon_payment_v2>
         </payment>
     </default>

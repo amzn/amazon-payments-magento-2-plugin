@@ -48,32 +48,18 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
      */
     public function execute()
     {
-        switch ($this->getRequest()->getParam('type')) {
-            case 'client':
-                $filePath = \Amazon\PayV2\Logger\Handler\Client::FILENAME;
-                break;
-            case 'async':
-                $filePath = \Amazon\PayV2\Logger\Handler\AsyncIpn::FILENAME;
-                break;
-            default:
-                $filePath = false;
-                break;
-        }
-
-        if ($filePath) {
-            $fileName = basename((string)$filePath);
-
-            try {
-                return $this->fileFactory->create(
-                    $fileName,
-                    [
-                        'type' => 'filename',
-                        'value' => $filePath
-                    ]
-                );
-            } catch (\Exception $e) {
-                throw new NotFoundException($e->getMessage());
+        try {
+            $log = $this->getRequest()->getParam('name');
+            $logs = \Amazon\PayV2\Block\Adminhtml\System\Config\Form\DeveloperLogs::LOGS;
+            if (!isset($logs[$log])) {
+                throw new \Exception('Log "' . $log . '" is not exist');
             }
+            return $this->fileFactory->create(basename($logs[$log]['path']), [
+                'type' => 'filename',
+                'value' => $logs[$log]['path']
+            ]);
+        } catch (\Exception $e) {
+            throw new NotFoundException($e->getMessage());
         }
     }
 

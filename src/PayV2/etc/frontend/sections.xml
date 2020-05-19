@@ -6,4 +6,13 @@
         <section name="checkout-data"/>
         <section name="last-ordered-items"/>
     </action>
+    <action name="checkout/cart/add">
+        <section name="amazon-checkout-session"/>
+    </action>
+    <action name="checkout/cart/delete">
+        <section name="amazon-checkout-session"/>
+    </action>
+    <action name="checkout/sidebar/removeItem">
+        <section name="amazon-checkout-session"/>
+    </action>
 </config>

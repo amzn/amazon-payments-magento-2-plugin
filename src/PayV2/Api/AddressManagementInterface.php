@@ -24,5 +24,11 @@ interface AddressManagementInterface
      * @param mixed $cartId
      * @return mixed
      */
+    public function getBillingAddress($cartId);
+
+    /**
+     * @param mixed $cartId
+     * @return mixed
+     */
     public function getShippingAddress($cartId);
 }

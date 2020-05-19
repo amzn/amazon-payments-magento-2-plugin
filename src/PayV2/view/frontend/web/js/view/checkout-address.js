@@ -13,6 +13,7 @@ define(
         'Amazon_PayV2/js/model/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/address-converter',
+        'Magento_Checkout/js/action/create-shipping-address',
         'mage/storage',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/error-processor',
@@ -20,7 +21,10 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/model/address-list',
+        'Magento_Checkout/js/model/step-navigator',
         'uiRegistry',
+        'Amazon_PayV2/js/action/checkout-session-address-load',
+        'Amazon_PayV2/js/model/shipping-address/form-address-state',
         'Amazon_PayV2/js/amazon-checkout'
     ],
     function (
@@ -35,6 +39,7 @@ define(
         amazonStorage,
         shippingService,
         addressConverter,
+        createShippingAddress,
         storage,
         fullScreenLoader,
         errorProcessor,
@@ -42,7 +47,10 @@ define(
         checkoutData,
         checkoutDataResolver,
         addressList,
+        stepNavigator,
         registry,
+        checkoutSessionAddressLoad,
+        shippingFormAddressState,
         amazonCheckout
     ) {
         'use strict';
@@ -50,8 +58,6 @@ define(
         var self;
 
         require([amazonCheckout.getCheckoutModuleName()]);
-
-        amazonStorage.reloadCheckoutSessionId();
 
         return Component.extend({
             defaults: {
@@ -67,8 +73,12 @@ define(
             initialize: function () {
                 self = this;
                 this._super();
-                if (this.isAmazonCheckout) {
+                if (!amazonStorage.isPayOnly(true) && this.isAmazonCheckout) {
                     this.getShippingAddressFromAmazon();
+                    if (amazonStorage.getIsEditPaymentFlag()) {
+                        amazonStorage.setIsEditPaymentFlag(false);
+                        stepNavigator.setHash('payment');
+                    }
                 }
             },
 
@@ -96,71 +106,41 @@ define(
              * Retrieve shipping address from Amazon API
              */
             getShippingAddressFromAmazon: function () {
-                var serviceUrl, payload;
-
                 // Only display one address from Amazon
                 addressList.removeAll();
+                checkoutSessionAddressLoad('shipping', function (amazonAddress) {
+                    var addressData = createShippingAddress(amazonAddress),
+                        checkoutProvider = registry.get('checkoutProvider'),
+                        addressConvert;
 
-                amazonStorage.isShippingMethodsLoading(true);
-                shippingService.isLoading(true);
-                serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/shipping-address', {
-                    cartId: quote.getQuoteId()
-                }),
+                    self.setEmail(amazonAddress.email);
 
-                storage.get(
-                    serviceUrl
-                ).done(
-                    function (data) {
-
-                        // Invalid checkout session
-                        if (!data.length) {
-                            //self.resetCheckout();
-                            return;
+                    // Fill in blank street fields
+                    if ($.isArray(addressData.street)) {
+                        for (var i = addressData.street.length; i <= 2; i++) {
+                            addressData.street[i] = '';
                         }
-
-                        var amazonAddress = data.shift(),
-                            addressData = addressConverter.formAddressDataToQuoteAddress(amazonAddress),
-                            checkoutProvider = registry.get('checkoutProvider'),
-                            addressConvert,
-                            i;
-
-                        //console.log(amazonAddress);
-                        //console.log(addressData);
-
-                        self.setEmail(amazonAddress.email);
-
-                        // Fill in blank street fields
-                        if ($.isArray(addressData.street)) {
-                            for (i = addressData.street.length; i <= 2; i++) {
-                                addressData.street[i] = '';
-                            }
-                        }
-
-                        // Amazon does not return telephone or non-US regionIds, so use previous provider values
-                        if (checkoutProvider.shippingAddress) {
-                            addressData.telephone = checkoutProvider.shippingAddress.telephone;
-                            if (!addressData.regionId) {
-                                addressData.regionId = checkoutProvider.shippingAddress.region_id;
-                            }
-                        }
-
-                        // Save shipping address
-                        addressConvert = addressConverter.quoteAddressToFormAddressData(addressData);
-                        checkoutData.setShippingAddressFromData(addressConvert);
-                        checkoutProvider.set('shippingAddress', addressConvert);
-
-                        checkoutDataResolver.resolveEstimationAddress();
-
-                        self.initAddress();
                     }
-                ).fail(
-                    function (response) {
-                        errorProcessor.process(response);
-                        //remove shipping loader and set shipping rates to 0 on a fail
-                        shippingService.setShippingRates([]);
-                        amazonStorage.isShippingMethodsLoading(false);
+
+                    // Amazon does not return telephone or non-US regionIds, so use previous provider values
+                    if (checkoutProvider.shippingAddress) {
+                        if (!addressData.telephone) {
+                            shippingFormAddressState.lastTelephone(checkoutProvider.shippingAddress.telephone);
+                        }
+                        if (!addressData.regionId) {
+                            shippingFormAddressState.lastRegionId(checkoutProvider.shippingAddress.region_id);
+                        }
                     }
-                );
+
+                    // Save shipping address
+                    addressConvert = addressConverter.quoteAddressToFormAddressData(addressData);
+                    checkoutData.setShippingAddressFromData(addressConvert);
+                    checkoutProvider.set('shippingAddress', addressConvert);
+
+                    checkoutDataResolver.resolveEstimationAddress();
+
+                    self.initAddress();
+                });
             },
 
             /**
@@ -172,14 +152,6 @@ define(
                 checkoutData.setInputFieldEmailValue(email);
                 checkoutData.setValidatedEmailValue(email);
                 quote.guestEmail = email;
-            },
-
-            /**
-             * Revert to standard checkout
-             */
-            resetCheckout: function() {
-                amazonStorage.clearAmazonCheckout();
-                window.location =  window.checkoutConfig.checkoutUrl;
             }
         });
     }

@@ -18,16 +18,15 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
-        'mage/url',
         'Magento_Checkout/js/model/error-processor',
+        'Magento_Customer/js/customer-data',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
         'Amazon_PayV2/js/action/checkout-session-update',
         'Amazon_PayV2/js/model/storage',
-        'mage/translate',
         'Magento_CheckoutAgreements/js/model/agreements-assigner'
     ],
-    function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader, checkoutSessionUpdateAction, amazonStorage, $t, agreementsAssigner) {
+    function (quote, urlBuilder, storage, errorProcessor, customerData, customer, fullScreenLoader, checkoutSessionUpdateAction, amazonStorage, agreementsAssigner) {
         'use strict';
 
         return function (paymentData, redirectOnSuccess) {
@@ -67,6 +66,7 @@ define(
                     // Redirect URL
                     if (response === true) {
                         checkoutSessionUpdateAction(function (redirectUrl) {
+                            customerData.invalidate(['cart']);
                             amazonStorage.clearAmazonCheckout();
                             window.location.replace(redirectUrl);
                         });

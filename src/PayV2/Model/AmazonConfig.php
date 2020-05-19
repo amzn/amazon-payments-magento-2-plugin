@@ -49,7 +49,7 @@ class AmazonConfig
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Amazon\Core\Helper\ClientIp $clientIpHelper,
+        \Amazon\PayV2\Helper\ClientIp $clientIpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\State $appState
     ) {
@@ -294,6 +294,19 @@ class AmazonConfig
     }
 
     /**
+     * @param string $scope
+     * @param string $scopeCode
+     * @return boolean
+     */
+    public function isBillingAddressEditable($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return in_array($this->getPaymentRegion($scope, $scopeCode), [
+            'de',
+            'uk',
+        ]);
+    }
+
+    /**
      * Return Private Key
      *
      * @param string $scope
@@ -461,5 +474,27 @@ class AmazonConfig
     public function isPayButtonAvailableAsPaymentMethod($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->scopeConfig->isSetFlag('payment/amazonlogin/active', $scope, $scopeCode);
+    }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
+    public function isAlexaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/alexa_active',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlatformId()
+    {
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2/platform_id');
     }
 }

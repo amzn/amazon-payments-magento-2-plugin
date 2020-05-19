@@ -25,28 +25,58 @@ define([
     if (amazonStorage.isEnabled) {
         $.widget('amazon.AmazonButton', {
             options: {
+                payOnly: null,
+                forcePayOnly: false,
                 placement: amazonPayV2Config.getValue('placement'),
-                selector: '.amazon-checkout-button'
+            },
+
+            /**
+             * @returns {boolean}
+             * @private
+             */
+            _isPayOnly: function () {
+                var result = this.options.forcePayOnly || amazonStorage.isPayOnly(true);
+                if (result && this.options.payOnly !== null) {
+                    result = this.options.payOnly;
+                }
+                return result;
             },
 
             /**
              * Create button
              */
             _create: function () {
-                amazonCheckout.withAmazonCheckout(function(amazon, args) {
-                    amazon.Pay.renderButton(this.options.selector, {
-                        merchantId: amazonPayV2Config.getValue('merchantId'),
-                        createCheckoutSession: {
-                            url: url.build('amazon_payv2/checkout/createSession'),
-                            method: 'PUT'
+                var $buttonContainer = this.element;
+                amazonCheckout.withAmazonCheckout(function (amazon, args) {
+                    var buttonPreferences = {
+                            merchantId: amazonPayV2Config.getValue('merchantId'),
+                            createCheckoutSession: {
+                                url: url.build('amazon_payv2/checkout/createSession'),
+                                method: 'PUT'
+                            },
+                            ledgerCurrency: amazonPayV2Config.getValue('currency'),
+                            checkoutLanguage: amazonPayV2Config.getValue('language'),
+                            productType: this._isPayOnly() ? 'PayOnly' : 'PayAndShip',
+                            placement: this.options.placement,
+                            sandbox: amazonPayV2Config.getValue('sandbox'),
                         },
-                        ledgerCurrency: amazonPayV2Config.getValue('currency'),
-                        checkoutLanguage: amazonPayV2Config.getValue('language'),
-                        placement: this.options.placement,
-                        sandbox: amazonPayV2Config.getValue('sandbox'),
-                    });
-                    $('.amazon-button-container-v2 .field-tooltip').fadeIn();
+                        buttonPreferencesJson = JSON.stringify(buttonPreferences);
+                    if ($buttonContainer.data('button-preferences') !== buttonPreferencesJson) {
+                        $buttonContainer.empty();
+                        $buttonContainer.data('button-preferences', buttonPreferencesJson);
+
+                        var $buttonRoot = $('<div></div>');
+                        $buttonRoot.uniqueId();
+                        $buttonContainer.append($buttonRoot);
+
+                        amazon.Pay.renderButton('#' + $buttonRoot.attr('id'), buttonPreferences);
+                        $('.amazon-button-container-v2 .field-tooltip').fadeIn();
+                    }
                 }, this);
+            },
+
+            click: function () {
+                this.element.children().first().trigger('click');
             }
         });
 

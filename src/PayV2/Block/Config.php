@@ -24,6 +24,14 @@ namespace Amazon\PayV2\Block;
  */
 class Config extends \Magento\Framework\View\Element\Template
 {
+    const LANG_DE = 'de_DE';
+    const LANG_FR = 'fr_FR';
+    const LANG_ES = 'es_ES';
+    const LANG_IT = 'it_IT';
+    const LANG_JA = 'ja_JP';
+    const LANG_UK = 'en_GB';
+    const LANG_US = 'en_US';
+
     /**
      * @var \Magento\Framework\Locale\Resolver
      */
@@ -61,6 +69,49 @@ class Config extends \Magento\Framework\View\Element\Template
     /**
      * @return string
      */
+    protected function getLanguage()
+    {
+        $paymentRegion = $this->amazonConfig->getRegion();
+        @list($lang, $region) = explode('_', $this->localeResolver->getLocale());
+        switch ($lang) {
+            case 'de':
+                $result = self::LANG_DE;
+                break;
+            case 'fr':
+                $result = self::LANG_FR;
+                break;
+            case 'es':
+                $result = self::LANG_ES;
+                break;
+            case 'it':
+                $result = self::LANG_IT;
+                break;
+            case 'ja':
+                $result = self::LANG_JA;
+                break;
+            case 'en':
+                $result = $paymentRegion == 'us' ? self::LANG_US : self::LANG_UK;
+                break;
+        }
+        if (!isset($result)) {
+            switch ($paymentRegion) {
+                case 'jp':
+                    $result = self::LANG_JA;
+                    break;
+                case 'us':
+                    $result = self::LANG_US;
+                    break;
+                default:
+                    $result = self::LANG_UK;
+                    break;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
     public function getConfig()
     {
         $config = [
@@ -68,8 +119,10 @@ class Config extends \Magento\Framework\View\Element\Template
             'region'                   => $this->amazonConfig->getRegion(),
             'currency'                 => $this->amazonConfig->getCurrencyCode(),
             'sandbox'                  => $this->amazonConfig->isSandboxEnabled(),
-            'language'                 => $this->localeResolver->getLocale(),
+            'language'                 => $this->getLanguage(),
             'placement'                => 'Cart',
+            'code'                     => \Amazon\PayV2\Gateway\Config\Config::CODE,
+            'is_method_available'      => $this->amazonConfig->isPayButtonAvailableAsPaymentMethod(),
         ];
 
         return $config;

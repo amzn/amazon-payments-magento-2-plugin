@@ -42,6 +42,11 @@ class AmazonPayV2Adapter
     private $quoteRepository;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var \Amazon\PayV2\Logger\Logger
      */
     private $logger;
@@ -52,6 +57,7 @@ class AmazonPayV2Adapter
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Logger\Logger $logger
      */
     public function __construct(
@@ -59,13 +65,44 @@ class AmazonPayV2Adapter
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Logger\Logger $logger
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
         $this->storeManager = $storeManager;
         $this->quoteRepository = $quoteRepository;
+        $this->amazonHelper = $amazonHelper;
         $this->logger = $logger;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getMerchantCustomInformation()
+    {
+        return sprintf('Magento Version: 2, Plugin Version: %s (v2)', $this->amazonHelper->getVersion());
+    }
+
+    /**
+     * @param mixed $amount
+     * @param string $currencyCode
+     * @return array
+     */
+    protected function createPrice($amount, $currencyCode)
+    {
+        switch ($currencyCode) {
+            case 'JPY':
+                $amount = round($amount);
+                break;
+            default:
+                $amount = (float) $amount;
+                break;
+        }
+        return [
+            'amount' => $amount,
+            'currencyCode' => $currencyCode,
+        ];
     }
 
     /**
@@ -83,6 +120,7 @@ class AmazonPayV2Adapter
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
+            'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $response = $this->clientFactory->create($storeId)->createCheckoutSession($payload, $headers);
@@ -131,17 +169,14 @@ class AmazonPayV2Adapter
             'paymentDetail' => [
                 'paymentIntent' => 'Authorize',
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
-                'chargeAmount' => [
-                    'amount' => (float) $quote->getGrandTotal(),
-                    'currencyCode' => $store->getCurrentCurrency()->getCode(),
-                ],
+                'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
-                'merchantStoreName' => $store->getName(),
-                //noteToBuyer => '',
-                //customInformation => '',
-            ]
+                'merchantStoreName' => $this->amazonConfig->getStoreName() ?: $store->getName(),
+                'customInformation' => $this->getMerchantCustomInformation(),
+            ],
+            'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload);
@@ -177,10 +212,7 @@ class AmazonPayV2Adapter
 
         $payload = [
             'chargePermissionId' => $chargePermissionId,
-            'chargeAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currency,
-            ]
+            'chargeAmount' => $this->createPrice($amount, $currency),
         ];
 
         $response = $this->clientFactory->create($storeId)->createCharge($payload, $headers);
@@ -202,10 +234,7 @@ class AmazonPayV2Adapter
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
-            'captureAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currency,
-            ]
+            'captureAmount' => $this->createPrice($amount, $currency),
         ];
 
         $response = $this->clientFactory->create($storeId)->captureCharge($chargeId, $payload, $headers);
@@ -228,10 +257,7 @@ class AmazonPayV2Adapter
 
         $payload = [
             'chargeId' => $chargeId,
-            'refundAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currency,
-            ]
+            'refundAmount' => $this->createPrice($amount, $currency),
         ];
 
         $response = $this->clientFactory->create($storeId)->createRefund($payload, $headers);

@@ -55,6 +55,11 @@ class Button extends Template implements ShortcutInterface
     private $amazonConfig;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * Button constructor.
      * @param Template\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
