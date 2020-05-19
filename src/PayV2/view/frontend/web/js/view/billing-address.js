@@ -1,42 +1,33 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/billing-address',
-    'Magento_Checkout/js/model/quote',
     'Amazon_PayV2/js/action/toggle-form-fields',
     'Amazon_PayV2/js/model/storage',
     'Amazon_PayV2/js/model/billing-address/form-address-state'
-], function ($, Component, quote, toggleFormFields, amazonStorage, billingFormAddressState) {
+], function ($, Component, toggleFormFields, amazonStorage, billingFormAddressState) {
     'use strict';
 
     var self;
     var formSelector = '#amazon-payment form';
-    var editSelector = '#amazon-payment .action-edit-address';
 
     return Component.extend({
         defaults: {
             template: 'Amazon_PayV2/billing-address',
-            isAddressFormVisible: false,
             actionsTemplate: 'Amazon_PayV2/billing-address/actions',
-            detailsTemplate: {
-                name: 'Amazon_PayV2/billing-address/details',
-                afterRender: function () {
-                    if ($(editSelector).length) {
-                        amazon.Pay.bindChangeAction(editSelector, {
-                            amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
-                            changeAction: 'changePayment'
-                        });
-                    }
-                }
-            },
+            detailsTemplate: 'Amazon_PayV2/billing-address/details',
             formTemplate: {
                 name: 'Amazon_PayV2/billing-address/form',
                 afterRender: function () {
                     self.triggerBillingDataValidateEvent();
-                    var isValid = toggleFormFields(formSelector);
+                    var isValid = toggleFormFields(formSelector, !self.isAddressEditable);
                     billingFormAddressState.isValid(isValid);
                     self.isAddressFormVisible(!isValid);
+                    if (self.isAddressEditable) {
+                        self.isAddressDetailsVisible(isValid);
+                    }
                 }
             },
+            isAddressEditable: true,
         },
 
         /**
@@ -56,20 +47,39 @@ define([
             }
         },
 
-        updateAddress: function () {
+        editAddress: function () {
             this._super();
-            billingFormAddressState.isValid(!this.source.get('params.invalid'));
+            this.isAddressFormVisible(true);
         },
 
         cancelAddressEdit: function () {
-            quote.billingAddress(null);
-            amazonStorage.clearAmazonCheckout();
-            window.location = window.checkoutConfig.checkoutUrl;
+            this._super();
+            this.isAddressFormVisible(false);
         },
 
-        editAddress: function () {
+        updateAddress: function () {
+            this._super();
+            var isValid = !this.source.get('params.invalid');
+            if (this.isAddressEditable) {
+                this.isAddressFormVisible(!isValid);
+            }
+            billingFormAddressState.isValid(isValid);
+        },
+
+        canUseCancelBillingAddress: function () {
+            return this.isAddressEditable ? this._super() : false;
+        },
+
+        bindEditPaymentAction: function (elem) {
+            var $elem = $(elem);
+            amazon.Pay.bindChangeAction('#' + $elem.uniqueId().attr('id'), {
+                amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
+                changeAction: 'changePayment'
+            });
             if (!amazonStorage.isPayOnly(true)) {
-                amazonStorage.setIsEditPaymentFlag(true);
+                $elem.click(function () {
+                    amazonStorage.setIsEditPaymentFlag(true);
+                });
             }
         }
     });
