@@ -2,22 +2,14 @@
 define(
     [
         'jquery',
-        'underscore',
-        'ko',
         'Magento_Checkout/js/view/shipping',
         'Magento_Customer/js/model/customer',
-        'Magento_Checkout/js/action/set-shipping-information',
-        'Magento_Checkout/js/model/step-navigator',
         'Amazon_Payment/js/model/storage'
     ],
     function (
         $,
-        _,
-        ko,
         Component,
         customer,
-        setShippingInformationAction,
-        stepNavigator,
         amazonStorage
     ) {
         'use strict';
@@ -49,20 +41,20 @@ define(
             },
 
             /**
-             * New setShipping Action for Amazon Pay to bypass validation
+             * Overridden validateShippingInformation for Amazon Pay to bypass validation
+             *
+             * @inheritDoc
              */
-            setShippingInformation: function () {
-                if (amazonStorage.isAmazonAccountLoggedIn()) {
-                    if (customer.isLoggedIn() || this.validateGuestEmail()) {
-                        setShippingInformationAction().done(
-                            function () {
-                                stepNavigator.next();
-                            }
-                        );
-                    }
-                } else {
-                    this._super();
+            validateShippingInformation: function () {
+                if (!amazonStorage.isAmazonAccountLoggedIn()) {
+                    return this._super();
                 }
+
+                if (!customer.isLoggedIn()) {
+                    return this.validateGuestEmail();
+                }
+
+                return true;
             }
         });
     }
