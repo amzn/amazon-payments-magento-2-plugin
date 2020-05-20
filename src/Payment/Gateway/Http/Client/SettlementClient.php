@@ -38,7 +38,7 @@ class SettlementClient extends AbstractClient
                 'capture_reference_id' => $data['amazon_order_reference_id'] . '-C' . time()
             ];
 
-            $response = $this->adapter->completeCapture($captureData, $data['store_id']);
+            $response = $this->adapter->completeCapture($captureData, $data['store_id'], $data['amazon_order_reference_id']);
         } else {
             // if invalid - reauthorize and capture
             $captureData = [
