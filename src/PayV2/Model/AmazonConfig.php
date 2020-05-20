@@ -75,6 +75,10 @@ class AmazonConfig
             return false;
         }
 
+        if (!$this->isCurrentCurrencySupportedByAmazon($scope, $scopeCode)) {
+            return false;
+        }
+
         return $this->scopeConfig->isSetFlag(
             'payment/amazon_payment_v2/active',
             $scope,
@@ -108,11 +112,13 @@ class AmazonConfig
     }
 
     /**
+     * @param string $scope
+     * @param string $scopeCode
      * @return bool
      */
-    public function isCurrentCurrencySupportedByAmazon()
+    public function isCurrentCurrencySupportedByAmazon($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        return $this->getBaseCurrencyCode() == $this->getCurrencyCode();
+        return $this->getCurrentCurrencyCode() == $this->getCurrencyCode($scope, $scopeCode);
     }
 
     /**
@@ -157,11 +163,10 @@ class AmazonConfig
     /**
      * Gets customer's current currency
      *
-     * @param null $store
-     * @return mixed
+     * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getCurrentCurrencyCode($store = null)
+    protected function getCurrentCurrencyCode()
     {
         return $this->storeManager->getStore()->getCurrentCurrency()->getCode();
     }
@@ -268,29 +273,6 @@ class AmazonConfig
             }
         }
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPresentmentCurrency()
-    {
-        return $this->getCurrentCurrencyCode();
-    }
-
-    /**
-     * Retrieves the base currency of the store.
-     *
-     * @param null $store
-     * @return mixed
-     */
-    public function getBaseCurrencyCode($store = null)
-    {
-        return $this->scopeConfig->getValue(
-            'currency/options/base',
-            ScopeInterface::SCOPE_STORE,
-            $store
-        );
     }
 
     /**
