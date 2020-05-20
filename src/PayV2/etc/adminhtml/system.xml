@@ -225,7 +225,7 @@
                             <label>Checkout review URL</label>
                             <comment><![CDATA[Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_review_url</config_path>
-                            <validate>validate-url</validate>
+                            <validate>validate-secure-url</validate>
                             <depends>
                                 <field id="payment/us/amazon_payment/api_version">2</field>
                             </depends>
@@ -234,7 +234,7 @@
                             <label>Checkout result URL</label>
                             <comment><![CDATA[Amazon Pay will redirect to this URL after completing the transaction.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_url</config_path>
-                            <validate>validate-url</validate>
+                            <validate>validate-secure-url</validate>
                             <depends>
                                 <field id="payment/us/amazon_payment/api_version">2</field>
                             </depends>
