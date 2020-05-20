@@ -325,11 +325,12 @@ class AmazonPaymentAdapter
     }
 
     /**
-     * @param $data
-     * @param $storeId
+     * @param array $data
+     * @param string $storeId
+     * @param string $amazonOrderReferenceId
      * @return array
      */
-    public function completeCapture($data, $storeId)
+    public function completeCapture($data, $storeId, $amazonOrderReferenceId)
     {
         $response = [
             'status' => false
@@ -347,12 +348,12 @@ class AmazonPaymentAdapter
                     'reauthorized' => false
                 ];
             } elseif ($capture->getStatus()->getState() == 'Pending') {
-                $order = $this->subjectReader->getOrder();
+                $order = $this->getOrderByReference($amazonOrderReferenceId);
 
                 try {
                     $this->pendingCaptureFactory->create()
                         ->setCaptureId($capture->getTransactionId())
-                        ->setOrderId($order->getId())
+                        ->setOrderId($order->getEntityId())
                         ->setPaymentId($order->getPayment()->getEntityId())
                         ->save();
                 } catch (\Exception $e) {
