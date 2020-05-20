@@ -16,4 +16,21 @@
             <column name="is_pending"/>
         </index>
     </table>
+    <table name="amazon_payv2_checkout_session" resource="default" engine="innodb" comment="Amazon PayV2 Checkout Session">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="session_id" length="36" nullable="false" comment="Session ID"/>
+        <column xsi:type="int" name="quote_id" padding="10" unsigned="true" nullable="false" comment="Quote ID"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" default="1" comment="Is Active"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="datetime" name="canceled_at" nullable="true" comment="Canceled At"/>
+        <column xsi:type="datetime" name="updated_at" nullable="true" comment="Updated At"/>
+        <column xsi:type="datetime" name="completed_at" nullable="true" comment="Completed At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="AMAZON_PAYV2_CHECKOUT_SESSION_QUOTE_ID_QUOTE_ENTITY_ID" table="amazon_payv2_checkout_session" column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="AMAZON_PAYV2_CHECKOUT_SESSION_IS_ACTIVE" indexType="btree">
+            <column name="is_active"/>
+        </index>
+    </table>
 </schema>

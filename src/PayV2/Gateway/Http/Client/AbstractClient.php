@@ -19,8 +19,6 @@ namespace Amazon\PayV2\Gateway\Http\Client;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use Amazon\PayV2\Client\ClientFactoryInterface;
-use Amazon\PayV2\Gateway\Helper\SubjectReader;
 use Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter;
 
 /**
@@ -30,19 +28,9 @@ use Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter;
 abstract class AbstractClient implements ClientInterface
 {
     /**
-     * @var SubjectReader
-     */
-    protected $subjectReader;
-
-    /**
      * @var Logger
      */
     protected $logger;
-
-    /**
-     * @var ClientFactoryInterface
-     */
-    protected $clientFactory;
 
     /**
      * @var AmazonPayV2Adapter
@@ -51,12 +39,8 @@ abstract class AbstractClient implements ClientInterface
 
     public function __construct(
         Logger $logger,
-        ClientFactoryInterface $clientFactory,
-        SubjectReader $subjectReader,
         AmazonPayV2Adapter $adapter
     ) {
-        $this->subjectReader = $subjectReader;
-        $this->clientFactory = $clientFactory;
         $this->logger = $logger;
         $this->adapter = $adapter;
     }
