@@ -13,40 +13,23 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 namespace Amazon\PayV2\Api;
 
-/**
- * @api
- */
-interface CheckoutSessionManagementInterface
+use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use Magento\Quote\Api\Data\CartInterface;
+
+interface CheckoutSessionRepositoryInterface
 {
     /**
-     * @param mixed $cartId
-     * @return string
+     * @param CartInterface $cart
+     * @return CheckoutSessionInterface
      */
-    public function createCheckoutSession($cartId);
+    public function getActiveForCart(CartInterface $cart);
 
     /**
-     * @param mixed $cartId
+     * @param CheckoutSessionInterface $checkoutSession
      * @return void
      */
-    public function cancelCheckoutSession($cartId);
-
-    /**
-     * @param mixed $cartId
-     * @return string
-     */
-    public function getCheckoutSession($cartId);
-
-    /**
-     * @param mixed $cartId
-     * @return string
-     */
-    public function updateCheckoutSession($cartId);
-
-    /**
-     * @param mixed $cartId
-     * @return int
-     */
-    public function completeCheckoutSession($cartId);
+    public function save(CheckoutSessionInterface $checkoutSession);
 }

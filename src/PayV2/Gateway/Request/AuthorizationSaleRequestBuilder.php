@@ -22,17 +22,25 @@ use Amazon\PayV2\Gateway\Helper\SubjectReader;
 class AuthorizationSaleRequestBuilder implements BuilderInterface
 {
     /**
+     * @var \Amazon\PayV2\Api\CheckoutSessionManagementInterface
+     */
+    private $sessionManagement;
+
+    /**
      * @var SubjectReader
      */
     private $subjectReader;
 
     /**
      * AuthorizationRequestBuilder constructor.
+     * @param \Amazon\PayV2\Api\CheckoutSessionManagementInterface $sessionManagement
      * @param SubjectReader $subjectReader
      */
     public function __construct(
+        \Amazon\PayV2\Api\CheckoutSessionManagementInterface $sessionManagement,
         SubjectReader $subjectReader
     ) {
+        $this->sessionManagement = $sessionManagement;
         $this->subjectReader = $subjectReader;
     }
 
@@ -41,12 +49,11 @@ class AuthorizationSaleRequestBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-
-        $quote = $this->subjectReader->getCheckoutQuote();
-
+        $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
+        /* @var $payment \Magento\Sales\Model\Order\Payment */
         return [
-            'quote_id' => $quote->getId(),
-            'amazon_checkout_session_id' => $this->subjectReader->getAmazonCheckoutSessionId(),
+            'quote_id' => $payment->getOrder()->getQuoteId(),
+            'amazon_checkout_session_id' => $this->sessionManagement->getCheckoutSession($payment->getOrder()->getQuoteId()),
         ];
     }
 }

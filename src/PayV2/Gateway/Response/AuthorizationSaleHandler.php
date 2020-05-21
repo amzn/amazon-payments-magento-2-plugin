@@ -87,11 +87,11 @@ class AuthorizationSaleHandler implements HandlerInterface
     /**
      * Set order as pending review
      *
-     * @param $payment
+     * @param Payment $payment
      */
     private function setPending($payment)
     {
-        $order = $this->subjectReader->getCheckoutOrder();
+        $order = $payment->getOrder();
         $payment->setIsTransactionPending(true);
         $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)->setStatus(
             \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW
