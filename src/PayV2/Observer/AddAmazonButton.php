@@ -47,7 +47,7 @@ class AddAmazonButton implements \Magento\Framework\Event\ObserverInterface
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
-        if ($this->amazonConfig->isEnabled() && $this->amazonConfig->isCurrentCurrencySupportedByAmazon()) {
+        if ($this->amazonConfig->isEnabled()) {
             $params = [
                 'shortcutValidator' => $this->shortcutFactory->create($observer->getEvent()->getCheckoutSession()),
             ];
