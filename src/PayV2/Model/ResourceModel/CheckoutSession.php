@@ -1,3 +1,4 @@
+<?php
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -12,15 +13,18 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-var config = {
-    config: {
-        mixins: {
-            'mage/validation': {
-                'Amazon_PayV2/js/validation-mixin': true
-            },
-            'Amazon_Core/js/simplepath': {
-                'Amazon_PayV2/js/simplepath-mixin': true
-            }
-        }
+
+namespace Amazon\PayV2\Model\ResourceModel;
+
+use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+class CheckoutSession extends AbstractDb
+{
+    const TABLE_NAME = 'amazon_payv2_checkout_session';
+
+    protected function _construct()
+    {
+        $this->_init(static::TABLE_NAME, CheckoutSessionInterface::KEY_ID);
     }
-};
+}

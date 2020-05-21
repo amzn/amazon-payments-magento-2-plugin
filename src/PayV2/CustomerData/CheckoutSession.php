@@ -38,27 +38,19 @@ class CheckoutSession implements SectionSourceInterface
     private $checkoutSessionManagement;
 
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
-     */
-    private $amazonConfig;
-
-    /**
      * CheckoutSession constructor.
      * @param \Magento\Checkout\Model\Session $session
      * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
         \Magento\Checkout\Model\Session $session,
         \Amazon\PayV2\Helper\Data $amazonHelper,
-        \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement,
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+        \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement
     ) {
         $this->session = $session;
         $this->amazonHelper = $amazonHelper;
         $this->checkoutSessionManagement = $checkoutSessionManagement;
-        $this->amazonConfig = $amazonConfig;
     }
 
     /**
@@ -66,13 +58,10 @@ class CheckoutSession implements SectionSourceInterface
      */
     public function getSectionData()
     {
-        $data = [];
-        if ($this->amazonConfig->isEnabled()) {
-            $data = [
-                'isPayOnly' => $this->amazonHelper->isPayOnly(),
-                'checkoutSessionId' => $this->getCheckoutSessionId()
-            ];
-        }
+        $data = [
+            'isPayOnly' => $this->amazonHelper->isPayOnly(),
+            'checkoutSessionId' => $this->getCheckoutSessionId(),
+        ];
         return $data;
     }
 
@@ -81,7 +70,7 @@ class CheckoutSession implements SectionSourceInterface
      */
     public function clearCheckoutSessionId()
     {
-        $this->session->unsAmazonCheckoutSessionId();
+        $this->checkoutSessionManagement->cancelCheckoutSession($this->session->getQuote());
     }
 
     /**
@@ -89,11 +78,15 @@ class CheckoutSession implements SectionSourceInterface
      */
     public function getCheckoutSessionId()
     {
-        if (!$this->amazonConfig->isEnabled()) {
-            return false;
-        }
+        return $this->checkoutSessionManagement->getCheckoutSession($this->session->getQuote());
+    }
 
-        return $this->session->getAmazonCheckoutSessionId();
+    /**
+     * Complete Amazon Checkout Session
+     */
+    public function completeCheckoutSession()
+    {
+        return $this->checkoutSessionManagement->completeCheckoutSession($this->session->getQuote());
     }
 
     /**
@@ -101,11 +94,6 @@ class CheckoutSession implements SectionSourceInterface
      */
     public function createCheckoutSessionId()
     {
-        $response = $this->checkoutSessionManagement->createCheckoutSession();
-        if ($response) {
-            $sessionId = $response['checkoutSessionId'];
-            $this->session->setAmazonCheckoutSessionId($sessionId);
-            return $sessionId;
-        }
+        return $this->checkoutSessionManagement->createCheckoutSession($this->session->getQuote());
     }
 }

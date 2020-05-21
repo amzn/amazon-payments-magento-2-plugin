@@ -16,12 +16,8 @@
 
 namespace Amazon\PayV2\Gateway\Helper;
 
-use Magento\Checkout\Model\Session;
-use Magento\Quote\Model\Quote;
 use Magento\Payment\Gateway\Helper;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Amazon\PayV2\CustomerData\CheckoutSession;
-use Amazon\Core\Model\AmazonConfig;
 
 /**
  * Class SubjectReader
@@ -29,36 +25,6 @@ use Amazon\Core\Model\AmazonConfig;
  */
 class SubjectReader
 {
-    /**
-     * @var Session
-     */
-    private $checkoutSession;
-
-    /**
-     * @var AmazonConfig
-     */
-    private $amazonConfig;
-
-    /**
-     * @var Session
-     */
-    private $amazonCheckoutSession;
-
-    /**
-     * SubjectReader constructor.
-     * @param Session $checkoutSession
-     * @param CheckoutSession $amazonCheckoutSession
-     */
-    public function __construct(
-        AmazonConfig $amazonConfig,
-        Session $checkoutSession,
-        CheckoutSession $amazonCheckoutSession
-    ) {
-        $this->amazonConfig = $amazonConfig;
-        $this->checkoutSession = $checkoutSession;
-        $this->amazonCheckoutSession = $amazonCheckoutSession;
-    }
-
     /**
      * Reads payment from subject
      *
@@ -79,48 +45,5 @@ class SubjectReader
     public function readAmount(array $subject)
     {
         return Helper\SubjectReader::readAmount($subject);
-    }
-
-    /**
-     * Gets quote from current checkout session and returns store ID
-     *
-     * @return int
-     */
-    public function getStoreId()
-    {
-        $quote = $this->getQuote();
-
-        return $quote->getStoreId();
-    }
-
-    /**
-     * Get Amazon Checkout Session ID
-     *
-     * @return mixed
-     */
-    public function getAmazonCheckoutSessionId()
-    {
-        return $this->amazonCheckoutSession->getCheckoutSessionId();
-    }
-
-    /**
-     * @return \Magento\Quote\Model\Quote
-     */
-    public function getCheckoutQuote()
-    {
-        return $this->checkoutSession->getQuote();
-    }
-
-    /**
-     * @return \Magento\Sales\Model\Order
-     */
-    public function getCheckoutOrder()
-    {
-        return $this->checkoutSession->getLastRealOrder();
-    }
-
-    public function getAmazonConfig()
-    {
-        return $this->amazonConfig;
     }
 }

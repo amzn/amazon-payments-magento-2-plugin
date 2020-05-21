@@ -21,14 +21,14 @@ namespace Amazon\PayV2\Api;
 interface AddressManagementInterface
 {
     /**
-     * @param string $amazonCheckoutSessionId
+     * @param mixed $cartId
      * @return mixed
      */
-    public function getBillingAddress($amazonCheckoutSessionId);
+    public function getBillingAddress($cartId);
 
     /**
-     * @param string $amazonCheckoutSessionId
+     * @param mixed $cartId
      * @return mixed
      */
-    public function getShippingAddress($amazonCheckoutSessionId);
+    public function getShippingAddress($cartId);
 }

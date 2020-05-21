@@ -117,7 +117,7 @@ class AmazonPayV2Adapter
 
         $payload = [
             'webCheckoutDetail' => [
-                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
+                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
             'platformId' => $this->amazonConfig->getPlatformId(),
@@ -164,10 +164,7 @@ class AmazonPayV2Adapter
 
         $payload = [
             'webCheckoutDetail' => [
-                'checkoutResultReturnUrl' => $store->getUrl(
-                    'amazon_payv2/payment/completeCheckout',
-                    ['_forced_secure' => true]
-                )
+                'checkoutResultReturnUrl' => $this->amazonConfig->getCheckoutResultUrl()
             ],
             'paymentDetail' => [
                 'paymentIntent' => 'Authorize',
