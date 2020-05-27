@@ -134,22 +134,19 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      */
     public function createCheckoutSession($cartId)
     {
-        $result = null;
+        $checkoutSession = $this->checkoutSessionFactory->create();
         $this->cancelCheckoutSession($cartId);
         if ($this->amazonConfig->isEnabled()) {
             $response = $this->amazonAdapter->createCheckoutSession($this->storeManager->getStore()->getId());
             if (isset($response['checkoutSessionId'])) {
-                $checkoutSession = $this->checkoutSessionFactory->create([
-                    'data' => [
-                        CheckoutSessionInterface::KEY_QUOTE_ID => $this->getCart($cartId)->getId(),
-                        CheckoutSessionInterface::KEY_SESSION_ID => $response['checkoutSessionId'],
-                    ]
+                $checkoutSession->setData([
+                    CheckoutSessionInterface::KEY_QUOTE_ID => $this->getCart($cartId)->getId(),
+                    CheckoutSessionInterface::KEY_SESSION_ID => $response['checkoutSessionId']
                 ]);
                 $this->checkoutSessionRepository->save($checkoutSession);
-                $result = $checkoutSession->getSessionId();
             }
         }
-        return $result;
+        return $checkoutSession;
     }
 
     /**

@@ -22,7 +22,7 @@ interface CheckoutSessionManagementInterface
 {
     /**
      * @param mixed $cartId
-     * @return string
+     * @return \Amazon\PayV2\Api\Data\CheckoutSessionInterface
      */
     public function createCheckoutSession($cartId);
 
