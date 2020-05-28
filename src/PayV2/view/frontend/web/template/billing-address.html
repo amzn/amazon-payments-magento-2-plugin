@@ -1,4 +1,4 @@
-<div class="checkout-billing-address">
+<div if="isAddressLoaded" id="amazon-billing-address" class="checkout-billing-address">
     <render args="detailsTemplate"/>
     <fieldset class="fieldset" data-bind="visible: isAddressFormVisible()">
         <render args="formTemplate"/>
