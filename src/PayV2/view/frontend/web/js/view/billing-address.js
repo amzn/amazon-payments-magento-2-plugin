@@ -7,8 +7,13 @@ define([
 ], function ($, Component, toggleFormFields, amazonStorage, billingFormAddressState) {
     'use strict';
 
+    if (!amazonStorage.isAmazonCheckout()) {
+        // DO NOT EXTEND SHARED BILLING ADDRESS FORM IF AMAZON CHECKOUT IS NOT INITIATED
+        return Component;
+    }
+
     var self;
-    var formSelector = '#amazon-payment form';
+    var formSelector = '#amazon-billing-address form';
 
     return Component.extend({
         defaults: {
@@ -27,6 +32,7 @@ define([
                     }
                 }
             },
+            isAddressLoaded: billingFormAddressState.isLoaded,
             isAddressEditable: true,
         },
 

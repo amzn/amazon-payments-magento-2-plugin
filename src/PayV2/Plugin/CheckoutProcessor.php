@@ -23,29 +23,21 @@ class CheckoutProcessor
     private $amazonConfig;
 
     /**
-     * @var \Amazon\PayV2\Helper\Data
+     * @var \Magento\Checkout\Helper\Data
      */
-    private $amazonHelper;
-
-    /**
-     * @var  \Magento\Checkout\Model\Session
-     */
-    private $checkoutSession;
+    private $checkoutDataHelper;
 
     /**
      * CheckoutProcessor constructor.
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-     * @param \Amazon\PayV2\Helper\Data $amazonHelper
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Checkout\Helper\Data $checkoutDataHelper
      */
     public function __construct(
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Helper\Data $amazonHelper,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Helper\Data $checkoutDataHelper
     ) {
         $this->amazonConfig = $amazonConfig;
-        $this->amazonHelper = $amazonHelper;
-        $this->checkoutSession = $checkoutSession;
+        $this->checkoutDataHelper = $checkoutDataHelper;
     }
 
     /**
@@ -71,8 +63,14 @@ class CheckoutProcessor
             ['component'] = 'Amazon_PayV2/js/view/shipping-address/address-renderer/default';
 
             $paymentConfig['children']['payments-list']['component'] = 'Amazon_PayV2/js/view/payment/list';
-            $paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form']['component'] = 'Amazon_PayV2/js/view/billing-address';
-            $paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form']['isAddressEditable'] = $this->amazonConfig->isBillingAddressEditable();
+
+            if ($this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
+                $billingConfig = &$paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form'];
+            } else {
+                $billingConfig = &$paymentConfig['children']['afterMethods']['children']['billing-address-form'];
+            }
+            $billingConfig['component'] = 'Amazon_PayV2/js/view/billing-address';
+            $billingConfig['isAddressEditable'] = $this->amazonConfig->isBillingAddressEditable();
 
             unset($paymentConfig['children']['renders']['children']['amazonlogin']); // legacy
         } else {
