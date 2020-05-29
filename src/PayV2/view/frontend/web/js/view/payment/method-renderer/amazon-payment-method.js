@@ -39,7 +39,7 @@ define(
             defaults: {
                 isAmazonButtonVisible: ko.observable(!amazonStorage.isAmazonCheckout()),
                 isBillingAddressVisible: ko.observable(false),
-                isPlaceOrderActionAllowed: ko.observable(false),
+                isPlaceOrderActionAllowed: billingFormAddressState.isValid,
                 template: 'Amazon_PayV2/payment/amazon-payment-method'
             },
 
@@ -54,11 +54,6 @@ define(
             },
 
             initBillingAddress: function () {
-                billingFormAddressState.isValid.subscribe(function (isValid) {
-                    this.isPlaceOrderActionAllowed(isValid);
-                }, this);
-
-                var billingAddressCode = 'billingAddress' + this.getCode();
                 var checkoutProvider = registry.get('checkoutProvider');
                 checkoutSessionAddressLoad('billing', function (amazonAddress) {
                     self.setEmail(amazonAddress.email);
@@ -87,10 +82,11 @@ define(
                     var formAddress = addressConverter.quoteAddressToFormAddressData(quoteAddress);
                     checkoutData.setBillingAddressFromData(formAddress);
                     checkoutData.setNewCustomerBillingAddress(formAddress);
-                    checkoutProvider.set(billingAddressCode, formAddress);
+                    checkoutProvider.set('billingAddress' + (window.checkoutConfig.displayBillingOnPaymentMethod ? self.getCode() : 'shared'), formAddress);
                     checkoutDataResolver.resolveBillingAddress();
 
                     self.isBillingAddressVisible(true);
+                    billingFormAddressState.isLoaded(true);
                 });
             },
 
