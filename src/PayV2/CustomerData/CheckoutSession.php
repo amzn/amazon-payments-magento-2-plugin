@@ -94,6 +94,6 @@ class CheckoutSession implements SectionSourceInterface
      */
     public function createCheckoutSessionId()
     {
-        return $this->checkoutSessionManagement->createCheckoutSession($this->session->getQuote());
+        return $this->checkoutSessionManagement->createCheckoutSession($this->session->getQuote())->getSessionId();
     }
 }
