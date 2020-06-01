@@ -33,6 +33,11 @@ class CheckoutSessionRepository implements CheckoutSessionRepositoryInterface
      */
     private $checkoutSessionCollectionFactory;
 
+    /**
+     * @var array
+     */
+    private $checkoutSessions = [];
+
     public function __construct(
         ResourceModel\CheckoutSession $checkoutSessionResourceModel,
         ResourceModel\CheckoutSession\CollectionFactory $checkoutSessionCollectionFactory
@@ -47,17 +52,20 @@ class CheckoutSessionRepository implements CheckoutSessionRepositoryInterface
      */
     public function getActiveForCart(CartInterface $cart)
     {
-        $result = null;
-        $checkoutSessionCollection = $this->checkoutSessionCollectionFactory->create();
-        /* @var $checkoutSessionCollection ResourceModel\CheckoutSession\Collection */
-        $checkoutSessionCollection->addFieldToFilter(CheckoutSessionInterface::KEY_QUOTE_ID, $cart->getId());
-        $checkoutSessionCollection->addFieldToFilter(CheckoutSessionInterface::KEY_IS_ACTIVE, true);
-        $checkoutSessionCollection->setOrder(CheckoutSessionInterface::KEY_ID);
-        $checkoutSessionCollection->setPageSize(1);
-        if ($checkoutSessionCollection->count()) {
-            $result = $checkoutSessionCollection->getFirstItem();
+        if (!array_key_exists($cart->getId(), $this->checkoutSessions)) {
+            $result = null;
+            $checkoutSessionCollection = $this->checkoutSessionCollectionFactory->create();
+            /* @var $checkoutSessionCollection ResourceModel\CheckoutSession\Collection */
+            $checkoutSessionCollection->addFieldToFilter(CheckoutSessionInterface::KEY_QUOTE_ID, $cart->getId());
+            $checkoutSessionCollection->addFieldToFilter(CheckoutSessionInterface::KEY_IS_ACTIVE, true);
+            $checkoutSessionCollection->setOrder(CheckoutSessionInterface::KEY_ID);
+            $checkoutSessionCollection->setPageSize(1);
+            if ($checkoutSessionCollection->count()) {
+                $result = $checkoutSessionCollection->getFirstItem();
+            }
+            $this->checkoutSessions[$cart->getId()] = $result;
         }
-        return $result;
+        return $this->checkoutSessions[$cart->getId()];
     }
 
     /**
