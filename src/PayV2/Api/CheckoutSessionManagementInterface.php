@@ -22,7 +22,7 @@ interface CheckoutSessionManagementInterface
 {
     /**
      * @param mixed $cartId
-     * @return string
+     * @return mixed
      */
     public function createCheckoutSession($cartId);
 
