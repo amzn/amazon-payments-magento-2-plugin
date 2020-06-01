@@ -90,9 +90,9 @@ class CheckoutSession implements SectionSourceInterface
     }
 
     /**
-     * Create and save Amazon Checkout Session Id
+     * Create Amazon Checkout Session
      */
-    public function createCheckoutSessionId()
+    public function createCheckoutSession()
     {
         return $this->checkoutSessionManagement->createCheckoutSession($this->session->getQuote());
     }
