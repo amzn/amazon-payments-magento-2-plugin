@@ -62,6 +62,11 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     private $amazonAdapter;
 
     /**
+     * @var array
+     */
+    private $carts = [];
+
+    /**
      * CheckoutSessionManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
@@ -101,11 +106,17 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     {
         if ($cartId instanceof CartInterface) {
             $result = $cartId;
-        } elseif (is_numeric($cartId)) {
-            $result = $this->cartRepository->getActive($cartId);
         } else {
-            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-            $result = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+            if (!isset($this->carts[$cartId])) {
+                if (is_numeric($cartId)) {
+                    $cart = $this->cartRepository->getActive($cartId);
+                } else {
+                    $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+                    $cart = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+                }
+                $this->carts[$cartId] = $cart;
+            }
+            $result = $this->carts[$cartId];
         }
         return $result;
     }
@@ -215,12 +226,21 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
             $checkoutSession = $this->getCheckoutSessionForCart($cart);
         }
         if ($checkoutSession && $this->canComplete($cart, $checkoutSession)) {
-            if (!$cart->getCustomer()->getId()) {
-                $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+            try {
+                if (!$cart->getCustomer()->getId()) {
+                    $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+                }
+                $result = $this->cartManagement->placeOrder($cart->getId());
+                $checkoutSession->complete();
+                $this->checkoutSessionRepository->save($checkoutSession);
+            } catch (\Exception $e) {
+                $session = $this->amazonAdapter->getCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId());
+                if (isset($session['chargePermissionId'])) {
+                    $response = $this->amazonAdapter->closeChargePermission($cart->getStoreId(), $session['chargePermissionId'], 'ERROR: ' . $e->getMessage(), true);
+                }
+                $this->cancelCheckoutSession($cartId);
+                throw $e;
             }
-            $result = $this->cartManagement->placeOrder($cart->getId());
-            $checkoutSession->complete();
-            $this->checkoutSessionRepository->save($checkoutSession);
         }
         return $result;
     }
