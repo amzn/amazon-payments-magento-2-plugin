@@ -296,6 +296,25 @@ class AmazonPayV2Adapter
     }
 
     /**
+     * @param int $storeId
+     * @param string $chargePermissionId
+     * @param string $reason
+     * @param boolean $cancelPendingCharges
+     * @return array
+     */
+    public function closeChargePermission($storeId, $chargePermissionId, $reason, $cancelPendingCharges = false)
+    {
+        $payload = [
+            'closureReason' => $reason,
+            'cancelPendingCharges' => $cancelPendingCharges,
+        ];
+
+        $response = $this->clientFactory->create($storeId)->closeChargePermission($chargePermissionId, $payload);
+
+        return $this->processResponse($response, __FUNCTION__);
+    }
+
+    /**
      * AuthorizeClient and SaleClient Gateway Command
      *
      * @param $data
