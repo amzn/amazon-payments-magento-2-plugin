@@ -24,8 +24,6 @@ use Amazon\Payment\Domain\AmazonAuthorizationResponseFactory;
 use Amazon\Payment\Domain\AmazonCaptureResponseFactory;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
-use Amazon\Payment\Api\Data\PendingAuthorizationInterfaceFactory;
-use Amazon\Payment\Api\Data\PendingCaptureInterfaceFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Framework\App\ObjectManager;
@@ -38,6 +36,8 @@ use Magento\Framework\App\ObjectManager;
 class AmazonPaymentAdapter
 {
     const SUCCESS_CODES = ['Open', 'Closed', 'Completed'];
+
+    const PENDING_CODE = 'Pending';
 
     /**
      * @var Logger
@@ -75,16 +75,6 @@ class AmazonPaymentAdapter
     private $coreHelper;
 
     /**
-     * @var PendingCaptureInterfaceFactory
-     */
-    private $pendingCaptureFactory;
-
-    /**
-     * @var PendingAuthorizationInterfaceFactory
-     */
-    private $pendingAuthorizationFactory;
-
-    /**
      * @var UrlInterface
      */
     private $urlBuilder;
@@ -105,8 +95,6 @@ class AmazonPaymentAdapter
      * @param AmazonCaptureResponseFactory $amazonCaptureResponseFactory
      * @param AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory
      * @param AmazonAuthorizationResponseFactory $amazonAuthorizationResponseFactory
-     * @param PendingCaptureInterfaceFactory $pendingCaptureFactory
-     * @param PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory
      * @param SubjectReader $subjectReader
      * @param Data $coreHelper
      * @param Logger $logger
@@ -119,8 +107,6 @@ class AmazonPaymentAdapter
         AmazonCaptureResponseFactory $amazonCaptureResponseFactory,
         AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory,
         AmazonAuthorizationResponseFactory $amazonAuthorizationResponseFactory,
-        PendingCaptureInterfaceFactory $pendingCaptureFactory,
-        PendingAuthorizationInterfaceFactory $pendingAuthorizationFactory,
         SubjectReader $subjectReader,
         Data $coreHelper,
         Logger $logger,
@@ -135,8 +121,6 @@ class AmazonPaymentAdapter
         $this->amazonAuthorizationResponseFactory = $amazonAuthorizationResponseFactory;
         $this->subjectReader = $subjectReader;
         $this->coreHelper = $coreHelper;
-        $this->pendingCaptureFactory = $pendingCaptureFactory;
-        $this->pendingAuthorizationFactory = $pendingAuthorizationFactory;
         $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
         $this->orderLinkFactory = $orderLinkFactory ?: ObjectManager::getInstance()->get(OrderLinkFactory::class);
         $this->orderRepository = $orderRepository ?: ObjectManager::getInstance()->get(OrderRepository::class);
@@ -288,7 +272,7 @@ class AmazonPaymentAdapter
         if ($authorizeResponse->getCaptureTransactionId() || $authorizeResponse->getAuthorizeTransactionId()) {
             $response['authorize_transaction_id'] = $authorizeResponse->getAuthorizeTransactionId();
 
-            if ($authorizeResponse->getStatus()->getState() == 'Pending' && $authMode == 'synchronous_possible') {
+            if ($authorizeResponse->getStatus()->getState() == self::PENDING_CODE && $authMode == 'synchronous_possible') {
                 if ($captureNow) {
                     $response['capture_transaction_id'] = $authorizeResponse->getCaptureTransactionId();
                 }
@@ -325,8 +309,8 @@ class AmazonPaymentAdapter
     }
 
     /**
-     * @param $data
-     * @param $storeId
+     * @param array $data
+     * @param string $storeId
      * @return array
      */
     public function completeCapture($data, $storeId)
@@ -340,25 +324,14 @@ class AmazonPaymentAdapter
             $captureResponse = $this->amazonCaptureResponseFactory->create(['response' => $responseParser]);
             $capture = $captureResponse->getDetails();
 
-            if (in_array($capture->getStatus()->getState(), self::SUCCESS_CODES)) {
+            $captureCode = $capture->getStatus()->getState();
+            $successCodes = array_merge(self::SUCCESS_CODES, [self::PENDING_CODE]);
+            if (in_array($captureCode, $successCodes)) {
                 $response = [
                     'status' => true,
                     'transaction_id' => $capture->getTransactionId(),
-                    'reauthorized' => false
+                    'pending' => $captureCode == self::PENDING_CODE,
                 ];
-            } elseif ($capture->getStatus()->getState() == 'Pending') {
-                $order = $this->subjectReader->getOrder();
-
-                try {
-                    $this->pendingCaptureFactory->create()
-                        ->setCaptureId($capture->getTransactionId())
-                        ->setOrderId($order->getId())
-                        ->setPaymentId($order->getPayment()->getEntityId())
-                        ->save();
-                } catch (\Exception $e) {
-                    $log['error'] = __('AmazonPaymentAdapter: Unable to capture pending information for capture.');
-                    $this->logger->debug($log);
-                }
             } else {
                 $response['response_code'] = $capture->getReasonCode();
             }
