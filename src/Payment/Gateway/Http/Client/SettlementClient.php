@@ -37,8 +37,12 @@ class SettlementClient extends AbstractClient
                 'currency_code' => $data['currency_code'],
                 'capture_reference_id' => $data['amazon_order_reference_id'] . '-C' . time()
             ];
+            if (isset($data['seller_note'])) {
+                $captureData['seller_capture_note'] = $data['seller_note'];
+            }
 
-            $response = $this->adapter->completeCapture($captureData, $data['store_id']);
+            $response = $this->adapter->completeCapture($captureData, $data['store_id'], $data['amazon_order_reference_id']);
+            $response['reauthorized'] = false;
         } else {
             // if invalid - reauthorize and capture
             $captureData = [
@@ -49,6 +53,9 @@ class SettlementClient extends AbstractClient
                 'custom_information' => $data['custom_information'],
                 'platform_id' => $data['platform_id']
             ];
+            if (isset($data['seller_note'])) {
+                $captureData['seller_authorization_note'] = $data['seller_note'];
+            }
             $response = $this->adapter->authorize($data, true);
             $response['reauthorized'] = true;
         }

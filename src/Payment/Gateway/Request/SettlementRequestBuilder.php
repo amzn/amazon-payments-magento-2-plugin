@@ -82,6 +82,41 @@ class SettlementRequestBuilder implements BuilderInterface
         $this->logger = $logger;
     }
 
+    /**
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return \Magento\Sales\Model\Order\Invoice
+     */
+    protected function getCurrentInvoice($payment)
+    {
+        $result = null;
+        $order = $payment->getOrder();
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            if (!$invoice->getId()) {
+                $result = $invoice;
+                break;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return string
+     */
+    protected function getSellerNote($payment)
+    {
+        $result = '';
+        $invoice = $this->getCurrentInvoice($payment);
+        if ($invoice && $invoice->getComments()) {
+            foreach ($invoice->getComments() as $comment) {
+                if ($comment->getComment()) {
+                    $result = $comment->getComment();
+                    break;
+                }
+            }
+        }
+        return $result;
+    }
 
     /**
      * @param array $buildSubject
@@ -123,6 +158,10 @@ class SettlementRequestBuilder implements BuilderInterface
                 if (isset($buildSubject['request_payment_authorization']) && $buildSubject['request_payment_authorization']) {
                     $data['request_payment_authorization'] = true;
                 }
+        }
+
+        if ($this->coreHelper->isSandboxEnabled('store', $orderDO->getStoreId())) {
+            $data['seller_note'] = $this->getSellerNote($paymentDO->getPayment());
         }
 
         return $data;
