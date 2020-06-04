@@ -62,8 +62,6 @@ class CheckoutProcessor
             $shippingConfig['children']['address-list']['rendererTemplates']['new-customer-address']
             ['component'] = 'Amazon_PayV2/js/view/shipping-address/address-renderer/default';
 
-            $paymentConfig['children']['payments-list']['component'] = 'Amazon_PayV2/js/view/payment/list';
-
             if ($this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
                 $billingConfig = &$paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form'];
             } else {
