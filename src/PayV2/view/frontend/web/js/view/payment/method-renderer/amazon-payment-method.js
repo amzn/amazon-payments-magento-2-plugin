@@ -8,6 +8,7 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/address-converter',
         'Magento_Checkout/js/model/checkout-data-resolver',
+        'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/quote',
         'uiRegistry',
         'Amazon_PayV2/js/model/billing-address/form-address-state',
@@ -24,6 +25,7 @@ define(
         checkoutData,
         addressConverter,
         checkoutDataResolver,
+        additionalValidators,
         quote,
         registry,
         billingFormAddressState,
@@ -100,7 +102,7 @@ define(
                     event.preventDefault();
                 }
 
-                if (this.validate()) {
+                if (this.validate() && additionalValidators.validate()) {
                     //this.isPlaceOrderActionAllowed(false);
                     placeOrder = placeOrderAction(this.getData());
                 }
