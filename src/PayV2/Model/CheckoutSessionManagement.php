@@ -52,6 +52,11 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     private $checkoutSessionRepository;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var AmazonConfig
      */
     private $amazonConfig;
@@ -74,6 +79,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
      * @param \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
      */
@@ -84,6 +90,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
         \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
         \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
     )
@@ -94,6 +101,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $this->cartRepository = $cartRepository;
         $this->checkoutSessionFactory = $checkoutSessionFactory;
         $this->checkoutSessionRepository = $checkoutSessionRepository;
+        $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
     }
@@ -138,6 +146,24 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     protected function canComplete($cartId, $checkoutSession)
     {
         return $this->getCart($cartId)->getIsActive() && $checkoutSession->getUpdatedAt();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfig($cartId)
+    {
+        $result = [];
+        if ($this->amazonConfig->isEnabled()) {
+            $result = [
+                'merchant_id' => $this->amazonConfig->getMerchantId(),
+                'currency' => $this->amazonConfig->getCurrencyCode(),
+                'language' => $this->amazonConfig->getLanguage(),
+                'pay_only' => $this->amazonHelper->isPayOnly($this->getCart($cartId)),
+                'sandbox' => $this->amazonConfig->isSandboxEnabled(),
+            ];
+        }
+        return $result;
     }
 
     /**
