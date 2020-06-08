@@ -28,11 +28,14 @@ class Data extends AbstractHelper
     }
 
     /**
+     * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      */
-    public function isPayOnly()
+    public function isPayOnly($quote = null)
     {
-        $quote = $this->helperCheckout->getQuote();
+        if ($quote === null) {
+            $quote = $this->helperCheckout->getQuote();
+        }
         return $quote->hasItems() ? $quote->isVirtual() : true;
     }
 

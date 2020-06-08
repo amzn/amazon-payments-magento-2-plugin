@@ -34,6 +34,7 @@ define([
             },
             isAddressLoaded: billingFormAddressState.isLoaded,
             isAddressEditable: true,
+            isPayOnly: false,
         },
 
         /**
@@ -82,7 +83,7 @@ define([
                 amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
                 changeAction: 'changePayment'
             });
-            if (!amazonStorage.isPayOnly(true)) {
+            if (!this.isPayOnly) {
                 $elem.click(function () {
                     amazonStorage.setIsEditPaymentFlag(true);
                 });

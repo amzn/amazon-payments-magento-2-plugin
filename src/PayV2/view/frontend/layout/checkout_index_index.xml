@@ -91,6 +91,9 @@
                                                                     <item name="component" xsi:type="string">Amazon_PayV2/js/view/checkout-address</item>
                                                                     <item name="sortOrder" xsi:type="string">0</item>
                                                                     <item name="displayArea" xsi:type="string">amazon-payv2-address</item>
+                                                                    <item name="config" xsi:type="array">
+                                                                        <item name="isPayOnly" xsi:type="helper" helper="Amazon\PayV2\Helper\Data::isPayOnly"/>
+                                                                    </item>
                                                                 </item>
                                                             </item>
                                                         </item>

@@ -65,6 +65,7 @@ define(
             },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonCheckout: amazonStorage.isAmazonCheckout(),
+            isPayOnly: false,
             rates: shippingService.getShippingRates(),
 
             /**
@@ -73,7 +74,7 @@ define(
             initialize: function () {
                 self = this;
                 this._super();
-                if (!amazonStorage.isPayOnly(true) && this.isAmazonCheckout) {
+                if (!this.isPayOnly && this.isAmazonCheckout) {
                     this.getShippingAddressFromAmazon();
                     if (amazonStorage.getIsEditPaymentFlag()) {
                         amazonStorage.setIsEditPaymentFlag(false);

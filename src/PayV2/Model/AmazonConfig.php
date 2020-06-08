@@ -20,6 +20,14 @@ use Magento\Store\Model\ScopeInterface;
 
 class AmazonConfig
 {
+    const LANG_DE = 'de_DE';
+    const LANG_FR = 'fr_FR';
+    const LANG_ES = 'es_ES';
+    const LANG_IT = 'it_IT';
+    const LANG_JA = 'ja_JP';
+    const LANG_UK = 'en_GB';
+    const LANG_US = 'en_US';
+
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
@@ -36,6 +44,11 @@ class AmazonConfig
     private $clientIpHelper;
 
     /**
+     * @var \Magento\Framework\Locale\Resolver
+     */
+    private $localeResolver;
+
+    /**
      * @var \Magento\Framework\App\State
      */
     private $appState;
@@ -45,18 +58,20 @@ class AmazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Amazon\PayV2\Helper\ClientIp $clientIpHelper
+     * @param \Magento\Framework\Locale\Resolver $localeResolver
+     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Amazon\PayV2\Helper\ClientIp $clientIpHelper,
-        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\Locale\Resolver $localeResolver,
         \Magento\Framework\App\State $appState
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->clientIpHelper = $clientIpHelper;
-        $this->urlBuilder = $urlBuilder;
+        $this->localeResolver = $localeResolver;
         $this->appState = $appState;
     }
 
@@ -109,6 +124,51 @@ class AmazonConfig
     public function getRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->getPaymentRegion($scope, $scopeCode);
+    }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return string
+     */
+    public function getLanguage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $paymentRegion = $this->getRegion($scope, $scopeCode);
+        @list($lang, $region) = explode('_', $this->localeResolver->getLocale());
+        switch ($lang) {
+            case 'de':
+                $result = self::LANG_DE;
+                break;
+            case 'fr':
+                $result = self::LANG_FR;
+                break;
+            case 'es':
+                $result = self::LANG_ES;
+                break;
+            case 'it':
+                $result = self::LANG_IT;
+                break;
+            case 'ja':
+                $result = self::LANG_JA;
+                break;
+            case 'en':
+                $result = $paymentRegion == 'us' ? self::LANG_US : self::LANG_UK;
+                break;
+        }
+        if (!isset($result)) {
+            switch ($paymentRegion) {
+                case 'jp':
+                    $result = self::LANG_JA;
+                    break;
+                case 'us':
+                    $result = self::LANG_US;
+                    break;
+                default:
+                    $result = self::LANG_UK;
+                    break;
+            }
+        }
+        return $result;
     }
 
     /**
