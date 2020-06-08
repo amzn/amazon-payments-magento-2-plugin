@@ -22,6 +22,12 @@ interface CheckoutSessionManagementInterface
 {
     /**
      * @param mixed $cartId
+     * @return mixed
+     */
+    public function getConfig($cartId);
+
+    /**
+     * @param mixed $cartId
      * @return string
      */
     public function createCheckoutSession($cartId);

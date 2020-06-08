@@ -14,28 +14,44 @@
  */
 define([
     'jquery',
-    'Magento_Customer/js/customer-data',
-    'Amazon_PayV2/js/model/amazon-payv2-config',
+    'Amazon_PayV2/js/action/checkout-session-config-load',
     'Amazon_PayV2/js/model/storage',
     'mage/url',
     'Amazon_PayV2/js/amazon-checkout',
-], function ($, customerData, amazonPayV2Config, amazonStorage, url, amazonCheckout) {
+], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout) {
     'use strict';
 
     if (amazonStorage.isEnabled) {
         $.widget('amazon.AmazonButton', {
             options: {
                 payOnly: null,
-                forcePayOnly: false,
-                placement: amazonPayV2Config.getValue('placement'),
+                placement: 'Cart',
+            },
+
+            _loadButtonConfig: function (callback) {
+                checkoutSessionConfigLoad(function (checkoutSessionConfig) {
+                    callback({
+                        merchantId: checkoutSessionConfig['merchant_id'],
+                        createCheckoutSession: {
+                            url: url.build('amazon_payv2/checkout/createSession'),
+                            method: 'PUT'
+                        },
+                        ledgerCurrency: checkoutSessionConfig['currency'],
+                        checkoutLanguage: checkoutSessionConfig['language'],
+                        productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
+                        placement: this.options.placement,
+                        sandbox: checkoutSessionConfig['sandbox'],
+                    });
+                }.bind(this));
             },
 
             /**
+             * @param {boolean} isCheckoutSessionPayOnly
              * @returns {boolean}
              * @private
              */
-            _isPayOnly: function () {
-                var result = this.options.forcePayOnly || amazonStorage.isPayOnly(true);
+            _isPayOnly: function (isCheckoutSessionPayOnly) {
+                var result = isCheckoutSessionPayOnly;
                 if (result && this.options.payOnly !== null) {
                     result = this.options.payOnly;
                 }
@@ -48,30 +64,13 @@ define([
             _create: function () {
                 var $buttonContainer = this.element;
                 amazonCheckout.withAmazonCheckout(function (amazon, args) {
-                    var buttonPreferences = {
-                            merchantId: amazonPayV2Config.getValue('merchantId'),
-                            createCheckoutSession: {
-                                url: url.build('amazon_payv2/checkout/createSession'),
-                                method: 'PUT'
-                            },
-                            ledgerCurrency: amazonPayV2Config.getValue('currency'),
-                            checkoutLanguage: amazonPayV2Config.getValue('language'),
-                            productType: this._isPayOnly() ? 'PayOnly' : 'PayAndShip',
-                            placement: this.options.placement,
-                            sandbox: amazonPayV2Config.getValue('sandbox'),
-                        },
-                        buttonPreferencesJson = JSON.stringify(buttonPreferences);
-                    if ($buttonContainer.data('button-preferences') !== buttonPreferencesJson) {
-                        $buttonContainer.empty();
-                        $buttonContainer.data('button-preferences', buttonPreferencesJson);
-
-                        var $buttonRoot = $('<div></div>');
-                        $buttonRoot.uniqueId();
-                        $buttonContainer.append($buttonRoot);
-
-                        amazon.Pay.renderButton('#' + $buttonRoot.attr('id'), buttonPreferences);
+                    var $buttonRoot = $('<div></div>');
+                    $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
+                    $buttonContainer.empty().append($buttonRoot);
+                    this._loadButtonConfig(function (buttonConfig) {
+                        amazon.Pay.renderButton('#' + $buttonRoot.empty().uniqueId().attr('id'), buttonConfig);
                         $('.amazon-button-container-v2 .field-tooltip').fadeIn();
-                    }
+                    });
                 }, this);
             },
 
