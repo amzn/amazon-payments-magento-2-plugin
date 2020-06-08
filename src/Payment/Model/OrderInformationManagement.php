@@ -25,7 +25,6 @@ use Amazon\Payment\Domain\AmazonSetOrderDetailsResponse;
 use Amazon\Payment\Domain\AmazonSetOrderDetailsResponseFactory;
 use Exception;
 use Magento\Checkout\Model\Session;
-use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Quote\Model\Quote;
@@ -76,11 +75,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     private $config;
 
     /**
-     * @var ProductMetadata
-     */
-    private $productMetadata;
-
-    /**
      * OrderInformationManagement constructor.
      * @param Session $session
      * @param ClientFactoryInterface $clientFactory
@@ -89,7 +83,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
      * @param AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory
      * @param QuoteLinkInterfaceFactory $quoteLinkFactory
      * @param LoggerInterface $logger
-     * @param ProductMetadata $productMetadata
      */
     public function __construct(
         Session $session,
@@ -99,7 +92,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory,
         QuoteLinkInterfaceFactory $quoteLinkFactory,
         LoggerInterface $logger,
-        ProductMetadata $productMetadata,
         UrlInterface $urlBuilder = null
     ) {
         $this->session                              = $session;
@@ -109,7 +101,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
         $this->quoteLinkFactory                     = $quoteLinkFactory;
         $this->logger                               = $logger;
-        $this->productMetadata                      = $productMetadata;
         $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
     }
 
@@ -137,31 +128,18 @@ class OrderInformationManagement implements OrderInformationManagementInterface
                 'currency_code'             => $quote->getQuoteCurrencyCode(),
                 'store_name'                => $storeName,
                 'custom_information'        =>
-                    'Magento Version : ' . $this->productMetadata->getVersion() . ' ' .
+                    'Magento Version : 2, ' .
                     'Plugin Version : ' . $this->coreHelper->getVersion()
                 ,
                 'platform_id'               => $this->config->getValue('platform_id')
             ];
 
             $responseParser = $this->clientFactory->create($storeId)->setOrderReferenceDetails($data);
-            try {
-                $response       = $this->amazonSetOrderDetailsResponseFactory->create(
-                    [
-                    'response' => $responseParser
-                    ]
-                );
+            $response = $this->amazonSetOrderDetailsResponseFactory->create([
+                'response' => $responseParser
+            ]);
 
-                $this->validateConstraints($response, $allowedConstraints);
-            } catch (AmazonServiceUnavailableException $e) {
-                if($e->getApiErrorCode() == 'OrderReferenceNotModifiable') {
-                    $this->logger->warning(
-                        "Could not modify Amazon order details for $amazonOrderReferenceId: "
-                        . $e->getApiErrorMessage()
-                    );
-                } else {
-                    throw $e;
-                }
-            }
+            $this->validateConstraints($response, $allowedConstraints);
         } catch (LocalizedException $e) {
             throw $e;
         } catch (Exception $e) {

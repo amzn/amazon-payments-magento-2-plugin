@@ -241,11 +241,13 @@
 
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SingleCountryAllowConfig" stepKey="SingleCountryAllowConfig"/>
             <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
+            <createData entity="DefaultCountryAllowConfig" stepKey="DefaultCountryAllowConfig"/>
             <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>

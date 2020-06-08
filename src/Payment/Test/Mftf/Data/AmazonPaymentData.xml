@@ -47,6 +47,70 @@
     <entity name="SampleAmazonLwaEnabled" type="lwa_enabled">
         <data key="value">1</data>
     </entity>
+    <!-- Partial capture support configuration -->
+    <entity name="MultiInvoiceAmazonPaymentConfig" type="amazon_payment_config_state">
+        <requiredEntity type="merchant_id">MultiInvoiceAmazonMerchantId</requiredEntity>
+        <requiredEntity type="access_key">MultiInvoiceAmazonAccessKey</requiredEntity>
+        <requiredEntity type="secret_key">MultiInvoiceAmazonSecretKey</requiredEntity>
+        <requiredEntity type="client_id">MultiInvoiceAmazonClientId</requiredEntity>
+        <requiredEntity type="client_secret">MultiInvoiceAmazonClientSecret</requiredEntity>
+        <requiredEntity type="payment_region">MultiInvoiceAmazonPaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">SampleAmazonSandbox</requiredEntity>
+        <requiredEntity type="payment_action">SampleAmazonPaymentAction</requiredEntity>
+        <requiredEntity type="authorization_mode">SampleAmazonAuthorizationMode</requiredEntity>
+        <requiredEntity type="amazon_pay_active">SampleAmazonPayActive</requiredEntity>
+        <requiredEntity type="lwa_enabled">DefaultAmazonLwaEnabled</requiredEntity>
+    </entity>
+    <entity name="MultiInvoiceAmazonMerchantId" type="merchant_id">
+        <data key="value">{{_CREDS.amazon/v1_multi_invoice_merchant_id}}</data>
+    </entity>
+    <entity name="MultiInvoiceAmazonAccessKey" type="access_key">
+        <data key="value">{{_CREDS.amazon/v1_multi_invoice_access_key}}</data>
+    </entity>
+    <entity name="MultiInvoiceAmazonSecretKey" type="secret_key">
+        <data key="value">{{_CREDS.amazon/v1_multi_invoice_secret_key}}</data>
+    </entity>
+    <entity name="MultiInvoiceAmazonClientId" type="client_id">
+        <data key="value">{{_CREDS.amazon/v1_multi_invoice_client_id}}</data>
+    </entity>
+    <entity name="MultiInvoiceAmazonClientSecret" type="client_secret">
+        <data key="value">{{_CREDS.amazon/v1_multi_invoice_client_secret}}</data>
+    </entity>
+    <entity name="MultiInvoiceAmazonPaymentRegion" type="payment_region">
+        <data key="value">{{_CREDS.amazon/v1_multi_invoice_region}}</data>
+    </entity>
+    <!-- No partial capture support configuration -->
+    <entity name="SingleInvoiceAmazonPaymentConfig" type="amazon_payment_config_state">
+        <requiredEntity type="merchant_id">SingleInvoiceAmazonMerchantId</requiredEntity>
+        <requiredEntity type="access_key">SingleInvoiceAmazonAccessKey</requiredEntity>
+        <requiredEntity type="secret_key">SingleInvoiceAmazonSecretKey</requiredEntity>
+        <requiredEntity type="client_id">SingleInvoiceAmazonClientId</requiredEntity>
+        <requiredEntity type="client_secret">SingleInvoiceAmazonClientSecret</requiredEntity>
+        <requiredEntity type="payment_region">SingleInvoiceAmazonPaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">SampleAmazonSandbox</requiredEntity>
+        <requiredEntity type="payment_action">SampleAmazonPaymentAction</requiredEntity>
+        <requiredEntity type="authorization_mode">SampleAmazonAuthorizationMode</requiredEntity>
+        <requiredEntity type="amazon_pay_active">SampleAmazonPayActive</requiredEntity>
+        <requiredEntity type="lwa_enabled">DefaultAmazonLwaEnabled</requiredEntity>
+    </entity>
+    <entity name="SingleInvoiceAmazonMerchantId" type="merchant_id">
+        <data key="value">{{_CREDS.amazon/v1_single_invoice_merchant_id}}</data>
+    </entity>
+    <entity name="SingleInvoiceAmazonAccessKey" type="access_key">
+        <data key="value">{{_CREDS.amazon/v1_single_invoice_access_key}}</data>
+    </entity>
+    <entity name="SingleInvoiceAmazonSecretKey" type="secret_key">
+        <data key="value">{{_CREDS.amazon/v1_single_invoice_secret_key}}</data>
+    </entity>
+    <entity name="SingleInvoiceAmazonClientId" type="client_id">
+        <data key="value">{{_CREDS.amazon/v1_single_invoice_client_id}}</data>
+    </entity>
+    <entity name="SingleInvoiceAmazonClientSecret" type="client_secret">
+        <data key="value">{{_CREDS.amazon/v1_single_invoice_client_secret}}</data>
+    </entity>
+    <entity name="SingleInvoiceAmazonPaymentRegion" type="payment_region">
+        <data key="value">{{_CREDS.amazon/v1_single_invoice_region}}</data>
+    </entity>
     <!-- default configuration used to restore Magento config -->
     <entity name="DefaultAmazonPaymentConfig" type="amazon_payment_config_state">
         <requiredEntity type="merchant_id">DefaultAmazonMerchantId</requiredEntity>

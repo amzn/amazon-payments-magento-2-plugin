@@ -56,6 +56,6 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
         $output .= __('Module version') . ': ' . $version;
         $output .= "</div>";
-        return $output;
+        return '<div id="row_' . $element->getHtmlId() . '">' . $output . '</div>';
     }
 }

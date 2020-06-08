@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="AmazonCurrencyConfig" dataType="amazon_currency_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/currency/" method="POST">
+        <object key="groups" dataType="amazon_currency_config">
+            <object key="options" dataType="amazon_currency_config">
+                <object key="fields" dataType="amazon_currency_config">
+                    <object key="base" dataType="base">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="default" dataType="default">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="allow" dataType="allow">
+                        <array key="value">
+                            <value>string</value>
+                        </array>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="DefaultAmazonCurrencyConfig" dataType="default_amazon_currency_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/currency/" method="POST">
+        <object key="groups" dataType="default_amazon_currency_config">
+            <object key="options" dataType="default_amazon_currency_config">
+                <object key="fields" dataType="default_amazon_currency_config">
+                    <object key="base" dataType="default_amazon_currency_config">
+                        <object key="inherit" dataType="amazonCurrencyBaseFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="default" dataType="default_amazon_currency_config">
+                        <object key="inherit" dataType="amazonCurrencyDefaultFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="allow" dataType="default_amazon_currency_config">
+                        <object key="inherit" dataType="amazonCurrencyAllowFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

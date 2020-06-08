@@ -18,7 +18,6 @@ namespace Amazon\Payment\Gateway\Request;
 
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Framework\App\ProductMetadata;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Amazon\Core\Helper\Data;
 use Amazon\Core\Model\AmazonConfig;
@@ -33,11 +32,6 @@ class AuthorizationRequestBuilder implements BuilderInterface
      * @var ConfigInterface
      */
     private $config;
-
-    /**
-     * @var ProductMetadata
-     */
-    private $productMetaData;
 
     /**
      * @var SubjectReader
@@ -68,7 +62,6 @@ class AuthorizationRequestBuilder implements BuilderInterface
      * AuthorizationRequestBuilder constructor.
      *
      * @param ConfigInterface $config
-     * @param ProductMetadata $productMetadata
      * @param SubjectReader $subjectReader
      * @param Data $coreHelper
      * @param AmazonConfig $amazonConfig
@@ -77,7 +70,6 @@ class AuthorizationRequestBuilder implements BuilderInterface
      */
     public function __construct(
         ConfigInterface $config,
-        ProductMetaData $productMetadata,
         SubjectReader $subjectReader,
         Data $coreHelper,
         AmazonConfig $amazonConfig,
@@ -87,7 +79,6 @@ class AuthorizationRequestBuilder implements BuilderInterface
         $this->config = $config;
         $this->coreHelper = $coreHelper;
         $this->amazonConfig = $amazonConfig;
-        $this->productMetaData = $productMetadata;
         $this->subjectReader = $subjectReader;
         $this->eventManager = $eventManager;
         $this->categoryExclusion = $categoryExclusion;
@@ -152,7 +143,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
                     'currency_code' => $currencyCode,
                     'store_name' => $storeName,
                     'custom_information' =>
-                        'Magento Version : ' . $this->productMetaData->getVersion() . ' ' .
+                        'Magento Version : 2, ' .
                         'Plugin Version : ' . $this->coreHelper->getVersion(),
                     'platform_id' => $this->config->getValue('platform_id'),
                     'request_payment_authorization' => true
@@ -163,15 +154,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
             $data['additional_information'] =
                 $payment->getAdditionalInformation(AdditionalInformation::KEY_SANDBOX_SIMULATION_REFERENCE);
 
-            $eventData = [
-                'amazon_order_reference_id' => $amazonId,
-                'authorization_amount' => $total,
-                'currency_code' => $currencyCode,
-                'authorization_reference_id' => $amazonId . '-A' . time(),
-                'capture_now' => false,
-            ];
-
-            $transport = new DataObject($eventData);
+            $transport = new DataObject($data);
             $this->eventManager->dispatch(
                 'amazon_payment_authorize_before',
                 [
@@ -180,6 +163,7 @@ class AuthorizationRequestBuilder implements BuilderInterface
                     'transport' => $transport
                 ]
             );
+            $data = $transport->getData();
         }
 
         return $data;
