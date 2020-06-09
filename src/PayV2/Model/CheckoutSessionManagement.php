@@ -52,6 +52,11 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     private $checkoutSessionRepository;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var AmazonConfig
      */
     private $amazonConfig;
@@ -62,6 +67,11 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     private $amazonAdapter;
 
     /**
+     * @var array
+     */
+    private $carts = [];
+
+    /**
      * CheckoutSessionManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
@@ -69,6 +79,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
      * @param \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
      */
@@ -79,6 +90,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
         \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
         \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
     )
@@ -89,6 +101,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $this->cartRepository = $cartRepository;
         $this->checkoutSessionFactory = $checkoutSessionFactory;
         $this->checkoutSessionRepository = $checkoutSessionRepository;
+        $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
     }
@@ -101,11 +114,17 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     {
         if ($cartId instanceof CartInterface) {
             $result = $cartId;
-        } elseif (is_numeric($cartId)) {
-            $result = $this->cartRepository->getActive($cartId);
         } else {
-            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-            $result = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+            if (!isset($this->carts[$cartId])) {
+                if (is_numeric($cartId)) {
+                    $cart = $this->cartRepository->getActive($cartId);
+                } else {
+                    $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+                    $cart = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
+                }
+                $this->carts[$cartId] = $cart;
+            }
+            $result = $this->carts[$cartId];
         }
         return $result;
     }
@@ -127,6 +146,24 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     protected function canComplete($cartId, $checkoutSession)
     {
         return $this->getCart($cartId)->getIsActive() && $checkoutSession->getUpdatedAt();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfig($cartId)
+    {
+        $result = [];
+        if ($this->amazonConfig->isEnabled()) {
+            $result = [
+                'merchant_id' => $this->amazonConfig->getMerchantId(),
+                'currency' => $this->amazonConfig->getCurrencyCode(),
+                'language' => $this->amazonConfig->getLanguage(),
+                'pay_only' => $this->amazonHelper->isPayOnly($this->getCart($cartId)),
+                'sandbox' => $this->amazonConfig->isSandboxEnabled(),
+            ];
+        }
+        return $result;
     }
 
     /**
@@ -214,12 +251,21 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
             $checkoutSession = $this->getCheckoutSessionForCart($cart);
         }
         if ($checkoutSession && $this->canComplete($cart, $checkoutSession)) {
-            if (!$cart->getCustomer()->getId()) {
-                $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+            try {
+                if (!$cart->getCustomer()->getId()) {
+                    $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+                }
+                $result = $this->cartManagement->placeOrder($cart->getId());
+                $checkoutSession->complete();
+                $this->checkoutSessionRepository->save($checkoutSession);
+            } catch (\Exception $e) {
+                $session = $this->amazonAdapter->getCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId());
+                if (isset($session['chargePermissionId'])) {
+                    $response = $this->amazonAdapter->closeChargePermission($cart->getStoreId(), $session['chargePermissionId'], 'ERROR: ' . $e->getMessage(), true);
+                }
+                $this->cancelCheckoutSession($cartId);
+                throw $e;
             }
-            $result = $this->cartManagement->placeOrder($cart->getId());
-            $checkoutSession->complete();
-            $this->checkoutSessionRepository->save($checkoutSession);
         }
         return $result;
     }

@@ -28,11 +28,6 @@ class CheckoutSession implements SectionSourceInterface
     private $session;
 
     /**
-     * @var \Amazon\PayV2\Helper\Data
-     */
-    private $amazonHelper;
-
-    /**
      * @var \Amazon\PayV2\Model\CheckoutSessionManagement
      */
     private $checkoutSessionManagement;
@@ -40,16 +35,13 @@ class CheckoutSession implements SectionSourceInterface
     /**
      * CheckoutSession constructor.
      * @param \Magento\Checkout\Model\Session $session
-     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement
      */
     public function __construct(
         \Magento\Checkout\Model\Session $session,
-        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement
     ) {
         $this->session = $session;
-        $this->amazonHelper = $amazonHelper;
         $this->checkoutSessionManagement = $checkoutSessionManagement;
     }
 
@@ -59,10 +51,17 @@ class CheckoutSession implements SectionSourceInterface
     public function getSectionData()
     {
         $data = [
-            'isPayOnly' => $this->amazonHelper->isPayOnly(),
             'checkoutSessionId' => $this->getCheckoutSessionId(),
         ];
         return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->checkoutSessionManagement->getConfig($this->session->getQuote());
     }
 
     /**

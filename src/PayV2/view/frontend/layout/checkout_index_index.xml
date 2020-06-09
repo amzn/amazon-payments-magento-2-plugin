@@ -91,6 +91,9 @@
                                                                     <item name="component" xsi:type="string">Amazon_PayV2/js/view/checkout-address</item>
                                                                     <item name="sortOrder" xsi:type="string">0</item>
                                                                     <item name="displayArea" xsi:type="string">amazon-payv2-address</item>
+                                                                    <item name="config" xsi:type="array">
+                                                                        <item name="isPayOnly" xsi:type="helper" helper="Amazon\PayV2\Helper\Data::isPayOnly"/>
+                                                                    </item>
                                                                 </item>
                                                             </item>
                                                         </item>
@@ -113,6 +116,17 @@
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="amazon_payment_v2" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                        <item name="customer-email" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="before-login-form" xsi:type="array">
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="amazon-checkout-revert" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">Amazon_PayV2/js/view/checkout-revert</item>
                                                                         </item>
                                                                     </item>
                                                                 </item>

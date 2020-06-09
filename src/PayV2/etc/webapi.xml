@@ -16,6 +16,12 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/amazon-v2-checkout-session/:cartId/config" method="GET">
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="getConfig"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
     <route url="/V1/amazon-v2-checkout-session/:cartId/billing-address" method="GET">
         <service class="Amazon\PayV2\Api\AddressManagementInterface" method="getBillingAddress"/>
         <resources>
