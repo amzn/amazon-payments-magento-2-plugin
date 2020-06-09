@@ -13,6 +13,13 @@
  * permissions and limitations under the License.
  */
 var config = {
+    config: {
+        mixins: {
+            'Magento_Checkout/js/view/payment/list': {
+                'Amazon_PayV2/js/view/payment/list-mixin': true
+            }
+        }
+    },
     map: {
         '*': {
             amazonPayV2ProductAdd: 'Amazon_PayV2/js/amazon-product-add',

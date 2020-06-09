@@ -77,16 +77,6 @@ define([
         },
 
         /**
-         * @param defaultResult
-         * @returns {boolean}
-         */
-        isPayOnly: function (defaultResult) {
-            var sessionValue = customerData.get(sectionKey)()['isPayOnly'];
-            var result = typeof sessionValue === 'boolean' ? sessionValue : defaultResult;
-            return result;
-        },
-
-        /**
          * @param value
          * @returns {exports}
          */
