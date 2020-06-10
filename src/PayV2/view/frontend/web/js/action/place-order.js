@@ -67,6 +67,16 @@ define(
                     if (response === true) {
                         checkoutSessionUpdateAction(function (redirectUrl) {
                             customerData.invalidate(['cart']);
+                            customerData.set('checkout-data', {
+                                'selectedShippingAddress': null,
+                                'shippingAddressFromData': null,
+                                'newCustomerShippingAddress': null,
+                                'selectedShippingRate': null,
+                                'selectedPaymentMethod': null,
+                                'selectedBillingAddress': null,
+                                'billingAddressFromData': null,
+                                'newCustomerBillingAddress': null
+                            });
                             amazonStorage.clearAmazonCheckout();
                             window.location.replace(redirectUrl);
                         });
