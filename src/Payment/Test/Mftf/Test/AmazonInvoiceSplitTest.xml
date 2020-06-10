@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonInvoiceSplit">
+        <annotations>
+            <stories value="Amazon Pay Invoice"/>
+            <title value="Admin user must be able to split invoices when configuration allows"/>
+            <description value="Admin user must be able to split invoices when configuration allows"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_invoice"/>
+            <group value="amazon_payment"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct1"/>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct2"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SplitInvoiceAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!-- Go to product 1 page and add to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct1StoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct1ToCart"/>
+
+        <!-- Go to product 2 page and add to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2StoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct2.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct2ToCart"/>
+
+        <!-- Click on mini cart -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+
+        <!-- Login (redirect) -->
+        <click selector="{{AmazonCheckoutSection.miniCartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup" />
+
+        <!-- Place order -->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order in backend -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+
+        <!-- Create Invoice 1 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice1"/>
+        <waitForPageLoad stepKey="waitForInvoicePage1"/>
+        <fillField stepKey="fillQty" userInput="1" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}"/>
+        <fillField stepKey="fillNoQty" userInput="0" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQty"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice1"/>
+        <waitForPageLoad stepKey="waitForLoadPage1"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage1"/>
+
+        <!-- Create Invoice 2 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice2"/>
+        <waitForPageLoad stepKey="waitForInvoicePage2"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2"/>
+        <waitForPageLoad stepKey="waitForLoadPage2"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage2"/>
+    </test>
+</tests>
