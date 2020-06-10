@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutDisplayLanguage" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Complete checkout with non-default display language setting"/>
+            <title value="Amazon Pay Checkout Display Language"/>
+            <description value="Perform checkout with non-default display language and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+            <group value="amazon_payment"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <magentoCLI command="config:set payment/amazon_payment/button_display_language de_DE" stepKey="setDeDisplayLanguage"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="config:set payment/amazon_payment/button_display_language ''" stepKey="setDeDisplayLanguage"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
+</tests>

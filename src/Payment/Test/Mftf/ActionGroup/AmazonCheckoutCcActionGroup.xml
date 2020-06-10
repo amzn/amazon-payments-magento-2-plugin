@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Select credit card number and submit-->
+    <actionGroup name="AmazonCheckoutCcActionGroup">
+        <arguments>
+            <argument name="cc" defaultValue="1111" type="string"/>
+        </arguments>
+        <executeJS function="return window.name;" stepKey="topName"/>
+        <!--Get wallet iframe name (dynamic)-->
+        <executeJS function="return jQuery('#walletWidgetDiv iframe').attr('name');" stepKey="iframeName"/>
+        <!--Expand Wallet Widget to expose all CC# (and avoid JS paging)-->
+        <executeJS function="jQuery('#walletWidgetDiv').css('height', '450px');" stepKey="executeJsHeight"/>
+        <!--Select CC#-->
+        <switchToIFrame userInput="{$iframeName}" stepKey="switchToIFrameWidget"/>
+        <executeJS function="$('.card-number:contains({{cc}})').closest('a').click();" stepKey="executeJsCc"/>
+        <!--Place order-->
+        <switchToWindow userInput="{$topName}" stepKey="switchToWindowTop" />
+        <waitForPageLoad stepKey="waitForPageLoadPayment1" />
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+    </actionGroup>
+</actionGroups>

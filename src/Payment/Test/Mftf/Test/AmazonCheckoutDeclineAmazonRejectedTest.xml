@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutDeclineAmazonRejected" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline AmazonRejected"/>
+            <description value="Test CC decline message, logout, and redirect to cart with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+            <group value="amazon_payment"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="2323" />
+        </actionGroup>
+        <!--Decline Error Message-->
+        <waitForText userInput="please choose another payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+        <!--Verify iframe wallet message-->
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+    </test>
+</tests>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutProductDetail" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Success page elements are presented for placed order with Amazon Pay"/>
+            <title value="Amazon Pay Checkout from Product Details"/>
+            <description value="Perform checkout from product details page and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+            <group value="amazon_payment"/>
+        </annotations>
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
+</tests>
