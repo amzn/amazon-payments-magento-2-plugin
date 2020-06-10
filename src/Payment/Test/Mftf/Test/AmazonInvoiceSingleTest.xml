@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonInvoiceSingle">
+        <annotations>
+            <stories value="Amazon Pay Invoice"/>
+            <title value="Admin user must be unable to split invoices when configuration disallows"/>
+            <description value="Admin user must be unable to split invoices when configuration disallows"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_invoice"/>
+            <group value="amazon_payment"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct1"/>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct2"/>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SingleInvoiceAmazonPaymentConfig"/>
+            <createData entity="EUAmazonCurrencyConfig" stepKey="SingleInvoiceAmazonCurrencyConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!-- Go to product 1 page and add to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct1StoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct1ToCart"/>
+
+        <!-- Go to product 2 page and add to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2StoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct2.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct2ToCart"/>
+
+        <!-- Click on mini cart -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+
+        <!-- Login (redirect) -->
+        <click selector="{{AmazonCheckoutSection.miniCartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup" />
+
+        <!-- Place order -->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order in backend -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+
+        <!-- Create Invoice -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoicePage"/>
+
+        <!-- Verify invoice item qtys cannot be changed -->
+        <dontSeeElement stepKey="dontSeeItemQtyToInvoice1" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}"/>
+        <dontSeeElement stepKey="dontSeeItemQtyToInvoice2" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}"/>
+        <dontSeeElement stepKey="dontSeeUpdateQty" selector="{{AdminInvoiceItemsSection.updateQty}}"/>
+
+        <!-- Submit and verify the invoice created -->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
+        <waitForPageLoad stepKey="waitForLoadPage"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage"/>
+    </test>
+</tests>

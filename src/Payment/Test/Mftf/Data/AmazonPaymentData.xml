@@ -12,7 +12,6 @@
         <requiredEntity type="payment_action">SampleAmazonPaymentAction</requiredEntity>
         <requiredEntity type="authorization_mode">SampleAmazonAuthorizationMode</requiredEntity>
         <requiredEntity type="amazon_pay_active">SampleAmazonPayActive</requiredEntity>
-        <requiredEntity type="lwa_enabled">SampleAmazonLwaEnabled</requiredEntity>
     </entity>
     <entity name="SampleAmazonMerchantId" type="merchant_id">
         <data key="value">{{_CREDS.amazon/v1_merchant_id}}</data>
@@ -44,72 +43,36 @@
     <entity name="SampleAmazonPayActive" type="amazon_pay_active">
         <data key="value">1</data>
     </entity>
-    <entity name="SampleAmazonLwaEnabled" type="lwa_enabled">
-        <data key="value">1</data>
-    </entity>
-    <!-- Partial capture support configuration -->
-    <entity name="MultiInvoiceAmazonPaymentConfig" type="amazon_payment_config_state">
-        <requiredEntity type="merchant_id">MultiInvoiceAmazonMerchantId</requiredEntity>
-        <requiredEntity type="access_key">MultiInvoiceAmazonAccessKey</requiredEntity>
-        <requiredEntity type="secret_key">MultiInvoiceAmazonSecretKey</requiredEntity>
-        <requiredEntity type="client_id">MultiInvoiceAmazonClientId</requiredEntity>
-        <requiredEntity type="client_secret">MultiInvoiceAmazonClientSecret</requiredEntity>
-        <requiredEntity type="payment_region">MultiInvoiceAmazonPaymentRegion</requiredEntity>
+    <!-- EU configuration used to test region-specific features -->
+    <entity name="EUAmazonPaymentConfig" type="amazon_payment_config_state">
+        <requiredEntity type="merchant_id">EUAmazonMerchantId</requiredEntity>
+        <requiredEntity type="access_key">EUAmazonAccessKey</requiredEntity>
+        <requiredEntity type="secret_key">EUAmazonSecretKey</requiredEntity>
+        <requiredEntity type="client_id">EUAmazonClientId</requiredEntity>
+        <requiredEntity type="client_secret">EUAmazonClientSecret</requiredEntity>
+        <requiredEntity type="payment_region">EUAmazonPaymentRegion</requiredEntity>
         <requiredEntity type="sandbox">SampleAmazonSandbox</requiredEntity>
         <requiredEntity type="payment_action">SampleAmazonPaymentAction</requiredEntity>
         <requiredEntity type="authorization_mode">SampleAmazonAuthorizationMode</requiredEntity>
         <requiredEntity type="amazon_pay_active">SampleAmazonPayActive</requiredEntity>
-        <requiredEntity type="lwa_enabled">DefaultAmazonLwaEnabled</requiredEntity>
     </entity>
-    <entity name="MultiInvoiceAmazonMerchantId" type="merchant_id">
-        <data key="value">{{_CREDS.amazon/v1_multi_invoice_merchant_id}}</data>
+    <entity name="EUAmazonMerchantId" type="merchant_id">
+        <data key="value">{{_CREDS.amazon/v1_eu_merchant_id}}</data>
     </entity>
-    <entity name="MultiInvoiceAmazonAccessKey" type="access_key">
-        <data key="value">{{_CREDS.amazon/v1_multi_invoice_access_key}}</data>
+    <entity name="EUAmazonAccessKey" type="access_key">
+        <data key="value">{{_CREDS.amazon/v1_eu_access_key}}</data>
     </entity>
-    <entity name="MultiInvoiceAmazonSecretKey" type="secret_key">
-        <data key="value">{{_CREDS.amazon/v1_multi_invoice_secret_key}}</data>
+    <entity name="EUAmazonSecretKey" type="secret_key">
+        <data key="value">{{_CREDS.amazon/v1_eu_secret_key}}</data>
     </entity>
-    <entity name="MultiInvoiceAmazonClientId" type="client_id">
-        <data key="value">{{_CREDS.amazon/v1_multi_invoice_client_id}}</data>
+    <entity name="EUAmazonClientId" type="client_id">
+        <data key="value">{{_CREDS.amazon/v1_eu_client_id}}</data>
     </entity>
-    <entity name="MultiInvoiceAmazonClientSecret" type="client_secret">
-        <data key="value">{{_CREDS.amazon/v1_multi_invoice_client_secret}}</data>
+    <entity name="EUAmazonClientSecret" type="client_secret">
+        <data key="value">{{_CREDS.amazon/v1_eu_client_secret}}</data>
     </entity>
-    <entity name="MultiInvoiceAmazonPaymentRegion" type="payment_region">
-        <data key="value">{{_CREDS.amazon/v1_multi_invoice_region}}</data>
-    </entity>
-    <!-- No partial capture support configuration -->
-    <entity name="SingleInvoiceAmazonPaymentConfig" type="amazon_payment_config_state">
-        <requiredEntity type="merchant_id">SingleInvoiceAmazonMerchantId</requiredEntity>
-        <requiredEntity type="access_key">SingleInvoiceAmazonAccessKey</requiredEntity>
-        <requiredEntity type="secret_key">SingleInvoiceAmazonSecretKey</requiredEntity>
-        <requiredEntity type="client_id">SingleInvoiceAmazonClientId</requiredEntity>
-        <requiredEntity type="client_secret">SingleInvoiceAmazonClientSecret</requiredEntity>
-        <requiredEntity type="payment_region">SingleInvoiceAmazonPaymentRegion</requiredEntity>
-        <requiredEntity type="sandbox">SampleAmazonSandbox</requiredEntity>
-        <requiredEntity type="payment_action">SampleAmazonPaymentAction</requiredEntity>
-        <requiredEntity type="authorization_mode">SampleAmazonAuthorizationMode</requiredEntity>
-        <requiredEntity type="amazon_pay_active">SampleAmazonPayActive</requiredEntity>
-        <requiredEntity type="lwa_enabled">DefaultAmazonLwaEnabled</requiredEntity>
-    </entity>
-    <entity name="SingleInvoiceAmazonMerchantId" type="merchant_id">
-        <data key="value">{{_CREDS.amazon/v1_single_invoice_merchant_id}}</data>
-    </entity>
-    <entity name="SingleInvoiceAmazonAccessKey" type="access_key">
-        <data key="value">{{_CREDS.amazon/v1_single_invoice_access_key}}</data>
-    </entity>
-    <entity name="SingleInvoiceAmazonSecretKey" type="secret_key">
-        <data key="value">{{_CREDS.amazon/v1_single_invoice_secret_key}}</data>
-    </entity>
-    <entity name="SingleInvoiceAmazonClientId" type="client_id">
-        <data key="value">{{_CREDS.amazon/v1_single_invoice_client_id}}</data>
-    </entity>
-    <entity name="SingleInvoiceAmazonClientSecret" type="client_secret">
-        <data key="value">{{_CREDS.amazon/v1_single_invoice_client_secret}}</data>
-    </entity>
-    <entity name="SingleInvoiceAmazonPaymentRegion" type="payment_region">
-        <data key="value">{{_CREDS.amazon/v1_single_invoice_region}}</data>
+    <entity name="EUAmazonPaymentRegion" type="payment_region">
+        <data key="value">de</data>
     </entity>
     <!-- default configuration used to restore Magento config -->
     <entity name="DefaultAmazonPaymentConfig" type="amazon_payment_config_state">
@@ -123,7 +86,6 @@
         <requiredEntity type="payment_action">DefaultAmazonPaymentAction</requiredEntity>
         <requiredEntity type="authorization_mode">DefaultAmazonAuthorizationMode</requiredEntity>
         <requiredEntity type="amazon_pay_active">DefaultAmazonPayActive</requiredEntity>
-        <requiredEntity type="lwa_enabled">DefaultAmazonLwaEnabled</requiredEntity>
     </entity>
     <entity name="DefaultAmazonMerchantId" type="merchant_id">
         <data key="value"/>
@@ -155,7 +117,8 @@
     <entity name="DefaultAmazonPayActive" type="amazon_pay_active">
         <data key="value">0</data>
     </entity>
-    <entity name="DefaultAmazonLwaEnabled" type="lwa_enabled">
-        <data key="value">0</data>
+    <!-- Misc configurations -->
+    <entity name="AmazonLwaConfig">
+        <data key="path">payment/amazon_payment/lwa_enabled</data>
     </entity>
 </entities>

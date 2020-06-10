@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutDeclineTransactionTimedOutAutomatic" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline TransactionTimedOut with Automatic Authorization)"/>
+            <description value="Test CC timeout message with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+            <group value="amazon_payment"/>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode asynchronous" />
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode synchronous" />
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup" />
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="5656" />
+        </actionGroup>
+        <!--Transaction declined error message-->
+        <waitForText userInput="Transaction has been declined" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+    </test>
+</tests>
