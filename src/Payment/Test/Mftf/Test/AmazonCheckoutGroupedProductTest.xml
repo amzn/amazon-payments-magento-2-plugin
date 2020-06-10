@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutGroupedProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Complete checkout with bundled product"/>
+            <title value="Amazon Pay Checkout Bundled Product"/>
+            <description value="Perform checkout with bundled product and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+            <group value="amazon_payment"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <!--Create Grouped product with three simple product -->
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="simple3">
+                <field key="price">200.00</field>
+            </createData>
+            <createData entity="ApiProductWithDescription" stepKey="simple3" before="product">
+                <field key="price">300.00</field>
+            </createData>
+            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple1"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductTwo">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple2"/>
+            </updateData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addProductOne" stepKey="addProductThree">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="simple3"/>
+            </updateData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <deleteData createDataKey="simple1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simple2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="simple3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="product" stepKey="deleteGroupProduct"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!-- Fill Quantity and add Product to the cart -->
+        <actionGroup ref="StorefrontAddThreeGroupedProductToTheCartActionGroup" stepKey="addGropedProductsToTheCart">
+            <argument name="urlKey" value="$$product.custom_attributes[url_key]$$"/>
+            <argument name="product1" value="$$simple1.name$$"/>
+            <argument name="product2" value="$$simple2.name$$"/>
+            <argument name="product3" value="$$simple3.name$$"/>
+            <argument name="qty1" value="1"/>
+            <argument name="qty2" value="2"/>
+            <argument name="qty3" value="3"/>
+        </actionGroup>
+
+        <!--Open minicart-->
+        <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowMinicart" />
+        <waitForElement selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForCartLink" />
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart" />
+
+        <!--Login (redirect)-->
+        <click selector="{{AmazonCheckoutSection.miniCartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup" />
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+    </test>
+</tests>

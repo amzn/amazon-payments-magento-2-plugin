@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Begin checkout and proceed to final step-->
+    <actionGroup name="AmazonCheckoutBeginActionGroup">
+        <waitForElement selector="{{CheckoutShippingMethodsSection.shippingMethodRow}}" time="20" stepKey="apWaitForShipping"/>
+        <waitForPageLoad stepKey="apWaitPageLoadShipping" />
+
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="clickShippingMethod"/>
+        <waitForPageLoad stepKey="waitForPageLoadPayment1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadPayment2" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+    </actionGroup>
+</actionGroups>
