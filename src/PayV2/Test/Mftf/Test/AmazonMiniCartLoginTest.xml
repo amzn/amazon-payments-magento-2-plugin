@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonMiniCartLogin" extends="AmazonMiniCartButtonV2">
+        <annotations>
+            <stories value="Amazon Login"/>
+            <title value="User should be able to login to Amazon from the mini cart when enabled."/>
+            <description value="User should be able to login to Amazon from the mini cart when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_login"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the mini cart and login-->
+        <click selector="{{AmazonButtonSection.v2MiniCart}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
+    </test>
+</tests>
