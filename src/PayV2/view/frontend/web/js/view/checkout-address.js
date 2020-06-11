@@ -149,7 +149,7 @@ define(
              * @param email
              */
             setEmail: function(email) {
-                $('#customer-email').val(email);
+                $('#customer-email').val(email).trigger('change');
                 checkoutData.setInputFieldEmailValue(email);
                 checkoutData.setValidatedEmailValue(email);
                 quote.guestEmail = email;
