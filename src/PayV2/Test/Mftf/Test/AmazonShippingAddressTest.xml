@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ShippingAmazonAddress" extends="CheckoutAmazonButtonV2">
+    <test name="AmazonShippingAddress" extends="AmazonCheckoutButtonV2">
         <annotations>
             <stories value="Amazon Address"/>
             <title value="User should be able to use Amazon address as checkout shipping address."/>
