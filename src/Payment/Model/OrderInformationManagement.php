@@ -18,6 +18,7 @@ namespace Amazon\Payment\Model;
 use Amazon\Core\Client\ClientFactoryInterface;
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use Amazon\Core\Helper\Data as CoreHelper;
+use Amazon\Core\Model\AmazonConfig;
 use Amazon\Payment\Gateway\Config\Config;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Api\OrderInformationManagementInterface;
@@ -55,6 +56,11 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     private $coreHelper;
 
     /**
+     * @var AmazonConfig
+     */
+    private $amazonConfig;
+
+    /**
      * @var AmazonSetOrderDetailsResponseFactory
      */
     private $amazonSetOrderDetailsResponseFactory;
@@ -79,6 +85,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
      * @param Session $session
      * @param ClientFactoryInterface $clientFactory
      * @param CoreHelper $coreHelper
+     * @param AmazonConfig $amazonConfig
      * @param Config $config
      * @param AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory
      * @param QuoteLinkInterfaceFactory $quoteLinkFactory
@@ -88,6 +95,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         Session $session,
         ClientFactoryInterface $clientFactory,
         CoreHelper $coreHelper,
+        AmazonConfig $amazonConfig,
         Config $config,
         AmazonSetOrderDetailsResponseFactory $amazonSetOrderDetailsResponseFactory,
         QuoteLinkInterfaceFactory $quoteLinkFactory,
@@ -97,6 +105,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
         $this->session                              = $session;
         $this->clientFactory                        = $clientFactory;
         $this->coreHelper                           = $coreHelper;
+        $this->amazonConfig                         = $amazonConfig;
         $this->config                               = $config;
         $this->amazonSetOrderDetailsResponseFactory = $amazonSetOrderDetailsResponseFactory;
         $this->quoteLinkFactory                     = $quoteLinkFactory;
@@ -150,7 +159,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
 
     protected function validateCurrency($code)
     {
-        if ($this->coreHelper->getCurrencyCode() !== $code) {
+        if ($this->coreHelper->getCurrencyCode() !== $code && !$this->amazonConfig->canUseCurrency($code)) {
             throw new LocalizedException(__('The currency selected is not supported by Amazon Pay'));
         }
     }
