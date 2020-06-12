@@ -152,7 +152,7 @@
                             <label>Store Name</label>
                             <config_path>payment/amazon_payment/storename</config_path>
                         </field>
-                        <field id="multicurrency" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <field id="multicurrency" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Use Multi-currency</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/multicurrency</config_path>

@@ -611,10 +611,9 @@ class Data extends AbstractHelper
      */
     public function isCurrentCurrencySupportedByAmazon()
     {
-        $baseCurrency = $this->config->getBaseCurrencyCode();
         $regionCurrency = $this->getCurrencyCode();
         $currentCurrency = $this->config->getPresentmentCurrency();
-        return ($currentCurrency === $baseCurrency && $baseCurrency == $regionCurrency) || $this->config->canUseCurrency($currentCurrency);
+        return $currentCurrency === $regionCurrency || $this->config->canUseCurrency($currentCurrency);
     }
 
     /**
