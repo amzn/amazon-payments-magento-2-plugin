@@ -581,7 +581,7 @@ class SimplePath
             'isSecure'      => (int) ($this->request->isSecure()),
             'hasOpenssl'    => (int) (extension_loaded('openssl')),
             'formParams'    => $this->getFormParams(),
-            'isMultiCurrencyRegion' => (int) $this->amazonConfig->isMulticurrencyRegion(),
+            'isMultiCurrencyRegion' => (int) $this->amazonConfig->isMulticurrencyRegion($this->_scope, $this->_scopeId),
         ];
     }
 }

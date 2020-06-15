@@ -77,21 +77,20 @@ class AmazonConfig
      * Checks to see if store's selected region is a multicurrency region.
      * @param string $scope
      * @param null $scopeCode
-     * @param null $store
      * @return bool
      */
-    public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
+    public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         $mcRegions = $this->scopeConfig->getValue(
             'multicurrency/regions',
             $scope,
-            $store
+            $scopeCode
         );
 
         if ($mcRegions) {
             $allowedRegions = explode(',', $mcRegions);
 
-            if (in_array($this->getPaymentRegion(), $allowedRegions)) {
+            if (in_array($this->getPaymentRegion($scope, $scopeCode), $allowedRegions)) {
                 return true;
             }
         }
@@ -104,11 +103,10 @@ class AmazonConfig
      *
      * @param string $scope
      * @param null $scopeCode
-     * @param null $store
      *
      * @return bool
      */
-    public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
+    public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         $enabled = $this->scopeConfig->getValue(
             'payment/amazon_payment/multicurrency',
@@ -117,10 +115,25 @@ class AmazonConfig
         );
 
         if ($enabled) {
-            return $this->isMulticurrencyRegion($scope, $scopeCode, $store);
+            return $this->isMulticurrencyRegion($scope, $scopeCode);
         }
 
         return false;
+    }
+
+    /**
+     * @param string $currencyCode
+     * @param string $scope
+     * @param string $scopeCode
+     * @return boolean
+     */
+    public function canUseCurrency($currencyCode, $scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $result = false;
+        if ($this->multiCurrencyEnabled($scope, $scopeCode)) {
+            $result = in_array($currencyCode, explode(',', $this->scopeConfig->getValue('multicurrency/currencies', $scope, $scopeCode)));
+        }
+        return $result;
     }
 
     /**
@@ -131,23 +144,7 @@ class AmazonConfig
      */
     public function useMultiCurrency($store = null)
     {
-        if ($this->multiCurrencyEnabled()) {
-            // get allowed presentment currencies from config.xml
-            $currencies = $this->scopeConfig->getValue(
-                'multicurrency/currencies',
-                ScopeInterface::SCOPE_STORE,
-                $store
-            );
-
-            if ($currencies) {
-                $allowedCurrencies = explode(',', $currencies);
-
-                if (in_array($this->getCurrentCurrencyCode(), $allowedCurrencies)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return $this->canUseCurrency($this->getCurrentCurrencyCode(), ScopeInterface::SCOPE_STORE, $store);
     }
 
     /*
