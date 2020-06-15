@@ -34,16 +34,10 @@
             <argument name="config" xsi:type="object">Amazon\Payment\Gateway\Config\Config</argument>
         </arguments>
     </virtualType>
-    <virtualType name="AmazonCurrencyValidator" type="Amazon\Payment\Gateway\Validator\CurrencyValidator">
-        <arguments>
-            <argument name="config" xsi:type="object">Amazon\Payment\Gateway\Config\Config</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="AmazonValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="country" xsi:type="string">AmazonCountryValidator</item>
-                <item name="currency" xsi:type="string">AmazonCurrencyValidator</item>
             </argument>
         </arguments>
     </virtualType>
