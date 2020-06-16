@@ -539,9 +539,14 @@ class SimplePath
      */
     public function getRegion()
     {
-        $currency = $this->getConfig('currency/options/default');
+        $currency = $this->getCurrency();
 
-        $region = isset($this->_mapCurrencyRegion[$currency]) ? strtoupper($this->_mapCurrencyRegion[$currency]) : '';
+        $region = null;
+        if ($currency) {
+            $region = isset($this->_mapCurrencyRegion[$currency]) ? strtoupper($this->_mapCurrencyRegion[$currency]) : 'DE';
+        }
+
+
         if ($region == 'DE') {
             $region = 'Euro Region';
         }
@@ -555,7 +560,15 @@ class SimplePath
     public function getCurrency()
     {
         $currency = $this->getConfig('currency/options/default');
-        return (isset($this->_mapCurrencyRegion[$currency])) ? $currency : null;
+        $isCurrencyValid = isset($this->_mapCurrencyRegion[$currency]);
+        if (!$isCurrencyValid) {
+            if ($this->getConfig(CoreHelper::AMAZON_ACTIVE, $this->_scope, $this->_scopeId)) {
+                $isCurrencyValid = $this->amazonConfig->canUseCurrency($currency, $this->_scope, $this->_scopeId);
+            } else {
+                $isCurrencyValid = in_array($currency, $this->amazonConfig->getValidCurrencies($this->_scope, $this->_scopeId));
+            }
+        }
+        return $isCurrencyValid ? $currency : null;
     }
 
     /**
