@@ -122,6 +122,16 @@ class AmazonConfig
     }
 
     /**
+     * @param string $scope
+     * @param string $scopeCode
+     * @return array
+     */
+    public function getValidCurrencies($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return explode(',', $this->scopeConfig->getValue('multicurrency/currencies', $scope, $scopeCode));
+    }
+
+    /**
      * @param string $currencyCode
      * @param string $scope
      * @param string $scopeCode
@@ -131,7 +141,7 @@ class AmazonConfig
     {
         $result = false;
         if ($this->multiCurrencyEnabled($scope, $scopeCode)) {
-            $result = in_array($currencyCode, explode(',', $this->scopeConfig->getValue('multicurrency/currencies', $scope, $scopeCode)));
+            $result = in_array($currencyCode, $this->getValidCurrencies($scope, $scopeCode));
         }
         return $result;
     }
