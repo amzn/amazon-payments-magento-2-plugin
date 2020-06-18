@@ -25,6 +25,14 @@
     <preference for="Amazon\PayV2\Api\Data\AsyncInterface" type="Amazon\PayV2\Model\Async" />
     <preference for="Amazon\PayV2\Api\Data\CheckoutSessionInterface" type="Amazon\PayV2\Model\CheckoutSession" />
 
+    <type name="Magento\Framework\Console\CommandList">
+       <arguments>
+           <argument name="commands" xsi:type="array">
+               <item name="AmazonPayV2AsyncProcess" xsi:type="object">Amazon\PayV2\Command\Async\ProcessCommand</item>
+           </argument>
+       </arguments>
+   </type>
+
     <!-- Loggers -->
     <type name="Amazon\PayV2\Logger\AlexaLogger">
         <arguments>

@@ -17,10 +17,16 @@
 namespace Amazon\PayV2\Gateway\Request;
 
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Amazon\PayV2\Model\AmazonConfig;
 use Amazon\PayV2\Gateway\Helper\SubjectReader;
 
 class SettlementRequestBuilder implements BuilderInterface
 {
+    /**
+     * @var AmazonConfig
+     */
+    private $amazonConfig;
+
     /**
      * @var SubjectReader
      */
@@ -28,12 +34,67 @@ class SettlementRequestBuilder implements BuilderInterface
 
     /**
      * AuthorizationRequestBuilder constructor.
+     * @param AmazonConfig $amazonConfig
      * @param SubjectReader $subjectReader
      */
     public function __construct(
+        AmazonConfig $amazonConfig,
         SubjectReader $subjectReader
     ) {
+        $this->amazonConfig = $amazonConfig;
         $this->subjectReader = $subjectReader;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return \Magento\Sales\Model\Order\Invoice
+     */
+    protected function getCurrentInvoice($payment)
+    {
+        $result = null;
+        $order = $payment->getOrder();
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            if (!$invoice->getId()) {
+                $result = $invoice;
+                break;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return string
+     */
+    protected function getComment($payment)
+    {
+        $result = '';
+        $invoice = $this->getCurrentInvoice($payment);
+        if ($invoice && $invoice->getComments()) {
+            foreach ($invoice->getComments() as $comment) {
+                if ($comment->getComment()) {
+                    $result = $comment->getComment();
+                    break;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Payment $payment
+     * @return array
+     */
+    protected function getHeaders($payment)
+    {
+        $result = [];
+        $data = (array) json_decode($this->getComment($payment), true);
+        foreach ($data as $key => $value) {
+            if (strpos($key, 'x-amz-pay') === 0) {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
     }
 
     /**
@@ -56,6 +117,9 @@ class SettlementRequestBuilder implements BuilderInterface
             'amount' => $total,
             'currency_code' => $currencyCode,
         ];
+        if ($this->amazonConfig->isSandboxEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $orderDO->getStoreId())) {
+            $data['headers'] = $this->getHeaders($paymentDO->getPayment());
+        }
 
         return $data;
     }

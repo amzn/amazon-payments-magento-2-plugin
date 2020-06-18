@@ -17,6 +17,8 @@
 namespace Amazon\PayV2\Model\AsyncManagement;
 
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 
 class Charge extends AbstractOperation
 {
@@ -29,6 +31,11 @@ class Charge extends AbstractOperation
      * @var \Amazon\PayV2\Logger\AsyncIpnLogger
      */
     private $asyncLogger;
+
+    /**
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
 
     /**
      * @var \Magento\Sales\Model\Service\InvoiceService
@@ -56,6 +63,7 @@ class Charge extends AbstractOperation
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
      * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
@@ -67,6 +75,7 @@ class Charge extends AbstractOperation
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
         \Amazon\PayV2\Logger\AsyncIpnLogger $asyncLogger,
+        \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Notification\NotifierInterface $notifier,
@@ -75,10 +84,27 @@ class Charge extends AbstractOperation
         parent::__construct($orderRepository, $transactionRepository, $searchCriteriaBuilder);
         $this->amazonAdapter = $amazonAdapter;
         $this->asyncLogger = $asyncLogger;
+        $this->invoiceRepository = $invoiceRepository;
         $this->invoiceService = $invoiceService;
         $this->transactionBuilder = $transactionBuilder;
         $this->notifier = $notifier;
         $this->urlBuilder = $urlBuilder;
+    }
+
+    /**
+     * @param string $chargeId
+     * @param OrderInterface $order
+     * @return \Magento\Sales\Model\Order\Invoice
+     */
+    protected function loadInvoice($chargeId, OrderInterface $order)
+    {
+        $this->searchCriteriaBuilder->addFilter(InvoiceInterface::TRANSACTION_ID, $chargeId . '-capture');
+        $this->searchCriteriaBuilder->addFilter(InvoiceInterface::ORDER_ID, $order->getEntityId());
+        $this->searchCriteriaBuilder->setPageSize(1);
+        $this->searchCriteriaBuilder->setCurrentPage(1);
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $invoices = $this->invoiceRepository->getList($searchCriteria)->getItems();
+        return count($invoices) ? current($invoices) : null;
     }
 
     /**
@@ -96,16 +122,16 @@ class Charge extends AbstractOperation
             if (isset($charge['statusDetail'])) {
                 switch ($charge['statusDetail']['state']) {
                     case 'Declined':
-                        $this->decline($order, $charge['statusDetail']);
+                        $this->decline($order, $chargeId, $charge['statusDetail']['reasonDescription']);
                         break;
                     case 'Canceled':
                         $this->cancel($order, $charge['statusDetail']);
                         break;
                     case 'Authorized':
-                        $this->authorize($order, $charge['chargeId']);
+                        $this->authorize($order, $chargeId);
                         break;
                     case 'Captured':
-                        $this->capture($order, $charge);
+                        $this->capture($order, $chargeId, $charge['captureAmount']['amount']);
                         break;
                 }
             }
@@ -116,13 +142,20 @@ class Charge extends AbstractOperation
      * Decline charge
      *
      * @param \Magento\Sales\Model\Order $order
+     * @param string $chargeId
+     * @param string $reason
      */
-    public function decline($order, $detail)
+    public function decline($order, $chargeId, $reason)
     {
+        $invoice = $this->loadInvoice($chargeId, $order);
+        if ($invoice) {
+            $invoice->cancel();
+            $order->addRelatedObject($invoice);
+        }
         if ($order->canHold() || $order->isPaymentReview()) {
             $this->setOnHold($order);
             $this->closeLastTransaction($order);
-            $order->addStatusHistoryComment($detail['reasonDescription']);
+            $order->addStatusHistoryComment($reason);
             $order->save();
 
             $this->notifier->addNotice(
@@ -182,28 +215,31 @@ class Charge extends AbstractOperation
      * Capture charge
      *
      * @param \Magento\Sales\Model\Order $order
-     * @param $charge
+     * @param string $chargeId
+     * @param float $chargeAmount
      */
-    public function capture($order, $charge)
+    public function capture($order, $chargeId, $chargeAmount)
     {
-        if ($order->canInvoice()) {
-            $payment = $order->getPayment();
-            $amount = $charge['captureAmount']['amount'];
-
+        $invoice = $this->loadInvoice($chargeId, $order);
+        if (!$invoice && $order->canInvoice()) {
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
+        }
+        if ($invoice) {
+            $payment = $order->getPayment();
+
             $invoice->pay();
             $order->addRelatedObject($invoice);
 
             $transaction = $this->transactionBuilder->setPayment($payment)
                 ->setOrder($order)
-                ->setTransactionId($charge['chargeId'] . '-capture')
+                ->setTransactionId($chargeId . '-capture')
                 ->build(Transaction::TYPE_CAPTURE);
 
-            $formattedAmount = $order->getBaseCurrency()->formatTxt($amount);
+            $formattedAmount = $order->getBaseCurrency()->formatTxt($chargeAmount);
             $message = __('Captured amount of %1 online.', $formattedAmount);
 
-            $payment->setDataUsingMethod('base_amount_paid_online', $amount);
+            $payment->setDataUsingMethod('base_amount_paid_online', $chargeAmount);
             $payment->addTransactionCommentsToOrder($transaction, $message);
             $this->setProcessing($order);
             $order->save();

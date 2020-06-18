@@ -30,7 +30,8 @@ class SettlementClient extends AbstractClient
             $data['store_id'],
             $data['charge_id'],
             $data['amount'],
-            $data['currency_code']
+            $data['currency_code'],
+            $data['headers'] ?? []
         );
         return $response;
     }
