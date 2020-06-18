@@ -77,7 +77,7 @@ class AuthorizationSaleHandler implements HandlerInterface
                 case 'Captured':
                     $payment->setIsTransactionClosed(true);
                     break;
-                case 'CaptureInitated':
+                case 'CaptureInitiated':
                     $payment->setIsTransactionClosed(false);
                     break;
             }
