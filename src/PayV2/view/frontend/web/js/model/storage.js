@@ -15,15 +15,12 @@
 
 define([
     'jquery',
-    'ko',
-    'Magento_Customer/js/customer-data',
     'Amazon_PayV2/js/model/amazon-payv2-config'
-], function ($, ko, customerData, amazonPayV2Config) {
+], function ($, amazonPayV2Config) {
     'use strict';
 
     var isEnabled = amazonPayV2Config.isDefined(),
-        sessionId,
-        sectionKey = 'amazon-checkout-session';
+        storage = $.initNamespaceStorage('amzn-checkout-session').localStorage;
 
     return {
         isEnabled: isEnabled,
@@ -41,9 +38,7 @@ define([
          * Clear Amazon Checkout Session ID and revert checkout
          */
         clearAmazonCheckout: function() {
-            var sessionData = customerData.get(sectionKey)();
-            sessionData['checkoutSessionId'] = null;
-            customerData.set(sectionKey, sessionData);
+            storage.removeAll();
         },
 
         /**
@@ -52,21 +47,12 @@ define([
          * @returns {*}
          */
         getCheckoutSessionId: function () {
-            if (typeof sessionId === 'undefined') {
-                sessionId = customerData.get(sectionKey)()['checkoutSessionId'];
-                if (!sessionId && window.location.search.indexOf('?amazonCheckoutSessionId=') != -1) {
-                    sessionId = window.location.search.replace('?amazonCheckoutSessionId=', '');
-                    this.reloadCheckoutSessionId();
-                }
+            var sessionId = storage.get('id');
+            if (typeof sessionId === 'undefined' && window.location.search.indexOf('?amazonCheckoutSessionId=') != -1) {
+                sessionId = window.location.search.replace('?amazonCheckoutSessionId=', '');
+                storage.set('id', sessionId);
             }
             return sessionId;
-        },
-
-        /**
-         * Reinit Amazon Checkout Session ID via Ajax
-         */
-        reloadCheckoutSessionId: function() {
-            customerData.reload([sectionKey]);
         },
 
         /**
@@ -81,9 +67,7 @@ define([
          * @returns {exports}
          */
         setIsEditPaymentFlag: function (value) {
-            var sessionData = customerData.get(sectionKey)();
-            sessionData['IsEditBillingClicked'] = value;
-            customerData.set(sectionKey, sessionData);
+            storage.set('is_edit_billing_clicked', value);
             return this;
         },
 
@@ -91,7 +75,7 @@ define([
          * @returns {boolean}
          */
         getIsEditPaymentFlag: function () {
-            return customerData.get(sectionKey)()['IsEditBillingClicked'];
+            return storage.get('is_edit_billing_clicked');
         }
     };
 });

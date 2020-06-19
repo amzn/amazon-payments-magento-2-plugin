@@ -15,12 +15,10 @@
  */
 namespace Amazon\PayV2\CustomerData;
 
-use Magento\Customer\CustomerData\SectionSourceInterface;
-
 /**
  * Amazon Checkout Session section
  */
-class CheckoutSession implements SectionSourceInterface
+class CheckoutSession
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -43,17 +41,6 @@ class CheckoutSession implements SectionSourceInterface
     ) {
         $this->session = $session;
         $this->checkoutSessionManagement = $checkoutSessionManagement;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSectionData()
-    {
-        $data = [
-            'checkoutSessionId' => $this->getCheckoutSessionId(),
-        ];
-        return $data;
     }
 
     /**

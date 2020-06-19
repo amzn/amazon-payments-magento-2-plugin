@@ -76,6 +76,14 @@ class CheckoutSession extends AbstractModel implements CheckoutSessionInterface
     /**
      * @inheritDoc
      */
+    public function setQuoteId($value)
+    {
+        return $this->setData(self::KEY_QUOTE_ID, $value);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getIsActive()
     {
         return $this->getData(self::KEY_IS_ACTIVE);
