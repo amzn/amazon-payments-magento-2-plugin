@@ -23,7 +23,7 @@ define([
     'use strict';
 
     var callbacks = [];
-    var localStorage = $.initNamespaceStorage('amzn-checkout-session').localStorage;
+    var localStorage = $.initNamespaceStorage('amzn-checkout-session-config').localStorage;
     return function (callback) {
         var cartId = customerData.get('cart')()['data_id'] || 0;
         if (cartId !== localStorage.get('cart_id')) {

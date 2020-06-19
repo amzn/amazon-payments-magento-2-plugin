@@ -18,6 +18,17 @@ define([
             this._super();
             this.visible = true;
             return this;
+        },
+
+        /**
+         * @param {Object} address
+         * @param {*} index
+         */
+        createRendererComponent: function (address, index) {
+            if (address.getType() === 'new-customer-address') {
+                // Only display one address from Amazon
+                this._super();
+            }
         }
     });
 });

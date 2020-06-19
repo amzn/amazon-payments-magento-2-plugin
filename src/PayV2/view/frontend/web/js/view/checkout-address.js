@@ -4,23 +4,14 @@ define(
     [
         'jquery',
         'uiComponent',
-        'ko',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/action/select-shipping-address',
-        'Magento_Checkout/js/model/shipping-rate-processor/new-address',
-        'Magento_Checkout/js/action/set-shipping-information',
         'Amazon_PayV2/js/model/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/address-converter',
         'Magento_Checkout/js/action/create-shipping-address',
-        'mage/storage',
-        'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Checkout/js/model/error-processor',
-        'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
-        'Magento_Customer/js/model/address-list',
         'Magento_Checkout/js/model/step-navigator',
         'uiRegistry',
         'Amazon_PayV2/js/action/checkout-session-address-load',
@@ -30,23 +21,14 @@ define(
     function (
         $,
         Component,
-        ko,
         customer,
         quote,
-        selectShippingAddress,
-        shippingProcessor,
-        setShippingInformationAction,
         amazonStorage,
         shippingService,
         addressConverter,
         createShippingAddress,
-        storage,
-        fullScreenLoader,
-        errorProcessor,
-        urlBuilder,
         checkoutData,
         checkoutDataResolver,
-        addressList,
         stepNavigator,
         registry,
         checkoutSessionAddressLoad,
@@ -60,9 +42,6 @@ define(
         require([amazonCheckout.getCheckoutModuleName()]);
 
         return Component.extend({
-            defaults: {
-                template: 'Amazon_PayV2/checkout-address'
-            },
             isCustomerLoggedIn: customer.isLoggedIn,
             isAmazonCheckout: amazonStorage.isAmazonCheckout(),
             isPayOnly: false,
@@ -84,31 +63,9 @@ define(
             },
 
             /**
-             * Call when component template is rendered
-             */
-            initAddress: function () {
-                var addressDataList = $.extend({}, quote.shippingAddress());
-
-                // Only display one address from Amazon
-                addressList.removeAll();
-
-                // Remove empty street array values for list view
-                if ($.isArray(addressDataList.street)) {
-                    addressDataList.street = addressDataList.street.filter(function (el) {
-                        return el != null;
-                    });
-                }
-
-                addressList.push(addressDataList);
-                this.setEmail(addressDataList.email);
-            },
-
-            /**
              * Retrieve shipping address from Amazon API
              */
             getShippingAddressFromAmazon: function () {
-                // Only display one address from Amazon
-                addressList.removeAll();
                 checkoutSessionAddressLoad('shipping', function (amazonAddress) {
                     var addressData = createShippingAddress(amazonAddress),
                         checkoutProvider = registry.get('checkoutProvider'),
@@ -139,8 +96,6 @@ define(
                     checkoutProvider.set('shippingAddress', addressConvert);
 
                     checkoutDataResolver.resolveEstimationAddress();
-
-                    self.initAddress();
                 });
             },
 
