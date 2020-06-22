@@ -122,6 +122,10 @@ class AmazonPayV2Adapter
             'storeId' => $this->amazonConfig->getClientId(),
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
+        $deliverySpecifications = $this->amazonConfig->getDeliverySpecifications();
+        if (!empty($deliverySpecifications)) {
+            $payload['deliverySpecifications'] = $deliverySpecifications;
+        }
 
         $response = $this->clientFactory->create($storeId)->createCheckoutSession($payload, $headers);
 
