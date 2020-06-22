@@ -57,7 +57,17 @@ class SettlementHandler implements HandlerInterface
         if (isset($response['chargeId'])) {
             $payment->setTransactionId($response['chargeId'].'-capture');
             $payment->setParentTransactionId($response['chargeId']);
-            $payment->setIsTransactionClosed(true);
+
+            switch ($response['statusDetail']['state']) {
+                case 'CaptureInitiated':
+                    $payment->setIsTransactionPending(true);
+                    $payment->setIsTransactionClosed(false);
+                    $this->asyncManagement->queuePendingAuthorization($response['chargeId']);
+                    break;
+                default:
+                    $payment->setIsTransactionClosed(true);
+                    break;
+            }
         }
     }
 }

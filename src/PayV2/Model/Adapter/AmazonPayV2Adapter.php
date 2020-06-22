@@ -227,11 +227,12 @@ class AmazonPayV2Adapter
      * @param $chargeId
      * @param $amount
      * @param $currency
+     * @param array $headers
      * @return mixed
      */
-    public function captureCharge($storeId, $chargeId, $amount, $currency)
+    public function captureCharge($storeId, $chargeId, $amount, $currency, $headers = [])
     {
-        $headers = $this->getIdempotencyHeader();
+        $headers = array_merge($headers, $this->getIdempotencyHeader());
 
         $payload = [
             'captureAmount' => $this->createPrice($amount, $currency),

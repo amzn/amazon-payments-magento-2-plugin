@@ -29,7 +29,7 @@ abstract class AbstractOperation
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
