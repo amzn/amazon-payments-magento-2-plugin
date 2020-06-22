@@ -43,6 +43,12 @@ interface CheckoutSessionInterface
     public function getQuoteId();
 
     /**
+     * @param int $value
+     * @return $this
+     */
+    public function setQuoteId($value);
+
+    /**
      * @return bool
      */
     public function getIsActive();
