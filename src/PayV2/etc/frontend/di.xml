@@ -24,13 +24,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
-        <arguments>
-            <argument name="sectionSourceMap" xsi:type="array">
-                <item name="amazon-checkout-session" xsi:type="string">Amazon\PayV2\CustomerData\CheckoutSession</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
         <plugin name="amazon_payv2_checkout_processor" type="Amazon\PayV2\Plugin\CheckoutProcessor" />
     </type>

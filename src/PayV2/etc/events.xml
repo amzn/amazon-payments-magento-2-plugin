@@ -19,4 +19,7 @@
     <event name="sales_order_shipment_track_save_after">
         <observer name="amazon_payv2_sales_order_shipment_track_save_after" instance="Amazon\PayV2\Observer\SalesOrderShipmentTrackAfter"/>
     </event>
+    <event name="sales_quote_merge_after">
+        <observer name="amazon_payv2_sales_quote_merge_after" instance="Amazon\PayV2\Observer\SalesQuoteMergeAfter"/>
+    </event>
 </config>
