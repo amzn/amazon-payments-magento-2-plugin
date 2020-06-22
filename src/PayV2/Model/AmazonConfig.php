@@ -44,6 +44,16 @@ class AmazonConfig
     private $clientIpHelper;
 
     /**
+     * @var \Magento\Directory\Model\AllowedCountries
+     */
+    private $countriesAllowed;
+
+    /**
+     * @var \Magento\Directory\Model\Config\Source\Country
+     */
+    private $countryConfig;
+
+    /**
      * @var \Magento\Framework\Locale\Resolver
      */
     private $localeResolver;
@@ -58,6 +68,8 @@ class AmazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Amazon\PayV2\Helper\ClientIp $clientIpHelper
+     * @param \Magento\Directory\Model\AllowedCountries $countriesAllowed
+     * @param \Magento\Directory\Model\Config\Source\Country $countryConfig
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      * @param \Magento\Framework\App\State $appState
      */
@@ -65,12 +77,16 @@ class AmazonConfig
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Amazon\PayV2\Helper\ClientIp $clientIpHelper,
+        \Magento\Directory\Model\AllowedCountries $countriesAllowed,
+        \Magento\Directory\Model\Config\Source\Country $countryConfig,
         \Magento\Framework\Locale\Resolver $localeResolver,
         \Magento\Framework\App\State $appState
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->clientIpHelper = $clientIpHelper;
+        $this->countriesAllowed = $countriesAllowed;
+        $this->countryConfig = $countryConfig;
         $this->localeResolver = $localeResolver;
         $this->appState = $appState;
     }
@@ -530,6 +546,40 @@ class AmazonConfig
             $scope,
             $scopeCode
         );
+    }
+
+    /**
+     * @param string $scope
+     * @param string $scopeCode
+     * @return array
+     */
+    public function getDeliverySpecifications($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $result = [];
+        $allCountries = array_column($this->countryConfig->toOptionArray(true), 'value');
+        $allowedCountries = $this->countriesAllowed->getAllowedCountries($scope, $scopeCode);
+        $allCountriesCount = count($allCountries);
+        $allowedCountriesCount = count($allowedCountries);
+        if ($allowedCountriesCount < $allCountriesCount) {
+            if ($allowedCountriesCount < $allCountriesCount / 2) {
+                $type = 'Allowed';
+                $countries = $allowedCountries;
+            } else {
+                $type = 'NotAllowed';
+                $countries = array_diff($allCountries, $allowedCountries);
+            }
+            $restrictions = [];
+            foreach ($countries as $country) {
+                $restrictions[$country] = new \stdClass();
+            }
+            $result = [
+                'addressRestrictions' => [
+                    'type' => $type,
+                    'restrictions' => $restrictions,
+                ],
+            ];
+        }
+        return $result;
     }
 
     /**
