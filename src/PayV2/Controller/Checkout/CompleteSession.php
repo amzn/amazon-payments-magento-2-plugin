@@ -33,6 +33,11 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     private $amazonCheckoutSession;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var ExceptionLogger
      */
     private $exceptionLogger;
@@ -53,6 +58,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
      * @param \Amazon\PayV2\CustomerData\CheckoutSession $amazonCheckoutSession
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ExceptionLogger|null $exceptionLogger
      */
     public function __construct(
@@ -60,6 +66,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
         \Amazon\PayV2\CustomerData\CheckoutSession $amazonCheckoutSession,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
@@ -67,6 +74,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->storeManager = $storeManager;
     }
 
     /*
@@ -74,20 +82,25 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
+        $scope = $this->storeManager->getStore()->getId();
         try {
             $orderId = $this->amazonCheckoutSession->completeCheckoutSession();
             if (!$orderId) {
                 throw new \Exception(__('Something went wrong. Please try again.'));
             }
             $this->updateVersionCookie();
-            return $this->_redirect('checkout/onepage/success');
+            return $this->_redirect('checkout/onepage/success', [
+                '_scope' => $scope,
+            ]);
         } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             $this->amazonCheckoutSession->clearCheckoutSessionId();
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        return $this->_redirect('checkout/cart');
+        return $this->_redirect('checkout/cart', [
+            '_scope' => $scope,
+        ]);
     }
 
     /**
