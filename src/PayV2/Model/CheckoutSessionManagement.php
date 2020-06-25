@@ -158,6 +158,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
             $result = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
+                'button_color' => $this->amazonConfig->getButtonColor(),
                 'language' => $this->amazonConfig->getLanguage(),
                 'pay_only' => $this->amazonHelper->isPayOnly($this->getCart($cartId)),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),

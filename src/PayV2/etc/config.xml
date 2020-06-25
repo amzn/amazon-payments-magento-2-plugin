@@ -27,6 +27,7 @@
         <payment>
             <amazon_payment_v2>
                 <active>0</active>
+                <button_color>Gold</button_color>
                 <is_gateway>1</is_gateway>
                 <title>Amazon Pay V2</title>
                 <sort_order>1</sort_order>
