@@ -219,6 +219,14 @@
                                 <field id="payment/us/amazon_payment/api_version">1</field>
                             </depends>
                         </field>
+                        <field id="button_color_v2" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Button Color</label>
+                            <config_path>payment/amazon_payment_v2/button_color</config_path>
+                            <source_model>Amazon\PayV2\Model\Config\Source\ButtonColor</source_model>
+                            <depends>
+                                <field id="payment/us/amazon_payment/api_version">2</field>
+                            </depends>
+                        </field>
                     </group>
                     <group id="extra_options" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <field id="checkout_review_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

@@ -144,6 +144,16 @@ class AmazonConfig
 
     /**
      * @param string $scope
+     * @param string $scopeCode
+     * @return string
+     */
+    public function getButtonColor($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2/button_color', $scope, $scopeCode);
+    }
+
+    /**
+     * @param string $scope
      * @param null $scopeCode
      * @return string
      */
