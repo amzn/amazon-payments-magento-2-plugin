@@ -37,6 +37,7 @@ define([
                             method: 'PUT'
                         },
                         ledgerCurrency: checkoutSessionConfig['currency'],
+                        buttonColor: checkoutSessionConfig['button_color'],
                         checkoutLanguage: checkoutSessionConfig['language'],
                         productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
                         placement: this.options.placement,
