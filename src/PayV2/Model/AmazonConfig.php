@@ -589,6 +589,16 @@ class AmazonConfig
                 ],
             ];
         }
+        $specialRestrictions = [];
+        if ($this->scopeConfig->getValue('payment/amazon_payment_v2/shipping_restrict_po_boxes', $scope, $scopeCode)) {
+            $specialRestrictions[] = 'RestrictPOBoxes';
+        }
+        if ($this->scopeConfig->getValue('payment/amazon_payment_v2/shipping_restrict_packstations', $scope, $scopeCode)) {
+            $specialRestrictions[] = 'RestrictPackstations';
+        }
+        if (!empty($specialRestrictions)) {
+            $result['specialRestrictions'] = $specialRestrictions;
+        }
         return $result;
     }
 
