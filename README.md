@@ -52,5 +52,5 @@ The following table provides an overview on which Git branch is compatible to wh
 
 | Magento Version | Github Branch | Latest release |
 | ------------- | ------------- | ------------- |
-| 2.2.4 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.2.1 |
-| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.0.2 |
+| 2.2.4 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.3.1 |
+| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.1.0 |
