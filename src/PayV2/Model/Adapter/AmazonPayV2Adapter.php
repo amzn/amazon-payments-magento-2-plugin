@@ -368,16 +368,16 @@ class AmazonPayV2Adapter
             $response['status'] = $clientResponse['status'];
         }
 
-        // Log error
-        if (!in_array($response['status'], [200, 201]) && $this->amazonConfig->isLoggingEnabled()) {
-            $this->logger->error($functionName . ' ' . $response['status'], $response);
-            $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            $this->logger->debug($functionName . ' backtrace', $debugBackTrace[2]);
-        } elseif ($this->amazonConfig->isLoggingDeveloper()) {
-            // Log full response if dev
+        // Log
+        $isError = !in_array($response['status'], [200, 201]);
+        if ($isError || $this->amazonConfig->isLoggingEnabled()) {
             $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
-            $this->logger->debug($functionName, $debugBackTrace[1]['args']);
-            $this->logger->debug(print_r($response, true));
+            $this->logger->debug($functionName . ' <- ', $debugBackTrace[1]['args']);
+            if ($isError) {
+                $this->logger->error($functionName . ' -> ', $response);
+            } else {
+                $this->logger->debug($functionName . ' -> ', $response);
+            }
         }
 
         return $response;
