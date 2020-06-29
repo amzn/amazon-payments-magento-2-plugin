@@ -239,14 +239,6 @@ class AmazonConfig
     }
 
     /**
-     * Is logging for developer mode?
-     */
-    public function isLoggingDeveloper()
-    {
-        return $this->appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER;
-    }
-
-    /**
      * Gets customer's current currency
      *
      * @return string
