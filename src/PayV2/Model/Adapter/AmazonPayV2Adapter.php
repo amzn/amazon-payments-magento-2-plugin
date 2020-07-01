@@ -177,7 +177,7 @@ class AmazonPayV2Adapter
             ],
             'merchantMetadata' => [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
-                'merchantStoreName' => $this->amazonConfig->getStoreName() ?: $store->getName(),
+                'merchantStoreName' => $this->amazonConfig->getStoreName(),
                 'customInformation' => $this->getMerchantCustomInformation(),
             ],
             'platformId' => $this->amazonConfig->getPlatformId(),
