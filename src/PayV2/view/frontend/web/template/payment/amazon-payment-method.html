@@ -4,13 +4,25 @@
                name="payment[method]"
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
-        <label data-bind="attr: {'for': getCode()}" class="label"><span>Amazon Pay</span></label>
+        <label data-bind="attr: {'for': getCode()}" class="label">
+            <img alt="Amazon Pay" data-bind="attr: { src: getLogoUrl() } "/>
+        </label>
+        <span data-bind="text: paymentDescriptor"/>
     </div>
     <div class="payment-method-content">
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <!-- ko if: isAmazonButtonVisible -->
+        <!-- ko if: isAmazonCheckout -->
+            <div class="amazon-payment-action-container">
+                <button class="action action-edit-payment"
+                        type="button"
+                        data-bind="afterRender: bindEditPaymentAction($element)">
+                    <span translate="'Edit Payment Method'"></span>
+                </button>
+            </div>
+        <!--/ko-->
+        <!-- ko ifnot: isAmazonCheckout -->
             <div class="amazon-button-container-v2">
                 <div class="amazon-button-column">
                     <div id="PayWithAmazonButton"
@@ -31,21 +43,23 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div class="actions-toolbar">
-            <div class="primary">
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="
-                        click: placeOrder,
-                        attr: {title: $t('Place Order')},
-                        css: {disabled: !isPlaceOrderActionAllowed()},
-                        enable: (getCode() == isChecked())
-                        "
-                        disabled>
-                    <span data-bind="i18n: 'Place Order'"></span>
-                </button>
+        <!-- ko if: isAmazonCheckout -->
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button class="action primary checkout"
+                            type="submit"
+                            data-bind="
+                            click: placeOrder,
+                            attr: {title: $t('Place Order')},
+                            css: {disabled: !isPlaceOrderActionAllowed()},
+                            enable: (getCode() == isChecked())
+                            "
+                            disabled>
+                        <span data-bind="i18n: 'Place Order'"></span>
+                    </button>
+                </div>
             </div>
-        </div>
+        <!--/ko-->
     </div>
 </div>
 

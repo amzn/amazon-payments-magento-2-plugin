@@ -70,14 +70,14 @@ class CheckoutProcessor
             $shippingConfig['children']['address-list']['rendererTemplates']['new-customer-address']
             ['component'] = 'Amazon_PayV2/js/view/shipping-address/address-renderer/default';
 
-            if ($this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
-                $billingConfig = &$paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form'];
-            } else {
+            if (!$this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
                 $billingConfig = &$paymentConfig['children']['afterMethods']['children']['billing-address-form'];
+            } else if ($this->amazonHelper->isBillingAddressRequired()) {
+                $billingConfig = &$paymentConfig['children']['payments-list']['children'][\Amazon\PayV2\Gateway\Config\Config::CODE . '-form'];
             }
-            $billingConfig['component'] = 'Amazon_PayV2/js/view/billing-address';
-            $billingConfig['isAddressEditable'] = $this->amazonConfig->isBillingAddressEditable();
-            $billingConfig['isPayOnly'] = $this->amazonHelper->isPayOnly();
+            if (isset($billingConfig)) {
+                $billingConfig['component'] = 'Amazon_PayV2/js/view/billing-address';
+            }
 
             unset($paymentConfig['children']['renders']['children']['amazonlogin']); // legacy
         } else {
