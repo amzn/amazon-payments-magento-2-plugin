@@ -115,7 +115,7 @@
                                                                     </item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="amazon_payment_v2" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="helper" helper="Amazon\PayV2\Helper\Data::isBillingAddressRequired"/>
                                                                         </item>
                                                                     </item>
                                                                 </item>

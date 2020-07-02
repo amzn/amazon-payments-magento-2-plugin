@@ -25,6 +25,11 @@ namespace Amazon\PayV2\Block;
 class Config extends \Magento\Framework\View\Element\Template
 {
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var \Amazon\PayV2\Model\AmazonConfig
      */
     private $amazonConfig;
@@ -32,13 +37,16 @@ class Config extends \Magento\Framework\View\Element\Template
     /**
      * Config constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig
     ) {
         parent::__construct($context);
+        $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
     }
 
@@ -51,6 +59,8 @@ class Config extends \Magento\Framework\View\Element\Template
             'region'                   => $this->amazonConfig->getRegion(),
             'code'                     => \Amazon\PayV2\Gateway\Config\Config::CODE,
             'is_method_available'      => $this->amazonConfig->isPayButtonAvailableAsPaymentMethod(),
+            'is_billing_address_required' => $this->amazonHelper->isBillingAddressRequired(),
+            'is_pay_only'              => $this->amazonHelper->isPayOnly(),
         ];
 
         return $config;

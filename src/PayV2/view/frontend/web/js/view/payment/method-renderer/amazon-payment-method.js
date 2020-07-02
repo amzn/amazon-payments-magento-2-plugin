@@ -11,9 +11,11 @@ define(
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/quote',
         'uiRegistry',
+        'Amazon_PayV2/js/model/amazon-payv2-config',
         'Amazon_PayV2/js/model/billing-address/form-address-state',
         'Amazon_PayV2/js/model/storage',
         'Amazon_PayV2/js/action/checkout-session-address-load',
+        'Amazon_PayV2/js/action/checkout-session-payment-descriptor-load',
         'Amazon_PayV2/js/action/place-order'
     ],
     function (
@@ -28,9 +30,11 @@ define(
         additionalValidators,
         quote,
         registry,
+        amazonConfig,
         billingFormAddressState,
         amazonStorage,
         checkoutSessionAddressLoad,
+        checkoutSessionPaymentDescriptorLoad,
         placeOrderAction
     ) {
         'use strict';
@@ -39,9 +43,11 @@ define(
 
         return Component.extend({
             defaults: {
-                isAmazonButtonVisible: ko.observable(!amazonStorage.isAmazonCheckout()),
+                isAmazonCheckout: ko.observable(amazonStorage.isAmazonCheckout()),
                 isBillingAddressVisible: ko.observable(false),
                 isPlaceOrderActionAllowed: billingFormAddressState.isValid,
+                paymentDescriptor: ko.observable(''),
+                logo: 'Amazon_PayV2/images/logo/Black-L.png',
                 template: 'Amazon_PayV2/payment/amazon-payment-method'
             },
 
@@ -50,9 +56,37 @@ define(
                 parentComponent.prototype.initialize.apply(this, arguments);
                 this.initChildren();
                 if (amazonStorage.isAmazonCheckout()) {
-                    this.initBillingAddress();
+                    this.initPaymentDescriptor();
+                    if (amazonConfig.getValue('is_billing_address_required')) {
+                        this.initBillingAddress();
+                    } else {
+                        this.isPlaceOrderActionAllowed(true);
+                    }
                     this.selectPaymentMethod();
                 }
+            },
+
+            bindEditPaymentAction: function (elem) {
+                var $elem = $(elem);
+                amazon.Pay.bindChangeAction('#' + $elem.uniqueId().attr('id'), {
+                    amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
+                    changeAction: 'changePayment'
+                });
+                if (!amazonConfig.getValue('is_pay_only')) {
+                    $elem.click(function () {
+                        amazonStorage.setIsEditPaymentFlag(true);
+                    });
+                }
+            },
+
+            getLogoUrl: function() {
+                return require.toUrl(this.logo);
+            },
+
+            initPaymentDescriptor: function () {
+                checkoutSessionPaymentDescriptorLoad(function (paymentDescriptor) {
+                    self.paymentDescriptor(paymentDescriptor);
+                });
             },
 
             initBillingAddress: function () {
