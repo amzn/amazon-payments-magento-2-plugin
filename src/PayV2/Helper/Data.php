@@ -48,20 +48,6 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param string $scope
-     * @param string $scopeCode
-     * @return boolean
-     */
-    public function isBillingAddressRequired($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
-    {
-        $region = $this->amazonConfig->getPaymentRegion($scope, $scopeCode);
-        return in_array($region, [
-            'de',
-            'uk',
-        ]);
-    }
-
-    /**
      * @return string
      */
     public function getVersion()
