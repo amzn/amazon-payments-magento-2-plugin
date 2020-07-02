@@ -31,9 +31,7 @@ define([
 
         return storage.get(serviceUrl).done(function (data) {
             fullScreenLoader.stopLoader(true);
-            if (data.length) {
-                callback(data.shift());
-            }
+            callback(data.length ? data.shift() : {});
         }).fail(function (response) {
             errorProcessor.process(response);
             fullScreenLoader.stopLoader(true);

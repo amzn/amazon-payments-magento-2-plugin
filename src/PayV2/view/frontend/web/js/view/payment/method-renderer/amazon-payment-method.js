@@ -57,11 +57,7 @@ define(
                 this.initChildren();
                 if (amazonStorage.isAmazonCheckout()) {
                     this.initPaymentDescriptor();
-                    if (amazonConfig.getValue('is_billing_address_required')) {
-                        this.initBillingAddress();
-                    } else {
-                        this.isPlaceOrderActionAllowed(true);
-                    }
+                    this.initBillingAddress();
                     this.selectPaymentMethod();
                 }
             },
@@ -92,6 +88,11 @@ define(
             initBillingAddress: function () {
                 var checkoutProvider = registry.get('checkoutProvider');
                 checkoutSessionAddressLoad('billing', function (amazonAddress) {
+                    if ($.isEmptyObject(amazonAddress)) {
+                        self.isPlaceOrderActionAllowed(true);
+                        return;
+                    }
+
                     self.setEmail(amazonAddress.email);
 
                     var quoteAddress = createBillingAddress(amazonAddress);

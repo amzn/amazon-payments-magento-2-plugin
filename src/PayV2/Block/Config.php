@@ -59,7 +59,6 @@ class Config extends \Magento\Framework\View\Element\Template
             'region'                   => $this->amazonConfig->getRegion(),
             'code'                     => \Amazon\PayV2\Gateway\Config\Config::CODE,
             'is_method_available'      => $this->amazonConfig->isPayButtonAvailableAsPaymentMethod(),
-            'is_billing_address_required' => $this->amazonHelper->isBillingAddressRequired(),
             'is_pay_only'              => $this->amazonHelper->isPayOnly(),
         ];
 

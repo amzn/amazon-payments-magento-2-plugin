@@ -318,13 +318,9 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      */
     public function getBillingAddress($cartId)
     {
-        $result = $this->fetchAddress($cartId, false, function ($session) {
+        return $this->fetchAddress($cartId, false, function ($session) {
             return $session['paymentPreferences'][0]['billingAddress'] ?? [];
         });
-        if (empty($result) && !$this->amazonHelper->isPayOnly()) {
-            $result = $this->getShippingAddress($cartId);
-        }
-        return $result;
     }
 
     /**
