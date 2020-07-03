@@ -127,9 +127,6 @@ class OrderInformationManagement implements OrderInformationManagementInterface
             $this->setReservedOrderId($quote);
 
             $storeName = $this->coreHelper->getStoreName(ScopeInterface::SCOPE_STORE, $storeId);
-            if (!$storeName) {
-                $storeName = $quote->getStore()->getName();
-            }
 
             $data = [
                 'amazon_order_reference_id' => $amazonOrderReferenceId,
