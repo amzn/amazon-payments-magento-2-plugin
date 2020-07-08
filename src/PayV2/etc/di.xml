@@ -21,7 +21,6 @@
 
     <preference for="Amazon\PayV2\Api\CheckoutSessionManagementInterface" type="Amazon\PayV2\Model\CheckoutSessionManagement" />
     <preference for="Amazon\PayV2\Api\CheckoutSessionRepositoryInterface" type="Amazon\PayV2\Model\CheckoutSessionRepository" />
-    <preference for="Amazon\PayV2\Api\AddressManagementInterface" type="Amazon\PayV2\Model\AddressManagement" />
     <preference for="Amazon\PayV2\Api\Data\AsyncInterface" type="Amazon\PayV2\Model\Async" />
     <preference for="Amazon\PayV2\Api\Data\CheckoutSessionInterface" type="Amazon\PayV2\Model\CheckoutSession" />
 

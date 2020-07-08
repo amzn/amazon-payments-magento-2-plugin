@@ -18,6 +18,8 @@ namespace Amazon\PayV2\Model;
 
 use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionManagementInterface
 {
@@ -40,6 +42,26 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $cartRepository;
+
+    /**
+     * @var \Magento\Framework\Validator\Factory
+     */
+    private $validatorFactory;
+
+    /**
+     * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
+     */
+    private $countryCollectionFactory;
+
+    /**
+     * @var \Amazon\Core\Domain\AmazonAddressFactory
+     */
+    private $amazonAddressFactory;
+
+    /**
+     * @var \Amazon\Payment\Helper\Address
+     */
+    private $addressHelper;
 
     /**
      * @var \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory
@@ -69,6 +91,11 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     /**
      * @var array
      */
+    private $amazonSessions = [];
+
+    /**
+     * @var array
+     */
     private $carts = [];
 
     /**
@@ -77,6 +104,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
+     * @param \Magento\Framework\Validator\Factory $validatorFactory,
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
+     * @param \Amazon\Core\Domain\AmazonAddressFactory $amazonAddressFactory,
+     * @param \Amazon\Payment\Helper\Address $addressHelper,
      * @param \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
      * @param \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
      * @param \Amazon\PayV2\Helper\Data $amazonHelper
@@ -88,6 +119,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
+        \Magento\Framework\Validator\Factory $validatorFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
+        \Amazon\Core\Domain\AmazonAddressFactory $amazonAddressFactory,
+        \Amazon\Payment\Helper\Address $addressHelper,
         \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
         \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
         \Amazon\PayV2\Helper\Data $amazonHelper,
@@ -99,6 +134,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartManagement = $cartManagement;
         $this->cartRepository = $cartRepository;
+        $this->validatorFactory = $validatorFactory;
+        $this->countryCollectionFactory = $countryCollectionFactory;
+        $this->amazonAddressFactory = $amazonAddressFactory;
+        $this->addressHelper = $addressHelper;
         $this->checkoutSessionFactory = $checkoutSessionFactory;
         $this->checkoutSessionRepository = $checkoutSessionRepository;
         $this->amazonHelper = $amazonHelper;
@@ -149,6 +188,81 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     }
 
     /**
+     * @param mixed $cartId
+     * @return mixed
+     */
+    protected function getAmazonSession($cartId)
+    {
+        $amazonSessionId = $this->getCheckoutSession($cartId);
+        if (!isset($this->amazonSessions[$amazonSessionId])) {
+            $this->amazonSessions[$amazonSessionId] = $this->amazonAdapter->getCheckoutSession($this->storeManager->getStore()->getId(), $amazonSessionId);
+        }
+        return $this->amazonSessions[$amazonSessionId];
+    }
+
+    /**
+     * @param mixed $cartId
+     * @param bool $isShippingAddress
+     * @param mixed $addressDataExtractor
+     * @return mixed
+     */
+    protected function fetchAddress($cartId, $isShippingAddress, $addressDataExtractor)
+    {
+        $result = false;
+        if ($this->amazonConfig->isEnabled()) {
+            $session = $this->getAmazonSession($cartId);
+
+            $addressData = call_user_func($addressDataExtractor, $session);
+            if (!empty($addressData)) {
+                $addressData['state'] = $addressData['stateOrRegion'];
+                $addressData['phone'] = $addressData['phoneNumber'];
+
+                $address = array_combine(
+                    array_map('ucfirst', array_keys($addressData)),
+                    array_values($addressData)
+                );
+
+                $result = $this->convertToMagentoAddress($address, $isShippingAddress);
+                $result[0]['email'] = $session['buyer']['email'];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param array $address
+     * @param boolean $isShippingAddress
+     * @return array
+     */
+    protected function convertToMagentoAddress(array $address, $isShippingAddress = false)
+    {
+        $amazonAddress  = $this->amazonAddressFactory->create(['address' => $address]);
+        $magentoAddress = $this->addressHelper->convertToMagentoEntity($amazonAddress);
+
+        if ($isShippingAddress) {
+            $validator = $this->validatorFactory->createValidator('amazon_address', 'on_select');
+
+            if (!$validator->isValid($magentoAddress)) {
+                throw new ValidatorException(null, null, [$validator->getMessages()]);
+            }
+
+            $countryCollection = $this->countryCollectionFactory->create();
+
+            $collectionSize = $countryCollection->loadByStore()
+                ->addFieldToFilter('country_id', ['eq' => $magentoAddress->getCountryId()])
+                ->setPageSize(1)
+                ->setCurPage(1)
+                ->getSize();
+
+            if (1 != $collectionSize) {
+                throw new WebapiException(__('the country for your address is not allowed for this store'));
+            }
+        }
+
+        return [$this->addressHelper->convertToArray($magentoAddress)];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getConfig($cartId)
@@ -187,6 +301,35 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
             }
         }
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getShippingAddress($cartId)
+    {
+        return $this->fetchAddress($cartId, true, function ($session) {
+            return $session['shippingAddress'] ?? [];
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBillingAddress($cartId)
+    {
+        return $this->fetchAddress($cartId, false, function ($session) {
+            return $session['paymentPreferences'][0]['billingAddress'] ?? [];
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPaymentDescriptor($cartId)
+    {
+        $session = $this->getAmazonSession($cartId);
+        return $session['paymentPreferences'][0]['paymentDescriptor'] ?? '';
     }
 
     /**

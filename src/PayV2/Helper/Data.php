@@ -3,9 +3,15 @@
 namespace Amazon\PayV2\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Store\Model\ScopeInterface;
 
 class Data extends AbstractHelper
 {
+    /**
+     * @var \Amazon\PayV2\Model\AmazonConfig
+     */
+    private $amazonConfig;
+
     /**
      * @var \Magento\Checkout\Helper\Data
      */
@@ -17,11 +23,13 @@ class Data extends AbstractHelper
     private $moduleList;
 
     public function __construct(
+        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Magento\Checkout\Helper\Data $helperCheckout,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\App\Helper\Context $context
     )
     {
+        $this->amazonConfig = $amazonConfig;
         $this->helperCheckout = $helperCheckout;
         $this->moduleList = $moduleList;
         parent::__construct($context);

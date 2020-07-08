@@ -34,6 +34,24 @@ interface CheckoutSessionManagementInterface
 
     /**
      * @param mixed $cartId
+     * @return mixed
+     */
+    public function getShippingAddress($cartId);
+
+    /**
+     * @param mixed $cartId
+     * @return mixed
+     */
+    public function getBillingAddress($cartId);
+
+    /**
+     * @param mixed $cartId
+     * @return string
+     */
+    public function getPaymentDescriptor($cartId);
+
+    /**
+     * @param mixed $cartId
      * @return void
      */
     public function cancelCheckoutSession($cartId);

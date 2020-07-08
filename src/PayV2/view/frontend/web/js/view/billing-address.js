@@ -34,7 +34,6 @@ define([
             },
             isAddressLoaded: billingFormAddressState.isLoaded,
             isAddressEditable: true,
-            isPayOnly: false,
         },
 
         /**
@@ -75,19 +74,6 @@ define([
 
         canUseCancelBillingAddress: function () {
             return this.isAddressEditable ? this._super() : false;
-        },
-
-        bindEditPaymentAction: function (elem) {
-            var $elem = $(elem);
-            amazon.Pay.bindChangeAction('#' + $elem.uniqueId().attr('id'), {
-                amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
-                changeAction: 'changePayment'
-            });
-            if (!this.isPayOnly) {
-                $elem.click(function () {
-                    amazonStorage.setIsEditPaymentFlag(true);
-                });
-            }
         }
     });
 });

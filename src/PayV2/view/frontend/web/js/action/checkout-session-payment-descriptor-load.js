@@ -22,8 +22,8 @@ define([
 ], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor) {
     'use strict';
 
-    return function (addressType, callback) {
-        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/' + addressType + '-address', {
+    return function (callback) {
+        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/payment-descriptor', {
             cartId: quote.getQuoteId()
         });
 
@@ -31,7 +31,7 @@ define([
 
         return storage.get(serviceUrl).done(function (data) {
             fullScreenLoader.stopLoader(true);
-            callback(data.length ? data.shift() : {});
+            callback(data);
         }).fail(function (response) {
             errorProcessor.process(response);
             fullScreenLoader.stopLoader(true);
