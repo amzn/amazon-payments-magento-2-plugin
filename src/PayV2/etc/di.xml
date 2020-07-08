@@ -24,6 +24,33 @@
     <preference for="Amazon\PayV2\Api\Data\AsyncInterface" type="Amazon\PayV2\Model\Async" />
     <preference for="Amazon\PayV2\Api\Data\CheckoutSessionInterface" type="Amazon\PayV2\Model\CheckoutSession" />
 
+    <preference for="Amazon\PayV2\Domain\AmazonNameInterface" type="Amazon\PayV2\Domain\AmazonName" />
+    <preference for="Amazon\PayV2\Domain\AmazonAddressInterface" type="Amazon\PayV2\Domain\AmazonAddress" />
+
+    <type name="Amazon\PayV2\Domain\AmazonAddressFactory">
+        <arguments>
+            <argument name="addressDecoratorPool" xsi:type="array">
+                <item name="DE" xsi:type="string">Amazon\PayV2\Domain\AmazonAddressDecoratorDe</item>
+                <item name="AT" xsi:type="string">Amazon\PayV2\Domain\AmazonAddressDecoratorDe</item>
+                <item name="JP" xsi:type="string">Amazon\PayV2\Domain\AmazonAddressDecoratorJp</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Amazon_PayV2_RemoteAddressWithAdditionalIpHeaders" type="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
+        <arguments>
+            <argument name="alternativeHeaders" xsi:type="array">
+                <item name="x-forwarded-for" xsi:type="string">HTTP_X_FORWARDED_FOR</item>
+                <item name="x-real-ip" xsi:type="string">HTTP_X_REAL_IP</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Amazon\PayV2\Model\AmazonConfig">
+        <arguments>
+            <argument name="remoteAddress" xsi:type="object">Amazon_PayV2_RemoteAddressWithAdditionalIpHeaders</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\Console\CommandList">
        <arguments>
            <argument name="commands" xsi:type="array">
@@ -185,13 +212,6 @@
             <argument name="errorMessageMapper" xsi:type="object">Amazon\PayV2\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
-
-    <!-- Void Request -->
-    <type name="Amazon\Payment\Gateway\Request\VoidRequestBuilder">
-        <arguments>
-            <argument name="config" xsi:type="object">AmazonGatewayConfig</argument>
-        </arguments>
-    </type>
 
     <!-- Value handlers infrastructure -->
     <virtualType name="AmazonPayV2ValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">

@@ -16,7 +16,6 @@
 namespace Amazon\PayV2\Cron;
 
 use Amazon\PayV2\Api\Data\AsyncInterface;
-use Amazon\Core\Model\Config\Source\UpdateMechanism;
 use Magento\Framework\Data\Collection;
 
 class ProcessAsync

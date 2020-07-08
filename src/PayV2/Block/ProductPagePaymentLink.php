@@ -15,8 +15,6 @@
  */
 namespace Amazon\PayV2\Block;
 
-use Magento\Catalog\Model\Product;
-
 class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
 {
 
@@ -26,11 +24,6 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     private $amazonConfig;
 
     /**
-     * @var \Amazon\Core\Helper\CategoryExclusion
-     */
-    private $categoryExclusionHelper;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     private $registry;
@@ -38,14 +31,12 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\Core\Helper\CategoryExclusion $categoryExclusionHelper,
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {
         parent::__construct($context, $data);
 
         $this->amazonConfig = $amazonConfig;
-        $this->categoryExclusionHelper = $categoryExclusionHelper;
         $this->registry = $registry;
     }
 
@@ -55,15 +46,6 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     protected function _toHtml()
     {
         if (!$this->amazonConfig->isEnabled() || !$this->amazonConfig->isPayButtonAvailableOnProductPage()) {
-            return '';
-        }
-
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->registry->registry('product');
-
-        if ($product instanceof Product &&
-            $this->categoryExclusionHelper->productHasExcludedCategory($product)
-        ) {
             return '';
         }
 
