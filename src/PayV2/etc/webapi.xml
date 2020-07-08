@@ -22,14 +22,20 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/amazon-v2-checkout-session/:cartId/payment-descriptor" method="GET">
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="getPaymentDescriptor"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
     <route url="/V1/amazon-v2-checkout-session/:cartId/billing-address" method="GET">
-        <service class="Amazon\PayV2\Api\AddressManagementInterface" method="getBillingAddress"/>
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="getBillingAddress"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/amazon-v2-checkout-session/:cartId/shipping-address" method="GET">
-        <service class="Amazon\PayV2\Api\AddressManagementInterface" method="getShippingAddress"/>
+        <service class="Amazon\PayV2\Api\CheckoutSessionManagementInterface" method="getShippingAddress"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

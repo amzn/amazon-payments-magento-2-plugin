@@ -76,8 +76,6 @@ class CheckoutProcessor
                 $billingConfig = &$paymentConfig['children']['afterMethods']['children']['billing-address-form'];
             }
             $billingConfig['component'] = 'Amazon_PayV2/js/view/billing-address';
-            $billingConfig['isAddressEditable'] = $this->amazonConfig->isBillingAddressEditable();
-            $billingConfig['isPayOnly'] = $this->amazonHelper->isPayOnly();
 
             unset($paymentConfig['children']['renders']['children']['amazonlogin']); // legacy
         } else {
