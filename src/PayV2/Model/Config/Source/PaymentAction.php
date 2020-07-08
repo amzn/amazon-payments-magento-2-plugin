@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13,20 +14,22 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Helper;
 
-use Magento\Store\Model\ScopeInterface;
+namespace Amazon\PayV2\Model\Config\Source;
 
-class ClientIp extends \Amazon\Core\Helper\ClientIp
+class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
 {
+    const AUTHORIZE = 'authorize';
+    const AUTHORIZE_AND_CAPTURE = 'authorize_capture';
+
     /**
-     * @param string $scope
-     * @param mixed $scopeCode
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAllowedIps($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    public function toOptionArray()
     {
-        $allowedIpsString = $this->scopeConfig->getValue('payment/amazon_payment_v2/allowed_ips', $scope, $scopeCode);
-        return empty($allowedIpsString) ? [] : explode(',', $allowedIpsString);
+        return [
+            ['value' => static::AUTHORIZE, 'label' => __('Charge on Shipment')],
+            ['value' => static::AUTHORIZE_AND_CAPTURE, 'label' => __('Charge on Order')],
+        ];
     }
 }

@@ -54,12 +54,12 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     private $countryCollectionFactory;
 
     /**
-     * @var \Amazon\Core\Domain\AmazonAddressFactory
+     * @var \Amazon\PayV2\Domain\AmazonAddressFactory
      */
     private $amazonAddressFactory;
 
     /**
-     * @var \Amazon\Payment\Helper\Address
+     * @var \Amazon\PayV2\Helper\Address
      */
     private $addressHelper;
 
@@ -106,8 +106,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\Framework\Validator\Factory $validatorFactory,
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
-     * @param \Amazon\Core\Domain\AmazonAddressFactory $amazonAddressFactory,
-     * @param \Amazon\Payment\Helper\Address $addressHelper,
+     * @param \Amazon\PayV2\Domain\AmazonAddressFactory $amazonAddressFactory,
+     * @param \Amazon\PayV2\Helper\Address $addressHelper,
      * @param \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
      * @param \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
      * @param \Amazon\PayV2\Helper\Data $amazonHelper
@@ -121,8 +121,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
-        \Amazon\Core\Domain\AmazonAddressFactory $amazonAddressFactory,
-        \Amazon\Payment\Helper\Address $addressHelper,
+        \Amazon\PayV2\Domain\AmazonAddressFactory $amazonAddressFactory,
+        \Amazon\PayV2\Helper\Address $addressHelper,
         \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
         \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
         \Amazon\PayV2\Helper\Data $amazonHelper,

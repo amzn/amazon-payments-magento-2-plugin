@@ -25,21 +25,13 @@ class AddAmazonButton implements \Magento\Framework\Event\ObserverInterface
     private $amazonConfig;
 
     /**
-     * @var \Amazon\Payment\Helper\Shortcut\Factory
-     */
-    private $shortcutFactory;
-
-    /**
      * AddAmazonButton constructor.
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-     * @param \Amazon\Payment\Helper\Shortcut\Factory $shortcutFactory
      */
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\Payment\Helper\Shortcut\Factory $shortcutFactory
+        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
     ) {
         $this->amazonConfig = $amazonConfig;
-        $this->shortcutFactory = $shortcutFactory;
     }
 
     public function execute(Observer $observer)
@@ -48,17 +40,8 @@ class AddAmazonButton implements \Magento\Framework\Event\ObserverInterface
         $shortcutButtons = $observer->getEvent()->getContainer();
 
         if ($this->amazonConfig->isEnabled()) {
-            $params = [
-                'shortcutValidator' => $this->shortcutFactory->create($observer->getEvent()->getCheckoutSession()),
-            ];
-            $params['checkoutSession'] = $observer->getEvent()->getCheckoutSession();
-
             /** @var \Magento\Framework\View\Element\Template $shortcut */
-            $shortcut = $shortcutButtons->getLayout()->createBlock(
-                \Amazon\PayV2\Block\Minicart\Button::class,
-                '',
-                $params
-            );
+            $shortcut = $shortcutButtons->getLayout()->createBlock(\Amazon\PayV2\Block\Minicart\Button::class);
 
             $shortcut->setIsInCatalogProduct(
                 $observer->getEvent()->getIsCatalogProduct()
