@@ -5,4 +5,7 @@
 - [Instructions for updating Magento 2.3.2, Amazon Pay 3.2.9 to **Latest Release**](https://gist.github.com/christianzichichi/7a2d4f18dbecf93ee3ff10aac8e0ac37)
 - [Instructions for updating Magento 2.3.3, Amazon Pay 3.2.13 to **Latest Release**](https://gist.github.com/christianzichichi/bc44b914badac1f53b6005a262298ee8)
 - [Instructions for updating Magento 2.3.4, Amazon Pay 3.3.1 to **Latest Release**](https://gist.github.com/christianzichichi/79831e03451e17c491fb8cd7dc20b6f8)
-- [Instructions for updating Magento 2.3.5, Amazon Pay 3.4.1 to **Latest Release**](https://gist.github.com/christianzichichi/7d0d76b541070c3cdea77554c391c571)
+- [Instructions for updating Magento 2.3.5 and 2.3.5-p1, Amazon Pay 3.4.1 to **Latest Release**](https://gist.github.com/christianzichichi/7d0d76b541070c3cdea77554c391c571)
+- Instructions for updating Magento 2.3.5-p2, Amazon Pay 3.4.1-p2 to **Latest Release** (TBD)
+- Instructions for updating Magento 2.3.6, Amazon Pay 3.4.1-p2 to **Latest Release** (TBD)
+
