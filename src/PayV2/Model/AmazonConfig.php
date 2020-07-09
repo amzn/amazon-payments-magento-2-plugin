@@ -39,11 +39,6 @@ class AmazonConfig
     private $storeManager;
 
     /**
-     * @var \Amazon\PayV2\Helper\ClientIp
-     */
-    private $clientIpHelper;
-
-    /**
      * @var \Magento\Directory\Model\AllowedCountries
      */
     private $countriesAllowed;
@@ -59,36 +54,33 @@ class AmazonConfig
     private $localeResolver;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
      */
-    private $appState;
+    private $remoteAddress;
 
     /**
      * AmazonConfig constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Amazon\PayV2\Helper\ClientIp $clientIpHelper
      * @param \Magento\Directory\Model\AllowedCountries $countriesAllowed
      * @param \Magento\Directory\Model\Config\Source\Country $countryConfig
      * @param \Magento\Framework\Locale\Resolver $localeResolver
-     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Amazon\PayV2\Helper\ClientIp $clientIpHelper,
         \Magento\Directory\Model\AllowedCountries $countriesAllowed,
         \Magento\Directory\Model\Config\Source\Country $countryConfig,
         \Magento\Framework\Locale\Resolver $localeResolver,
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->clientIpHelper = $clientIpHelper;
         $this->countriesAllowed = $countriesAllowed;
         $this->countryConfig = $countryConfig;
         $this->localeResolver = $localeResolver;
-        $this->appState = $appState;
+        $this->remoteAddress = $remoteAddress;
     }
 
     /**
@@ -102,7 +94,7 @@ class AmazonConfig
             return false;
         }
 
-        if (!$this->clientIpHelper->clientHasAllowedIp()) {
+        if (!$this->clientHasAllowedIp()) {
             return false;
         }
 
@@ -477,6 +469,28 @@ class AmazonConfig
             $result = $this->storeManager->getStore()->getUrl('amazon_payv2/checkout/completeSession', ['_forced_secure' => true]);
         }
         return $result;
+    }
+
+    /**
+     * @param string $scope
+     * @param mixed $scopeCode
+     * @return array
+     */
+    public function getAllowedIps($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $allowedIpsString = $this->scopeConfig->getValue('payment/amazon_payment_v2/allowed_ips', $scope, $scopeCode);
+        return empty($allowedIpsString) ? [] : explode(',', $allowedIpsString);
+    }
+
+    /**
+     * @return bool
+     */
+    public function clientHasAllowedIp()
+    {
+        // e.g. X-Forwarded-For can have a comma-separated list of IPs
+        $clientIp = explode(',', $this->remoteAddress->getRemoteAddress())[0];
+        $allowedIps = $this->getAllowedIps();
+        return empty($allowedIps) ? true : in_array($clientIp, $allowedIps);
     }
 
     /**
