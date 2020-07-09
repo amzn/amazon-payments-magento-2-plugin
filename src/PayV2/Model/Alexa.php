@@ -107,7 +107,7 @@ class Alexa
     {
         $payment = $order->getPayment();
         /* @var $payment Payment */
-        if ($this->amazonConfig->getPaymentAction(ScopeInterface::SCOPE_STORE, $order->getStoreId()) == \Amazon\Core\Model\Config\Source\PaymentAction::AUTHORIZE) {
+        if ($this->amazonConfig->getPaymentAction(ScopeInterface::SCOPE_STORE, $order->getStoreId()) == \Amazon\PayV2\Model\Config\Source\PaymentAction::AUTHORIZE) {
             $transationType = Payment\Transaction::TYPE_AUTH;
         } else {
             $transationType = Payment\Transaction::TYPE_CAPTURE;
