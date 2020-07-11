@@ -23,15 +23,21 @@ define([
     'use strict';
 
     var callbacks = [];
-    var localStorage = $.initNamespaceStorage('amzn-checkout-session-config').localStorage;
+    var localStorage = null;
+    var getLocalStorage = function () {
+        if (localStorage === null) {
+            localStorage = $.initNamespaceStorage('amzn-checkout-session-config').localStorage;
+        }
+        return localStorage;
+    };
     return function (callback) {
         var cartId = customerData.get('cart')()['data_id'] || 0;
-        if (cartId !== localStorage.get('cart_id')) {
+        if (cartId !== getLocalStorage().get('cart_id')) {
             callbacks.push(callback);
             if (callbacks.length == 1) {
                 remoteStorage.get(url.build('amazon_payv2/checkout/config')).done(function (config) {
-                    localStorage.set('cart_id', cartId);
-                    localStorage.set('config', config);
+                    getLocalStorage().set('cart_id', cartId);
+                    getLocalStorage().set('config', config);
                     do {
                         callbacks.shift()(config);
                     } while (callbacks.length);
