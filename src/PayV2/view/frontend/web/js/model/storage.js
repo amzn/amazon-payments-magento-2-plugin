@@ -20,7 +20,13 @@ define([
     'use strict';
 
     var isEnabled = amazonPayV2Config.isDefined(),
-        storage = $.initNamespaceStorage('amzn-checkout-session').localStorage;
+        storage = null,
+        getStorage = function () {
+            if (storage === null) {
+                storage = $.initNamespaceStorage('amzn-checkout-session').localStorage;
+            }
+            return storage;
+        };
 
     return {
         isEnabled: isEnabled,
@@ -38,7 +44,7 @@ define([
          * Clear Amazon Checkout Session ID and revert checkout
          */
         clearAmazonCheckout: function() {
-            storage.removeAll();
+            getStorage().removeAll();
         },
 
         /**
@@ -47,10 +53,10 @@ define([
          * @returns {*}
          */
         getCheckoutSessionId: function () {
-            var sessionId = storage.get('id');
+            var sessionId = getStorage().get('id');
             if (typeof sessionId === 'undefined' && window.location.search.indexOf('?amazonCheckoutSessionId=') != -1) {
                 sessionId = window.location.search.replace('?amazonCheckoutSessionId=', '');
-                storage.set('id', sessionId);
+                getStorage().set('id', sessionId);
             }
             return sessionId;
         },
@@ -67,7 +73,7 @@ define([
          * @returns {exports}
          */
         setIsEditPaymentFlag: function (value) {
-            storage.set('is_edit_billing_clicked', value);
+            getStorage().set('is_edit_billing_clicked', value);
             return this;
         },
 
@@ -75,7 +81,7 @@ define([
          * @returns {boolean}
          */
         getIsEditPaymentFlag: function () {
-            return storage.get('is_edit_billing_clicked');
+            return getStorage().get('is_edit_billing_clicked');
         }
     };
 });
