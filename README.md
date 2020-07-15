@@ -26,8 +26,8 @@ You can find a list of modules in the require section of the `composer.json` fil
 same directory as this `README.md` file.
 
 ## Installation and Configuration
-This section will be released once Magento 2.4.0 is widely available in June 2020.
-If you are on M2.2.x or M2.3.x, please use the [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) branch. The [README.md](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#amazon-pay-checkout-v2) contains all the installation and configuration information.
+This section will be released once Magento 2.4.0 is widely available on July 28th 2020.
+If you are on M2.2.6 and above, please use the [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) branch. The [README.md](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#amazon-pay-checkout-v2) contains all the installation and configuration information.
 
 ## Alexa Notifications
 
@@ -52,5 +52,5 @@ The following table provides an overview on which Git branch is compatible to wh
 
 | Magento Version | Github Branch | Latest release |
 | ------------- | ------------- | ------------- |
-| 2.2.4 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.4.0 |
+| 2.2.6 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.4.0 |
 | 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.1.2 |
