@@ -449,4 +449,61 @@
         <!--Place order-->
         <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
     </test>
+    <test name="AmazonCheckoutSuccessAfterDeclined" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Amazon Pay Success After being Declined by InvalidPaymentMethod error"/>
+            <title value="Amazon Pay Success After being Declined by InvalidPaymentMethod error"/>
+            <description value="Test user ability to placed order with different CC after being declined"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup"/>
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="3434"/>
+        </actionGroup>
+        <!--Decline Error Message-->
+        <waitForText userInput="There has been a problem with the selected payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Place order again with normal CC-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </test>
+    <test name="AmazonCheckoutSuccessAfterSCAAbandoned" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="(SCA) Amazon SCA Success After Abandoned"/>
+            <title value="(SCA) Amazon SCA Success After Abandoned"/>
+            <description value="Perform checkout from cart page and ensure SCA can succeed after being Abandoned."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_sca"/>
+        </annotations>
+
+        <!--Go to Cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart"/>
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Login (popup)-->
+        <click selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup"/>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup"/>
+        <!--Place order with SCA Abandoned CC-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="4440"/>
+        </actionGroup>
+        <!--Transaction declined error message-->
+        <waitForText userInput="Something's wrong with your payment method." selector=".message" stepKey="waitForText"/>
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+
+        <!--Placing order again with normal CC-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </test>
 </tests>
