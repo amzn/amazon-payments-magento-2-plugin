@@ -3,7 +3,7 @@
     <test name="AmazonProductButtonV1">
         <annotations>
             <stories value="Amazon Button"/>
-            <title value="Only Amazon Button V1 should be present on product page when enabled."/>
+            <title value="Amazon Product Button V1"/>
             <description value="Only Amazon Button V1 should be present on product page when enabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>

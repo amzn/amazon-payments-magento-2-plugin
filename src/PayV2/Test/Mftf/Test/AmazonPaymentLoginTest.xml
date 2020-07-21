@@ -3,7 +3,7 @@
     <test name="AmazonPaymentLogin" extends="AmazonPaymentButtonV2">
         <annotations>
             <stories value="Amazon Login"/>
-            <title value="User should be able to login to Amazon from the payment method when enabled."/>
+            <title value="Amazon Payment Login"/>
             <description value="User should be able to login to Amazon from the payment method when enabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>

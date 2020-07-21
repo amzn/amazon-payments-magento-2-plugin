@@ -3,7 +3,7 @@
     <test name="AmazonCheckoutSuccessV2" extends="AmazonCheckoutButtonV2">
         <annotations>
             <stories value="Amazon Checkout"/>
-            <title value="User should be able to checkout with Amazon Pay."/>
+            <title value="Amazon Checkout Success V2"/>
             <description value="User should be able to checkout with Amazon Pay."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>

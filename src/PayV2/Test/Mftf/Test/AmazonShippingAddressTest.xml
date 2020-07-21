@@ -3,7 +3,7 @@
     <test name="AmazonShippingAddress" extends="AmazonCheckoutButtonV2">
         <annotations>
             <stories value="Amazon Address"/>
-            <title value="User should be able to use Amazon address as checkout shipping address."/>
+            <title value="Amazon Shipping Address"/>
             <description value="User should be able to use Amazon address as checkout shipping address."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>
