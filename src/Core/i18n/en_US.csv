@@ -106,7 +106,7 @@
 "The currency selected is not supported by Amazon Pay","The currency selected is not supported by Amazon Pay on this store."
 "the email address for your Amazon account is invalid","The email address for your Amazon account is invalid."
 "There has been a problem with the selected payment method on your Amazon account. Please choose another one.","There has been a problem with the selected payment method on your Amazon account. Please choose another one."
-"Unfortunately it is not possible to pay with Amazon Pay for this order. Please choose another payment method.","Unfortunately it is not possible to Pay with Amazon Pay for this order. Please choose another payment method."
+"Unfortunately it is not possible to use Amazon Pay for this order, please choose another payment method.","Unfortunately it is not possible to Pay with Amazon Pay for this order. Please choose another payment method."
 "United Kingdom","United Kingdom"
 "United States","United States"
 "Update Mechanism","Update Mechanism"

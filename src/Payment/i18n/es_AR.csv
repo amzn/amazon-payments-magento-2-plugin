@@ -4,7 +4,7 @@
 "Amazon capture invalid state : %1 with reason %2","Estado inesperado de la captura de Amazon Pay. Estado: %1; Código de motivo: %2"
 "Amazon refund invalid state : %1 with reason %2","Estado inesperado del reembolso de Amazon Pay. Estado: %1; Código de motivo: %2"
 "the country for your address is not allowed for this store","Este sitio web no admite el país asociado a tu dirección."
-"Unfortunately it is not possible to pay with Amazon Pay for this order. Please choose another payment method.","Lo sentimos, no es posible utilizar Amazon Pay para este pedido. Elige otro método de pago."
+"Unfortunately it is not possible to use Amazon Pay for this order, please choose another payment method.","Lo sentimos, no es posible utilizar Amazon Pay para este pedido. Elige otro método de pago."
 "There has been a problem with the selected payment method on your Amazon account. Please choose another one.","Lo sentimos, se ha producido un problema con el método de pago seleccionado en tu cuenta de Amazon. Elige otro método de pago."
 "The currency selected is not supported by Amazon Pay","Amazon Pay no admite la divisa seleccionada en este sitio web."
 "Captured amount of %1 online","Importe capturado por Internet de %1."
