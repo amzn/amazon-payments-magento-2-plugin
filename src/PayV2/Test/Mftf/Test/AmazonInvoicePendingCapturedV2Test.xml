@@ -3,7 +3,7 @@
     <test name="AmazonInvoicePendingCapturedV2" extends="AmazonCheckoutButtonV2">
         <annotations>
             <stories value="Amazon Invoice"/>
-            <title value="User should be able to create invoice after 7 Days (Captured case)."/>
+            <title value="Amazon Invoice after 7 Days (Captured case)."/>
             <description value="User should be able to create invoice after 7 Days (Captured case)."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>

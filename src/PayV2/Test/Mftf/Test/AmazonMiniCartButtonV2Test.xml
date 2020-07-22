@@ -3,7 +3,7 @@
     <test name="AmazonMiniCartButtonV2">
         <annotations>
             <stories value="Amazon Button"/>
-            <title value="Only Amazon Button V2 should be present in mini cart when enabled."/>
+            <title value="Amazon Mini Cart Button V2"/>
             <description value="Only Amazon Button V2 should be present in mini cart when enabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>

@@ -3,7 +3,7 @@
     <test name="AmazonCheckoutLogin" extends="AmazonCheckoutButtonV2">
         <annotations>
             <stories value="Amazon Login"/>
-            <title value="User should be able to login to Amazon from the checkout when enabled."/>
+            <title value="Amazon Checkout Login"/>
             <description value="User should be able to login to Amazon from the checkout when enabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>
