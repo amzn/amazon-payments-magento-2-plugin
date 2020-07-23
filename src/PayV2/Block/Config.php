@@ -70,6 +70,6 @@ class Config extends \Magento\Framework\View\Element\Template
      */
     public function isEnabled()
     {
-        return $this->amazonConfig->isEnabled();
+        return $this->amazonConfig->isEnabled() && !$this->amazonHelper->hasRestrictedProducts();
     }
 }
