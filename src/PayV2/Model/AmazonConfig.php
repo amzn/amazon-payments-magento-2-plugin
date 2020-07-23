@@ -539,6 +539,16 @@ class AmazonConfig
 
     /**
      * @param string $scope
+     * @param mixed $scopeCode
+     * @return array
+     */
+    public function getRestrictedCategoryIds($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return explode(',', $this->scopeConfig->getValue('payment/amazon_payment_v2/restrict_categories', $scope, $scopeCode));
+    }
+
+    /**
+     * @param string $scope
      * @param null $scopeCode
      * @return bool
      */

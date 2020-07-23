@@ -26,23 +26,28 @@ define([
             options: {
                 payOnly: null,
                 placement: 'Cart',
+                hideIfUnavailable: '',
             },
 
             _loadButtonConfig: function (callback) {
                 checkoutSessionConfigLoad(function (checkoutSessionConfig) {
-                    callback({
-                        merchantId: checkoutSessionConfig['merchant_id'],
-                        createCheckoutSession: {
-                            url: url.build('amazon_payv2/checkout/createSession'),
-                            method: 'PUT'
-                        },
-                        ledgerCurrency: checkoutSessionConfig['currency'],
-                        buttonColor: checkoutSessionConfig['button_color'],
-                        checkoutLanguage: checkoutSessionConfig['language'],
-                        productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
-                        placement: this.options.placement,
-                        sandbox: checkoutSessionConfig['sandbox'],
-                    });
+                    if (!$.isEmptyObject(checkoutSessionConfig)) {
+                        callback({
+                            merchantId: checkoutSessionConfig['merchant_id'],
+                            createCheckoutSession: {
+                                url: url.build('amazon_payv2/checkout/createSession'),
+                                method: 'PUT'
+                            },
+                            ledgerCurrency: checkoutSessionConfig['currency'],
+                            buttonColor: checkoutSessionConfig['button_color'],
+                            checkoutLanguage: checkoutSessionConfig['language'],
+                            productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
+                            placement: this.options.placement,
+                            sandbox: checkoutSessionConfig['sandbox'],
+                        });
+                    } else {
+                        $(this.options.hideIfUnavailable).hide();
+                    }
                 }.bind(this));
             },
 
