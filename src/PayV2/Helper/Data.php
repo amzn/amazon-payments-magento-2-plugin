@@ -27,6 +27,11 @@ class Data extends AbstractHelper
     private $categoryResourceModel;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @var mixed
      */
     private $restrictedCategoryIds;
@@ -36,6 +41,7 @@ class Data extends AbstractHelper
         \Magento\Checkout\Helper\Data $helperCheckout,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResourceModel,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Framework\App\Helper\Context $context
     )
     {
@@ -43,6 +49,7 @@ class Data extends AbstractHelper
         $this->helperCheckout = $helperCheckout;
         $this->moduleList = $moduleList;
         $this->categoryResourceModel = $categoryResourceModel;
+        $this->metadataPool = $metadataPool;
         parent::__construct($context);
     }
 
@@ -59,12 +66,13 @@ class Data extends AbstractHelper
         if (!empty($categories)) {
             $firstCategory = array_shift($categories);
             if ($firstCategory['is_anchor'] == 1) {
-                $anchorCategories[] = $firstCategory['entity_id'];
+                $linkfield = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+                $anchorCategories[] = $firstCategory[$linkfield];
                 foreach ($categories as $category) {
                     if (in_array($category['parent_id'], $result) && in_array($category['parent_id'], $anchorCategories)) {
-                        $result[] = $category['entity_id'];
+                        $result[] = $category[$linkfield];
                         if ($category['is_anchor'] == 1 || in_array($category['parent_id'], $anchorCategories)) {
-                            $anchorCategories[] = $category['entity_id'];
+                            $anchorCategories[] = $category[$linkfield];
                         }
                     }
                 }
