@@ -18,8 +18,10 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/url-builder',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/model/error-processor'
-], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor) {
+    'Magento_Checkout/js/model/error-processor',
+    'Amazon_PayV2/js/action/checkout-session-cancel',
+    'Amazon_PayV2/js/model/storage'
+], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor, checkoutSessionCancelAction, amazonStorage) {
     'use strict';
 
     return function (callback) {
@@ -30,6 +32,12 @@ define([
         fullScreenLoader.startLoader();
 
         return storage.get(serviceUrl).done(function (data) {
+            if (!data) {
+                checkoutSessionCancelAction(function () {
+                    amazonStorage.clearAmazonCheckout();
+                    window.location.replace(window.checkoutConfig.checkoutUrl);
+                });
+            }
             fullScreenLoader.stopLoader(true);
             callback(data);
         }).fail(function (response) {
