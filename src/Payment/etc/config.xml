@@ -23,6 +23,7 @@
                 <model>Amazon\Payment\Model\Method\AmazonLoginMethod</model>
                 <order_status>pending</order_status>
                 <title>Amazon Pay</title>
+                <sort_order>0</sort_order>
                 <allowspecific>0</allowspecific>
             </amazonlogin>
             <amazon_payment>
