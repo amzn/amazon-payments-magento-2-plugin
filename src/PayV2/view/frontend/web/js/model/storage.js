@@ -15,12 +15,8 @@
 
 define([
     'jquery',
-    'Amazon_PayV2/js/model/amazon-payv2-config',
-    'mage/storage',
-    'Magento_Checkout/js/model/url-builder',
-    'Amazon_PayV2/js/action/checkout-session-cancel',
-    'Magento_Checkout/js/model/quote'
-], function ($, amazonPayV2Config, mageStorage, urlBuilder, checkoutSessionCancelAction, quote) {
+    'Amazon_PayV2/js/model/amazon-payv2-config'
+], function ($, amazonPayV2Config) {
     'use strict';
 
     var isEnabled = amazonPayV2Config.isDefined(),
@@ -62,30 +58,8 @@ define([
                 sessionId = window.location.search.replace('?amazonCheckoutSessionId=', '');
                 getStorage().set('id', sessionId);
             }
-
-            // If we got a sessionId here, optimistically return it, but validate it asynchronously.
-            if (sessionId && !this.sessionValidationTriggered) {
-                var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/validate', {
-                    cartId: quote.getQuoteId()
-                });
-                mageStorage.get(serviceUrl).done(function (data) {
-                    if (!data) {
-                        checkoutSessionCancelAction(function () {
-                            this.clearAmazonCheckout();
-                            window.location.replace(window.checkoutConfig.checkoutUrl);
-                        }.bind(this));
-                    }
-                }.bind(this)).fail(function (response) {
-                    checkoutSessionCancelAction(function () {
-                        this.clearAmazonCheckout();
-                        window.location.replace(window.checkoutConfig.checkoutUrl);
-                    }.bind(this));
-                }.bind(this));
-                this.sessionValidationTriggered = true;
-            }
             return sessionId;
         },
-        sessionValidationTriggered: false,
 
         /**
          * Return the Amazon Pay region
