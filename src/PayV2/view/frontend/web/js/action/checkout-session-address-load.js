@@ -18,8 +18,9 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/url-builder',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/model/error-processor'
-], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor) {
+    'Magento_Checkout/js/model/error-processor',
+    'Amazon_PayV2/js/model/storage'
+], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor, amazonStorage) {
     'use strict';
 
     return function (addressType, callback) {
@@ -29,10 +30,22 @@ define([
 
         fullScreenLoader.startLoader();
 
-        return storage.get(serviceUrl).done(function (data) {
+        var handleResponse = function(data) {
             fullScreenLoader.stopLoader(true);
             callback(data.length ? data.shift() : {});
-        }).fail(function (response) {
+        }
+
+        var validateAndHandle = function(data) {
+            if (!data) {
+                amazonStorage.clearAmazonCheckout();
+                window.location.replace(window.checkoutConfig.checkoutUrl);
+            }
+            handleResponse(data);
+        }
+
+        var responseCallback = addressType == 'shipping' ? validateAndHandle : handleResponse;
+
+        return storage.get(serviceUrl).done(responseCallback).fail(function (response) {
             errorProcessor.process(response);
             fullScreenLoader.stopLoader(true);
         });
