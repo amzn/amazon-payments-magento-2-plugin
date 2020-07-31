@@ -413,9 +413,4 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         }
         return $result;
     }
-
-    public function validateAmazonSession($cartId) {
-        $session = $this->getAmazonSession($cartId);
-        return ($session['status'] == 200 && $session['statusDetail']['state'] == 'Open');
-    }
 }

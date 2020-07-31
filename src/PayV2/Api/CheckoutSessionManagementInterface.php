@@ -73,10 +73,4 @@ interface CheckoutSessionManagementInterface
      * @return int
      */
     public function completeCheckoutSession($cartId);
-
-    /**
-     * @param mixed $cartId
-     * @return int
-     */
-    public function validateAmazonSession($cartId);
 }
