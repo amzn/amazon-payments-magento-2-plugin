@@ -31,17 +31,19 @@
              data-mage-init='{"Amazon_PayV2/js/amazon-button": {}}'>
         </div>
     </div>
-    <div class="amazon-button-column amazon-button-column-tooltip">
-        <div class="field-tooltip toggle">
-            <span class="field-tooltip-action action-help"
-                  data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-            </span>
-            <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
-                <?= $block->escapeHtml(__('Are you an Amazon customer? ' .
-                    'Pay now with address and payment details stored in your Amazon account.')); ?>
+    <div class="checkout-methods-items">
+        <div class="amazon-button-column amazon-button-column-tooltip">
+            <div class="field-tooltip toggle">
+                <span class="field-tooltip-action action-help"
+                      data-mage-init='{"dropdown":{"activeClass": "_active"}}'
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false">
+                </span>
+                <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
+                    <?= $block->escapeHtml(__('Are you an Amazon customer? ' .
+                        'Pay now with address and payment details stored in your Amazon account.')); ?>
+                </div>
             </div>
         </div>
     </div>
