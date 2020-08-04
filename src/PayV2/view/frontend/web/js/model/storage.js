@@ -59,7 +59,7 @@ define([
                 sessionId = window.location.search.replace(paramId, '');
                 getStorage().set('id', sessionId);
             }
-            else if(sessionId != window.location.search.replace(paramId, '')) {
+            else if(sessionId != window.location.search.replace(param, '') && window.location.search.replace(param, '') != '') {
                 sessionId = window.location.search.replace(paramId, '');
                 getStorage().set('id', sessionId);
             }
