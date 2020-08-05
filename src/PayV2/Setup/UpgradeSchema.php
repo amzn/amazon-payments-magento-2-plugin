@@ -116,7 +116,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ->addForeignKey(
                     'AMAZON_PAYV2_CHECKOUT_SESSION_QUOTE_ID_QUOTE_ENTITY_ID',
                     'quote_id',
-                    'quote',
+                    $setup->getTable('quote'),
                     'entity_id',
                     Table::ACTION_CASCADE
                 )
