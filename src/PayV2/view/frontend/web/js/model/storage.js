@@ -54,8 +54,13 @@ define([
          */
         getCheckoutSessionId: function () {
             var sessionId = getStorage().get('id');
-            if (typeof sessionId === 'undefined' && window.location.search.indexOf('?amazonCheckoutSessionId=') != -1) {
-                sessionId = window.location.search.replace('?amazonCheckoutSessionId=', '');
+            var param = '?amazonCheckoutSessionId=';
+            if (typeof sessionId === 'undefined' && window.location.search.indexOf(param) != -1) {
+                sessionId = window.location.search.replace(param, '');
+                getStorage().set('id', sessionId);
+            }
+            else if(sessionId != window.location.search.replace(param, '') && window.location.search.replace(param, '') != '') {
+                sessionId = window.location.search.replace(param, '');
                 getStorage().set('id', sessionId);
             }
             return sessionId;
