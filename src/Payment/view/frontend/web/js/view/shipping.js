@@ -4,17 +4,20 @@ define(
         'jquery',
         'Magento_Checkout/js/view/shipping',
         'Magento_Customer/js/model/customer',
-        'Amazon_Payment/js/model/storage'
+        'Amazon_Payment/js/model/storage',
+        'Amazon_Payment/js/messages'
     ],
     function (
         $,
         Component,
         customer,
-        amazonStorage
+        amazonStorage,
+        amazonMessages
     ) {
         'use strict';
 
         return Component.extend({
+            noShippingAddressSelectedMsg: 'No shipping address has been selected for this order, please try to refresh the page or add a new shipping address in the Address Book widget.',
 
             /**
              * Initialize shipping
@@ -51,7 +54,19 @@ define(
                 }
 
                 if (!customer.isLoggedIn()) {
-                    return this.validateGuestEmail();
+                    if (!(amazonStorage.isAmazonShippingAddressSelected() && this.validateGuestEmail())) {
+                        amazonMessages.addMessage('error', this.noShippingAddressSelectedMsg);
+                        amazonMessages.displayMessages();
+
+                        return false;
+                    }
+                }
+
+                if (!(amazonStorage.isAmazonShippingAddressSelected())) {
+                    amazonMessages.addMessage('error', this.noShippingAddressSelectedMsg);
+                    amazonMessages.displayMessages();
+
+                    return false;
                 }
 
                 return true;
