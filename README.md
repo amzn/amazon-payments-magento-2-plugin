@@ -43,7 +43,7 @@ In `magento-root`, execute:
 
 ```
 $ composer require amzn/amazon-pay-v2-magento-2-module
-$ bin/magento module:enable Amazon_PayV2
+$ bin/magento module:enable Amazon_PayV2 --clear-static-content
 ```
 
 If Composer installation didn't work, use the manual procedure below. If any of these were successful, please proceed with **2. Post-installation procedure**, otherwise reach out to Amazon Pay Merchant Support for additional assistance.
