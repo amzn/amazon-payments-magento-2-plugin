@@ -57,7 +57,7 @@ In `magento-root`, execute:
 ```
 $ composer require amzn/amazon-pay-sdk-v2-php
 $ composer require aws/aws-php-sns-message-validator
-$ bin/magento module:enable Amazon_PayV2
+$ bin/magento module:enable Amazon_PayV2 --clear-static-content
 ```
 
 ### 2. Post-installation procedure
@@ -67,8 +67,6 @@ Execute the following steps to perform the module upgrade, compile dependency in
 ```
 $ bin/magento setup:upgrade
 $ bin/magento setup:di:compile
-$ bin/magento setup:static-content:deploy
-$ bin/magento cache:clean
 ```
 
 ## PWA Support
