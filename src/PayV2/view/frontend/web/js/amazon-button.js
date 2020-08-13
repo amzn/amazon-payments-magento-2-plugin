@@ -106,11 +106,11 @@ define([
                     }
                 });
             
-            }
+            },
 
             click: function () {
                 this.element.children().first().trigger('click');
-            },
+            }
         });
 
         return $.amazon.AmazonButton;
