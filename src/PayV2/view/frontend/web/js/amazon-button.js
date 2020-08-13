@@ -18,7 +18,8 @@ define([
     'Amazon_PayV2/js/model/storage',
     'mage/url',
     'Amazon_PayV2/js/amazon-checkout',
-], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout) {
+    'Magento_Customer/js/customer-data'
+], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout, customerData) {
     'use strict';
 
     if (amazonStorage.isEnabled) {
@@ -26,7 +27,7 @@ define([
             options: {
                 payOnly: null,
                 placement: 'Cart',
-                hideIfUnavailable: '',
+                hideIfUnavailable: ''
             },
 
             _loadButtonConfig: function (callback) {
@@ -45,6 +46,8 @@ define([
                             placement: this.options.placement,
                             sandbox: checkoutSessionConfig['sandbox'],
                         });
+
+                        $(this.options.hideIfUnavailable).show();
                     } else {
                         $(this.options.hideIfUnavailable).hide();
                     }
@@ -68,6 +71,17 @@ define([
              * Create button
              */
             _create: function () {
+                this._draw();
+
+                if (this.options.placement == 'Product') {
+                    this._redraw();
+                }
+            },
+
+            /**
+            * Draw button
+            **/
+            _draw: function () {
                 var $buttonContainer = this.element;
                 amazonCheckout.withAmazonCheckout(function (amazon, args) {
                     var $buttonRoot = $('<div></div>');
@@ -80,9 +94,23 @@ define([
                 }, this);
             },
 
+            /**
+            * Redraw button if needed
+            **/
+            _redraw: function () {
+                var self = this;
+                var cartData = customerData.get('cart');
+                cartData.subscribe(function (updatedCart) {
+                    if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
+                        self._draw();
+                    }
+                });
+            
+            }
+
             click: function () {
                 this.element.children().first().trigger('click');
-            }
+            },
         });
 
         return $.amazon.AmazonButton;
