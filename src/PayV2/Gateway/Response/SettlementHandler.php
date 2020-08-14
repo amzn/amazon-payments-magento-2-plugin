@@ -58,7 +58,7 @@ class SettlementHandler implements HandlerInterface
             $payment->setTransactionId($response['chargeId'].'-capture');
             $payment->setParentTransactionId($response['chargeId']);
 
-            switch ($response['statusDetail']['state']) {
+            switch ($response['statusDetails']['state']) {
                 case 'CaptureInitiated':
                     $payment->setIsTransactionPending(true);
                     $payment->setIsTransactionClosed(false);

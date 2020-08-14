@@ -319,7 +319,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     public function getBillingAddress($cartId)
     {
         return $this->fetchAddress($cartId, false, function ($session) {
-            return $session['paymentPreferences'][0]['billingAddress'] ?? [];
+            return $session['billingAddress'] ?? [];
         });
     }
 
@@ -374,8 +374,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         }
         if ($checkoutSession && $cart->getIsActive()) {
             $response = $this->amazonAdapter->updateCheckoutSession($cart, $checkoutSession->getSessionId());
-            if (!empty($response['webCheckoutDetail']['amazonPayRedirectUrl'])) {
-                $result = $response['webCheckoutDetail']['amazonPayRedirectUrl'];
+            if (!empty($response['webCheckoutDetails']['amazonPayRedirectUrl'])) {
+                $result = $response['webCheckoutDetails']['amazonPayRedirectUrl'];
                 $checkoutSession->setUpdated();
                 $this->checkoutSessionRepository->save($checkoutSession);
             }
@@ -400,6 +400,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                     $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
                 }
                 $result = $this->cartManagement->placeOrder($cart->getId());
+                $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getBaseGrandTotal() , $cart->getBaseCurrencyCode());
                 $checkoutSession->complete();
                 $this->checkoutSessionRepository->save($checkoutSession);
             } catch (\Exception $e) {
