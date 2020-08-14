@@ -24,7 +24,7 @@
     "magento/module-customer": "*",
     "magento/module-store": "*",
     "zendframework/zend-crypt": "^2.6.0",
-    "amzn/amazon-pay-sdk-v2-php": "^4.2",
+    "amzn/amazon-pay-api-sdk-php": "^2.2",
     "aws/aws-php-sns-message-validator": "^1.5"
   },
   "repositories": [

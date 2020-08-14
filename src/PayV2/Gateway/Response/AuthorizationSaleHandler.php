@@ -63,7 +63,7 @@ class AuthorizationSaleHandler implements HandlerInterface
 
             $payment->setTransactionId($response['chargeId']);
 
-            $chargeState = $response['charge']['statusDetail']['state'];
+            $chargeState = $response['statusDetails']['state'];
 
             switch ($chargeState) {
                 case 'Authorized':
