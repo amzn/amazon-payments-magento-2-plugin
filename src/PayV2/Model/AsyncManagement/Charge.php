@@ -119,13 +119,13 @@ class Charge extends AbstractOperation
             $charge = $this->amazonAdapter->getCharge($order->getStoreId(), $chargeId);
 
             // Compare Charge State with Order State
-            if (isset($charge['statusDetail'])) {
-                switch ($charge['statusDetail']['state']) {
+            if (isset($charge['statusDetails'])) {
+                switch ($charge['statusDetails']['state']) {
                     case 'Declined':
-                        $this->decline($order, $chargeId, $charge['statusDetail']['reasonDescription']);
+                        $this->decline($order, $chargeId, $charge['statusDetails']['reasonDescription']);
                         break;
                     case 'Canceled':
-                        $this->cancel($order, $charge['statusDetail']);
+                        $this->cancel($order, $charge['statusDetails']);
                         break;
                     case 'Authorized':
                         $this->authorize($order, $chargeId);

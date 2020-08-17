@@ -116,7 +116,7 @@ class AmazonPayV2Adapter
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
-            'webCheckoutDetail' => [
+            'webCheckoutDetails' => [
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
@@ -167,10 +167,10 @@ class AmazonPayV2Adapter
         }
 
         $payload = [
-            'webCheckoutDetail' => [
+            'webCheckoutDetails' => [
                 'checkoutResultReturnUrl' => $this->amazonConfig->getCheckoutResultUrl()
             ],
-            'paymentDetail' => [
+            'paymentDetails' => [
                 'paymentIntent' => 'Authorize',
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
@@ -332,7 +332,7 @@ class AmazonPayV2Adapter
             // Get charge for async checkout
             $charge = $this->getCharge($quote->getStoreId(), $response['chargeId']);
 
-            if ($captureNow && $charge['statusDetail']['state'] == 'Authorized') {
+            if ($captureNow && $charge['statusDetails']['state'] == 'Authorized') {
                 $response = $this->captureCharge(
                     $quote->getStoreId(),
                     $response['chargeId'],
@@ -343,6 +343,26 @@ class AmazonPayV2Adapter
             $response['charge'] = $charge;
         }
 
+        return $response;
+    }
+
+
+    /**
+     * @param $storeId
+     * @param $sessionId
+     * @param $amount
+     * @param $currencyCode
+     */
+    public function completeCheckoutSession($storeId, $sessionId, $amount, $currencyCode)
+    {
+        $payload = [
+            'chargeAmount' => [
+                'amount' => $amount,
+                'currencyCode' => $currencyCode,
+            ]
+        ];
+
+        $response = $this->clientFactory->create($storeId)->completeCheckoutSession($sessionId, json_encode($payload));
         return $response;
     }
 
