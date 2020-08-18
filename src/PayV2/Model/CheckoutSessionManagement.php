@@ -17,9 +17,11 @@
 namespace Amazon\PayV2\Model;
 
 use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use http\Exception\UnexpectedValueException;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 
 class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionManagementInterface
 {
@@ -52,6 +54,16 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
     private $countryCollectionFactory;
+
+    /**
+     * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     */
+    private $transactionRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var \Amazon\PayV2\Domain\AmazonAddressFactory
@@ -113,6 +125,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -127,7 +141,9 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
         \Amazon\PayV2\Helper\Data $amazonHelper,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+        \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     )
     {
         $this->storeManager = $storeManager;
@@ -143,6 +159,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
+        $this->transactionRepository = $transactionRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -384,6 +402,45 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     }
 
     /**
+     * Load transaction.
+     *
+     * @param $transactionId
+     * @param \Magento\Sales\Api\Data\TransactionInterface $type
+     * @return mixed
+     */
+    private function getTransaction($transactionId, $type = null)
+    {
+        $this->searchCriteriaBuilder->addFilter(Transaction::TXN_ID, $transactionId);
+
+        if ($type) {
+            $this->searchCriteriaBuilder->addFilter(Transaction::TXN_TYPE, $type);
+        }
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $transactionCollection = $this->transactionRepository->getList($searchCriteria);
+
+        if (count($transactionCollection)) {
+            return $transactionCollection->getFirstItem();
+        }
+    }
+
+    /**
+     * Swaps the checkoutSessionId that was originally stored on the sales_payment_transaction record with the
+     * real payment charge (transaction) id
+     *
+     * @param array $amazonResult must have two keys, 'checkoutSessionId' and 'chargeId'
+     */
+    private function updateTransactionId($amazonResult)
+    {
+        if (!array_key_exists('checkoutSessionId', $amazonResult) || !array_key_exists('chargeId', $amazonResult)) {
+            throw new Exception('Required data not set on result');
+        }
+
+        $transaction = $this->getTransaction($amazonResult['checkoutSessionId'], Transaction::TYPE_AUTH);
+        $transaction->setTxnId($amazonResult['chargeId'])->save();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function completeCheckoutSession($cartId)
@@ -401,6 +458,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 }
                 $result = $this->cartManagement->placeOrder($cart->getId());
                 $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getBaseGrandTotal() , $cart->getBaseCurrencyCode());
+                $this->updateTransactionId($amazonResult);
                 $checkoutSession->complete();
                 $this->checkoutSessionRepository->save($checkoutSession);
             } catch (\Exception $e) {
