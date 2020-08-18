@@ -61,12 +61,13 @@ class AuthorizationSaleHandler implements HandlerInterface
             /** @var Payment $payment */
             $payment = $paymentDO->getPayment();
 
-            $payment->setTransactionId($response['chargeId']);
+            $payment->setTransactionId($response['checkoutSessionId']);
 
             $chargeState = $response['statusDetails']['state'];
 
             switch ($chargeState) {
                 case 'Authorized':
+                case 'Open':
                     $payment->setIsTransactionClosed(false);
                     break;
                 case 'AuthorizationInitiated':

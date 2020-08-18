@@ -362,8 +362,8 @@ class AmazonPayV2Adapter
             ]
         ];
 
-        $response = $this->clientFactory->create($storeId)->completeCheckoutSession($sessionId, json_encode($payload));
-        return $response;
+        $rawResponse = $this->clientFactory->create($storeId)->completeCheckoutSession($sessionId, json_encode($payload));
+        return $this->processResponse($rawResponse, __FUNCTION__);
     }
 
     /**
