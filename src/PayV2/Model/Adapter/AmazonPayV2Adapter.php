@@ -21,6 +21,10 @@ namespace Amazon\PayV2\Model\Adapter;
  */
 class AmazonPayV2Adapter
 {
+    const PAYMENT_INTENT_CONFIRM = 'Confirm';
+    const PAYMENT_INTENT_AUTHORIZE = 'Authorize';
+    const PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE = 'AuthorizeWithCapture';
+
     /**
      * @var \Amazon\PayV2\Client\ClientFactoryInterface
      */
@@ -151,9 +155,10 @@ class AmazonPayV2Adapter
      *
      * @param $quote
      * @param $checkoutSessionId
+     * @param $paymentIntent
      * @return mixed
      */
-    public function updateCheckoutSession($quote, $checkoutSessionId)
+    public function updateCheckoutSession($quote, $checkoutSessionId, $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE)
     {
         $storeId = $quote->getStoreId();
         $store = $quote->getStore();
@@ -171,7 +176,7 @@ class AmazonPayV2Adapter
                 'checkoutResultReturnUrl' => $this->amazonConfig->getCheckoutResultUrl()
             ],
             'paymentDetails' => [
-                'paymentIntent' => 'Authorize',
+                'paymentIntent' => $paymentIntent,
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
@@ -323,25 +328,13 @@ class AmazonPayV2Adapter
      * AuthorizeClient and SaleClient Gateway Command
      *
      * @param $data
+     * @return array|mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function authorize($data, $captureNow = false)
+    public function authorize($data)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
         $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
-        if (!empty($response['chargeId'])) {
-            // Get charge for async checkout
-            $charge = $this->getCharge($quote->getStoreId(), $response['chargeId']);
-
-            if ($captureNow && $charge['statusDetails']['state'] == 'Authorized') {
-                $response = $this->captureCharge(
-                    $quote->getStoreId(),
-                    $response['chargeId'],
-                    $quote->getGrandTotal(),
-                    $quote->getStore()->getCurrentCurrency()->getCode()
-                );
-            }
-            $response['charge'] = $charge;
-        }
 
         return $response;
     }
