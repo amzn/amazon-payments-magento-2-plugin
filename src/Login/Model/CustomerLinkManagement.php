@@ -99,7 +99,7 @@ class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagement
         $customerData->setFirstname($amazonCustomer->getFirstName());
         $customerData->setLastname($amazonCustomer->getLastName());
         $customerData->setEmail($amazonCustomer->getEmail());
-        $password = $this->random->getRandomString(64);
+        $password = "4mZ!" . $this->random->getRandomString(60);
 
         $customer = $this->accountManagement->createAccount($customerData, $password);
 
