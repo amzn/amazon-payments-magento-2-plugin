@@ -23,7 +23,7 @@ require (['uiRegistry'], function(registry) {
 });
 
 <?php if ($block->getRequest()->getFrontName() != 'checkout'): ?>
-require (['jquery', 'Amazon_PayV2/js/model/storage'], function($, amazonStorage) {
+require (['Amazon_PayV2/js/model/storage'], function(amazonStorage) {
     amazonStorage.clearAmazonCheckout();
 });
 <?php endif; ?>
