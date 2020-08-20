@@ -15,7 +15,8 @@
 
 define([
     'jquery',
-    'Amazon_PayV2/js/model/amazon-payv2-config'
+    'Amazon_PayV2/js/model/amazon-payv2-config',
+    'jquery/jquery-storageapi'
 ], function ($, amazonPayV2Config) {
     'use strict';
 
