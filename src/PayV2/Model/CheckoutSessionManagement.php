@@ -202,6 +202,20 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
 
     /**
      * @param mixed $cartId
+     * @return bool
+     */
+    protected function isAvailable($cartId)
+    {
+        $result = false;
+        if ($this->amazonConfig->isEnabled()) {
+            $cart = $this->getCart($cartId);
+            $result = !$this->amazonHelper->hasRestrictedProducts($cart);
+        }
+        return $result;
+    }
+
+    /**
+     * @param mixed $cartId
      * @param bool $isShippingAddress
      * @param mixed $addressDataExtractor
      * @return mixed
@@ -209,7 +223,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     protected function fetchAddress($cartId, $isShippingAddress, $addressDataExtractor)
     {
         $result = false;
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->isAvailable($cartId)) {
             $session = $this->getAmazonSession($cartId);
 
             $addressData = call_user_func($addressDataExtractor, $session);
@@ -268,7 +282,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     public function getConfig($cartId)
     {
         $result = [];
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->isAvailable($cartId)) {
             $result = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
@@ -288,7 +302,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     {
         $result = [];
         $this->cancelCheckoutSession($cartId);
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->isAvailable($cartId)) {
             $result = $this->amazonAdapter->createCheckoutSession($this->storeManager->getStore()->getId());
             if (isset($result['checkoutSessionId'])) {
                 $checkoutSession = $this->checkoutSessionFactory->create([
@@ -337,7 +351,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      */
     public function cancelCheckoutSession($cartId)
     {
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->isAvailable($cartId)) {
             $checkoutSession = $this->getCheckoutSessionForCart($cartId);
             if ($checkoutSession) {
                 $checkoutSession->cancel();
@@ -352,7 +366,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     public function getCheckoutSession($cartId)
     {
         $result = null;
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->isAvailable($cartId)) {
             $checkoutSession = $this->getCheckoutSessionForCart($cartId);
             if ($checkoutSession) {
                 $result = $checkoutSession->getSessionId();
@@ -369,7 +383,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $result = null;
         $checkoutSession = null;
         $cart = $this->getCart($cartId);
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->isAvailable($cartId)) {
             $checkoutSession = $this->getCheckoutSessionForCart($cart);
         }
         if ($checkoutSession && $cart->getIsActive()) {
@@ -391,7 +405,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $result = null;
         $checkoutSession = null;
         $cart = $this->getCart($cartId);
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->isAvailable($cartId)) {
             $checkoutSession = $this->getCheckoutSessionForCart($cart);
         }
         if ($checkoutSession && $this->canComplete($cart, $checkoutSession)) {

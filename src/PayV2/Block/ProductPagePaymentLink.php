@@ -24,6 +24,11 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     private $amazonConfig;
 
     /**
+     * @var \Amazon\PayV2\Helper\Data
+     */
+    private $amazonHelper;
+
+    /**
      * @var \Magento\Framework\Registry
      */
     private $registry;
@@ -31,12 +36,14 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
+        \Amazon\PayV2\Helper\Data $amazonHelper,
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {
         parent::__construct($context, $data);
 
         $this->amazonConfig = $amazonConfig;
+        $this->amazonHelper = $amazonHelper;
         $this->registry = $registry;
     }
 
@@ -45,7 +52,7 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        if (!$this->amazonConfig->isEnabled() || !$this->amazonConfig->isPayButtonAvailableOnProductPage()) {
+        if (!$this->amazonConfig->isEnabled() || $this->amazonHelper->isProductRestricted($this->_getProduct()) || !$this->amazonConfig->isPayButtonAvailableOnProductPage()) {
             return '';
         }
 
@@ -53,12 +60,18 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return \Magento\Catalog\Model\Product
+     */
+    protected function _getProduct()
+    {
+        return $this->registry->registry('product');
+    }
+
+    /**
      * @return bool
      */
     public function isPayOnly()
     {
-        $product = $this->registry->registry('product');
-        /* @var $product \Magento\Catalog\Model\Product */
-        return $product->isVirtual();
+        return $this->_getProduct()->isVirtual();
     }
 }

@@ -63,7 +63,7 @@ class CheckoutProcessor
         $paymentConfig = &$jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment'];
 
-        if ($this->amazonConfig->isEnabled()) {
+        if ($this->amazonConfig->isEnabled() && !$this->amazonHelper->hasRestrictedProducts()) {
             $shippingConfig['component'] = 'Amazon_PayV2/js/view/shipping';
             $shippingConfig['children']['customer-email']['component'] = 'Amazon_PayV2/js/view/form/element/email';
             $shippingConfig['children']['address-list']['component'] = 'Amazon_PayV2/js/view/shipping-address/list';
