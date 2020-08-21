@@ -18,7 +18,8 @@ define([
     'Amazon_PayV2/js/model/storage',
     'mage/url',
     'Amazon_PayV2/js/amazon-checkout',
-], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout) {
+    'Magento_Customer/js/customer-data'
+], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout, customerData) {
     'use strict';
 
     if (amazonStorage.isEnabled) {
@@ -26,23 +27,30 @@ define([
             options: {
                 payOnly: null,
                 placement: 'Cart',
+                hideIfUnavailable: ''
             },
 
             _loadButtonConfig: function (callback) {
                 checkoutSessionConfigLoad(function (checkoutSessionConfig) {
-                    callback({
-                        merchantId: checkoutSessionConfig['merchant_id'],
-                        createCheckoutSession: {
-                            url: url.build('amazon_payv2/checkout/createSession'),
-                            method: 'PUT'
-                        },
-                        ledgerCurrency: checkoutSessionConfig['currency'],
-                        buttonColor: checkoutSessionConfig['button_color'],
-                        checkoutLanguage: checkoutSessionConfig['language'],
-                        productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
-                        placement: this.options.placement,
-                        sandbox: checkoutSessionConfig['sandbox'],
-                    });
+                    if (!$.isEmptyObject(checkoutSessionConfig)) {
+                        callback({
+                            merchantId: checkoutSessionConfig['merchant_id'],
+                            createCheckoutSession: {
+                                url: url.build('amazon_payv2/checkout/createSession'),
+                                method: 'PUT'
+                            },
+                            ledgerCurrency: checkoutSessionConfig['currency'],
+                            buttonColor: checkoutSessionConfig['button_color'],
+                            checkoutLanguage: checkoutSessionConfig['language'],
+                            productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
+                            placement: this.options.placement,
+                            sandbox: checkoutSessionConfig['sandbox'],
+                        });
+
+                        $(this.options.hideIfUnavailable).show();
+                    } else {
+                        $(this.options.hideIfUnavailable).hide();
+                    }
                 }.bind(this));
             },
 
@@ -63,6 +71,17 @@ define([
              * Create button
              */
             _create: function () {
+                this._draw();
+
+                if (this.options.placement == 'Product') {
+                    this._redraw();
+                }
+            },
+
+            /**
+            * Draw button
+            **/
+            _draw: function () {
                 var $buttonContainer = this.element;
                 amazonCheckout.withAmazonCheckout(function (amazon, args) {
                     var $buttonRoot = $('<div></div>');
@@ -73,6 +92,20 @@ define([
                         $('.amazon-button-container-v2 .field-tooltip').fadeIn();
                     });
                 }, this);
+            },
+
+            /**
+            * Redraw button if needed
+            **/
+            _redraw: function () {
+                var self = this;
+                var cartData = customerData.get('cart');
+                cartData.subscribe(function (updatedCart) {
+                    if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
+                        self._draw();
+                    }
+                });
+            
             },
 
             click: function () {

@@ -44,7 +44,7 @@ define([
                 });
             }
         } else {
-            callback(localStorage.get('config'));
+            callback(getLocalStorage().get('config'));
         }
     };
 });
