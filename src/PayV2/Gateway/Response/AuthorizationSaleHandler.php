@@ -61,40 +61,8 @@ class AuthorizationSaleHandler implements HandlerInterface
             /** @var Payment $payment */
             $payment = $paymentDO->getPayment();
 
-            $payment->setTransactionId($response['chargeId']);
-
-            $chargeState = $response['statusDetails']['state'];
-
-            switch ($chargeState) {
-                case 'Authorized':
-                    $payment->setIsTransactionClosed(false);
-                    break;
-                case 'AuthorizationInitiated':
-                    $payment->setIsTransactionClosed(false);
-                    $this->setPending($payment);
-                    $this->asyncManagement->queuePendingAuthorization($response['chargeId']);
-                    break;
-                case 'Captured':
-                    $payment->setIsTransactionClosed(true);
-                    break;
-                case 'CaptureInitiated':
-                    $payment->setIsTransactionClosed(false);
-                    break;
-            }
+            $payment->setTransactionId($response['checkoutSessionId']);
+            $payment->setIsTransactionClosed(false);
         }
-    }
-
-    /**
-     * Set order as pending review
-     *
-     * @param Payment $payment
-     */
-    private function setPending($payment)
-    {
-        $order = $payment->getOrder();
-        $payment->setIsTransactionPending(true);
-        $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)->setStatus(
-            \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW
-        );
     }
 }
