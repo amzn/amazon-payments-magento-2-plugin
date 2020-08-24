@@ -2,3 +2,5 @@
 "Edit Billing Address","Rechnungsadresse ändern"
 "Edit Payment Method","Zahlungsmethode ändern"
 "Billing address associated with this payment method:","Mit dieser Zahlungsmethode verbundene Rechnungsadresse:"
+"This transaction was cancelled. Please try again.","Die Transaktion wurde abgebrochen, bitte versuchen Sie es erneut."
+"This transaction was declined. Please try again using a different payment method.","Die Transaktion wurde abgelehnt, bitte nutzen Sie eine andere Zahlungsmethode."
