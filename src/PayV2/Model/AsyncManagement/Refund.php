@@ -92,9 +92,9 @@ class Refund extends AbstractOperation
 
         if ($order) {
             $refund = $this->amazonAdapter->getRefund($order->getStoreId(), $refundId);
-            if (isset($refund['statusDetail']) && $refund['statusDetail']['state'] == 'Declined') {
+            if (isset($refund['statusDetails']) && $refund['statusDetails']['state'] == 'Declined') {
 
-                $order->addStatusHistoryComment($refund['statusDetail']['reasonDescription']);
+                $order->addStatusHistoryComment($refund['statusDetails']['reasonDescription']);
                 $order->save();
 
                 $this->notifier->addNotice(
