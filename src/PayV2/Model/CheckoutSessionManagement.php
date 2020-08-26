@@ -405,7 +405,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
             } catch (\Exception $e) {
                 $session = $this->amazonAdapter->getCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId());
                 if (isset($session['chargePermissionId'])) {
-                    $response = $this->amazonAdapter->closeChargePermission($cart->getStoreId(), $session['chargePermissionId'], 'ERROR: ' . $e->getMessage(), true);
+                    $response = $this->amazonAdapter->closeChargePermission($cart->getStoreId(), $session['chargePermissionId'], 'Canceled due to technical issue: ' . $e->getMessage(), true);
                 }
                 $this->cancelCheckoutSession($cartId);
                 throw $e;

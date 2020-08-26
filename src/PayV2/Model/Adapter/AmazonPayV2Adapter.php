@@ -310,7 +310,7 @@ class AmazonPayV2Adapter
     public function closeChargePermission($storeId, $chargePermissionId, $reason, $cancelPendingCharges = false)
     {
         $payload = [
-            'closureReason' => $reason,
+            'closureReason' => substr($reason, 0, 255),
             'cancelPendingCharges' => $cancelPendingCharges,
         ];
 
