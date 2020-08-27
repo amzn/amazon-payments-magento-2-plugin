@@ -329,6 +329,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     {
         $result = [];
         if ($this->isAvailable($cartId)) {
+            $buttonPayload = $this->amazonAdapter->generateButtonPayload();
+
             $result = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
@@ -336,6 +338,9 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 'language' => $this->amazonConfig->getLanguage(),
                 'pay_only' => $this->amazonHelper->isPayOnly($this->getCart($cartId)),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),
+                'payload' => $buttonPayload,
+                'signature' => $this->amazonAdapter->signButton($buttonPayload),
+                'public_key_id' => $this->amazonConfig->getPublicKeyId(),
             ];
         }
         return $result;

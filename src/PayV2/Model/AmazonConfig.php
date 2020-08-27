@@ -17,6 +17,7 @@
 namespace Amazon\PayV2\Model;
 
 use Magento\Store\Model\ScopeInterface;
+use Amazon\Core\Helper\Data as AmazonCoreHelper;
 
 class AmazonConfig
 {
@@ -59,6 +60,13 @@ class AmazonConfig
     private $remoteAddress;
 
     /**
+     * @var AmazonCoreHelper
+     *
+     * Temporarily route any references to CV1 helper methods through here
+     */
+    private $coreHelper;
+
+    /**
      * AmazonConfig constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -73,7 +81,8 @@ class AmazonConfig
         \Magento\Directory\Model\AllowedCountries $countriesAllowed,
         \Magento\Directory\Model\Config\Source\Country $countryConfig,
         \Magento\Framework\Locale\Resolver $localeResolver,
-        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
+        AmazonCoreHelper $coreHelper
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -81,6 +90,7 @@ class AmazonConfig
         $this->countryConfig = $countryConfig;
         $this->localeResolver = $localeResolver;
         $this->remoteAddress = $remoteAddress;
+        $this->coreHelper = $coreHelper;
     }
 
     /**
@@ -454,7 +464,7 @@ class AmazonConfig
     {
         $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_review_url', $scope, $scopeCode);
         if (empty($result)) {
-            $result = $this->storeManager->getStore()->getUrl('checkout', ['_forced_secure' => true]);
+            $result = $this->storeManager->getStore()->getUrl('amazon_payv2/login/checkout', ['_forced_secure' => true]);
         }
         return $result;
     }
@@ -612,5 +622,13 @@ class AmazonConfig
     public function getPlatformId()
     {
         return $this->scopeConfig->getValue('payment/amazon_payment_v2/platform_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLwaEnabled()
+    {
+        return $this->isEnabled() && $this->coreHelper->isLwaEnabled();
     }
 }

@@ -15,34 +15,35 @@
  */
 namespace Amazon\PayV2\Plugin;
 
-use Amazon\Core\Helper\Data;
+use Magento\Checkout\Controller\Index\Index;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\UrlInterface;
 
-class AmazonCoreHelperData
+class CheckoutController
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @var Session
      */
-    private $amazonConfig;
+    private $session;
 
     /**
-     * AmazonCoreHelperData constructor.
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @var UrlInterface
      */
-    public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-    ) {
-        $this->amazonConfig = $amazonConfig;
+    private $url;
+
+    public function __construct(Session $session, UrlInterface $url)
+    {
+        $this->session = $session;
+        $this->url     = $url;
     }
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterIsPwaEnabled(Data $subject, $result)
+    public function afterExecute(Index $index, ResultInterface $result)
     {
-        // Disable v1 PWA
-        if ($result && $this->amazonConfig->getApiVersion() == '2') {
-            return false;
-        }
+        $this->session->setAfterAmazonAuthUrl($this->url->getUrl('checkout'));
 
         return $result;
     }
