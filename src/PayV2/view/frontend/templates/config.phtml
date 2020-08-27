@@ -22,5 +22,11 @@ require (['uiRegistry'], function(registry) {
     registry.set('amazonPayV2', <?= /* @noEscape */ \Zend_Json::encode($block->getConfig()); ?>);
 });
 
+<?php if ($block->getRequest()->getFrontName() != 'checkout'): ?>
+require (['Amazon_PayV2/js/model/storage'], function(amazonStorage) {
+    amazonStorage.clearAmazonCheckout();
+});
+<?php endif; ?>
+
 </script>
 <?php endif ?>
