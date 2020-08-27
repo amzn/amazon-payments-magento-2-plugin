@@ -56,6 +56,11 @@ class AmazonPayV2Adapter
     private $logger;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $url;
+
+    /**
      * AmazonPayV2Adapter constructor.
      * @param \Amazon\PayV2\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
@@ -63,6 +68,7 @@ class AmazonPayV2Adapter
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Logger\Logger $logger
+     * @pqram \Magento\Framework\UrlInterface $url
      */
     public function __construct(
         \Amazon\PayV2\Client\ClientFactoryInterface $clientFactory,
@@ -70,7 +76,8 @@ class AmazonPayV2Adapter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\PayV2\Helper\Data $amazonHelper,
-        \Amazon\PayV2\Logger\Logger $logger
+        \Amazon\PayV2\Logger\Logger $logger,
+        \Magento\Framework\UrlInterface $url
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
@@ -78,6 +85,7 @@ class AmazonPayV2Adapter
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
         $this->logger = $logger;
+        $this->url = $url;
     }
 
     /**
@@ -360,6 +368,19 @@ class AmazonPayV2Adapter
     }
 
     /**
+     * @param $token
+     * @return array
+     */
+    public function getBuyer($token)
+    {
+        $response = $this->clientFactory
+            ->create()
+            ->getBuyer($token);
+
+        return $this->processResponse($response, __FUNCTION__);
+    }
+
+    /**
      * Process SDK client response
      *
      * @param $clientResponse
@@ -407,4 +428,28 @@ class AmazonPayV2Adapter
             'x-amz-pay-idempotency-key' => uniqid(),
         ];
     }
+
+    /**
+     * Generate static signature for amazon.Pay.renderButton used by checkout.js
+     *
+     * @param array $payload
+     * @param null|int|string $storeId
+     * @return string
+     */
+    public function generateButtonPayload()
+    {
+        $payload = [
+            'signInReturnUrl' => $this->url->getRouteUrl('amazon_payv2/login/authorize/'),
+            'storeId' => $this->amazonConfig->getClientId(),
+            'signInScopes' => ['name', 'email'],
+        ];
+
+        return json_encode($payload, JSON_UNESCAPED_SLASHES);
+    }
+
+    public function signButton($payload, $storeId = null)
+    {
+        return $this->clientFactory->create($storeId)->generateButtonSignature($payload);
+    }
+
 }
