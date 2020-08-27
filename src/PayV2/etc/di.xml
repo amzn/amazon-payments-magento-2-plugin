@@ -245,4 +245,8 @@
         </arguments>
     </virtualType>
 
+    <!-- Order comments for currency differences  -->
+    <type name="Magento\Sales\Model\Order\Payment\State\AuthorizeCommand">
+        <plugin name="amazon_payv2_order_payment_state_authorizecommand" type="Amazon\PayV2\Plugin\AuthorizeCommand" />
+    </type>
 </config>
