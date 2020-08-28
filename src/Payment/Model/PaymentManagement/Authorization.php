@@ -290,6 +290,9 @@ class Authorization extends AbstractOperation
             }
 
             $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getGrandTotal()) .']';
+            }
             $message = __('Captured amount of %1 online', $formattedAmount);
             $payment->setDataUsingMethod(
                 'base_amount_paid_online',
@@ -297,7 +300,10 @@ class Authorization extends AbstractOperation
             );
         } else {
             $formattedAmount = $order->getBaseCurrency()->formatTxt($payment->getBaseAmountAuthorized());
-            $message = __('Authorized amount of %1 online', $formattedAmount);
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getAmountOrdered()) .']';
+            }
+            $message = __('Authorized amount of %1', $formattedAmount);
         }
 
         $transaction = ($newTransaction) ?: $this->paymentManagement->getTransaction($transactionId, $payment, $order);
@@ -366,8 +372,14 @@ class Authorization extends AbstractOperation
             $invoice = $this->getInvoice($transactionId, $order);
             $this->setPaymentReview($order);
             $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getGrandTotal()) .']';
+            }
         } else {
             $formattedAmount = $order->getBaseCurrency()->formatTxt($payment->getBaseAmountAuthorized());
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getAmountOrdered()) .']';
+            }
         }
 
         $message = __('Declined amount of %1 online', $formattedAmount);
@@ -409,9 +421,15 @@ class Authorization extends AbstractOperation
         if ($capture) {
             $invoice = $this->getInvoiceAndSetCancelled($transactionId, $order);
             $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getGrandTotal()) .']';
+            }
             $this->addCaptureDeclinedNotice($order);
         } else {
             $formattedAmount = $order->getBaseCurrency()->formatTxt($payment->getBaseAmountAuthorized());
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getAmountOrdered()) .']';
+            }
         }
 
         $message = __('Declined amount of %1 online', $formattedAmount);
