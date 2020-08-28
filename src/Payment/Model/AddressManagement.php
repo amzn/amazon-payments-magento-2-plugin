@@ -135,6 +135,9 @@ class AddressManagement implements AddressManagementInterface
 
             if (isset($data['OrderReferenceDetails']['Destination']['PhysicalDestination'])) {
                 $shippingAddress = $data['OrderReferenceDetails']['Destination']['PhysicalDestination'];
+                if (!isset($shippingAddress['Phone']) || empty($shippingAddress['Phone'])) {
+                    $shippingAddress['Phone'] = '000-000-0000';
+                }
 
                 return $this->convertToMagentoAddress($shippingAddress, true);
             }
