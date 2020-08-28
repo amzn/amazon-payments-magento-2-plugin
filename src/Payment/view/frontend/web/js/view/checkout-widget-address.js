@@ -164,6 +164,8 @@ define(
                             addressConverter.quoteAddressToFormAddressData(addressData)
                         );
                         checkoutDataResolver.resolveEstimationAddress();
+
+                        amazonStorage.isAmazonShippingAddressSelected(true);
                     }
                 ).fail(
                     function (response) {
