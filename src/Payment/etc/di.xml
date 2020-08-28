@@ -318,4 +318,9 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    
+    <!-- Order comments for currency differences  -->
+    <type name="Magento\Sales\Model\Order\Payment\State\AuthorizeCommand">
+        <plugin name="amazon_pay_order_payment_state_authorizecommand" type="Amazon\Payment\Plugin\AuthorizeCommand" />
+    </type>
 </config>
