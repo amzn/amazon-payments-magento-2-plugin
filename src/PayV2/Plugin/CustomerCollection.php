@@ -16,7 +16,7 @@
 namespace Amazon\PayV2\Plugin;
 
 use Closure;
-use Amazon\Core\Helper\Data as AmazonHelper;
+use Amazon\PayV2\Model\AmazonConfig;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
 use Magento\Framework\DB\Select;
@@ -24,17 +24,17 @@ use Magento\Framework\DB\Select;
 class CustomerCollection
 {
     /**
-     * @var AmazonHelper
+     * @var AmazonConfig
      */
-    private $amazonHelper;
+    private $amazonConfig;
 
     /**
-     * @param AmazonHelper $amazonHelper
+     * @param AmazonConfig $amazonConfig
      */
     public function __construct(
-        AmazonHelper $amazonHelper
+        AmazonConfig $amazonConfig
     ) {
-        $this->amazonHelper = $amazonHelper;
+        $this->amazonConfig = $amazonConfig;
     }
 
     /**
@@ -55,7 +55,7 @@ class CustomerCollection
         $condition = null,
         $joinType = 'inner'
     ) {
-        if ($this->amazonHelper->isLwaEnabled() && is_array($attribute)) {
+        if ($this->amazonConfig->isLwaEnabled() && is_array($attribute)) {
             $attribute = $this->addAmazonIdFilter($attribute, $collection);
 
             if (0 === count($attribute)) {

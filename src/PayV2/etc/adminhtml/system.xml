@@ -162,6 +162,17 @@
                         </depends>
                     </field>
                     <field id="lwa_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="payment/us/amazon_payment/api_version">1</field>
+                        </depends>
+                    </field>
+                    <field id="v2_lwa_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Login with Amazon</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/amazon_payment_v2/lwa_enabled</config_path>
+                        <depends>
+                            <field id="payment/us/amazon_payment/api_version">2</field>
+                        </depends>
                         <comment><![CDATA[Please note that if Amazon Sign-in is disabled and Magento Guest Checkout is disabled, the customer will be able to use Amazon Pay only if already signed in with a Magento account]]></comment>
                     </field>
                     <field id="update_mechanism" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">

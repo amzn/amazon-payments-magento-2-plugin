@@ -22,7 +22,7 @@ define([
     'use strict';
 
     if (amazonStorage.isEnabled) {
-        $.widget('amazon.AmazonButton', {
+        $.widget('amazon.AmazonLoginButton', {
             options: {
                 payOnly: null,
                 placement: 'Cart',
@@ -82,6 +82,6 @@ define([
             }
         });
 
-        return $.amazon.AmazonButton;
+        return $.amazon.AmazonLoginButton;
     }
 });
