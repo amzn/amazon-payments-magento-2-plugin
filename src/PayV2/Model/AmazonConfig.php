@@ -624,11 +624,23 @@ class AmazonConfig
         return $this->scopeConfig->getValue('payment/amazon_payment_v2/platform_id');
     }
 
-    /**
+    /*
      * @return bool
      */
-    public function isLwaEnabled()
+    public function isLwaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        return $this->isEnabled() && $this->coreHelper->isLwaEnabled();
+        if (!$this->isEnabled()) {
+            return false;
+        }
+
+        if (!$this->clientHasAllowedIp()) {
+            return false;
+        }
+
+        return $this->scopeConfig->isSetFlag(
+            'payment/amazon_payment_v2/lwa_enabled',
+            $scope,
+            $scopeCode
+        );
     }
 }
