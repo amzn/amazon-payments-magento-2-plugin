@@ -18,8 +18,8 @@ Amazon Pay offers a familiar and convenient buying experience that can help your
 
 Requirements:
 * Magento minimum version requirement: 2.4.0 and above
-* Amazon Pay V1 plugin minimum version requirement: 4.0.2 and above
-* PHP 7.3 and 7.4 supported
+* Amazon Pay plugin minimum version requirement: 4.0.2 and above
+* Supported PHP versions: 7.3 and 7.4
 
 ## Dependencies
 
@@ -27,7 +27,7 @@ You can find a list of modules in the require section of the `composer.json` fil
 same directory as this `README.md` file.
 
 ## Installation and Configuration
-If you are on M2.2.6 and above or M2.3.x, please use the [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) branch. The [README.md](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#amazon-pay-checkout-v2) contains all the installation and configuration information.
+If you are on M2.2.6 and above or M2.3.x, please use [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) branch. The [README.md](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#amazon-pay-checkout-v2) contains all the installation and configuration information.
 
 ## Installation Steps
 
@@ -55,7 +55,7 @@ If Composer installation didn't work, use the manual procedure below. If any of 
 
 In `magento-root`, execute:
 ```
-$ composer require amzn/amazon-pay-sdk-v2-php
+$ composer require amzn/amazon-pay-api-sdk-php
 $ composer require aws/aws-php-sns-message-validator
 $ bin/magento module:enable Amazon_PayV2 --clear-static-content
 ```
@@ -112,5 +112,5 @@ The following table provides an overview on which Git branch is compatible to wh
 
 | Magento Version | Github Branch | Latest release |
 | ------------- | ------------- | ------------- |
-| 2.2.6 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.4.1 |
-| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.1.4 |
+| 2.2.6 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.5.0 |
+| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.2.0 |
