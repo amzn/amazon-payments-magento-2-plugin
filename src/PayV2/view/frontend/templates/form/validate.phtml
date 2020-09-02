@@ -52,11 +52,13 @@
                                 <span><?= $block->escapeHtml(__('Ok')) ?></span>
                             </button>
                         </div>
+                        <?php if ($block->isGuestCheckoutEnabled()): ?>
                         <div class="secondary continue-as-guest">
                             <a class="action secondary" href="<?= $block->escapeUrl($block->getContinueAsGuestUrl())?>">
                                 <span><?= $block->escapeHtml(__('Continue as Guest')) ?></span>
                             </a>
                         </div>
+                        <?php endif; ?>
                         <div class="secondary forgot-password">
                             <a class="action secondary" href="<?= $block->escapeUrl($block->getForgotPasswordUrl()) ?>">
                                 <span><?= $block->escapeHtml(__('Forgot Your Password?')) ?></span>

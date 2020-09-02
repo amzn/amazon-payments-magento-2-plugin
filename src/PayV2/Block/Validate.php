@@ -33,4 +33,9 @@ class Validate extends Template
     {
         return $this->_urlBuilder->getUrl('checkout');
     }
+
+    public function isGuestCheckoutEnabled()
+    {
+        return $this->_scopeConfig->getValue('checkout/options/guest_checkout');
+    }
 }

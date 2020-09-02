@@ -25,7 +25,8 @@ var config = {
             amazonPayV2ProductAdd: 'Amazon_PayV2/js/amazon-product-add',
             amazonPayV2Button: 'Amazon_PayV2/js/amazon-button',
             amazonPayV2Config: 'Amazon_PayV2/js/model/amazonPayV2Config',
-            amazonPayV2Login: 'Amazon_PayV2/js/amazon-login'
+            amazonPayV2LoginButton: 'Amazon_PayV2/js/amazon-login-button',
+            amazonPayV2Logout: 'Amazon_PayV2/js/amazon-logout'
         }
     },
     paths: {
