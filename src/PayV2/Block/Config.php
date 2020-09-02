@@ -72,4 +72,12 @@ class Config extends \Magento\Framework\View\Element\Template
     {
         return $this->amazonConfig->isEnabled();
     }
+
+    /**
+     * @return bool
+     */
+    public function isLwaEnabled()
+    {
+        return $this->amazonConfig->isLwaEnabled();
+    }
 }
