@@ -100,8 +100,8 @@ class AuthorizationRequestBuilder implements BuilderInterface
         $storeId = $orderDO->getStoreId();
         $storeName = '';
 
-        $currencyCode = $orderDO->getCurrencyCode();
-        $total = $buildSubject['amount'];
+        $currencyCode = $payment->getOrder()->getOrderCurrencyCode();
+        $total = $payment->getAmountOrdered();
 
         // capture sale or new auth/capture for partial capture
         if (isset($buildSubject['multicurrency']) && $buildSubject['multicurrency']['multicurrency']) {
