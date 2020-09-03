@@ -429,9 +429,6 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $result = null;
         $checkoutSession = null;
         $paymentIntent = Adapter\AmazonPayV2Adapter::PAYMENT_INTENT_AUTHORIZE;
-        if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
-            $paymentIntent = Adapter\AmazonPayV2Adapter::PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE;
-        }
         $cart = $this->getCart($cartId);
         if ($this->isAvailable($cartId)) {
             $checkoutSession = $this->getCheckoutSessionForCart($cart);
@@ -523,6 +520,9 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 $order = $this->orderRepository->get($result);
                 $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getBaseGrandTotal() , $cart->getBaseCurrencyCode());
                 $chargeId = $amazonResult['chargeId'];
+                if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
+                    $this->amazonAdapter->captureCharge($cart->getStoreId(), $chargeId, $cart->getGrandTotal(), $cart->getQuoteCurrencyCode());
+                }
                 $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
                 $payment = $order->getPayment();
                 $transaction = $this->getTransaction($amazonResult['checkoutSessionId']);
