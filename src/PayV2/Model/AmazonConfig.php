@@ -643,4 +643,18 @@ class AmazonConfig
             $scopeCode
         );
     }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
+    public function isGuestCheckoutEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            'checkout/options/guest_checkout',
+            $scope,
+            $scopeCode
+        );
+    }
 }
