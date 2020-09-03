@@ -320,7 +320,7 @@
     </type>
     
     <!-- Order comments for currency differences  -->
-    <type name="Magento\Sales\Model\Order\Payment\State\AuthorizeCommand">
-        <plugin name="amazon_pay_order_payment_state_authorizecommand" type="Amazon\Payment\Plugin\AuthorizeCommand" />
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="amazon_pay_order_payment" type="Amazon\Payment\Plugin\OrderCurrencyComment" />
     </type>
 </config>
