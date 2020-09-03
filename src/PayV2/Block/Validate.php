@@ -31,7 +31,8 @@ class Validate extends Template
 
     public function getContinueAsGuestUrl()
     {
-        return $this->_urlBuilder->getUrl('checkout');
+        $checkoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
+        return $this->_urlBuilder->getUrl('checkout', ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]);
     }
 
     public function isGuestCheckoutEnabled()

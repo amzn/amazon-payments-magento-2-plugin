@@ -18,7 +18,6 @@ namespace Amazon\PayV2\Controller\Login;
 use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
 use Amazon\PayV2\Domain\ValidationCredentials;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\Exception\NotFoundException;
 use Zend_Validate;
 
 class Checkout extends \Amazon\PayV2\Controller\Login
@@ -29,30 +28,32 @@ class Checkout extends \Amazon\PayV2\Controller\Login
     public function execute()
     {
         $checkoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
-        $checkoutSession = $this->amazonAdapter->getCheckoutSession($this->storeManager->getStore()->getId(), $checkoutSessionId);
-        $amazonCustomer = $this->getAmazonCustomerFromSession($checkoutSession);
 
         try {
-            if ($this->amazonConfig->isLwaEnabled()) {
+            $checkoutSession = $this->amazonAdapter->getCheckoutSession($this->storeManager->getStore()->getId(), $checkoutSessionId);
+
+            if (!$this->amazonConfig->isLwaEnabled()) {
+                $userInfo = $checkoutSession['buyer'];
+                if ($userInfo && isset($userInfo['email'])) {
+                    $userEmail = $userInfo['email'];
+                    $quote = $this->session->getQuote();
+
+                    if ($quote) {
+                        $quote->setCustomerEmail($userEmail);
+                        $quote->save();
+                    }
+                }
+            } else {
+                $amazonCustomer = $this->createAmazonCustomerFromSession($checkoutSession);
                 if ($amazonCustomer) {
                     $processed = $this->processAmazonCustomer($amazonCustomer);
 
                     if ($processed instanceof ValidationCredentials) {
                         $this->session->setValidationCredentials($processed);
                         $this->session->setAmazonCustomer($amazonCustomer);
-                        return $this->_redirect($this->_url->getRouteUrl('*/*/validate'));
-                    } else {
+                        return $this->_redirect($this->_url->getUrl('*/*/validate', ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]));
+                    } elseif (!$this->customerSession->isLoggedIn()) {
                         $this->session->login($processed);
-                    }
-                }
-            } else {
-                $userInfo = $checkoutSession['buyer'];
-                if ($userInfo && isset($userInfo['email'])) {
-                    $quote = $this->session->getQuote();
-
-                    if ($quote) {
-                        $quote->setCustomerEmail($userInfo['email']);
-                        $quote->save();
                     }
                 }
             }
@@ -103,7 +104,7 @@ class Checkout extends \Amazon\PayV2\Controller\Login
 
     /**
      * @param $checkoutSession
-     * @return \Amazon\PayV2\Domain\AmazonCustomer|false
+     * @return array|false
      */
     protected function getAmazonCustomerFromSession($checkoutSession)
     {
@@ -116,9 +117,21 @@ class Checkout extends \Amazon\PayV2\Controller\Login
                 'name' => $userInfo['name'],
                 'country' => $this->amazonConfig->getRegion(),
             ];
-            return $this->amazonCustomerFactory->create($data);
+
+            return $data;
         }
 
         return false;
+    }
+
+    /**
+     * @param $checkoutSession
+     * @return \Amazon\PayV2\Domain\AmazonCustomer
+     */
+    protected function createAmazonCustomerFromSession($checkoutSession)
+    {
+        $data = $this->getAmazonCustomerFromSession($checkoutSession);
+
+        return $this->amazonCustomerFactory->create($data);
     }
 }

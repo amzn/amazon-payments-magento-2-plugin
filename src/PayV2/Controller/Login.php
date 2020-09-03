@@ -22,6 +22,7 @@ use Amazon\PayV2\Model\AmazonConfig;
 use Amazon\PayV2\Model\Validator\AccessTokenRequestValidator;
 use Amazon\PayV2\Model\Customer\Account\Redirect as AccountRedirect;
 use Amazon\PayV2\Helper\Session;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
@@ -104,13 +105,17 @@ abstract class Login extends Action
     protected $url;
 
     /**
+     * @var AccountManagementInterface
+     */
+    protected $accountManagement;
+
+    /**
      * Login constructor.
      * @param Context $context
      * @param AmazonCustomerFactory $amazonCustomerFactory
-     * @param Adapter\AmazonPayV2Adapter $amazonAdapter
-     * @param LoggerInterface             $logger
-     * @param AmazonConfig                $amazonConfig
-     * @param Url                         $customerUrl
+     * @param \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param AmazonConfig $amazonConfig
+     * @param Url $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      * @param AccountRedirect $accountRedirect
      * @param MatcherInterface $matcher
@@ -120,6 +125,7 @@ abstract class Login extends Action
      * @param LoggerInterface $logger
      * @param StoreManager $storeManager
      * @param UrlInterface $url
+     * @param AccountManagementInterface $accountManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -136,7 +142,8 @@ abstract class Login extends Action
         Session $session,
         LoggerInterface $logger,
         StoreManager $storeManager,
-        UrlInterface $url
+        UrlInterface $url,
+        AccountManagementInterface $accountManagement
     ) {
         $this->amazonCustomerFactory       = $amazonCustomerFactory;
         $this->amazonAdapter               = $amazonAdapter;
@@ -151,6 +158,7 @@ abstract class Login extends Action
         $this->logger                      = $logger;
         $this->storeManager                = $storeManager;
         $this->url                         = $url;
+        $this->accountManagement           = $accountManagement;
         parent::__construct($context);
     }
 
