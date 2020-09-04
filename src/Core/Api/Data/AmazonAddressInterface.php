@@ -60,6 +60,14 @@ interface AmazonAddressInterface
     public function getLine($lineNumber);
 
     /**
+     * Shifts address lines
+     *
+     * @param int $times
+     * @return null|string
+     */
+    public function shiftLines($times);
+
+    /**
      * Get city
      *
      * @return string
@@ -100,4 +108,12 @@ interface AmazonAddressInterface
      * @return string
      */
     public function getCompany();
+
+    /**
+     * Set company name
+     *
+     * @param string $company
+     * @return string
+     */
+    public function setCompany($company);
 }
