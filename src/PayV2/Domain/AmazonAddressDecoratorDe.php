@@ -79,11 +79,15 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
                 $firstTwoLines = $line1 . ' ' . $line2;
                 if (!$this->isPOBox($line1, $firstTwoLines)) {
                     $company = $firstTwoLines;
+                    $this->amazonAddress->setCompany($company);
+                    $this->amazonAddress->shiftLines(2);
                 }
                 break;
             case !empty($line2):
                 if (!$this->isPOBox($line1, $line1)) {
                     $company = $line1;
+                    $this->amazonAddress->setCompany($company);
+                    $this->amazonAddress->shiftLines();
                 }
                 break;
         }
