@@ -184,4 +184,20 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     {
         return $this->amazonAddress->getLine($lineNumber);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function shiftLines($times)
+    {
+        return $this->amazonAddress->shiftLines($times);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCompany($company)
+    {
+        return $this->amazonAddress->setCompany($company);
+    }
 }
