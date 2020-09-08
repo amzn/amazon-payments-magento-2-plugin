@@ -22,6 +22,7 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -47,6 +48,7 @@ class Redirect extends BaseRedirect
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
         ResultFactory $resultFactory,
+        CookieMetadataFactory $cookieMetadataFactory,
         CheckoutSession $checkoutSession
     ) {
         parent::__construct(
@@ -57,7 +59,8 @@ class Redirect extends BaseRedirect
             $url,
             $urlDecoder,
             $customerUrl,
-            $resultFactory
+            $resultFactory,
+            $cookieMetadataFactory
         );
 
         $this->customerSession = $customerSession;
