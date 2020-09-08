@@ -57,24 +57,6 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     /**
      * {@inheritdoc}
      */
-    public function shiftLines($times = 1)
-    {
-        while ($times > 0) {
-            $lines = $this->getData(AmazonAddressInterface::LINES);
-            for ($i = 1; $i <= count($lines); $i++) {
-                $lines[$i] = isset($lines[$i + 1]) ? $lines[$i + 1] : '';
-            }
-            $this->setData(AmazonAddressInterface::LINES, $lines);
-
-            $times--;
-        }
-
-        return $this->getLines();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCity()
     {
         return $this->getData(AmazonAddressInterface::CITY);
@@ -118,15 +100,5 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     public function getCompany()
     {
         return $this->getData(AmazonAddressInterface::COMPANY);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setCompany($company)
-    {
-        $this->setData(AmazonAddressInterface::COMPANY, $company);
-
-        return $this->getCompany();
     }
 }

@@ -80,9 +80,6 @@ class Address
         $address->setTelephone($amazonAddress->getTelephone());
         $address->setCountryId($this->getCountryId($amazonAddress));
 
-        $company = !empty($amazonAddress->getCompany()) ? $amazonAddress->getCompany() : '';
-        $address->setCompany($company);
-
         /*
          * The number of lines in a street address is configurable via 'customer/address/street_lines'.
          * To avoid discarding information, we'll concatenate additional lines so that they fit within the configured
@@ -98,6 +95,9 @@ class Address
             }
         }
         $address->setStreet(array_values($lines));
+
+        $company = !empty($amazonAddress->getCompany()) ? $amazonAddress->getCompany() : '';
+        $address->setCompany($company);
 
         if ($amazonAddress->getState()) {
             $address->setRegion($this->getRegionData($amazonAddress, $address->getCountryId()));
