@@ -521,7 +521,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 }
                 $result = $this->cartManagement->placeOrder($cart->getId());
                 $order = $this->orderRepository->get($result);
-                $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getBaseGrandTotal() , $cart->getBaseCurrencyCode());
+                $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getGrandTotal() , $cart->getQuoteCurrencyCode());
                 $chargeId = $amazonResult['chargeId'];
                 $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
                 $payment = $order->getPayment();
