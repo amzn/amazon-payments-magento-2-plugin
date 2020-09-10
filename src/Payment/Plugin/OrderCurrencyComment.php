@@ -56,9 +56,11 @@ class OrderCurrencyComment
     {
         if ($subject->getMethod() == Config::CODE) {
             $order = $subject->getOrder();
-            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()
+            if (($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()
                 && $subject->getMessage() instanceof Phrase
-                && $subject->getMessage()->getText() == 'Canceled order online') {
+                && $subject->getMessage()->getText() == 'Canceled order online')
+                || strpos($subject->getTransactionId(), '-void') !== FALSE
+            ) {
                 return $result .' ['. $order->formatPriceTxt($subject->getAmountOrdered()) .']';
             }
         }
