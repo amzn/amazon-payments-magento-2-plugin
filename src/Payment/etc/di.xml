@@ -318,4 +318,9 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    
+    <!-- Order comments for currency differences  -->
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="amazon_pay_order_payment" type="Amazon\Payment\Plugin\OrderCurrencyComment" />
+    </type>
 </config>

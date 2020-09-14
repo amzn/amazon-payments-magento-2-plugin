@@ -221,6 +221,9 @@ class Capture extends AbstractOperation
         $transaction = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
         $invoice = $this->getInvoice($transactionId, $order);
         $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
+        if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+            $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getGrandTotal()) .']';
+        }
         $message = __('Captured amount of %1 online', $formattedAmount);
 
         $this->getInvoiceAndSetPaid($transactionId, $order);
@@ -242,6 +245,9 @@ class Capture extends AbstractOperation
         $transaction = $this->paymentManagement->getTransaction($transactionId, $payment, $order);
         $invoice = $this->getInvoice($transactionId, $order);
         $formattedAmount = $order->getBaseCurrency()->formatTxt($invoice->getBaseGrandTotal());
+        if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+            $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getGrandTotal()) .']';
+        }
         $message = __('Declined amount of %1 online', $formattedAmount);
 
         $this->getInvoiceAndSetCancelled($transactionId, $order);
