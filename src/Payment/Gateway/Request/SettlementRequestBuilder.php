@@ -128,11 +128,11 @@ class SettlementRequestBuilder implements BuilderInterface
         $data = [];
 
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-
         $orderDO = $paymentDO->getOrder();
+        $order = $paymentDO->getPayment()->getOrder();
 
-        $currencyCode = $orderDO->getCurrencyCode();
-        $total = $buildSubject['amount'];
+        $currencyCode = $order->getOrderCurrencyCode();
+        $total = $paymentDO->getPayment()->getAmountOrdered();
 
         if ($buildSubject['multicurrency']['multicurrency']) {
             $currencyCode = $buildSubject['multicurrency']['order_currency'];

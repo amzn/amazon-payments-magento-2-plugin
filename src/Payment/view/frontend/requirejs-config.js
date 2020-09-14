@@ -27,6 +27,9 @@ var config = {
         mixins: {
             'Amazon_Payment/js/action/place-order': {
                 'Amazon_Payment/js/model/place-order-mixin': true
+            },
+            'Magento_Tax/js/view/checkout/summary/grand-total': {
+                'Amazon_Payment/js/view/checkout/summary/grand-total-mixin': true
             }
         }
     }
