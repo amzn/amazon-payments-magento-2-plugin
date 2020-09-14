@@ -41,13 +41,15 @@ class GeneralResponseValidator extends AbstractValidator
         $response = $validationSubject['response'];
 
         if (isset($response['statusDetails'])) {
-            if (!empty($response['statusDetails']['reasonCode'])) {
-                $isValid = false;
-                $errorCodes[] = $response['statusDetails']['reasonCode'];
-            }
-            if (!empty($response['statusDetails']['reasonDescription'])) {
-                $isValid = false;
-                $errorMessages[] = $response['statusDetails']['reasonDescription'];
+            if ($response['statusDetails']['state'] != 'Canceled') {
+                if (!empty($response['statusDetails']['reasonCode'])) {
+                    $isValid = false;
+                    $errorCodes[] = $response['statusDetails']['reasonCode'];
+                }
+                if (!empty($response['statusDetails']['reasonDescription'])) {
+                    $isValid = false;
+                    $errorMessages[] = $response['statusDetails']['reasonDescription'];
+                }
             }
         }
 

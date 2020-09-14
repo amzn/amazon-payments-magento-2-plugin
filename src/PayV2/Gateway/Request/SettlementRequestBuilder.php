@@ -107,9 +107,10 @@ class SettlementRequestBuilder implements BuilderInterface
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $orderDO = $paymentDO->getOrder();
         $storeId = $orderDO->getStoreId();
+        $order = $paymentDO->getPayment()->getOrder();
 
-        $currencyCode = $orderDO->getCurrencyCode();
-        $total = $buildSubject['amount'];
+        $currencyCode = $order->getOrderCurrencyCode();
+        $total = $paymentDO->getPayment()->getAmountOrdered();
 
         $data = [
             'store_id' => $storeId,
