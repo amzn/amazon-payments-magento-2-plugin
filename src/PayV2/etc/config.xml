@@ -17,13 +17,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <dev>
-            <js>
-                <minify_exclude>
-                    <payments_amazon_checkout>\.payments-amazon\.com/checkout</payments_amazon_checkout>
-                </minify_exclude>
-            </js>
-        </dev>
         <payment>
             <amazon_payment_v2>
                 <active>0</active>

@@ -16,6 +16,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Minification exclusion -->
+    <type name="Magento\Framework\View\Asset\Minification">
+        <plugin name="amazon_payv2_minification_exclusion" type="Amazon\PayV2\Plugin\MinificationExclusion" />
+    </type>
+    
     <preference for="Amazon\PayV2\Client\ClientFactoryInterface" type="Amazon\PayV2\Client\ClientFactory" />
     <preference for="AmazonPayV2\ClientInterface" type="Amazon\PayV2\Client\Client" />
 
