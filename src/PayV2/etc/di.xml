@@ -192,7 +192,7 @@
     <!-- Refund Command -->
     <virtualType name="AmazonPayV2RefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">Amazon\PayV2\Gateway\Request\RefundRequestBuilder</argument>
+            <argument name="requestBuilder" xsi:type="object">Amazon\PayV2\Gateway\Request\SettlementRequestBuilder</argument>
             <argument name="handler" xsi:type="object">Amazon\PayV2\Gateway\Response\RefundHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\PayV2\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Amazon\PayV2\Gateway\Http\Client\RefundClient</argument>
