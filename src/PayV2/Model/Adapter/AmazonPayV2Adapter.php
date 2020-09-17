@@ -213,15 +213,17 @@ class AmazonPayV2Adapter
      * @param $chargePermissionId
      * @param $amount
      * @param $currency
+     * @param bool $captureNow
      * @return mixed
      */
-    public function createCharge($storeId, $chargePermissionId, $amount, $currency)
+    public function createCharge($storeId, $chargePermissionId, $amount, $currency, $captureNow = false)
     {
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
             'chargePermissionId' => $chargePermissionId,
             'chargeAmount' => $this->createPrice($amount, $currency),
+            'captureNow' => $captureNow,
         ];
 
         $response = $this->clientFactory->create($storeId)->createCharge($payload, $headers);
@@ -289,6 +291,18 @@ class AmazonPayV2Adapter
     }
 
     /**
+     * @param int $storeId
+     * @param string $chargePermissionId
+     * @return array
+     */
+    public function getChargePermission(int $storeId, string $chargePermissionId)
+    {
+        $response = $this->clientFactory->create($storeId)->getChargePermission($chargePermissionId);
+
+        return $this->processResponse($response, __FUNCTION__);
+    }
+
+    /**
      * Cancel charge
      *
      * @param $storeId
@@ -334,7 +348,14 @@ class AmazonPayV2Adapter
     public function authorize($data)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
-        $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
+        if (!empty($data['amazon_checkout_session_id'])) {
+            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
+        } elseif (!empty($data['charge_permission_id'])) {
+            $getChargePermissionResponse = $this->getChargePermission($quote->getStoreId(), $data['charge_permission_id']);
+            if ($getChargePermissionResponse['statusDetails']['state'] == "Chargeable") {
+                $response = $this->createCharge($quote->getStoreId(), $data['charge_permission_id'], $data['amount'], $quote->getQuoteCurrencyCode(), true);
+            }
+        }
 
         return $response;
     }

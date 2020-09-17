@@ -525,6 +525,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 $chargeId = $amazonResult['chargeId'];
                 $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
                 $payment = $order->getPayment();
+                $payment->setAdditionalInformation('charge_permission_id', $amazonResult['chargePermissionId']);
                 $transaction = $this->getTransaction($amazonResult['checkoutSessionId']);
 
                 $chargeState = $amazonCharge['statusDetails']['state'];
