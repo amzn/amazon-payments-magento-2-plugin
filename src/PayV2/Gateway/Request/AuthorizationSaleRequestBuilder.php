@@ -16,6 +16,7 @@
 
 namespace Amazon\PayV2\Gateway\Request;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Amazon\PayV2\Gateway\Helper\SubjectReader;
 
@@ -50,10 +51,17 @@ class AuthorizationSaleRequestBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
+        try {
+            $amazonCheckoutSessionId = $this->sessionManagement->getCheckoutSession($payment->getOrder()->getQuoteId());
+        } catch (NoSuchEntityException $e) {
+            $amazonCheckoutSessionId = null;
+        }
         /* @var $payment \Magento\Sales\Model\Order\Payment */
         return [
             'quote_id' => $payment->getOrder()->getQuoteId(),
-            'amazon_checkout_session_id' => $this->sessionManagement->getCheckoutSession($payment->getOrder()->getQuoteId()),
+            'amazon_checkout_session_id' => $amazonCheckoutSessionId,
+            'charge_permission_id' => $payment->getAdditionalInformation('charge_permission_id'),
+            'amount' => $buildSubject['amount'],
         ];
     }
 }
