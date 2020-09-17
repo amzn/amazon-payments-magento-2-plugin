@@ -38,14 +38,14 @@ The module can be either installed via Composer (recommended), or manually. The 
 In `magento-root`, execute:
 
 ```
-$ composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout-1.2.x
+$ composer require amzn/amazon-payments-magento-2-plugin:v1.5.1-beta
 $ bin/magento module:enable Amazon_PayV2 --clear-static-content
 ```
 
 If Composer installation didn't work, use the manual procedure below. If any of these were successful, please proceed with **2. Post-installation procedure**, otherwise reach out to Amazon Pay Merchant Support for additional assistance.
 
 #### Manual installation
-* Download the [Amazon Pay V2 checkout plugin](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) via `git clone` or "Download ZIP"
+* Download the [Amazon Pay V2 checkout plugin](https://github.com/amzn/amazon-payments-magento-2-plugin/releases/tag/v1.5.1-beta) via `git clone` or "Download ZIP"
 * Copy src/PayV2 to app/code/Amazon/PayV2  
 (If `magento-root/app/code/Amazon/PayV2` path is not present, please create the folders `Amazon` and `PayV2`)  
 
