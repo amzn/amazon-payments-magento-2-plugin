@@ -201,6 +201,9 @@ class Charge extends AbstractOperation
                 ->build(Transaction::TYPE_AUTH);
 
             $formattedAmount = $order->getBaseCurrency()->formatTxt($payment->getBaseAmountAuthorized());
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getAmountOrdered()) .']';
+            }
             $message = __('Authorized amount of %1.', $formattedAmount);
             $payment->addTransactionCommentsToOrder($transaction, $message);
             $payment->setIsTransactionClosed(false);
@@ -237,6 +240,9 @@ class Charge extends AbstractOperation
                 ->build(Transaction::TYPE_CAPTURE);
 
             $formattedAmount = $order->getBaseCurrency()->formatTxt($chargeAmount);
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getAmountOrdered()) .']';
+            }
             $message = __('Captured amount of %1 online.', $formattedAmount);
 
             $payment->setDataUsingMethod('base_amount_paid_online', $chargeAmount);

@@ -17,6 +17,9 @@ var config = {
         mixins: {
             'Magento_Checkout/js/view/payment/list': {
                 'Amazon_PayV2/js/view/payment/list-mixin': true
+            },
+            'Magento_Tax/js/view/checkout/summary/grand-total': {
+                'Amazon_PayV2/js/view/checkout/summary/grand-total-mixin': true
             }
         }
     },
