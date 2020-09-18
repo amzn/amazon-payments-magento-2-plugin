@@ -16,6 +16,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Minification exclusion -->
+    <type name="Magento\Framework\View\Asset\Minification">
+        <plugin name="amazon_payv2_minification_exclusion" type="Amazon\PayV2\Plugin\MinificationExclusion" />
+    </type>
+    
     <preference for="Amazon\PayV2\Client\ClientFactoryInterface" type="Amazon\PayV2\Client\ClientFactory" />
     <preference for="AmazonPayV2\ClientInterface" type="Amazon\PayV2\Client\Client" />
 
@@ -244,8 +249,12 @@
             <argument name="messageMapping" xsi:type="object">Amazon\PayV2\Gateway\ErrorMapper\VirtualMappingData</argument>
         </arguments>
     </virtualType>
-
-
+    
+    <!-- Order comments for currency differences  -->
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="amazon_payv2_order_payment" type="Amazon\PayV2\Plugin\OrderCurrencyComment" />
+    </type>
+    
     <preference for="Amazon\PayV2\Api\CustomerLinkRepositoryInterface" type="Amazon\PayV2\Model\CustomerLinkRepository" />
     <preference for="Amazon\PayV2\Api\CustomerLinkManagementInterface" type="Amazon\PayV2\Model\CustomerLinkManagement" />
     <preference for="Amazon\PayV2\Api\CustomerManagementInterface" type="Amazon\PayV2\Model\CustomerManagement" />

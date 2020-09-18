@@ -116,4 +116,20 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
         }
         return null;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function shiftLines($times)
+    {
+        return $this->amazonAddress->shiftLines($times);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCompany($company)
+    {
+        return $this->amazonAddress->setCompany($company);
+    }
 }
