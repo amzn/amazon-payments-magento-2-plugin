@@ -51,7 +51,7 @@ class Config extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getConfig()
     {
@@ -60,6 +60,7 @@ class Config extends \Magento\Framework\View\Element\Template
             'code'                     => \Amazon\PayV2\Gateway\Config\Config::CODE,
             'is_method_available'      => $this->amazonConfig->isPayButtonAvailableAsPaymentMethod(),
             'is_pay_only'              => $this->amazonHelper->isPayOnly(),
+            'is_lwa_enabled'            => $this->isLwaEnabled(),
         ];
 
         return $config;

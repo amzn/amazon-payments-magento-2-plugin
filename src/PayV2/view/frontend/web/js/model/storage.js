@@ -29,8 +29,11 @@ define([
             return storage;
         };
 
+    var isLwaEnabled = amazonPayV2Config.getValue('is_lwa_enabled');
+
     return {
         isEnabled: isEnabled,
+        isLwaEnabled: isLwaEnabled,
 
         /**
          * Is checkout using Amazon PAYV2?
