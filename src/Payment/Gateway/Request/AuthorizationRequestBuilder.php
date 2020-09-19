@@ -101,7 +101,12 @@ class AuthorizationRequestBuilder implements BuilderInterface
         $storeName = '';
 
         $currencyCode = $payment->getOrder()->getOrderCurrencyCode();
-        $total = $payment->getAmountOrdered();
+        if ($payment->getAmazonDisplayInvoiceAmount()) {
+            $total = $payment->getAmazonDisplayInvoiceAmount();
+        }
+        else {
+            $total = $payment->getAmountOrdered();
+        }
 
         // capture sale or new auth/capture for partial capture
         if (isset($buildSubject['multicurrency']) && $buildSubject['multicurrency']['multicurrency']) {

@@ -92,7 +92,7 @@ class RefundRequestBuilder implements BuilderInterface
         $orderDO = $paymentDO->getOrder();
 
         $currencyCode = $payment->getOrder()->getOrderCurrencyCode();
-        $total = $payment->getAmountOrdered();
+        $total = $payment->getCreditMemo()->getGrandTotal();
         $storeId = $orderDO->getStoreId();
 
         // The magento order adapter doesn't expose everything we need to send a request to the AP API so we
