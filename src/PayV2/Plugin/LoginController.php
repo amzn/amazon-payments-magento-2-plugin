@@ -15,34 +15,35 @@
  */
 namespace Amazon\PayV2\Plugin;
 
-use Amazon\Core\Helper\Data;
+use Magento\Customer\Controller\Account\Login;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\Controller\ResultInterface;
 
-class AmazonCoreHelperData
+class LoginController
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @var Session
      */
-    private $amazonConfig;
+    private $session;
 
     /**
-     * AmazonCoreHelperData constructor.
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @var Url
      */
-    public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-    ) {
-        $this->amazonConfig = $amazonConfig;
+    private $url;
+
+    public function __construct(Session $session, Url $url)
+    {
+        $this->session = $session;
+        $this->url     = $url;
     }
 
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterIsPwaEnabled(Data $subject, $result)
+    public function afterExecute(Login $login, ResultInterface $result)
     {
-        // Disable v1 PWA
-        if ($result && $this->amazonConfig->getApiVersion() == '2') {
-            return false;
-        }
+        $this->session->setAfterAmazonAuthUrl($this->url->getAccountUrl());
 
         return $result;
     }

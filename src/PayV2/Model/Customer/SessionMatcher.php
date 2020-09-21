@@ -13,37 +13,34 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\PayV2\Model\Customer;
 
-use Amazon\Core\Helper\Data;
+use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
+use Amazon\PayV2\Model\Customer\MatcherInterface;
+use Magento\Customer\Model\Session;
 
-class AmazonCoreHelperData
+class SessionMatcher implements MatcherInterface
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @var Session
      */
-    private $amazonConfig;
+    private $session;
 
-    /**
-     * AmazonCoreHelperData constructor.
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-     */
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+        Session $session
     ) {
-        $this->amazonConfig = $amazonConfig;
+        $this->session = $session;
     }
 
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritDoc}
      */
-    public function afterIsPwaEnabled(Data $subject, $result)
+    public function match(AmazonCustomerInterface $amazonCustomer)
     {
-        // Disable v1 PWA
-        if ($result && $this->amazonConfig->getApiVersion() == '2') {
-            return false;
+        if ($this->session->isLoggedIn()) {
+            return $this->session->getCustomerData();
         }
 
-        return $result;
+        return null;
     }
 }

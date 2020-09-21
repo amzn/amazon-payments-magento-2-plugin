@@ -454,7 +454,7 @@ class AmazonConfig
     {
         $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_review_url', $scope, $scopeCode);
         if (empty($result)) {
-            $result = $this->storeManager->getStore()->getUrl('checkout', ['_forced_secure' => true]);
+            $result = $this->storeManager->getStore()->getUrl('amazon_payv2/login/checkout', ['_forced_secure' => true]);
         }
         return $result;
     }
@@ -612,5 +612,39 @@ class AmazonConfig
     public function getPlatformId()
     {
         return $this->scopeConfig->getValue('payment/amazon_payment_v2/platform_id');
+    }
+
+    /*
+     * @return bool
+     */
+    public function isLwaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        if (!$this->isEnabled()) {
+            return false;
+        }
+
+        if (!$this->clientHasAllowedIp()) {
+            return false;
+        }
+
+        return $this->scopeConfig->isSetFlag(
+            'payment/amazon_payment_v2/lwa_enabled',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
+    public function isGuestCheckoutEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            'checkout/options/guest_checkout',
+            $scope,
+            $scopeCode
+        );
     }
 }
