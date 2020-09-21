@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutDeclineTransactionTimedOutInstant" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test decline error messages using sandbox CC# with Amazon Pay"/>
+            <title value="Amazon Pay Decline TransactionTimedOut with Instant Authorization"/>
+            <description value="Test CC timeout message with Amazon Pay"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="setAuthMode" command="config:set payment/amazon_payment/authorization_mode synchronous"/>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Begin checkout-->
+        <actionGroup ref="AmazonCheckoutBeginActionGroup" stepKey="AmazonCheckoutBeginActionGroup"/>
+        <!--Place order with invalid test CC#-->
+        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupBad">
+            <argument name="cc" value="5656"/>
+        </actionGroup>
+        <!--Timeout Error Message-->
+        <waitForText userInput="please choose another payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+        <!--Wait for redirect to cart-->
+        <wait time="5" stepKey="waitRedirect"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+    </test>
+</tests>
