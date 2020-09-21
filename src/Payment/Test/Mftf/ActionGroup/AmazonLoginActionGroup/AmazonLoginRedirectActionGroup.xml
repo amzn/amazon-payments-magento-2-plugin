@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AmazonLoginRedirectActionGroup">
+        <waitForElement selector="{{AmazonLoginSection.apEmail}}" time="10" stepKey="apWaitForLogin"/>
+        <fillField selector="{{AmazonLoginSection.apEmail}}" userInput="{{AmazonLogin.email}}" stepKey="apEnterEmail"/>
+        <fillField selector="{{AmazonLoginSection.apPassword}}" userInput="{{AmazonLogin.password}}" stepKey="apEnterPassword"/>
+        <click selector="{{AmazonLoginSection.apSignin}}" stepKey="clickSigninButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadLogin"/>
+        <conditionalClick selector="{{AmazonLoginSection.apConsent}}" dependentSelector="{{AmazonLoginSection.apConsent}}" visible="true" stepKey="clickLoginConsent"/>
+    </actionGroup>
+</actionGroups>

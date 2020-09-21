@@ -3,7 +3,7 @@
     <test name="AmazonInvoiceSplit">
         <annotations>
             <stories value="Amazon Pay Invoice"/>
-            <title value="Amazon Pay Split Invoice"/>
+            <title value="Admin user must be able to split invoices when configuration allows"/>
             <description value="Admin user must be able to split invoices when configuration allows"/>
             <severity value="CRITICAL"/>
             <group value="amazon_invoice"/>

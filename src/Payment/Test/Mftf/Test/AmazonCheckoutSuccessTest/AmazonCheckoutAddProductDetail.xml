@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Prepares product to be checked out"/>
+            <title value="Amazon Pay Add Product to Cart from Detail Page"/>
+            <description value="Creates and loads simple product and adds it to cart using Amazon Pay button on product detail page."/>
+            <severity value="BLOCKER"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadCatalog" time="30"/>
+
+        <!--Add to cart via Amazon Pay button on product page-->
+        <waitForElement selector="{{AmazonCheckoutSection.productPayButton}}" time="30" stepKey="apWaitForPayButton"/>
+        <waitForElement selector="#OffAmazonPaymentsWidgets0" time="30" stepKey="apWaitForPayButton2"/>
+        <waitForJS function="return document.getElementById('{{AmazonCheckoutSection.productPayButton}}'.substr(1)).clientHeight &gt; 10;" stepKey="waitForPayButtonClickable"/>
+        <click selector="{{AmazonCheckoutSection.productPayButton}}" stepKey="clickProductPayButton"/>
+
+        <!--Login (redirect)-->
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup"/>
+    </test>
+</tests>
