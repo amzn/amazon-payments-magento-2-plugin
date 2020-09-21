@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutFreeShipping" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Complete checkout with free shipping"/>
+            <title value="Amazon Pay Checkout Free Shipping"/>
+            <description value="Perform checkout with free shipping"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <magentoCLI command="config:set carriers/freeshipping/active 1" stepKey="enableFreeShipping"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="config:set carriers/freeshipping/active 0" stepKey="disableFreeShipping"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup"/>
+    </test>
+</tests>

@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AmazonCheckoutSection">
         <element name="cartPayButton" type="button" selector="#PayWithAmazon-checkout-cart-shortcut-buttons img"/>
         <element name="miniCartPayButton" type="button" selector="#minicart-amazon-pay-button img"/>
