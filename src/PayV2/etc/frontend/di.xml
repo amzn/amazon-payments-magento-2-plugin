@@ -30,11 +30,4 @@
     <type name="Amazon\Core\Helper\Data">
         <plugin name="amazon_payv2_amazon_core_helper" type="Amazon\PayV2\Plugin\AmazonCoreHelperData" sortOrder="1" />
     </type>
-    <type name="Magento\Checkout\Model\CompositeConfigProvider">
-        <arguments>
-            <argument name="configProviders" xsi:type="array">
-                <item name="amazon_login_checkout_config_provider" xsi:type="object">Amazon\Login\Model\CheckoutConfigProvider\Proxy</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
