@@ -329,6 +329,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     {
         $result = [];
         if ($this->isAvailable($cartId)) {
+            $buttonPayload = $this->amazonAdapter->generateButtonPayload();
+
             $result = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
@@ -336,6 +338,9 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 'language' => $this->amazonConfig->getLanguage(),
                 'pay_only' => $this->amazonHelper->isPayOnly($this->getCart($cartId)),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),
+                'payload' => $buttonPayload,
+                'signature' => $this->amazonAdapter->signButton($buttonPayload),
+                'public_key_id' => $this->amazonConfig->getPublicKeyId(),
             ];
         }
         return $result;
@@ -526,6 +531,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 $result = $this->cartManagement->placeOrder($cart->getId());
                 $order = $this->orderRepository->get($result);
                 $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getGrandTotal() , $cart->getQuoteCurrencyCode());
+                if (array_key_exists('status', $amazonResult) && $amazonResult['status'] != 200) {
+                    // Something went wrong, but the order has already been placed
+                    return $result;
+                }
                 $chargeId = $amazonResult['chargeId'];
                 $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
                 $payment = $order->getPayment();
