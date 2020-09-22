@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutPage" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <features value="Amazon Pay"/>
+            <stories value="Success page elements are presented for placed order with Amazon Pay"/>
+            <title value="Amazon Pay Checkout from Checkout page"/>
+            <description value="Perform checkout from checkout page and ensure Success page."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_checkout"/>
+        </annotations>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!--Login (popup)-->
+        <click selector="{{AmazonCheckoutSection.checkoutPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup"/>
+
+        <!--Place order-->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup"/>
+    </test>
+</tests>

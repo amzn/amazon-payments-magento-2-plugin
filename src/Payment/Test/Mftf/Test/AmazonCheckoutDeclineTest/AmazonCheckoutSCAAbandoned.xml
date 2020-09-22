@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutSuccessAfterSCAAbandoned" extends="AmazonCheckoutAddProduct">
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutSCAAbandoned" extends="AmazonCheckoutAddProduct">
         <annotations>
             <features value="Amazon Pay"/>
-            <stories value="(SCA) Amazon SCA Success After Abandoned"/>
-            <title value="(SCA) Amazon SCA Success After Abandoned"/>
-            <description value="Perform checkout from cart page and ensure SCA can succeed after being Abandoned."/>
+            <stories value="(SCA) Amazon SCA Abandoned"/>
+            <title value="(SCA) Amazon SCA Abandoned"/>
+            <description value="Perform checkout from cart page and ensure SCA Abandoned page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
-            <group value="amazon_payment"/>
         </annotations>
 
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
-            <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
-            <createData entity="EUAmazonCurrencyConfig" stepKey="SampleAmazonCurrencyConfig"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
             <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
-            <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
@@ -41,11 +45,5 @@
         </actionGroup>
         <!--Transaction declined error message-->
         <waitForText userInput="Something's wrong with your payment method." selector=".message" stepKey="waitForText"/>
-
-        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
-
-        <!--Placing order again with normal CC-->
-        <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
-        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
     </test>
 </tests>
