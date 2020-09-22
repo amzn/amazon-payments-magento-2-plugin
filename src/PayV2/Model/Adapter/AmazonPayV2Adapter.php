@@ -370,10 +370,7 @@ class AmazonPayV2Adapter
     public function completeCheckoutSession($storeId, $sessionId, $amount, $currencyCode)
     {
         $payload = [
-            'chargeAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currencyCode,
-            ]
+            'chargeAmount' => $this->createPrice($amount, $currencyCode),
         ];
 
         $rawResponse = $this->clientFactory->create($storeId)->completeCheckoutSession($sessionId, json_encode($payload));
