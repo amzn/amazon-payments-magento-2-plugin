@@ -9,6 +9,10 @@ use Amazon\PayV2\Model\AmazonConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class Config
+ * @package Amazon\PayV2\Gateway\Config
+ */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
     const CODE = 'amazon_payment_v2';
@@ -21,14 +25,30 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     protected $amazonConfig;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    protected $orderRepository;
+
+    /**
      * @param AmazonConfig $amazonConfig
      * @param ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         AmazonConfig $amazonConfig,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
     ) {
         $this->amazonConfig = $amazonConfig;
+        $this->request = $request;
+        $this->orderRepository = $orderRepository;
         parent::__construct($scopeConfig, self::CODE);
     }
 
@@ -38,6 +58,15 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     protected function canCapturePartial($storeId = null)
     {
+        // get the order store id if not provided
+        if (empty($storeId)) {
+            $orderId = $this->request->getParam('order_id');
+            if ($orderId) {
+                $order = $this->orderRepository->get($orderId);
+                $storeId = $order->getStoreId();
+            }
+        }
+
         $region = $this->amazonConfig->getPaymentRegion(ScopeInterface::SCOPE_STORE, $storeId);
         switch ($region) {
             case 'de':
