@@ -56,12 +56,20 @@ class AuthorizationSaleRequestBuilder implements BuilderInterface
         } catch (NoSuchEntityException $e) {
             $amazonCheckoutSessionId = null;
         }
+
+        if ($payment->getAmazonDisplayInvoiceAmount()) {
+            $total = $payment->getAmazonDisplayInvoiceAmount();
+        }
+        else {
+            $total = $payment->getAmountOrdered();
+        }
+
         /* @var $payment \Magento\Sales\Model\Order\Payment */
         return [
             'quote_id' => $payment->getOrder()->getQuoteId(),
             'amazon_checkout_session_id' => $amazonCheckoutSessionId,
             'charge_permission_id' => $payment->getAdditionalInformation('charge_permission_id'),
-            'amount' => $buildSubject['amount'],
+            'amount' => $total,
         ];
     }
 }

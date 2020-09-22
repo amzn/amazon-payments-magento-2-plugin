@@ -108,9 +108,16 @@ class SettlementRequestBuilder implements BuilderInterface
         $orderDO = $paymentDO->getOrder();
         $storeId = $orderDO->getStoreId();
         $order = $paymentDO->getPayment()->getOrder();
+        $payment = $paymentDO->getPayment();
 
         $currencyCode = $order->getOrderCurrencyCode();
-        $total = $paymentDO->getPayment()->getAmountOrdered();
+        if ($payment->getAmazonDisplayInvoiceAmount()) {
+            $total = $payment->getAmazonDisplayInvoiceAmount();
+        } elseif ($creditMemo = $payment->getCreditMemo()) {
+            $total = $creditMemo->getGrandTotal();
+        } else {
+            $total = $payment->getAmountOrdered();
+        }
 
         $data = [
             'store_id' => $storeId,
