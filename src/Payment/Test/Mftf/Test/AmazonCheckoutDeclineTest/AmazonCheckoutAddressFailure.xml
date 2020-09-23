@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutAddressFailure" extends="AmazonCheckoutAddProductDetail">
+        <annotations>
+            <stories value="Test new shipping address validation"/>
+            <title value="Amazon Pay Invalid Shipping Address"/>
+            <description value="Adds an invalid address to Amazon Address widget to test Magento shipping address validation"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_decline"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SingleCountryAllowConfig" stepKey="SingleCountryAllowConfig"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="DefaultCountryAllowConfig" stepKey="DefaultCountryAllowConfig"/>
+            <createData entity="DefaultAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+        <!--Get address widget iframe name (dynamic)-->
+        <executeJS function="return jQuery('#addressBookWidgetDiv iframe').attr('name');" stepKey="iframeName"/>
+        <switchToIFrame userInput="{$iframeName}" stepKey="switchToIFrameWidget"/>
+        <!--Open new address pop-up-->
+        <click selector="{{AmazonCheckoutSection.addNewAddress}}" stepKey="clickAddNew"/>
+        <waitForPageLoad stepKey="waitForPageLoadPopup"/>
+        <executeJS function="return document.getElementById('addShippingAddressForm').target;" stepKey="windowAddressName"/>
+        <switchToWindow userInput="{$windowAddressName}" stepKey="switchToWindowAddress"/>
+        <waitForElement selector="{{AmazonAddressSection.name}}" time="10" stepKey="apWait"/>
+        <!--Add new address-->
+        <!--Select is hidden, so must change with JS-->
+        <executeJS function="document.getElementById('{{AmazonAddressSection.country}}').value = '{{AmazonAddressFail.country}}'" stepKey="apcountry"/>
+        <fillField selector="{{AmazonAddressSection.name}}" userInput="{{AmazonAddressFail.name}}" stepKey="enterName"/>
+        <fillField selector="{{AmazonAddressSection.address}}" userInput="{{AmazonAddressFail.address}}" stepKey="enterAddress"/>
+        <fillField selector="{{AmazonAddressSection.city}}" userInput="{{AmazonAddressFail.city}}" stepKey="enterCity"/>
+        <fillField selector="{{AmazonAddressSection.region}}" userInput="{{AmazonAddressFail.region}}" stepKey="enterRegion"/>
+        <fillField selector="{{AmazonAddressSection.postal}}" userInput="{{AmazonAddressFail.postal}}" stepKey="enterPostal"/>
+        <fillField selector="{{AmazonAddressSection.phone}}" userInput="{{AmazonAddressFail.phone}}" stepKey="enterPhone"/>
+        <click selector="{{AmazonAddressSection.submit}}" stepKey="clickAddAddressButton"/>
+        <!--Switch back to Magento and detect error from new address-->
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener"/>
+        <waitForText userInput="The country associated with your address is not allowed" selector=".message" stepKey="waitForText"/>
+    </test>
+</tests>
