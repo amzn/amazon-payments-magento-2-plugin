@@ -11,7 +11,7 @@
     <section name="AmazonLoginSection">
         <element name="apEmail" type="input" selector="#ap_email"/>
         <element name="apPassword" type="input" selector="#ap_password"/>
-        <element name="apSignin" type="button" selector="#signInSubmit button"/>
+        <element name="apSignin" type="button" selector="#signInSubmit"/>
         <element name="apConsent" type="button" selector="[name=consentApproved]"/>
     </section>
 </sections>
