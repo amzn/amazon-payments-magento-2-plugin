@@ -34,10 +34,17 @@ class OrderCurrencyComment
     {
         if ($subject->getMethod() == Config::CODE) {
             $order = $subject->getOrder();
-            if ($order->getBaseCurrencyCode() != $order->getOrderOrderCurrencyCode()) {
+            if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+                if ($subject->getOrder()->getPayment()->getCreditmemo()) {
+                    $displayCurrencyAmount = $subject->getCreditmemo()->getGrandTotal();
+                }
+                else {
+                    $displayCurrencyAmount = $subject->getOrder()->getPayment()->getAmazonDisplayInvoiceAmount() ?: $subject->getAmountOrdered();
+                }
                 $messagePrependTo = __(
                     $messagePrependTo->getText(),
-                    $order->getBaseCurrency()->formatTxt($order->getBaseGrandTotal()) .' ['. $order->formatPriceTxt($subject->getAmountOrdered()) .']'
+                    $order->getBaseCurrency()
+                        ->formatTxt($messagePrependTo->getArguments()[0]) .' ['. $order->formatPriceTxt($displayCurrencyAmount) .']'
                 );
 
                 return [$messagePrependTo];
@@ -61,7 +68,7 @@ class OrderCurrencyComment
                 && $subject->getMessage()->getText() == 'Canceled order online')
                 || strpos($subject->getTransactionId(), '-void') !== FALSE
             ) {
-                return $result .' ['. $order->formatPriceTxt($subject->getAmountOrdered()) .']';
+                return $result .' ['. $order->formatPriceTxt($subject->getCreditmemo()->getGrandTotal()) .']';
             }
         }
 
