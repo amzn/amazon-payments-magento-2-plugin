@@ -22,4 +22,7 @@
     <event name="sales_quote_merge_after">
         <observer name="amazon_payv2_sales_quote_merge_after" instance="Amazon\PayV2\Observer\SalesQuoteMergeAfter"/>
     </event>
+    <event name="sales_order_payment_capture">
+        <observer name="amazon_payment_order_payment_capture" instance="Amazon\PayV2\Observer\OrderPaymentCapture" />
+    </event>
 </config>
