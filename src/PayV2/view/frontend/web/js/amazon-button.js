@@ -27,7 +27,7 @@ define([
         canCheckoutWithAmazon = false;
 
     // to use Amazon Pay: customer needs to be logged in, or guest checkout allowed, or Amazon Sign-in enabled
-    if (customer().firstname || cart().isGuestCheckoutAllowed === true || amazonStorage.isLwaEnabled) {
+    if (customer().firstname || amazonStorage.isGuestCheckoutEnabled || amazonStorage.isLwaEnabled) {
         canCheckoutWithAmazon = true;
     }
 

@@ -61,6 +61,7 @@ class Config extends \Magento\Framework\View\Element\Template
             'is_method_available'      => $this->amazonConfig->isPayButtonAvailableAsPaymentMethod(),
             'is_pay_only'              => $this->amazonHelper->isPayOnly(),
             'is_lwa_enabled'            => $this->isLwaEnabled(),
+            'is_guest_checkout_enabled' => $this->amazonConfig->isGuestCheckoutEnabled(),
         ];
 
         return $config;

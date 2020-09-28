@@ -30,10 +30,12 @@ define([
         };
 
     var isLwaEnabled = amazonPayV2Config.getValue('is_lwa_enabled');
+    var isGuestCheckoutEnabled = amazonPayV2Config.getValue('is_guest_checkout_enabled');
 
     return {
         isEnabled: isEnabled,
         isLwaEnabled: isLwaEnabled,
+        isGuestCheckoutEnabled: isGuestCheckoutEnabled,
 
         /**
          * Is checkout using Amazon PAYV2?
