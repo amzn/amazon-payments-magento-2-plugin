@@ -40,4 +40,7 @@
     <event name="amazon_payment_pending_authorization_hard_decline_after">
         <observer name="amazon_payment_hard_decline_email" instance="Amazon\Payment\Observer\HardDeclinedEmailSender" />
     </event>
+    <event name="sales_order_payment_capture">
+        <observer name="amazon_payment_order_payment_capture" instance="Amazon\Payment\Observer\OrderPaymentCapture" />
+    </event>
 </config>
