@@ -86,7 +86,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Sets up base classes needed to mock the command strategy class
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commandPool = $this->getMockBuilder(CommandPoolInterface::class)
             ->disableOriginalConstructor()
