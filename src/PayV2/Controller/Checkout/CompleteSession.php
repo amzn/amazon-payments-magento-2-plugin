@@ -84,6 +84,9 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     {
         $scope = $this->storeManager->getStore()->getId();
         try {
+            // Bypass cache check in \Magento\PageCache\Model\DepersonalizeChecker
+            $this->getRequest()->setParams(['ajax' => 1]);
+
             $orderId = $this->amazonCheckoutSession->completeCheckoutSession();
             if (!$orderId) {
                 throw new \Exception(__('Something went wrong. Please try again.'));
