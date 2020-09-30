@@ -56,7 +56,7 @@ define([
                             sandbox: checkoutSessionConfig['sandbox'],
                         });
 
-                        $(this.options.hideIfUnavailable).show();
+                        this.options.placement !== "Checkout" && $(this.options.hideIfUnavailable).show();
                     } else {
                         $(this.options.hideIfUnavailable).hide();
                     }
