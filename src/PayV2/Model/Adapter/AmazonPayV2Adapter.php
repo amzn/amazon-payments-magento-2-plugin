@@ -56,6 +56,11 @@ class AmazonPayV2Adapter
     private $logger;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    private $url;
+
+    /**
      * AmazonPayV2Adapter constructor.
      * @param \Amazon\PayV2\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
@@ -63,6 +68,7 @@ class AmazonPayV2Adapter
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\PayV2\Helper\Data $amazonHelper
      * @param \Amazon\PayV2\Logger\Logger $logger
+     * @pqram \Magento\Framework\UrlInterface $url
      */
     public function __construct(
         \Amazon\PayV2\Client\ClientFactoryInterface $clientFactory,
@@ -70,7 +76,8 @@ class AmazonPayV2Adapter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\PayV2\Helper\Data $amazonHelper,
-        \Amazon\PayV2\Logger\Logger $logger
+        \Amazon\PayV2\Logger\Logger $logger,
+        \Magento\Framework\UrlInterface $url
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
@@ -78,6 +85,7 @@ class AmazonPayV2Adapter
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
         $this->logger = $logger;
+        $this->url = $url;
     }
 
     /**
@@ -213,15 +221,17 @@ class AmazonPayV2Adapter
      * @param $chargePermissionId
      * @param $amount
      * @param $currency
+     * @param bool $captureNow
      * @return mixed
      */
-    public function createCharge($storeId, $chargePermissionId, $amount, $currency)
+    public function createCharge($storeId, $chargePermissionId, $amount, $currency, $captureNow = false)
     {
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
             'chargePermissionId' => $chargePermissionId,
             'chargeAmount' => $this->createPrice($amount, $currency),
+            'captureNow' => $captureNow,
         ];
 
         $response = $this->clientFactory->create($storeId)->createCharge($payload, $headers);
@@ -289,6 +299,18 @@ class AmazonPayV2Adapter
     }
 
     /**
+     * @param int $storeId
+     * @param string $chargePermissionId
+     * @return array
+     */
+    public function getChargePermission(int $storeId, string $chargePermissionId)
+    {
+        $response = $this->clientFactory->create($storeId)->getChargePermission($chargePermissionId);
+
+        return $this->processResponse($response, __FUNCTION__);
+    }
+
+    /**
      * Cancel charge
      *
      * @param $storeId
@@ -334,7 +356,14 @@ class AmazonPayV2Adapter
     public function authorize($data)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
-        $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
+        if (!empty($data['amazon_checkout_session_id'])) {
+            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
+        } elseif (!empty($data['charge_permission_id'])) {
+            $getChargePermissionResponse = $this->getChargePermission($quote->getStoreId(), $data['charge_permission_id']);
+            if ($getChargePermissionResponse['statusDetails']['state'] == "Chargeable") {
+                $response = $this->createCharge($quote->getStoreId(), $data['charge_permission_id'], $data['amount'], $quote->getQuoteCurrencyCode(), true);
+            }
+        }
 
         return $response;
     }
@@ -349,14 +378,24 @@ class AmazonPayV2Adapter
     public function completeCheckoutSession($storeId, $sessionId, $amount, $currencyCode)
     {
         $payload = [
-            'chargeAmount' => [
-                'amount' => $amount,
-                'currencyCode' => $currencyCode,
-            ]
+            'chargeAmount' => $this->createPrice($amount, $currencyCode),
         ];
 
         $rawResponse = $this->clientFactory->create($storeId)->completeCheckoutSession($sessionId, json_encode($payload));
         return $this->processResponse($rawResponse, __FUNCTION__);
+    }
+
+    /**
+     * @param $token
+     * @return array
+     */
+    public function getBuyer($token)
+    {
+        $response = $this->clientFactory
+            ->create()
+            ->getBuyer($token);
+
+        return $this->processResponse($response, __FUNCTION__);
     }
 
     /**
@@ -407,4 +446,28 @@ class AmazonPayV2Adapter
             'x-amz-pay-idempotency-key' => uniqid(),
         ];
     }
+
+    /**
+     * Generate static signature for amazon.Pay.renderButton used by checkout.js
+     *
+     * @param array $payload
+     * @param null|int|string $storeId
+     * @return string
+     */
+    public function generateButtonPayload()
+    {
+        $payload = [
+            'signInReturnUrl' => $this->url->getRouteUrl('amazon_payv2/login/authorize/'),
+            'storeId' => $this->amazonConfig->getClientId(),
+            'signInScopes' => ['name', 'email'],
+        ];
+
+        return json_encode($payload, JSON_UNESCAPED_SLASHES);
+    }
+
+    public function signButton($payload, $storeId = null)
+    {
+        return $this->clientFactory->create($storeId)->generateButtonSignature($payload);
+    }
+
 }

@@ -46,17 +46,4 @@ class AmazonCoreHelperData
 
         return $result;
     }
-
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterIsLwaEnabled(Data $subject, $result)
-    {
-        // Disable v1 LWA
-        if ($result && $this->amazonConfig->getApiVersion() == '2') {
-            return false;
-        }
-
-        return $result;
-    }
 }

@@ -22,7 +22,16 @@ define([
 ], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout, customerData) {
     'use strict';
 
-    if (amazonStorage.isEnabled) {
+    var cart = customerData.get('cart'),
+        customer = customerData.get('customer'),
+        canCheckoutWithAmazon = false;
+
+    // to use Amazon Pay: customer needs to be logged in, or guest checkout allowed, or Amazon Sign-in enabled
+    if (customer().firstname || amazonStorage.isGuestCheckoutEnabled || amazonStorage.isLwaEnabled) {
+        canCheckoutWithAmazon = true;
+    }
+
+    if (amazonStorage.isEnabled && canCheckoutWithAmazon) {
         $.widget('amazon.AmazonButton', {
             options: {
                 payOnly: null,
@@ -47,7 +56,9 @@ define([
                             sandbox: checkoutSessionConfig['sandbox'],
                         });
 
-                        $(this.options.hideIfUnavailable).show();
+                        if (this.options.placement !== "Checkout") {
+                            $(this.options.hideIfUnavailable).show();
+                        }
                     } else {
                         $(this.options.hideIfUnavailable).hide();
                     }
@@ -105,7 +116,7 @@ define([
                         self._draw();
                     }
                 });
-            
+
             },
 
             click: function () {
