@@ -528,12 +528,13 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 $result = $this->cartManagement->placeOrder($cart->getId());
                 $order = $this->orderRepository->get($result);
                 $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getGrandTotal() , $cart->getQuoteCurrencyCode());
-                if (array_key_exists('status', $amazonResult) && $amazonResult['status'] != 200) {
+                $completeCheckoutStatus = $amazonResult['status'] ?? '404';
+                if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)){
                     // Something went wrong, but the order has already been placed
                     return $result;
                 }
                 $chargeId = $amazonResult['chargeId'];
-                if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
+                if ($completeCheckoutStatus != '202' && $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
                     $this->amazonAdapter->captureCharge($cart->getStoreId(), $chargeId, $cart->getGrandTotal(), $cart->getQuoteCurrencyCode());
                 }
                 $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
