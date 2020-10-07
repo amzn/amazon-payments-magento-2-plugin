@@ -136,22 +136,35 @@ class Charge extends AbstractOperation
                     $charge = $this->amazonAdapter->getCharge($order->getStoreId(), $chargeId);
                     $state = $charge['statusDetails']['state'];
                 }
+
+                $complete = false;
+
                 switch ($state) {
                     case 'Declined':
                         $this->decline($order, $chargeId, $charge['statusDetails']['reasonDescription']);
+                        $complete = true;
                         break;
                     case 'Canceled':
                         $this->cancel($order, $charge['statusDetails']);
+                        $complete = true;
                         break;
                     case 'Authorized':
                         $this->authorize($order, $chargeId);
+                        $complete = true;
                         break;
                     case 'Captured':
                         $this->capture($order, $chargeId, $charge['captureAmount']['amount']);
+                        $complete = true;
+                        break;
+                    default:
                         break;
                 }
+
+                return $complete;
             }
         }
+
+        return false;
     }
 
     /**
