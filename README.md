@@ -42,7 +42,7 @@ The module can be either installed via Composer (recommended), or manually. The 
 In `magento-root`, execute:
 
 ```
-$ composer require amzn/amazon-pay-v2-magento-2-module
+$ composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout
 $ bin/magento module:enable Amazon_PayV2 --clear-static-content
 ```
 
