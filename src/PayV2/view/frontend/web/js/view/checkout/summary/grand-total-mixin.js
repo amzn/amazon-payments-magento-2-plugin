@@ -11,7 +11,7 @@ define([
              * @return {Boolean}
              */
             isBaseGrandTotalDisplayNeeded: function () {
-                if (!amazonStorage.isAmazonAccountLoggedIn()) {
+                if (!amazonStorage.isAmazonCheckout()) {
                     return this._super();
                 }
 
