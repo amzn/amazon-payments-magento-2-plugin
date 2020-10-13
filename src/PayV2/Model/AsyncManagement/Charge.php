@@ -153,6 +153,7 @@ class Charge extends AbstractOperation
                         $complete = true;
                         break;
                     case 'Captured':
+                        $this->setProcessing($order);
                         $this->capture($order, $chargeId, $charge['captureAmount']['amount']);
                         $complete = true;
                         break;

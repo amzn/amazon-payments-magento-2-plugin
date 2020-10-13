@@ -20,7 +20,7 @@
     <type name="Magento\Framework\View\Asset\Minification">
         <plugin name="amazon_payv2_minification_exclusion" type="Amazon\PayV2\Plugin\MinificationExclusion" />
     </type>
-    
+
     <preference for="Amazon\PayV2\Client\ClientFactoryInterface" type="Amazon\PayV2\Client\ClientFactory" />
     <preference for="AmazonPayV2\ClientInterface" type="Amazon\PayV2\Client\Client" />
 
@@ -249,12 +249,12 @@
             <argument name="messageMapping" xsi:type="object">Amazon\PayV2\Gateway\ErrorMapper\VirtualMappingData</argument>
         </arguments>
     </virtualType>
-    
+
     <!-- Order comments for currency differences  -->
     <type name="Magento\Sales\Model\Order\Payment">
         <plugin name="amazon_payv2_order_payment" type="Amazon\PayV2\Plugin\OrderCurrencyComment" />
     </type>
-    
+
     <preference for="Amazon\PayV2\Api\CustomerLinkRepositoryInterface" type="Amazon\PayV2\Model\CustomerLinkRepository" />
     <preference for="Amazon\PayV2\Api\CustomerLinkManagementInterface" type="Amazon\PayV2\Model\CustomerLinkManagement" />
     <preference for="Amazon\PayV2\Api\CustomerManagementInterface" type="Amazon\PayV2\Model\CustomerManagement" />
@@ -310,5 +310,8 @@
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
+    </type>
+    <type name="Magento\Payment\Model\Method\Adapter">
+        <plugin name="amazon_payv2_pay_action" type="Amazon\PayV2\Plugin\ModelMethodAdapter" sortOrder="1" />
     </type>
 </config>
