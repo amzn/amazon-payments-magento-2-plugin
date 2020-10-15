@@ -17,6 +17,7 @@
 namespace Amazon\PayV2\Gateway\Response;
 
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Amazon\PayV2\Gateway\Helper\SubjectReader;
 use Amazon\PayV2\Model\AsyncManagement;
 
@@ -33,16 +34,24 @@ class RefundHandler implements HandlerInterface
     private $asyncManagement;
 
     /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
      * SettlementHandler constructor.
      * @param SubjectReader $subjectReader
      * @param AsyncManagement $asyncManagement
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         SubjectReader $subjectReader,
-        AsyncManagement $asyncManagement
+        AsyncManagement $asyncManagement,
+        ManagerInterface $messageManager
     ) {
         $this->subjectReader = $subjectReader;
         $this->asyncManagement = $asyncManagement;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -59,6 +68,8 @@ class RefundHandler implements HandlerInterface
 
             // Verify refund via async
             $this->asyncManagement->queuePendingRefund($payment->getOrder()->getId(), $response['refundId']);
+
+            $this->messageManager->addSuccessMessage(__('Amazon Pay refund successful.'));
         }
     }
 }
