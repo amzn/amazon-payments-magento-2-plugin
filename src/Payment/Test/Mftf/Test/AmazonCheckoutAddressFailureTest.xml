@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
--->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AmazonCheckoutAddressFailure" extends="AmazonCheckoutAddProductDetail">
         <annotations>
             <stories value="Test new shipping address validation"/>
@@ -14,6 +7,7 @@
             <description value="Adds an invalid address to Amazon Address widget to test Magento shipping address validation"/>
             <severity value="CRITICAL"/>
             <group value="amazon_decline"/>
+            <group value="amazon_payment"/>
         </annotations>
 
         <before>
@@ -51,7 +45,7 @@
         <fillField selector="{{AmazonAddressSection.phone}}" userInput="{{AmazonAddressFail.phone}}" stepKey="enterPhone"/>
         <click selector="{{AmazonAddressSection.submit}}" stepKey="clickAddAddressButton"/>
         <!--Switch back to Magento and detect error from new address-->
-        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener"/>
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
         <waitForText userInput="The country associated with your address is not allowed" selector=".message" stepKey="waitForText"/>
     </test>
 </tests>
