@@ -522,12 +522,30 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 if (!$cart->getCustomer()->getId()) {
                     $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
                 }
-                $result = $this->cartManagement->placeOrder($cart->getId());
-                $order = $this->orderRepository->get($result);
+                
+                // check the Amazon session one last time before placing the order
+                $amazonSession = $this->amazonAdapter->getCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId());
+                if ($amazonSession['statusDetails']['state'] == 'Canceled') {
+                    return [
+                        'success' => false,
+                        'message' => $amazonSession['statusDetails']['reasonDescription'],
+                    ];
+                }
+
+                $orderId = $this->cartManagement->placeOrder($cart->getId());
+                $order = $this->orderRepository->get($orderId);
+                $result = [
+                    'success' => true,
+                    'order_id' => $orderId,
+                ];
+
                 $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getGrandTotal() , $cart->getQuoteCurrencyCode());
                 if (array_key_exists('status', $amazonResult) && $amazonResult['status'] != 200) {
                     // Something went wrong, but the order has already been placed
-                    return $result;
+                    return [
+                        'success' => false,
+                        'message' => $amazonResult['message'],
+                    ];
                 }
                 $chargeId = $amazonResult['chargeId'];
                 $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
