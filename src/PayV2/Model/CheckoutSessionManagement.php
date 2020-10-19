@@ -528,7 +528,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 if ($amazonSession['statusDetails']['state'] == 'Canceled') {
                     return [
                         'success' => false,
-                        'message' => $amazonSession['statusDetails']['reasonDescription'],
+                        'message' => $this->getCanceledMessage($amazonSession),
                     ];
                 }
 
@@ -580,5 +580,21 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
             }
         }
         return $result;
+    }
+
+    /**
+     * @param $amazonSession
+     * @return \Magento\Framework\Phrase|mixed
+     */
+    protected function getCanceledMessage($amazonSession)
+    {
+        if ($amazonSession['statusDetails']['reasonCode'] == 'BuyerCanceled') {
+            return __("This transaction was cancelled. Please try again.");
+        }
+        else if ($amazonSession['statusDetails']['reasonCode'] == 'Declined') {
+            return __("This transaction was declined. Please try again using a different payment method.");
+        }
+
+        return $amazonSession['statusDetails']['reasonDescription'];
     }
 }
