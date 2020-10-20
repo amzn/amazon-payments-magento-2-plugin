@@ -28,7 +28,7 @@
             <argument name="cc" value="4545" />
         </actionGroup>
         <!--Decline Error Message-->
-        <waitForText userInput="Please select a payment method" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+        <waitForText userInput="The selected payment method is not available for this transaction" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
         <!--Use default CC#-->
         <actionGroup ref="AmazonCheckoutCcActionGroup" stepKey="AmazonCheckoutCcActionGroupGood"/>
         <!--See success message-->

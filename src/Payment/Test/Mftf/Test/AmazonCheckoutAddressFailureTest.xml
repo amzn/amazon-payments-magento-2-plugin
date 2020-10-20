@@ -26,6 +26,7 @@
         <!--Save opener window name since popup auto-closes-->
         <executeJS function="return window.name;" stepKey="openerName"/>
         <!--Get address widget iframe name (dynamic)-->
+        <wait time="5" stepKey="jankyWaitForIframe"/>
         <executeJS function="return jQuery('#addressBookWidgetDiv iframe').attr('name');" stepKey="iframeName"/>
         <switchToIFrame userInput="{$iframeName}" stepKey="switchToIFrameWidget"/>
         <!--Open new address pop-up-->

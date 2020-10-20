@@ -40,6 +40,6 @@
             <argument name="cc" value="4440" />
         </actionGroup>
         <!--Transaction declined error message-->
-        <waitForText userInput="Something's wrong with your payment method." selector=".message" stepKey="waitForText"/>
+        <waitForText userInput="There has been a problem with the selected payment method" selector=".message" stepKey="waitForText"/>
     </test>
 </tests>
