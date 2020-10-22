@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
--->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AmazonCheckoutConfigurableProduct">
         <annotations>
             <features value="Amazon Pay"/>
@@ -15,6 +8,7 @@
             <description value="Perform checkout with configurable product and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <group value="amazon_payment"/>
         </annotations>
 
         <before>
@@ -122,22 +116,22 @@
 
         <!-- Add Configurable Product to the cart -->
         <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
-            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
             <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
             <argument name="productOption" value="$$getConfigAttributeOption2.label$$"/>
             <argument name="qty" value="2"/>
         </actionGroup>
 
         <!--Open minicart-->
-        <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowMinicart"/>
-        <waitForElement selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForCartLink"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart"/>
+        <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowMinicart" />
+        <waitForElement selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForCartLink" />
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart" />
 
         <!--Login (redirect)-->
         <click selector="{{AmazonCheckoutSection.miniCartPayButton}}" stepKey="clickAmazonCartButton"/>
-        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup"/>
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup" />
 
         <!--Place order-->
-        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup"/>
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
     </test>
 </tests>

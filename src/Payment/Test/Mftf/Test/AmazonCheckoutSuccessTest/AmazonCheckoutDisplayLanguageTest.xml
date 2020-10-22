@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
--->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AmazonCheckoutDisplayLanguage" extends="AmazonCheckoutAddProductDetail">
         <annotations>
             <features value="Amazon Pay"/>
@@ -15,6 +8,7 @@
             <description value="Perform checkout with non-default display language and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <group value="amazon_payment"/>
         </annotations>
 
         <before>
@@ -31,6 +25,6 @@
         </after>
 
         <!--Place order-->
-        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup"/>
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
     </test>
 </tests>

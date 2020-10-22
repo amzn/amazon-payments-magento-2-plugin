@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
--->
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Open login popup and complete form-->
     <actionGroup name="AmazonLoginPopupActionGroup">
         <!--Save opener window name since popup auto-closes-->
         <executeJS function="return window.name;" stepKey="openerName"/>
@@ -21,6 +15,6 @@
         <click selector="{{AmazonLoginSection.apSignin}}" stepKey="clickSigninButton"/>
 
         <!--Prevent "NoSuchWindowException: window was already closed"-->
-        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener"/>
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
     </actionGroup>
 </actionGroups>

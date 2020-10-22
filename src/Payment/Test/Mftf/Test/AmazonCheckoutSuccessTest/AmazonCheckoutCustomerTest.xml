@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
--->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AmazonCheckoutCustomer" extends="AmazonCheckoutAddProduct">
         <annotations>
             <features value="Amazon Pay"/>
@@ -15,16 +8,25 @@
             <description value="Perform checkout after logging in from customer account page and ensure Success page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_checkout"/>
+            <group value="amazon_payment"/>
         </annotations>
 
+        <before>
+            <magentoCLI command="config:set {{AmazonLwaConfig.path}} 1" stepKey="enableAmazonLwa"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{AmazonLwaConfig.path}} 0" stepKey="disableAmazonLwa"/>
+        </after>
+
         <!--Go to Customer page-->
-        <amOnPage url="/customer/account/" stepKey="goToMyAccountPage"/>
+        <amOnPage url="/customer/account/" stepKey="goToMyAccountPage" />
 
         <!--Login (popup)-->
         <click selector="{{AmazonCheckoutSection.loginButton}}" stepKey="clickAmazonCartButton"/>
-        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup"/>
+        <actionGroup ref="AmazonLoginPopupActionGroup" stepKey="AmazonLoginPopupActionGroup" />
 
         <!--Place order-->
-        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup"/>
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
     </test>
 </tests>

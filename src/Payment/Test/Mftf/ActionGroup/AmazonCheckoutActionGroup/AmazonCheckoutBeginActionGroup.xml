@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
--->
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Begin checkout and proceed to final step-->
     <actionGroup name="AmazonCheckoutBeginActionGroup">
+        <!-- slight delay to allow for the shipping methods to refresh if needed -->
+        <wait time="2" stepKey="giveShippingChanceToReload"/>
         <waitForElement selector="{{CheckoutShippingMethodsSection.shippingMethodRow}}" time="20" stepKey="apWaitForShipping"/>
-        <waitForPageLoad stepKey="apWaitPageLoadShipping"/>
+        <waitForPageLoad stepKey="apWaitPageLoadShipping" />
 
         <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="clickShippingMethod"/>
-        <waitForPageLoad stepKey="waitForPageLoadPayment1"/>
+        <waitForPageLoad stepKey="waitForPageLoadPayment1" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
 
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickContinueButton"/>
-        <waitForPageLoad stepKey="waitForPageLoadPayment2"/>
+        <waitForPageLoad stepKey="waitForPageLoadPayment2" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
     </actionGroup>
 </actionGroups>
