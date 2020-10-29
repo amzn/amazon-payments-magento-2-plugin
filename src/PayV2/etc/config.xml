@@ -17,6 +17,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <multicurrency>
+            <regions>uk,de</regions>
+            <currencies>AUD,GBP,DKK,EUR,HKD,JPY,NZD,NOK,ZAR,SEK,CHF,USD</currencies>
+        </multicurrency>
         <payment>
             <amazon_payment_v2>
                 <active>0</active>
