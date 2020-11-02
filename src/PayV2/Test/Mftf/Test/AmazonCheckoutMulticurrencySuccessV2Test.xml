@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutMulticurrencySuccessV2" extends="AmazonCheckoutButtonV2">
+        <annotations>
+            <stories value="Amazon Checkout Multicurrency"/>
+            <title value="Amazon Checkout Multicurrency Success V2"/>
+            <description value="User should be able to checkout with Amazon Pay when multicurrency is enabled and they are using a supported currency."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_checkout"/>
+            <group value="amazon_pay_v2_multicurrency"/>
+        </annotations>
+
+        <before>
+            <createData entity="EUAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigData" before="flushCache"/>
+            <createData entity="EUAmazonCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
+            <!-- set default currency to one supported for multicurrency -->
+            <magentoCLI command="config:set currency/options/default USD" stepKey="setDefaultCurrency" before="flushCache"/>
+            <!-- disable multicurrency -->
+            <magentoCLI command="config:set payment/amazon_payment/multicurrency 1" stepKey="setMulticurrency" before="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="SampleAmazonPaymentV2Config" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <!--Go to payment method-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+    </test>
+</tests>
