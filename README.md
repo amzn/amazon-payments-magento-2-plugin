@@ -17,7 +17,7 @@ This module will enable "Amazon Pay Checkout v2" on your Magento 2 installation.
 Amazon Pay offers a familiar and convenient buying experience that can help your customers spend more time shopping and less time checking out. Amazon Pay is used by large and small companies. From years of shopping safely with Amazon, customers trust their personal information will remain secure and know many transactions are covered by the Amazon A-to-z Guarantee. Businesses have the reassurance of our advanced fraud protection and payment protection policy.
 
 Requirements:
-* Magento minimum version requirement: 2.4.0 and above
+* Magento minimum version requirement: 2.5.0 and above
 * Amazon Pay plugin minimum version requirement: 4.0.2 and above
 * Supported PHP versions: 7.3 and 7.4
 
@@ -112,5 +112,5 @@ The following table provides an overview on which Git branch is compatible to wh
 
 | Magento Version | Github Branch | Latest release |
 | ------------- | ------------- | ------------- |
-| 2.2.6 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.8.0 |
-| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.4.0 |
+| 2.2.6 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.9.0 |
+| 2.5.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.5.0 |
