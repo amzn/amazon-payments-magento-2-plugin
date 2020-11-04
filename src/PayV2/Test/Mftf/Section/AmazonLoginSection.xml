@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
+    <section name="AmazonLoginSection">
+        <element name="v2Login" type="button" selector="#AmazonPayButton.login-with-amazon div"/>
+        <element name="consentButton" type="button" selector="#consent-form input[type=submit]"/>
+    </section>
+</sections>
