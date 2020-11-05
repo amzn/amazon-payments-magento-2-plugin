@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Customer\Model\Url;
 use Magento\Customer\Model\Session;
 use Amazon\Login\Api\CustomerLinkRepositoryInterface;
+use Amazon\Core\Helper\Data;
 
 /**
  * @api
@@ -26,17 +27,21 @@ class ResetPassword extends Template
 
     private $customerLink;
 
+    private $coreHelper;
+
     public function __construct(
         Context $context,
         Url $urlModel,
         Session $session,
         CustomerLinkRepositoryInterface $customerLink,
+        Data $coreHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->urlModel = $urlModel;
         $this->session = $session;
         $this->customerLink = $customerLink;
+        $this->coreHelper = $coreHelper;
     }
 
     protected function _prepareLayout()
@@ -66,5 +71,17 @@ class ResetPassword extends Template
         $url = $this->urlModel->getLogoutUrl();
 
         return $url;
+    }
+
+    /**
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!$this->coreHelper->isLoginButtonEnabled()) {
+            return '';
+        }
+
+        return parent::_toHtml();
     }
 }
