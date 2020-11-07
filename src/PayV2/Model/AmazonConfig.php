@@ -436,6 +436,20 @@ class AmazonConfig
     }
 
     /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return mixed
+     */
+    public function getAuthorizationMode($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment/authorization_mode',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /**
      * @return bool
      */
     public function canHandlePendingAuthorization($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
