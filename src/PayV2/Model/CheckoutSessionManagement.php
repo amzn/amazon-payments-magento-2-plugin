@@ -17,6 +17,7 @@
 namespace Amazon\PayV2\Model;
 
 use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use Amazon\PayV2\Model\Config\Source\AuthorizationMode;
 use Amazon\PayV2\Model\Config\Source\PaymentAction;
 use Amazon\PayV2\Model\AsyncManagement;
 use http\Exception\UnexpectedValueException;
@@ -120,6 +121,11 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     private $asyncManagement;
 
     /**
+     * @var AsyncManagement\Charge
+     */
+    private $asyncCharge;
+
+    /**
      * @var array
      */
     private $amazonSessions = [];
@@ -147,6 +153,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
      * @param AsyncManagement $asyncManagement
+     * @param \Amazon\PayV2\Model\AsyncManagement\Charge $asyncCharge
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
@@ -167,6 +174,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
         \Amazon\PayV2\Model\AsyncManagement $asyncManagement,
+        \Amazon\PayV2\Model\AsyncManagement\Charge $asyncCharge,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     )
@@ -187,6 +195,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
         $this->asyncManagement = $asyncManagement;
+        $this->asyncCharge = $asyncCharge;
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
@@ -504,6 +513,46 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     }
 
     /**
+     * Set order as processing
+     *
+     * @param Payment $payment
+     */
+    protected function setProcessing($payment)
+    {
+        $order = $payment->getOrder();
+        $payment->setIsTransactionPending(false);
+        $order->getInvoiceCollection()->getFirstItem()->pay();
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)->setStatus(
+            \Magento\Sales\Model\Order::STATE_PROCESSING
+        );
+        $this->orderRepository->save($order);
+    }
+
+    /**
+     * Add capture comment to order
+     *
+     * @param Payment $payment
+     * @param $cart
+     * @param $chargeId
+     */
+    protected function addCaptureComment($payment, $cart, $chargeId)
+    {
+        $order = $payment->getOrder();
+        $formattedAmount = $order->getBaseCurrency()->formatTxt($cart->getBaseGrandTotal());
+        if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
+            $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getAmountOrdered()) .']';
+        }
+        if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
+            $message = __('Captured amount of %1 online.', $formattedAmount);
+        }
+        else {
+            $message = __('Authorized amount of %1.', $formattedAmount);
+        }
+        $payment->addTransactionCommentsToOrder($chargeId, $message);
+        $this->orderRepository->save($order);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function completeCheckoutSession($cartId)
@@ -529,7 +578,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 }
                 $chargeId = $amazonResult['chargeId'];
                 if ($completeCheckoutStatus != '202' && $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
+                    // capture on Amazon Pay
                     $this->amazonAdapter->captureCharge($cart->getStoreId(), $chargeId, $cart->getGrandTotal(), $cart->getQuoteCurrencyCode());
+                    // capture and invoice on the Magento side
+                    $this->asyncCharge->capture($order, $chargeId, $cart->getGrandTotal());
                 }
                 $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
                 $payment = $order->getPayment();
@@ -547,6 +599,12 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                     case 'Captured':
                         $payment->setIsTransactionClosed(true);
                         $transaction->setIsClosed(true);
+
+                        if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
+                            $this->setProcessing($payment);
+                            $this->addCaptureComment($payment, $cart, $chargeId);
+                        }
+
                         break;
                 }
 

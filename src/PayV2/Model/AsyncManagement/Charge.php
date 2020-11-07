@@ -108,7 +108,7 @@ class Charge extends AbstractOperation
      */
     protected function loadInvoice($chargeId, OrderInterface $order)
     {
-        $this->searchCriteriaBuilder->addFilter(InvoiceInterface::TRANSACTION_ID, $chargeId . '-capture');
+        $this->searchCriteriaBuilder->addFilter(InvoiceInterface::TRANSACTION_ID, $chargeId . '%', 'like');
         $this->searchCriteriaBuilder->addFilter(InvoiceInterface::ORDER_ID, $order->getEntityId());
         $this->searchCriteriaBuilder->setPageSize(1);
         $this->searchCriteriaBuilder->setCurrentPage(1);
@@ -141,10 +141,11 @@ class Charge extends AbstractOperation
 
                 switch ($state) {
                     case 'Declined':
-                        $this->decline($order, $chargeId, $charge['statusDetails']['reasonDescription']);
+                        $this->decline($order, $chargeId, $charge['statusDetails']);
                         $complete = true;
                         break;
                     case 'Canceled':
+                        $this->setProcessing($order);
                         $this->cancel($order, $charge['statusDetails']);
                         $complete = true;
                         break;
@@ -175,7 +176,7 @@ class Charge extends AbstractOperation
      * @param string $chargeId
      * @param string $reason
      */
-    public function decline($order, $chargeId, $reason)
+    public function decline($order, $chargeId, $detail)
     {
         $invoice = $this->loadInvoice($chargeId, $order);
         if ($invoice) {
@@ -183,9 +184,16 @@ class Charge extends AbstractOperation
             $order->addRelatedObject($invoice);
         }
         if ($order->canHold() || $order->isPaymentReview()) {
-            $this->setOnHold($order);
             $this->closeLastTransaction($order);
-            $order->addStatusHistoryComment($reason);
+            $this->amazonAdapter->closeChargePermission($order->getStoreId(), $order->getPayment()->getAdditionalInformation()['charge_permission_id'], 'Canceled due to capture declined.', true);
+            $this->setOrderState($order, 'canceled');
+            $payment = $order->getPayment();
+            $transaction = $this->transactionBuilder->setPayment($payment)
+                ->setOrder($order)
+                ->setTransactionId($chargeId)
+                ->setFailSafe(true)
+                ->build(Transaction::TYPE_AUTH);
+            $payment->addTransactionCommentsToOrder($transaction, __('Capture declined') . '.');
             $order->save();
 
             $this->notifier->addNotice(
@@ -247,7 +255,7 @@ class Charge extends AbstractOperation
     /**
      * Capture charge
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param \Magento\Sales\Model\Order|\Magento\Sales\Api\Data\OrderInterface $order
      * @param string $chargeId
      * @param float $chargeAmount
      */

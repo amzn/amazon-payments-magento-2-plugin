@@ -18,6 +18,8 @@ namespace Amazon\PayV2\Gateway\Response;
 
 use Amazon\PayV2\Gateway\Helper\SubjectReader;
 use Amazon\PayV2\Model\AsyncManagement;
+use Amazon\PayV2\Model\Config\Source\AuthorizationMode;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
@@ -34,16 +36,24 @@ class AuthorizationSaleHandler implements HandlerInterface
     private $asyncManagement;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * AuthorizationHandler constructor.
      * @param SubjectReader $subjectReader
      * @param AsyncManagement $asyncManagement
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         SubjectReader $subjectReader,
-        AsyncManagement $asyncManagement
+        AsyncManagement $asyncManagement,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->subjectReader = $subjectReader;
         $this->asyncManagement = $asyncManagement;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -64,6 +74,10 @@ class AuthorizationSaleHandler implements HandlerInterface
             $transactionId = $response['chargeId'] ?? $response['checkoutSessionId'];
             $payment->setTransactionId($transactionId);
             $payment->setIsTransactionClosed($handlingSubject['partial_capture'] ?? false);
+
+            if ($this->scopeConfig->getValue('payment/amazon_payment/authorization_mode') == AuthorizationMode::SYNC_THEN_ASYNC) {
+                $payment->setIsTransactionPending(true);
+            }
         }
     }
 }
