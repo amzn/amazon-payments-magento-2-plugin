@@ -17,11 +17,13 @@
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
         <!--Change shipping address-->
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
-        <waitForPageLoad stepKey="waitForAmazonEditShippingPageLoad"/>
+        <wait time="1" stepKey="allowButtonToActivate"/>
+        <waitForElement selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForAmazonEditShippingPageLoad"/>
         <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAmazonAddressButton"/>
         <click selector="{{AmazonPageSection.notSelectedAddress}}" stepKey="clickNotSelectedAmazonAddress"/>
         <click selector="{{AmazonPageSection.useAddressButton}}" stepKey="clickUseAddressButton"/>
-        <waitForPageLoad stepKey="waitForAmazonChangedShippingPageLoad"/>
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonChangedShippingPageLoad"/>
+        <wait time="1" stepKey="allowButtonToActivate2"/>
         <!--Come back to checkout with changed address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="ChangedAmazonCheckoutActionGroup"/>
     </test>

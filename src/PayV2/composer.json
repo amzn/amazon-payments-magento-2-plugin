@@ -2,7 +2,7 @@
   "name": "amzn/amazon-pay-v2-module",
   "description": "Amazon Pay V2 module",
   "type": "magento2-module",
-  "version": "1.7.0",
+  "version": "1.9.0",
   "license": [
     "Apache-2.0"
   ],

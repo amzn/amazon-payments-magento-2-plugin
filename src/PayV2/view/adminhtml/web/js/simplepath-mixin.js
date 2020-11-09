@@ -28,8 +28,6 @@ define([
                 }
                 var apiVersion = $apiSelector.val();
                 if (apiVersion > 1) {
-                    $('#row_payment_' + country + '_amazon_payment_advanced_sales_options_multicurrency').hide();
-
                     GrandClass.prototype.initObservable.apply(this, arguments);
                 } else {
                     this._super();
