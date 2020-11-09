@@ -4,4 +4,14 @@
         <data key="email">{{_CREDS.amazon/test_account_eu_email}}</data>
         <data key="password">{{_CREDS.amazon/test_account_eu_password}}</data>
     </entity>
+    <entity name="Simple_Customer_With_Amazon_Account" type="customer">
+        <data key="group_id">1</data>
+        <data key="email">{{_CREDS.amazon/test_account_eu_email}}</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+    </entity>
 </entities>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonSignInExistingUnlinkedAccount" extends="AmazonSignInButton">
+        <annotations>
+            <stories value="Amazon Sign In when there is an existing unlinked account"/>
+            <title value="Amazon Sign In when there is an existing unlinked account"/>
+            <description value="Amazon Sign In button should redirect to Link Account page"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_signin"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_Customer_With_Amazon_Account" stepKey="createCustomer"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Verify Sign in with Amazon Button V2 is present-->
+        <click selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButton"/>
+
+        <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
+        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
+
+        <waitForPageLoad stepKey="waitForLinkAccountPageLoad"/>
+        <see userInput="A store account for this email address already exists" stepKey="seeAnAccountExists"/>
+
+        <fillField selector="{{AmazonLoginSection.linkAccountPassword}}" userInput="{{Simple_Customer_With_Amazon_Account.password}}" stepKey="fillAmazonPagePasswordField"/>
+        <click selector="{{AmazonLoginSection.linkAccountButton}}" stepKey="clickLinkAccountButton"/>
+
+        <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
+        <see userInput="My Account" stepKey="seeMyAccount"/>
+    </test>
+</tests>
