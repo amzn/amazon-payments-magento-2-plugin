@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="AmazonAllowCurrencyValue" type="allow">
+    <entity name="AmazonAllowCurrencyValueV2" type="allow">
         <array key="value">
             <item>USD</item>
             <item>EUR</item>
@@ -21,7 +21,7 @@
     <entity name="EUAmazonCurrencyConfig" type="amazon_currency_config">
         <requiredEntity type="base">EUAmazonBaseCurrencyValue</requiredEntity>
         <requiredEntity type="default">EUAmazonDefaultCurrencyValue</requiredEntity>
-        <requiredEntity type="allow">AmazonAllowCurrencyValue</requiredEntity>
+        <requiredEntity type="allow">AmazonAllowCurrencyValueV2</requiredEntity>
     </entity>
     <entity name="EUAmazonMultiCurrencyConfig" type="amazon_currency_config">
         <requiredEntity type="base">EUAmazonBaseCurrencyValue</requiredEntity>
