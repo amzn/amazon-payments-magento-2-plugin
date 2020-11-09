@@ -10,7 +10,17 @@
             <group value="amazon_pay_v2_signin"/>
         </annotations>
 
-        <!--Verify Sign in with Amazon Button V2 is not present-->
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer" before="logout">
+                <argument name="email" value="{{AmazonAccount.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Verify Sign in with Amazon Button V2 is present-->
         <click selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButton"/>
 
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
