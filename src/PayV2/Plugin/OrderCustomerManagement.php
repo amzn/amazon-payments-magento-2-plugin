@@ -15,7 +15,6 @@
  */
 namespace Amazon\PayV2\Plugin;
 
-use Amazon\PayV2\Helper\Data;
 use Amazon\PayV2\Api\CustomerLinkManagementInterface;
 use Amazon\PayV2\Helper\Session as LoginSessionHelper;
 use Amazon\PayV2\Gateway\Config\Config;
@@ -50,13 +49,13 @@ class OrderCustomerManagement
      * @param LoginSessionHelper $loginSessionHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param CustomerLinkManagementInterface $customerLinkManagement
-     * @param Data $amazonConfig
+     * @param AmazonConfig $amazonConfig
      */
     public function __construct(
         LoginSessionHelper $loginSessionHelper,
         OrderRepositoryInterface $orderRepository,
         CustomerLinkManagementInterface $customerLinkManagement,
-        Data $amazonConfig
+        AmazonConfig $amazonConfig
     ) {
         $this->loginSessionHelper     = $loginSessionHelper;
         $this->orderRepository        = $orderRepository;
