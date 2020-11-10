@@ -60,7 +60,7 @@ class OrderCustomerManagement
         $this->loginSessionHelper     = $loginSessionHelper;
         $this->orderRepository        = $orderRepository;
         $this->customerLinkManagement = $customerLinkManagement;
-        $this->amazonConfig             = $amazonConfig;
+        $this->amazonConfig           = $amazonConfig;
     }
 
     /**
