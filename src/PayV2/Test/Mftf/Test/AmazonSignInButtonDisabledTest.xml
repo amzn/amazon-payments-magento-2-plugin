@@ -14,7 +14,8 @@
             <createData entity="SampleAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigLwa"/>
         </before>
 
-        <!--Verify Sign in with Amazon Button V2 is not present-->
-        <dontSeeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButton"/>
+        <!--Verify Sign in with Amazon Button V2 is not present on create or login pages-->
+        <dontSeeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
+        <dontSeeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
     </test>
 </tests>

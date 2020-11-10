@@ -21,10 +21,15 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
+        <!--Verify Sign in with Amazon Button V2 is present on account create-->
+        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="amOnCreateAccountPage"/>
+        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded2"/>
+        <seeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
+
+        <!--Verify Sign in with Amazon Button V2 is present on login page-->
+        <!--Leave this as the last step as other tests start from the login page-->
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
-
-        <!--Verify Sign in with Amazon Button V2 is present-->
-        <seeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButton"/>
+        <seeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
     </test>
 </tests>
