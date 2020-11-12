@@ -12,14 +12,14 @@
 
         <before>
             <createData entity="SampleAmazonPaymentV2ConfigLwa" stepKey="SampleAmazonPaymentV2ConfigData"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
         </before>
 
         <after>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer" before="logout">
                 <argument name="email" value="{{AmazonAccount.email}}"/>
             </actionGroup>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Go to Amazon Pay from the checkout and login-->

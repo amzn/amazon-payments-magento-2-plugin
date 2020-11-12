@@ -3,7 +3,7 @@
     <test name="AmazonInvoiceV2" extends="AmazonCheckoutButtonV2">
         <annotations>
             <stories value="Amazon Invoice"/>
-            <title value="User should be able to create invoice."/>
+            <title value="Amazon Invoice V2"/>
             <description value="User should be able to create invoice."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>
@@ -27,11 +27,11 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!--Login as admin-->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!--Open created order in backend-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
         <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+        <actionGroup ref="OpenOrderById" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <!--Create Invoice-->

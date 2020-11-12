@@ -3,7 +3,7 @@
     <test name="AmazonInvoicePendingCapturedV2" extends="AmazonCheckoutButtonV2">
         <annotations>
             <stories value="Amazon Invoice"/>
-            <title value="User should be able to create invoice after 7 Days (Captured case)."/>
+            <title value="Amazon Invoice after 7 Days (Captured case)."/>
             <description value="User should be able to create invoice after 7 Days (Captured case)."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>
@@ -27,11 +27,11 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!--Login as admin-->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!--Open created order in backend-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
         <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+        <actionGroup ref="OpenOrderById" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
@@ -50,8 +50,8 @@
         <wait time="30" stepKey="waitForStatusUpdate"/>
         <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
         <!--Open order and verify status is Processing-->
-        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
-            <argument name="entityId" value="{$grabOrderId}"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeProcessingStatus"/>
     </test>
