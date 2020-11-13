@@ -51,7 +51,7 @@
         <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
         <!--Open order and verify status is On Hold-->
         <actionGroup ref="OpenOrderById" stepKey="openOrder">
-            <argument name="orderId" value="{$grabOrderId}"/>
+            <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="On Hold" stepKey="seeOnHoldStatus"/>
     </test>
