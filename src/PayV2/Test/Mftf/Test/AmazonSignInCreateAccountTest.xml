@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonSignInCreateAccount" extends="AmazonSignInButton">
+        <annotations>
+            <stories value="Amazon Sign In Create Account"/>
+            <title value="Amazon Sign In Create Account"/>
+            <description value="Amazon Sign In button should create an account when logging in"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_signin"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer" before="logout">
+                <argument name="email" value="{{AmazonAccount.email}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Verify Sign in with Amazon Button V2 is present-->
+        <click selector="{{AmazonLoginSection.v2Login}}" stepKey="clickSignInWithAmazonButton"/>
+
+        <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
+        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
+
+        <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
+        <see userInput="My Account" stepKey="seeMyAccount"/>
+    </test>
+</tests>
