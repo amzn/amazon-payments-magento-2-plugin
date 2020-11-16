@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonInvoiceMultipleCapture" extends="AmazonCheckoutButtonV2">
+        <annotations>
+            <stories value="Amazon Pay Multiple Capture"/>
+            <title value="Admin user must be able to capture multiple times when configuration allows"/>
+            <description value="Admin user must be able to capture multiple times when configuration allows"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_invoice"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct2" before="flushCache"/>
+        </before>
+
+        <!-- Product 1 is added to cart by AmazonCheckoutButtonV2 -->
+
+        <!-- Go to product 2 page and add to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2StoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct2.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct2ToCart"/>
+
+        <!--Go to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart2"/>
+
+        <!--Go to Amazon Pay and login-->
+        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <!--Go to payment method-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order in backend -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+
+        <!-- Create Invoice 1 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice1"/>
+        <waitForPageLoad stepKey="waitForInvoicePage1"/>
+        <fillField stepKey="fillQty" userInput="1" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}"/>
+        <fillField stepKey="fillNoQty" userInput="0" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQty"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice1"/>
+        <waitForPageLoad stepKey="waitForLoadPage1"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage1"/>
+
+        <!-- Create Invoice 2 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice2"/>
+        <waitForPageLoad stepKey="waitForInvoicePage2"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2"/>
+        <waitForPageLoad stepKey="waitForLoadPage2"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage2"/>
+    </test>
+</tests>
