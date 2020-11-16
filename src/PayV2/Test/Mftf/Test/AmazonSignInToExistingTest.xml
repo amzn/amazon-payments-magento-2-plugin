@@ -32,6 +32,8 @@
         <!-- Log out and return to sign in page -->
         <actionGroup stepKey="logout" ref="StorefrontCustomerLogoutActionGroup"/>
         <waitForPageLoad time="30" stepKey="waitLogoutPageFullyLoaded"/>
+        <!-- make sure we are logged out from Amazon by clearing ubid-main cookie -->
+        <resetCookie userInput="ubid-main" parameterArray="['domainName' => '.amazon.com']" stepKey="resetCookieForAmazon"/>
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage2"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
 
