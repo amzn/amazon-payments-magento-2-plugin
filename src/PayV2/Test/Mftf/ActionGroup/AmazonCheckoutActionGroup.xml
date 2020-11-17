@@ -28,6 +28,5 @@
         <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressZipCode" stepKey="seeAmazonAddressZipCode"/>
         <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressCountryName" stepKey="seeAmazonAddressCountryName"/>
         <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressPhoneNumber" stepKey="seeAmazonAddressPhoneNumber"/>
-        <return value="{$amazonAddressZipCode}" stepKey="returnAddressZip"/>
     </actionGroup>
 </actionGroups>
