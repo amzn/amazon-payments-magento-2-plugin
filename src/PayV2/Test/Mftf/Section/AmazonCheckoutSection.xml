@@ -6,5 +6,6 @@
         <element name="editShippingButton" type="button" selector="#checkout-step-shipping .shipping-address-item.selected-item .edit-address-link"/>
         <element name="v1Method" type="input" selector="#amazonlogin"/>
         <element name="v2Method" type="input" selector="#amazon_payment_v2"/>
+        <element name="returnToStandardCheckout" type="text" selector="#checkout-step-shipping .revert-checkout"/>
     </section>
 </sections>
