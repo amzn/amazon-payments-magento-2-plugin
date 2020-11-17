@@ -26,3 +26,4 @@
 "The selected payment method is not available for this transaction. Please select another one or add a new payment method to the wallet widget.","El método de pago seleccionado no está disponible para esta transacción. Por favor, seleccione otro o introducza uno nuevo en el recuadro Metodo de pago."
 "No payment instrument has been selected for this order, please try to refresh the page or add a new payment instrument in the wallet widget.","No ha sido seleccionado un método de pago para este pedido. Por favor, refresque la página o introduzca uno nuevo en el recuadro Metodo de pago."
 "The order failed due to a technical error, please select another payment method or contact our support.","El pedido no ha sido procesado debido a un error técnico. Por favor, seleccione otro método de pago o contacte nuestro servicio de soporte al cliente."
+"or continue with Standard Checkout","o continúa con el Checkout Standard"
