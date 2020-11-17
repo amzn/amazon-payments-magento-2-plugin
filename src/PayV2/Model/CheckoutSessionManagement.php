@@ -521,7 +521,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     {
         $order = $payment->getOrder();
         $payment->setIsTransactionPending(false);
-        $order->getInvoiceCollection()->getFirstItem()->pay();
+        $invoiceCollection = $order->getInvoiceCollection();
+        if (!empty($invoiceCollection->getItems())) {
+            $invoiceCollection->getFirstItem()->pay();
+        }
         $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)->setStatus(
             \Magento\Sales\Model\Order::STATE_PROCESSING
         );
@@ -614,6 +617,12 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                         $transaction->setIsClosed(false);
                         $this->asyncManagement->queuePendingAuthorization($chargeId);
                         break;
+                    case 'Authorized':
+                        if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
+                            $this->setProcessing($payment);
+                            $this->addCaptureComment($payment, $cart, $amazonCharge['chargePermissionId']);
+                        }
+                        break;
                     case 'Captured':
                         $payment->setIsTransactionClosed(true);
                         $transaction->setIsClosed(true);
@@ -622,7 +631,6 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                             $this->setProcessing($payment);
                             $this->addCaptureComment($payment, $cart, $chargeId);
                         }
-
                         break;
                 }
 
