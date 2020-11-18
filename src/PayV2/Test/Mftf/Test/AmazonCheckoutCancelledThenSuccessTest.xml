@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutCancelledThenSuccess" extends="AmazonCheckoutButtonV2">
+        <annotations>
+            <stories value="Amazon Checkout Cancelled then Successful"/>
+            <title value="Amazon Checkout Cancelled then Successful"/>
+            <description value="User should be able to checkout with Amazon Pay after cancelling their checkout session."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_checkout"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+
+        <click selector="{{AmazonPageSection.cancelButton}}" stepKey="cancelCheckout"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+
+        <!--Go back to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton2"/>
+        <actionGroup ref="AmazonAlreadyLoggedInActionGroup" stepKey="AmazonLoginActionGroup2"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+
+        <!-- Ensure we have a new checkout session by clicking Edit address, then return to checkout -->
+        <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup2"/>
+
+        <!--Go to payment method-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+
+        <click selector="{{AmazonCheckoutSection.editPaymentButton}}" stepKey="clickEditPaymentButton"/>
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForContinueButton"/>
+        <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="clickAmazonCheckoutButton"/>
+        <waitForElement selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" stepKey="waitForCheckoutPaymentPageLoad2"/>
+
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+    </test>
+</tests>
