@@ -10,6 +10,7 @@
                 <value id="amazon_it" type="host">*.amazon.it</value>
                 <value id="amazon_fr" type="host">*.amazon.fr</value>
                 <value id="amazon_es" type="host">*.amazon.es</value>
+                <value id="amazon_de" type="host">*.amazon.de</value>
                 <value id="amazonpay_com" type="host">*.amazonpay.com</value>
                 <value id="amazonpay_co_uk" type="host">*.amazonpay.co.uk</value>
                 <value id="amazonpay_co_jp" type="host">*.amazonpay.co.jp</value>
@@ -17,6 +18,7 @@
                 <value id="amazonpay_it" type="host">*.amazonpay.it</value>
                 <value id="amazonpay_fr" type="host">*.amazonpay.fr</value>
                 <value id="amazonpay_es" type="host">*.amazonpay.es</value>
+                <value id="amazonpay_de" type="host">*.amazonpay.de</value>
                 <value id="amazonservices_com" type="host">mws.amazonservices.com</value>
                 <value id="amazonservices_co_uk" type="host">mws.amazonservices.co.uk</value>
                 <value id="amazonservices_co_jp" type="host">mws.amazonservices.co.jp</value>
@@ -24,6 +26,7 @@
                 <value id="amazonservices_it" type="host">mws.amazonservices.it</value>
                 <value id="amazonservices_fr" type="host">mws.amazonservices.fr</value>
                 <value id="amazonservices_es" type="host">mws.amazonservices.es</value>
+                <value id="amazonservices_de" type="host">mws.amazonservices.de</value>
             </values>
         </policy>
         <policy id="script-src">
@@ -35,6 +38,7 @@
                 <value id="amazon_payment_widget_it" type="host">*.payments-amazon.it</value>
                 <value id="amazon_payment_widget_fr" type="host">*.payments-amazon.fr</value>
                 <value id="amazon_payment_widget_es" type="host">*.payments-amazon.es</value>
+                <value id="amazon_payment_widget_de" type="host">*.payments-amazon.de</value>
             </values>
         </policy>
         <policy id="img-src">
@@ -68,6 +72,7 @@
                 <value id="ssl_images_amazon_it" type="host">*.ssl-images-amazon.it</value>
                 <value id="ssl_images_amazon_fr" type="host">*.ssl-images-amazon.fr</value>
                 <value id="ssl_images_amazon_es" type="host">*.ssl-images-amazon.es</value>
+                <value id="ssl_images_amazon_de" type="host">*.ssl-images-amazon.de</value>
                 <value id="media_amazon_com" type="host">*.media-amazon.com</value>
                 <value id="media_amazon_co_uk" type="host">*.media-amazon.co.uk</value>
                 <value id="media_amazon_co_jp" type="host">*.media-amazon.co.jp</value>
@@ -75,6 +80,7 @@
                 <value id="media_amazon_it" type="host">*.media-amazon.it</value>
                 <value id="media_amazon_fr" type="host">*.media-amazon.fr</value>
                 <value id="media_amazon_es" type="host">*.media-amazon.es</value>
+                <value id="media_amazon_de" type="host">*.media-amazon.de</value>
             </values>
         </policy>
         <policy id="form-action">
@@ -86,6 +92,7 @@
                 <value id="amazon_it" type="host">*.amazon.it</value>
                 <value id="amazon_fr" type="host">*.amazon.fr</value>
                 <value id="amazon_es" type="host">*.amazon.es</value>
+                <value id="amazon_de" type="host">*.amazon.de</value>
             </values>
         </policy>
         <policy id="frame-src">
@@ -97,6 +104,7 @@
                 <value id="amazon_it" type="host">*.amazon.it</value>
                 <value id="amazon_fr" type="host">*.amazon.fr</value>
                 <value id="amazon_es" type="host">*.amazon.es</value>
+                <value id="amazon_de" type="host">*.amazon.de</value>
                 <value id="amazon_payment_widget_com" type="host">*.payments-amazon.com</value>
                 <value id="amazon_payment_widget_co_uk" type="host">*.payments-amazon.co.uk</value>
                 <value id="amazon_payment_widget_co_jp" type="host">*.payments-amazon.co.jp</value>
@@ -104,6 +112,7 @@
                 <value id="amazon_payment_widget_it" type="host">*.payments-amazon.it</value>
                 <value id="amazon_payment_widget_fr" type="host">*.payments-amazon.fr</value>
                 <value id="amazon_payment_widget_es" type="host">*.payments-amazon.es</value>
+                <value id="amazon_payment_widget_de" type="host">*.payments-amazon.de</value>
             </values>
         </policy>
     </policies>
