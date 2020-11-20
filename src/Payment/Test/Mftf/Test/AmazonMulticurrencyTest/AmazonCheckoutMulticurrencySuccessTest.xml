@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutMulticurrencySuccess" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <stories value="Amazon Checkout Multicurrency"/>
+            <title value="Amazon Checkout Multicurrency Success"/>
+            <description value="User should be able to checkout with Amazon Pay when multicurrency is enabled and they are using a supported currency."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_payment"/>
+            <group value="amazon_payment_multicurrency"/>
+        </annotations>
+
+        <before>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData" before="flushCache"/>
+            <createData entity="EUAmazonCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
+            <!-- set default currency to one supported for multicurrency -->
+            <magentoCLI command="config:set currency/options/default USD" stepKey="setDefaultCurrency" before="flushCache"/>
+            <!-- enable multicurrency -->
+            <magentoCLI command="config:set payment/amazon_payment/multicurrency 1" stepKey="setMulticurrency" before="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
+            <!-- disable multicurrency -->
+            <magentoCLI command="config:set payment/amazon_payment/multicurrency 0" stepKey="disableMulticurrency" before="flushCache"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!-- Click on mini cart -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+
+        <!-- Login (redirect) -->
+        <click selector="{{AmazonCheckoutSection.miniCartPayButton}}" stepKey="clickAmazonCartButton"/>
+        <actionGroup ref="AmazonLoginRedirectActionGroup" stepKey="AmazonLoginRedirectActionGroup" />
+
+        <!-- Place order -->
+        <actionGroup ref="AmazonCheckoutSubmitActionGroup" stepKey="AmazonCheckoutSubmitActionGroup" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order in backend -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+
+        <!-- Create Invoice -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoicePage"/>
+
+        <!-- Verify invoice item qtys cannot be changed -->
+        <dontSeeElement stepKey="dontSeeItemQtyToInvoice1" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}"/>
+        <dontSeeElement stepKey="dontSeeItemQtyToInvoice2" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}"/>
+        <dontSeeElement stepKey="dontSeeUpdateQty" selector="{{AdminInvoiceItemsSection.updateQty}}"/>
+
+        <!-- Submit and verify the invoice created using the presentmentCurrency -->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
+        <waitForPageLoad stepKey="waitForLoadPage"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage"/>
+        <see userInput="Captured amount of €6.23 [$8.82] online." stepKey="seeCapturedAmount"/>
+    </test>
+</tests>
