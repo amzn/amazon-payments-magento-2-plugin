@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutMulticurrencyDisabledNoButton" extends="AmazonCheckoutAddProduct">
+        <annotations>
+            <stories value="Amazon Checkout Multicurrency Disabled No Button"/>
+            <title value="Amazon Checkout Multicurrency Disabled No Button"/>
+            <description value="User should not be able to checkout with Amazon Pay when multi-currency is disabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_payment"/>
+            <group value="amazon_payment_multicurrency"/>
+        </annotations>
+
+        <before>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData" before="flushCache"/>
+            <createData entity="EUAmazonMultiCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
+            <!-- ensure multicurrency disabled -->
+            <magentoCLI command="config:set payment/amazon_payment/multicurrency 0" stepKey="setMulticurrency" before="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Go to Cart-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="cartOpenCart" />
+
+        <!--Verify we don't see Amazon Pay Button-->
+        <dontSeeElement selector="{{AmazonCheckoutSection.cartPayButton}}" stepKey="dontSeeEnabledAmazonButton"/>
+    </test>
+</tests>
