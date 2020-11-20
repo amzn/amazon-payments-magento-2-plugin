@@ -7,11 +7,11 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutSCAAbandoned" extends="AmazonCheckoutAddProduct">
+    <test name="AmazonCheckoutSuccessAfterSCAAbandoned" extends="AmazonCheckoutAddProduct">
         <annotations>
             <features value="Amazon Pay"/>
-            <stories value="(SCA) Amazon SCA Abandoned"/>
-            <title value="(SCA) Amazon SCA Abandoned"/>
+            <stories value="(SCA) Amazon Success After SCA Abandoned"/>
+            <title value="(SCA) Amazon Success After SCA Abandoned"/>
             <description value="Perform checkout from cart page and ensure SCA Abandoned page."/>
             <severity value="CRITICAL"/>
             <group value="amazon_sca"/>
@@ -19,7 +19,8 @@
 
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
-            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <createData entity="EUAmazonCurrencyConfig" stepKey="SampleAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
@@ -44,6 +45,6 @@
             <argument name="cc" value="4440"/>
         </actionGroup>
         <!--Transaction declined error message-->
-        <waitForText userInput="Something's wrong with your payment method." selector=".message" stepKey="waitForText"/>
+        <waitForText userInput="There has been a problem with the selected payment method" selector=".message" stepKey="waitForText"/>
     </test>
 </tests>
