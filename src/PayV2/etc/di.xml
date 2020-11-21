@@ -306,4 +306,7 @@
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Payment\Model\Method\Adapter">
+        <plugin name="amazon_payv2_pay_action" type="Amazon\PayV2\Plugin\ModelMethodAdapter" sortOrder="1" />
+    </type>
 </config>
