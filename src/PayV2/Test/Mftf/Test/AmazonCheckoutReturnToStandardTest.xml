@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutReturnToStandard" extends="AmazonCheckoutButtonV2">
+        <annotations>
+            <stories value="Amazon Checkout Return to Standard"/>
+            <title value="Amazon Checkout Return to Standard"/>
+            <description value="User should be able to return to standard checkout instead of using Amazon Pay."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_checkout"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+
+        <click selector="{{AmazonCheckoutSection.returnToStandardCheckout}}" stepKey="clickReturnToStandardCheckout"/>
+        <waitForPageLoad stepKey="waitForStandardCheckoutPageLoad"/>
+
+        <!-- We don't have a good way to to get the zip out of the action group in MFTF v2, so just look at the postcode field presence -->
+        <seeElement selector="{{CheckoutShippingSection.postcode}}" stepKey="seeAmazonAddressPostcode"/>
+    </test>
+</tests>

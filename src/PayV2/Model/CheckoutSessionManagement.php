@@ -25,6 +25,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 
@@ -543,16 +544,44 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $order = $payment->getOrder();
         $formattedAmount = $order->getBaseCurrency()->formatTxt($cart->getBaseGrandTotal());
         if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
-            $formattedAmount = $formattedAmount .' ['. $order->formatPriceTxt($payment->getAmountOrdered()) .']';
+            $formattedAmount = $formattedAmount . ' [' . $order->formatPriceTxt($payment->getAmountOrdered()) . ']';
         }
         if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
             $message = __('Captured amount of %1 online.', $formattedAmount);
-        }
-        else {
+        } else {
             $message = __('Authorized amount of %1.', $formattedAmount);
         }
         $payment->addTransactionCommentsToOrder($chargeId, $message);
         $this->orderRepository->save($order);
+    }
+
+    /**
+     * Cancel order
+     *
+     * @param $order
+     */
+    private function cancelOrder($order)
+    {
+        // set order as cancelled
+        $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
+            \Magento\Sales\Model\Order::STATE_CANCELED
+        );
+        $order->getPayment()->setIsTransactionClosed(true);
+
+        // cancel invoices
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            $invoice->setState(Invoice::STATE_CANCELED);
+        }
+
+        // delete order comments and add new one
+        foreach ($order->getStatusHistories() as $history) {
+            $history->delete();
+        }
+        $order->addStatusHistoryComment(
+            __('Payment was unable to be successfully captured, the checkout session failed to complete.')
+        );
+
+        $order->save();
     }
 
     /**
@@ -591,10 +620,17 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getGrandTotal() , $cart->getQuoteCurrencyCode());
                 $completeCheckoutStatus = $amazonResult['status'] ?? '404';
                 if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)){
-                    // Something went wrong, but the order has already been placed
+                    // Something went wrong, but the order has already been placed, so cancelling it
+                    $this->cancelOrder($order);
+
+                    $session = $this->amazonAdapter->getCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId());
+                    if (isset($session['chargePermissionId'])) {
+                        $this->amazonAdapter->closeChargePermission($cart->getStoreId(), $session['chargePermissionId'], 'Canceled due to checkout session failed to complete', true);
+                    }
+
                     return [
                         'success' => false,
-                        'message' => $amazonResult['message'],
+                        'message' => __('Payment was unable to be successfully captured, the checkout session failed to complete.'),
                     ];
                 }
 
@@ -641,10 +677,17 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 $this->checkoutSessionRepository->save($checkoutSession);
             } catch (\Exception $e) {
                 $session = $this->amazonAdapter->getCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId());
+
                 if (isset($session['chargePermissionId'])) {
-                    $response = $this->amazonAdapter->closeChargePermission($cart->getStoreId(), $session['chargePermissionId'], 'Canceled due to technical issue: ' . $e->getMessage(), true);
+                    $this->amazonAdapter->closeChargePermission($cart->getStoreId(), $session['chargePermissionId'], 'Canceled due to technical issue: ' . $e->getMessage(), true);
                 }
                 $this->cancelCheckoutSession($cartId);
+
+                // cancel order
+                if (isset($order)) {
+                    $this->cancelOrder($order);
+                }
+
                 throw $e;
             }
         }

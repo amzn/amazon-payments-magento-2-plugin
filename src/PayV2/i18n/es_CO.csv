@@ -4,3 +4,4 @@
 "Billing address associated with this payment method:","Dirección de Facturación asociada a este método de pago:"
 "This transaction was cancelled. Please try again.","La transacción ha sido cancelada, puede intentarlo nuevamente."
 "This transaction was declined. Please try again using a different payment method.","La transacción se ha rechazado, intenta utilizar otro método de pago."
+"or continue with Standard Checkout","o continúa con el Checkout Standard"

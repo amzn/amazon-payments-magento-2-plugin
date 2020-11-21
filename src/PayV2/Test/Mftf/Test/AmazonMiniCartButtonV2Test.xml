@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonMiniCartButtonV2">
+        <annotations>
+            <stories value="Amazon Button"/>
+            <title value="Amazon Mini Cart Button V2"/>
+            <description value="Only Amazon Button V2 should be present in mini cart when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_button"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigData"/>
+            <magentoCLI command="config:set {{AmazonButtonMiniCartConfig.path}} 1" stepKey="displayAmazonButtonMiniCart"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <!--Go to product page-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Click on Add To Cart button-->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <!--Verify only Amazon Button V2 is present-->
+        <seeElement selector="{{AmazonButtonSection.v2MiniCart}}" stepKey="seeEnabledAmazonButton"/>
+        <dontSeeElement selector="{{AmazonButtonSection.v1MiniCart}}" stepKey="dontSeeDisabledAmazonButton"/>
+    </test>
+</tests>
