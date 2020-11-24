@@ -300,12 +300,6 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $magentoAddress = $this->addressHelper->convertToMagentoEntity($amazonAddress);
 
         if ($isShippingAddress) {
-            $validator = $this->validatorFactory->createValidator('amazon_address', 'on_select');
-
-            if (!$validator->isValid($magentoAddress)) {
-                throw new ValidatorException(null, null, [$validator->getMessages()]);
-            }
-
             $countryCollection = $this->countryCollectionFactory->create();
 
             $collectionSize = $countryCollection->loadByStore()
