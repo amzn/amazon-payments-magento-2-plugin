@@ -15,9 +15,12 @@
  */
 namespace Amazon\PayV2\Controller\Payment;
 
+use Amazon\PayV2\Api\Data\AsyncInterface;
+use Amazon\PayV2\Model\Async;
 use Magento\Framework\App\ObjectManager;
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
+use Magento\Framework\Data\Collection;
 
 /**
  * Class Ipn
@@ -48,19 +51,26 @@ class Ipn extends \Magento\Framework\App\Action\Action
     private $ipnLogger;
 
     /**
+     * @var \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory
+     */
+    private $asyncCollectionFactory;
+
+    /**
      * Ipn constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
      * @param \Amazon\PayV2\Model\AsyncManagement\ChargeFactory $chargeFactory
      * @param \Amazon\PayV2\Model\AsyncManagement\RefundFactory $refundFactory
      * @param \Amazon\PayV2\Logger\AsyncIpnLogger $ipnLogger
+     * @param \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Amazon\PayV2\Model\AsyncManagement\ChargeFactory $chargeFactory,
         \Amazon\PayV2\Model\AsyncManagement\RefundFactory $refundFactory,
-        \Amazon\PayV2\Logger\AsyncIpnLogger $ipnLogger
+        \Amazon\PayV2\Logger\AsyncIpnLogger $ipnLogger,
+        \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
     ) {
         // Bypass Magento's CsrfValidator (which rejects POST) and use Amazon SNS Message Validator instead
         $context->getRequest()->setMethod('PUT');
@@ -70,8 +80,13 @@ class Ipn extends \Magento\Framework\App\Action\Action
         $this->chargeFactory = $chargeFactory;
         $this->refundFactory = $refundFactory;
         $this->ipnLogger = $ipnLogger;
+        $this->asyncCollectionFactory = $asyncCollectionFactory;
     }
 
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @throws \Exception
+     */
     public function execute()
     {
         if (!$this->amazonConfig->isEnabled()) {
@@ -91,17 +106,22 @@ class Ipn extends \Magento\Framework\App\Action\Action
             // Message Validator checks SigningCertURL, SignatureVersion, and Signature
             if ($validator->isValid($snsMessage)) {
                 $message = json_decode($snsMessage['Message'], true);
+                $asyncComplete = false;
 
                 // Process message
                 if (isset($message['ObjectType'])) {
                     switch ($message['ObjectType']) {
                         case 'CHARGE':
-                            $this->chargeFactory->create()->processStateChange($message['ObjectId']);
+                            $asyncComplete = $this->chargeFactory->create()->processStateChange($message['ObjectId']);
                             break;
                         case 'REFUND':
-                            $this->refundFactory->create()->processRefund($message['ObjectId']);
+                            $asyncComplete = $this->refundFactory->create()->processRefund($message['ObjectId']);
                             break;
                     }
+                }
+
+                if ($asyncComplete) {
+                    $this->completePending($message['ObjectId']);
                 }
             } else {
                 $this->ipnLogger->warning('Invalid SNS Message');
@@ -110,6 +130,23 @@ class Ipn extends \Magento\Framework\App\Action\Action
         } catch (\Exception $e) {
             $this->ipnLogger->error($e);
             throw $e;
+        }
+    }
+
+    /**
+     * Complete successful async pending action
+     *
+     * @param $asyncId
+     */
+    protected function completePending($asyncId)
+    {
+        $collection = $this->asyncCollectionFactory
+            ->create()
+            ->addFilter(AsyncInterface::PENDING_ID, $asyncId)
+            ->setPageSize(1);
+
+        foreach ($collection as $async) {
+            $async->setIsPending(false)->save();
         }
     }
 }
