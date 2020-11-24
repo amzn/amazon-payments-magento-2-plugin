@@ -196,7 +196,9 @@ class AmazonConfig
      */
     public function isCurrentCurrencySupportedByAmazon($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        return $this->getCurrentCurrencyCode() == $this->getCurrencyCode($scope, $scopeCode);
+        $regionCurrency = $this->getCurrentCurrencyCode();
+        $currentCurrency = $this->getCurrencyCode($scope, $scopeCode);
+        return ($currentCurrency === $regionCurrency) || $this->canUseCurrency($regionCurrency);
     }
 
     /**
@@ -214,6 +216,31 @@ class AmazonConfig
         ];
 
         return array_key_exists($paymentRegion, $currencyCodeMap) ? $currencyCodeMap[$paymentRegion] : '';
+    }
+
+    /**
+     * @param string $currencyCode
+     * @param string $scope
+     * @param string $scopeCode
+     * @return boolean
+     */
+    public function canUseCurrency($currencyCode, $scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $result = false;
+        if ($this->multiCurrencyEnabled($scope, $scopeCode)) {
+            $result = in_array($currencyCode, $this->getValidCurrencies($scope, $scopeCode));
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $scope
+     * @param string $scopeCode
+     * @return array
+     */
+    public function getValidCurrencies($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return explode(',', $this->scopeConfig->getValue('multicurrency/currencies', $scope, $scopeCode));
     }
 
     /**

@@ -42,7 +42,7 @@ The module can be either installed via Composer (recommended), or manually. The 
 In `magento-root`, execute:
 
 ```
-$ composer require amzn/amazon-pay-v2-magento-2-module
+$ composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout
 $ bin/magento module:enable Amazon_PayV2 --clear-static-content
 ```
 
@@ -112,5 +112,5 @@ The following table provides an overview on which Git branch is compatible to wh
 
 | Magento Version | Github Branch | Latest release |
 | ------------- | ------------- | ------------- |
-| 2.2.6 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.7.0 |
-| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.3.0 |
+| 2.2.6 - 2.3.x | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.9.0 |
+| 2.4.0 and above | [V2checkout](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout) | 2.5.0 |
