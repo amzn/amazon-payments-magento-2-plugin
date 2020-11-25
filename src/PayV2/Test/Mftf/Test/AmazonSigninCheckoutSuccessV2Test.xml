@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonSigninCheckoutSuccessV2" extends="AmazonCheckoutButtonV2">
+        <annotations>
+            <stories value="Amazon Signin Enabled Checkout"/>
+            <title value="Amazon Signin Enabled Checkout Success V2"/>
+            <description value="User should be able to sign in during checkout with Amazon Pay."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_signin"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentV2ConfigLwa" stepKey="SampleAmazonPaymentV2ConfigData"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer" before="logout">
+                <argument name="email" value="{{AmazonAccount.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <!--Go to payment method-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order and see the logged in order number message-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="loggedInPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+    </test>
+</tests>

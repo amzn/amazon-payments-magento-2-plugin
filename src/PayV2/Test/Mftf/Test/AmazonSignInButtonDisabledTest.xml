@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonSignInButtonDisabled" extends="AmazonSignInButton">
+        <annotations>
+            <stories value="Amazon Sign In Button Disabled"/>
+            <title value="Amazon Sign In Button Disabled"/>
+            <description value="Amazon Sign In button should not be visible on the login page when disabled"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_signin"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigLwa"/>
+        </before>
+
+        <!--Verify Sign in with Amazon Button V2 is not present on create or login pages-->
+        <dontSeeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
+        <dontSeeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
+    </test>
+</tests>

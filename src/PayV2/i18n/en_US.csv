@@ -4,3 +4,4 @@
 "Billing address associated with this payment method:","Billing address associated with this payment method:"
 "This transaction was cancelled. Please try again.","The transaction has been canceled, please try again."
 "This transaction was declined. Please try again using a different payment method.","The transaction has been declined, please try to use another payment method."
+"or continue with Standard Checkout","or continue with Standard Checkout"
