@@ -8,6 +8,8 @@ namespace Amazon\Payment\Gateway\Config;
 /**
  * Class Config
  * @package Amazon\Payment\Gateway\Config
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {

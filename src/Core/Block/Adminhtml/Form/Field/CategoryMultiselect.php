@@ -17,6 +17,9 @@ namespace Amazon\Core\Block\Adminhtml\Form\Field;
 
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CategoryMultiselect extends Category
 {
     /**

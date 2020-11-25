@@ -22,6 +22,9 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Amazon\Payment\Model\PendingAuthorization as PendingAuthorizationModel;
 use Amazon\Payment\Model\ResourceModel\PendingAuthorization as PendingAuthorizationResourceModel;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Collection extends AbstractCollection
 {
     protected function _construct()

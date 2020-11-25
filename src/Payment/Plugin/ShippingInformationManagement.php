@@ -23,6 +23,9 @@ use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Amazon\Login\Helper\Session as LoginSessionHelper;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ShippingInformationManagement
 {
     /**

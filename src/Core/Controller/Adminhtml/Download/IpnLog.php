@@ -24,6 +24,8 @@ use Magento\Framework\Exception\NotFoundException;
 /**
  * Class IpnLog
  * Enables custom IPN log file to be accessed via an admin link
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class IpnLog extends System
 {

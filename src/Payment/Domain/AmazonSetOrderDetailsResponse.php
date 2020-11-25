@@ -18,6 +18,9 @@ namespace Amazon\Payment\Domain;
 use Amazon\Core\Exception\AmazonServiceUnavailableException;
 use AmazonPay\ResponseInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonSetOrderDetailsResponse
 {
     /**

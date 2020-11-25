@@ -18,6 +18,9 @@ namespace Amazon\Payment\Domain\Details;
 use Amazon\Payment\Domain\AmazonRefundStatus;
 use Amazon\Payment\Domain\AmazonRefundStatusFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonRefundDetails
 {
     /**

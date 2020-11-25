@@ -18,6 +18,9 @@ namespace Amazon\Core\Block\Adminhtml\System\Config\Form;
 use Magento\Backend\Block\Template\Context;
 use Amazon\Core\Helper\Data as CoreHelper;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Version extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

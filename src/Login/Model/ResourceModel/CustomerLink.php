@@ -17,6 +17,9 @@ namespace Amazon\Login\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CustomerLink extends AbstractDb
 {
     const TABLE_NAME = 'amazon_customer';

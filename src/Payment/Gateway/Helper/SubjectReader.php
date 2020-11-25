@@ -26,6 +26,8 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 /**
  * Class SubjectReader
  * Consolidates commonly used calls
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class SubjectReader
 {

@@ -16,6 +16,9 @@
 
 namespace Amazon\Core\Block\Adminhtml\System\Config;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class SimplePathAdmin extends \Magento\Framework\View\Element\Template
 {
     /**

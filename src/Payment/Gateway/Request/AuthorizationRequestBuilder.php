@@ -26,6 +26,9 @@ use Magento\Framework\DataObject;
 use Amazon\Payment\Plugin\AdditionalInformation;
 use Amazon\Core\Helper\CategoryExclusion;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AuthorizationRequestBuilder implements BuilderInterface
 {
     /**

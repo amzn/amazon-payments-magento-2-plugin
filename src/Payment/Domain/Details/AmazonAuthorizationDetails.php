@@ -18,6 +18,9 @@ namespace Amazon\Payment\Domain\Details;
 use Amazon\Payment\Domain\AmazonAuthorizationStatus;
 use Amazon\Payment\Domain\AmazonAuthorizationStatusFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonAuthorizationDetails
 {
     /**

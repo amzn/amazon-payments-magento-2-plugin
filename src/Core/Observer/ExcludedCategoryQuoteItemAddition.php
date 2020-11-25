@@ -21,6 +21,9 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ExcludedCategoryQuoteItemAddition implements ObserverInterface
 {
     /**

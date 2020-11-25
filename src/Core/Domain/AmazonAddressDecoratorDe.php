@@ -17,6 +17,9 @@ namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonAddressInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonAddressDecoratorDe implements AmazonAddressInterface
 {
     /**

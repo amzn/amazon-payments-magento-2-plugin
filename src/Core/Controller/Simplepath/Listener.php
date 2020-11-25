@@ -25,6 +25,8 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Class Listener
  * Retrieves entered keys from Amazon Pay popup
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class Listener extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {

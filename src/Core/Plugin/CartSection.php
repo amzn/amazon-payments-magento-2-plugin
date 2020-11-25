@@ -19,6 +19,9 @@ use Amazon\Core\Helper\Data;
 use Amazon\Core\Helper\CategoryExclusion;
 use Magento\Checkout\CustomerData\Cart;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CartSection
 {
     /**

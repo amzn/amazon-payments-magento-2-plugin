@@ -27,6 +27,8 @@ use \phpseclib\Crypt\AES;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class SimplePath
 {

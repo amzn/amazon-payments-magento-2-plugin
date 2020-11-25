@@ -15,6 +15,9 @@
  */
 namespace Amazon\Payment\Exception;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CapturePendingException extends \Exception
 {
     public function __construct($message = '', $code = 0, \Exception $previous = null)

@@ -26,6 +26,8 @@ use Amazon\Payment\Observer\AddAmazonButton;
  * Class AddAmazonButtonTest
  *
  * @see \Amazon\Payment\Observer\AddAmazonButton
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class AddAmazonButtonTest extends \PHPUnit\Framework\TestCase
 {

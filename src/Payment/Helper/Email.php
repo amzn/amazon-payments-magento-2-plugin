@@ -23,6 +23,9 @@ use Magento\Sales\Model\Order;
 use Magento\Framework\Mail\Template\TransportBuilderFactory;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Email extends AbstractHelper
 {
     /**

@@ -22,6 +22,8 @@ use \Amazon\Core\Model\AmazonConfig;
  * Class LayoutConfigTest
  *
  * @see \Amazon\Login\Domain\LayoutConfig
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class LayoutConfigTest extends \PHPUnit\Framework\TestCase
 {

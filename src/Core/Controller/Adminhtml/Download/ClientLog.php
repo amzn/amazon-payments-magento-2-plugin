@@ -24,6 +24,8 @@ use Magento\Framework\Exception\NotFoundException;
 /**
  * Class ClientLog
  * Enables custom client log file to be accessed via an admin link
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class ClientLog extends System
 {

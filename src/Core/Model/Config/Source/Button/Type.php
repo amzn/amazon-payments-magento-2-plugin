@@ -17,6 +17,9 @@ namespace Amazon\Core\Model\Config\Source\Button;
 
 use Magento\Framework\Option\ArrayInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Type implements ArrayInterface
 {
     /**

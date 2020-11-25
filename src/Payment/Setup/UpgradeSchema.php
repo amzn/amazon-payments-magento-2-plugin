@@ -32,6 +32,9 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
 

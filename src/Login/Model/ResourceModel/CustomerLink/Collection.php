@@ -15,6 +15,9 @@
  */
 namespace Amazon\Login\Model\ResourceModel\CustomerLink;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     protected function _construct()

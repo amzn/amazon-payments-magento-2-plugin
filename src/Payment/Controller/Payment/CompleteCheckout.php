@@ -36,6 +36,8 @@ use Magento\Framework\App\ObjectManager;
  * Class CompleteCheckout
  *
  * @package Amazon\Payment\Controller\Payment
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class CompleteCheckout extends Action
 {

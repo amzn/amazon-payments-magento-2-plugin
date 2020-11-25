@@ -18,6 +18,9 @@ namespace Amazon\Payment\Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class TransactionTimeoutException extends HardDeclineException
 {
     public function __construct(Phrase $phrase, \Exception $cause = null)

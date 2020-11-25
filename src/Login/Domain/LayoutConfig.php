@@ -21,6 +21,8 @@ use Amazon\Core\Helper\Data as CoreHelper;
 
 /**
  * Used for accessing Amazon Login layout configuration
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class LayoutConfig
 {

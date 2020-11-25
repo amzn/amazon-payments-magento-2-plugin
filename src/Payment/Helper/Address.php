@@ -23,6 +23,9 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Address
 {
     /**

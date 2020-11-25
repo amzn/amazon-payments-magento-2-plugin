@@ -19,6 +19,9 @@ use Amazon\Payment\Api\Data\OrderLinkInterface;
 use Amazon\Payment\Model\ResourceModel\OrderLink as OrderLinkResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class OrderLink extends AbstractModel implements OrderLinkInterface
 {
     protected function _construct()

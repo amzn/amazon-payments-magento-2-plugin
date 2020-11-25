@@ -23,6 +23,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Sales\Api\OrderCustomerManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class OrderCustomerManagement
 {
     /**

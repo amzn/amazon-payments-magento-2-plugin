@@ -21,6 +21,9 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Amazon\Payment\Model\PendingCapture as PendingCaptureModel;
 use Amazon\Payment\Model\ResourceModel\PendingCapture as PendingCaptureResourceModel;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Collection extends AbstractCollection
 {
     protected function _construct()

@@ -18,6 +18,9 @@ namespace Amazon\Login\Controller\Login;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ProcessAuthHash extends \Magento\Framework\App\Action\Action
 {
     /**

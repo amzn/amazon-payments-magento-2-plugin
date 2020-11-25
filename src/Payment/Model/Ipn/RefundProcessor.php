@@ -22,6 +22,9 @@ use Amazon\Payment\Model\QueuedRefundUpdater;
 use Amazon\Payment\Model\ResourceModel\PendingRefund\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class RefundProcessor implements ProcessorInterface
 {
     /**

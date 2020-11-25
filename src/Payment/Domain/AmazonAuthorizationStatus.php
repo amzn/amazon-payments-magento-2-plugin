@@ -15,6 +15,9 @@
  */
 namespace Amazon\Payment\Domain;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonAuthorizationStatus extends AbstractAmazonStatus
 {
     const STATE_OPEN = 'Open';

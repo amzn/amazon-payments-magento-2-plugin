@@ -19,6 +19,9 @@ use Amazon\Payment\Helper\Email;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class HardDeclinedEmailSender implements ObserverInterface
 {
     /**

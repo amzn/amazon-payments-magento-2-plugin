@@ -22,6 +22,8 @@ use Amazon\Payment\Domain\Details\AmazonAuthorizationDetails;
 /**
  * Class AmazonAuthorization
  * validates Amazon Pay status during cron updates.
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class AmazonAuthorization
 {

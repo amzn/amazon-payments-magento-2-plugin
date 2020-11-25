@@ -19,6 +19,8 @@ namespace Amazon\Payment\Gateway\Http\Client;
 /**
  * Class Client
  * Amazon Pay authorization gateway client
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class AuthorizeClient extends AbstractClient
 {

@@ -15,6 +15,9 @@
  */
 namespace Amazon\Payment\Domain;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonCaptureDetailsResponse extends AbstractAmazonCaptureResponse
 {
     private $resultKey = 'GetCaptureDetailsResult';

@@ -21,6 +21,9 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class SetLogoutCookie implements ObserverInterface
 {
     const LOGGEDOUT_COOKIE = 'amz_auth_logout';

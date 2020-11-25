@@ -27,6 +27,9 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroup;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class GetAmazonAuthorizationUpdates
 {
     /**

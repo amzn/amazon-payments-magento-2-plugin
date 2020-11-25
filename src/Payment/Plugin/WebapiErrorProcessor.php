@@ -18,6 +18,9 @@ namespace Amazon\Payment\Plugin;
 use Amazon\Core\Exception\AmazonWebapiException;
 use Magento\Framework\Webapi\ErrorProcessor;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class WebapiErrorProcessor
 {
     /**

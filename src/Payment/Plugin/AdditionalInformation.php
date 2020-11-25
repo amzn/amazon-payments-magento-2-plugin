@@ -17,6 +17,9 @@ namespace Amazon\Payment\Plugin;
 
 use Magento\Quote\Model\Quote\Payment;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AdditionalInformation
 {
     const KEY_SANDBOX_SIMULATION_REFERENCE = 'sandbox_simulation_reference';

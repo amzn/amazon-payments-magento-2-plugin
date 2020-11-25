@@ -19,6 +19,9 @@ use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Core\Api\Data\AmazonNameInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCustomerInterface
 {
     /**

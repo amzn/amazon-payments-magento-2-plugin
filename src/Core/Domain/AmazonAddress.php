@@ -17,6 +17,9 @@ namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonAddressInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddressInterface
 {
     /**

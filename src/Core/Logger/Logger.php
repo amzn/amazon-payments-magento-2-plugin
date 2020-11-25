@@ -17,6 +17,8 @@ namespace Amazon\Core\Logger;
 
 /**
  * Enables implementation of custom log file.
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class Logger extends \Monolog\Logger
 {

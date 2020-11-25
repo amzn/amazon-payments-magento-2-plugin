@@ -18,6 +18,9 @@ namespace Amazon\Login\Model\Validator;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Validator\AbstractValidator;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AccessTokenRequestValidator extends AbstractValidator
 {
     /**

@@ -26,6 +26,8 @@ use Amazon\Payment\Api\Data\PendingRefundInterfaceFactory;
 /**
  * Class RefundHandler
  * Handles refund behavior for Amazon Pay
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class RefundHandler implements HandlerInterface
 {

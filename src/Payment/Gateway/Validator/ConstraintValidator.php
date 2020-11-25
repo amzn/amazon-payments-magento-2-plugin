@@ -21,6 +21,9 @@ use Magento\Payment\Gateway\Validator\ResultInterface;
 use Amazon\Payment\Gateway\Http\Client\Client;
 use Amazon\Payment\Domain\AmazonConstraint;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ConstraintValidator extends AbstractValidator
 {
 

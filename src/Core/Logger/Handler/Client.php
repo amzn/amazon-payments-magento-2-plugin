@@ -17,6 +17,9 @@ namespace Amazon\Core\Logger\Handler;
 
 use Magento\Framework\Logger\Handler\Base;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Client extends Base
 {
     const FILENAME = '/var/log/paywithamazon.log';

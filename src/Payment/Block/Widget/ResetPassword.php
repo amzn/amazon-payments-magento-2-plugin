@@ -16,6 +16,8 @@ use Amazon\Login\Api\CustomerLinkRepositoryInterface;
 
 /**
  * @api
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class ResetPassword extends Template
 {

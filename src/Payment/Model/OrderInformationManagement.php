@@ -37,6 +37,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class OrderInformationManagement implements OrderInformationManagementInterface
 {
@@ -259,7 +261,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     public function removeOrderReference()
     {
         $quote = $this->session->getQuote();
-        
+
         if ($quote->getId()) {
             $quoteLink = $this->quoteLinkFactory->create()->load($quote->getId(), 'quote_id');
 

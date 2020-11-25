@@ -23,6 +23,8 @@ use Magento\Catalog\Model\Product;
 
 /**
  * @api
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class PaymentLink extends Template
 {

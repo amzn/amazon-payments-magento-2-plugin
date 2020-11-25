@@ -19,6 +19,8 @@ namespace Amazon\Payment\Gateway\Http\Client;
 /**
  * Class SettlementClient
  * Amazon Pay capture client
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class SettlementClient extends AbstractClient
 {

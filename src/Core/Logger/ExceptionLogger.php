@@ -17,6 +17,9 @@ namespace Amazon\Core\Logger;
 
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ExceptionLogger
 {
     private $logger;

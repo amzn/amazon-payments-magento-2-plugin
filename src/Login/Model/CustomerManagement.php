@@ -19,6 +19,9 @@ use Amazon\Login\Api\CustomerLinkManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerExtensionFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CustomerManagement implements \Amazon\Login\Api\CustomerManagementInterface
 {
     /**

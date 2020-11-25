@@ -46,6 +46,8 @@ use Amazon\Payment\Exception\TransactionTimeoutException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class Authorization extends AbstractOperation
 {

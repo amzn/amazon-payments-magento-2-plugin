@@ -23,6 +23,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Displays links to available custom logs
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
 {

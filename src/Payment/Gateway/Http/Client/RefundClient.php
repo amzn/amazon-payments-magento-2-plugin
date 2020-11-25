@@ -25,6 +25,8 @@ use Amazon\Payment\Domain\AmazonRefundResponseFactory;
 /**
  * Class RefundClient
  * Amazon Pay refund client
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class RefundClient implements ClientInterface
 {

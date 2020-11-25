@@ -25,6 +25,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Math\Random;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CustomerLinkManagement implements \Amazon\Login\Api\CustomerLinkManagementInterface
 {
     /**

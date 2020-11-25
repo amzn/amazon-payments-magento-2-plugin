@@ -22,6 +22,9 @@ use Magento\Payment\Model\Method\Logger;
 use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Magento\Framework\Message\ManagerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class VoidHandler implements HandlerInterface
 {
 

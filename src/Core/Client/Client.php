@@ -17,6 +17,9 @@ namespace Amazon\Core\Client;
 
 use AmazonPay\Client as AmazonClient;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Client extends AmazonClient
 {
     /**

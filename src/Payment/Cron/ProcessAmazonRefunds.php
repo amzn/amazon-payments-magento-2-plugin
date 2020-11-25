@@ -22,6 +22,9 @@ use Amazon\Payment\Model\QueuedRefundUpdaterFactory;
 use Amazon\Payment\Model\ResourceModel\PendingRefund\CollectionFactory;
 use Magento\Framework\Data\Collection;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ProcessAmazonRefunds
 {
     /**

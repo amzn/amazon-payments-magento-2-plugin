@@ -20,6 +20,9 @@ use Amazon\Payment\Api\QuoteLinkManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class QuoteRepository
 {
     /**

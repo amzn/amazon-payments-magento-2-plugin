@@ -17,6 +17,9 @@ namespace Amazon\Payment\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class OrderLink extends AbstractDb
 {
     const TABLE_NAME = 'amazon_sales_order';

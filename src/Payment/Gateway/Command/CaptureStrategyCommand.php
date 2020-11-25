@@ -29,6 +29,9 @@ use Amazon\Core\Helper\Data;
 use Amazon\Core\Logger\ExceptionLogger;
 use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CaptureStrategyCommand implements CommandInterface
 {
 

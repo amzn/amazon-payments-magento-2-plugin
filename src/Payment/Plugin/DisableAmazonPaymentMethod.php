@@ -13,6 +13,8 @@ use Magento\Checkout\Model\Session;
 /**
  * Class DisableAmazonPaymentMethod
  * Plugin removes Amazon Payment Method if cart contains only virtual products.
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class DisableAmazonPaymentMethod
 {
