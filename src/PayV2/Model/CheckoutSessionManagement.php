@@ -637,8 +637,9 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 $payment = $order->getPayment();
                 $chargeId = $amazonResult['chargeId'];
                 $transaction = $this->getTransaction($amazonResult['checkoutSessionId']);
-                $this->updateTransactionId($chargeId, $payment, $transaction);
+                // relies on updateTransactionId to save the $payment
                 $payment->setAdditionalInformation('charge_permission_id', $amazonResult['chargePermissionId']);
+                $this->updateTransactionId($chargeId, $payment, $transaction);
 
                 if ($completeCheckoutStatus != '202' && $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
                     // capture on Amazon Pay
