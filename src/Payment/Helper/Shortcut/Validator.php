@@ -18,6 +18,8 @@ namespace Amazon\Payment\Helper\Shortcut;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class Validator implements ValidatorInterface
 {

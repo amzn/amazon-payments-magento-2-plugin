@@ -23,6 +23,9 @@ use Amazon\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class SettlementHandler implements HandlerInterface
 {
 

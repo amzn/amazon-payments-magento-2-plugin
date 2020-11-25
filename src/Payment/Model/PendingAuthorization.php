@@ -25,6 +25,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class PendingAuthorization extends AbstractModel implements PendingAuthorizationInterface
 {
     /**

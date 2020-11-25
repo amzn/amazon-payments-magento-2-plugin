@@ -19,6 +19,9 @@ use Amazon\Payment\Api\Data\PendingRefundInterface;
 use Amazon\Payment\Setup\UpgradeSchema as AmazonSchemaHelper;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class PendingRefund extends AbstractDb
 {
     const TABLE_NAME = AmazonSchemaHelper::PENDING_REFUND_TABLE_NAME;

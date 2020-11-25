@@ -34,6 +34,8 @@ use Magento\Quote\Api\CartRepositoryInterface;
  * Class ConfirmOrderReference
  *
  * Confirm the OrderReference when payment details are saved
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class ConfirmOrderReference
 {

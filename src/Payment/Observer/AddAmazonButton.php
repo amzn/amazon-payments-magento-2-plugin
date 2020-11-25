@@ -20,6 +20,9 @@ use Magento\Framework\Event\Observer;
 use Amazon\Core\Helper\Data;
 use Amazon\Payment\Helper\Shortcut\Factory as ShortcutFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AddAmazonButton implements ObserverInterface
 {
     /**

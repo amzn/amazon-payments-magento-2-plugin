@@ -17,6 +17,9 @@ namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonNameInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonName extends \Magento\Framework\DataObject implements AmazonNameInterface
 {
     /**

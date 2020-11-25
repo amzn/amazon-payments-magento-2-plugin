@@ -20,6 +20,9 @@ use Amazon\Login\Api\CustomerManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CustomerRepository
 {
     /**

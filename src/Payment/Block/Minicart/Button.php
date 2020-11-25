@@ -30,6 +30,8 @@ use Magento\Framework\App\Request\Http;
  * Class Button
  *
  * @api
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class Button extends Template implements ShortcutInterface
 {

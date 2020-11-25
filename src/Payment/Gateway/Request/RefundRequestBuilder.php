@@ -26,6 +26,8 @@ use Amazon\Payment\Gateway\Data\Order\OrderAdapterFactory;
 /**
  * Class RefundRequestBuilder
  * Builds refund request for Amazon Pay
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class RefundRequestBuilder implements BuilderInterface
 {

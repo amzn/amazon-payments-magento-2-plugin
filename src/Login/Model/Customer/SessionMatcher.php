@@ -19,6 +19,9 @@ use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Model\Customer\MatcherInterface;
 use Magento\Customer\Model\Session;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class SessionMatcher implements MatcherInterface
 {
     /**

@@ -32,6 +32,8 @@ use Magento\Framework\App\ObjectManager;
  * Class AmazonPaymentAdapter
  * Use \Amazon\Payment\Model\Adapter\AmazonPaymentAdapterFactory to create new instance of adapter.
  * @codeCoverageIgnore
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class AmazonPaymentAdapter
 {

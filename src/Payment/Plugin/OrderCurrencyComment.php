@@ -22,6 +22,8 @@ use Amazon\Payment\Gateway\Config\Config;
 /**
  * Class OrderCurrencyComment
  * @package Amazon\Payment\Plugin
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class OrderCurrencyComment
 {

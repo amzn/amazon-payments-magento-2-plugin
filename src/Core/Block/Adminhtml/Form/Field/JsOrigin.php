@@ -21,6 +21,9 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\UrlInterface;
 use Zend\Uri\UriFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class JsOrigin extends BaseField
 {
     /**

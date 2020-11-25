@@ -22,6 +22,8 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 /**
  * Class UpgradeData
  * Ensures default authorization mode is set if upgrading from earlier versions
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class UpgradeData implements UpgradeDataInterface
 {

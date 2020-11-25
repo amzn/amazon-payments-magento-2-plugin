@@ -19,6 +19,9 @@ use Amazon\Login\Api\Data\CustomerLinkInterface;
 use Amazon\Login\Model\ResourceModel\CustomerLink as CustomerLinkResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CustomerLink extends AbstractModel implements CustomerLinkInterface
 {
     protected function _construct()

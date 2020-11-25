@@ -24,6 +24,8 @@ use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Class DataAssignObserverTest
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class DataAssignObserverTest extends \PHPUnit\Framework\TestCase
 {

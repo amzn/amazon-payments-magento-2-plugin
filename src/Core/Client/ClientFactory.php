@@ -21,6 +21,9 @@ use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ClientFactory implements ClientFactoryInterface
 {
     /**

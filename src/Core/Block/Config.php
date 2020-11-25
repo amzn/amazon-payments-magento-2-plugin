@@ -28,6 +28,8 @@ use Magento\Framework\View\Element\Template\Context;
  * @api
  *
  * Provides a block that displays links to available custom error logs in Amazon Pay admin/config section.
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class Config extends Template
 {

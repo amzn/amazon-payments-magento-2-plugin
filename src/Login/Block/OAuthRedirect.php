@@ -21,6 +21,8 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class OAuthRedirect extends Template
 {

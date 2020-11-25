@@ -21,6 +21,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Validator\AbstractValidator;
 use AmazonPay\ResponseInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ApiCredentialsValidator extends AbstractValidator
 {
     const TEST_ORDER_REF = 'S00-0000000-0000000';

@@ -18,6 +18,9 @@ namespace Amazon\Core\Model\Validation;
 use Amazon\Core\Helper\Data;
 use Magento\Framework\Validator\AbstractValidator;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AddressBlacklistTermsValidator extends AbstractValidator
 {
     /**

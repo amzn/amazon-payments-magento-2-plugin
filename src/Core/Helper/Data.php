@@ -28,6 +28,9 @@ use Amazon\Core\Model\AmazonConfig;
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Data extends AbstractHelper
 {
 

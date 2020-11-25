@@ -19,6 +19,8 @@ namespace Amazon\Payment\Gateway\Http\Client;
 /**
  * Class VoidClient
  * Amazon Pay client for gateway cancel and void
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class VoidClient extends AbstractClient
 {

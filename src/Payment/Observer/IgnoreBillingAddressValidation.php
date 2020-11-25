@@ -19,6 +19,9 @@ use Amazon\Payment\Gateway\Config\Config as AmazonPayment;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class IgnoreBillingAddressValidation implements ObserverInterface
 {
     public function execute(Observer $observer)

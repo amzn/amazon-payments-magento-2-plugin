@@ -20,6 +20,9 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Amazon\Payment\Plugin\AdditionalInformation;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
 

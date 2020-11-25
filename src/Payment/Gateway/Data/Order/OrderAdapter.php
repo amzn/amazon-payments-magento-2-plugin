@@ -25,6 +25,8 @@ use Amazon\Core\Helper\Data;
 
 /**
  * Class OrderAdapter
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class OrderAdapter implements OrderAdapterInterface
 {

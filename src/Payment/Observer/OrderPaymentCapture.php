@@ -22,6 +22,8 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class OrderPaymentCapture
  * @package Amazon\Payment\Observer
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class OrderPaymentCapture implements ObserverInterface
 {

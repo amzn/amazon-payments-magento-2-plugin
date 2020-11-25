@@ -18,6 +18,9 @@ namespace Amazon\Payment\Plugin;
 use Amazon\Core\Helper\Data;
 use Magento\Checkout\Model\Session;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CheckoutProcessor
 {
     /**

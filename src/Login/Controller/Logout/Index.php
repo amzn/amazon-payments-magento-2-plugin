@@ -19,6 +19,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Amazon\Login\Helper\Session;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**

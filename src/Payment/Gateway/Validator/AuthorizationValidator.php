@@ -23,6 +23,8 @@ use Amazon\Payment\Domain\AmazonConstraint;
 /**
  * Class AuthorizationValidator
  * Validates authorization calls during gateway payment
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class AuthorizationValidator extends AbstractValidator
 {

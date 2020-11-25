@@ -15,6 +15,9 @@
  */
 namespace Amazon\Payment\Domain;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonOrderStatus extends AbstractAmazonStatus
 {
     const STATE_DRAFT = 'Draft';

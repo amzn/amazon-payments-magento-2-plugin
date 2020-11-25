@@ -21,6 +21,9 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\NotFoundException;
 use Zend_Validate;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Authorize extends \Amazon\Login\Controller\Login
 {
     /**

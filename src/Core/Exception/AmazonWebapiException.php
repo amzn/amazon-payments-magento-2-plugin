@@ -18,6 +18,9 @@ namespace Amazon\Core\Exception;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonWebapiException extends Exception
 {
     public function __construct(

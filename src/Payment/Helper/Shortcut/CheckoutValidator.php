@@ -16,6 +16,9 @@
 
 namespace Amazon\Payment\Helper\Shortcut;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CheckoutValidator implements ValidatorInterface
 {
     /**

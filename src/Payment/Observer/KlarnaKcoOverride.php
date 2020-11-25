@@ -20,6 +20,9 @@ use Magento\Framework\Event\Observer;
 use Amazon\Core\Helper\Data;
 use Amazon\Login\Helper\Session;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class KlarnaKcoOverride implements ObserverInterface
 {
     /**

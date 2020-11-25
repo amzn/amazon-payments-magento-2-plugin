@@ -17,6 +17,9 @@ namespace Amazon\Core\Model\Config\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AuthorizationMode implements ArrayInterface
 {
     const ASYNC = 'asynchronous';

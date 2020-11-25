@@ -18,6 +18,9 @@ namespace Amazon\Payment\Model\ResourceModel;
 use Amazon\Payment\Api\Data\PendingAuthorizationInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class PendingAuthorization extends AbstractDb
 {
     const TABLE_NAME = 'amazon_pending_authorization';

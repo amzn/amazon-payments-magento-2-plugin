@@ -20,6 +20,9 @@ use Amazon\Login\Model\Customer\MatcherInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class IdMatcher implements MatcherInterface
 {
     /**

@@ -24,6 +24,9 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Amazon\Payment\Api\Data\QuoteLinkInterfaceFactory;
 use Amazon\Payment\Model\Adapter\AmazonPaymentAdapter;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class LoadOrder implements ObserverInterface
 {
     /**

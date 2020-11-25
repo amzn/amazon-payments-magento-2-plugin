@@ -20,6 +20,9 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\Controller\ResultInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CreateController
 {
     /**

@@ -15,6 +15,9 @@
  */
 namespace Amazon\Login\Domain;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class ValidationCredentials
 {
     /**

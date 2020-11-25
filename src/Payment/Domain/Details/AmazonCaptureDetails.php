@@ -18,6 +18,9 @@ namespace Amazon\Payment\Domain\Details;
 use Amazon\Payment\Domain\AmazonCaptureStatus;
 use Amazon\Payment\Domain\AmazonCaptureStatusFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonCaptureDetails
 {
     /**

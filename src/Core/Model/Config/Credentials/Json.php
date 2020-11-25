@@ -23,6 +23,9 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Json
 {
     const AMAZON_CONFIG_PREFIX = 'payment/amazon_payment/';

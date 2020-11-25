@@ -20,6 +20,9 @@ use Amazon\Payment\Domain\Details\AmazonOrderDetails;
 use Amazon\Payment\Domain\Details\AmazonOrderDetailsFactory;
 use AmazonPay\ResponseInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonGetOrderDetailsResponse
 {
     /**

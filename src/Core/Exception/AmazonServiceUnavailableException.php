@@ -17,6 +17,9 @@ namespace Amazon\Core\Exception;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonServiceUnavailableException extends LocalizedException
 {
     const ERROR_MESSAGE = 'Amazon could not process your request.';

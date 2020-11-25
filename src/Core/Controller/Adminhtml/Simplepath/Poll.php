@@ -20,6 +20,9 @@ use Magento\Backend\Controller\Adminhtml\System;
 use Magento\Framework\App\ObjectManager;
 use Amazon\Core\Logger\ExceptionLogger;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Poll extends System
 {
 

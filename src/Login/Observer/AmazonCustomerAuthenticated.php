@@ -19,6 +19,9 @@ use Amazon\Login\Helper\Session as SessionHelper;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonCustomerAuthenticated implements ObserverInterface
 {
     /**

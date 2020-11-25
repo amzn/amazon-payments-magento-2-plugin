@@ -35,6 +35,8 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Class CaptureStrategyCommandTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
 {

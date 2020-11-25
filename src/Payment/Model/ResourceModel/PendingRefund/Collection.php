@@ -20,6 +20,9 @@ use Amazon\Payment\Model\PendingRefund as PendingRefundModel;
 use Amazon\Payment\Model\ResourceModel\PendingRefund as PendingRefundResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class Collection extends AbstractCollection
 {
 

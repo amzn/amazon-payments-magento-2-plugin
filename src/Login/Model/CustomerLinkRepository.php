@@ -28,6 +28,8 @@ use Amazon\Login\Model\ResourceModel\CustomerLink\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
  */
 class CustomerLinkRepository implements CustomerLinkRepositoryInterface
 {

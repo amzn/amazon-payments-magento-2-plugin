@@ -22,6 +22,9 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CategoryExclusion extends AbstractHelper
 {
     const ATTR_QUOTE_ITEM_IS_EXCLUDED_PRODUCT = 'is_excluded_product';

@@ -17,6 +17,9 @@ namespace Amazon\Core\Block\Adminhtml\System\Config\Form;
 
 use Magento\Backend\Block\Template\Context;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class SimplepathConfig extends \Magento\Config\Block\System\Config\Form\Field
 {
 

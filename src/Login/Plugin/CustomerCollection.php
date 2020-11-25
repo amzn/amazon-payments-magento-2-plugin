@@ -21,6 +21,9 @@ use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
 use Magento\Framework\DB\Select;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CustomerCollection
 {
     /**

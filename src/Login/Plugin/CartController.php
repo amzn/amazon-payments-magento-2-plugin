@@ -20,6 +20,9 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\UrlInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CartController
 {
     /**

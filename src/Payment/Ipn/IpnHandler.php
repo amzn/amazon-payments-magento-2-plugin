@@ -17,6 +17,9 @@ namespace Amazon\Payment\Ipn;
 
 use AmazonPay\IpnHandler as AmazonIpnHandler;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class IpnHandler extends AmazonIpnHandler
 {
     /**

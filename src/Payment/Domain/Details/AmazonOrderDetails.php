@@ -18,6 +18,9 @@ namespace Amazon\Payment\Domain\Details;
 use Amazon\Payment\Domain\AmazonOrderStatus;
 use Amazon\Payment\Domain\AmazonOrderStatusFactory;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonOrderDetails
 {
     /**

@@ -17,6 +17,9 @@ namespace Amazon\Payment\Domain;
 
 use AmazonPay\ResponseInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonRefundResponse extends AbstractAmazonRefundResponse
 {
     private $resultKey = 'RefundResult';

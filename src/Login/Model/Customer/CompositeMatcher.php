@@ -18,6 +18,9 @@ namespace Amazon\Login\Model\Customer;
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Model\Customer\MatcherInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class CompositeMatcher implements MatcherInterface
 {
     /**

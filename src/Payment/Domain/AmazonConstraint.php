@@ -15,6 +15,9 @@
  */
 namespace Amazon\Payment\Domain;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonConstraint
 {
     const PAYMENT_METHOD_NOT_ALLOWED_ID = 'PaymentMethodNotAllowed';

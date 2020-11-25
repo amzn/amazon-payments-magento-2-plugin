@@ -18,6 +18,9 @@ namespace Amazon\Payment\Model\ResourceModel;
 use Amazon\Payment\Api\Data\PendingCaptureInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class PendingCapture extends AbstractDb
 {
     const TABLE_NAME = 'amazon_pending_capture';

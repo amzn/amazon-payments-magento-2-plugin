@@ -19,6 +19,9 @@ use Amazon\Core\Helper\Data;
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Framework\Json\DecoderInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class JsonConfigDataValidator extends AbstractValidator
 {
     /**

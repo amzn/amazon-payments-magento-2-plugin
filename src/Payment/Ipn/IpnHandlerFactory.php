@@ -21,6 +21,9 @@ use AmazonPay\IpnHandlerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class IpnHandlerFactory implements IpnHandlerFactoryInterface
 {
     /**

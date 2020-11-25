@@ -18,6 +18,9 @@ namespace Amazon\Core\Domain;
 
 use Amazon\Core\Api\Data\AmazonNameInterface;
 
+/**
+ * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ */
 class AmazonNameDecoratorJp implements AmazonNameInterface
 {
     /**
