@@ -53,6 +53,6 @@
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
             <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="On Hold" stepKey="seeOnHoldStatus"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeCanceledStatus"/>
     </test>
 </tests>
