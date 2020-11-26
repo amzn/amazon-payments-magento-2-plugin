@@ -2,13 +2,13 @@
   "name": "amzn/login-with-amazon-module",
   "description": "Login with Amazon module",
   "type": "magento2-module",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "license": [
     "Apache-2.0"
   ],
   "require": {
     "php": "~7.1.3||~7.2.0||~7.3.0",
-    "amzn/amazon-pay-and-login-with-amazon-core-module": "^3.7.3",
+    "amzn/amazon-pay-and-login-with-amazon-core-module": "^3.7.4",
     "magento/framework": "^102",
     "magento/module-customer": "^102",
     "magento/module-store": "^101",
