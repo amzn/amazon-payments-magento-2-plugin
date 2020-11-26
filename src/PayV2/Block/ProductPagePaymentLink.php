@@ -15,6 +15,8 @@
  */
 namespace Amazon\PayV2\Block;
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+
 class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
 {
 
@@ -54,6 +56,21 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     {
         if (!$this->amazonConfig->isEnabled() || $this->amazonHelper->isProductRestricted($this->_getProduct()) || !$this->amazonConfig->isPayButtonAvailableOnProductPage()) {
             return '';
+        }
+
+        // check for product stock and/or saleability
+        $product = $this->_getProduct();
+        // configurable products
+        if ($product->getTypeId() == Configurable::TYPE_CODE) {
+            if (!$product->isSaleable()) {
+                return '';
+            }
+        }
+        // other product types
+        else {
+            if ($product->isInStock() == 0 || !$product->isSaleable()) {
+                return '';
+            }
         }
 
         return parent::_toHtml();
