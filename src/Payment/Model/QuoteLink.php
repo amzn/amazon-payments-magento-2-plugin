@@ -19,6 +19,14 @@ use Amazon\Payment\Api\Data\QuoteLinkInterface;
 use Amazon\Payment\Model\ResourceModel\QuoteLink as QuoteLinkResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * @deprecated As of February 2021, this Legacy Amazon Pay plugin has been
+ * deprecated, in favor of a newer Amazon Pay version available through GitHub
+ * and Magento Marketplace. Please download the new plugin for automatic
+ * updates and to continue providing your customers with a seamless checkout
+ * experience. Please see https://pay.amazon.com/help/E32AAQBC2FY42HS for details
+ * and installation instructions.
+ */
 class QuoteLink extends AbstractModel implements QuoteLinkInterface
 {
     protected function _construct()
