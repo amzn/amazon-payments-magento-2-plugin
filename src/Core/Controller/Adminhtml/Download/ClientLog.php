@@ -29,7 +29,7 @@ use Magento\Framework\Exception\NotFoundException;
  * deprecated, in favor of a newer Amazon Pay version available through GitHub
  * and Magento Marketplace. Please download the new plugin for automatic
  * updates and to continue providing your customers with a seamless checkout
- * experience. Please see https://pay.amazon.com/help/201828650 for details
+ * experience. Please see https://pay.amazon.com/help/E32AAQBC2FY42HS for details
  * and installation instructions.
  */
 class ClientLog extends System
