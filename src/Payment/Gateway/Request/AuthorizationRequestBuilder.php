@@ -27,7 +27,12 @@ use Amazon\Payment\Plugin\AdditionalInformation;
 use Amazon\Core\Helper\CategoryExclusion;
 
 /**
- * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ * @deprecated As of February 2021, this Legacy Amazon Pay plugin has been
+ * deprecated, in favor of a newer Amazon Pay version available through GitHub
+ * and Magento Marketplace. Please download the new plugin for automatic
+ * updates and to continue providing your customers with a seamless checkout
+ * experience. Please see https://pay.amazon.com/help/201828650 for details
+ * and installation instructions.
  */
 class AuthorizationRequestBuilder implements BuilderInterface
 {
