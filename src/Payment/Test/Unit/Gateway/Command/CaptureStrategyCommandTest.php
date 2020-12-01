@@ -35,6 +35,13 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Class CaptureStrategyCommandTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated As of February 2021, this Legacy Amazon Pay plugin has been
+ * deprecated, in favor of a newer Amazon Pay version available through GitHub
+ * and Magento Marketplace. Please download the new plugin for automatic
+ * updates and to continue providing your customers with a seamless checkout
+ * experience. Please see https://pay.amazon.com/help/E32AAQBC2FY42HS for details
+ * and installation instructions.
  */
 class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
 {

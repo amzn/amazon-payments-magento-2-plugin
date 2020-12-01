@@ -37,6 +37,13 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated As of February 2021, this Legacy Amazon Pay plugin has been
+ * deprecated, in favor of a newer Amazon Pay version available through GitHub
+ * and Magento Marketplace. Please download the new plugin for automatic
+ * updates and to continue providing your customers with a seamless checkout
+ * experience. Please see https://pay.amazon.com/help/E32AAQBC2FY42HS for details
+ * and installation instructions.
  */
 class OrderInformationManagement implements OrderInformationManagementInterface
 {
@@ -259,7 +266,7 @@ class OrderInformationManagement implements OrderInformationManagementInterface
     public function removeOrderReference()
     {
         $quote = $this->session->getQuote();
-        
+
         if ($quote->getId()) {
             $quoteLink = $this->quoteLinkFactory->create()->load($quote->getId(), 'quote_id');
 
