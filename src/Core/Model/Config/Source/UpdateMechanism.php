@@ -18,7 +18,12 @@ namespace Amazon\Core\Model\Config\Source;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
- * @deprecated AMZN_DEPRECATION_PLACEHOLDER_TEXT
+ * @deprecated As of February 2021, this Legacy Amazon Pay plugin has been
+ * deprecated, in favor of a newer Amazon Pay version available through GitHub
+ * and Magento Marketplace. Please download the new plugin for automatic
+ * updates and to continue providing your customers with a seamless checkout
+ * experience. Please see https://pay.amazon.com/help/201828650 for details
+ * and installation instructions.
  */
 class UpdateMechanism implements ArrayInterface
 {
