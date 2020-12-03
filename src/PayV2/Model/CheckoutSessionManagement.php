@@ -494,7 +494,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $this->paymentRepository->save($payment);
 
          if ($invoice = $payment->getCreatedInvoice()) {
-             $invoice->setTransactionId($chargeId)->save();
+             $invoice->setTransactionId($chargeId);
          }
     }
 
