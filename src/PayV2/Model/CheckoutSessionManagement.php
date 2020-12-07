@@ -494,7 +494,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         $this->paymentRepository->save($payment);
 
          if ($invoice = $payment->getCreatedInvoice()) {
-             $invoice->setTransactionId($chargeId);
+             $invoice->setTransactionId($chargeId)->save();
          }
     }
 
@@ -617,8 +617,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                     'order_id' => $orderId,
                 ];
 
-                $amazonResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getGrandTotal() , $cart->getQuoteCurrencyCode());
-                $completeCheckoutStatus = $amazonResult['status'] ?? '404';
+                $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession($cart->getStoreId(), $checkoutSession->getSessionId(), $cart->getGrandTotal() , $cart->getQuoteCurrencyCode());
+                $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
                 if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)){
                     // Something went wrong, but the order has already been placed, so cancelling it
                     $this->cancelOrder($order);
@@ -635,11 +635,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 }
 
                 $payment = $order->getPayment();
-                $chargeId = $amazonResult['chargeId'];
-                $transaction = $this->getTransaction($amazonResult['checkoutSessionId']);
-                // relies on updateTransactionId to save the $payment
-                $payment->setAdditionalInformation('charge_permission_id', $amazonResult['chargePermissionId']);
-                $this->updateTransactionId($chargeId, $payment, $transaction);
+                $chargeId = $amazonCompleteCheckoutResult['chargeId'];
+                $transaction = $this->getTransaction($amazonCompleteCheckoutResult['checkoutSessionId']);
 
                 if ($completeCheckoutStatus != '202' && $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
                     // capture on Amazon Pay
@@ -673,6 +670,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                         }
                         break;
                 }
+
+                // relies on updateTransactionId to save the $payment
+                $payment->setAdditionalInformation('charge_permission_id', $amazonCompleteCheckoutResult['chargePermissionId']);
+                $this->updateTransactionId($chargeId, $payment, $transaction);
 
                 $checkoutSession->complete();
                 $this->checkoutSessionRepository->save($checkoutSession);
