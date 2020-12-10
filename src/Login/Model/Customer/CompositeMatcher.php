@@ -18,6 +18,14 @@ namespace Amazon\Login\Model\Customer;
 use Amazon\Core\Api\Data\AmazonCustomerInterface;
 use Amazon\Login\Model\Customer\MatcherInterface;
 
+/**
+ * @deprecated As of February 2021, this Legacy Amazon Pay plugin has been
+ * deprecated, in favor of a newer Amazon Pay version available through GitHub
+ * and Magento Marketplace. Please download the new plugin for automatic
+ * updates and to continue providing your customers with a seamless checkout
+ * experience. Please see https://pay.amazon.com/help/E32AAQBC2FY42HS for details
+ * and installation instructions.
+ */
 class CompositeMatcher implements MatcherInterface
 {
     /**

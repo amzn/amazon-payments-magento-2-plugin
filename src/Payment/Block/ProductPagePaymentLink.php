@@ -18,12 +18,20 @@ namespace Amazon\Payment\Block;
 use Amazon\Core\Helper\CategoryExclusion;
 use Amazon\Core\Helper\Data;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api
+ *
+ * @deprecated As of February 2021, this Legacy Amazon Pay plugin has been
+ * deprecated, in favor of a newer Amazon Pay version available through GitHub
+ * and Magento Marketplace. Please download the new plugin for automatic
+ * updates and to continue providing your customers with a seamless checkout
+ * experience. Please see https://pay.amazon.com/help/E32AAQBC2FY42HS for details
+ * and installation instructions.
  */
 class ProductPagePaymentLink extends PaymentLink
 {
@@ -71,6 +79,20 @@ class ProductPagePaymentLink extends PaymentLink
             $this->categoryExclusionHelper->productHasExcludedCategory($product)
         ) {
             return '';
+        }
+
+        // check for product stock and/or saleability
+        // configurable products
+        if ($product->getTypeId() == Configurable::TYPE_CODE) {
+            if (!$product->isSaleable()) {
+                return '';
+            }
+        }
+        // other product types
+        else {
+            if ($product->isInStock() == 0 || !$product->isSaleable()) {
+                return '';
+            }
         }
 
         return parent::_toHtml();
