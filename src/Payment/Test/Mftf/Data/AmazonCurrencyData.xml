@@ -6,7 +6,7 @@
             <item>EUR</item>
         </array>
     </entity>
-    <entity name="AmazonAllowMultiCurrencyValue" type="allow">
+    <entity name="AmazonAllowMultiCurrencyValueV1" type="allow">
         <array key="value">
             <item>USD</item>
             <item>EUR</item>
@@ -26,12 +26,12 @@
     <entity name="EUAmazonMultiCurrencyConfig" type="amazon_currency_config">
         <requiredEntity type="base">EUAmazonMultiCurrencyBaseValue</requiredEntity>
         <requiredEntity type="default">EUAmazonMultiCurrencyValue</requiredEntity>
-        <requiredEntity type="allow">AmazonAllowMultiCurrencyValue</requiredEntity>
+        <requiredEntity type="allow">AmazonAllowMultiCurrencyValueV1</requiredEntity>
     </entity>
     <entity name="EUAmazonInvalidMultiCurrencyConfig" type="amazon_currency_config">
         <requiredEntity type="base">EUAmazonBaseCurrencyValue</requiredEntity>
         <requiredEntity type="default">EUAmazonNoMultiCurrencyValue</requiredEntity>
-        <requiredEntity type="allow">AmazonAllowMultiCurrencyValue</requiredEntity>
+        <requiredEntity type="allow">AmazonAllowMultiCurrencyValueV1</requiredEntity>
     </entity>
     <entity name="MultiInvoiceAmazonBaseCurrencyValue" type="base">
         <data key="value">USD</data>
