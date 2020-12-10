@@ -15,7 +15,7 @@
             <createData entity="EUAmazonInvalidMultiCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin" before="flushCache"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!-- set EUR => CZK currency conversion -->
             <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage" before="flushCache"/>
