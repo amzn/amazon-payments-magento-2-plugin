@@ -266,7 +266,7 @@ class Charge extends AbstractOperation
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
         }
-        if ($invoice) {
+        if ($invoice && $invoice->canCapture()) {
             $payment = $order->getPayment();
 
             $invoice->pay();
