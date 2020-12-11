@@ -20,6 +20,7 @@ use Amazon\PayV2\Model\Config\Source\PaymentAction;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 
 class Charge extends AbstractOperation
 {
@@ -266,7 +267,7 @@ class Charge extends AbstractOperation
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
         }
-        if ($invoice && $invoice->canCapture()) {
+        if ($invoice && ($invoice->canCapture() || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW)) {
             $payment = $order->getPayment();
 
             $invoice->pay();
