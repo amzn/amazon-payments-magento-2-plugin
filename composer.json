@@ -2,7 +2,7 @@
   "name": "amzn/amazon-pay-v2-magento-2-module",
   "description": "Official Magento2 Plugin to integrate with Amazon Pay V2",
   "type": "magento2-module",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "license": [
     "Apache-2.0"
   ],
@@ -23,7 +23,7 @@
     "magento/module-quote": "*",
     "magento/module-customer": "*",
     "magento/module-store": "*",
-    "zendframework/zend-crypt": "^2.6.0",
+    "zendframework/zend-crypt": "^2.7.0",
     "amzn/amazon-pay-api-sdk-php": "^2.2",
     "aws/aws-php-sns-message-validator": "^1.5"
   },
