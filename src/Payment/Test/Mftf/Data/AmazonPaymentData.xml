@@ -184,7 +184,7 @@
         <data key="value">synchronous</data>
     </entity>
     <entity name="DefaultAmazonPayActive" type="amazon_pay_active">
-        <data key="value">0</data>
+        <data key="value">1</data>
     </entity>
     <entity name="DefaultAmazonLwaEnabled" type="lwa_enabled">
         <data key="value">0</data>
