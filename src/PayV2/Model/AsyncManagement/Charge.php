@@ -16,6 +16,7 @@
 
 namespace Amazon\PayV2\Model\AsyncManagement;
 
+use Amazon\PayV2\Model\Config\Source\PaymentAction;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -58,16 +59,23 @@ class Charge extends AbstractOperation
     private $urlBuilder;
 
     /**
+     * @var \Amazon\PayV2\Model\AmazonConfig
+     */
+    private $amazonConfig;
+
+    /**
      * Charge constructor.
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\PayV2\Logger\AsyncIpnLogger $asyncLogger
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
      * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
      * @param \Magento\Backend\Model\UrlInterface $urlBuilder
+     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -79,7 +87,8 @@ class Charge extends AbstractOperation
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Notification\NotifierInterface $notifier,
-        \Magento\Backend\Model\UrlInterface $urlBuilder
+        \Magento\Backend\Model\UrlInterface $urlBuilder,
+        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
     ) {
         parent::__construct($orderRepository, $transactionRepository, $searchCriteriaBuilder);
         $this->amazonAdapter = $amazonAdapter;
@@ -89,6 +98,7 @@ class Charge extends AbstractOperation
         $this->transactionBuilder = $transactionBuilder;
         $this->notifier = $notifier;
         $this->urlBuilder = $urlBuilder;
+        $this->amazonConfig = $amazonConfig;
     }
 
     /**
@@ -98,7 +108,7 @@ class Charge extends AbstractOperation
      */
     protected function loadInvoice($chargeId, OrderInterface $order)
     {
-        $this->searchCriteriaBuilder->addFilter(InvoiceInterface::TRANSACTION_ID, $chargeId . '-capture');
+        $this->searchCriteriaBuilder->addFilter(InvoiceInterface::TRANSACTION_ID, $chargeId . '%', 'like');
         $this->searchCriteriaBuilder->addFilter(InvoiceInterface::ORDER_ID, $order->getEntityId());
         $this->searchCriteriaBuilder->setPageSize(1);
         $this->searchCriteriaBuilder->setCurrentPage(1);
@@ -120,22 +130,43 @@ class Charge extends AbstractOperation
 
             // Compare Charge State with Order State
             if (isset($charge['statusDetails'])) {
-                switch ($charge['statusDetails']['state']) {
+                $state = $charge['statusDetails']['state'];
+                if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE && $state == 'Authorized') {
+                    $this->amazonAdapter->captureCharge($order->getStoreId(), $chargeId, $order->getGrandTotal(), $order->getOrderCurrencyCode());
+                    $charge = $this->amazonAdapter->getCharge($order->getStoreId(), $chargeId);
+                    $state = $charge['statusDetails']['state'];
+                }
+
+                $complete = false;
+
+                switch ($state) {
                     case 'Declined':
-                        $this->decline($order, $chargeId, $charge['statusDetails']['reasonDescription']);
+                        $this->decline($order, $chargeId, $charge['statusDetails']);
+                        $complete = true;
                         break;
                     case 'Canceled':
+                        $this->setProcessing($order);
                         $this->cancel($order, $charge['statusDetails']);
+                        $complete = true;
                         break;
                     case 'Authorized':
                         $this->authorize($order, $chargeId);
+                        $complete = true;
                         break;
                     case 'Captured':
+                        $this->setProcessing($order);
                         $this->capture($order, $chargeId, $charge['captureAmount']['amount']);
+                        $complete = true;
+                        break;
+                    default:
                         break;
                 }
+
+                return $complete;
             }
         }
+
+        return false;
     }
 
     /**
@@ -145,7 +176,7 @@ class Charge extends AbstractOperation
      * @param string $chargeId
      * @param string $reason
      */
-    public function decline($order, $chargeId, $reason)
+    public function decline($order, $chargeId, $detail)
     {
         $invoice = $this->loadInvoice($chargeId, $order);
         if ($invoice) {
@@ -153,9 +184,16 @@ class Charge extends AbstractOperation
             $order->addRelatedObject($invoice);
         }
         if ($order->canHold() || $order->isPaymentReview()) {
-            $this->setOnHold($order);
             $this->closeLastTransaction($order);
-            $order->addStatusHistoryComment($reason);
+            $this->amazonAdapter->closeChargePermission($order->getStoreId(), $order->getPayment()->getAdditionalInformation()['charge_permission_id'], 'Canceled due to capture declined.', true);
+            $this->setOrderState($order, 'canceled');
+            $payment = $order->getPayment();
+            $transaction = $this->transactionBuilder->setPayment($payment)
+                ->setOrder($order)
+                ->setTransactionId($chargeId)
+                ->setFailSafe(true)
+                ->build(Transaction::TYPE_AUTH);
+            $payment->addTransactionCommentsToOrder($transaction, __('Capture declined') . '.');
             $order->save();
 
             $this->notifier->addNotice(
@@ -217,7 +255,7 @@ class Charge extends AbstractOperation
     /**
      * Capture charge
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param \Magento\Sales\Model\Order|\Magento\Sales\Api\Data\OrderInterface $order
      * @param string $chargeId
      * @param float $chargeAmount
      */
@@ -228,7 +266,7 @@ class Charge extends AbstractOperation
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
         }
-        if ($invoice) {
+        if ($invoice && $invoice->canCapture()) {
             $payment = $order->getPayment();
 
             $invoice->pay();

@@ -72,16 +72,19 @@ class AsyncUpdater
         try {
             $async->getResource()->beginTransaction();
             $async->setLockOnLoad(true);
+            $asyncComplete = false;
 
             switch ($async->getPendingAction()) {
                 case AsyncManagement::ACTION_AUTH:
-                    $this->chargeFactory->create()->processStateChange($async->getPendingId());
-                    $this->completePending($async);
+                    $asyncComplete = $this->chargeFactory->create()->processStateChange($async->getPendingId());
                     break;
                 case AsyncManagement::ACTION_REFUND:
-                    $this->refundFactory->create()->processRefund($async->getPendingId());
-                    $this->completePending($async);
+                    $asyncComplete = $this->refundFactory->create()->processRefund($async->getPendingId());
                     break;
+            }
+
+            if ($asyncComplete) {
+                $this->completePending($async);
             }
 
             $async->getResource()->commit();

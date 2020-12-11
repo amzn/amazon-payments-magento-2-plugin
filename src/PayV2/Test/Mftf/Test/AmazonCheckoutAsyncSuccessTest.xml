@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonInvoicePendingDeclinedV2" extends="AmazonCheckoutButtonV2">
+    <test name="AmazonCheckoutAsyncSuccess" extends="AmazonCheckoutButtonV2">
         <annotations>
-            <stories value="Amazon Invoice"/>
-            <title value="Amazon Invoice after 7 Days (Declined case)."/>
-            <description value="User should be able to create invoice after 7 Days (Declined case)."/>
+            <stories value="Amazon Checkout Async Success"/>
+            <title value="Amazon Checkout Async Success"/>
+            <description value="Async transactions that are approved should go to processing"/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_invoice"/>
+            <group value="amazon_pay_v2_checkout"/>
         </annotations>
+
+        <before>
+            <magentoCLI command="config:set payment/amazon_payment/authorization_mode synchronous_possible" stepKey="setAuthModeAutomatic" before="flushCache"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set payment/amazon_payment/authorization_mode synchronous" stepKey="setAuthModeImmediate"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
 
         <!--Go to Amazon Pay from the checkout and login-->
         <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
         <!--Come back to checkout with default address-->
-        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup">
+            <argument name="cc" value="0701" />
+        </actionGroup>
         <!--Go to payment method-->
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
         <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
@@ -35,24 +46,18 @@
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
-        <!--Create Invoice-->
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoicePage"/>
-        <!--Add simulation string-->
-        <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="{&quot;x-amz-pay-simulation-code&quot;:&quot;AmazonRejected&quot;}" stepKey="writeComment"/>
-        <!--Submit and verify the invoice created-->
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
-        <waitForPageLoad stepKey="waitForLoadPage"/>
-        <see userInput="The invoice has been created." stepKey="seeMessage"/>
-        <!--Verify order status is Payment Review-->
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Payment Review" stepKey="seePaymentReviewStatus"/>
-        <!--Update status-->
-        <wait time="30" stepKey="waitForStatusUpdate"/>
-        <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
-        <!--Open order and verify status is On Hold-->
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
             <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Canceled" stepKey="seeCanceledStatus"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Payment Review" stepKey="seePaymentReviewedStatus"/>
+
+        <!-- run async processing, which will put the order in Processing -->
+        <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
+
+        <!--Open order and verify status is Processing-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderAgain">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeProcessingStatus"/>
     </test>
 </tests>
