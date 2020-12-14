@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonSignInToExisting" extends="AmazonSignInButton">
+        <annotations>
+            <stories value="Amazon Sign In To Existing Account"/>
+            <title value="Amazon Sign In To Existing Account"/>
+            <description value="Amazon Sign In button should log into existing account"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_signin"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer" before="logout">
+                <argument name="email" value="{{AmazonAccount.email}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Verify Sign in with Amazon Button V2 is present-->
+        <click selector="{{AmazonLoginSection.v2Login}}" stepKey="clickSignInWithAmazonButton"/>
+
+        <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
+        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
+
+        <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
+        <see userInput="My Account" stepKey="seeMyAccount"/>
+
+        <!-- Log out and return to sign in page -->
+        <actionGroup stepKey="logout" ref="StorefrontCustomerLogoutActionGroup"/>
+        <waitForPageLoad time="30" stepKey="waitLogoutPageFullyLoaded"/>
+        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage2"/>
+        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
+
+        <!--Verify Sign in with Amazon Button V2 is present again-->
+        <click selector="{{AmazonLoginSection.v2Login}}" stepKey="clickSignInWithAmazonButton2"/>
+
+        <!-- make sure we are logged out from Amazon by clearing ubid-main cookie -->
+        <resetCookie userInput="ubid-main" parameterArray="['domainName' => '.amazon.com']" stepKey="resetCookieForAmazon"/>
+        <reloadPage stepKey="reloadAmazonLoginPage"/>
+
+        <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup2"/>
+        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton2"/>
+
+        <waitForPageLoad stepKey="waitForMyAccountPageLoad2"/>
+        <see userInput="My Account" stepKey="seeMyAccount2"/>
+    </test>
+</tests>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonProductLogin" extends="AmazonProductButtonV2">
+        <annotations>
+            <stories value="Amazon Login"/>
+            <title value="Amazon Product Login"/>
+            <description value="User should be able to login to Amazon from the product page when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay_v2"/>
+            <group value="amazon_pay_v2_login"/>
+        </annotations>
+
+        <!--Add to cart via Amazon Pay button on product page and login-->
+        <click selector="{{AmazonButtonSection.v2Product}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
+    </test>
+</tests>

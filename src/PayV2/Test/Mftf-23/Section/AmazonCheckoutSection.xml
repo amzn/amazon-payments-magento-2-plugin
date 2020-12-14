@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
+    <section name="AmazonCheckoutSection">
+        <element name="shippingAddress" type="text" selector="#checkout-step-shipping .shipping-address-item.selected-item"/>
+        <element name="countryNameByCode" type="text" selector="select[name=country_id] option[value={{country_code}}]" parameterized="true"/>
+        <element name="editShippingButton" type="button" selector="#checkout-step-shipping .shipping-address-item.selected-item .edit-address-link"/>
+        <element name="editPaymentButton" type="button" selector="#amazon-payment .action-edit-payment"/>
+        <element name="v1Method" type="input" selector="#amazonlogin"/>
+        <element name="v2Method" type="input" selector="#amazon_payment_v2"/>
+        <element name="returnToStandardCheckout" type="text" selector="#checkout-step-shipping .revert-checkout"/>
+    </section>
+</sections>
