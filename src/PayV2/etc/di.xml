@@ -305,12 +305,6 @@
     <type name="Magento\Sales\Api\OrderCustomerManagementInterface">
         <plugin name="amazon_login_order_customer_service" type="Amazon\PayV2\Plugin\OrderCustomerManagement" sortOrder="1" />
     </type>
-    <type name="Amazon\PayV2\Model\Customer\Account\Redirect">
-        <arguments>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Payment\Model\Method\Adapter">
         <plugin name="amazon_payv2_pay_action" type="Amazon\PayV2\Plugin\ModelMethodAdapter" sortOrder="1" />
     </type>
