@@ -20,7 +20,7 @@ use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
 use Amazon\PayV2\Domain\AmazonCustomerFactory;
 use Amazon\PayV2\Model\AmazonConfig;
 use Amazon\PayV2\Model\Validator\AccessTokenRequestValidator;
-use Amazon\PayV2\Model\Customer\Account\Redirect as AccountRedirect;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Amazon\PayV2\Helper\Session;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session as CustomerSession;
