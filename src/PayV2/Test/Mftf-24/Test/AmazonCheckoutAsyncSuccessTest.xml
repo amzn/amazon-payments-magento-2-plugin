@@ -52,6 +52,7 @@
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Payment Review" stepKey="seePaymentReviewedStatus"/>
 
         <!-- run async processing, which will put the order in Processing -->
+        <wait time="30" stepKey="waitForStatusUpdate"/>
         <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
 
         <!--Open order and verify status is Processing-->
