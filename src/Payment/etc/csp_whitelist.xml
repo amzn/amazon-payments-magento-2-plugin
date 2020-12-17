@@ -65,6 +65,7 @@
                 <value id="amazon_cloudfront20" type="host">d2bomicxw8p7ii.cloudfront.net</value>
                 <value id="amazon_cloudfront21" type="host">d3aypcdgvjnnam.cloudfront.net</value>
                 <value id="amazon_cloudfront22" type="host">d2a3iuf10348gy.cloudfront.net</value>
+                <value id="amazon_cloudfront23" type="host">d23yuld0pofhhw.cloudfront.net</value>
                 <value id="ssl_images_amazon_com" type="host">*.ssl-images-amazon.com</value>
                 <value id="ssl_images_amazon_co_uk" type="host">*.ssl-images-amazon.co.uk</value>
                 <value id="ssl_images_amazon_co_jp" type="host">*.ssl-images-amazon.co.jp</value>
