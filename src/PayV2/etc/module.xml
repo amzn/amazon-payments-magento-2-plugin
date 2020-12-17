@@ -17,10 +17,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Amazon_PayV2" setup_version="1.0.0" >
-        <sequence>
-            <module name="Amazon_Core"/>
-            <module name="Amazon_Login"/>
-            <module name="Amazon_Payment"/>
-        </sequence>
     </module>
 </config>

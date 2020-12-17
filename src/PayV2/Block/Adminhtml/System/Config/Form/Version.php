@@ -41,7 +41,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
-        $output .= __('Module version') . ': ' . $this->helper->getVersion();
+        $output .= __('Module version') . ': ' . $this->helper->getModuleVersion('Amazon_PayV2');
         $output .= '</div>';
         return '<div id="row_' . $element->getHtmlId() . '">' . $output . '</div>';
     }

@@ -25,7 +25,6 @@ class ApiVersion implements ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => 1, 'label' => __('V1')],
             ['value' => 2, 'label' => __('V2')],
         ];
     }

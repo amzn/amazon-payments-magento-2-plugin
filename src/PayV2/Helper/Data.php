@@ -3,6 +3,9 @@
 namespace Amazon\PayV2\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
+use Zxing\ReaderException;
 
 class Data extends AbstractHelper
 {
@@ -36,13 +39,25 @@ class Data extends AbstractHelper
      */
     private $restrictedCategoryIds;
 
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface
+     */
+    protected $componentRegistrar;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     */
+    protected $readFactory;
+
     public function __construct(
         \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
         \Magento\Checkout\Helper\Data $helperCheckout,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResourceModel,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Framework\App\Helper\Context $context
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
     )
     {
         $this->amazonConfig = $amazonConfig;
@@ -50,6 +65,8 @@ class Data extends AbstractHelper
         $this->moduleList = $moduleList;
         $this->categoryResourceModel = $categoryResourceModel;
         $this->metadataPool = $metadataPool;
+        $this->componentRegistrar = $componentRegistrar;
+        $this->readFactory = $readFactory;
         parent::__construct($context);
     }
 
@@ -148,5 +165,28 @@ class Data extends AbstractHelper
     {
         $module = $this->moduleList->getOne('Amazon_PayV2');
         return $module['setup_version'] ?? __('--');
+    }
+
+    /**
+     * Get module composer version
+     *
+     * @param $moduleName
+     * @return string
+     */
+    public function getModuleVersion($moduleName)
+    {
+        $path = $this->componentRegistrar->getPath(
+            \Magento\Framework\Component\ComponentRegistrar::MODULE,
+            $moduleName
+        );
+        $directoryRead = $this->readFactory->create($path);
+        try {
+            $composerJsonData = $directoryRead->readFile('composer.json');
+        } catch (Exception $e) {
+            return '--';
+        }
+        $data = json_decode($composerJsonData);
+
+        return !empty($data->version) ? $data->version : __('Read error!');
     }
 }
