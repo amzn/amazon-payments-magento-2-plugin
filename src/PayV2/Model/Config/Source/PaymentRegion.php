@@ -16,20 +16,19 @@
 
 namespace Amazon\PayV2\Model\Config\Source;
 
-class AuthorizationMode implements \Magento\Framework\Data\OptionSourceInterface
+class PaymentRegion implements \Magento\Framework\Data\OptionSourceInterface
 {
-    const ASYNC = 'asynchronous';
-    const SYNC = 'synchronous';
-    const SYNC_THEN_ASYNC = 'synchronous_possible';
-
     /**
      * {@inheritdoc}
      */
     public function toOptionArray()
     {
         return [
-            ['value' => static::SYNC, 'label' => __('Immediate')],
-            ['value' => static::SYNC_THEN_ASYNC, 'label' => __('Automatic')]
+            ['value' => '', 'label' => __('-- Please Select --')],
+            ['value' => 'de', 'label' => __('Euro Region')],
+            ['value' => 'uk', 'label' => __('United Kingdom')],
+            ['value' => 'us', 'label' => __('United States')],
+            ['value' => 'jp', 'label' => __('Japan')],
         ];
     }
 }

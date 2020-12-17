@@ -180,11 +180,15 @@ class Data extends AbstractHelper
             $moduleName
         );
         $directoryRead = $this->readFactory->create($path);
+
         try {
             $composerJsonData = $directoryRead->readFile('composer.json');
-        } catch (Exception $e) {
+        } catch (FileSystemException $e) {
+            return '--';
+        } catch (ValidatorException $e) {
             return '--';
         }
+
         $data = json_decode($composerJsonData);
 
         return !empty($data->version) ? $data->version : __('Read error!');
