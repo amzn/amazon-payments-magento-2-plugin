@@ -5,3 +5,4 @@
 "This transaction was cancelled. Please try again.","The transaction has been canceled, please try again."
 "This transaction was declined. Please try again using a different payment method.","The transaction has been declined, please try to use another payment method."
 "or continue with Standard Checkout","or continue with Standard Checkout"
+"A shop account for this email address already exists. Please enter your shop accounts password to log in without leaving the shop.","A store account for this email address already exists. Please enter your store account password to log in without leaving the store."
