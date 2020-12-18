@@ -15,6 +15,9 @@
         <index referenceId="AMAZON_PAYV2_ASYNC_IS_PENDING" indexType="btree">
             <column name="is_pending"/>
         </index>
+        <index referenceId="AMAZON_PAYV2_ASYNC_CUSTOMER_ID_AMAZON_ID" indexType="btree">
+            <column name="is_pending"/>
+        </index>
     </table>
     <table name="amazon_payv2_checkout_session" resource="default" engine="innodb" comment="Amazon PayV2 Checkout Session">
         <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
@@ -32,5 +35,21 @@
         <index referenceId="AMAZON_PAYV2_CHECKOUT_SESSION_IS_ACTIVE" indexType="btree">
             <column name="is_active"/>
         </index>
+    </table>
+    <table name="amazon_customer" resource="default" engine="innodb" comment="Amazon PayV2 Customer Link">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity_id"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Customer_id"/>
+        <column xsi:type="varchar" name="amazon_id" nullable="false" length="255" comment="Amazon_id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="AMAZON_CUSTOMER_CUSTOMER_ID_AMAZON_ID">
+            <column name="customer_id"/>
+            <column name="amazon_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="AMAZON_CUSTOMER_CUSTOMER_ID">
+            <column name="customer_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="AMAZON_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="amazon_customer" column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
 </schema>
