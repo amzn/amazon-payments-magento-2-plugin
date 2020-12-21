@@ -30,7 +30,10 @@ class Checkout extends \Amazon\PayV2\Controller\Login
         $checkoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
 
         try {
-            $checkoutSession = $this->amazonAdapter->getCheckoutSession($this->storeManager->getStore()->getId(), $checkoutSessionId);
+            $checkoutSession = $this->amazonAdapter->getCheckoutSession(
+                $this->storeManager->getStore()->getId(),
+                $checkoutSessionId
+            );
 
             if (!$this->amazonConfig->isLwaEnabled()) {
                 $userInfo = $checkoutSession['buyer'];
@@ -51,7 +54,12 @@ class Checkout extends \Amazon\PayV2\Controller\Login
                     if ($processed instanceof ValidationCredentials) {
                         $this->session->setValidationCredentials($processed);
                         $this->session->setAmazonCustomer($amazonCustomer);
-                        return $this->_redirect($this->_url->getUrl('*/*/validate', ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]));
+                        return $this->_redirect(
+                            $this->_url->getUrl(
+                                '*/*/validate',
+                                ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]
+                            )
+                        );
                     } elseif (!$this->customerSession->isLoggedIn()) {
                         $this->session->login($processed);
                     }

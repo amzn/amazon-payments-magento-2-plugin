@@ -19,10 +19,6 @@ use Magento\Framework\Phrase;
 use Magento\Sales\Model\Order\Payment;
 use Amazon\PayV2\Gateway\Config\Config;
 
-/**
- * Class OrderCurrencyComment
- * @package Amazon\PayV2\Plugin
- */
 class OrderCurrencyComment
 {
     /**
@@ -37,14 +33,15 @@ class OrderCurrencyComment
             if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) {
                 if ($subject->getOrder()->getPayment()->getCreditmemo()) {
                     $displayCurrencyAmount = $subject->getCreditmemo()->getGrandTotal();
-                }
-                else {
-                    $displayCurrencyAmount = $subject->getOrder()->getPayment()->getAmazonDisplayInvoiceAmount() ?: $subject->getAmountOrdered();
+                } else {
+                    $displayCurrencyAmount = $subject->getOrder()->getPayment()->getAmazonDisplayInvoiceAmount() ?:
+                        $subject->getAmountOrdered();
                 }
                 $messagePrependTo = __(
                     $messagePrependTo->getText(),
                     $order->getBaseCurrency()
-                        ->formatTxt($messagePrependTo->getArguments()[0]) .' ['. $order->formatPriceTxt($displayCurrencyAmount) .']'
+                        ->formatTxt($messagePrependTo->getArguments()[0]) .' ['.
+                        $order->formatPriceTxt($displayCurrencyAmount) .']'
                 );
 
                 return [$messagePrependTo];
@@ -66,7 +63,7 @@ class OrderCurrencyComment
             if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode() &&
                 (($subject->getMessage() instanceof Phrase
                 && $subject->getMessage()->getText() == 'Canceled order online')
-                || strpos($subject->getTransactionId(), '-void') !== FALSE)
+                || strpos($subject->getTransactionId(), '-void') !== false)
             ) {
                 return $result .' ['. $order->formatPriceTxt($subject->getAmountOrdered()) .']';
             }

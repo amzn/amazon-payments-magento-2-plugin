@@ -48,19 +48,15 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
      */
     public function execute()
     {
-        try {
-            $log = $this->getRequest()->getParam('name');
-            $logs = \Amazon\PayV2\Block\Adminhtml\System\Config\Form\DeveloperLogs::LOGS;
-            if (!isset($logs[$log])) {
-                throw new \Exception('Log "' . $log . '" is not exist');
-            }
-            return $this->fileFactory->create(basename($logs[$log]['path']), [
-                'type' => 'filename',
-                'value' => $logs[$log]['path']
-            ]);
-        } catch (\Exception $e) {
-            throw new NotFoundException($e->getMessage());
+        $log = $this->getRequest()->getParam('name');
+        $logs = \Amazon\PayV2\Block\Adminhtml\System\Config\Form\DeveloperLogs::LOGS;
+        if (!isset($logs[$log])) {
+            throw new NotFoundException('Log "' . $log . '" does not exist');
         }
+        return $this->fileFactory->create(basename($logs[$log]['path']), [
+            'type' => 'filename',
+            'value' => $logs[$log]['path']
+        ]);
     }
 
     /**

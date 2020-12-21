@@ -17,9 +17,6 @@ namespace Amazon\PayV2\Client;
 
 use Amazon\Pay\API\Client as AmazonClient;
 
-/**
- * Class Client
- */
 class Client extends AmazonClient
 {
     /**

@@ -20,12 +20,12 @@
  */
 ?>
 
-<div class="amazon-checkout-now" style="display: none;"><?= __('Checkout now') ?></div>
+<div class="amazon-checkout-now" style="display: none;"><?= $block->escapeHtml(__('Checkout now')) ?></div>
 <div class="amazon-button-container-v2 amazon-button-product-page" style="display: none;">
     <div class="amazon-button-column">
         <div id="PayWithAmazon-Product"
              class="amazon-checkout-button"
-             data-mage-init='<?= json_encode([
+             data-mage-init='<?= /* @noEscape */ json_encode([
                  'Amazon_PayV2/js/amazon-button' => [
                      'payOnly' => $block->isPayOnly(),
                      'placement' => 'Product',

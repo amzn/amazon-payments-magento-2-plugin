@@ -24,8 +24,7 @@ class ProcessCommand extends Command
         \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
         \Amazon\PayV2\Model\AsyncUpdater $asyncUpdater,
         string $name = null
-    )
-    {
+    ) {
         $this->asyncCollectionFactory = $asyncCollectionFactory;
         $this->asyncUpdater = $asyncUpdater;
         parent::__construct($name);

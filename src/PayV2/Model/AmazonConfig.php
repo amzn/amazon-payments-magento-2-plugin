@@ -493,9 +493,16 @@ class AmazonConfig
      */
     public function getCheckoutReviewUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_review_url', $scope, $scopeCode);
+        $result = $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/checkout_review_url',
+            $scope,
+            $scopeCode
+        );
         if (empty($result)) {
-            $result = $this->storeManager->getStore()->getUrl('amazon_payv2/login/checkout', ['_forced_secure' => true]);
+            $result = $this->storeManager->getStore()->getUrl(
+                'amazon_payv2/login/checkout',
+                ['_forced_secure' => true]
+            );
         }
         return $result;
     }
@@ -505,9 +512,16 @@ class AmazonConfig
      */
     public function getCheckoutResultUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        $result = $this->scopeConfig->getValue('payment/amazon_payment_v2/checkout_result_url', $scope, $scopeCode);
+        $result = $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/checkout_result_url',
+            $scope,
+            $scopeCode
+        );
         if (empty($result)) {
-            $result = $this->storeManager->getStore()->getUrl('amazon_payv2/checkout/completeSession', ['_forced_secure' => true]);
+            $result = $this->storeManager->getStore()->getUrl(
+                'amazon_payv2/checkout/completeSession',
+                ['_forced_secure' => true]
+            );
         }
         return $result;
     }
@@ -519,7 +533,11 @@ class AmazonConfig
      */
     public function getAllowedIps($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        $allowedIpsString = $this->scopeConfig->getValue('payment/amazon_payment_v2/allowed_ips', $scope, $scopeCode);
+        $allowedIpsString = $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/allowed_ips',
+            $scope,
+            $scopeCode
+        );
         return empty($allowedIpsString) ? [] : explode(',', $allowedIpsString);
     }
 
@@ -553,7 +571,11 @@ class AmazonConfig
      */
     public function isPayButtonAvailableInMinicart($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        return $this->scopeConfig->isSetFlag('payment/amazon_payment/minicart_button_is_visible', $scope, $scopeCode);
+        return $this->scopeConfig->isSetFlag(
+            'payment/amazon_payment/minicart_button_is_visible',
+            $scope,
+            $scopeCode
+        );
     }
 
    /**
@@ -564,7 +586,11 @@ class AmazonConfig
     */
     public function isPayButtonAvailableOnProductPage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        return $this->scopeConfig->isSetFlag('payment/amazon_payment/pwa_pp_button_is_visible', $scope, $scopeCode);
+        return $this->scopeConfig->isSetFlag(
+            'payment/amazon_payment/pwa_pp_button_is_visible',
+            $scope,
+            $scopeCode
+        );
     }
 
     /**
@@ -575,7 +601,11 @@ class AmazonConfig
      */
     public function isPayButtonAvailableAsPaymentMethod($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        return $this->scopeConfig->isSetFlag('payment/amazonlogin/active', $scope, $scopeCode);
+        return $this->scopeConfig->isSetFlag(
+            'payment/amazonlogin/active',
+            $scope,
+            $scopeCode
+        );
     }
 
     /**
@@ -635,10 +665,18 @@ class AmazonConfig
             ];
         }
         $specialRestrictions = [];
-        if ($this->scopeConfig->getValue('payment/amazon_payment_v2/shipping_restrict_po_boxes', $scope, $scopeCode)) {
+        if ($this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/shipping_restrict_po_boxes',
+            $scope,
+            $scopeCode
+        )) {
             $specialRestrictions[] = 'RestrictPOBoxes';
         }
-        if ($this->scopeConfig->getValue('payment/amazon_payment_v2/shipping_restrict_packstations', $scope, $scopeCode)) {
+        if ($this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/shipping_restrict_packstations',
+            $scope,
+            $scopeCode
+        )) {
             $specialRestrictions[] = 'RestrictPackstations';
         }
         if (!empty($specialRestrictions)) {

@@ -16,9 +16,6 @@
 
 namespace Amazon\PayV2\Model\Adapter;
 
-/**
- * Class AmazonPayV2Adapter
- */
 class AmazonPayV2Adapter
 {
     const PAYMENT_INTENT_CONFIRM = 'Confirm';
@@ -359,15 +356,23 @@ class AmazonPayV2Adapter
         if (!empty($data['amazon_checkout_session_id'])) {
             $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
         } elseif (!empty($data['charge_permission_id'])) {
-            $getChargePermissionResponse = $this->getChargePermission($quote->getStoreId(), $data['charge_permission_id']);
+            $getChargePermissionResponse = $this->getChargePermission(
+                $quote->getStoreId(),
+                $data['charge_permission_id']
+            );
             if ($getChargePermissionResponse['statusDetails']['state'] == "Chargeable") {
-                $response = $this->createCharge($quote->getStoreId(), $data['charge_permission_id'], $data['amount'], $quote->getQuoteCurrencyCode(), true);
+                $response = $this->createCharge(
+                    $quote->getStoreId(),
+                    $data['charge_permission_id'],
+                    $data['amount'],
+                    $quote->getQuoteCurrencyCode(),
+                    true
+                );
             }
         }
 
         return $response;
     }
-
 
     /**
      * @param $storeId
@@ -381,7 +386,10 @@ class AmazonPayV2Adapter
             'chargeAmount' => $this->createPrice($amount, $currencyCode),
         ];
 
-        $rawResponse = $this->clientFactory->create($storeId)->completeCheckoutSession($sessionId, json_encode($payload));
+        $rawResponse = $this->clientFactory->create($storeId)->completeCheckoutSession(
+            $sessionId,
+            json_encode($payload)
+        );
         return $this->processResponse($rawResponse, __FUNCTION__);
     }
 
@@ -469,5 +477,4 @@ class AmazonPayV2Adapter
     {
         return $this->clientFactory->create($storeId)->generateButtonSignature($payload);
     }
-
 }

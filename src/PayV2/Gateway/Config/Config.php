@@ -9,10 +9,6 @@ use Amazon\PayV2\Model\AmazonConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class Config
- * @package Amazon\PayV2\Gateway\Config
- */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
     const CODE = 'amazon_payment_v2';

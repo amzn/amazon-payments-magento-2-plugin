@@ -63,7 +63,8 @@ class AmazonCustomerFactory
     public function create(array $data = [])
     {
         $amazonName = $this->amazonNameFactory
-            ->create(['name' => $this->escaper->escapeHtml($data['name']), 'country' => $this->escaper->escapeHtml($data['country'])]);
+            ->create(['name' => $this->escaper->escapeHtml($data['name']),
+                'country' => $this->escaper->escapeHtml($data['country'])]);
         $data[AmazonNameInterface::FIRST_NAME] = $amazonName->getFirstName();
         $data[AmazonNameInterface::LAST_NAME] = $amazonName->getLastName();
         return $this->objectManager->create(AmazonCustomer::class, ['data' => $data]);

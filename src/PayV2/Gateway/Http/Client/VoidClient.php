@@ -16,9 +16,6 @@
 
 namespace Amazon\PayV2\Gateway\Http\Client;
 
-/**
- * Class VoidClient
- */
 class VoidClient extends AbstractClient
 {
     /**

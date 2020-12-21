@@ -18,10 +18,6 @@ namespace Amazon\PayV2\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-/**
- * Class OrderPaymentCapture
- * @package Amazon\Payment\Observer
- */
 class OrderPaymentCapture implements ObserverInterface
 {
     /**
@@ -32,7 +28,7 @@ class OrderPaymentCapture implements ObserverInterface
         $payment = $observer->getPayment();
         $invoice = $observer->getInvoice();
 
-        // set custom invoice amount on the payment in the display currency, as Magento does everything on the base currency
+        // set custom invoice amount on payment in the display currency, as Magento does everything on the base currency
         $payment->setAmazonDisplayInvoiceAmount($invoice->getGrandTotal());
     }
 }

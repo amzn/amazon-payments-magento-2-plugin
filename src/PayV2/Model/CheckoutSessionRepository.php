@@ -41,8 +41,7 @@ class CheckoutSessionRepository implements CheckoutSessionRepositoryInterface
     public function __construct(
         ResourceModel\CheckoutSession $checkoutSessionResourceModel,
         ResourceModel\CheckoutSession\CollectionFactory $checkoutSessionCollectionFactory
-    )
-    {
+    ) {
         $this->checkoutSessionResourceModel = $checkoutSessionResourceModel;
         $this->checkoutSessionCollectionFactory = $checkoutSessionCollectionFactory;
     }

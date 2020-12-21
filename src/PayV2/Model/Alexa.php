@@ -67,8 +67,7 @@ class Alexa
         Dir $moduleDir,
         \Magento\Framework\File\Csv $csv,
         \Magento\Framework\Config\CacheInterface $cache
-    )
-    {
+    ) {
         $this->amazonConfig = $amazonConfig;
         $this->clientFactory = $clientFactory;
         $this->transactionRepository = $transactionRepository;
@@ -94,7 +93,7 @@ class Alexa
             $errorMessage = __('API error:') . ' (' . $status . ') ';
             $errorMessage .= !empty($response['reasonCode']) ? $response['reasonCode'] . ': ' : '';
             $errorMessage .= !empty($response['message']) ? $response['message'] : '';
-            throw new \Exception($errorMessage);
+            throw new \Magento\Framework\Exception\StateException($errorMessage);
         }
         return $response;
     }
@@ -107,14 +106,15 @@ class Alexa
     {
         $payment = $order->getPayment();
         /* @var $payment Payment */
-        if ($this->amazonConfig->getPaymentAction(ScopeInterface::SCOPE_STORE, $order->getStoreId()) == \Amazon\PayV2\Model\Config\Source\PaymentAction::AUTHORIZE) {
+        if ($this->amazonConfig->getPaymentAction(ScopeInterface::SCOPE_STORE, $order->getStoreId()) ==
+            \Amazon\PayV2\Model\Config\Source\PaymentAction::AUTHORIZE) {
             $transationType = Payment\Transaction::TYPE_AUTH;
         } else {
             $transationType = Payment\Transaction::TYPE_CAPTURE;
         }
         $transaction = $this->transactionRepository->getByTransactionType($transationType, $payment->getId());
         if (!$transaction) {
-            throw new \Exception('Failed to lookup order transaction');
+            throw new \Magento\Framework\Exception\NotFoundException('Failed to lookup order transaction');
         }
         $response = $this->apiCall($order->getStoreId(), 'getCharge', [$transaction->getTxnId()]);
         return $response['chargePermissionId'];
@@ -143,14 +143,17 @@ class Alexa
      */
     protected function getDeliveryCarriers()
     {
-        $cacheKey = md5(__METHOD__);
+        $cacheKey = hash('sha256', __METHOD__);
         $result = $this->cache->load($cacheKey);
         if ($result) {
-            $result = unserialize(gzuncompress($result));
+            $result = \Magento\Framework\Serialize\SerializerInterface::unserialize(gzuncompress($result));
         }
         if (!$result) {
             $result = $this->fetchDeliveryCarriers();
-            $this->cache->save(gzcompress(serialize($result)), $cacheKey);
+            $this->cache->save(
+                gzcompress(\Magento\Framework\Serialize\SerializerInterface::serialize($result)),
+                $cacheKey
+            );
         }
         return $result;
     }
@@ -188,7 +191,8 @@ class Alexa
     {
         $result = false;
         if ($this->amazonConfig->isAlexaEnabled(ScopeInterface::SCOPE_STORE, $track->getStoreId())) {
-            $result = $track->getShipment()->getOrder()->getPayment()->getMethod() == \Amazon\PayV2\Gateway\Config\Config::CODE;
+            $result = $track->getShipment()->getOrder()->getPayment()->getMethod() ==
+                \Amazon\PayV2\Gateway\Config\Config::CODE;
         }
         return $result;
     }

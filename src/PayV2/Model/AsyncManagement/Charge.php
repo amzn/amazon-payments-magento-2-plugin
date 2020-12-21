@@ -132,8 +132,14 @@ class Charge extends AbstractOperation
             // Compare Charge State with Order State
             if (isset($charge['statusDetails'])) {
                 $state = $charge['statusDetails']['state'];
-                if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE && $state == 'Authorized') {
-                    $this->amazonAdapter->captureCharge($order->getStoreId(), $chargeId, $order->getGrandTotal(), $order->getOrderCurrencyCode());
+                if ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE &&
+                    $state == 'Authorized') {
+                    $this->amazonAdapter->captureCharge(
+                        $order->getStoreId(),
+                        $chargeId,
+                        $order->getGrandTotal(),
+                        $order->getOrderCurrencyCode()
+                    );
                     $charge = $this->amazonAdapter->getCharge($order->getStoreId(), $chargeId);
                     $state = $charge['statusDetails']['state'];
                 }
@@ -186,7 +192,12 @@ class Charge extends AbstractOperation
         }
         if ($order->canHold() || $order->isPaymentReview()) {
             $this->closeLastTransaction($order);
-            $this->amazonAdapter->closeChargePermission($order->getStoreId(), $order->getPayment()->getAdditionalInformation()['charge_permission_id'], 'Canceled due to capture declined.', true);
+            $this->amazonAdapter->closeChargePermission(
+                $order->getStoreId(),
+                $order->getPayment()->getAdditionalInformation()['charge_permission_id'],
+                'Canceled due to capture declined.',
+                true
+            );
             $this->setOrderState($order, 'canceled');
             $payment = $order->getPayment();
             $transaction = $this->transactionBuilder->setPayment($payment)

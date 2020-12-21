@@ -1,18 +1,12 @@
 <?php
 
-
 namespace Amazon\PayV2\Plugin;
-
 
 use Amazon\PayV2\Gateway\Config\Config;
 use Amazon\PayV2\Model\Config\Source\AuthorizationMode;
 use Amazon\PayV2\Model\Config\Source\PaymentAction;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-/**
- * Class ModelMethodAdapter
- * @package Amazon\PayV2\Plugin
- */
 class ModelMethodAdapter
 {
     /**
@@ -26,8 +20,7 @@ class ModelMethodAdapter
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
     }
 

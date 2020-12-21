@@ -20,11 +20,6 @@ use Magento\Quote\Api\CartManagementInterface;
 use Amazon\PayV2\Logger\ExceptionLogger;
 use Magento\Framework\App\PageCache\Version;
 
-/**
- * Class CompleteCheckout
- *
- * @package Amazon\PayV2\Controller\Payment
- */
 class CompleteSession extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -92,9 +87,8 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
                 $this->messageManager->addErrorMessage($result['message']);
 
                 return $this->_redirect('checkout/cart', ['_scope' => $scope]);
-            }
-            else if(!$result['order_id']) {
-                throw new \Exception(__('Something went wrong. Please try again.'));
+            } elseif (!$result['order_id']) {
+                throw new \Magento\Framework\Exception\NotFoundException(__('Something went wrong. Please try again.'));
             }
             $this->updateVersionCookie();
             return $this->_redirect('checkout/onepage/success', [
@@ -118,7 +112,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
      */
     protected function generateValue()
     {
-        return md5(rand() . time());
+        return hash('sha256', rand() . time());
     }
 
     /**

@@ -18,11 +18,6 @@ namespace Amazon\PayV2\Block\Minicart;
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
 
-/**
- * Class Button
- *
- * @api
- */
 class Button extends Template implements ShortcutInterface
 {
     const ALIAS_ELEMENT_INDEX = 'alias';

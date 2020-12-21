@@ -125,7 +125,10 @@ class SettlementRequestBuilder implements BuilderInterface
             'amount' => $total,
             'currency_code' => $currencyCode,
         ];
-        if ($this->amazonConfig->isSandboxEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $orderDO->getStoreId())) {
+        if ($this->amazonConfig->isSandboxEnabled(
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $orderDO->getStoreId()
+        )) {
             $data['headers'] = $this->getHeaders($paymentDO->getPayment());
         }
 

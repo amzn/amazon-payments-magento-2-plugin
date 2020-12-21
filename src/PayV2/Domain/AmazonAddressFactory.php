@@ -74,10 +74,10 @@ class AmazonAddressFactory
         );
 
         $data = [
-            AmazonAddressInterface::POSTAL_CODE => isset($address['PostalCode']) ? $address['PostalCode'] : '',
+            AmazonAddressInterface::POSTAL_CODE => $address['PostalCode'] ?? '',
             AmazonAddressInterface::COUNTRY_CODE => $address['CountryCode'],
-            AmazonAddressInterface::TELEPHONE => isset($address['Phone']) ? $address['Phone'] : '',
-            AmazonAddressInterface::STATE_OR_REGION => isset($address['StateOrRegion']) ? $address['StateOrRegion'] : '',
+            AmazonAddressInterface::TELEPHONE => $address['Phone'] ?? '',
+            AmazonAddressInterface::STATE_OR_REGION => $address['StateOrRegion'] ?? '',
             AmazonAddressInterface::FIRST_NAME => $amazonName->getFirstName(),
             AmazonAddressInterface::LAST_NAME => $amazonName->getLastName(),
             AmazonAddressInterface::LINES => $this->getLines($address)

@@ -59,8 +59,7 @@ class AuthorizationSaleRequestBuilder implements BuilderInterface
 
         if ($payment->getAmazonDisplayInvoiceAmount()) {
             $total = $payment->getAmazonDisplayInvoiceAmount();
-        }
-        else {
+        } else {
             $total = $payment->getAmountOrdered();
         }
 

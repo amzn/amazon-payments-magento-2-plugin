@@ -61,7 +61,8 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     {
         while ($times > 0) {
             $lines = $this->getData(AmazonAddressInterface::LINES);
-            for ($i = 1; $i <= count($lines); $i++) {
+            $numberOfLines = count($lines);
+            for ($i = 1; $i <= $numberOfLines; $i++) {
                 $lines[$i] = isset($lines[$i + 1]) ? $lines[$i + 1] : '';
             }
             $this->setData(AmazonAddressInterface::LINES, $lines);

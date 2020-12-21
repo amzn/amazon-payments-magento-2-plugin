@@ -54,7 +54,10 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        if (!$this->amazonConfig->isEnabled() || $this->amazonHelper->isProductRestricted($this->_getProduct()) || !$this->amazonConfig->isPayButtonAvailableOnProductPage()) {
+        if (!$this->amazonConfig->isEnabled() ||
+            $this->amazonHelper->isProductRestricted($this->_getProduct()) ||
+            !$this->amazonConfig->isPayButtonAvailableOnProductPage()
+        ) {
             return '';
         }
 
@@ -65,9 +68,8 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
             if (!$product->isSaleable()) {
                 return '';
             }
-        }
-        // other product types
-        else {
+        } else {
+            // other product types
             if ($product->isInStock() == 0 || !$product->isSaleable()) {
                 return '';
             }

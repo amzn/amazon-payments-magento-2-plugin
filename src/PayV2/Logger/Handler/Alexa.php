@@ -20,8 +20,6 @@ use Magento\Framework\Logger\Handler\Base;
 
 /**
  * Logs result/response from Amazon API
- *
- * @package Amazon\Alexa\Logger\Handler
  */
 class Alexa extends Base
 {

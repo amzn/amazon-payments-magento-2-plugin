@@ -76,7 +76,9 @@ class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
     {
         $elementData = $this->_getElementData($element);
         $elementDataScope = $this->_getElementDataScope($element);
-        return '<div data-bind="scope: \'restrict_categories\'"><!-- ko template: getTemplate() --><!-- /ko --></div><script type="text/x-magento-init">' . json_encode([
+        return '<div data-bind="scope: \'restrict_categories\'">' .
+            '<!-- ko template: getTemplate() --><!-- /ko --></div><script type="text/x-magento-init">' .
+            json_encode([
             '*' => [
                 'Magento_Ui/js/core/app' => [
                     'components' => [

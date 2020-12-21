@@ -42,10 +42,11 @@ class Login extends Template
      * @param AmazonConfig $amazonConfig
      * @param Client $amazonClient
      */
-    public function __construct(Context $context,
-                                AmazonConfig $amazonConfig,
-                                AmazonPayV2Adapter $amazonAdapter)
-    {
+    public function __construct(
+        Context $context,
+        AmazonConfig $amazonConfig,
+        AmazonPayV2Adapter $amazonAdapter
+    ) {
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
         parent::__construct($context);

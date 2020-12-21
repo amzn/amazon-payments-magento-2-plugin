@@ -37,8 +37,7 @@ class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverI
         \Amazon\PayV2\Model\Alexa $alexaModel,
         \Amazon\PayV2\Logger\AlexaLogger $alexaLogger,
         \Magento\Framework\Message\ManagerInterface $messageManager
-    )
-    {
+    ) {
         $this->alexaModel = $alexaModel;
         $this->alexaLogger = $alexaLogger;
         $this->messageManager = $messageManager;

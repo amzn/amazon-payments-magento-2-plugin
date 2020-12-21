@@ -2,6 +2,7 @@
 
 namespace Amazon\PayV2\Helper;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
@@ -58,8 +59,7 @@ class Data extends AbstractHelper
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
-    )
-    {
+    ) {
         $this->amazonConfig = $amazonConfig;
         $this->helperCheckout = $helperCheckout;
         $this->moduleList = $moduleList;
@@ -83,10 +83,11 @@ class Data extends AbstractHelper
         if (!empty($categories)) {
             $firstCategory = array_shift($categories);
             if ($firstCategory['is_anchor'] == 1) {
-                $linkfield = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+                $linkfield = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
                 $anchorCategories[] = $firstCategory[$linkfield];
                 foreach ($categories as $category) {
-                    if (in_array($category['parent_id'], $result) && in_array($category['parent_id'], $anchorCategories)) {
+                    if (in_array($category['parent_id'], $result) &&
+                        in_array($category['parent_id'], $anchorCategories)) {
                         $result[] = $category[$linkfield];
                         if ($category['is_anchor'] == 1 || in_array($category['parent_id'], $anchorCategories)) {
                             $anchorCategories[] = $category[$linkfield];
@@ -107,7 +108,10 @@ class Data extends AbstractHelper
             $restrictedCategoryIds = [];
             foreach ($this->amazonConfig->getRestrictedCategoryIds() as $restrictedCategoryId) {
                 if (!in_array($restrictedCategoryId, $restrictedCategoryIds)) {
-                    $restrictedCategoryIds = array_merge($restrictedCategoryIds, $this->fetchRestrictedCategoryIds($restrictedCategoryId));
+                    $restrictedCategoryIds = array_merge(
+                        $restrictedCategoryIds,
+                        $this->fetchRestrictedCategoryIds($restrictedCategoryId)
+                    );
                 }
             }
             $this->restrictedCategoryIds = $restrictedCategoryIds;

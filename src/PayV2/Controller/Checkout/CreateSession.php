@@ -15,9 +15,6 @@
  */
 namespace Amazon\PayV2\Controller\Checkout;
 
-/**
- * Class CreateSession
- */
 class CreateSession extends \Magento\Framework\App\Action\Action
 {
 
