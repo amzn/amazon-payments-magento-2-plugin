@@ -268,6 +268,7 @@ class Charge extends AbstractOperation
             $invoice->register();
         }
         if ($invoice && ($invoice->canCapture() || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW)) {
+            $order = $invoice->getOrder();
             $payment = $order->getPayment();
 
             $invoice->pay();
