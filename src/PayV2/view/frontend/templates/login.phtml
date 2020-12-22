@@ -39,6 +39,7 @@ $amazonPublicKeyId = $block->getAmazonPublicKeyId();
                         <div id="AmazonPayButton"
                              class="login-with-amazon"
                              data-mage-init='{"amazonPayV2LoginButton": {"payload":
+                             <?php // phpcs:ignore Magento2.Functions.DiscouragedFunction ?>
                              "<?= $block->escapeHtml(addslashes($buttonPayload)) ?>",
                               "signature": "<?= $block->escapeHtml($buttonSignature) ?>",
                               "public_key_id": "<?= $block->escapeHtml($amazonPublicKeyId) ?>" }}'>

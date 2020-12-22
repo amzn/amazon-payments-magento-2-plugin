@@ -108,6 +108,7 @@ class Data extends AbstractHelper
             $restrictedCategoryIds = [];
             foreach ($this->amazonConfig->getRestrictedCategoryIds() as $restrictedCategoryId) {
                 if (!in_array($restrictedCategoryId, $restrictedCategoryIds)) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $restrictedCategoryIds = array_merge(
                         $restrictedCategoryIds,
                         $this->fetchRestrictedCategoryIds($restrictedCategoryId)

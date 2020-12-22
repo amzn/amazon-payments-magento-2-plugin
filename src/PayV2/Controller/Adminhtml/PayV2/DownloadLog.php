@@ -53,6 +53,7 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
         if (!isset($logs[$log])) {
             throw new NotFoundException('Log "' . $log . '" does not exist');
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return $this->fileFactory->create(basename($logs[$log]['path']), [
             'type' => 'filename',
             'value' => $logs[$log]['path']

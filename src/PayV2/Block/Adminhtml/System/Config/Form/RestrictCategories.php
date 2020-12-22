@@ -40,6 +40,7 @@ class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getElementData(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         parse_str($element->getName(), $result);
         $data = &$result;
         while (is_array($data)) {
@@ -58,6 +59,7 @@ class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getElementDataScope(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         parse_str($element->getName(), $data);
         $scopes = [];
         while (is_array($data)) {

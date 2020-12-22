@@ -129,6 +129,7 @@ class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
         $links = [];
         $root = $this->directoryList->getPath(DirectoryList::ROOT);
         foreach (self::LOGS as $name => $data) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (file_exists($root . $data['path'])) {
                 $links[] = [
                     'name' => $data['name'],

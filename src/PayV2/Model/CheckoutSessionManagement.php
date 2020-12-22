@@ -284,6 +284,7 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         if ($this->isAvailable($cartId)) {
             $session = $this->getAmazonSession($cartId);
 
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $addressData = call_user_func($addressDataExtractor, $session);
             if (!empty($addressData)) {
                 $addressData['state'] = $addressData['stateOrRegion'];

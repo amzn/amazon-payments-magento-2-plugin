@@ -95,6 +95,7 @@ class Ipn extends \Magento\Framework\App\Action\Action
 
         try {
             if ($this->amazonConfig->isLoggingEnabled()) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $this->ipnLogger->info(print_r($this->getRequest()->getHeaders()->toArray(), 1));
                 $this->ipnLogger->info($this->getRequest()->getContent());
             }

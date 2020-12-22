@@ -19,13 +19,5 @@ use Amazon\Pay\API\Client as AmazonClient;
 
 class Client extends AmazonClient
 {
-    /**
-     * Client constructor
-     *
-     * @param array $amazonConfig
-     */
-    public function __construct(array $amazonConfig)
-    {
-        parent::__construct($amazonConfig);
-    }
+    // Only wrap the sdk class for easy access
 }

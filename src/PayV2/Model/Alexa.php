@@ -86,6 +86,7 @@ class Alexa
     protected function apiCall($storeId, $method, $arguments)
     {
         $client = $this->clientFactory->create($storeId, ScopeInterface::SCOPE_STORE);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $data = call_user_func_array([$client, $method], $arguments);
         $status = $data['status'];
         $response = json_decode($data['response'], true);
@@ -146,11 +147,13 @@ class Alexa
         $cacheKey = hash('sha256', __METHOD__);
         $result = $this->cache->load($cacheKey);
         if ($result) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $result = \Magento\Framework\Serialize\SerializerInterface::unserialize(gzuncompress($result));
         }
         if (!$result) {
             $result = $this->fetchDeliveryCarriers();
             $this->cache->save(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 gzcompress(\Magento\Framework\Serialize\SerializerInterface::serialize($result)),
                 $cacheKey
             );
