@@ -13,11 +13,22 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Amazon\PayV2\Client;
 
 use Amazon\Pay\API\Client as AmazonClient;
 
 class Client extends AmazonClient
 {
-    // Only wrap the sdk class for easy access
+    /**
+     * Client constructor
+     *
+     * @param array $amazonConfig
+     */
+    public function __construct(array $amazonConfig)
+    {
+        parent::__construct($amazonConfig);
+    }
 }
