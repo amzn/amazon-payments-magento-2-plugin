@@ -338,6 +338,19 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         if ($this->isAvailable($cartId)) {
             $buttonPayload = $this->amazonAdapter->generateButtonPayload();
 
+            $buttonPayload = [
+                'webCheckoutDetails' => [
+                    'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
+                ],
+                'storeId' => $this->amazonConfig->getClientId(),
+            ];
+            if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
+                $buttonPayload['deliverySpecifications'] = $deliverySpecs;
+            }
+            // todo use magento method
+            $buttonPayload = json_encode($buttonPayload, JSON_UNESCAPED_SLASHES);
+
+
             $result = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
@@ -356,21 +369,21 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     /**
      * {@inheritdoc}
      */
-    public function createCheckoutSession($cartId)
+    public function storeCheckoutSession($cartId, $checkoutSessionId)
     {
         $result = [];
         $this->cancelCheckoutSession($cartId);
         if ($this->isAvailable($cartId)) {
-            $result = $this->amazonAdapter->createCheckoutSession($this->storeManager->getStore()->getId());
-            if (isset($result['checkoutSessionId'])) {
+//            $result = $this->amazonAdapter->createCheckoutSession($this->storeManager->getStore()->getId());
+//            if (isset($result['checkoutSessionId'])) {
                 $checkoutSession = $this->checkoutSessionFactory->create([
                     'data' => [
                         CheckoutSessionInterface::KEY_QUOTE_ID => $this->getCart($cartId)->getId(),
-                        CheckoutSessionInterface::KEY_SESSION_ID => $result['checkoutSessionId'],
+                        CheckoutSessionInterface::KEY_SESSION_ID => $checkoutSessionId,
                     ]
                 ]);
                 $this->checkoutSessionRepository->save($checkoutSession);
-            }
+//            }
         }
         return $result;
     }
