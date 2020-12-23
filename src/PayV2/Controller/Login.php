@@ -15,6 +15,7 @@
  */
 namespace Amazon\PayV2\Controller;
 
+use Amazon\PayV2\Api\CheckoutSessionManagementInterface;
 use Amazon\PayV2\Client\ClientFactoryInterface;
 use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
 use Amazon\PayV2\Domain\AmazonCustomerFactory;
@@ -109,6 +110,8 @@ abstract class Login extends Action
      */
     protected $accountManagement;
 
+    protected $checkoutSessionManagement;
+
     /**
      * Login constructor.
      * @param Context $context
@@ -143,7 +146,8 @@ abstract class Login extends Action
         LoggerInterface $logger,
         StoreManager $storeManager,
         UrlInterface $url,
-        AccountManagementInterface $accountManagement
+        AccountManagementInterface $accountManagement,
+        CheckoutSessionManagementInterface $checkoutSessionManagement
     ) {
         $this->amazonCustomerFactory       = $amazonCustomerFactory;
         $this->amazonAdapter               = $amazonAdapter;
@@ -159,6 +163,7 @@ abstract class Login extends Action
         $this->storeManager                = $storeManager;
         $this->url                         = $url;
         $this->accountManagement           = $accountManagement;
+        $this->checkoutSessionManagement   = $checkoutSessionManagement;
         parent::__construct($context);
     }
 

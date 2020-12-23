@@ -44,16 +44,21 @@ define([
                     if (!$.isEmptyObject(checkoutSessionConfig)) {
                         callback({
                             merchantId: checkoutSessionConfig['merchant_id'],
-                            createCheckoutSession: {
-                                url: url.build('amazon_payv2/checkout/createSession'),
-                                method: 'PUT'
-                            },
+                            // createCheckoutSession: {
+                            //     url: url.build('amazon_payv2/checkout/createSession'),
+                            //     method: 'PUT'
+                            // },
                             ledgerCurrency: checkoutSessionConfig['currency'],
-                            buttonColor: checkoutSessionConfig['button_color'],
+                            sandbox: checkoutSessionConfig['sandbox'],
                             checkoutLanguage: checkoutSessionConfig['language'],
                             productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
                             placement: this.options.placement,
-                            sandbox: checkoutSessionConfig['sandbox'],
+                            buttonColor: checkoutSessionConfig['button_color'],
+                            createCheckoutSessionConfig: {
+                                payloadJSON: checkoutSessionConfig['payload'],
+                                signature: checkoutSessionConfig['signature'],
+                                publicKeyId: checkoutSessionConfig['public_key_id'],
+                            }
                         });
 
                         if (this.options.placement !== "Checkout") {
