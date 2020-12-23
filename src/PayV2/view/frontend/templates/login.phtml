@@ -15,13 +15,6 @@
  */
 ?>
 <?php /** @var \Amazon\PayV2\Block\Login $block */?>
-<?php
-
-$buttonPayload = $block->getAmazonLoginPayload();
-$buttonSignature = $block->getAmazonLoginSignature($buttonPayload);
-$amazonPublicKeyId = $block->getAmazonPublicKeyId();
-
-?>
 <div class="block block-amazon-login">
     <div class="block-title">
         <strong id="block-amazon-login-heading" role="heading" aria-level="2">
@@ -38,11 +31,7 @@ $amazonPublicKeyId = $block->getAmazonPublicKeyId();
                     <div class="amazon-button-container__cell">
                         <div id="AmazonPayButton"
                              class="login-with-amazon"
-                             data-mage-init='{"amazonPayV2LoginButton": {"payload":
-                             <?php // phpcs:ignore Magento2.Functions.DiscouragedFunction ?>
-                             "<?= $block->escapeHtml(addslashes($buttonPayload)) ?>",
-                              "signature": "<?= $block->escapeHtml($buttonSignature) ?>",
-                              "public_key_id": "<?= $block->escapeHtml($amazonPublicKeyId) ?>" }}'>
+                             data-mage-init='{"amazonPayV2LoginButton": {}}'>
                         </div>
                     </div>
                     <div class="amazon-button-container__cell">

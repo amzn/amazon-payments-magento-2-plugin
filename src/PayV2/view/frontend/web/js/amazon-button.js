@@ -44,10 +44,6 @@ define([
                     if (!$.isEmptyObject(checkoutSessionConfig)) {
                         callback({
                             merchantId: checkoutSessionConfig['merchant_id'],
-                            // createCheckoutSession: {
-                            //     url: url.build('amazon_payv2/checkout/createSession'),
-                            //     method: 'PUT'
-                            // },
                             ledgerCurrency: checkoutSessionConfig['currency'],
                             sandbox: checkoutSessionConfig['sandbox'],
                             checkoutLanguage: checkoutSessionConfig['language'],
@@ -55,8 +51,8 @@ define([
                             placement: this.options.placement,
                             buttonColor: checkoutSessionConfig['button_color'],
                             createCheckoutSessionConfig: {
-                                payloadJSON: checkoutSessionConfig['payload'],
-                                signature: checkoutSessionConfig['signature'],
+                                payloadJSON: checkoutSessionConfig['checkout_payload'],
+                                signature: checkoutSessionConfig['checkout_signature'],
                                 publicKeyId: checkoutSessionConfig['public_key_id'],
                             }
                         });

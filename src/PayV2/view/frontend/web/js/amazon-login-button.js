@@ -40,8 +40,8 @@ define([
                         sandbox: checkoutSessionConfig['sandbox'],
                         // configure sign in
                         signInConfig: {
-                            payloadJSON: checkoutSessionConfig['payload'],
-                            signature: checkoutSessionConfig['signature'],
+                            payloadJSON: checkoutSessionConfig['login_payload'],
+                            signature: checkoutSessionConfig['login_signature'],
                             publicKeyId: checkoutSessionConfig['public_key_id']
                         }
                     });

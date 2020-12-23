@@ -16,8 +16,6 @@
 namespace Amazon\PayV2\Block;
 
 use Amazon\PayV2\Model\AmazonConfig;
-use Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter;
-use Amazon\Pay\API\Client;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
@@ -32,23 +30,15 @@ class Login extends Template
     private $amazonConfig;
 
     /**
-     * @var AmazonPayV2Adapter
-     */
-    private $amazonAdapter;
-
-    /**
      * Login constructor.
      * @param Context $context
      * @param AmazonConfig $amazonConfig
-     * @param Client $amazonClient
      */
     public function __construct(
         Context $context,
-        AmazonConfig $amazonConfig,
-        AmazonPayV2Adapter $amazonAdapter
+        AmazonConfig $amazonConfig
     ) {
         $this->amazonConfig = $amazonConfig;
-        $this->amazonAdapter = $amazonAdapter;
         parent::__construct($context);
     }
 
@@ -62,20 +52,5 @@ class Login extends Template
         }
 
         return parent::_toHtml();
-    }
-
-    public function getAmazonLoginPayload()
-    {
-        return $this->amazonAdapter->generateButtonPayload();
-    }
-
-    public function getAmazonLoginSignature($payload)
-    {
-        return $this->amazonAdapter->signButton($payload);
-    }
-
-    public function getAmazonPublicKeyId()
-    {
-        return $this->amazonConfig->getPublicKeyId();
     }
 }
