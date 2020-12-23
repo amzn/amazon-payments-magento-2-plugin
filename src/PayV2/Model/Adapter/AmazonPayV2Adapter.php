@@ -118,33 +118,6 @@ class AmazonPayV2Adapter
     }
 
     /**
-     * Create new Amazon Checkout Session
-     *
-     * @param $storeId
-     * @return mixed
-     */
-    public function createCheckoutSession($storeId)
-    {
-        $headers = $this->getIdempotencyHeader();
-
-        $payload = [
-            'webCheckoutDetails' => [
-                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
-            ],
-            'storeId' => $this->amazonConfig->getClientId(),
-            'platformId' => $this->amazonConfig->getPlatformId(),
-        ];
-        $deliverySpecifications = $this->amazonConfig->getDeliverySpecifications();
-        if (!empty($deliverySpecifications)) {
-            $payload['deliverySpecifications'] = $deliverySpecifications;
-        }
-
-        $response = $this->clientFactory->create($storeId)->createCheckoutSession($payload, $headers);
-
-        return $this->processResponse($response, __FUNCTION__);
-    }
-
-    /**
      * Return checkout session details
      *
      * @param $storeId
@@ -448,19 +421,38 @@ class AmazonPayV2Adapter
     }
 
     /**
-     * Generate static signature for amazon.Pay.renderButton used by checkout.js
+     * Generate login static signature for amazon.Pay.renderButton used by checkout.js
      *
-     * @param array $payload
-     * @param null|int|string $storeId
      * @return string
      */
-    public function generateButtonPayload()
+    public function generateLoginButtonPayload()
     {
         $payload = [
             'signInReturnUrl' => $this->url->getRouteUrl('amazon_payv2/login/authorize/'),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
         ];
+
+        return json_encode($payload, JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * Generate checkout static signature for amazon.Pay.renderButton used by checkout.js
+     *
+     * @return string
+     */
+    public function generateCheckoutButtonPayload()
+    {
+        $payload = [
+            'webCheckoutDetails' => [
+                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
+            ],
+            'storeId' => $this->amazonConfig->getClientId(),
+        ];
+
+        if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
+            $payload['deliverySpecifications'] = $deliverySpecs;
+        }
 
         return json_encode($payload, JSON_UNESCAPED_SLASHES);
     }
