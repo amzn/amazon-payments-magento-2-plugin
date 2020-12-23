@@ -110,11 +110,14 @@ define([
             **/
             _redraw: function () {
                 var self = this;
-                var cartData = customerData.get('cart');
-                cartData.subscribe(function (updatedCart) {
-                    if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
-                        self._draw();
-                    }
+
+                amazonCheckout.withAmazonCheckout(function (amazon, args) {
+                    var cartData = customerData.get('cart');
+                    cartData.subscribe(function (updatedCart) {
+                        if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
+                            self._draw();
+                        }
+                    });
                 });
 
             },
