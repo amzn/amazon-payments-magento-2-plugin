@@ -100,7 +100,7 @@ define([
                     $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
                     $buttonContainer.empty().append($buttonRoot);
                     this._loadButtonConfig(function (buttonConfig) {
-                        amazon.Pay.renderButton('#' + $buttonRoot.empty().uniqueId().attr('id'), buttonConfig);
+                        amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
                         $('.amazon-button-container-v2 .field-tooltip').fadeIn();
                     });
                 }, this);
