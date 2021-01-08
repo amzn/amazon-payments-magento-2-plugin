@@ -23,7 +23,13 @@ class VoidClient extends AbstractClient
      */
     protected function process(array $data)
     {
-        $response = $this->adapter->closeChargePermission($data['store_id'], $data['charge_permission_id'], 'MerchantClosed', true);
+        $response = $this->adapter->closeChargePermission(
+            $data['store_id'],
+            $data['charge_permission_id'],
+            'MerchantClosed',
+            true
+        );
+
         return $response;
     }
 }
