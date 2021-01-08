@@ -26,7 +26,7 @@ class VoidClient extends AbstractClient
      */
     protected function process(array $data)
     {
-        $response = $this->adapter->cancelCharge($data['store_id'], $data['charge_id']);
+        $response = $this->adapter->closeChargePermission($data['store_id'], $data['charge_permission_id'], 'MerchantClosed', true);
         return $response;
     }
 }
