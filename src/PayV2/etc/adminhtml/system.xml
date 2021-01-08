@@ -38,19 +38,23 @@
                         <config_path>payment/amazon_payment_v2/private_key</config_path>
                         <frontend_model>Amazon\PayV2\Model\Config\Form\Privatekey</frontend_model>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <validate>validate-private-key</validate>
                     </field>
                     <field id="public_key_id" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Public Key ID</label>
                         <config_path>payment/amazon_payment_v2/public_key_id</config_path>
+                        <validate>validate-amzn-public-key-id</validate>
                     </field>
                     <field id="merchant_id_v2" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Merchant Id</label>
                         <config_path>payment/amazon_payment_v2/merchant_id</config_path>
+                        <validate>validate-amzn-merchant-id</validate>
                     </field>
                     <field id="store_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Store Id</label>
                         <comment><![CDATA[Referred as clientId in SellerCentral.]]></comment>
                         <config_path>payment/amazon_payment_v2/store_id</config_path>
+                        <validate>validate-amzn-store-id</validate>
                     </field>
                     <field id="payment_region" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Region</label>
