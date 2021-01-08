@@ -61,6 +61,7 @@
                         <depends>
                             <field id="payment/us/amazon_payment/api_version">2</field>
                         </depends>
+                        <validate>validate-private-key</validate>
                     </field>
                     <field id="public_key_id" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Public Key ID</label>
@@ -68,6 +69,7 @@
                         <depends>
                             <field id="payment/us/amazon_payment/api_version">2</field>
                         </depends>
+                        <validate>validate-amzn-public-key-id</validate>
                     </field>
                     <field id="merchant_id_v2" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Merchant Id</label>
@@ -75,6 +77,7 @@
                         <depends>
                             <field id="payment/us/amazon_payment/api_version">2</field>
                         </depends>
+                        <validate>validate-amzn-merchant-id</validate>
                     </field>
                     <field id="store_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Store Id</label>
@@ -83,6 +86,7 @@
                         <depends>
                             <field id="payment/us/amazon_payment/api_version">2</field>
                         </depends>
+                        <validate>validate-amzn-store-id</validate>
                     </field>
                     <field id="ipn_url_v2" type="note" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>IPN URL</label>

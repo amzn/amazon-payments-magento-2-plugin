@@ -28,6 +28,48 @@ define(['jquery'], function ($) {
 
             },
             $.mage.__('Please enter a valid URL. Secure protocol is required (https://).')
+        ),
+        $.validator.addMethod(
+            'validate-private-key',
+            function (v) {
+                if (v == '******' || $.mage.isEmptyNoTrim(v)) {
+                    return true;
+                }
+                return (/^-----BEGIN RSA PRIVATE KEY-----.*-----END RSA PRIVATE KEY-----$/).test(v);
+            },
+            $.mage.__('Private Key field is invalid. It must include header ' +
+                'and footer of the private key. Please check and try again')
+        ),
+        $.validator.addMethod(
+            'validate-amzn-merchant-id',
+            function (v) {
+                if ($.mage.isEmptyNoTrim(v)) {
+                    return true;
+                }
+                return (/^[0-9A-Z]{13}[0-9A-Z]?$/).test(v);
+            },
+            $.mage.__('Merchant Id field is invalid. It must contain 14 characters. Please check and try again')
+        ),
+        $.validator.addMethod(
+            'validate-amzn-public-key-id',
+            function (v) {
+                if ($.mage.isEmptyNoTrim(v)) {
+                    return true;
+                }
+                return (/^[0-9A-Z]{24}$/).test(v);
+            },
+            $.mage.__('Public Key ID field is invalid. It must contain 24 characters. Please check and try again')
+        ),
+        $.validator.addMethod(
+            'validate-amzn-store-id',
+            function (v) {
+                if ($.mage.isEmptyNoTrim(v)) {
+                    return true;
+                }
+                return (/^amzn1\.application-oa2-client\.[0-9a-z]{32}$/).test(v);
+            },
+            $.mage.__('Store Id field is invalid. It must start with “amzn1.application-oa2-client.” ' +
+                'and contain 61 characters. Please check and try again')
         )
     }
 });
