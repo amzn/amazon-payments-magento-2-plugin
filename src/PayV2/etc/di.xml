@@ -303,4 +303,7 @@
     <type name="Magento\Payment\Model\Method\Adapter">
         <plugin name="amazon_payv2_pay_action" type="Amazon\PayV2\Plugin\ModelMethodAdapter" sortOrder="1" />
     </type>
+    <type name="Magento\Sales\Model\Order\Payment\Transaction\Manager">
+        <plugin name="amazon_payv2_update_transaction_id" type="Amazon\PayV2\Plugin\PaymentTransactionIdUpdate" sortOrder="1" />
+    </type>
 </config>
