@@ -39,37 +39,44 @@
                         <frontend_model>Amazon\PayV2\Model\Config\Form\Privatekey</frontend_model>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <validate>validate-private-key</validate>
+                        <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="public_key_id" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Public Key ID</label>
                         <config_path>payment/amazon_payment_v2/public_key_id</config_path>
                         <validate>validate-amzn-public-key-id</validate>
+                        <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="merchant_id_v2" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Merchant Id</label>
                         <config_path>payment/amazon_payment_v2/merchant_id</config_path>
                         <validate>validate-amzn-merchant-id</validate>
+                        <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="store_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Store Id</label>
                         <comment><![CDATA[Referred as clientId in SellerCentral.]]></comment>
                         <config_path>payment/amazon_payment_v2/store_id</config_path>
                         <validate>validate-amzn-store-id</validate>
+                        <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="payment_region" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Region</label>
                         <source_model>Amazon\PayV2\Model\Config\Source\PaymentRegion</source_model>
                         <config_path>payment/amazon_payment/payment_region</config_path>
+                        <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="sandbox" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sandbox</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment/sandbox</config_path>
+                        <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="ipn_url_v2" type="note" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>IPN URL</label>
                         <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\IpnUrl</frontend_model>
                         <comment><![CDATA[Add this url in SellerCentral to enable IPN.]]></comment>
+                        <depends><field id="active_v2">1</field></depends>
                     </field>
                 </group>
                 <group id="options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
