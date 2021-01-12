@@ -25,7 +25,8 @@ interface ClientFactoryInterface
      *
      * @param null|int|string $scopeId
      * @param null|int|string $scope
+     * @param array $config
      * @return ClientInterface
      */
-    public function create($scopeId = null, $scope = ScopeInterface::SCOPE_STORE);
+    public function create($scopeId = null, $scope = ScopeInterface::SCOPE_STORE, array $config = []);
 }

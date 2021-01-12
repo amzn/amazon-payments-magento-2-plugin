@@ -62,16 +62,16 @@ class ClientFactory implements ClientFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create($scopeId = null, $scope = ScopeInterface::SCOPE_STORE)
+    public function create($scopeId = null, $scope = ScopeInterface::SCOPE_STORE, array $config = [])
     {
-        $config = [
-            'public_key_id' => $this->amazonConfig->getPublicKeyId($scope, $scopeId),
-            'private_key'   => $this->amazonConfig->getPrivateKey($scope, $scopeId),
-            'sandbox'       => $this->amazonConfig->isSandboxEnabled($scope, $scopeId),
-            'region'        => $this->amazonConfig->getRegion($scope, $scopeId),
-        ];
-
-        $client = $this->objectManager->create($this->instanceName, ['amazonConfig' => $config]);
+        $client = $this->objectManager->create($this->instanceName, [
+            'amazonConfig' => array_merge([
+                'public_key_id' => $this->amazonConfig->getPublicKeyId($scope, $scopeId),
+                'private_key'   => $this->amazonConfig->getPrivateKey($scope, $scopeId),
+                'sandbox'       => $this->amazonConfig->isSandboxEnabled($scope, $scopeId),
+                'region'        => $this->amazonConfig->getRegion($scope, $scopeId),
+            ], $config),
+        ]);
 
         if ($client instanceof LoggerAwareInterface && $this->amazonConfig->isLoggingEnabled($scope, $scopeId)) {
             $client->setLogger($this->logger);

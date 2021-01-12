@@ -102,6 +102,16 @@ class AmazonConfig
             return false;
         }
 
+        return $this->isActive($scope, $scopeCode);
+    }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return string
+     */
+    public function isActive($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
         return $this->scopeConfig->isSetFlag(
             'payment/amazon_payment_v2/active',
             $scope,

@@ -306,4 +306,7 @@
     <type name="Magento\Sales\Model\Order\Payment\Transaction\Manager">
         <plugin name="amazon_payv2_update_transaction_id" type="Amazon\PayV2\Plugin\PaymentTransactionIdUpdate" sortOrder="1" />
     </type>
+    <type name="Magento\Config\Model\Config">
+        <plugin name="amazon_payv2_config" type="Amazon\PayV2\Plugin\ConfigCredentialsValidator" sortOrder="100" disabled="false"/>
+    </type>
 </config>
