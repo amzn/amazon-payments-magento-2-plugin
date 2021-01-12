@@ -17,9 +17,6 @@ var config = {
         mixins: {
             'mage/validation': {
                 'Amazon_PayV2/js/validation-mixin': true
-            },
-            'Amazon_Core/js/simplepath': {
-                'Amazon_PayV2/js/simplepath-mixin': true
             }
         }
     }
