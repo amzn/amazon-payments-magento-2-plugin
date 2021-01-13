@@ -24,6 +24,7 @@ class ConfigCredentialsValidator
 {
     const XML_PATH_API_VERSION = 'groups/amazon_pay/fields/api_version/value';
     const XML_PATH_ACTIVE = 'groups/amazon_pay/groups/credentials/fields/active_v2/value';
+    const XML_PATH_ACTIVE_INHERIT = 'groups/amazon_pay/groups/credentials/fields/active_v2/inherit';
     const XML_PATH_PRIVATE_KEY = 'groups/amazon_pay/groups/credentials/fields/private_key/value';
     const XML_PATH_PUBLIC_KEY_ID = 'groups/amazon_pay/groups/credentials/fields/public_key_id/value';
     const XML_PATH_STORE_ID = 'groups/amazon_pay/groups/credentials/fields/store_id/value';
@@ -221,6 +222,7 @@ class ConfigCredentialsValidator
                 }
             }
         } catch (\Exception $e) {
+            $this->setDataByPath($subject, self::XML_PATH_ACTIVE_INHERIT, false);
             $this->setDataByPath($subject, self::XML_PATH_ACTIVE, false);
             $this->messageManager->addErrorMessage(__('Failed to enable Amazon Pay: %1', $e->getMessage()));
         }
