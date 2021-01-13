@@ -77,7 +77,6 @@
                         <depends>
                             <field id="payment/us/amazon_payment/api_version">2</field>
                         </depends>
-                        <validate>validate-amzn-merchant-id</validate>
                     </field>
                     <field id="store_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Store Id</label>
