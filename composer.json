@@ -44,10 +44,10 @@
   },
   "autoload": {
     "files": [
-      "src/PayV2/registration.php"
+      "registration.php"
     ],
     "psr-4": {
-      "Amazon\\PayV2\\": "src/PayV2"
+      "Amazon\\PayV2\\": ""
     }
   }
 }
