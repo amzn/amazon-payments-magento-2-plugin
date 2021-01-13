@@ -50,7 +50,6 @@
                     <field id="merchant_id_v2" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Merchant Id</label>
                         <config_path>payment/amazon_payment_v2/merchant_id</config_path>
-                        <validate>validate-amzn-merchant-id</validate>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="store_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
