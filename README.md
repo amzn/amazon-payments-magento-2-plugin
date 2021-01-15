@@ -19,6 +19,23 @@ All Amazon Pay transactions are protected by Amazon's A-to-z Guarantee.
 You can find a list of modules in the require section of the `composer.json` file located in the
 same directory as this `README.md` file.
 
+## Prerequisite for installation
+
+Before installing Amazon Pay, please remove any previously installed versions. This includes all directories 
+and their files from the following paths:
+
+* `app/code/Amazon/PayV2`
+* `vendor/amzn/amazon-pay-and-login-with-amazon-core-module`
+* `vendor/amzn/amazon-pay-module`
+* `vendor/amzn/login-with-amazon-module`
+
+If you are using composer to install Amazon Pay, it will remove the files in `vendor` for you, but you will 
+need to manually clean `app/code/Amazon` if present.
+
+## Installation
+
+The extension is available via composer in Packagist or Magento Marketplace as `amzn/amazon-pay-magento-2-module`.
+
 ## Extension Points
 
 Amazon Pay does not provide any specific extension points.
