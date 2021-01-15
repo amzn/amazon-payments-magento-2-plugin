@@ -18,7 +18,8 @@ define([
     'Amazon_PayV2/js/model/storage',
     'mage/url',
     'Amazon_PayV2/js/amazon-checkout',
-], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout) {
+    'Magento_Customer/js/customer-data'
+], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout, customerData) {
     'use strict';
 
     if (amazonStorage.isEnabled) {
@@ -73,6 +74,7 @@ define([
                     this._loadButtonConfig(config, function (buttonConfig) {
                         amazon.Pay.renderButton('#' + $buttonRoot.empty().uniqueId().attr('id'), buttonConfig);
                         $('.amazon-button-container-v2 .field-tooltip').fadeIn();
+                        $('.login-with-amazon').click(function() { customerData.invalidate('*'); });
                     });
                 }, this);
             },
