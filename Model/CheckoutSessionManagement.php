@@ -602,138 +602,142 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         if ($this->isAvailable($cartId)) {
             $checkoutSession = $this->getCheckoutSessionForCart($cart);
         }
-        if ($checkoutSession && $this->canComplete($cart, $checkoutSession)) {
-            try {
-                if (!$cart->getCustomer()->getId()) {
-                    $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
-                }
+        if (empty($checkoutSession) || !$this->canComplete($cart, $checkoutSession)) {
+            return [
+                'success' => false,
+                'message' => __("Unable to complete Amazon Pay checkout"),
+            ];
+        }
+        try {
+            if (!$cart->getCustomer()->getId()) {
+                $cart->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+            }
 
-                // check the Amazon session one last time before placing the order
-                $amazonSession = $this->amazonAdapter->getCheckoutSession(
-                    $cart->getStoreId(),
-                    $checkoutSession->getSessionId()
-                );
-                if ($amazonSession['statusDetails']['state'] == 'Canceled') {
-                    return [
-                        'success' => false,
-                        'message' => $this->getCanceledMessage($amazonSession),
-                    ];
-                }
-
-                $orderId = $this->cartManagement->placeOrder($cart->getId());
-                $order = $this->orderRepository->get($orderId);
-                $result = [
-                    'success' => true,
-                    'order_id' => $orderId,
+            // check the Amazon session one last time before placing the order
+            $amazonSession = $this->amazonAdapter->getCheckoutSession(
+                $cart->getStoreId(),
+                $checkoutSession->getSessionId()
+            );
+            if ($amazonSession['statusDetails']['state'] == 'Canceled') {
+                return [
+                    'success' => false,
+                    'message' => $this->getCanceledMessage($amazonSession),
                 ];
+            }
 
-                $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
-                    $cart->getStoreId(),
-                    $checkoutSession->getSessionId(),
-                    $cart->getGrandTotal(),
-                    $cart->getQuoteCurrencyCode()
-                );
-                $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
-                if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)) {
-                    // Something went wrong, but the order has already been placed, so cancelling it
-                    $this->cancelOrder($order);
+            $orderId = $this->cartManagement->placeOrder($cart->getId());
+            $order = $this->orderRepository->get($orderId);
+            $result = [
+                'success' => true,
+                'order_id' => $orderId,
+            ];
 
-                    $session = $this->amazonAdapter->getCheckoutSession(
-                        $cart->getStoreId(),
-                        $checkoutSession->getSessionId()
-                    );
-                    if (isset($session['chargePermissionId'])) {
-                        $this->amazonAdapter->closeChargePermission(
-                            $cart->getStoreId(),
-                            $session['chargePermissionId'],
-                            'Canceled due to checkout session failed to complete',
-                            true
-                        );
-                    }
+            $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
+                $cart->getStoreId(),
+                $checkoutSession->getSessionId(),
+                $cart->getGrandTotal(),
+                $cart->getQuoteCurrencyCode()
+            );
+            $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
+            if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)) {
+                // Something went wrong, but the order has already been placed, so cancelling it
+                $this->cancelOrder($order);
 
-                    return [
-                        'success' => false,
-                        'message' => __(
-                            'Payment was unable to be successfully captured, the checkout session failed to complete.'
-                        ),
-                    ];
-                }
-
-                $payment = $order->getPayment();
-                $chargeId = $amazonCompleteCheckoutResult['chargeId'];
-                $transaction = $this->getTransaction($amazonCompleteCheckoutResult['checkoutSessionId']);
-
-                if ($completeCheckoutStatus != '202' &&
-                    $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
-                    // capture on Amazon Pay
-                    $this->amazonAdapter->captureCharge(
-                        $cart->getStoreId(),
-                        $chargeId,
-                        $cart->getGrandTotal(),
-                        $cart->getQuoteCurrencyCode()
-                    );
-                    // capture and invoice on the Magento side
-                    $this->asyncCharge->capture($order, $chargeId, $cart->getGrandTotal());
-                }
-                $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
-
-                $chargeState = $amazonCharge['statusDetails']['state'];
-                switch ($chargeState) {
-                    case 'AuthorizationInitiated':
-                        $payment->setIsTransactionClosed(false);
-                        $this->setPending($payment);
-                        $transaction->setIsClosed(false);
-                        $this->asyncManagement->queuePendingAuthorization($chargeId);
-                        break;
-                    case 'Authorized':
-                        if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
-                            $this->setProcessing($payment);
-                            $this->addCaptureComment($payment, $cart, $amazonCharge['chargePermissionId']);
-                        }
-                        break;
-                    case 'Captured':
-                        $payment->setIsTransactionClosed(true);
-                        $transaction->setIsClosed(true);
-
-                        if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
-                            $this->setProcessing($payment);
-                            $this->addCaptureComment($payment, $cart, $chargeId);
-                        }
-                        break;
-                }
-
-                // relies on updateTransactionId to save the $payment
-                $payment->setAdditionalInformation(
-                    'charge_permission_id',
-                    $amazonCompleteCheckoutResult['chargePermissionId']
-                );
-                $this->updateTransactionId($chargeId, $payment, $transaction);
-
-                $checkoutSession->complete();
-                $this->checkoutSessionRepository->save($checkoutSession);
-            } catch (\Exception $e) {
                 $session = $this->amazonAdapter->getCheckoutSession(
                     $cart->getStoreId(),
                     $checkoutSession->getSessionId()
                 );
-
                 if (isset($session['chargePermissionId'])) {
                     $this->amazonAdapter->closeChargePermission(
                         $cart->getStoreId(),
                         $session['chargePermissionId'],
-                        'Canceled due to technical issue: ' . $e->getMessage(),
+                        'Canceled due to checkout session failed to complete',
                         true
                     );
                 }
-                $this->cancelCheckoutSession($cartId);
 
-                // cancel order
-                if (isset($order)) {
-                    $this->cancelOrder($order);
-                }
-
-                throw $e;
+                return [
+                    'success' => false,
+                    'message' => __(
+                        'Payment was unable to be successfully captured, the checkout session failed to complete.'
+                    ),
+                ];
             }
+
+            $payment = $order->getPayment();
+            $chargeId = $amazonCompleteCheckoutResult['chargeId'];
+            $transaction = $this->getTransaction($amazonCompleteCheckoutResult['checkoutSessionId']);
+
+            if ($completeCheckoutStatus != '202' &&
+                $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
+                // capture on Amazon Pay
+                $this->amazonAdapter->captureCharge(
+                    $cart->getStoreId(),
+                    $chargeId,
+                    $cart->getGrandTotal(),
+                    $cart->getQuoteCurrencyCode()
+                );
+                // capture and invoice on the Magento side
+                $this->asyncCharge->capture($order, $chargeId, $cart->getGrandTotal());
+            }
+            $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
+
+            $chargeState = $amazonCharge['statusDetails']['state'];
+            switch ($chargeState) {
+                case 'AuthorizationInitiated':
+                    $payment->setIsTransactionClosed(false);
+                    $this->setPending($payment);
+                    $transaction->setIsClosed(false);
+                    $this->asyncManagement->queuePendingAuthorization($chargeId);
+                    break;
+                case 'Authorized':
+                    if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
+                        $this->setProcessing($payment);
+                        $this->addCaptureComment($payment, $cart, $amazonCharge['chargePermissionId']);
+                    }
+                    break;
+                case 'Captured':
+                    $payment->setIsTransactionClosed(true);
+                    $transaction->setIsClosed(true);
+
+                    if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
+                        $this->setProcessing($payment);
+                        $this->addCaptureComment($payment, $cart, $chargeId);
+                    }
+                    break;
+            }
+
+            // relies on updateTransactionId to save the $payment
+            $payment->setAdditionalInformation(
+                'charge_permission_id',
+                $amazonCompleteCheckoutResult['chargePermissionId']
+            );
+            $this->updateTransactionId($chargeId, $payment, $transaction);
+
+            $checkoutSession->complete();
+            $this->checkoutSessionRepository->save($checkoutSession);
+        } catch (\Exception $e) {
+            $session = $this->amazonAdapter->getCheckoutSession(
+                $cart->getStoreId(),
+                $checkoutSession->getSessionId()
+            );
+
+            if (isset($session['chargePermissionId'])) {
+                $this->amazonAdapter->closeChargePermission(
+                    $cart->getStoreId(),
+                    $session['chargePermissionId'],
+                    'Canceled due to technical issue: ' . $e->getMessage(),
+                    true
+                );
+            }
+            $this->cancelCheckoutSession($cartId);
+
+            // cancel order
+            if (isset($order)) {
+                $this->cancelOrder($order);
+            }
+
+            throw $e;
         }
         return $result;
     }
