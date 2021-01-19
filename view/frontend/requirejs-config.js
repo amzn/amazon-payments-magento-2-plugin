@@ -30,7 +30,8 @@ var config = {
             amazonPayV2Button: 'Amazon_PayV2/js/amazon-button',
             amazonPayV2Config: 'Amazon_PayV2/js/model/amazonPayV2Config',
             amazonPayV2LoginButton: 'Amazon_PayV2/js/amazon-login-button',
-            amazonPayV2Logout: 'Amazon_PayV2/js/amazon-logout'
+            amazonPayV2Logout: 'Amazon_PayV2/js/amazon-logout',
+            amazonPayV2LogoutButton: 'Amazon_PayV2/js/amazon-logout-button'
         }
     },
     paths: {
