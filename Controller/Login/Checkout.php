@@ -13,14 +13,14 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Controller\Login;
+namespace Amazon\Pay\Controller\Login;
 
-use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
-use Amazon\PayV2\Domain\ValidationCredentials;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Framework\Exception\ValidatorException;
 use Zend_Validate;
 
-class Checkout extends \Amazon\PayV2\Controller\Login
+class Checkout extends \Amazon\Pay\Controller\Login
 {
     /**
      * {@inheritdoc}
@@ -139,7 +139,7 @@ class Checkout extends \Amazon\PayV2\Controller\Login
 
     /**
      * @param $checkoutSession
-     * @return \Amazon\PayV2\Domain\AmazonCustomer
+     * @return \Amazon\Pay\Domain\AmazonCustomer
      */
     protected function createAmazonCustomerFromSession($checkoutSession)
     {

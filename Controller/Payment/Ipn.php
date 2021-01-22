@@ -13,10 +13,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Controller\Payment;
+namespace Amazon\Pay\Controller\Payment;
 
-use Amazon\PayV2\Api\Data\AsyncInterface;
-use Amazon\PayV2\Model\Async;
+use Amazon\Pay\Api\Data\AsyncInterface;
+use Amazon\Pay\Model\Async;
 use Magento\Framework\App\ObjectManager;
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
@@ -31,46 +31,46 @@ use Magento\Framework\Data\Collection;
 class Ipn extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
     /**
-     * @var \Amazon\PayV2\Model\AsyncManagement\ChargeFactory
+     * @var \Amazon\Pay\Model\AsyncManagement\ChargeFactory
      */
     private $chargeFactory;
 
     /**
-     * @var \Amazon\PayV2\Model\AsyncManagement\RefundFactory
+     * @var \Amazon\Pay\Model\AsyncManagement\RefundFactory
      */
     private $refundFactory;
 
     /**
-     * @var \Amazon\PayV2\Logger\AsyncIpnLogger
+     * @var \Amazon\Pay\Logger\AsyncIpnLogger
      */
     private $ipnLogger;
 
     /**
-     * @var \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory
+     * @var \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory
      */
     private $asyncCollectionFactory;
 
     /**
      * Ipn constructor.
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-     * @param \Amazon\PayV2\Model\AsyncManagement\ChargeFactory $chargeFactory
-     * @param \Amazon\PayV2\Model\AsyncManagement\RefundFactory $refundFactory
-     * @param \Amazon\PayV2\Logger\AsyncIpnLogger $ipnLogger
-     * @param \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory
+     * @param \Amazon\Pay\Model\AsyncManagement\RefundFactory $refundFactory
+     * @param \Amazon\Pay\Logger\AsyncIpnLogger $ipnLogger
+     * @param \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Model\AsyncManagement\ChargeFactory $chargeFactory,
-        \Amazon\PayV2\Model\AsyncManagement\RefundFactory $refundFactory,
-        \Amazon\PayV2\Logger\AsyncIpnLogger $ipnLogger,
-        \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory,
+        \Amazon\Pay\Model\AsyncManagement\RefundFactory $refundFactory,
+        \Amazon\Pay\Logger\AsyncIpnLogger $ipnLogger,
+        \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
     ) {
         // Bypass Magento's CsrfValidator (which rejects POST) and use Amazon SNS Message Validator instead
         $context->getRequest()->setMethod('PUT');

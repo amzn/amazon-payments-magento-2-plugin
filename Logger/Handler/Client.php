@@ -13,13 +13,13 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Logger\Handler;
+namespace Amazon\Pay\Logger\Handler;
 
 use Magento\Framework\Logger\Handler\Base;
 
 class Client extends Base
 {
-    const FILENAME = '/var/log/paywithamazon_v2.log';
+    const FILENAME = '/var/log/paywithamazon.log';
 
     /**
      * @var string

@@ -6,8 +6,8 @@
             <title value="Amazon Mini Cart Button V2"/>
             <description value="Only Amazon Button V2 should be present in mini cart when enabled."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_button"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_button"/>
         </annotations>
 
         <before>
@@ -26,7 +26,7 @@
         <!--Click on mini cart-->
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <!--Verify only Amazon Button V2 is present-->
-        <seeElement selector="{{AmazonButtonSection.v2MiniCart}}" stepKey="seeEnabledAmazonButton"/>
+        <seeElement selector="{{AmazonButtonSection.MiniCart}}" stepKey="seeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1MiniCart}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>
 </tests>

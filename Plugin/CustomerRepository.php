@@ -13,10 +13,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
-use Amazon\PayV2\Model\AmazonConfig;
-use Amazon\PayV2\Api\CustomerManagementInterface;
+use Amazon\Pay\Model\AmazonConfig;
+use Amazon\Pay\Api\CustomerManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 

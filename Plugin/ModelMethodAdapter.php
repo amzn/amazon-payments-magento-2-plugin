@@ -1,10 +1,10 @@
 <?php
 
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
-use Amazon\PayV2\Gateway\Config\Config;
-use Amazon\PayV2\Model\Config\Source\AuthorizationMode;
-use Amazon\PayV2\Model\Config\Source\PaymentAction;
+use Amazon\Pay\Gateway\Config\Config;
+use Amazon\Pay\Model\Config\Source\AuthorizationMode;
+use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ModelMethodAdapter

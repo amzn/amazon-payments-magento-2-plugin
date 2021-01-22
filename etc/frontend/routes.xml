@@ -17,8 +17,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
-        <route id="amazon_payv2" frontName="amazon_payv2">
-            <module name="Amazon_PayV2" />
+        <route id="amazon_pay" frontName="amazon_pay">
+            <module name="Amazon_Pay" />
         </route>
     </router>
 </config>

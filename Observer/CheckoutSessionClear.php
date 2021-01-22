@@ -14,18 +14,18 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Observer;
+namespace Amazon\Pay\Observer;
 
 use Magento\Framework\Event\Observer;
 
 class CheckoutSessionClear implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * @var \Amazon\PayV2\CustomerData\CheckoutSession
+     * @var \Amazon\Pay\CustomerData\CheckoutSession
      */
     private $amazonCheckoutSession;
 
-    public function __construct(\Amazon\PayV2\CustomerData\CheckoutSession $amazonCheckoutSession)
+    public function __construct(\Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession)
     {
         $this->amazonCheckoutSession = $amazonCheckoutSession;
     }

@@ -18,7 +18,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Amazon\PayV2\Block\Config" name="amazon_logout" after="customer_logout" template="Amazon_PayV2::logout.phtml" />
+            <block class="Amazon\Pay\Block\Config" name="amazon_logout" after="customer_logout" template="Amazon_Pay::logout.phtml" />
         </referenceContainer>
     </body>
 </page>

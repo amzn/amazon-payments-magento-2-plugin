@@ -13,10 +13,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
 use Closure;
-use Amazon\PayV2\Model\AmazonConfig;
+use Amazon\Pay\Model\AmazonConfig;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
 use Magento\Framework\DB\Select;

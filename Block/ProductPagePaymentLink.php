@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Block;
+namespace Amazon\Pay\Block;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
@@ -21,12 +21,12 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
 {
 
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
     /**
-     * @var \Amazon\PayV2\Helper\Data
+     * @var \Amazon\Pay\Helper\Data
      */
     private $amazonHelper;
 
@@ -37,8 +37,8 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Helper\Data $amazonHelper,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Helper\Data $amazonHelper,
         \Magento\Framework\Registry $registry,
         array $data = []
     ) {

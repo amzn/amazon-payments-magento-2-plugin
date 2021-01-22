@@ -13,18 +13,18 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Amazon\PayV2\Api\CustomerLinkRepositoryInterface;
-use Amazon\PayV2\Api\Data;
-use Amazon\PayV2\Api\Data\CustomerLinkInterface;
-use Amazon\PayV2\Api\Data\CustomerLinkSearchResultsInterfaceFactory;
-use Amazon\PayV2\Model\ResourceModel\CustomerLink as CustomerLinkResourceModel;
-use Amazon\PayV2\Model\ResourceModel\CustomerLink\CollectionFactory;
+use Amazon\Pay\Api\CustomerLinkRepositoryInterface;
+use Amazon\Pay\Api\Data;
+use Amazon\Pay\Api\Data\CustomerLinkInterface;
+use Amazon\Pay\Api\Data\CustomerLinkSearchResultsInterfaceFactory;
+use Amazon\Pay\Model\ResourceModel\CustomerLink as CustomerLinkResourceModel;
+use Amazon\Pay\Model\ResourceModel\CustomerLink\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

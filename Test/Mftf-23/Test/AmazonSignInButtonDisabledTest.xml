@@ -6,8 +6,8 @@
             <title value="Amazon Sign In Button Disabled"/>
             <description value="Amazon Sign In button should not be visible on the login page when disabled"/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_signin"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_signin"/>
         </annotations>
 
         <before>
@@ -15,7 +15,7 @@
         </before>
 
         <!--Verify Sign in with Amazon Button V2 is not present on create or login pages-->
-        <dontSeeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
-        <dontSeeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
+        <dontSeeElement selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
+        <dontSeeElement selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
     </test>
 </tests>

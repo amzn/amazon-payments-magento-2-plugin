@@ -15,11 +15,11 @@
  */
 
 /**
- * @var \Amazon\PayV2\Block\Minicart\Button $block
+ * @var \Amazon\Pay\Block\Minicart\Button $block
  */
 ?>
 
-<div id="minicart-amazon-pay-button" class="amazon-button-container-v2" style="display: none;">
+<div id="minicart-amazon-pay-button" class="amazon-button-container" style="display: none;">
     <div class="amazon-divider">
         <span><?= $block->escapeHtml(__('or')) ?></span>
     </div>
@@ -28,7 +28,7 @@
         <div id="PayWithAmazon-Cart"
              class="amazon-checkout-button"
              data-loaded-at="<?= $block->escapeHtml(time()) // added for force re-rendering ?>"
-             data-mage-init='{"Amazon_PayV2/js/amazon-button": {"hideIfUnavailable": ".amazon-button-container-v2"}}'>
+             data-mage-init='{"Amazon_Pay/js/amazon-button": {"hideIfUnavailable": ".amazon-button-container"}}'>
         </div>
     </div>
     <div class="checkout-methods-items">

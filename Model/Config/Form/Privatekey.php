@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model\Config\Form;
+namespace Amazon\Pay\Model\Config\Form;
 
 /**
  * Frontend model to obscure decrypted textarea

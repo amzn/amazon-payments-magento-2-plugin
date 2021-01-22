@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Block\Minicart;
+namespace Amazon\Pay\Block\Minicart;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Catalog\Block\ShortcutInterface;
@@ -50,7 +50,7 @@ class Button extends Template implements ShortcutInterface
     private $amazonConfig;
 
     /**
-     * @var \Amazon\PayV2\Helper\Data
+     * @var \Amazon\Pay\Helper\Data
      */
     private $amazonHelper;
 
@@ -60,7 +60,7 @@ class Button extends Template implements ShortcutInterface
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param array $data
      */
     public function __construct(
@@ -68,7 +68,7 @@ class Button extends Template implements ShortcutInterface
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);

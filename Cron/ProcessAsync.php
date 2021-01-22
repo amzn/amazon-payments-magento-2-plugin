@@ -13,20 +13,20 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Cron;
+namespace Amazon\Pay\Cron;
 
-use Amazon\PayV2\Api\Data\AsyncInterface;
+use Amazon\Pay\Api\Data\AsyncInterface;
 use Magento\Framework\Data\Collection;
 
 class ProcessAsync
 {
     /**
-     * @var \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory
+     * @var \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory
      */
     private $asyncCollectionFactory;
 
     /**
-     * @var \Amazon\PayV2\Model\AsyncUpdaterFactory
+     * @var \Amazon\Pay\Model\AsyncUpdaterFactory
      */
     private $asyncUpdater;
 
@@ -37,13 +37,13 @@ class ProcessAsync
 
     /**
      * ProcessAsync constructor.
-     * @param \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
-     * @param \Amazon\PayV2\Model\AsyncUpdater $asyncUpdater
+     * @param \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
+     * @param \Amazon\Pay\Model\AsyncUpdater $asyncUpdater
      * @param int $limit
      */
     public function __construct(
-        \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
-        \Amazon\PayV2\Model\AsyncUpdater $asyncUpdater,
+        \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
+        \Amazon\Pay\Model\AsyncUpdater $asyncUpdater,
         $limit = 100
     ) {
         $limit = (int)$limit;
@@ -66,7 +66,7 @@ class ProcessAsync
             ->setPageSize($this->limit)
             ->setCurPage(1);
 
-        /** @var \Amazon\PayV2\Model\Async $async */
+        /** @var \Amazon\Pay\Model\Async $async */
         foreach ($collection as $async) {
             $this->asyncUpdater->processPending($async);
         }

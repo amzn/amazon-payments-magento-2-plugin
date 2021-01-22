@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
 use Magento\Sales\Api\Data\OrderInterface;
 
@@ -24,12 +24,12 @@ class AsyncManagement
     const ACTION_REFUND = 'refund';
 
     /**
-     * @var \Amazon\PayV2\Api\Data\AsyncInterfaceFactory
+     * @var \Amazon\Pay\Api\Data\AsyncInterfaceFactory
      */
     private $asyncFactory;
 
     public function __construct(
-        \Amazon\PayV2\Api\Data\AsyncInterfaceFactory $asyncFactory
+        \Amazon\Pay\Api\Data\AsyncInterfaceFactory $asyncFactory
     ) {
         $this->asyncFactory = $asyncFactory;
     }

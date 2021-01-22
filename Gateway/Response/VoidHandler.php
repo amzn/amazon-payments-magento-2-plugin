@@ -14,9 +14,9 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Response;
+namespace Amazon\Pay\Gateway\Response;
 
-use Amazon\PayV2\Gateway\Helper\SubjectReader;
+use Amazon\Pay\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 

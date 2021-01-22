@@ -16,17 +16,17 @@
  *
  */
 
-namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 class Version extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @var \Amazon\PayV2\Helper\Data
+     * @var \Amazon\Pay\Helper\Data
      */
     protected $helper;
 
     public function __construct(
-        \Amazon\PayV2\Helper\Data $helper,
+        \Amazon\Pay\Helper\Data $helper,
         \Magento\Backend\Block\Template\Context $context,
         array $data = []
     ) {
@@ -41,7 +41,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $output = '<div style="background-color:#eee;padding:1em;border:1px solid #ddd;">';
-        $output .= __('Module version') . ': ' . $this->helper->getModuleVersion('Amazon_PayV2');
+        $output .= __('Module version') . ': ' . $this->helper->getModuleVersion('Amazon_Pay');
         $output .= '</div>';
         return '<div id="row_' . $element->getHtmlId() . '">' . $output . '</div>';
     }

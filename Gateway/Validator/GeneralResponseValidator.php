@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Validator;
+namespace Amazon\Pay\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;

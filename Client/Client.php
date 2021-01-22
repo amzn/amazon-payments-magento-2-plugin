@@ -16,7 +16,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Amazon\PayV2\Client;
+namespace Amazon\Pay\Client;
 
 use Amazon\Pay\API\Client as AmazonClient;
 

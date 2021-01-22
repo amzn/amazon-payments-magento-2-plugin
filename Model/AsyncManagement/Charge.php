@@ -14,9 +14,9 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model\AsyncManagement;
+namespace Amazon\Pay\Model\AsyncManagement;
 
-use Amazon\PayV2\Model\Config\Source\PaymentAction;
+use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -25,12 +25,12 @@ use Magento\Sales\Model\Order;
 class Charge extends AbstractOperation
 {
     /**
-     * @var \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter
+     * @var \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter
      */
     private $amazonAdapter;
 
     /**
-     * @var \Amazon\PayV2\Logger\AsyncIpnLogger
+     * @var \Amazon\Pay\Logger\AsyncIpnLogger
      */
     private $asyncLogger;
 
@@ -60,7 +60,7 @@ class Charge extends AbstractOperation
     private $urlBuilder;
 
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
@@ -69,27 +69,27 @@ class Charge extends AbstractOperation
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
-     * @param \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
-     * @param \Amazon\PayV2\Logger\AsyncIpnLogger $asyncLogger
+     * @param \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
      * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
      * @param \Magento\Backend\Model\UrlInterface $urlBuilder
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
-        \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
-        \Amazon\PayV2\Logger\AsyncIpnLogger $asyncLogger,
+        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger,
         \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Notification\NotifierInterface $notifier,
         \Magento\Backend\Model\UrlInterface $urlBuilder,
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig
     ) {
         parent::__construct($orderRepository, $transactionRepository, $searchCriteriaBuilder);
         $this->amazonAdapter = $amazonAdapter;

@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Client;
+namespace Amazon\Pay\Client;
 
 use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -21,7 +21,7 @@ use Psr\Log\LoggerAwareInterface;
 class ClientFactory implements ClientFactoryInterface
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
@@ -48,7 +48,7 @@ class ClientFactory implements ClientFactoryInterface
      * @param string $instanceName
      */
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Psr\Log\LoggerInterface $logger,
         $instanceName = '\\AmazonPayV2\\ClientInterface'

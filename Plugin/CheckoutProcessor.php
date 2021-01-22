@@ -13,17 +13,17 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
 class CheckoutProcessor
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
     /**
-     * @var \Amazon\PayV2\Helper\Data
+     * @var \Amazon\Pay\Helper\Data
      */
     private $amazonHelper;
 
@@ -34,13 +34,13 @@ class CheckoutProcessor
 
     /**
      * CheckoutProcessor constructor.
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
-     * @param \Amazon\PayV2\Helper\Data $amazonHelper
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Magento\Checkout\Helper\Data $checkoutDataHelper
      */
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Helper\Data $amazonHelper,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Helper\Data $amazonHelper,
         \Magento\Checkout\Helper\Data $checkoutDataHelper
     ) {
         $this->amazonConfig = $amazonConfig;
@@ -64,19 +64,19 @@ class CheckoutProcessor
         ['children']['payment'];
 
         if ($this->amazonConfig->isEnabled() && !$this->amazonHelper->hasRestrictedProducts()) {
-            $shippingConfig['component'] = 'Amazon_PayV2/js/view/shipping';
-            $shippingConfig['children']['customer-email']['component'] = 'Amazon_PayV2/js/view/form/element/email';
-            $shippingConfig['children']['address-list']['component'] = 'Amazon_PayV2/js/view/shipping-address/list';
+            $shippingConfig['component'] = 'Amazon_Pay/js/view/shipping';
+            $shippingConfig['children']['customer-email']['component'] = 'Amazon_Pay/js/view/form/element/email';
+            $shippingConfig['children']['address-list']['component'] = 'Amazon_Pay/js/view/shipping-address/list';
             $shippingConfig['children']['address-list']['rendererTemplates']['new-customer-address']
-            ['component'] = 'Amazon_PayV2/js/view/shipping-address/address-renderer/default';
+            ['component'] = 'Amazon_Pay/js/view/shipping-address/address-renderer/default';
 
             if ($this->checkoutDataHelper->isDisplayBillingOnPaymentMethodAvailable()) {
                 $billingConfig = &$paymentConfig['children']['payments-list']['children']
-                [\Amazon\PayV2\Gateway\Config\Config::CODE . '-form'];
+                [\Amazon\Pay\Gateway\Config\Config::CODE . '-form'];
             } else {
                 $billingConfig = &$paymentConfig['children']['afterMethods']['children']['billing-address-form'];
             }
-            $billingConfig['component'] = 'Amazon_PayV2/js/view/billing-address';
+            $billingConfig['component'] = 'Amazon_Pay/js/view/billing-address';
 
             unset($paymentConfig['children']['renders']['children']['amazonlogin']); // legacy
         } else {

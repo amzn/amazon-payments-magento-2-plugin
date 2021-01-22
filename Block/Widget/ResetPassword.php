@@ -14,14 +14,14 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Block\Widget;
+namespace Amazon\Pay\Block\Widget;
 
-use Amazon\PayV2\Model\AmazonConfig;
+use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Customer\Model\Url;
 use Magento\Customer\Model\Session;
-use Amazon\PayV2\Api\CustomerLinkRepositoryInterface;
+use Amazon\Pay\Api\CustomerLinkRepositoryInterface;
 
 /**
  * @api

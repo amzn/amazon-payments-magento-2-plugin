@@ -6,12 +6,12 @@
             <title value="Amazon Product Login"/>
             <description value="User should be able to login to Amazon from the product page when enabled."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_login"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_login"/>
         </annotations>
 
         <!--Add to cart via Amazon Pay button on product page and login-->
-        <click selector="{{AmazonButtonSection.v2Product}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.Product}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
     </test>
 </tests>

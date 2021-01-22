@@ -19,12 +19,12 @@ define([
     'Magento_Checkout/js/model/url-builder',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/error-processor',
-    'Amazon_PayV2/js/model/storage'
+    'Amazon_Pay/js/model/storage'
 ], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor, amazonStorage) {
     'use strict';
 
     return function (addressType, callback) {
-        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/' + addressType + '-address', {
+        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-session/:cartId/' + addressType + '-address', {
             cartId: quote.getQuoteId()
         });
 

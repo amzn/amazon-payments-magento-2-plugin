@@ -13,12 +13,12 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model\ResourceModel\Async;
+namespace Amazon\Pay\Model\ResourceModel\Async;
 
 use Generator;
-use Amazon\PayV2\Api\Data\AsyncInterface;
-use Amazon\PayV2\Model\Async as AsyncModel;
-use Amazon\PayV2\Model\ResourceModel\Async as AsyncResourceModel;
+use Amazon\Pay\Api\Data\AsyncInterface;
+use Amazon\Pay\Model\Async as AsyncModel;
+use Amazon\Pay\Model\ResourceModel\Async as AsyncResourceModel;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

@@ -22,8 +22,8 @@ define(
         'Magento_Customer/js/customer-data',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Amazon_PayV2/js/action/checkout-session-update',
-        'Amazon_PayV2/js/model/storage',
+        'Amazon_Pay/js/action/checkout-session-update',
+        'Amazon_Pay/js/model/storage',
         'Magento_CheckoutAgreements/js/model/agreements-assigner'
     ],
     function (quote, urlBuilder, storage, errorProcessor, customerData, customer, fullScreenLoader, checkoutSessionUpdateAction, amazonStorage, agreementsAssigner) {

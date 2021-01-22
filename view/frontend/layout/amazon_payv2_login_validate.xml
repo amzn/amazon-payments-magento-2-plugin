@@ -22,7 +22,7 @@
     <body>
         <referenceBlock name="page.main.title" display="false"/>
         <referenceContainer name="content">
-            <block class="Amazon\PayV2\Block\Validate" name="validateAccount" template="Amazon_PayV2::form/validate.phtml" />
+            <block class="Amazon\Pay\Block\Validate" name="validateAccount" template="Amazon_Pay::form/validate.phtml" />
         </referenceContainer>
     </body>
 </page>

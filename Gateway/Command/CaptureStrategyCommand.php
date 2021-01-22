@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Command;
+namespace Amazon\Pay\Gateway\Command;
 
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
@@ -25,7 +25,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Framework\App\ObjectManager;
-use Amazon\PayV2\Logger\ExceptionLogger;
+use Amazon\Pay\Logger\ExceptionLogger;
 
 class CaptureStrategyCommand implements CommandInterface
 {

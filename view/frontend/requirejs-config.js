@@ -16,22 +16,22 @@ var config = {
     config: {
         mixins: {
             'Magento_Checkout/js/view/payment/list': {
-                'Amazon_PayV2/js/view/payment/list-mixin': true
+                'Amazon_Pay/js/view/payment/list-mixin': true
             },
             'Magento_Tax/js/view/checkout/summary/grand-total': {
-                'Amazon_PayV2/js/view/checkout/summary/grand-total-mixin': true,
+                'Amazon_Pay/js/view/checkout/summary/grand-total-mixin': true,
                 'Amazon_Payment/js/view/checkout/summary/grand-total-mixin': false
             }
         }
     },
     map: {
         '*': {
-            amazonPayV2ProductAdd: 'Amazon_PayV2/js/amazon-product-add',
-            amazonPayV2Button: 'Amazon_PayV2/js/amazon-button',
-            amazonPayV2Config: 'Amazon_PayV2/js/model/amazonPayV2Config',
-            amazonPayV2LoginButton: 'Amazon_PayV2/js/amazon-login-button',
-            amazonPayV2Logout: 'Amazon_PayV2/js/amazon-logout',
-            amazonPayV2LogoutButton: 'Amazon_PayV2/js/amazon-logout-button'
+            amazonPayV2ProductAdd: 'Amazon_Pay/js/amazon-product-add',
+            amazonPayV2Button: 'Amazon_Pay/js/amazon-button',
+            amazonPayV2Config: 'Amazon_Pay/js/model/amazonPayV2Config',
+            amazonPayV2LoginButton: 'Amazon_Pay/js/amazon-login-button',
+            amazonPayV2Logout: 'Amazon_Pay/js/amazon-logout',
+            amazonPayV2LogoutButton: 'Amazon_Pay/js/amazon-logout-button'
         }
     },
     paths: {

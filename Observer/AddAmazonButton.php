@@ -13,23 +13,23 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Observer;
+namespace Amazon\Pay\Observer;
 
 use Magento\Framework\Event\Observer;
 
 class AddAmazonButton implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
     /**
      * AddAmazonButton constructor.
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig
     ) {
         $this->amazonConfig = $amazonConfig;
     }
@@ -41,7 +41,7 @@ class AddAmazonButton implements \Magento\Framework\Event\ObserverInterface
 
         if ($this->amazonConfig->isEnabled()) {
             /** @var \Magento\Framework\View\Element\Template $shortcut */
-            $shortcut = $shortcutButtons->getLayout()->createBlock(\Amazon\PayV2\Block\Minicart\Button::class);
+            $shortcut = $shortcutButtons->getLayout()->createBlock(\Amazon\Pay\Block\Minicart\Button::class);
 
             $shortcut->setIsInCatalogProduct(
                 $observer->getEvent()->getIsCatalogProduct()

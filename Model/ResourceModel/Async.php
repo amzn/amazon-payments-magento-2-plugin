@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model\ResourceModel;
+namespace Amazon\Pay\Model\ResourceModel;
 
 class Async extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -21,6 +21,6 @@ class Async extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     protected function _construct()
     {
-        $this->_init(static::TABLE_NAME, \Amazon\PayV2\Api\Data\AsyncInterface::ID);
+        $this->_init(static::TABLE_NAME, \Amazon\Pay\Api\Data\AsyncInterface::ID);
     }
 }

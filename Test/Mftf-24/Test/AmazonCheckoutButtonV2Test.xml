@@ -6,8 +6,8 @@
             <title value="Amazon Checkout Button V2"/>
             <description value="Only Amazon Button V2 should be present on checkout when enabled."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_button"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_button"/>
         </annotations>
 
         <before>
@@ -25,7 +25,7 @@
         <!--Go to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
         <!--Verify only Amazon Button V2 is present-->
-        <seeElement selector="{{AmazonButtonSection.v2Checkout}}" stepKey="seeEnabledAmazonButton"/>
+        <seeElement selector="{{AmazonButtonSection.checkout}}" stepKey="seeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Checkout}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>
 </tests>

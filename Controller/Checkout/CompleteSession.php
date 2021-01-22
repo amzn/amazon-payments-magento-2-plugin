@@ -13,17 +13,17 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Controller\Checkout;
+namespace Amazon\Pay\Controller\Checkout;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\CartManagementInterface;
-use Amazon\PayV2\Logger\ExceptionLogger;
+use Amazon\Pay\Logger\ExceptionLogger;
 use Magento\Framework\App\PageCache\Version;
 
 class CompleteSession extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Amazon\PayV2\CustomerData\CheckoutSession
+     * @var \Amazon\Pay\CustomerData\CheckoutSession
      */
     private $amazonCheckoutSession;
 
@@ -50,7 +50,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     /**
      * CompleteCheckout constructor.
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Amazon\PayV2\CustomerData\CheckoutSession $amazonCheckoutSession
+     * @param \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -58,7 +58,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Amazon\PayV2\CustomerData\CheckoutSession $amazonCheckoutSession,
+        \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

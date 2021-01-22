@@ -35,7 +35,7 @@ define([
         if (cartId !== getLocalStorage().get('cart_id')) {
             callbacks.push(callback);
             if (callbacks.length == 1) {
-                remoteStorage.get(url.build('amazon_payv2/checkout/config')).done(function (config) {
+                remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {
                     getLocalStorage().set('cart_id', cartId);
                     getLocalStorage().set('config', config);
                     do {

@@ -6,8 +6,8 @@
             <title value="Amazon Sign In when there is an existing unlinked account"/>
             <description value="Amazon Sign In button should redirect to Link Account page"/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_signin"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_signin"/>
         </annotations>
 
         <before>
@@ -19,7 +19,7 @@
         </after>
 
         <!--Verify Sign in with Amazon Button V2 is present-->
-        <click selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButton"/>
+        <click selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButton"/>
 
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
         <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>

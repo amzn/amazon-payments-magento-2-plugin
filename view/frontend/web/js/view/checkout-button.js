@@ -3,7 +3,7 @@
 define(
     [
         'uiComponent',
-        'Amazon_PayV2/js/model/storage'
+        'Amazon_Pay/js/model/storage'
     ],
     function (
         Component,
@@ -14,7 +14,7 @@ define(
         return Component.extend(
             {
                 defaults: {
-                    template: 'Amazon_PayV2/checkout-button'
+                    template: 'Amazon_Pay/checkout-button'
                 },
                 isVisible: !amazonStorage.isAmazonCheckout(),
 

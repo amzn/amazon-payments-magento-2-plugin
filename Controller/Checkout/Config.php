@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Controller\Checkout;
+namespace Amazon\Pay\Controller\Checkout;
 
 class Config extends \Magento\Framework\App\Action\Action
 {
@@ -26,14 +26,14 @@ class Config extends \Magento\Framework\App\Action\Action
     private $resultJsonFactory;
 
     /**
-     * @var \Amazon\PayV2\CustomerData\CheckoutSession
+     * @var \Amazon\Pay\CustomerData\CheckoutSession
      */
     private $amazonCheckoutSession;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Amazon\PayV2\CustomerData\CheckoutSession $amazonCheckoutSession
+        \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession
     ) {
         parent::__construct($context);
 

@@ -6,9 +6,9 @@
             <title value="Amazon Checkout Multicurrency Success V2"/>
             <description value="User should be able to checkout with Amazon Pay when multicurrency is enabled and they are using a supported currency."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_checkout"/>
-            <group value="amazon_pay_v2_multicurrency"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_checkout"/>
+            <group value="amazon_pay_multicurrency"/>
         </annotations>
 
         <before>
@@ -27,7 +27,7 @@
         </after>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
@@ -36,7 +36,7 @@
         <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
         <!--Verify only Amazon Pay method is visible-->
         <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
-        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
+        <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
         <!--Place order-->
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />

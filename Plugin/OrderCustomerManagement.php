@@ -13,12 +13,12 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
-use Amazon\PayV2\Api\CustomerLinkManagementInterface;
-use Amazon\PayV2\Helper\Session as LoginSessionHelper;
-use Amazon\PayV2\Gateway\Config\Config;
-use Amazon\PayV2\Model\AmazonConfig;
+use Amazon\Pay\Api\CustomerLinkManagementInterface;
+use Amazon\Pay\Helper\Session as LoginSessionHelper;
+use Amazon\Pay\Gateway\Config\Config;
+use Amazon\Pay\Model\AmazonConfig;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Sales\Api\OrderCustomerManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;

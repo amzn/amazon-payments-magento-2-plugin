@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Helper;
+namespace Amazon\Pay\Gateway\Helper;
 
 use Magento\Payment\Gateway\Helper;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;

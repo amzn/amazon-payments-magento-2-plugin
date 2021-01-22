@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Domain;
+namespace Amazon\Pay\Domain;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;

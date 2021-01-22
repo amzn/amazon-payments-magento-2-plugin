@@ -1,7 +1,7 @@
 /*global define*/
 
 define([
-    'Amazon_PayV2/js/model/storage'
+    'Amazon_Pay/js/model/storage'
 ], function (amazonStorage) {
     'use strict';
 

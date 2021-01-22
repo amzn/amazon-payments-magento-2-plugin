@@ -14,12 +14,12 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
-use Amazon\PayV2\Model\Config\Source\AuthorizationMode;
-use Amazon\PayV2\Model\Config\Source\PaymentAction;
-use Amazon\PayV2\Model\AsyncManagement;
+use Amazon\Pay\Api\Data\CheckoutSessionInterface;
+use Amazon\Pay\Model\Config\Source\AuthorizationMode;
+use Amazon\Pay\Model\Config\Source\PaymentAction;
+use Amazon\Pay\Model\AsyncManagement;
 use http\Exception\UnexpectedValueException;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
@@ -29,7 +29,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 
-class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionManagementInterface
+class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -82,27 +82,27 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     private $searchCriteriaBuilder;
 
     /**
-     * @var \Amazon\PayV2\Domain\AmazonAddressFactory
+     * @var \Amazon\Pay\Domain\AmazonAddressFactory
      */
     private $amazonAddressFactory;
 
     /**
-     * @var \Amazon\PayV2\Helper\Address
+     * @var \Amazon\Pay\Helper\Address
      */
     private $addressHelper;
 
     /**
-     * @var \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory
+     * @var \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory
      */
     private $checkoutSessionFactory;
 
     /**
-     * @var \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface
+     * @var \Amazon\Pay\Api\CheckoutSessionRepositoryInterface
      */
     private $checkoutSessionRepository;
 
     /**
-     * @var \Amazon\PayV2\Helper\Data
+     * @var \Amazon\Pay\Helper\Data
      */
     private $amazonHelper;
 
@@ -146,15 +146,15 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
      * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $paymentRepository
      * @param \Magento\Framework\Validator\Factory $validatorFactory ,
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory ,
-     * @param \Amazon\PayV2\Domain\AmazonAddressFactory $amazonAddressFactory ,
-     * @param \Amazon\PayV2\Helper\Address $addressHelper ,
-     * @param \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
-     * @param \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
-     * @param \Amazon\PayV2\Helper\Data $amazonHelper
+     * @param \Amazon\Pay\Domain\AmazonAddressFactory $amazonAddressFactory ,
+     * @param \Amazon\Pay\Helper\Address $addressHelper ,
+     * @param \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
+     * @param \Amazon\Pay\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
+     * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayV2Adapter $amazonAdapter
      * @param AsyncManagement $asyncManagement
-     * @param \Amazon\PayV2\Model\AsyncManagement\Charge $asyncCharge
+     * @param \Amazon\Pay\Model\AsyncManagement\Charge $asyncCharge
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
@@ -167,15 +167,15 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
         \Magento\Sales\Api\OrderPaymentRepositoryInterface $paymentRepository,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
-        \Amazon\PayV2\Domain\AmazonAddressFactory $amazonAddressFactory,
-        \Amazon\PayV2\Helper\Address $addressHelper,
-        \Amazon\PayV2\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
-        \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
-        \Amazon\PayV2\Helper\Data $amazonHelper,
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
-        \Amazon\PayV2\Model\AsyncManagement $asyncManagement,
-        \Amazon\PayV2\Model\AsyncManagement\Charge $asyncCharge,
+        \Amazon\Pay\Domain\AmazonAddressFactory $amazonAddressFactory,
+        \Amazon\Pay\Helper\Address $addressHelper,
+        \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
+        \Amazon\Pay\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
+        \Amazon\Pay\Helper\Data $amazonHelper,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Model\AsyncManagement $asyncManagement,
+        \Amazon\Pay\Model\AsyncManagement\Charge $asyncCharge,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {

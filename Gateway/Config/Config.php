@@ -3,9 +3,9 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Amazon\PayV2\Gateway\Config;
+namespace Amazon\Pay\Gateway\Config;
 
-use Amazon\PayV2\Model\AmazonConfig;
+use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 

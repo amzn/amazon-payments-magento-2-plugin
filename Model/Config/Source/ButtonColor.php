@@ -15,7 +15,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model\Config\Source;
+namespace Amazon\Pay\Model\Config\Source;
 
 class ButtonColor implements \Magento\Framework\Data\OptionSourceInterface
 {

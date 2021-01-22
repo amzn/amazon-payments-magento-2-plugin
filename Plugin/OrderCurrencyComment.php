@@ -13,11 +13,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
 use Magento\Framework\Phrase;
 use Magento\Sales\Model\Order\Payment;
-use Amazon\PayV2\Gateway\Config\Config;
+use Amazon\Pay\Gateway\Config\Config;
 
 class OrderCurrencyComment
 {

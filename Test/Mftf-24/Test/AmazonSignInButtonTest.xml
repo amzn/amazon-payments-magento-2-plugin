@@ -6,8 +6,8 @@
             <title value="Amazon Sign In Button"/>
             <description value="Amazon Sign In button should be visible on the login page when configured"/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_signin"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_signin"/>
         </annotations>
 
         <before>
@@ -24,12 +24,12 @@
         <!--Verify Sign in with Amazon Button V2 is present on account create-->
         <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="amOnCreateAccountPage"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded2"/>
-        <seeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
+        <seeElement selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
 
         <!--Verify Sign in with Amazon Button V2 is present on login page-->
         <!--Leave this as the last step as other tests start from the login page-->
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
-        <seeElement selector="{{AmazonLoginSection.v2Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
+        <seeElement selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
     </test>
 </tests>

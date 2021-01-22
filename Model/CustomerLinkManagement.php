@@ -13,19 +13,19 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
-use Amazon\PayV2\Model\CustomerLinkRepositryFactory;
-use Amazon\PayV2\Api\CustomerLinkRepositoryInterface;
-use Amazon\PayV2\Api\Data\CustomerLinkInterfaceFactory;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Model\CustomerLinkRepositryFactory;
+use Amazon\Pay\Api\CustomerLinkRepositoryInterface;
+use Amazon\Pay\Api\Data\CustomerLinkInterfaceFactory;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Math\Random;
 
-class CustomerLinkManagement implements \Amazon\PayV2\Api\CustomerLinkManagementInterface
+class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementInterface
 {
     /**
      * @var CustomerLinkRepositoryInterface

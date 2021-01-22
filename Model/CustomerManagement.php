@@ -13,13 +13,13 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Api\CustomerLinkManagementInterface;
+use Amazon\Pay\Api\CustomerLinkManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerExtensionFactory;
 
-class CustomerManagement implements \Amazon\PayV2\Api\CustomerManagementInterface
+class CustomerManagement implements \Amazon\Pay\Api\CustomerManagementInterface
 {
     /**
      * @var CustomerLinkManagement

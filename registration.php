@@ -17,6 +17,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 $registrar = new ComponentRegistrar();
 
-if ($registrar->getPath(ComponentRegistrar::MODULE, 'Amazon_PayV2') === null) {
-    ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Amazon_PayV2', __DIR__);
+if ($registrar->getPath(ComponentRegistrar::MODULE, 'Amazon_Pay') === null) {
+    ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Amazon_Pay', __DIR__);
 }

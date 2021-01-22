@@ -13,10 +13,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Domain;
+namespace Amazon\Pay\Domain;
 
-use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
-use Amazon\PayV2\Api\Data\AmazonNameInterface;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Api\Data\AmazonNameInterface;
 use Magento\Framework\Api\AbstractSimpleObject;
 
 class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCustomerInterface

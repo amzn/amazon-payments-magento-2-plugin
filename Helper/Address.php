@@ -15,9 +15,9 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Helper;
+namespace Amazon\Pay\Helper;
 
-use Amazon\PayV2\Domain\AmazonAddressInterface;
+use Amazon\Pay\Domain\AmazonAddressInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;

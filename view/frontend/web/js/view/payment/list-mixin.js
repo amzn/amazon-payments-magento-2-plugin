@@ -13,8 +13,8 @@
  * permissions and limitations under the License.
  */
 define([
-    'Amazon_PayV2/js/model/amazon-payv2-config',
-    'Amazon_PayV2/js/model/storage'
+    'Amazon_Pay/js/model/amazon-pay-config',
+    'Amazon_Pay/js/model/storage'
 ], function (amazonConfig, amazonStorage) {
     'use strict';
 

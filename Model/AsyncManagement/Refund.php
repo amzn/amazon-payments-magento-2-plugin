@@ -14,19 +14,19 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model\AsyncManagement;
+namespace Amazon\Pay\Model\AsyncManagement;
 
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 
 class Refund extends AbstractOperation
 {
     /**
-     * @var \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter
+     * @var \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter
      */
     private $amazonAdapter;
 
     /**
-     * @var \Amazon\PayV2\Logger\AsyncIpnLogger
+     * @var \Amazon\Pay\Logger\AsyncIpnLogger
      */
     private $asyncLogger;
 
@@ -55,8 +55,8 @@ class Refund extends AbstractOperation
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
-     * @param \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
-     * @param \Amazon\PayV2\Logger\AsyncIpnLogger $asyncLogger
+     * @param \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
      * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
@@ -66,8 +66,8 @@ class Refund extends AbstractOperation
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
-        \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
-        \Amazon\PayV2\Logger\AsyncIpnLogger $asyncLogger,
+        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Notification\NotifierInterface $notifier,

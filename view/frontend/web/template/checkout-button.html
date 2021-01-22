@@ -21,11 +21,11 @@
 
 <div class="amazon-express-title" data-bind="i18n: 'Express Checkout', visible: isVisible"></div>
 
-<div class="amazon-button-container-v2" data-bind="visible: isVisible">
+<div class="amazon-button-container" data-bind="visible: isVisible">
     <div class="amazon-button-column">
         <div id="PayWithAmazon-Checkout"
              class="amazon-checkout-button"
-             data-bind="attr: {id: 'PayWithAmazon_' + displayArea}, mageInit: {'Amazon_PayV2/js/amazon-button':{'placement': 'Checkout', 'hideIfUnavailable': '.amazon-express-title,.amazon-button-container-v2,.amazon-divider'}}"></div>
+             data-bind="attr: {id: 'PayWithAmazon_' + displayArea}, mageInit: {'Amazon_Pay/js/amazon-button':{'placement': 'Checkout', 'hideIfUnavailable': '.amazon-express-title,.amazon-button-container,.amazon-divider'}}"></div>
     </div>
 
     <div class="amazon-button-column amazon-button-column-tooltip">

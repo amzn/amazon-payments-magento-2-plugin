@@ -47,7 +47,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "Amazon\\PayV2\\": ""
+      "Amazon\\Pay\\": ""
     }
   }
 }

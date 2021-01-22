@@ -14,9 +14,9 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use Amazon\Pay\Api\Data\CheckoutSessionInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class CheckoutSession extends AbstractModel implements CheckoutSessionInterface
@@ -53,7 +53,7 @@ class CheckoutSession extends AbstractModel implements CheckoutSessionInterface
      */
     protected function _construct()
     {
-        $this->_init(\Amazon\PayV2\Model\ResourceModel\CheckoutSession::class);
+        $this->_init(\Amazon\Pay\Model\ResourceModel\CheckoutSession::class);
     }
 
     /**

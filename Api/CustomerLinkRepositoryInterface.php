@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Api;
+namespace Amazon\Pay\Api;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -30,7 +30,7 @@ interface CustomerLinkRepositoryInterface
      * Lists payment tokens that match specified search criteria.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria The search criteria.
-     * @return \Amazon\PayV2\Api\Data\CustomerLinkSearchResultsInterface search result interface.
+     * @return \Amazon\Pay\Api\Data\CustomerLinkSearchResultsInterface search result interface.
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -38,7 +38,7 @@ interface CustomerLinkRepositoryInterface
      * Loads by Customer ID.
      *
      * @param int $customerId The customer ID.
-     * @return \Amazon\PayV2\Api\Data\CustomerLinkInterface Customer link interface.
+     * @return \Amazon\Pay\Api\Data\CustomerLinkInterface Customer link interface.
      */
     public function get($customerId);
 
@@ -46,14 +46,14 @@ interface CustomerLinkRepositoryInterface
      * Loads by Entity ID.
      *
      * @param int $entityId The customer link entity ID.
-     * @return \Amazon\PayV2\Api\Data\CustomerLinkInterface Customer link interface.
+     * @return \Amazon\Pay\Api\Data\CustomerLinkInterface Customer link interface.
      */
     public function getById($entityId);
 
     /**
      * Delete customer link.
      *
-     * @param \Amazon\PayV2\Api\Data\CustomerLinkInterface Customer link interface.
+     * @param \Amazon\Pay\Api\Data\CustomerLinkInterface Customer link interface.
      * @return bool
      * @throws CouldNotDeleteException
      */
@@ -72,8 +72,8 @@ interface CustomerLinkRepositoryInterface
     /**
      * Save customer link
      *
-     * @param \Amazon\PayV2\Api\Data\CustomerLinkInterface Customer link interface.
-     * @return \Amazon\PayV2\Api\Data\CustomerLinkInterface
+     * @param \Amazon\Pay\Api\Data\CustomerLinkInterface Customer link interface.
+     * @return \Amazon\Pay\Api\Data\CustomerLinkInterface
      * @throws CouldNotSaveException
      */
     public function save(Data\CustomerLinkInterface $customerLink);

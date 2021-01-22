@@ -14,16 +14,16 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Request;
+namespace Amazon\Pay\Gateway\Request;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Amazon\PayV2\Gateway\Helper\SubjectReader;
+use Amazon\Pay\Gateway\Helper\SubjectReader;
 
 class AuthorizationSaleRequestBuilder implements BuilderInterface
 {
     /**
-     * @var \Amazon\PayV2\Api\CheckoutSessionManagementInterface
+     * @var \Amazon\Pay\Api\CheckoutSessionManagementInterface
      */
     private $sessionManagement;
 
@@ -34,11 +34,11 @@ class AuthorizationSaleRequestBuilder implements BuilderInterface
 
     /**
      * AuthorizationRequestBuilder constructor.
-     * @param \Amazon\PayV2\Api\CheckoutSessionManagementInterface $sessionManagement
+     * @param \Amazon\Pay\Api\CheckoutSessionManagementInterface $sessionManagement
      * @param SubjectReader $subjectReader
      */
     public function __construct(
-        \Amazon\PayV2\Api\CheckoutSessionManagementInterface $sessionManagement,
+        \Amazon\Pay\Api\CheckoutSessionManagementInterface $sessionManagement,
         SubjectReader $subjectReader
     ) {
         $this->sessionManagement = $sessionManagement;

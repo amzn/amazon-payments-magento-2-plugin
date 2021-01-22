@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\UrlInterface;
@@ -34,7 +34,7 @@ class IpnUrl extends \Magento\Config\Block\System\Config\Form\Field
 
         $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
         if ($baseUrl) {
-            $value       = $baseUrl . 'amazon_payv2/payment/ipn/';
+            $value       = $baseUrl . 'amazon_pay/payment/ipn/';
             $valueReturn = "<div>".$this->escapeHtml($value)."</div>";
         }
 

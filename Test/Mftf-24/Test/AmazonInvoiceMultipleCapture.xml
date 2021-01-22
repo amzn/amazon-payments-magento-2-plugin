@@ -6,8 +6,8 @@
             <title value="Admin user must be able to capture multiple times when configuration allows"/>
             <description value="Admin user must be able to capture multiple times when configuration allows"/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_invoice"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_invoice"/>
         </annotations>
 
         <before>
@@ -26,7 +26,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart2"/>
 
         <!--Go to Amazon Pay and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
@@ -35,7 +35,7 @@
         <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
         <!--Verify only Amazon Pay method is visible-->
         <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
-        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
+        <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
         <!--Place order-->
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />

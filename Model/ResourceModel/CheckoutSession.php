@@ -14,9 +14,9 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model\ResourceModel;
+namespace Amazon\Pay\Model\ResourceModel;
 
-use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use Amazon\Pay\Api\Data\CheckoutSessionInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class CheckoutSession extends AbstractDb

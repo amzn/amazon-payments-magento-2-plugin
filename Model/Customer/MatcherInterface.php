@@ -13,9 +13,9 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model\Customer;
+namespace Amazon\Pay\Model\Customer;
 
-use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 
 /**

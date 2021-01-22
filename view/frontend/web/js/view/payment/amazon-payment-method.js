@@ -2,8 +2,8 @@ define(
     [
         'uiComponent',
         'Magento_Checkout/js/model/payment/renderer-list',
-        'Amazon_PayV2/js/model/amazon-payv2-config',
-        'Amazon_PayV2/js/model/storage'
+        'Amazon_Pay/js/model/amazon-pay-config',
+        'Amazon_Pay/js/model/storage'
     ],
     function (
         Component,
@@ -17,7 +17,7 @@ define(
             rendererList.push(
                 {
                     type: amazonConfig.getCode(),
-                    component: 'Amazon_PayV2/js/view/payment/method-renderer/amazon-payment-method'
+                    component: 'Amazon_Pay/js/view/payment/method-renderer/amazon-payment-method'
                 }
             );
         }

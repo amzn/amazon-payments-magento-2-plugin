@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
 use Magento\Store\Model\ScopeInterface;
 

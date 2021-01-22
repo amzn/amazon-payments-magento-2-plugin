@@ -13,10 +13,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Api\Data\CustomerLinkInterface;
-use Amazon\PayV2\Model\ResourceModel\CustomerLink as CustomerLinkResourceModel;
+use Amazon\Pay\Api\Data\CustomerLinkInterface;
+use Amazon\Pay\Model\ResourceModel\CustomerLink as CustomerLinkResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
 class CustomerLink extends AbstractModel implements CustomerLinkInterface

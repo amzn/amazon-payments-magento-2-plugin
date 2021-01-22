@@ -6,8 +6,8 @@
             <title value="Amazon Payment Button V2"/>
             <description value="Amazon Button V2 should be present in payment methods when enabled."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_button"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_button"/>
         </annotations>
 
         <before>
@@ -30,8 +30,8 @@
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
         <!--Verify only Amazon Payment Button V2 is present-->
-        <click selector="{{AmazonCheckoutSection.v2Method}}" stepKey="selectEnabledAmazonPaymentMethod"/>
-        <seeElement selector="{{AmazonButtonSection.v2Payment}}" stepKey="seeEnabledAmazonButton"/>
+        <click selector="{{AmazonCheckoutSection.method}}" stepKey="selectEnabledAmazonPaymentMethod"/>
+        <seeElement selector="{{AmazonButtonSection.Payment}}" stepKey="seeEnabledAmazonButton"/>
         <dontSee selector="{{AmazonCheckoutSection.v1Method}}" stepKey="dontSeeDisabledAmazonPaymentMethod"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Payment}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>

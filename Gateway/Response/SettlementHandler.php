@@ -14,11 +14,11 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Response;
+namespace Amazon\Pay\Gateway\Response;
 
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use Amazon\PayV2\Gateway\Helper\SubjectReader;
-use Amazon\PayV2\Model\AsyncManagement;
+use Amazon\Pay\Gateway\Helper\SubjectReader;
+use Amazon\Pay\Model\AsyncManagement;
 
 class SettlementHandler implements HandlerInterface
 {

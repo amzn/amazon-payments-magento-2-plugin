@@ -15,7 +15,7 @@
 
 define([
     'jquery',
-    'Amazon_PayV2/js/amazon-checkout',
+    'Amazon_Pay/js/amazon-checkout',
     'mage/cookies'
 ], function ($, amazonCheckout) {
     'use strict';

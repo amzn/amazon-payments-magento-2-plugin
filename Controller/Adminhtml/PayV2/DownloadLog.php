@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Controller\Adminhtml\PayV2;
+namespace Amazon\Pay\Controller\Adminhtml\PayV2;
 
 use Magento\Framework\Exception\NotFoundException;
 
@@ -49,7 +49,7 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
     public function execute()
     {
         $log = $this->getRequest()->getParam('name');
-        $logs = \Amazon\PayV2\Block\Adminhtml\System\Config\Form\DeveloperLogs::LOGS;
+        $logs = \Amazon\Pay\Block\Adminhtml\System\Config\Form\DeveloperLogs::LOGS;
         if (!isset($logs[$log])) {
             throw new NotFoundException('Log "' . $log . '" does not exist');
         }
@@ -66,6 +66,6 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Amazon_PayV2::downloadlogs');
+        return $this->_authorization->isAllowed('Amazon_Pay::downloadlogs');
     }
 }

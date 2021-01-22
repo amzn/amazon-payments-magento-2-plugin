@@ -13,9 +13,9 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Block;
+namespace Amazon\Pay\Block;
 
-use Amazon\PayV2\Model\AmazonConfig;
+use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 

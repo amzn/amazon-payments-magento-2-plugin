@@ -13,11 +13,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Controller\Login;
+namespace Amazon\Pay\Controller\Login;
 
-use Amazon\PayV2\Api\CustomerLinkManagementInterface;
-use Amazon\PayV2\Domain\ValidationCredentials;
-use Amazon\PayV2\Helper\Session;
+use Amazon\Pay\Api\CustomerLinkManagementInterface;
+use Amazon\Pay\Domain\ValidationCredentials;
+use Amazon\Pay\Helper\Session;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Action\Action;

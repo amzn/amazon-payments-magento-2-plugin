@@ -14,10 +14,10 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Request;
+namespace Amazon\Pay\Gateway\Request;
 
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Amazon\PayV2\Gateway\Helper\SubjectReader;
+use Amazon\Pay\Gateway\Helper\SubjectReader;
 
 class VoidRequestBuilder implements BuilderInterface
 {

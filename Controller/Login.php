@@ -13,16 +13,16 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Controller;
+namespace Amazon\Pay\Controller;
 
-use Amazon\PayV2\Api\CheckoutSessionManagementInterface;
-use Amazon\PayV2\Client\ClientFactoryInterface;
-use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
-use Amazon\PayV2\Domain\AmazonCustomerFactory;
-use Amazon\PayV2\Model\AmazonConfig;
-use Amazon\PayV2\Model\Validator\AccessTokenRequestValidator;
+use Amazon\Pay\Api\CheckoutSessionManagementInterface;
+use Amazon\Pay\Client\ClientFactoryInterface;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Domain\AmazonCustomerFactory;
+use Amazon\Pay\Model\AmazonConfig;
+use Amazon\Pay\Model\Validator\AccessTokenRequestValidator;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
-use Amazon\PayV2\Helper\Session;
+use Amazon\Pay\Helper\Session;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
@@ -30,8 +30,8 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Store\Model\StoreManager;
 use Psr\Log\LoggerInterface;
-use Amazon\PayV2\Model\Customer\MatcherInterface;
-use Amazon\PayV2\Api\CustomerLinkManagementInterface;
+use Amazon\Pay\Model\Customer\MatcherInterface;
+use Amazon\Pay\Api\CustomerLinkManagementInterface;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -116,7 +116,7 @@ abstract class Login extends Action
      * Login constructor.
      * @param Context $context
      * @param AmazonCustomerFactory $amazonCustomerFactory
-     * @param \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
      * @param AmazonConfig $amazonConfig
      * @param Url $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
@@ -134,7 +134,7 @@ abstract class Login extends Action
     public function __construct(
         Context $context,
         AmazonCustomerFactory $amazonCustomerFactory,
-        \Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
         AmazonConfig $amazonConfig,
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator,

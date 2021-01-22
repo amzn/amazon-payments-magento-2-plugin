@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Api\Data;
+namespace Amazon\Pay\Api\Data;
 
 /**
  * @api
@@ -23,14 +23,14 @@ interface CustomerLinkSearchResultsInterface extends \Magento\Framework\Api\Sear
     /**
      * Gets collection items.
      *
-     * @return \Amazon\PayV2\Api\Data\CustomerLinkInterface[] Array of collection items.
+     * @return \Amazon\Pay\Api\Data\CustomerLinkInterface[] Array of collection items.
      */
     public function getItems();
 
     /**
      * Sets collection items.
      *
-     * @param \Amazon\PayV2\Api\Data\CustomerLinkInterface[] $items
+     * @param \Amazon\Pay\Api\Data\CustomerLinkInterface[] $items
      * @return $this
      */
     public function setItems(array $items);

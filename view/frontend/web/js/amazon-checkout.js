@@ -15,7 +15,7 @@
 
 define([
     'require',
-    'Amazon_PayV2/js/model/storage',
+    'Amazon_Pay/js/model/storage',
 ], function (requre, amazonStorage) {
     'use strict';
     return {

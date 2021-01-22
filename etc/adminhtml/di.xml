@@ -17,6 +17,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Backend\Block\Widget\Form\Element\Dependence">
-        <plugin name="amazon_payv2_backend_field_dependence" type="Amazon\PayV2\Plugin\BackendFieldDependence" sortOrder="1" />
+        <plugin name="amazon_pay_backend_field_dependence" type="Amazon\Pay\Plugin\BackendFieldDependence" sortOrder="1" />
     </type>
 </config>

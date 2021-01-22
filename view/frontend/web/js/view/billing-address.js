@@ -1,9 +1,9 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/billing-address',
-    'Amazon_PayV2/js/action/toggle-form-fields',
-    'Amazon_PayV2/js/model/storage',
-    'Amazon_PayV2/js/model/billing-address/form-address-state'
+    'Amazon_Pay/js/action/toggle-form-fields',
+    'Amazon_Pay/js/model/storage',
+    'Amazon_Pay/js/model/billing-address/form-address-state'
 ], function ($, Component, toggleFormFields, amazonStorage, billingFormAddressState) {
     'use strict';
 
@@ -17,11 +17,11 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Amazon_PayV2/billing-address',
-            actionsTemplate: 'Amazon_PayV2/billing-address/actions',
-            detailsTemplate: 'Amazon_PayV2/billing-address/details',
+            template: 'Amazon_Pay/billing-address',
+            actionsTemplate: 'Amazon_Pay/billing-address/actions',
+            detailsTemplate: 'Amazon_Pay/billing-address/details',
             formTemplate: {
-                name: 'Amazon_PayV2/billing-address/form',
+                name: 'Amazon_Pay/billing-address/form',
                 afterRender: function () {
                     self.triggerBillingDataValidateEvent();
                     var isValid = toggleFormFields(formSelector, !self.isAddressEditable);

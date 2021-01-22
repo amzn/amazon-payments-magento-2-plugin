@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model\Validator;
+namespace Amazon\Pay\Model\Validator;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Validator\AbstractValidator;

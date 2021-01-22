@@ -1,6 +1,6 @@
-# Amazon_PayV2 Module
+# Amazon_Pay Module
 
-The Amazon_PayV2 module provides the "Amazon Pay" payment method using version 2 of the Amazon Pay API.
+The Amazon_Pay module provides the "Amazon Pay" payment method using version 2 of the Amazon Pay API.
 
 ## What's new in Amazon Pay for Magento 2?
 

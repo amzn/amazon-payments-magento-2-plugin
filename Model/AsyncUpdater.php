@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
 class AsyncUpdater
 {
@@ -29,7 +29,7 @@ class AsyncUpdater
     private $refundFactory;
 
     /**
-     * @var \Amazon\PayV2\Api\Data\AsyncInterfaceFactory
+     * @var \Amazon\Pay\Api\Data\AsyncInterfaceFactory
      */
     private $asyncFactory;
 
@@ -39,7 +39,7 @@ class AsyncUpdater
     private $adminNotifier;
 
     /**
-     * @var \Amazon\PayV2\Logger\AsyncIpnLogger
+     * @var \Amazon\Pay\Logger\AsyncIpnLogger
      */
     private $asyncLogger;
 
@@ -49,11 +49,11 @@ class AsyncUpdater
     private $logger;
 
     public function __construct(
-        \Amazon\PayV2\Model\AsyncManagement\ChargeFactory $chargeFactory,
-        \Amazon\PayV2\Model\AsyncManagement\RefundFactory $refundFactory,
-        \Amazon\PayV2\Api\Data\AsyncInterfaceFactory $asyncFactory,
+        \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory,
+        \Amazon\Pay\Model\AsyncManagement\RefundFactory $refundFactory,
+        \Amazon\Pay\Api\Data\AsyncInterfaceFactory $asyncFactory,
         \Magento\Framework\Notification\NotifierInterface $adminNotifier,
-        \Amazon\PayV2\Logger\AsyncIpnLogger $asyncLogger,
+        \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->chargeFactory = $chargeFactory;

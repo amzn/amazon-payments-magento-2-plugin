@@ -1,7 +1,7 @@
 define([
     'Magento_Checkout/js/view/shipping-address/list',
     'Magento_Customer/js/model/address-list',
-    'Amazon_PayV2/js/model/storage',
+    'Amazon_Pay/js/model/storage',
     'ko'
 ], function (Component, addressList, amazonStorage, ko) {
     'use strict';

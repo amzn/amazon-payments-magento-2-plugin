@@ -6,9 +6,9 @@
             <title value="Amazon Multicurrency Checkout No Button V2"/>
             <description value="User should not be able to checkout with Amazon Pay when not in an allowed multi-currency region."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_checkout"/>
-            <group value="amazon_pay_v2_multicurrency"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_checkout"/>
+            <group value="amazon_pay_multicurrency"/>
         </annotations>
 
         <before>

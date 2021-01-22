@@ -23,7 +23,7 @@ define([
     'use strict';
 
     return function (callback) {
-        var serviceUrl = urlBuilder.createUrl('/amazon-v2-checkout-session/:cartId/payment-descriptor', {
+        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-session/:cartId/payment-descriptor', {
             cartId: quote.getQuoteId()
         });
 

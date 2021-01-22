@@ -1,8 +1,8 @@
 <?php
 
-namespace Amazon\PayV2\Command\Async;
+namespace Amazon\Pay\Command\Async;
 
-use Amazon\PayV2\Api\Data\AsyncInterface;
+use Amazon\Pay\Api\Data\AsyncInterface;
 use Magento\Framework\Data\Collection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,18 +11,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ProcessCommand extends Command
 {
     /**
-     * @var \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory
+     * @var \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory
      */
     private $asyncCollectionFactory;
 
     /**
-     * @var \Amazon\PayV2\Model\AsyncUpdater
+     * @var \Amazon\Pay\Model\AsyncUpdater
      */
     private $asyncUpdater;
 
     public function __construct(
-        \Amazon\PayV2\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
-        \Amazon\PayV2\Model\AsyncUpdater $asyncUpdater,
+        \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
+        \Amazon\Pay\Model\AsyncUpdater $asyncUpdater,
         string $name = null
     ) {
         $this->asyncCollectionFactory = $asyncCollectionFactory;
@@ -42,7 +42,7 @@ class ProcessCommand extends Command
         $collection->addFieldToFilter(AsyncInterface::IS_PENDING, ['eq' => 1]);
         $collection->addOrder(AsyncInterface::ID, Collection::SORT_ORDER_ASC);
         foreach ($collection as $item) {
-            /** @var \Amazon\PayV2\Model\Async $item */
+            /** @var \Amazon\Pay\Model\Async $item */
             $this->asyncUpdater->processPending($item);
         }
     }

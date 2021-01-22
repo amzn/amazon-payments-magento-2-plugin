@@ -6,8 +6,8 @@
             <title value="Amazon Product Button V2"/>
             <description value="Only Amazon Button V2 should be present on product page when enabled."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_button"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_button"/>
         </annotations>
 
         <before>
@@ -22,7 +22,7 @@
             <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <!--Verify only Amazon Button V2 is present-->
-        <seeElement selector="{{AmazonButtonSection.v2Product}}" stepKey="seeEnabledAmazonButton"/>
+        <seeElement selector="{{AmazonButtonSection.Product}}" stepKey="seeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Product}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>
 </tests>

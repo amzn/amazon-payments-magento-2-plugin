@@ -11,12 +11,12 @@ define(
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/quote',
         'uiRegistry',
-        'Amazon_PayV2/js/model/amazon-payv2-config',
-        'Amazon_PayV2/js/model/billing-address/form-address-state',
-        'Amazon_PayV2/js/model/storage',
-        'Amazon_PayV2/js/action/checkout-session-address-load',
-        'Amazon_PayV2/js/action/checkout-session-payment-descriptor-load',
-        'Amazon_PayV2/js/action/place-order'
+        'Amazon_Pay/js/model/amazon-pay-config',
+        'Amazon_Pay/js/model/billing-address/form-address-state',
+        'Amazon_Pay/js/model/storage',
+        'Amazon_Pay/js/action/checkout-session-address-load',
+        'Amazon_Pay/js/action/checkout-session-payment-descriptor-load',
+        'Amazon_Pay/js/action/place-order'
     ],
     function (
         ko,
@@ -47,8 +47,8 @@ define(
                 isBillingAddressVisible: ko.observable(false),
                 isPlaceOrderActionAllowed: billingFormAddressState.isValid,
                 paymentDescriptor: ko.observable(''),
-                logo: 'Amazon_PayV2/images/logo/Black-L.png',
-                template: 'Amazon_PayV2/payment/amazon-payment-method'
+                logo: 'Amazon_Pay/images/logo/Black-L.png',
+                template: 'Amazon_Pay/payment/amazon-payment-method'
             },
 
             initialize: function () {

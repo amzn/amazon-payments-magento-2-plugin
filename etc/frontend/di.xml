@@ -16,18 +16,18 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Amazon\PayV2\Block\Minicart\Button">
+    <type name="Amazon\Pay\Block\Minicart\Button">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="template" xsi:type="string">Amazon_PayV2::minicart-button.phtml</item>
-                <item name="alias" xsi:type="string">amazon.payv2.button.mini-cart</item>
+                <item name="template" xsi:type="string">Amazon_Pay::minicart-button.phtml</item>
+                <item name="alias" xsi:type="string">amazon.pay.button.mini-cart</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
-        <plugin name="amazon_payv2_checkout_processor" type="Amazon\PayV2\Plugin\CheckoutProcessor" />
+        <plugin name="amazon_pay_checkout_processor" type="Amazon\Pay\Plugin\CheckoutProcessor" />
     </type>
     <type name="Amazon\Core\Helper\Data">
-        <plugin name="amazon_payv2_amazon_core_helper" type="Amazon\PayV2\Plugin\AmazonCoreHelperData" sortOrder="1" />
+        <plugin name="amazon_pay_amazon_core_helper" type="Amazon\Pay\Plugin\AmazonCoreHelperData" sortOrder="1" />
     </type>
 </config>

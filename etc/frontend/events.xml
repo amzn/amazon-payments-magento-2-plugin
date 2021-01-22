@@ -17,12 +17,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="shortcut_buttons_container">
-        <observer name="amazon_payv2_buttons" instance="Amazon\PayV2\Observer\AddAmazonButton"/>
+        <observer name="amazon_pay_buttons" instance="Amazon\Pay\Observer\AddAmazonButton"/>
     </event>
     <event name="checkout_cart_product_add_after">
-        <observer name="amazon_payv2_checkout_session_clear" instance="Amazon\PayV2\Observer\CheckoutSessionClear"/>
+        <observer name="amazon_pay_checkout_session_clear" instance="Amazon\Pay\Observer\CheckoutSessionClear"/>
     </event>
     <event name="sales_quote_remove_item">
-        <observer name="amazon_payv2_checkout_session_clear" instance="Amazon\PayV2\Observer\CheckoutSessionClear"/>
+        <observer name="amazon_pay_checkout_session_clear" instance="Amazon\Pay\Observer\CheckoutSessionClear"/>
     </event>
 </config>

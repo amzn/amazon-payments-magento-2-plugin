@@ -14,17 +14,17 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Observer;
+namespace Amazon\Pay\Observer;
 
 class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * @var \Amazon\PayV2\Model\Alexa
+     * @var \Amazon\Pay\Model\Alexa
      */
     private $alexaModel;
 
     /**
-     * @var \Amazon\PayV2\Logger\AlexaLogger
+     * @var \Amazon\Pay\Logger\AlexaLogger
      */
     private $alexaLogger;
 
@@ -34,8 +34,8 @@ class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverI
     private $messageManager;
 
     public function __construct(
-        \Amazon\PayV2\Model\Alexa $alexaModel,
-        \Amazon\PayV2\Logger\AlexaLogger $alexaLogger,
+        \Amazon\Pay\Model\Alexa $alexaModel,
+        \Amazon\Pay\Logger\AlexaLogger $alexaLogger,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->alexaModel = $alexaModel;

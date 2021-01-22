@@ -2,8 +2,8 @@
 define(
     [
         'uiComponent',
-        'Amazon_PayV2/js/action/checkout-session-cancel',
-        'Amazon_PayV2/js/model/storage'
+        'Amazon_Pay/js/action/checkout-session-cancel',
+        'Amazon_Pay/js/model/storage'
     ],
     function (
         Component,
@@ -14,7 +14,7 @@ define(
 
         return Component.extend({
             defaults: {
-                template: 'Amazon_PayV2/checkout-revert'
+                template: 'Amazon_Pay/checkout-revert'
             },
             isAmazonCheckout: amazonStorage.isAmazonCheckout(),
 

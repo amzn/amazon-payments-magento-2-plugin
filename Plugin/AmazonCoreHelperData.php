@@ -13,23 +13,23 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
 use Amazon\Core\Helper\Data;
 
 class AmazonCoreHelperData
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig $amazonConfig
      */
     private $amazonConfig;
 
     /**
      * AmazonCoreHelperData constructor.
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig
     ) {
         $this->amazonConfig = $amazonConfig;
     }

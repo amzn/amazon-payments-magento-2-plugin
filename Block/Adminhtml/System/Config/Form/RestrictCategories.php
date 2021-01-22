@@ -16,7 +16,7 @@
  *
  */
 
-namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
 {

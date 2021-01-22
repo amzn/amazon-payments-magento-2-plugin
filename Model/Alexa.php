@@ -14,9 +14,9 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Client\ClientFactoryInterface;
+use Amazon\Pay\Client\ClientFactoryInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
@@ -108,7 +108,7 @@ class Alexa
         $payment = $order->getPayment();
         /* @var $payment Payment */
         if ($this->amazonConfig->getPaymentAction(ScopeInterface::SCOPE_STORE, $order->getStoreId()) ==
-            \Amazon\PayV2\Model\Config\Source\PaymentAction::AUTHORIZE) {
+            \Amazon\Pay\Model\Config\Source\PaymentAction::AUTHORIZE) {
             $transationType = Payment\Transaction::TYPE_AUTH;
         } else {
             $transationType = Payment\Transaction::TYPE_CAPTURE;
@@ -128,7 +128,7 @@ class Alexa
     {
         $result = [];
         $fileName = implode(DIRECTORY_SEPARATOR, [
-            $this->moduleDir->getDir('Amazon_PayV2', Dir::MODULE_ETC_DIR),
+            $this->moduleDir->getDir('Amazon_Pay', Dir::MODULE_ETC_DIR),
             'files',
             'amazon-pay-delivery-tracker-supported-carriers.csv'
         ]);
@@ -195,7 +195,7 @@ class Alexa
         $result = false;
         if ($this->amazonConfig->isAlexaEnabled(ScopeInterface::SCOPE_STORE, $track->getStoreId())) {
             $result = $track->getShipment()->getOrder()->getPayment()->getMethod() ==
-                \Amazon\PayV2\Gateway\Config\Config::CODE;
+                \Amazon\Pay\Gateway\Config\Config::CODE;
         }
         return $result;
     }

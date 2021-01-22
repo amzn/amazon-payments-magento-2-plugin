@@ -17,7 +17,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="amazon_payv2_process_async" instance="Amazon\PayV2\Cron\ProcessAsync" method="execute">
+        <job name="amazon_pay_process_async" instance="Amazon\Pay\Cron\ProcessAsync" method="execute">
             <schedule>*/30 * * * *</schedule>
         </job>
     </group>

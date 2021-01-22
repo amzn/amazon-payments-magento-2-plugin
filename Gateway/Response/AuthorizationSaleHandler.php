@@ -14,11 +14,11 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Response;
+namespace Amazon\Pay\Gateway\Response;
 
-use Amazon\PayV2\Gateway\Helper\SubjectReader;
-use Amazon\PayV2\Model\AsyncManagement;
-use Amazon\PayV2\Model\Config\Source\AuthorizationMode;
+use Amazon\Pay\Gateway\Helper\SubjectReader;
+use Amazon\Pay\Model\AsyncManagement;
+use Amazon\Pay\Model\Config\Source\AuthorizationMode;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;

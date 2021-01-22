@@ -14,10 +14,10 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model\ResourceModel\CheckoutSession;
+namespace Amazon\Pay\Model\ResourceModel\CheckoutSession;
 
-use Amazon\PayV2\Model\CheckoutSession as CheckoutSessionModel;
-use Amazon\PayV2\Model\ResourceModel\CheckoutSession as CheckoutSessionResourceModel;
+use Amazon\Pay\Model\CheckoutSession as CheckoutSessionModel;
+use Amazon\Pay\Model\ResourceModel\CheckoutSession as CheckoutSessionResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection

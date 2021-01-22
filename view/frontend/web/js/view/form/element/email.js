@@ -11,7 +11,7 @@ define([
     return Component.extend({
         defaults: {
             email: checkoutData.getInputFieldEmailValue(),
-            template: 'Amazon_PayV2/form/element/email'
+            template: 'Amazon_Pay/form/element/email'
         },
 
         /**

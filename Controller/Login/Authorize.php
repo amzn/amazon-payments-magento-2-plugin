@@ -13,15 +13,15 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Controller\Login;
+namespace Amazon\Pay\Controller\Login;
 
-use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
-use Amazon\PayV2\Domain\ValidationCredentials;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\NotFoundException;
 use Zend_Validate;
 
-class Authorize extends \Amazon\PayV2\Controller\Login
+class Authorize extends \Amazon\Pay\Controller\Login
 {
     /**
      * {@inheritdoc}

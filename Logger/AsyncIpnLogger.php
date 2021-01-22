@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Logger;
+namespace Amazon\Pay\Logger;
 
 /**
  * Enables implementation of custom log file.

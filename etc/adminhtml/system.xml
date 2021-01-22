@@ -32,7 +32,7 @@
                     <field id="private_key" translate="label comment" type="textarea" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Private Key</label>
                         <config_path>payment/amazon_payment_v2/private_key</config_path>
-                        <frontend_model>Amazon\PayV2\Model\Config\Form\Privatekey</frontend_model>
+                        <frontend_model>Amazon\Pay\Model\Config\Form\Privatekey</frontend_model>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <validate>validate-private-key</validate>
                         <depends><field id="active_v2">1</field></depends>
@@ -57,7 +57,7 @@
                     </field>
                     <field id="payment_region" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Region</label>
-                        <source_model>Amazon\PayV2\Model\Config\Source\PaymentRegion</source_model>
+                        <source_model>Amazon\Pay\Model\Config\Source\PaymentRegion</source_model>
                         <config_path>payment/amazon_payment/payment_region</config_path>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
@@ -69,7 +69,7 @@
                     </field>
                     <field id="ipn_url_v2" type="note" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>IPN URL</label>
-                        <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\IpnUrl</frontend_model>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\IpnUrl</frontend_model>
                         <comment><![CDATA[Add this url in SellerCentral to enable IPN.]]></comment>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
@@ -84,7 +84,7 @@
                     </field>
                     <field id="payment_action_v2" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Action</label>
-                        <source_model>Amazon\PayV2\Model\Config\Source\PaymentAction</source_model>
+                        <source_model>Amazon\Pay\Model\Config\Source\PaymentAction</source_model>
                         <config_path>payment/amazon_payment_v2/payment_action</config_path>
                     </field>
                     <field id="multicurrency" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -95,7 +95,7 @@
                     </field>
                     <field id="authorization_mode" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Authorization Mode</label>
-                        <source_model>Amazon\PayV2\Model\Config\Source\AuthorizationMode</source_model>
+                        <source_model>Amazon\Pay\Model\Config\Source\AuthorizationMode</source_model>
                         <config_path>payment/amazon_payment/authorization_mode</config_path>
                     </field>
                 </group>
@@ -111,14 +111,14 @@
                 <group id="advanced" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced</label>
                     <field id="version_v2" type="text" translate="label comment" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\Version</frontend_model>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\Version</frontend_model>
                     </field>
                     <group id="frontend" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Frontend</label>
                         <field id="button_color_v2" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Button Color</label>
                             <config_path>payment/amazon_payment_v2/button_color</config_path>
-                            <source_model>Amazon\PayV2\Model\Config\Source\ButtonColor</source_model>
+                            <source_model>Amazon\Pay\Model\Config\Source\ButtonColor</source_model>
                         </field>
                         <field id="pwa_pp_button_is_visible" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Show Amazon Pay button on product page</label>
@@ -146,7 +146,7 @@
                         <field id="restrict_categories" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Restrict Product Categories</label>
                             <config_path>payment/amazon_payment_v2/restrict_categories</config_path>
-                            <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\RestrictCategories</frontend_model>
+                            <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\RestrictCategories</frontend_model>
                         </field>
                     </group>
                     <group id="shipping_restrictions" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -188,7 +188,7 @@
                             <depends>
                                 <field id="logging">1</field>
                             </depends>
-                            <frontend_model>Amazon\PayV2\Block\Adminhtml\System\Config\Form\DeveloperLogs</frontend_model>
+                            <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\DeveloperLogs</frontend_model>
                         </field>
                         <field id="allowed_ips_v2" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allowed IPs</label>

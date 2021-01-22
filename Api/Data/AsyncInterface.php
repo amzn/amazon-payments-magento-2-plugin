@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Api\Data;
+namespace Amazon\Pay\Api\Data;
 
 use Exception;
 
@@ -178,7 +178,7 @@ interface AsyncInterface
     /**
      * Retrieve model resource
      *
-     * @return \Amazon\PayV2\Model\ResourceModel\Async
+     * @return \Amazon\Pay\Model\ResourceModel\Async
      */
     public function getResource();
 }

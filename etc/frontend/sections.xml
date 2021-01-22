@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
-    <action name="amazon_payv2/checkout/completeSession">
+    <action name="amazon_pay/checkout/completeSession">
         <section name="cart"/>
         <section name="checkout-data"/>
         <section name="last-ordered-items"/>

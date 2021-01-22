@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 ?>
-<?php /* @var $block \Amazon\PayV2\Block\Config */ ?>
+<?php /* @var $block \Amazon\Pay\Block\Config */ ?>
 <?php if ($block->isEnabled()): ?>
 <script>
 
@@ -23,7 +23,7 @@
     });
 
     <?php if ($block->getRequest()->getFrontName() != 'checkout'): ?>
-    require (['Amazon_PayV2/js/model/storage'], function(amazonStorage) {
+    require (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
         amazonStorage.clearAmazonCheckout();
     });
     <?php endif; ?>

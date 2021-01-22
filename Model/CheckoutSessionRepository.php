@@ -14,10 +14,10 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Api\CheckoutSessionRepositoryInterface;
-use Amazon\PayV2\Api\Data\CheckoutSessionInterface;
+use Amazon\Pay\Api\CheckoutSessionRepositoryInterface;
+use Amazon\Pay\Api\Data\CheckoutSessionInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 class CheckoutSessionRepository implements CheckoutSessionRepositoryInterface

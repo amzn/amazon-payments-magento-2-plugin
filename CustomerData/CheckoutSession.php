@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\CustomerData;
+namespace Amazon\Pay\CustomerData;
 
 /**
  * Amazon Checkout Session section
@@ -26,18 +26,18 @@ class CheckoutSession
     private $session;
 
     /**
-     * @var \Amazon\PayV2\Model\CheckoutSessionManagement
+     * @var \Amazon\Pay\Model\CheckoutSessionManagement
      */
     private $checkoutSessionManagement;
 
     /**
      * CheckoutSession constructor.
      * @param \Magento\Checkout\Model\Session $session
-     * @param \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement
+     * @param \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement
      */
     public function __construct(
         \Magento\Checkout\Model\Session $session,
-        \Amazon\PayV2\Model\CheckoutSessionManagement $checkoutSessionManagement
+        \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement
     ) {
         $this->session = $session;
         $this->checkoutSessionManagement = $checkoutSessionManagement;

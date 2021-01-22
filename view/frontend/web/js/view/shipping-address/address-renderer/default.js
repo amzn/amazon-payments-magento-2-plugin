@@ -2,9 +2,9 @@ define([
     'jquery',
     'Magento_Checkout/js/view/shipping-address/address-renderer/default',
     'uiRegistry',
-    'Amazon_PayV2/js/action/toggle-form-fields',
-    'Amazon_PayV2/js/model/storage',
-    'Amazon_PayV2/js/amazon-checkout'
+    'Amazon_Pay/js/action/toggle-form-fields',
+    'Amazon_Pay/js/model/storage',
+    'Amazon_Pay/js/amazon-checkout'
 ], function ($, Component, registry, toggleFormFields, amazonStorage, amazonCheckout) {
     'use strict';
 

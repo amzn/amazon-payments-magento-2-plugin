@@ -13,12 +13,12 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model\ResourceModel\CustomerLink;
+namespace Amazon\Pay\Model\ResourceModel\CustomerLink;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     protected function _construct()
     {
-        $this->_init(\Amazon\PayV2\Model\CustomerLink::class, \Amazon\PayV2\Model\ResourceModel\CustomerLink::class);
+        $this->_init(\Amazon\Pay\Model\CustomerLink::class, \Amazon\Pay\Model\ResourceModel\CustomerLink::class);
     }
 }

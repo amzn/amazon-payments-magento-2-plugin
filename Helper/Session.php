@@ -13,10 +13,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Helper;
+namespace Amazon\Pay\Helper;
 
-use Amazon\PayV2\Api\Data\AmazonCustomerInterface;
-use Amazon\PayV2\Domain\ValidationCredentials;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;

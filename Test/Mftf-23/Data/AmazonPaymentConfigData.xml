@@ -39,7 +39,7 @@
         <data key="value">1</data>
     </entity>
 
-    <entity name="SampleAmazonPaymentV2Config" type="amazon_payment_v2_config">
+    <entity name="SampleAmazonPaymentV2Config" type="amazon_payment_config">
         <requiredEntity type="api_version">SampleAmazonPaymentV2ApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentV2Active</requiredEntity>
         <requiredEntity type="private_key">SampleAmazonPaymentV2PrivateKey</requiredEntity>
@@ -57,19 +57,19 @@
         <data key="value">1</data>
     </entity>
     <entity name="SampleAmazonPaymentV2PrivateKey" type="private_key">
-        <data key="value">{{_CREDS.amazon/v2_private_key}}</data>
+        <data key="value">{{_CREDS.amazon/private_key}}</data>
     </entity>
     <entity name="SampleAmazonPaymentV2PublicKeyId" type="public_key_id">
-        <data key="value">{{_CREDS.amazon/v2_public_key_id}}</data>
+        <data key="value">{{_CREDS.amazon/public_key_id}}</data>
     </entity>
     <entity name="SampleAmazonPaymentV2MerchantId" type="merchant_id">
-        <data key="value">{{_CREDS.amazon/v2_merchant_id}}</data>
+        <data key="value">{{_CREDS.amazon/merchant_id}}</data>
     </entity>
     <entity name="SampleAmazonPaymentV2StoreId" type="store_id">
-        <data key="value">{{_CREDS.amazon/v2_store_id}}</data>
+        <data key="value">{{_CREDS.amazon/store_id}}</data>
     </entity>
     <entity name="SampleAmazonPaymentV2PaymentRegion" type="payment_region">
-        <data key="value">{{_CREDS.amazon/v2_region}}</data>
+        <data key="value">{{_CREDS.amazon/region}}</data>
     </entity>
     <entity name="SampleAmazonPaymentV2Sandbox" type="sandbox">
         <data key="value">1</data>
@@ -81,7 +81,7 @@
         <data key="value">0</data>
     </entity>
 
-    <entity name="EUAmazonPaymentV2Config" type="amazon_payment_v2_config">
+    <entity name="EUAmazonPaymentV2Config" type="amazon_payment_config">
         <requiredEntity type="api_version">SampleAmazonPaymentV2ApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentV2Active</requiredEntity>
         <requiredEntity type="private_key">EUAmazonPaymentV2PrivateKey</requiredEntity>
@@ -93,25 +93,25 @@
         <requiredEntity type="v2_lwa_enabled">SampleAmazonPaymentV2LwaDisabled</requiredEntity>
     </entity>
     <entity name="EUAmazonPaymentV2PrivateKey" type="private_key">
-        <data key="value">{{_CREDS.amazon/v2_eu_private_key}}</data>
+        <data key="value">{{_CREDS.amazon/eu_private_key}}</data>
     </entity>
     <entity name="EUAmazonPaymentV2PublicKeyId" type="public_key_id">
-        <data key="value">{{_CREDS.amazon/v2_eu_public_key_id}}</data>
+        <data key="value">{{_CREDS.amazon/eu_public_key_id}}</data>
     </entity>
     <entity name="EUAmazonPaymentV2MerchantId" type="merchant_id">
-        <data key="value">{{_CREDS.amazon/v2_eu_merchant_id}}</data>
+        <data key="value">{{_CREDS.amazon/eu_merchant_id}}</data>
     </entity>
     <entity name="EUAmazonPaymentV2StoreId" type="store_id">
-        <data key="value">{{_CREDS.amazon/v2_eu_store_id}}</data>
+        <data key="value">{{_CREDS.amazon/eu_store_id}}</data>
     </entity>
     <entity name="EUAmazonPaymentV2PaymentRegion" type="payment_region">
-        <data key="value">{{_CREDS.amazon/v2_eu_region}}</data>
+        <data key="value">{{_CREDS.amazon/eu_region}}</data>
     </entity>
     <entity name="SampleAmazonPaymentV2Sandbox" type="sandbox">
         <data key="value">1</data>
     </entity>
 
-    <entity name="SampleAmazonPaymentV2ConfigLwa" type="amazon_payment_v2_config">
+    <entity name="SampleAmazonPaymentV2ConfigLwa" type="amazon_payment_config">
         <requiredEntity type="api_version">SampleAmazonPaymentV2ApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentV2Active</requiredEntity>
         <requiredEntity type="private_key">SampleAmazonPaymentV2PrivateKey</requiredEntity>

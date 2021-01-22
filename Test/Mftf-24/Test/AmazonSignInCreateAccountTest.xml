@@ -6,8 +6,8 @@
             <title value="Amazon Sign In Create Account"/>
             <description value="Amazon Sign In button should create an account when logging in"/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_signin"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_signin"/>
         </annotations>
 
         <before>
@@ -21,7 +21,7 @@
         </after>
 
         <!--Verify Sign in with Amazon Button V2 is present-->
-        <click selector="{{AmazonLoginSection.v2Login}}" stepKey="clickSignInWithAmazonButton"/>
+        <click selector="{{AmazonLoginSection.Login}}" stepKey="clickSignInWithAmazonButton"/>
 
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
         <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>

@@ -15,7 +15,7 @@
  *
  */
 
-namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -24,12 +24,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const DOWNLOAD_PATH = 'amazon_payv2/payv2/downloadLog';
+    const DOWNLOAD_PATH = 'amazon_pay/pay/downloadLog';
 
     const LOGS = [
-        'async' => ['name' => 'IPN V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\AsyncIpn::FILENAME],
-        'client' => ['name' => 'Client V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\Client::FILENAME],
-        'alexa' => ['name' => 'Alexa V2 Log', 'path' => \Amazon\PayV2\Logger\Handler\Alexa::FILENAME],
+        'async' => ['name' => 'IPN Log', 'path' => \Amazon\Pay\Logger\Handler\AsyncIpn::FILENAME],
+        'client' => ['name' => 'Client Log', 'path' => \Amazon\Pay\Logger\Handler\Client::FILENAME],
+        'alexa' => ['name' => 'Alexa Log', 'path' => \Amazon\Pay\Logger\Handler\Alexa::FILENAME],
     ];
 
     /**

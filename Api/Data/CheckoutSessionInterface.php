@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Api\Data;
+namespace Amazon\Pay\Api\Data;
 
 interface CheckoutSessionInterface
 {

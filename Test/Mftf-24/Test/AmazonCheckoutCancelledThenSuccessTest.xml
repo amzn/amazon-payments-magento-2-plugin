@@ -6,19 +6,19 @@
             <title value="Amazon Checkout Cancelled then Successful"/>
             <description value="User should be able to checkout with Amazon Pay after cancelling their checkout session."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_checkout"/>
+            <group value="amazon_pay_disabled"/>
+            <group value="amazon_pay_checkout"/>
         </annotations>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
 
         <click selector="{{AmazonPageSection.cancelButton}}" stepKey="cancelCheckout"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
 
         <!--Go back to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton2"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton2"/>
         <actionGroup ref="AmazonAlreadyLoggedInActionGroup" stepKey="AmazonLoginActionGroup2"/>
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup2"/>
@@ -33,7 +33,7 @@
         <waitForPageLoad stepKey="waitForCheckoutPageLoad2"/>
 
         <!--Go back to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton3"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton3"/>
         <actionGroup ref="AmazonAlreadyLoggedInActionGroup" stepKey="AmazonLoginActionGroup3"/>
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup3"/>
@@ -56,7 +56,7 @@
         <waitForPageLoad stepKey="waitForCheckoutPageLoad4"/>
 
         <!--Go back to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton4"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton4"/>
         <actionGroup ref="AmazonAlreadyLoggedInActionGroup" stepKey="AmazonLoginActionGroup4"/>
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup4"/>
@@ -79,7 +79,7 @@
 
         <!--Verify only Amazon Pay method is visible-->
         <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
-        <seeElement selector="{{AmazonCheckoutSection.v2Method}}" stepKey="seeAmazonPaymentMethod"/>
+        <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
         <!--Place order-->
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />

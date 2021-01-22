@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Http\Client;
+namespace Amazon\Pay\Gateway\Http\Client;
 
 class RefundClient extends AbstractClient
 {

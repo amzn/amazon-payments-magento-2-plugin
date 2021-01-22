@@ -6,8 +6,8 @@
             <title value="Amazon Checkout Disabled No Button V2"/>
             <description value="Amazon Button should not be present on checkout when disabled."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_button"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_button"/>
         </annotations>
 
         <before>
@@ -31,7 +31,7 @@
         <!--Go to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
         <!--Verify we don't see either Amazon Button V2 or V1 button-->
-        <dontSeeElement selector="{{AmazonButtonSection.v2Checkout}}" stepKey="dontSeeEnabledAmazonButton"/>
+        <dontSeeElement selector="{{AmazonButtonSection.checkout}}" stepKey="dontSeeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Checkout}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>
 </tests>

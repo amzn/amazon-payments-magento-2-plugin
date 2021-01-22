@@ -6,12 +6,12 @@
             <title value="Amazon Checkout Login"/>
             <description value="User should be able to login to Amazon from the checkout when enabled."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_login"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_login"/>
         </annotations>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
     </test>
 </tests>

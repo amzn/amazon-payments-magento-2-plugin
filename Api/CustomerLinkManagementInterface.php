@@ -13,9 +13,9 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Api;
+namespace Amazon\Pay\Api;
 
-use Amazon\PayV2\Api\Data\CustomerLinkInterface;
+use Amazon\Pay\Api\Data\CustomerLinkInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
@@ -39,7 +39,7 @@ interface CustomerLinkManagementInterface
      * @param AmazonCustomerInterface $amazonCustomer
      * @return CustomerInterface|null
      */
-    public function create(\Amazon\PayV2\Api\Data\AmazonCustomerInterface $amazonCustomer);
+    public function create(\Amazon\Pay\Api\Data\AmazonCustomerInterface $amazonCustomer);
 
     /**
      * Create or update magento/amazon customer link entity

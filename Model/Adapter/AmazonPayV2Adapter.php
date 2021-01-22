@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Model\Adapter;
+namespace Amazon\Pay\Model\Adapter;
 
 class AmazonPayV2Adapter
 {
@@ -23,12 +23,12 @@ class AmazonPayV2Adapter
     const PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE = 'AuthorizeWithCapture';
 
     /**
-     * @var \Amazon\PayV2\Client\ClientFactoryInterface
+     * @var \Amazon\Pay\Client\ClientFactoryInterface
      */
     private $clientFactory;
 
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
@@ -43,12 +43,12 @@ class AmazonPayV2Adapter
     private $quoteRepository;
 
     /**
-     * @var \Amazon\PayV2\Helper\Data
+     * @var \Amazon\Pay\Helper\Data
      */
     private $amazonHelper;
 
     /**
-     * @var \Amazon\PayV2\Logger\Logger
+     * @var \Amazon\Pay\Logger\Logger
      */
     private $logger;
 
@@ -59,21 +59,21 @@ class AmazonPayV2Adapter
 
     /**
      * AmazonPayV2Adapter constructor.
-     * @param \Amazon\PayV2\Client\ClientFactoryInterface $clientFactory
-     * @param \Amazon\PayV2\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param \Amazon\PayV2\Helper\Data $amazonHelper
-     * @param \Amazon\PayV2\Logger\Logger $logger
+     * @param \Amazon\Pay\Helper\Data $amazonHelper
+     * @param \Amazon\Pay\Logger\Logger $logger
      * @pqram \Magento\Framework\UrlInterface $url
      */
     public function __construct(
-        \Amazon\PayV2\Client\ClientFactoryInterface $clientFactory,
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Amazon\PayV2\Helper\Data $amazonHelper,
-        \Amazon\PayV2\Logger\Logger $logger,
+        \Amazon\Pay\Helper\Data $amazonHelper,
+        \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url
     ) {
         $this->clientFactory = $clientFactory;
@@ -90,7 +90,7 @@ class AmazonPayV2Adapter
      */
     protected function getMerchantCustomInformation()
     {
-        return sprintf('Magento Version: 2, Plugin Version: %s (v2)', $this->amazonHelper->getVersion());
+        return sprintf('Magento Version: 2, Plugin Version: %s', $this->amazonHelper->getVersion());
     }
 
     /**
@@ -436,7 +436,7 @@ class AmazonPayV2Adapter
     public function generateLoginButtonPayload()
     {
         $payload = [
-            'signInReturnUrl' => $this->url->getRouteUrl('amazon_payv2/login/authorize/'),
+            'signInReturnUrl' => $this->url->getRouteUrl('amazon_pay/login/authorize/'),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
         ];

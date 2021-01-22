@@ -6,12 +6,12 @@
             <title value="Amazon Shipping Address"/>
             <description value="User should be able to use Amazon address as checkout shipping address."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay_v2"/>
-            <group value="amazon_pay_v2_address"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_address"/>
         </annotations>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.v2Checkout}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>

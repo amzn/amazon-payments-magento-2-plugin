@@ -1,15 +1,15 @@
 <?php
 
-namespace Amazon\PayV2\Observer;
+namespace Amazon\Pay\Observer;
 
 class SalesQuoteMergeAfter implements \Magento\Framework\Event\ObserverInterface
 {
     /**
-     * @var \Amazon\PayV2\Api\CheckoutSessionRepositoryInterface
+     * @var \Amazon\Pay\Api\CheckoutSessionRepositoryInterface
      */
     private $checkoutSessionRepository;
 
-    public function __construct(\Amazon\PayV2\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository)
+    public function __construct(\Amazon\Pay\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository)
     {
         $this->checkoutSessionRepository = $checkoutSessionRepository;
     }

@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Logger\Handler;
+namespace Amazon\Pay\Logger\Handler;
 
 use Magento\Framework\Logger\Handler\Base;
 

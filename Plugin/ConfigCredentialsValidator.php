@@ -13,7 +13,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Plugin;
+namespace Amazon\Pay\Plugin;
 
 use Magento\Config\Model\Config;
 use Magento\Framework\Exception\ValidatorException;
@@ -32,12 +32,12 @@ class ConfigCredentialsValidator
     const XML_PATH_SANDBOX = 'groups/amazon_pay/groups/credentials/fields/sandbox/value';
 
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     protected $amazonConfig;
 
     /**
-     * @var \Amazon\PayV2\Client\ClientFactoryInterface
+     * @var \Amazon\Pay\Client\ClientFactoryInterface
      */
     protected $clientFactory;
 
@@ -47,8 +47,8 @@ class ConfigCredentialsValidator
     protected $messageManager;
 
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
-        \Amazon\PayV2\Client\ClientFactoryInterface $clientFactory,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->amazonConfig = $amazonConfig;

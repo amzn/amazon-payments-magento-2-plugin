@@ -14,12 +14,12 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\PayV2\Gateway\Http\Client;
+namespace Amazon\Pay\Gateway\Http\Client;
 
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use Amazon\PayV2\Model\Adapter\AmazonPayV2Adapter;
+use Amazon\Pay\Model\Adapter\AmazonPayV2Adapter;
 
 /**
  * Class AbstractClient

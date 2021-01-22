@@ -3,7 +3,7 @@ define(
     [
         'jquery',
         'Magento_Checkout/js/view/shipping',
-        'Amazon_PayV2/js/model/storage'
+        'Amazon_Pay/js/model/storage'
     ],
     function (
         $,

@@ -13,12 +13,12 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Model;
+namespace Amazon\Pay\Model;
 
-use Amazon\PayV2\Model\ResourceModel\Async as AsyncResourceModel;
+use Amazon\Pay\Model\ResourceModel\Async as AsyncResourceModel;
 use Magento\Framework\Model\AbstractModel;
 
-class Async extends AbstractModel implements \Amazon\PayV2\Api\Data\AsyncInterface
+class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory

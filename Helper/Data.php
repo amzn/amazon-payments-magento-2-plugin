@@ -1,6 +1,6 @@
 <?php
 
-namespace Amazon\PayV2\Helper;
+namespace Amazon\Pay\Helper;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -11,7 +11,7 @@ use Zxing\ReaderException;
 class Data extends AbstractHelper
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
@@ -51,7 +51,7 @@ class Data extends AbstractHelper
     protected $readFactory;
 
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Checkout\Helper\Data $helperCheckout,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResourceModel,
@@ -168,7 +168,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        $module = $this->moduleList->getOne('Amazon_PayV2');
+        $module = $this->moduleList->getOne('Amazon_Pay');
         return $module['setup_version'] ?? __('--');
     }
 

@@ -16,19 +16,19 @@
  *
  */
 
-namespace Amazon\PayV2\Block\Adminhtml\System\Config\Form;
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 class Note extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @var \Amazon\PayV2\Model\AmazonConfig
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     protected $amazonConfig;
 
     public function __construct(
-        \Amazon\PayV2\Model\AmazonConfig $amazonConfig,
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Backend\Block\Template\Context $context,
         array $data = []
     ) {

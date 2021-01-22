@@ -6,7 +6,7 @@ define(
         'uiComponent',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/quote',
-        'Amazon_PayV2/js/model/storage',
+        'Amazon_Pay/js/model/storage',
         'Magento_Checkout/js/model/shipping-service',
         'Magento_Checkout/js/model/address-converter',
         'Magento_Checkout/js/action/create-shipping-address',
@@ -14,9 +14,9 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Checkout/js/model/step-navigator',
         'uiRegistry',
-        'Amazon_PayV2/js/action/checkout-session-address-load',
-        'Amazon_PayV2/js/model/shipping-address/form-address-state',
-        'Amazon_PayV2/js/amazon-checkout'
+        'Amazon_Pay/js/action/checkout-session-address-load',
+        'Amazon_Pay/js/model/shipping-address/form-address-state',
+        'Amazon_Pay/js/amazon-checkout'
     ],
     function (
         $,
