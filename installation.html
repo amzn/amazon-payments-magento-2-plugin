@@ -68,7 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pre-installation-steps">Pre-installation steps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#web-setup-wizard-magento-marketplace-install-method">Web Setup Wizard / Magento Marketplace Install Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web-setup-wizard-magento-marketplace-install-method">Magento Marketplace Install Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-composer-install-method">Manual Composer Install Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#un-install-method">Un-install Method</a></li>
 </ul>
@@ -126,17 +126,24 @@
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last"> For Magento versions 2.2.6 up to 2.2.11 (EOL), the <a href="legacy/index.html">Legacy version</a> of the extension (EOL) is already preinstalled and the new extension for those versions has also reached EOL. The new extension is available <a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#installation-steps">here</a> and, when installed, will appear in the configuration panel as an alternative to the legacy checkout experience.<br>
-  For Magento versions below 2.2.6 (EOL), the Legacy version of our extension (EOL) is available at <a class="reference external" href="legacy/installation.html#manual-composer-install-method">Amazon Pay and Amazon Sign-in for Magento 2 (Legacy) documentation</a>.</p>
+  <br> For Magento versions below 2.2.6 (EOL), the Legacy version of our extension (EOL) is available at <a class="reference external" href="legacy/installation.html#manual-composer-install-method">Amazon Pay and Amazon Sign-in for Magento 2 (Legacy) documentation</a>.</p>
 </div>
 <div class="section" id="pre-installation-steps">
 <h2>Pre-installation steps<a class="headerlink" href="#pre-installation-steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Create a backup of your shop before proceeding to install.</li>
+ <p>Create a backup of your shop before proceeding to install. Before installing Amazon Pay, please also remove any previously installed versions. This includes all directories and their files from the following paths:
+    <ul class="simple">
+    <li><i>app/code/Amazon/PayV2</li>  
+    <li> vendor/amzn/amazon-pay-and-login-with-amazon-core-module</li>
+    <li> vendor/amzn/amazon-pay-module</li>
+    <li> vendor/amzn/login-with-amazon-module</li></ul></i>
+    
+If you are using composer to install Amazon Pay, it will remove the files in vendor for you, but you will need to manually clean <i>app/code/Amazon</i> if present.</p>
+
 </ul>
 </div>
 <div class="section" id="web-setup-wizard-magento-marketplace-install-method">
-<h2>Web Setup Wizard / Magento Marketplace Install Method<a class="headerlink" href="#web-setup-wizard-magento-marketplace-install-method" title="Permalink to this headline">¶</a></h2>
-<p>The installation via the Web Setup Wizard is the recomennded method of installation for our extension when using Magento 2.1 - 2.2.3. For shops using Magento 2.2.4 or higher, the composer method outlined below is recommended.
+<h2>Magento Marketplace Install Method<a class="headerlink" href="#web-setup-wizard-magento-marketplace-install-method" title="Permalink to this headline">¶</a></h2>
+<p>The installation via the Web Setup Wizard is the recommended method of installation for our extension when using Magento 2.3.0 - 2.4.x. For shops using Magento 2.2.6 up to 2.2.11 or higher, the composer method outlined below is recommended.
 Please follow the <a class="reference external" href="http://docs.magento.com/marketplace/user_guide/quick-tour/install-extension.html">Magento Marketplace User Guide</a> to learn how this works.</p>
 <p>Our extension can be found here: <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html</a></p>
 </div>
