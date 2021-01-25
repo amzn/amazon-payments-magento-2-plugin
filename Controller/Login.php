@@ -46,7 +46,7 @@ abstract class Login extends Action
     protected $amazonCustomerFactory;
 
     /**
-     * @var Adapter\AmazonPayV2Adapter
+     * @var Adapter\AmazonPayAdapter
      */
     protected $amazonAdapter;
 
@@ -116,7 +116,7 @@ abstract class Login extends Action
      * Login constructor.
      * @param Context $context
      * @param AmazonCustomerFactory $amazonCustomerFactory
-     * @param \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter
      * @param AmazonConfig $amazonConfig
      * @param Url $customerUrl
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
@@ -134,7 +134,7 @@ abstract class Login extends Action
     public function __construct(
         Context $context,
         AmazonCustomerFactory $amazonCustomerFactory,
-        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         AmazonConfig $amazonConfig,
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator,

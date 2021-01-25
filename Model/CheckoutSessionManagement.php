@@ -112,7 +112,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $amazonConfig;
 
     /**
-     * @var Adapter\AmazonPayV2Adapter
+     * @var Adapter\AmazonPayAdapter
      */
     private $amazonAdapter;
 
@@ -152,7 +152,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Amazon\Pay\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param AmazonConfig $amazonConfig
-     * @param Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param Adapter\AmazonPayAdapter $amazonAdapter
      * @param AsyncManagement $asyncManagement
      * @param \Amazon\Pay\Model\AsyncManagement\Charge $asyncCharge
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
@@ -173,7 +173,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Amazon\Pay\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
-        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Amazon\Pay\Model\AsyncManagement $asyncManagement,
         \Amazon\Pay\Model\AsyncManagement\Charge $asyncCharge,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
@@ -440,7 +440,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     {
         $result = null;
         $checkoutSession = null;
-        $paymentIntent = Adapter\AmazonPayV2Adapter::PAYMENT_INTENT_AUTHORIZE;
+        $paymentIntent = Adapter\AmazonPayAdapter::PAYMENT_INTENT_AUTHORIZE;
         $cart = $this->getCart($cartId);
         if ($this->isAvailable($cartId)) {
             $checkoutSession = $this->getCheckoutSessionForCart($cart);

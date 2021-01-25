@@ -16,7 +16,7 @@
 
 namespace Amazon\Pay\Model\Adapter;
 
-class AmazonPayV2Adapter
+class AmazonPayAdapter
 {
     const PAYMENT_INTENT_CONFIRM = 'Confirm';
     const PAYMENT_INTENT_AUTHORIZE = 'Authorize';
@@ -58,7 +58,7 @@ class AmazonPayV2Adapter
     private $url;
 
     /**
-     * AmazonPayV2Adapter constructor.
+     * AmazonPayAdapter constructor.
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager

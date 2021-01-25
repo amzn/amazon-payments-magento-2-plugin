@@ -51,7 +51,7 @@ class ClientFactory implements ClientFactoryInterface
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Psr\Log\LoggerInterface $logger,
-        $instanceName = '\\AmazonPayV2\\ClientInterface'
+        $instanceName = '\\AmazonPay\\ClientInterface'
     ) {
         $this->amazonConfig  = $amazonConfig;
         $this->objectManager = $objectManager;

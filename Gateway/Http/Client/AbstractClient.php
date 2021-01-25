@@ -19,7 +19,7 @@ namespace Amazon\Pay\Gateway\Http\Client;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use Amazon\Pay\Model\Adapter\AmazonPayV2Adapter;
+use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 
 /**
  * Class AbstractClient
@@ -33,13 +33,13 @@ abstract class AbstractClient implements ClientInterface
     protected $logger;
 
     /**
-     * @var AmazonPayV2Adapter
+     * @var AmazonPayAdapter
      */
     protected $adapter;
 
     public function __construct(
         Logger $logger,
-        AmazonPayV2Adapter $adapter
+        AmazonPayAdapter $adapter
     ) {
         $this->logger = $logger;
         $this->adapter = $adapter;

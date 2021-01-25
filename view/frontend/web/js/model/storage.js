@@ -17,10 +17,10 @@ define([
     'jquery',
     'Amazon_Pay/js/model/amazon-pay-config',
     'jquery/jquery-storageapi'
-], function ($, amazonPayV2Config) {
+], function ($, amazonPayConfig) {
     'use strict';
 
-    var isEnabled = amazonPayV2Config.isDefined(),
+    var isEnabled = amazonPayConfig.isDefined(),
         storage = null,
         getStorage = function () {
             if (storage === null) {
@@ -29,8 +29,8 @@ define([
             return storage;
         };
 
-    var isLwaEnabled = amazonPayV2Config.getValue('is_lwa_enabled');
-    var isGuestCheckoutEnabled = amazonPayV2Config.getValue('is_guest_checkout_enabled');
+    var isLwaEnabled = amazonPayConfig.getValue('is_lwa_enabled');
+    var isGuestCheckoutEnabled = amazonPayConfig.getValue('is_guest_checkout_enabled');
 
     return {
         isEnabled: isEnabled,
@@ -38,7 +38,7 @@ define([
         isGuestCheckoutEnabled: isGuestCheckoutEnabled,
 
         /**
-         * Is checkout using Amazon PAYV2?
+         * Is checkout using Amazon Pay?
          *
          * @returns {boolean}
          */
@@ -76,7 +76,7 @@ define([
          * Return the Amazon Pay region
          */
         getRegion: function() {
-            return amazonPayV2Config.getValue('region');
+            return amazonPayConfig.getValue('region');
         },
 
         /**

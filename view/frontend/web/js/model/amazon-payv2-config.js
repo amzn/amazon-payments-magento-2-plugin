@@ -17,7 +17,7 @@ define(
     function (registry) {
         'use strict';
 
-        var config = registry.get('amazonPayV2') || {};
+        var config = registry.get('amazonPay') || {};
 
         return {
             /**
@@ -39,10 +39,10 @@ define(
             },
 
             /**
-             * Is amazonPayV2 defined?
+             * Is amazonPay defined?
              */
             isDefined: function () {
-                return registry.get('amazonPayV2') !== undefined;
+                return registry.get('amazonPay') !== undefined;
             }
 
         };

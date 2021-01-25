@@ -17,7 +17,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Amazon\Pay\Client\ClientFactoryInterface" type="Amazon\Pay\Client\ClientFactory" />
-    <preference for="AmazonPayV2\ClientInterface" type="Amazon\Pay\Client\Client" />
+    <preference for="AmazonPay\ClientInterface" type="Amazon\Pay\Client\Client" />
 
     <preference for="Amazon\Pay\Api\CheckoutSessionManagementInterface" type="Amazon\Pay\Model\CheckoutSessionManagement" />
     <preference for="Amazon\Pay\Api\CheckoutSessionRepositoryInterface" type="Amazon\Pay\Model\CheckoutSessionRepository" />
@@ -54,7 +54,7 @@
     <type name="Magento\Framework\Console\CommandList">
        <arguments>
            <argument name="commands" xsi:type="array">
-               <item name="AmazonPayV2AsyncProcess" xsi:type="object">Amazon\Pay\Command\Async\ProcessCommand</item>
+               <item name="AmazonPayAsyncProcess" xsi:type="object">Amazon\Pay\Command\Async\ProcessCommand</item>
            </argument>
        </arguments>
    </type>
@@ -70,7 +70,7 @@
     </type>
     <type name="Amazon\Pay\Logger\Logger">
         <arguments>
-            <argument name="name" xsi:type="string">amazonClientLoggerV2</argument>
+            <argument name="name" xsi:type="string">amazonClientLogger</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="debug" xsi:type="object">Amazon\Pay\Logger\Handler\Client</item>
             </argument>
@@ -96,47 +96,47 @@
     </type>
 
     <!-- Payment Method Facade configuration -->
-    <virtualType name="AmazonPayV2Facade" type="Magento\Payment\Model\Method\Adapter">
+    <virtualType name="AmazonPayFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
             <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::CODE</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
-            <argument name="valueHandlerPool" xsi:type="object">AmazonPayV2ValueHandlerPool</argument>
-            <argument name="commandPool" xsi:type="object">AmazonPayV2CommandPool</argument>
+            <argument name="valueHandlerPool" xsi:type="object">AmazonPayValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">AmazonPayCommandPool</argument>
         </arguments>
     </virtualType>
 
     <!-- Commands infrastructure -->
-    <virtualType name="AmazonPayV2CommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+    <virtualType name="AmazonPayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="authorize" xsi:type="string">AmazonPayV2AuthorizeCommand</item>
-                <item name="sale" xsi:type="string">AmazonPayV2SaleCommand</item>
-                <item name="capture" xsi:type="string">AmazonPayV2CaptureStrategyCommand</item>
-                <item name="settlement" xsi:type="string">AmazonPayV2SettlementCommand</item>
-                <item name="refund" xsi:type="string">AmazonPayV2RefundCommand</item>
-                <item name="void" xsi:type="string">AmazonPayV2VoidCommand</item>
-                <item name="cancel" xsi:type="string">AmazonPayV2VoidCommand</item>
+                <item name="authorize" xsi:type="string">AmazonPayAuthorizeCommand</item>
+                <item name="sale" xsi:type="string">AmazonPaySaleCommand</item>
+                <item name="capture" xsi:type="string">AmazonPayCaptureStrategyCommand</item>
+                <item name="settlement" xsi:type="string">AmazonPaySettlementCommand</item>
+                <item name="refund" xsi:type="string">AmazonPayRefundCommand</item>
+                <item name="void" xsi:type="string">AmazonPayVoidCommand</item>
+                <item name="cancel" xsi:type="string">AmazonPayVoidCommand</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AmazonPayV2CaptureStrategyCommand" type="Amazon\Pay\Gateway\Command\CaptureStrategyCommand">
+    <virtualType name="AmazonPayCaptureStrategyCommand" type="Amazon\Pay\Gateway\Command\CaptureStrategyCommand">
         <arguments>
-            <argument name="commandPool" xsi:type="object">AmazonPayV2CommandPool</argument>
+            <argument name="commandPool" xsi:type="object">AmazonPayCommandPool</argument>
         </arguments>
     </virtualType>
 
     <!-- Configuration reader -->
-    <virtualType name="AmazonPayV2GatewayConfig" type="Amazon\Pay\Gateway\Config\Config">
+    <virtualType name="AmazonPayGatewayConfig" type="Amazon\Pay\Gateway\Config\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Amazon\Pay\Gateway\Config\Config::CODE</argument>
         </arguments>
     </virtualType>
 
     <!-- Command Manager -->
-    <virtualType name="AmazonPayV2CommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+    <virtualType name="AmazonPayCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
         <arguments>
-            <argument name="commandPool" xsi:type="object">AmazonPayV2CommandPool</argument>
+            <argument name="commandPool" xsi:type="object">AmazonPayCommandPool</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
@@ -148,7 +148,7 @@
     </type>
 
     <!-- Authorize command -->
-    <virtualType name="AmazonPayV2AuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonPayAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeClient</argument>
@@ -160,7 +160,7 @@
     </virtualType>
 
     <!-- Authorize and Capture command -->
-    <virtualType name="AmazonPayV2SaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonPaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SaleClient</argument>
@@ -172,7 +172,7 @@
     </virtualType>
 
     <!-- Capture settlement command -->
-    <virtualType name="AmazonPayV2SettlementCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonPaySettlementCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\SettlementRequestBuilder</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SettlementClient</argument>
@@ -185,12 +185,12 @@
 
     <type name="Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder">
         <arguments>
-            <argument name="config" xsi:type="object">AmazonPayV2GatewayConfig</argument>
+            <argument name="config" xsi:type="object">AmazonPayGatewayConfig</argument>
         </arguments>
     </type>
 
     <!-- Refund Command -->
-    <virtualType name="AmazonPayV2RefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonPayRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\SettlementRequestBuilder</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\RefundHandler</argument>
@@ -202,7 +202,7 @@
     </virtualType>
 
     <!-- Void command -->
-    <virtualType name="AmazonPayV2VoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="AmazonPayVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\VoidRequestBuilder</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\VoidHandler</argument>
@@ -214,16 +214,16 @@
     </virtualType>
 
     <!-- Value handlers infrastructure -->
-    <virtualType name="AmazonPayV2ValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+    <virtualType name="AmazonPayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">AmazonPayV2ConfigValueHandler</item>
+                <item name="default" xsi:type="string">AmazonPayConfigValueHandler</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AmazonPayV2ConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+    <virtualType name="AmazonPayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">AmazonPayV2GatewayConfig</argument>
+            <argument name="configInterface" xsi:type="object">AmazonPayGatewayConfig</argument>
         </arguments>
     </virtualType>
 

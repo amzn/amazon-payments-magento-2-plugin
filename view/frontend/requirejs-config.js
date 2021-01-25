@@ -26,18 +26,18 @@ var config = {
     },
     map: {
         '*': {
-            amazonPayV2ProductAdd: 'Amazon_Pay/js/amazon-product-add',
-            amazonPayV2Button: 'Amazon_Pay/js/amazon-button',
-            amazonPayV2Config: 'Amazon_Pay/js/model/amazonPayV2Config',
-            amazonPayV2LoginButton: 'Amazon_Pay/js/amazon-login-button',
-            amazonPayV2Logout: 'Amazon_Pay/js/amazon-logout',
-            amazonPayV2LogoutButton: 'Amazon_Pay/js/amazon-logout-button'
+            amazonPayProductAdd: 'Amazon_Pay/js/amazon-product-add',
+            amazonPayButton: 'Amazon_Pay/js/amazon-button',
+            amazonPayConfig: 'Amazon_Pay/js/model/amazonPayConfig',
+            amazonPayLoginButton: 'Amazon_Pay/js/amazon-login-button',
+            amazonPayLogout: 'Amazon_Pay/js/amazon-logout',
+            amazonPayLogoutButton: 'Amazon_Pay/js/amazon-logout-button'
         }
     },
     paths: {
-        amazonPayV2CheckoutDE: 'https://static-eu.payments-amazon.com/checkout',
-        amazonPayV2CheckoutUK: 'https://static-eu.payments-amazon.com/checkout',
-        amazonPayV2CheckoutJP: 'https://static-fe.payments-amazon.com/checkout',
-        amazonPayV2CheckoutUS: 'https://static-na.payments-amazon.com/checkout'
+        amazonPayCheckoutDE: 'https://static-eu.payments-amazon.com/checkout',
+        amazonPayCheckoutUK: 'https://static-eu.payments-amazon.com/checkout',
+        amazonPayCheckoutJP: 'https://static-fe.payments-amazon.com/checkout',
+        amazonPayCheckoutUS: 'https://static-na.payments-amazon.com/checkout'
     }
 };

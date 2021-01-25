@@ -33,9 +33,9 @@
                 <active>0</active>
                 <button_color>Gold</button_color>
                 <is_gateway>1</is_gateway>
-                <title>Amazon Pay V2</title>
+                <title>Amazon Pay</title>
                 <sort_order>1</sort_order>
-                <model>AmazonPayV2Facade</model>
+                <model>AmazonPayFacade</model>
                 <order_status>processing</order_status>
                 <payment_action>authorize</payment_action>
                 <can_authorize>1</can_authorize>

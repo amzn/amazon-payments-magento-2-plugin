@@ -25,7 +25,7 @@ use Magento\Sales\Model\Order;
 class Charge extends AbstractOperation
 {
     /**
-     * @var \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter
+     * @var \Amazon\Pay\Model\Adapter\AmazonPayAdapter
      */
     private $amazonAdapter;
 
@@ -69,7 +69,7 @@ class Charge extends AbstractOperation
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
-     * @param \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter
      * @param \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
@@ -82,7 +82,7 @@ class Charge extends AbstractOperation
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
-        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger,
         \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,

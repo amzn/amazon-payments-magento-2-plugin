@@ -21,7 +21,7 @@ use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 class Refund extends AbstractOperation
 {
     /**
-     * @var \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter
+     * @var \Amazon\Pay\Model\Adapter\AmazonPayAdapter
      */
     private $amazonAdapter;
 
@@ -55,7 +55,7 @@ class Refund extends AbstractOperation
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
-     * @param \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter
+     * @param \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter
      * @param \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
      * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
@@ -66,7 +66,7 @@ class Refund extends AbstractOperation
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
-        \Amazon\Pay\Model\Adapter\AmazonPayV2Adapter $amazonAdapter,
+        \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,

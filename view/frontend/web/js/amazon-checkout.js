@@ -25,17 +25,17 @@ define([
         getCheckoutModuleName: function() {
             switch(amazonStorage.getRegion()) {
                 case 'de':
-                    return 'amazonPayV2CheckoutDE';
+                    return 'amazonPayCheckoutDE';
                     break;
                 case 'uk':
-                    return 'amazonPayV2CheckoutUK';
+                    return 'amazonPayCheckoutUK';
                     break;
                 case 'jp':
-                    return 'amazonPayV2CheckoutJP';
+                    return 'amazonPayCheckoutJP';
                     break;
                 case 'us':
                 default:
-                    return 'amazonPayV2CheckoutUS';
+                    return 'amazonPayCheckoutUS';
                     break;
             }
         },
