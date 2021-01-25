@@ -511,7 +511,7 @@ class AmazonConfig
         );
         if (empty($result)) {
             $result = $this->storeManager->getStore()->getUrl(
-                'amazon_payv2/login/checkout',
+                'amazon_pay/login/checkout',
                 ['_forced_secure' => true]
             );
         }
@@ -530,7 +530,7 @@ class AmazonConfig
         );
         if (empty($result)) {
             $result = $this->storeManager->getStore()->getUrl(
-                'amazon_payv2/checkout/completeSession',
+                'amazon_pay/checkout/completeSession',
                 ['_forced_secure' => true]
             );
         }
