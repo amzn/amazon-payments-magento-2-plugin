@@ -18,7 +18,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
-        <!--Verify Sign in with Amazon Button V2 is present-->
+        <!--Verify Sign in with Amazon Button is present-->
         <click selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButton"/>
 
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>

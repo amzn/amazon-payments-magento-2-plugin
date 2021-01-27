@@ -84,7 +84,7 @@ class AmazonConfig
     }
 
     /**
-     * Is PayV2 enabled?
+     * Is Pay enabled?
      *
      * @return bool
      */

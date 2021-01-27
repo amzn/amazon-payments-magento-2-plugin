@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonMiniCartLogin" extends="AmazonMiniCartButtonV2">
+    <test name="AmazonMiniCartLogin" extends="AmazonMiniCartButton">
         <annotations>
             <stories value="Amazon Login"/>
             <title value="Amazon Mini Cart Login"/>

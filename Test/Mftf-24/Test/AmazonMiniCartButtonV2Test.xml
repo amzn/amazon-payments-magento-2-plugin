@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonMiniCartButtonV2">
+    <test name="AmazonMiniCartButton">
         <annotations>
             <stories value="Amazon Button"/>
-            <title value="Amazon Mini Cart Button V2"/>
+            <title value="Amazon Mini Cart Button"/>
             <description value="Only Amazon Button V2 should be present in mini cart when enabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
@@ -25,7 +25,7 @@
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
         <!--Click on mini cart-->
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
-        <!--Verify only Amazon Button V2 is present-->
+        <!--Verify only Amazon Button is present-->
         <seeElement selector="{{AmazonButtonSection.MiniCart}}" stepKey="seeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1MiniCart}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>

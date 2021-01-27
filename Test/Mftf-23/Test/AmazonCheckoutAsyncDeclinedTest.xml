@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutAsyncDecline" extends="AmazonCheckoutButtonV2">
+    <test name="AmazonCheckoutAsyncDecline" extends="AmazonCheckoutButton">
         <annotations>
             <stories value="Amazon Checkout Async Decline"/>
             <title value="Amazon Checkout Async Decline"/>

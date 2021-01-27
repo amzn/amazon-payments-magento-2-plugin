@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonPaymentButtonV2">
+    <test name="AmazonPaymentButton">
         <annotations>
-            <stories value="Amazon Button V2"/>
-            <title value="Amazon Payment Button V2"/>
-            <description value="Amazon Button V2 should be present in payment methods when enabled."/>
+            <stories value="Amazon Button"/>
+            <title value="Amazon Payment Button"/>
+            <description value="Amazon Button should be present in payment methods when enabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
             <group value="amazon_pay_button"/>
@@ -29,7 +29,7 @@
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
-        <!--Verify only Amazon Payment Button V2 is present-->
+        <!--Verify only Amazon Payment Button is present-->
         <click selector="{{AmazonCheckoutSection.method}}" stepKey="selectEnabledAmazonPaymentMethod"/>
         <seeElement selector="{{AmazonButtonSection.Payment}}" stepKey="seeEnabledAmazonButton"/>
         <dontSee selector="{{AmazonCheckoutSection.v1Method}}" stepKey="dontSeeDisabledAmazonPaymentMethod"/>

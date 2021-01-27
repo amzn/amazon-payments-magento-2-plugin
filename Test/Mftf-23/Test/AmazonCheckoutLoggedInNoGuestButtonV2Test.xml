@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutLoggedInNoGuestButtonV2">
+    <test name="AmazonCheckoutLoggedInNoGuestButton">
         <annotations>
             <stories value="Amazon Button"/>
-            <title value="Amazon Checkout Logged In with Guest Checkout Disabled V2"/>
+            <title value="Amazon Checkout Logged In with Guest Checkout Disabled"/>
             <description value="Amazon Pay should be available when Guest Checkout and Sign in with Amazon are both disabled only when signed in to Magento already."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
@@ -14,14 +14,14 @@
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
             <createData entity="Simple_Customer_With_Amazon_Account" stepKey="createCustomer"/>
             <!-- Sign in with Amazon is disabled in the Sample config, no need to explicitly disable -->
-            <createData entity="SampleAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigData"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
             <magentoCLI command="config:set checkout/options/guest_checkout 0" stepKey="disableGuestCheckout"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <createData entity="SampleAmazonPaymentV2Config" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
             <magentoCLI command="config:set checkout/options/guest_checkout 1" stepKey="enableGuestCheckout"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
@@ -35,7 +35,7 @@
         <!--Go to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
 
-        <!--Verify we don't see either Amazon Button V2 or V1 button-->
+        <!--Verify we don't see either Amazon Button-->
         <dontSeeElement selector="{{AmazonButtonSection.checkout}}" stepKey="dontSeeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Checkout}}" stepKey="dontSeeDisabledAmazonButton"/>
 

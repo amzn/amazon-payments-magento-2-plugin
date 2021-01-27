@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonInvoiceOnlySingleCapture" extends="AmazonCheckoutButtonV2">
+    <test name="AmazonInvoiceOnlySingleCapture" extends="AmazonCheckoutButton">
         <annotations>
             <stories value="Amazon Pay Only Single Capture"/>
             <title value="Admin user must not be able to capture multiple times when configuration doesn't allow"/>
@@ -12,18 +12,18 @@
 
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct2" before="flushCache"/>
-            <createData entity="EUAmazonPaymentV2Config" stepKey="SingleInvoiceAmazonPaymentConfig"/>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SingleInvoiceAmazonPaymentConfig"/>
             <createData entity="EUAmazonCurrencyConfig" stepKey="SingleInvoiceAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
-            <createData entity="SampleAmazonPaymentV2Config" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
             <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
-        <!-- Product 1 is added to cart by AmazonCheckoutButtonV2 -->
+        <!-- Product 1 is added to cart by AmazonCheckoutButton -->
 
         <!-- Go to product 2 page and add to cart -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2StoreFront">

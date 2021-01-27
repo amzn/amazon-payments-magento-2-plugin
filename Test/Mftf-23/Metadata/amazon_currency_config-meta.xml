@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
-    <operation name="AmazonV2CurrencyConfig" dataType="amazon_currency_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/currency/" method="POST">
+    <operation name="AmazonCurrencyConfig" dataType="amazon_currency_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/currency/" method="POST">
         <object key="groups" dataType="amazon_currency_config">
             <object key="options" dataType="amazon_currency_config">
                 <object key="fields" dataType="amazon_currency_config">
@@ -19,7 +19,7 @@
             </object>
         </object>
     </operation>
-    <operation name="DefaultAmazonV2CurrencyConfig" dataType="default_amazon_currency_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/currency/" method="POST">
+    <operation name="DefaultAmazonCurrencyConfig" dataType="default_amazon_currency_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/currency/" method="POST">
         <object key="groups" dataType="default_amazon_currency_config">
             <object key="options" dataType="default_amazon_currency_config">
                 <object key="fields" dataType="default_amazon_currency_config">

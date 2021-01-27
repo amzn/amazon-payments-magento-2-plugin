@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutMulticurrencySuccessV2" extends="AmazonCheckoutButtonV2">
+    <test name="AmazonCheckoutMulticurrencySuccess" extends="AmazonCheckoutButton">
         <annotations>
             <stories value="Amazon Checkout Multicurrency"/>
-            <title value="Amazon Checkout Multicurrency Success V2"/>
+            <title value="Amazon Checkout Multicurrency Success"/>
             <description value="User should be able to checkout with Amazon Pay when multicurrency is enabled and they are using a supported currency."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
@@ -12,7 +12,7 @@
         </annotations>
 
         <before>
-            <createData entity="EUAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigData" before="flushCache"/>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData" before="flushCache"/>
             <createData entity="EUAmazonCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
             <!-- set default currency to one supported for multicurrency -->
             <magentoCLI command="config:set currency/options/default USD" stepKey="setDefaultCurrency" before="flushCache"/>
@@ -21,7 +21,7 @@
         </before>
 
         <after>
-            <createData entity="SampleAmazonPaymentV2Config" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
             <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>

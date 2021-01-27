@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonProductButtonV2">
+    <test name="AmazonProductButton">
         <annotations>
             <stories value="Amazon Button"/>
-            <title value="Amazon Product Button V2"/>
-            <description value="Only Amazon Button V2 should be present on product page when enabled."/>
+            <title value="Amazon Product Button"/>
+            <description value="Only Amazon Button should be present on product page when enabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
             <group value="amazon_pay_button"/>
@@ -21,7 +21,7 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStoreFront">
             <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
-        <!--Verify only Amazon Button V2 is present-->
+        <!--Verify only Amazon Button is present-->
         <seeElement selector="{{AmazonButtonSection.Product}}" stepKey="seeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Product}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>

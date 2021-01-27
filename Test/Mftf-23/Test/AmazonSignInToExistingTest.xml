@@ -20,7 +20,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!--Verify Sign in with Amazon Button V2 is present-->
+        <!--Verify Sign in with Amazon Button is present-->
         <click selector="{{AmazonLoginSection.Login}}" stepKey="clickSignInWithAmazonButton"/>
 
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
@@ -35,7 +35,7 @@
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage2"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
 
-        <!--Verify Sign in with Amazon Button V2 is present again-->
+        <!--Verify Sign in with Amazon Button is present again-->
         <click selector="{{AmazonLoginSection.Login}}" stepKey="clickSignInWithAmazonButton2"/>
 
         <!-- make sure we are logged out from Amazon by clearing ubid-main cookie -->

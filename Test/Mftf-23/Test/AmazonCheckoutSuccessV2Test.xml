@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutSuccessV2" extends="AmazonCheckoutButtonV2">
+    <test name="AmazonCheckoutSuccess" extends="AmazonCheckoutButton">
         <annotations>
             <stories value="Amazon Checkout"/>
-            <title value="Amazon Checkout Success V2"/>
+            <title value="Amazon Checkout Success"/>
             <description value="User should be able to checkout with Amazon Pay."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>

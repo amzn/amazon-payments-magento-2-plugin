@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonInvoiceMultipleCapture" extends="AmazonCheckoutButtonV2">
+    <test name="AmazonInvoiceMultipleCapture" extends="AmazonCheckoutButton">
         <annotations>
             <stories value="Amazon Pay Multiple Capture"/>
             <title value="Admin user must be able to capture multiple times when configuration allows"/>
@@ -14,7 +14,7 @@
             <createData entity="SimpleTwo" stepKey="createSimpleProduct2" before="flushCache"/>
         </before>
 
-        <!-- Product 1 is added to cart by AmazonCheckoutButtonV2 -->
+        <!-- Product 1 is added to cart by AmazonCheckoutButton -->
 
         <!-- Go to product 2 page and add to cart -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2StoreFront">

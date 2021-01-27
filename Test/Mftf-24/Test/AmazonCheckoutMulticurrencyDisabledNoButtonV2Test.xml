@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutMulticurrencyDisabledNoButtonV2" extends="AmazonCheckoutDisabledNoButtonV2">
+    <test name="AmazonCheckoutMulticurrencyDisabledNoButton" extends="AmazonCheckoutDisabledNoButton">
         <annotations>
             <stories value="Amazon Checkout Multicurrency Currency No Button"/>
-            <title value="Amazon Checkout Multicurrency Currency No Button V2"/>
+            <title value="Amazon Checkout Multicurrency Currency No Button"/>
             <description value="User should not be able to checkout with Amazon Pay when not using an allowed multi-currency currency."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>

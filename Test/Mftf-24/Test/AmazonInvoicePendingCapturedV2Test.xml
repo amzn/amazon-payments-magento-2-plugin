@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonInvoicePendingCapturedV2" extends="AmazonCheckoutButtonV2">
+    <test name="AmazonInvoicePendingCaptured" extends="AmazonCheckoutButton">
         <annotations>
             <stories value="Amazon Invoice"/>
             <title value="Amazon Invoice after 7 Days (Captured case)."/>

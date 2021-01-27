@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutGuestCheckoutDisabledNoButtonV2">
+    <test name="AmazonCheckoutGuestCheckoutDisabledNoButton">
         <annotations>
             <stories value="Amazon Button"/>
-            <title value="Amazon Checkout Guest Checkout Disabled No Button V2"/>
+            <title value="Amazon Checkout Guest Checkout Disabled No Button"/>
             <description value="Amazon Button should not be present on checkout when both Guest Checkout and Sign in with Amazon are disabled."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
@@ -32,7 +32,7 @@
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
         <!--Go to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
-        <!--Verify we don't see either Amazon Button V2 or V1 button-->
+        <!--Verify we don't see either Amazon Button-->
         <dontSeeElement selector="{{AmazonButtonSection.checkout}}" stepKey="dontSeeEnabledAmazonButton"/>
         <dontSeeElement selector="{{AmazonButtonSection.v1Checkout}}" stepKey="dontSeeDisabledAmazonButton"/>
     </test>
