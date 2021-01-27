@@ -82,7 +82,7 @@ class CheckoutProcessor
         } else {
             unset($shippingConfig['children']['customer-email']['children']['amazon-payv2-button-region']);
             unset($shippingConfig['children']['before-form']['children']['amazon-payv2-address']);
-            unset($paymentConfig['children']['renders']['children']['amazon_payment_v2-method']);
+            unset($paymentConfig['children']['renders']['children']['amazon_payment-method']);
         }
 
         return $jsLayout;

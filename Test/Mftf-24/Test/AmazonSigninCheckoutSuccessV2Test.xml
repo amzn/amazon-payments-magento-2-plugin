@@ -11,7 +11,7 @@
         </annotations>
 
         <before>
-            <createData entity="SampleAmazonPaymentV2ConfigLwa" stepKey="SampleAmazonPaymentV2ConfigData"/>
+            <createData entity="SampleAmazonPaymentConfigLwa" stepKey="SampleAmazonPaymentConfigData"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
 

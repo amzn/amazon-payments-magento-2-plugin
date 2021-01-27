@@ -12,13 +12,13 @@
 
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct2" before="flushCache"/>
-            <createData entity="EUAmazonPaymentV2Config" stepKey="SingleInvoiceAmazonPaymentConfig"/>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SingleInvoiceAmazonPaymentConfig"/>
             <createData entity="EUAmazonCurrencyConfig" stepKey="SingleInvoiceAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
-            <createData entity="SampleAmazonPaymentV2Config" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
             <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>

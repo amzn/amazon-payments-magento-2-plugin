@@ -11,7 +11,7 @@
         </annotations>
 
         <before>
-            <createData entity="SampleAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigLwa"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigLwa"/>
         </before>
 
         <!--Verify Sign in with Amazon Button V2 is not present on create or login pages-->

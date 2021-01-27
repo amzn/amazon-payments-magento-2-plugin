@@ -39,7 +39,7 @@
         <data key="value">1</data>
     </entity>
 
-    <entity name="SampleAmazonPaymentV2Config" type="amazon_payment_config">
+    <entity name="SampleAmazonPaymentConfig" type="amazon_payment_v2_config">
         <requiredEntity type="api_version">SampleAmazonPaymentV2ApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentV2Active</requiredEntity>
         <requiredEntity type="private_key">SampleAmazonPaymentV2PrivateKey</requiredEntity>
@@ -81,7 +81,7 @@
         <data key="value">0</data>
     </entity>
 
-    <entity name="EUAmazonPaymentV2Config" type="amazon_payment_config">
+    <entity name="EUAmazonPaymentConfig" type="amazon_payment_v2_config">
         <requiredEntity type="api_version">SampleAmazonPaymentV2ApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentV2Active</requiredEntity>
         <requiredEntity type="private_key">EUAmazonPaymentV2PrivateKey</requiredEntity>
@@ -111,7 +111,7 @@
         <data key="value">1</data>
     </entity>
 
-    <entity name="SampleAmazonPaymentV2ConfigLwa" type="amazon_payment_config">
+    <entity name="SampleAmazonPaymentConfigLwa" type="amazon_payment_v2_config">
         <requiredEntity type="api_version">SampleAmazonPaymentV2ApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentV2Active</requiredEntity>
         <requiredEntity type="private_key">SampleAmazonPaymentV2PrivateKey</requiredEntity>

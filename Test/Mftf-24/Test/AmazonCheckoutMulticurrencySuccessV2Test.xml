@@ -12,7 +12,7 @@
         </annotations>
 
         <before>
-            <createData entity="EUAmazonPaymentV2Config" stepKey="SampleAmazonPaymentV2ConfigData" before="flushCache"/>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData" before="flushCache"/>
             <createData entity="EUAmazonCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
             <!-- set default currency to one supported for multicurrency -->
             <magentoCLI command="config:set currency/options/default USD" stepKey="setDefaultCurrency" before="flushCache"/>
@@ -21,7 +21,7 @@
         </before>
 
         <after>
-            <createData entity="SampleAmazonPaymentV2Config" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
             <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
