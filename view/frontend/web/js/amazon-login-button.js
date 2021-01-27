@@ -73,7 +73,7 @@ define([
                     $buttonContainer.empty().append($buttonRoot);
                     this._loadButtonConfig(config, function (buttonConfig) {
                         amazon.Pay.renderButton('#' + $buttonRoot.empty().uniqueId().attr('id'), buttonConfig);
-                        $('.amazon-button-container .field-tooltip').fadeIn();
+                        $('.amazon-sign-in-button-container .field-tooltip').fadeIn();
                         $('.login-with-amazon').click(function() { customerData.invalidate('*'); });
                     });
                 }, this);
