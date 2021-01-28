@@ -11,7 +11,7 @@
         </annotations>
 
         <!--Add to cart via Amazon Pay button on product page and login-->
-        <click selector="{{AmazonButtonSection.Product}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
     </test>
 </tests>

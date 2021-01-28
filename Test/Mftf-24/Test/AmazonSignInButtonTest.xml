@@ -24,12 +24,12 @@
         <!--Verify Sign in with Amazon Button is present on account create-->
         <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="amOnCreateAccountPage"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded2"/>
-        <seeElement selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
+        <seeElement selector="{{AmazonLoginSection.login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
 
         <!--Verify Sign in with Amazon Button is present on login page-->
         <!--Leave this as the last step as other tests start from the login page-->
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
-        <seeElement selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
+        <seeElement selector="{{AmazonLoginSection.login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
     </test>
 </tests>

@@ -11,7 +11,7 @@
         </annotations>
 
         <!--Go to Amazon Pay from the mini cart and login-->
-        <click selector="{{AmazonButtonSection.MiniCart}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.miniCart}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
     </test>
 </tests>
