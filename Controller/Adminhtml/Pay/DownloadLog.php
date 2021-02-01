@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\Pay\Controller\Adminhtml\PayV2;
+namespace Amazon\Pay\Controller\Adminhtml\Pay;
 
 use Magento\Framework\Exception\NotFoundException;
 
