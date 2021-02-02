@@ -73,7 +73,6 @@
 <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Frontend Customisation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">Q: I&#8217;d like to add a <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> button elsewhere on my site</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-customise-the-authorisation-decline-e-mail">Q: I&#8217;d like to customise the authorisation decline e-mail</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
@@ -143,14 +142,6 @@
 </pre></div>
 </div>
 <p>You can position and target which block the button appears in as with the <cite>Amazon Sign-in</cite> button. If you need more information on how to position and add new blocks into Magento 2 please see the <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/frontend-dev-guide/layouts/layout-overview.html">Magento 2 documentation</a></p>
-</div>
-<div class="section" id="q-i-d-like-to-customise-the-authorisation-decline-e-mail">
-<h2>Q: I&#8217;d like to customise the authorisation decline e-mail<a class="headerlink" href="#q-i-d-like-to-customise-the-authorisation-decline-e-mail" title="Permalink to this headline">¶</a></h2>
-<p>You can easily customise the authorisation decline e-mails by creating a version in your own theme. To do this you need to copy the current template into your own theme:</p>
-<p><code class="docutils literal"><span class="pre">vendor/amazon/module-payment/src/Payment/view/frontend/email/hard-declined-auth.html</span></code></p>
-<p>Copy to</p>
-<p><code class="docutils literal"><span class="pre">app/design/frontend/&lt;your_namspace&gt;/&lt;your_theme&gt;/Amazon_Payment/email/hard-declined-auth.html</span></code></p>
-<p>You can then customise this new template however you wish by adding images and new text or additional styling. You can read more about customising the Magento 2 email templates in the official <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/frontend-dev-guide/templates/template-email.html">Magento 2 documentation (template email)</a></p>
 </div>
 </div>
 

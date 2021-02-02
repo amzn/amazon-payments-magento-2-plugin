@@ -166,9 +166,17 @@
 <h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
 <p>After the successful installation you can proceed to the configuration. In Magento 2 admin go to <cite>Stores &#8211;&gt; Configuration &#8211;&gt; Sales &#8211;&gt; Payment Methods</cite>. Click the <strong>Configure</strong> button next to the Amazon Pay logo.</p>
 <img alt="_images/configuration_amazon_pay.png" src="_images/configuration_amazon_pay.png" />
-<p>You now have to choose whether you already have an existing Amazon Pay merchant account or if you want to register a new account. Please be aware that the base currency of the shop is used to decide in which region (US, UK, EU, etc.) the account will be registered. If you do have questions on the registration process, please contact Amazon Pay merchant support at <a class="reference external" href="https://sellercentral-europe.amazon.com/cu/contact-us">https://sellercentral-europe.amazon.com/cu/contact-us</a></p>
-<img alt="_images/configuration_amazon_pay_new-or-existing.png" src="_images/configuration_amazon_pay_new-or-existing.png" />
-<p>After completing the account registration, or if you already have an existing account, you can continue with the plugin configuration as described in the following sections.</p>
+
+<!-- <p>You now have to choose whether you already have an existing Amazon Pay merchant account or if you want to register a new account. Please be aware that the <strong>display currency</strong> of the shop is used to decide in which region (US, UK, EU or JP) the account will be registered. If you do have questions on the registration process, please contact Amazon Pay merchant support at <a class="reference external" href="https://sellercentral-europe.amazon.com/cu/contact-us">https://sellercentral-europe.amazon.com/cu/contact-us</a></p> -->
+<!-- <img alt="_images/configuration_amazon_pay_new-or-existing.png" src="_images/configuration_amazon_pay_new-or-existing.png" /> -->
+<p>If you already have an existing Amazon Pay merchant account, you can continue with the plugin configuration as described in the following sections. Otherwise, please register a merchant account at one of the following links, depending on your region: <br> 
+<ul class="simple">
+ <li>US (USD): <a target="_blank" href="https://pay.amazon.com/signup">https://pay.amazon.com/signup</a></li>
+ <li>EU (EUR): <a target="_blank" href="https://pay.amazon.eu/signup">https://pay.amazon.eu/signup</a></li>
+ <li>UK (GBP): <a target="_blank" href="https://pay.amazon.co.uk/signup">https://pay.amazon.co.uk/signup</a></li>
+ <li>JP (YEN): <a target="_blank" href="https://pay.amazon.co.jp/signup">https://pay.amazon.co.jp/signup</a></li>
+</ul>
+If you do have questions on the registration process, please contact Amazon Pay merchant support at <a class="reference external" target="_blank" href="https://sellercentral.amazon.com/cu/contact-us">https://sellercentral.amazon.com/cu/contact-us</a>.</p>
 <div class="section" id="credentials">
 <h2>Credentials<a class="headerlink" href="#credentials" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="credentials-json">
@@ -188,7 +196,7 @@
 <div class="section" id="payment-region">
 <h3>Payment Region<a class="headerlink" href="#payment-region" title="Permalink to this headline">¶</a></h3>
 <p>Select the region where you registered your seller account from the provided list. If you&#8217;re unsure about this information, please consult the Amazon Pay merchant support. Supported regions are:
-* Euro (use for countries that use EUR as their currency, e.g. Germany, France, Italy, Spain, etc.)
+* Euro (for countries that use EUR as their currency, e.g. Germany, France, Italy, Spain, etc.)
 * United Kingdom
 * United States
 * Japan</p>
