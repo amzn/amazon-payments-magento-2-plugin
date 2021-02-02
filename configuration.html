@@ -203,7 +203,7 @@ If you do have questions on the registration process, please contact Amazon Pay 
 </ul>
 <div class="admonition note">
   <p class="first admonition-title">Note</p>
-  <p class="last">In order for the Amazon Pay service to be effectively enabled and the Checkout buttons to appear, the <cite>Display Currency</cite> of the Store View where Amazon Pay is configured must always match <cite>Payment Region</cite>. This allows to configure different Store Views with different Amazon Pay accounts and corresponding <cite>Display Currency</cite> / <cite>Payment Region</cite> combinations.
+  <p class="last">In order for the Amazon Pay service to be effectively enabled and the Checkout buttons to appear, the value of <cite>General ‣ Currency Setup ‣ Display Currency</cite> of the Store View where Amazon Pay is configured must always match <cite>Payment Region</cite>. This allows to configure different Store Views with different Amazon Pay accounts and corresponding <cite>Display Currency</cite> / <cite>Payment Region</cite> combinations.
   </p>
   </div>
 </p>
@@ -233,7 +233,8 @@ Please add this information to the field <cite>Merchant URL</cite> at <span clas
 <h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="enable-login-with-amazon">
 <h3>Enable Amazon Sign-in<a class="headerlink" href="#enable-login-with-amazon" title="Permalink to this headline">¶</a></h3>
-<p>By switching this option you can toggle <strong>Amazon Sign-in</strong>. When enabled this will log customers into Magento via their Amazon account. If disabled, customers using Amazon Pay will be handled as guests.</p>
+<p>By switching this option you can toggle <strong>Amazon Sign-in</strong>. When enabled this will log customers into Magento via their Amazon account. If disabled, customers using Amazon Pay will be handled as Guests by default but prompted to optionally create an account during Checkout.
+ if Amazon Sign-in is disabled and Magento Guest Checkout is disabled, the customer will be able to see and use Amazon Pay buttons only if already signed in with a Magento account.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Amazon Sign-in requires that Amazon Pay is enabled in order to function.</p>
@@ -242,8 +243,8 @@ Please add this information to the field <cite>Merchant URL</cite> at <span clas
 <div class="section" id="payment-action">
 <h3>Payment Action<a class="headerlink" href="#payment-action" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><cite>Charge on shipment</cite> (default) - Payments are authorized when an order is placed automatically. Captures must be requested manually by creating an invoice and selecting <cite>Capture online</cite></li>
-<li><cite>Charge on order</cite> - Payments are immediately authorized and captured.</li>
+<li><cite>Charge on Shipment</cite> (default) - Payments are authorized when an order is placed automatically. Captures must be requested manually by creating an invoice and selecting <cite>Capture online</cite></li>
+<li><cite>Charge on Order</cite> - Payments are immediately authorized and captured.</li>
 </ul>
 </div>
 <div class="section" id="authorization-mode">
@@ -291,9 +292,9 @@ Please add this information to the field <cite>Merchant URL</cite> at <span clas
 <p>Enables the multi-currency feature of Amazon Pay for Magento 2.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Multi-currency is currently supported for payment region EU and UK only, and only on Magento 2.3.1 and higher. If you are using a different payment region or Magento 2 version, this option will not be available.</p>
+<p class="last">Multi-currency is currently supported for <cite>Payment Region Euro Region</cite> and <cite>United Kingdom</cite> only. If you are using a different <cite>Payment Region</cite>, this option will not be available. Moreover, Magento <cite>General ‣ Currency Setup ‣ Display Currency</cite> value should always match <cite>Payment Region</cite> in order for the Amazon Pay service to be enabled and the Checkout button to appear.</p>
 </div>
-<p>The feature includes the following currencies:</p>
+<p>The feature includes the following currencies, that will be able to be included in Magento <cite>General ‣ Currency Setup ‣ Allowed Currencies</cite>:</p>
 <ul class="simple">
 <li>Australian Dollar (AUD)</li>
 <li>British Pound (GBP)</li>
@@ -308,9 +309,8 @@ Please add this information to the field <cite>Merchant URL</cite> at <span clas
 <li>Swiss Franc (CHF)</li>
 <li>United States Dollar (USD)</li>
 </ul>
-<p>The Amazon Pay multi-currency feature is designed for international merchants who list prices in more than one currency on their website and charge their customers the exact amount quoted on the site. When you enable multi-currency, you are not limited by the currency associated with your Amazon Payments merchant account (the ledger currency in which you receive disbursements from Amazon Payments). The multi-currency feature is offered by Amazon Services Europe SARL.</p>
-<p>The benefit to your customers is that they don’t need to worry about currency conversion or rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out on your website with their existing Amazon account.</p>
-</div>
+<p>The Amazon Pay multi-currency feature is designed for international merchants who list prices in more than one currency on their website and charge their customers the exact amount quoted on the site. When you enable multi-currency, you are not limited by the currency associated with your Amazon Pay merchant account (the ledger currency in which you receive disbursements from Amazon Pay). The multi-currency feature is offered by Amazon Services Europe SARL.
+<br>The benefit to your customers is that they don’t need to worry about currency conversion or rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out on your website with their existing Amazon account.</p>
 <div class="section" id="store-name">
 <h4>Store Name<a class="headerlink" href="#store-name" title="Permalink to this headline">¶</a></h4>
 <p>Allows setting the store name submitted to Amazon Pay per Store View.</p>
