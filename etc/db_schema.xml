@@ -32,6 +32,9 @@
             <column name="id"/>
         </constraint>
         <constraint xsi:type="foreign" referenceId="AMAZON_PAYV2_CHECKOUT_SESSION_QUOTE_ID_QUOTE_ENTITY_ID" table="amazon_payv2_checkout_session" column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="AMAZON_PAYV2_CHECKOUT_SESSION_QUOTE_ID" indexType="btree">
+            <column name="quote_id"/>
+        </index>
         <index referenceId="AMAZON_PAYV2_CHECKOUT_SESSION_IS_ACTIVE" indexType="btree">
             <column name="is_active"/>
         </index>
