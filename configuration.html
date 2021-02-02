@@ -76,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#enable-amazon-pay">Enable Amazon Pay</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#credentials">Credentials</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#credentials-json">Credentials JSON</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret">Merchant Id, Access Key Id, Secret Access Key, Client Id, Client Secret</a></li>
@@ -85,7 +86,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#options">Options</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#enable-amazon-pay">Enable Amazon Pay</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enable-login-with-amazon">Enable Amazon Sign-in</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#payment-action">Payment Action</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#authorization-mode">Authorization Mode</a></li>
@@ -177,41 +177,52 @@
  <li>JP (YEN): <a target="_blank" href="https://pay.amazon.co.jp/signup">https://pay.amazon.co.jp/signup</a></li>
 </ul>
 If you do have questions on the registration process, please contact Amazon Pay merchant support at <a class="reference external" target="_blank" href="https://sellercentral.amazon.com/cu/contact-us">https://sellercentral.amazon.com/cu/contact-us</a>.</p>
+<div class="section" id="enable-amazon-pay">
+  <h2>Enable Amazon Pay<a class="headerlink" href="#enable-amazon-pay" title="Permalink to this headline">¶</a></h2>
+  <p>By switching this option you can enable or disable <strong>Amazon Pay</strong>. This option must be enabled if you want to provide the Amazon Pay service to your customers.</p>
+  </div>
 <div class="section" id="credentials">
 <h2>Credentials<a class="headerlink" href="#credentials" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="credentials-json">
-<h3>Credentials JSON<a class="headerlink" href="#credentials-json" title="Permalink to this headline">¶</a></h3>
-<p>JSON string of all Amazon Pay seller credentials, You can retrieve them via the copy your keys button in Amazon Seller Central at <span class="menuselection">Integration ‣ MWS Access Key</span>.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The values supplied in Credentials JSON will actually be used to set values for Merchant Id, Access Key Id, Secret Access Key, Client Id and Client Secret this value will be cleared on save.</p>
-</div>
-</div>
-<div class="section" id="merchant-id-access-key-id-secret-access-key-client-id-client-secret">
-<h3>Merchant Id, Access Key Id, Secret Access Key, Client Id, Client Secret<a class="headerlink" href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret" title="Permalink to this headline">¶</a></h3>
-<p>Using the credentials JSON is the preferred and easiest way to supply your credentials. Manual configuration is possible as well.</p>
-<p>The credentials can be found in Seller Central at <span class="menuselection">Integration ‣ MWS Access Key</span>.</p>
+<h3>Private Key, Public Key ID, Merchant ID, Store ID<a class="headerlink" href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret" title="Permalink to this headline">¶</a></h3>
+<p>The credentials can be found in Seller Central at <span class="menuselection"><i>Integration ‣ Integration Central</i></span>. <br> Credentials will be the same on <i>Sandbox</i> and <i>Production</i> views and work on both environments.</p>
 <img alt="_images/configuration_screenshot_1.png" src="_images/configuration_screenshot_1.png" />
+<p>From <i>Integration channel ‣ Website or mobile</i>, select <i>Magento 2</i> as platform and<i> >= 2.2.6</i> as version range. Clicking on <i>Get Instructions</i>, a link to this guide and <i>API access</i> section will be unlocked. <br> From <i>API access</i> section, you can retrieve <strong>Store ID</strong> and <strong>Merchant ID.</strong><br>
+<i>Create Keys</i> button will then allow to create a public/private key pair and a corresponding <strong>Public Key ID</strong>. <br> The <strong>Private Key</strong> will be needed to fill one of the mandatory fields in the plugin configuration panel and must include header and footer when copied over.
+<br> More information about <strong>Private Key</strong> and <strong>Public Key ID</strong> can be found <a class="reference external" target="_blank" href="https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/get-set-up-for-integration.html#4-get-your-public-key-id">here</a>.
+<img alt="_images/configuration_screenshot_1.png" src="_images/configuration_screenshot_2.png" />
 </div>
 <div class="section" id="payment-region">
 <h3>Payment Region<a class="headerlink" href="#payment-region" title="Permalink to this headline">¶</a></h3>
-<p>Select the region where you registered your seller account from the provided list. If you&#8217;re unsure about this information, please consult the Amazon Pay merchant support. Supported regions are:
-* Euro (for countries that use EUR as their currency, e.g. Germany, France, Italy, Spain, etc.)
-* United Kingdom
-* United States
-* Japan</p>
+<p>Select the region where you registered your Seller account from the provided list. If you&#8217;re unsure about this information, please consult the Amazon Pay merchant support. Supported regions are:
+  <ul class="simple">
+  
+  <li>Euro Region(for countries that use EUR as their currency, e.g. Germany, France, Italy, Spain, etc.)</li>
+    <li>United Kingdom</li>
+      <li>United States</li>
+        <li>Japan</li>
+</ul>
+<div class="admonition note">
+  <p class="first admonition-title">Note</p>
+  <p class="last">In order for the Amazon Pay service to be effectively enabled and the Checkout buttons to appear, the <cite>Display Currency</cite> of the Store View where Amazon Pay is configured must always match <cite>Payment Region</cite>. This allows to configure different Store Views with different Amazon Pay accounts and corresponding <cite>Display Currency</cite> / <cite>Payment Region</cite> combinations.
+  </p>
+  </div>
+</p>
 </div>
 <div class="section" id="sandbox">
 <h3>Sandbox<a class="headerlink" href="#sandbox" title="Permalink to this headline">¶</a></h3>
-<p>Sandbox mode has been designed to test the <strong>Amazon Pay</strong> service. In sandbox mode the selected payment method is not charged. Refer to the <strong>Amazon Pay</strong> documentation to get more information about the sandbox environment. In general, sandbox mode should be enabled for development and staging environments for testing and always has to be disabled for production environments. Never show the sandbox buttons and widgets to buyers in your live environment.</p>
+<p>Sandbox mode has been designed to test the <strong>Amazon Pay</strong> service. In sandbox mode the selected payment method is not charged. Refer to the <a target="_blank" href="https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/test-your-integration.html"><strong>Amazon Pay</strong> documentation</a>  to get more information about the sandbox environment. In general, sandbox mode should be enabled for development and staging environments for testing and always has to be disabled for production environments. Never show the sandbox buttons and widgets to buyers in your live environment.</p>
 </div>
 <div class="section" id="allowed-javascript-origins-allowed-return-urls-ipn-url">
-<h3>Allowed Javascript Origins, Allowed Return URLs, IPN URL<a class="headerlink" href="#allowed-javascript-origins-allowed-return-urls-ipn-url" title="Permalink to this headline">¶</a></h3>
-<p>These are URLs that are required by Amazon Pay and should be added to your Seller Central account. These URLs are built using the Base URL which can be found under <span class="menuselection">General ‣ Web</span>.</p>
+<h3>IPN URL<a class="headerlink" href="#allowed-javascript-origins-allowed-return-urls-ipn-url" title="Permalink to this headline">¶</a></h3>
+<p>Amazon Pay provides two update mechanisms to get Refund and Authorization status: </p>
 <ul class="simple">
-<li><cite>Allowed Javascript Origins, Allowed Return URLs</cite> - Please add these information to the corresponding fields in Seller Central, navigating to Amazon Pay (Production View) ‣ Integration ‣ Integration Central ‣ Manage client ID/store ID(s). </li>
-<li><cite>IPN URL</cite> - Please add this information to the field <strong>Merchant URL</strong> at <span class="menuselection">Settings ‣ Integration Settings</span> of the Seller Central</li>
-</ul>
+  <li><cite>Data polling via Cron Job</cite> (default) - Pull based mechanism where Magento 2 periodically checks authorization, capture  and refund status against the Amazon Pay systems. This is set to run at 5 minute intervals and requires that Magento 2 cron is setup and running</li>
+  <li><cite>Instant Payment Notifications</cite> - Push based mechanism where Amazon Pay pushes authorization, capture and refund status updates to Magento 2. This requires that your site has a valid SSL certificate</li>
+  </ul>
+
+<p>If <cite>IPN URL</cite> is set in Seller Central, Instant Payment Notifications will be enabled and will replace <i>Data polling via Cron Job</i>. This URL is built using the Base URL which can be found under <span class="menuselection"><cite>General ‣ Web</cite></span>.
+Please add this information to the field <cite>Merchant URL</cite> at <span class="menuselection"><cite>Settings ‣ Integration Settings</cite></span> in Seller Central.</p>
+
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The IPN URL settings for the Sandbox - and Production View differ. Please add the correct value to the environment you are currently transacting on.</p>
@@ -220,10 +231,6 @@ If you do have questions on the registration process, please contact Amazon Pay 
 </div>
 <div class="section" id="options">
 <h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="enable-amazon-pay">
-<h3>Enable Amazon Pay<a class="headerlink" href="#enable-amazon-pay" title="Permalink to this headline">¶</a></h3>
-<p>By switching this option you can enable or disable <strong>Amazon Pay</strong>. This option must be enabled if you want to provide the Amazon Pay service to your customers.</p>
-</div>
 <div class="section" id="enable-login-with-amazon">
 <h3>Enable Amazon Sign-in<a class="headerlink" href="#enable-login-with-amazon" title="Permalink to this headline">¶</a></h3>
 <p>By switching this option you can toggle <strong>Amazon Sign-in</strong>. When enabled this will log customers into Magento via their Amazon account. If disabled, customers using Amazon Pay will be handled as guests.</p>
@@ -251,22 +258,15 @@ If you do have questions on the registration process, please contact Amazon Pay 
 <p class="last">If you expect high order values, the <strong>Automatic</strong> authorization mode might be the best choice for your business.</p>
 </div>
 </div>
-<div class="section" id="update-mechanism">
-<h3>Update Mechanism<a class="headerlink" href="#update-mechanism" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><cite>Data polling via Cron Job</cite> (default) - Pull based mechanism where Magento 2 periodically checks authorization, capture  and refund status against the Amazon Pay systems. This is set to run at 5 minute intervals and requires that Magento 2 cron is setup and running</li>
-<li><cite>Instant Payment Notifications</cite> - Push based mechanism where Amazon Pay pushes authorization, capture and refund status updates to Magento 2. This requires that your site has a valid SSL certificate</li>
-</ul>
-</div>
 </div>
 <div class="section" id="advanced">
 <h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="frontend">
 <h3>Frontend<a class="headerlink" href="#frontend" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="button-display-language">
+<!-- <div class="section" id="button-display-language">
 <h4>Button Display Language<a class="headerlink" href="#button-display-language" title="Permalink to this headline">¶</a></h4>
 <p>Allows input of a locale string to control button language should be in the format <cite>en-gb</cite>. By default the language of the store view is used.</p>
-</div>
+</div> -->
 <div class="section" id="button-color">
 <h4>Button Color<a class="headerlink" href="#button-color" title="Permalink to this headline">¶</a></h4>
 <p>Allows selection of button color from a pre determined list.</p>
@@ -279,12 +279,8 @@ If you do have questions on the registration process, please contact Amazon Pay 
 <h4>Show Amazon Pay button in minicart<a class="headerlink" href="#show-amazon-pay-button-in-minicart" title="Permalink to this headline">¶</a></h4>
 <p>Toggles whether to show the <strong>Amazon Pay</strong> button in the Magento minicart.</p>
 </div>
-<div class="section" id="show-login-with-amazon-in-authentication-popup">
-<h4>Show Amazon Sign-in in authentication popup<a class="headerlink" href="#show-login-with-amazon-in-authentication-popup" title="Permalink to this headline">¶</a></h4>
-<p>Toggles whether to show <strong>Amazon Sign-in</strong> button in the Magento authentication popup.</p>
-</div>
 <div class="section" id="show-amazon-pay-method">
-<h4>Show Amazon Pay Method<a class="headerlink" href="#show-amazon-pay-method" title="Permalink to this headline">¶</a></h4>
+<h4>Show Amazon Pay in payment methods<a class="headerlink" href="#show-amazon-pay-method" title="Permalink to this headline">¶</a></h4>
 <p>If enabled, Amazon Pay is presented as an option in the list of available payment methods during the final step of checkout.</p>
 </div>
 </div>
@@ -318,10 +314,6 @@ If you do have questions on the registration process, please contact Amazon Pay 
 <div class="section" id="store-name">
 <h4>Store Name<a class="headerlink" href="#store-name" title="Permalink to this headline">¶</a></h4>
 <p>Allows setting the store name submitted to Amazon Pay per Store View.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Store View name will be provided by default for M2.2.x, M2.3.x and M2.4.0. Store Display Name (set in Seller Central account) will be provided by default starting from M2.4.1.</p>
-</div>
 </div>
 </div>
 <div class="section" id="developer-options">
