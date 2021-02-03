@@ -125,14 +125,13 @@
 <p>To migrate your Amazon Pay integration successfully from Magento 1 to Magento 2, please follow the instructions below carefully.</p>
 <div class="section" id="step-1-verify-extension-installation">
 <h2>Step 1: Verify extension installation<a class="headerlink" href="#step-1-verify-extension-installation" title="Permalink to this headline">¶</a></h2>
-<p>With Magento 2.2.4 and higher, the Amazon Pay extension is bundled along with Magento 2. To verify if it&#8217;s installed successfully, open the Magento 2 admin and go to Stores –&gt; Configuration –&gt; Sales –&gt; Payment Methods. Amazon Pay should be listed under &#8220;OTHER PAYMENT METHODS&#8221; like shown below.</p>
+<p>To verify if it&#8217;s installed successfully, open the Magento 2 admin and go to Stores –&gt; Configuration –&gt; Sales –&gt; Payment Methods. Amazon Pay should be listed under &#8220;OTHER PAYMENT METHODS&#8221; like shown below.</p>
 <img alt="_images/configuration_amazon_pay.png" src="_images/configuration_amazon_pay.png" />
 <p>If Amazon Pay is not listed here, please refer to the <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> section to get more details concerning installation procedure.</p>
 </div>
 <div class="section" id="step-2-configure-the-extension">
 <h2>Step 2: Configure the extension<a class="headerlink" href="#step-2-configure-the-extension" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Add the <strong>Allowed JavaScript Origins and Allowed Return URLs</strong> to your Amazon Sign-in section of the Seller Central. Please note that the Allowed JavaScript Origins URL must only be changed if the base URL of your shop has changed (e.g. www.myshop.com =&gt; www.mygreatnewshop.com ). The Allowed Return URL <strong>must be</strong> changed as this requires a full URL and is different from the one used in Magento 1.</li>
 <li>Add the <strong>IPN URL</strong> to the field Merchant URL at Settings ‣ Integration Settings of the Seller Central. Please note that the IPN URL can be specified separately for Production and Sandbox view, so please verify that it has been set correctly for both environment.</li>
 <li>Refer to <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> to get more information about the other configuration settings.</li>
 </ul>
@@ -158,11 +157,11 @@
 <tr class="row-even"><td rowspan="2">Payment Action</td>
 <td>Authorize and capture</td>
 <td>Authorize and capture</td>
-<td>Charge on order</td>
+<td>Charge on Order</td>
 </tr>
 <tr class="row-odd"><td>Authorize</td>
 <td>Authorize</td>
-<td>Charge on shipment</td>
+<td>Charge on hipment</td>
 </tr>
 <tr class="row-even"><td rowspan="3">Authorization Mode</td>
 <td>Auto</td>
@@ -180,7 +179,7 @@
 <tr class="row-odd"><td rowspan="2">Update Mechanism</td>
 <td>Instant Payment Notif.</td>
 <td>N/A</td>
-<td>Instant Payment N.</td>
+<td>IPN</td>
 </tr>
 <tr class="row-even"><td>Data polling</td>
 <td>Default</td>
@@ -203,7 +202,7 @@
 </div>
 <div class="section" id="step-6-go-live">
 <h2>Step 6: Go live<a class="headerlink" href="#step-6-go-live" title="Permalink to this headline">¶</a></h2>
-<p>Now that your Magento 2 integration is up-to-date with your Magento 1 integration and is functioning normally, please diable the sandbox mode and remove any IP address whitelisting. It is best practice to perform a test transaction in live mode to ensure the integration is working as expected.</p>
+<p>Now that your Magento 2 integration is up-to-date with your Magento 1 integration and is functioning normally, please disable the sandbox mode and remove any IP address whitelisting. It is best practice to perform a test transaction in live mode to ensure the integration is working as expected.</p>
 </div>
 </div>
 

@@ -129,28 +129,28 @@
 <h1>Order &amp; payment workflow<a class="headerlink" href="#order-payment-workflow" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="amazon-pay-button">
 <h2><cite>Amazon Pay</cite> button<a class="headerlink" href="#amazon-pay-button" title="Permalink to this headline">¶</a></h2>
-<p>The <cite>Amazon Pay</cite> button appears in several places in the shop</p>
+<p>The <cite>Amazon Pay</cite> button appears on several positions in the shop</p>
 <ul class="simple">
 <li>on the shipping step of checkout</li>
-<li>on the cart page</li>
-<li>on the minibasket</li>
-<li>on product pages depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a></li>
+<li>on the cart page </li>
+<li>on the minicart (optional, depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>)</li>
+<li>on product pages (optional, depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>)</li>
+<li>on the list of payment methods (optional, depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>)</li>
 </ul>
 <img alt="_images/amazon-pay-button.png" src="_images/amazon-pay-button.png" />
 <p>Pressing the <cite>Amazon Pay</cite> button launches the Amazon authentication window, where the customer is asked for their Amazon user account credentials.</p>
 <img alt="_images/sign-in.png" src="_images/sign-in.png" />
-<p>After a successful login the customer is redirected to the checkout</p>
+<p>After a successful sign-in the customer is prompted to select an address and a payment method from their Amazon account, and then they are redirected to Magento checkout page.</p>
+<img alt="_images/step1.png" src="_images/step1.png" />
 </div>
 <div class="section" id="placing-an-order">
 <h2>Placing an order<a class="headerlink" href="#placing-an-order" title="Permalink to this headline">¶</a></h2>
 <p>The <strong>Amazon Pay</strong> checkout uses the standard Magento 2 checkout however it replaces certain forms with widgets that populate the data the forms would have requested.</p>
-<p>On the shipping step of checkout the address form is replaced with a shipping widget</p>
-<img alt="_images/shipping-widget.png" src="_images/shipping-widget.png" />
-<p>On the payment step of checkout payment methods are replaced by a payment widget</p>
-<img alt="_images/payment-widget.png" src="_images/payment-widget.png" />
+<p>On the shipping step of checkout the address is taken from the Customer's Amazon account. The shipping address is editable in Amazon hosted page after clicking 'Edit' button.</p>
+<p>On the payment step of checkout, the billing adddress associated to the payment method chosen on Amazon hosted page is shown (EU/UK Payment Regions only) and can be editable via Magento standard forms clicking on 'Edit Billing Address' button. The customer can return to Amazon hosted page with 'Edit Payment Method' button. </p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">In instances where the billing address is not exposed such as within the US region the shipping address will be used to populate the billing address</p>
+<p class="last">For US/JP Payment Regions, the billing address associated to the payment method is not exposed by Amazon. The shipping address will be used to populate the billing address in Magento backend, but will not be shown and will not be editable by the customer at the payment step.</p>
 </div>
 <p>The actual order flow other than this remains the same, as it is for the standard Magento 2 checkout.</p>
 </div>
@@ -159,18 +159,18 @@
 <p>An authorization is automatically requested on order placement. There are two different authorization flows, Immediate and Automatic, as defined in <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>.</p>
 <div class="section" id="immediate">
 <h3>Immediate<a class="headerlink" href="#immediate" title="Permalink to this headline">¶</a></h3>
-<p>The customer will get instant feedback there are 3 possible outcomes</p>
+<p>The customer will get instant feedback there are 2 possible final outcomes:</p>
 <ol class="arabic simple">
-<li><cite>Authorization OK</cite> - Order is placed with a state of <cite>Processing</cite>, Customer is redirected to the standard Magento 2 confirmation screen</li>
-<li><cite>Soft Decline</cite> - Order is not placed and customer is asked to select an alternative payment instrument from the Amazon Pay widget</li>
-<li><cite>Hard Decline</cite> - Order is not placed, the Amazon Pay specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order</li>
+<li><cite>Authorization OK</cite> - Order is placed with a state of <cite>Processing</cite>, Customer is redirected to the standard Magento 2 confirmation screen.</li>
+<li><cite>Soft Decline</cite> - The customer will still be inside an Amazon checkout and will be asked to update the selected payment method, select a new one and retry the payment or abandon the checkout (resulting in an <cite>Hard Decline</cite></li>
+<li><cite>Hard Decline</cite> - Order is not placed, the Amazon Pay alternative checkout will be left and the customer will be asked to select an alternative payment method for this order.</li>
 </ol>
 </div>
 <div class="section" id="automatic">
 <h3>Automatic<a class="headerlink" href="#automatic" title="Permalink to this headline">¶</a></h3>
 <p>In this mode, the extension will try to authorize the order immediate (as described above). If this fails due to a timeout, it will fallback to an asynchronous authorization (returns <cite>Pending</cite> state with a <cite>Payment Review</cite> status).</p>
 <p>The customer will always be redirected to the standard Magento 2 confirmation screen as authorization state will be processed by Amazon Pay after the order is placed.</p>
-<p>A status update on the state of the authorization will be delivered by IPN or Cron depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> there are 3 possible outcomes of this process</p>
+<p>A status update on the state of the authorization will be delivered by IPN or Cron depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>. There are 3 possible outcomes of this process</p>
 <ol class="arabic simple">
 <li><cite>Authorization OK</cite> - Order moves to state <cite>Processing</cite></li>
 <li><cite>Soft Decline</cite> - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised</li>
@@ -186,6 +186,10 @@
 <li>Open the order for which you want to capture payment and click the <cite>Invoice</cite> link located in the top row. Please make sure that the payment you want to capture has an open authorization transaction and is in the <cite>Processing</cite> state.</li>
 <li>Submit the invoice form ensuring the <cite>Capture Online</cite> option above the <cite>Submit Invoice</cite> button is selected.</li>
 </ol>
+<div class="admonition note">
+  <p class="first admonition-title">Note</p>
+  <p class="last">For US/JP Payment Regions, it is possible to create multiple invoices on the same order (Split Shipments). For EU/UK Payment Regions, only one invoice is allowed due to PSD2 Regulations.</p>
+  </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">It is vital that <cite>Capture Online</cite> is selected as otherwise Amazon Pay will not be instructed to capture the payment, resulting in you not receiving any funds.</p>
