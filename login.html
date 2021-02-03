@@ -123,13 +123,15 @@
 <h1>Amazon Sign-in<a class="headerlink" href="#login-with-amazon" title="Permalink to this headline">¶</a></h1>
 <p><strong>Amazon Sign-in</strong> allows users to login to your shop using their Amazon username and password. The name, email address and user id is fetched from Amazon in order to facilitate the creation of a Magento account. Shipping and billing address will be retrieved as part of the checkout.</p>
 <p>Customers who have logged in via Amazon Sign-in previously, will be recognized and automatically logged in into the Magento customer account as well. In case an account for the email address already exists, the accounts can be linked to add <strong>Amazon Sign-in</strong> as another option to sign in for the customer.</p>
+<p>When enabled, <strong>Amazon Sign-in</strong> will log customers into Magento via their Amazon account. If disabled, customers using Amazon Pay will be handled as Guests by default but prompted to optionally create an account during Checkout.
+  if Amazon Sign-in is disabled and Magento Guest Checkout is disabled, the customer will be able to see and use Amazon Pay buttons only if already signed in with a Magento account.</p>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>To offer the <strong>Amazon Sign-in</strong> feature, you have to have a valid <strong>Amazon Pay</strong> merchant account (<a class="reference external" href="https://pay.amazon.com/signup">sign up here</a> if you don&#8217;t have one yet), and toggled <strong>Amazon Sign-in</strong> option on in the configuration panel, see <a href="configuration.html#enable-login-with-amazon">Configuration</a> section for more details. </p>
 </div>
 <div class="section" id="login-with-amazon-button">
 <h2><cite>Amazon Sign-in</cite> button<a class="headerlink" href="#login-with-amazon-button" title="Permalink to this headline">¶</a></h2>
-<p>The <cite>Amazon Sign-in</cite> button appears in several places in the shop:</p>
+<p>The <cite>Amazon Sign-in</cite> button appears on the following positions in the shop:</p>
 <ul class="simple">
 <li>on the customer login page</li>
 <li>on the customer registration page</li>
@@ -137,7 +139,9 @@
 <img alt="_images/register.png" src="_images/register.png" />
 <p>Pressing the <cite>Amazon Sign-in</cite> button launches the Amazon authentication window, where the customer is asked for their Amazon account e-mail address and password.</p>
 <img alt="_images/sign-in.png" src="_images/sign-in.png" />
-<p>After a successful login the customer is redirected to the <cite>My Account</cite> section.</p>
+<p>The customer will then have to provide Consent to share name and email coming from their Amazon account.</p>
+<img alt="_images/sign-in.png" src="_images/consent.png" />
+<p>After a successful sign-in, the customer is redirected to the <cite>My Account</cite> section.</p>
 </div>
 </div>
 
