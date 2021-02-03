@@ -322,6 +322,17 @@ Please add this information to the field <cite>Merchant URL</cite> at <span clas
 <p>Allows setting the store name submitted to Amazon Pay per Store View.</p>
 </div>
 </div>
+<div class="section" id="shipping-restrictions">
+  <h3>Shipping Restrictions<a class="headerlink" href="#shipping-restrictions" title="Permalink to this headline">¶</a></h3>
+  <div class="section" id="restrict-po-boxes">
+  <h4>Restrict PO Boxes<a class="headerlink" href="#restrict-po-boxes" title="Permalink to this headline">¶</a></h4>
+  <p>In Amazon hosted page, it marks PO box addresses in US, CA, GB, FR, DE, ES, PT, IT, AU as restricted in the Customer's shipping address selection.</p>
+  </div>
+  <div class="section" id="restrict-packstations">
+    <h4>Restrict Packstations<a class="headerlink" href="#restrict-packstations" title="Permalink to this headline">¶</a></h4>
+    <p>In Amazon hosted page, Marks packstation addresses in DE as restricted in the Customer's shipping address selection.</p>
+  </div>
+  </div>
 <div class="section" id="developer-options">
 <h3>Developer Options<a class="headerlink" href="#developer-options" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="logging">
@@ -330,11 +341,11 @@ Please add this information to the field <cite>Merchant URL</cite> at <span clas
 </div>
 <div class="section" id="checkout-review-url">
   <h4>Checkout review URL<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h4>
-  <p>Optional parameter. If left empty, base website URL + "/checkout/" will be used. Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address. Secure protocol is required (https://).</p>
+  <p>Optional parameter. Setting this value could break Amazon Pay Integration. If left empty, "https://base_website_url/amazon_pay/login/checkout" will be used. Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address. Secure protocol is required (https://).</p>
   </div>
   <div class="section" id="checkout-result-url">
     <h4>Checkout result URL<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h4>
-  <p>Optional parameter. If left empty, base website URL + "/checkout/" will be used. Amazon Pay will redirect to this URL after completing the transaction. Secure protocol is required (https://).</p>
+  <p>Optional parameter. Setting this value could break Amazon Pay Integration. If left empty, "https://base_website_url/amazon_pay/checkout/completeSession" will be used. Amazon Pay will redirect to this URL after completing the transaction. Secure protocol is required (https://).</p>
   </div>
 <div class="section" id="allowed-ips">
 <h4>Allowed IPs<a class="headerlink" href="#allowed-ips" title="Permalink to this headline">¶</a></h4>
