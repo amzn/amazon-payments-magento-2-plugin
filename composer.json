@@ -11,7 +11,8 @@
     "amzn/amazon-pay-and-login-with-amazon-core-module": "*",
     "amzn/login-with-amazon-module": "*",
     "amzn/amazon-pay-module": "*",
-    "amzn/amazon-pay-v2-magento-2-module": "*"
+    "amzn/amazon-pay-v2-magento-2-module": "*",
+    "amzn/amazon-payments-magento-2-plugin": "*"
   },
   "require-dev": {
     "guzzlehttp/guzzle": "^6.2.0",
