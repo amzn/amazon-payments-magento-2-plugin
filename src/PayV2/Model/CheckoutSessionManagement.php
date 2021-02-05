@@ -618,6 +618,9 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                     ];
                 }
 
+                // get payment to load it in the session, so that a salesrule that relies on payment method conditions
+                // can work as expected
+                $this->magentoCheckoutSession->getQuote()->getPayment();
                 // collect quote totals before placing order (needed for 2.3.0 and lower)
                 // https://github.com/amzn/amazon-payments-magento-2-plugin/issues/992
                 $this->magentoCheckoutSession->getQuote()->collectTotals();
