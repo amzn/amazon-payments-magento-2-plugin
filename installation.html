@@ -130,6 +130,11 @@
 <div class="section" id="pre-installation-steps">
 <h2>Pre-installation steps<a class="headerlink" href="#pre-installation-steps" title="Permalink to this headline">¶</a></h2>
 <p>For Magento versions from 2.2.4 up to 2.4.x, our <a href="legacy/index.html">Legacy </a> extension (EOL) is probably already pre-installed.</p>
+<div class="admonition note">
+  <p class="first admonition-title"><strong>Note</strong></p>
+  <p class="last"><strong>Any outstanding Payment authorizations and Payment Refunds for orders processed with the <a href="legacy/index.html">Legacy </a> extension (EOL) will be automatically processed by the new extension, once installed.</strong></p>
+</p>
+  </div>
 <p>Create a backup of your shop before proceeding to install this new Amazon Pay extension. Before installing Amazon Pay, please also remove any previously installed or preinstalled Amazon Pay extension. This includes all directories and their files from the following paths:
     <ul class="simple">
     <li><i>app/code/Amazon/PayV2</li>  
@@ -142,12 +147,6 @@
       <p class="last">If you are using Composer to install Amazon Pay, it will remove the files in <i>vendor</i> folder automatically, but you will need to manually clean <i>app/code/Amazon</i> if present.</p>
     </p>
       </div>
-
-      <div class="admonition note">
-        <p class="first admonition-title"><strong>Note</strong></p>
-        <p class="last"><strong>Any outstanding Payment authorizations and Payment Refunds for orders processed with the <a href="legacy/index.html">Legacy </a> extension (EOL) will be automatically processed by the new extension, once installed.</strong></p>
-      </p>
-        </div>
 </ul>
 </div>
 <div class="section" id="web-setup-wizard-magento-marketplace-install-method">
