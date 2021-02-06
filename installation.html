@@ -122,7 +122,7 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>Starting from Magento 2.3.0, the extension is available via Composer in Packagist or Magento Marketplace as <i>amzn/amazon-pay-magento-2-module</i>.</p>
+<p>Starting from Magento version 2.3.0, the extension is available via Composer in Packagist or Magento Marketplace as <i>amzn/amazon-pay-magento-2-module</i>.</p>
 <p class="last"> For Magento versions 2.2.6 up to 2.2.11 (EOL), the <a href="legacy/index.html">Legacy </a> extension (EOL) is already preinstalled and the new extension for those versions has also reached EOL. The new extension for those versions is available <a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#installation-steps">here</a> and, once installed, will appear in the <a href="configuration.html">Configuration</a> panel as an alternative (V2) to the Legacy (V1) checkout experience, as shown in the following image:
    <br></p>
   <p><img alt="_images/configuration_amazon_pay.png" src="_images/v1_v2_selector.png" />  
@@ -138,10 +138,16 @@
     <li> vendor/amzn/login-with-amazon-module</li></ul></i>
    
     <div class="admonition warning">
-      <p class="first admonition-title">Note</p>
+      <p class="first admonition-title">Warning</p>
       <p class="last">If you are using Composer to install Amazon Pay, it will remove the files in <i>vendor</i> folder automatically, but you will need to manually clean <i>app/code/Amazon</i> if present.</p>
     </p>
       </div>
+
+      <div class="admonition note">
+        <p class="first admonition-title"><strong>Note</strong></p>
+        <p class="last"><strong>Any outstanding Payment authorizations and Payment Refunds for orders processed with the <a href="legacy/index.html">Legacy </a> extension (EOL) will be automatically processed by the new extension, once installed.</strong></p>
+      </p>
+        </div>
 </ul>
 </div>
 <div class="section" id="web-setup-wizard-magento-marketplace-install-method">
@@ -166,7 +172,7 @@
 <div><ul class="simple">
 <li>Magento 2.1 - 2.2.5: <br>Not supported by this extension. Please take a look at our Legacy extension <a class="reference internal" href="legacy/index.html"><span class="doc">here</span></a>. 
 <li>Magento 2.2.6 - 2.2.x (EOL): <br><cite>composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout-1.2.x</cite></li>
-<li>Magento 2.3.0 and above: <br><cite>composer require amzn/amazon-payments-magento-2-plugin:5.*</cite></li>
+<li>Magento 2.3.0 and above: <br><cite>composer require amzn/amazon-pay-magento-2-module:5.*</cite></li>
 </ul>
 </div></blockquote>
 </li>

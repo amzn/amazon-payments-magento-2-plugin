@@ -165,20 +165,19 @@
 <h3>Immediate<a class="headerlink" href="#immediate" title="Permalink to this headline">¶</a></h3>
 <p>The customer will get instant feedback. There are 3 possible outcomes:</p>
 <ol class="arabic simple">
-<li><cite>Authorization OK</cite> - Order is placed with a state of <cite>Processing</cite>, Customer is redirected to the standard Magento 2 confirmation screen.</li>
-<li><cite>Soft Decline</cite> - The customer will still be inside an Amazon checkout and will be asked to update the selected payment method, select a new one and retry the payment or abandon the checkout (resulting in an <cite>Hard Decline</cite>).</li>
-<li><cite>Hard Decline</cite> - Order is not placed, the Amazon Pay alternative checkout will be left and the customer will be asked to select an alternative payment method for this order.</li>
+<li><cite>Authorization OK</cite> - Order is placed and moves to <cite>Processing</cite> state. The customer is redirected to the standard Magento 2 confirmation screen.</li>
+<li><cite>Soft Decline</cite> - The customer will still be inside an Amazon checkout and will be asked to update the selected payment method, select a new one and retry the payment or abandon the checkout (resulting in <cite>Authorization OK</cite> or <cite>Hard Decline</cite>).</li>
+<li><cite>Hard Decline</cite> - Order is not placed, the Amazon Pay checkout will be left and the customer will be asked to select an alternative payment method for this order.</li>
 </ol>
 </div>
 <div class="section" id="automatic">
 <h3>Automatic<a class="headerlink" href="#automatic" title="Permalink to this headline">¶</a></h3>
 <p>In this mode, the extension will try to authorize the order immediately (as described above). If this fails due to a timeout, it will fallback to an asynchronous authorization (returns <cite>Pending</cite> state with a <cite>Payment Review</cite> status).</p>
 <p>The customer will always be redirected to the standard Magento 2 confirmation screen as authorization state will be processed by Amazon Pay after the order is placed.</p>
-<p>A status update on the state of the authorization will be delivered via <cite>Polling</cite> or <cite>IPN</cite> depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>. There are 3 possible outcomes of this process:</p>
+<p>A status update on the state of the authorization will be delivered via <cite>Polling</cite> or <cite>IPN</cite> depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>. There are 2 possible outcomes of this process:</p>
 <ol class="arabic simple">
 <li><cite>Authorization OK</cite> - Order moves to state <cite>Processing</cite></li>
-<li><cite>Soft Decline</cite> - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised.</li>
-<li><cite>Hard Decline</cite> - Authorization is closed, customer is emailed with instructions to contact the merchant.</li>
+<li><cite>Hard Decline</cite> - Authorization is declined, Order moves to state <cite>Canceled</cite>. Customer is emailed with instructions to contact the merchant.</li>
 </ol>
 </div>
 </div>
