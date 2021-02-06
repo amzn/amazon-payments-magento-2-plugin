@@ -123,33 +123,35 @@
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>Starting from Magento 2.3.0, the extension is available via Composer in Packagist or Magento Marketplace as <i>amzn/amazon-pay-magento-2-module</i>.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"> For Magento versions 2.2.6 up to 2.2.11 (EOL), the <a href="legacy/index.html">Legacy version</a> of the extension (EOL) is already preinstalled and the new extension for those versions has also reached EOL. The new extension is available <a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#installation-steps">here</a> and, once installed, will appear in the <a href="configuration.html">Configuration</a> panel as an alternative (V2) to the Legacy (V1) checkout experience, as shown in the following image:
+<p class="last"> For Magento versions 2.2.6 up to 2.2.11 (EOL), the <a href="legacy/index.html">Legacy </a> extension (EOL) is already preinstalled and the new extension for those versions has also reached EOL. The new extension for those versions is available <a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x#installation-steps">here</a> and, once installed, will appear in the <a href="configuration.html">Configuration</a> panel as an alternative (V2) to the Legacy (V1) checkout experience, as shown in the following image:
    <br></p>
   <p><img alt="_images/configuration_amazon_pay.png" src="_images/v1_v2_selector.png" />  
 <br> For Magento versions below 2.2.6 (EOL), the Legacy version of our extension (EOL) is available at <a class="reference external" href="legacy/installation.html#manual-composer-install-method">Amazon Pay and Amazon Sign-in for Magento 2 (Legacy) documentation</a>.</p>
-</div>
 <div class="section" id="pre-installation-steps">
 <h2>Pre-installation steps<a class="headerlink" href="#pre-installation-steps" title="Permalink to this headline">¶</a></h2>
- <p>Create a backup of your shop before proceeding to install. Before installing Amazon Pay, please also remove any previously installed versions. This includes all directories and their files from the following paths:
+<p>For Magento versions from 2.2.4 up to 2.4.x, our <a href="legacy/index.html">Legacy </a> extension (EOL) is probably already pre-installed.</p>
+<p>Create a backup of your shop before proceeding to install this new Amazon Pay extension. Before installing Amazon Pay, please also remove any previously installed or preinstalled Amazon Pay extension. This includes all directories and their files from the following paths:
     <ul class="simple">
     <li><i>app/code/Amazon/PayV2</li>  
     <li> vendor/amzn/amazon-pay-and-login-with-amazon-core-module</li>
     <li> vendor/amzn/amazon-pay-module</li>
     <li> vendor/amzn/login-with-amazon-module</li></ul></i>
-    
-If you are using composer to install Amazon Pay, it will remove the files in vendor for you, but you will need to manually clean <i>app/code/Amazon</i> if present.</p>
-
+   
+    <div class="admonition warning">
+      <p class="first admonition-title">Note</p>
+      <p class="last">If you are using Composer to install Amazon Pay, it will remove the files in <i>vendor</i> folder automatically, but you will need to manually clean <i>app/code/Amazon</i> if present.</p>
+    </p>
+      </div>
 </ul>
 </div>
 <div class="section" id="web-setup-wizard-magento-marketplace-install-method">
 <h2>Magento Marketplace Install Method<a class="headerlink" href="#web-setup-wizard-magento-marketplace-install-method" title="Permalink to this headline">¶</a></h2>
-<p>Our extension can be found here: <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html</a></p>
+<p>Our extension can be downloaded from Magento Marketplace: <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html</a></p>
+<p>It can then be installed following these steps:</p>
+<p>WIP</p>
 </div>
 <div class="section" id="manual-composer-install-method">
-<h2>Manual Composer Install Method<a class="headerlink" href="#manual-composer-install-method" title="Permalink to this headline">¶</a></h2>
-<p>When using Magento 2.2.4, the extension is probably already pre-installed. If not, please follow this procedure to install the extension.</p>
+<h2>Composer Install Method<a class="headerlink" href="#manual-composer-install-method" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The composer require command below will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please replace the version behind the colon with the preferred version.</p>
@@ -162,14 +164,13 @@ If you are using composer to install Amazon Pay, it will remove the files in ven
 <li><p class="first">Install the extension via Composer. The right command is dependent on your Magento 2 version:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Magento 2.1 - 2.2.3: <cite>composer require amzn/amazon-payments-magento-2-plugin:1.2.*</cite></li>
-<li>Magento 2.2.4 - 2.2.5: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.0.*</cite></li>
-<li>Magento 2.2.6 - 2.2.x: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.2.*</cite></li>
-<li>Magento 2.3.0 and above: <cite>composer require amzn/amazon-payments-magento-2-plugin:3.*</cite></li>
+<li>Magento 2.1 - 2.2.5: <br>Not supported by this extension. Please take a look at our Legacy extension <a class="reference internal" href="legacy/index.html"><span class="doc">here</span></a>. 
+<li>Magento 2.2.6 - 2.2.x (EOL): <br><cite>composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout-1.2.x</cite></li>
+<li>Magento 2.3.0 and above: <br><cite>composer require amzn/amazon-payments-magento-2-plugin:5.*</cite></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first">Enable the extension: <cite>php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment</cite></p>
+<li><p class="first">Enable the extension: <cite>php bin/magento module:enable Amazon_Pay</cite></p>
 </li>
 <li><p class="first">Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></p>
 </li>
@@ -184,14 +185,14 @@ If you are using composer to install Amazon Pay, it will remove the files in ven
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Please also have a look at the official Magento documentation for command line configuration: <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html">http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html</a></p>
+<p class="last">Please also have a look at the official Magento documentation for command line configuration: <a class="reference external" href="http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands.html">http://devdocs.magento.com/guides/v2.4/config-guide/cli/config-cli-subcommands.html</a></p>
 </div>
 </div>
 <div class="section" id="un-install-method">
 <h2>Un-install Method<a class="headerlink" href="#un-install-method" title="Permalink to this headline">¶</a></h2>
-<p>If there is a need to disable the module, you can either disable Amazon Pay and Amazon Sign-in in the extension settings. This will remove all customer facing parts.</p>
-<p>To completely disable the module, please run <cite>php bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</cite></p>
-<p>To completely uninstall the module using composer, please run <cite>composer remove amzn/amazon-payments-magento-2-plugin</cite></p>
+<p>If there is a need to disable the module, you can disable Amazon Pay in the extension settings. This will remove all customer facing parts.</p>
+<p>To completely disable the module, please run: <br><cite>php bin/magento module:disable Amazon_Pay</cite></p>
+<p>To completely uninstall the module using Composer, please run: <br><cite>composer remove amzn/amazon-payments-magento-2-plugin</cite></p>
 </div>
 </div>
 
