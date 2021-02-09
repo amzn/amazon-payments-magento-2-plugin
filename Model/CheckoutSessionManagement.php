@@ -82,6 +82,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $searchCriteriaBuilder;
 
     /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    private $magentoCheckoutSession;
+
+    /**
      * @var \Amazon\Pay\Domain\AmazonAddressFactory
      */
     private $amazonAddressFactory;
@@ -146,6 +151,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $paymentRepository
      * @param \Magento\Framework\Validator\Factory $validatorFactory ,
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory ,
+     * @param \Magento\Checkout\Model\Session $magentoCheckoutSession
      * @param \Amazon\Pay\Domain\AmazonAddressFactory $amazonAddressFactory ,
      * @param \Amazon\Pay\Helper\Address $addressHelper ,
      * @param \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
@@ -167,6 +173,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Magento\Sales\Api\OrderPaymentRepositoryInterface $paymentRepository,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Checkout\Model\Session $magentoCheckoutSession,
         \Amazon\Pay\Domain\AmazonAddressFactory $amazonAddressFactory,
         \Amazon\Pay\Helper\Address $addressHelper,
         \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
@@ -187,6 +194,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->paymentRepository = $paymentRepository;
         $this->validatorFactory = $validatorFactory;
         $this->countryCollectionFactory = $countryCollectionFactory;
+        $this->magentoCheckoutSession = $magentoCheckoutSession;
         $this->amazonAddressFactory = $amazonAddressFactory;
         $this->addressHelper = $addressHelper;
         $this->checkoutSessionFactory = $checkoutSessionFactory;
@@ -624,6 +632,13 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     'message' => $this->getCanceledMessage($amazonSession),
                 ];
             }
+
+            // get payment to load it in the session, so that a salesrule that relies on payment method conditions
+            // can work as expected
+            $this->magentoCheckoutSession->getQuote()->getPayment();
+            // collect quote totals before placing order (needed for 2.3.0 and lower)
+            // https://github.com/amzn/amazon-payments-magento-2-plugin/issues/992
+            $this->magentoCheckoutSession->getQuote()->collectTotals();
 
             $orderId = $this->cartManagement->placeOrder($cart->getId());
             $order = $this->orderRepository->get($orderId);
