@@ -72,8 +72,8 @@
 <li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
 <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Frontend Customisation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pwa">Support for <cite>Progressive Web Apps/Headless Commerce/Single Page Applications</cite></a></li>
+<!-- <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li> -->
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
@@ -121,33 +121,35 @@
             
   <div class="section" id="frontend-customisation">
 <h1>Frontend Customisation<a class="headerlink" href="#frontend-customisation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">
-<h2>How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website<a class="headerlink" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site" title="Permalink to this headline">¶</a></h2>
-<p>If you want to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons to a new position on your website, you need to update the <strong>XML</strong> for the page you want to add it to.</p>
-<p>For instance, if you wish to add a <cite>Amazon Sign-in</cite> button to the category page you would update the following file.</p>
-<p>In your theme directory, you would create:
-<code class="docutils literal"><span class="pre">app/design/frontend/&lt;your_namspace&gt;/&lt;your_theme&gt;/Magento_Catalog/layout/catalog_category_view.xml</span></code></p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;page</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="na">layout=</span><span class="s">&quot;1column&quot;</span> <span class="na">xsi:noNamespaceSchemaLocation=</span><span class="s">&quot;urn:magento:framework:View/Layout/etc/page_configuration.xsd&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;body&gt;</span>
-        <span class="nt">&lt;referenceBlock</span> <span class="na">name=</span><span class="s">&quot;category.products&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;block</span> <span class="na">class=</span><span class="s">&quot;Amazon\Login\Block\Login&quot;</span> <span class="na">name=</span><span class="s">&quot;amazon_login&quot;</span> <span class="na">after=</span><span class="s">&quot;category.products.list&quot;</span> <span class="na">template=</span><span class="s">&quot;Amazon_Login::login.phtml&quot;</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/referenceBlock&gt;</span>
-    <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/page&gt;</span>
-</pre></div>
-</div>
-<p>Here you are referencing the block <strong>category.products</strong> and then simply inserting the <cite>Amazon Sign-in</cite> button template into this block to be positioned after the block <strong>category.products.list</strong></p>
-<p>Likewise, If you wish to add a <cite>Amazon Pay</cite> button elsewhere in your store, you can follow the same process above, using a different template:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;block</span> <span class="na">class=</span><span class="s">&quot;Amazon\Payment\Block\PaymentLink&quot;</span> <span class="na">name=</span><span class="s">&quot;amazon.pay.button&quot;</span> <span class="na">after=</span><span class="s">&quot;-&quot;</span> <span class="na">template=</span><span class="s">&quot;Amazon_Payment::payment-link.phtml&quot;</span> <span class="nt">/&gt;</span>
-</pre></div>
-</div>
-<p>You can position and target which block the button appears in as with the <cite>Amazon Sign-in</cite> button. If you need more information on how to position and add new blocks into Magento 2 please see the <a class="reference external" target="_blank" href="http://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html">Magento 2 documentation</a></p>
-</div>
 <div class="section" id="pwa">
   <h2>Support for <cite>Progressive Web Apps/Headless Commerce/Single Page Applications</cite><a class="headerlink" href="pwa" title="Permalink to this headline">¶</a></h2>
   <p>The module exposes the REST endpoints that needs to set up. You can find them at <a class="reference external" target="_blank" href="https://github.com/amzn/amazon-payments-magento-2-plugin/blob/V2checkout-1.2.x/src/PayV2/etc/webapi.xml"><cite>src/PayV2/etc/webapi.xml</cite>.</a>
     The front-end needs to be setup by the merchant/developer.</p>
   </div>
+
+  <!-- <div class="section" id="q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">
+    <h2>How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website<a class="headerlink" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site" title="Permalink to this headline">¶</a></h2>
+    <p>If you want to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons to a new position on your website, you need to update the <strong>XML</strong> for the page you want to add it to.</p>
+    <p>For instance, if you wish to add a <cite>Amazon Sign-in</cite> button to the category page you would update the following file.</p>
+    <p>In your theme directory, you would create:
+    <code class="docutils literal"><span class="pre">app/design/frontend/&lt;your_namspace&gt;/&lt;your_theme&gt;/Magento_Catalog/layout/catalog_category_view.xml</span></code></p>
+    <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;page</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="na">layout=</span><span class="s">&quot;1column&quot;</span> <span class="na">xsi:noNamespaceSchemaLocation=</span><span class="s">&quot;urn:magento:framework:View/Layout/etc/page_configuration.xsd&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;body&gt;</span>
+            <span class="nt">&lt;referenceBlock</span> <span class="na">name=</span><span class="s">&quot;category.products&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;block</span> <span class="na">class=</span><span class="s">&quot;Amazon\Login\Block\Login&quot;</span> <span class="na">name=</span><span class="s">&quot;amazon_login&quot;</span> <span class="na">after=</span><span class="s">&quot;category.products.list&quot;</span> <span class="na">template=</span><span class="s">&quot;Amazon_Login::login.phtml&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/referenceBlock&gt;</span>
+        <span class="nt">&lt;/body&gt;</span>
+    <span class="nt">&lt;/page&gt;</span>
+    </pre>
+    </div>
+    </div>
+    <p>Here you are referencing the block <strong>category.products</strong> and then simply inserting the <cite>Amazon Sign-in</cite> button template into this block to be positioned after the block <strong>category.products.list</strong></p>
+    <p>Likewise, If you wish to add a <cite>Amazon Pay</cite> button elsewhere in your store, you can follow the same process above, using a different template:</p>
+    <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;block</span> <span class="na">class=</span><span class="s">&quot;Amazon\Payment\Block\PaymentLink&quot;</span> <span class="na">name=</span><span class="s">&quot;amazon.pay.button&quot;</span> <span class="na">after=</span><span class="s">&quot;-&quot;</span> <span class="na">template=</span><span class="s">&quot;Amazon_Payment::payment-link.phtml&quot;</span> <span class="nt">/&gt;</span>
+    </pre></div>
+    </div>
+    <p>You can position and target which block the button appears in as with the <cite>Amazon Sign-in</cite> button. If you need more information on how to position and add new blocks into Magento 2 please see the <a class="reference external" target="_blank" href="http://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html">Magento 2 documentation</a></p>
+    </div> -->
 </div>
 
            </div>
