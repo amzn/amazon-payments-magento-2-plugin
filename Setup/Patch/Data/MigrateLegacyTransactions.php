@@ -17,7 +17,7 @@
 
 namespace Amazon\Pay\Setup\Patch\Data;
 
-use Amazon\PayV2\Api\Data\AsyncInterfaceFactory;
+use Amazon\Pay\Api\Data\AsyncInterfaceFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\App\ResourceConnection;

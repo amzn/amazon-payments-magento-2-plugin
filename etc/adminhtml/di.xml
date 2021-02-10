@@ -21,6 +21,6 @@
     </type>
 
     <type name="Magento\Sales\Model\Order">
-        <plugin name="amazon_payv2_legacy_order" type="Amazon\PayV2\Plugin\LegacyPaymentHandler" />
+        <plugin name="amazon_payv2_legacy_order" type="Amazon\Pay\Plugin\LegacyPaymentHandler" />
     </type>
 </config>
