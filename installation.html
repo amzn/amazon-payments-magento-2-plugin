@@ -153,7 +153,6 @@
     <li>Disable the in-core Legacy Magento modules in case they are still active:<br>
     <i>bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</i>
     </li>
-    <li>remove <i>app/code/Amazon</i> folder if present in your Magento installation.</li>
     <li>Purchase the module from <a target="_blank" class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">Magento Marketplace</a> and download the .zip file</li>
     <li>Extract the contents of the .zip file to <i>app/code/Amazon/Pay</i>, you should now see a file <i>app/code/Amazon/Pay/registration.php</i> if the directory nesting is correct</li>
     <li>Enable the module, and run the normal Magento commands for a module installation:<br />
@@ -172,6 +171,7 @@
 <p class="last">The composer require command below will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please replace the version behind the colon with the preferred version.</p>
 </div>
 <ul>
+<li>remove <i>app/code/Amazon</i> folder if present in your Magento installation.</li>
 <li><p class="first">Sign in to your server via SSH.</p>
 </li>
 <li><p class="first"><cite>cd</cite> into you Magento installation directory.</p>
