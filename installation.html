@@ -135,18 +135,14 @@
     <p class="last">Please settle pending transactions processed with any version of <a href="legacy/index.html">Legacy Amazon Pay extension (EOL)</a> extension prior to proceeding with the installation. <a class="reference internal" href="flow.html#payment-refund"><span class="doc">Refund</span></a> operation on past transactions will always be possible with newer versions. In case of issues, you can settle pending transactions in <a class="reference external" href="https://sellercentral.amazon.com">Seller Central</a> and then mark them as settled offline in Magento <cite>Orders</cite> page.</p>
   </p>
     </div>
-<p>Create a backup of your shop before proceeding to install this new Amazon Pay extension. Before installing Amazon Pay, please also remove any previously installed or preinstalled Amazon Pay extension. This includes all directories and their files from the following paths:
+<p>Create a backup of your shop before proceeding to install this new Amazon Pay extension. Before installing Amazon Pay, please disable any previously installed or preinstalled Amazon Pay extension: <br>
+    <i>bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</i> <br>
+  Then remove all directories and their files from the following paths:
     <ul class="simple">
     <li><i>app/code/Amazon/PayV2</li>  
     <li> vendor/amzn/amazon-pay-and-login-with-amazon-core-module</li>
     <li> vendor/amzn/amazon-pay-module</li>
     <li> vendor/amzn/login-with-amazon-module</li></ul></i>
-   
-    <div class="admonition warning">
-      <p class="first admonition-title">Warning</p>
-      <p class="last">If you are using Composer to install Amazon Pay, it will remove the files in <i>vendor</i> folder automatically, but you will need to manually clean <i>app/code/Amazon</i> if present.</p>
-    </p>
-      </div>
 </ul>
 </div>
 <div class="section" id="web-setup-wizard-magento-marketplace-install-method">
@@ -154,10 +150,11 @@
 <p>Our extension can be downloaded from Magento Marketplace: <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html</a></p>
 <p>It can then be installed following these steps:</p>
 <ul class="simple">
-    <li>Disable the in-core Magento modules:<br />
+    <li>Disable the in-core Legacy  Magento modules in case they are still active:<br />
     <i>bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</i>
     </li>
-    <li>Purchase the module from Magento Marketplace and download the .zip file</li>
+    <li>remove <i>app/code/Amazon</i> folder if present in your Magento installation.</li>
+    <li>Purchase the module from <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">Magento Marketplace</a> and download the .zip file</li>
     <li>Extract the contents of the .zip file to <i>app/code/Amazon/Pay</i>, you should now see a file <i>app/code/Amazon/Pay/registration.php</i> if the directory nesting is correct</li>
     <li>Enable the module, and run the normal Magento commands for a module installation:<br />
     <i>bin/magento module:enable Amazon_Pay</i><br />
@@ -210,7 +207,10 @@
 <h2>Un-install Method<a class="headerlink" href="#un-install-method" title="Permalink to this headline">¶</a></h2>
 <p>If there is a need to disable the module, you can disable Amazon Pay in the extension settings. This will remove all customer facing parts.</p>
 <p>To completely disable the module, please run: <br><cite>php bin/magento module:disable Amazon_Pay</cite></p>
-<p>To completely uninstall the module using Composer, please run: <br><cite>composer remove amzn/amazon-payments-magento-2-plugin</cite></p>
+<p>To completely uninstall the module using Composer, please run: <br>
+  <cite>composer remove amzn/amazon-pay-magento-2-module</cite></p>
+  <cite>composer remove amzn/amazon-payments-magento-2-plugin</cite><br>
+</p>
 </div>
 </div>
 
