@@ -104,9 +104,9 @@ class Refund extends AbstractOperation
                 );
 
                 $this->asyncLogger->info('Refund declined for Order #' . $order->getIncrementId());
-
-                return true;
             }
         }
+
+        return true;
     }
 }
