@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutLoggedInNoGuestButton">
+        <annotations>
+            <stories value="Amazon Button"/>
+            <title value="Amazon Checkout Logged In with Guest Checkout Disabled"/>
+            <description value="Amazon Pay should be available when Guest Checkout and Sign in with Amazon are both disabled only when signed in to Magento already."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_button"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="Simple_Customer_With_Amazon_Account" stepKey="createCustomer"/>
+            <!-- Sign in with Amazon is disabled in the Sample config, no need to explicitly disable -->
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="config:set checkout/options/guest_checkout 0" stepKey="disableGuestCheckout"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <magentoCLI command="config:set checkout/options/guest_checkout 1" stepKey="enableGuestCheckout"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Go to product page-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Click on Add To Cart button-->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <!--Go to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+
+        <!--Verify we don't see either Amazon Button-->
+        <dontSeeElement selector="{{AmazonButtonSection.checkout}}" stepKey="dontSeeEnabledAmazonButton"/>
+        <dontSeeElement selector="{{AmazonButtonSection.v1Checkout}}" stepKey="dontSeeDisabledAmazonButton"/>
+
+        <!-- Log in via the modal -->
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{Simple_Customer_With_Amazon_Account.email}}" stepKey="fillAmazonPageEmailField"/>
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.password}}" userInput="{{Simple_Customer_With_Amazon_Account.password}}" stepKey="fillAmazonPagePasswordField"/>
+        <click selector="{{StorefrontCustomerSignInPopupFormSection.signIn}}" stepKey="clickSignInButton"/>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <waitForElement selector="{{AmazonButtonSection.checkout}}" stepKey="waitForAmazonChangedShippingPageLoad"/>
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <!--Go to payment method-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="loggedInPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+    </test>
+</tests>

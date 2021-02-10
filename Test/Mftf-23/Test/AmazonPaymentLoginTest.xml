@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonPaymentLogin" extends="AmazonPaymentButton">
+        <annotations>
+            <stories value="Amazon Login"/>
+            <title value="Amazon Payment Login"/>
+            <description value="User should be able to login to Amazon from the payment method when enabled."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_login"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the payment method and login-->
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <click selector="{{AmazonButtonSection.Payment}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+    </test>
+</tests>

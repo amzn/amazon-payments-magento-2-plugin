@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AmazonCheckoutActionGroup">
+        <arguments>
+            <argument name="cc" defaultValue="1111" type="string"/>
+        </arguments>
+
+        <!--Get shipping address information-->
+        <grabAttributeFrom selector="{{AmazonPageSection.addressId}}" userInput="data-address_id" stepKey="amazonAddressId"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-name_on_address" stepKey="amazonAddressName"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-address_line1" stepKey="amazonAddressLine1Raw"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-address_line2" stepKey="amazonAddressLine2Raw"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-address_line3" stepKey="amazonAddressLine3Raw"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-city" stepKey="amazonAddressCity"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-zip_code" stepKey="amazonAddressZipCode"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-country" stepKey="amazonAddressCountryCode"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-phone_number" stepKey="amazonAddressPhoneNumber"/>
+
+        <!-- choose card -->
+        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangeAddress"/>
+        <executeJS function="document.querySelectorAll('#maxo_payment_methods .a-radio-label').forEach(function(v,i,o) { if (v.querySelector('.trail_number').innerText.includes('{{cc}}')) { v.click() } });" stepKey="executeJsCc"/>
+        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethod"/>
+
+        <!--Go back to checkout-->
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonCheckoutButton"/>
+        <wait time="1" stepKey="allowContinueButtonToActivate"/>
+        <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="clickAmazonCheckoutButton"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <!--Filter out address data-->
+        <executeJS function="return '{$amazonAddressLine1Raw}' !== 'null' ? '{$amazonAddressLine1Raw}' : ''" stepKey="amazonAddressLine1"/>
+        <executeJS function="return '{$amazonAddressLine2Raw}' !== 'null' ? '{$amazonAddressLine2Raw}' : ''" stepKey="amazonAddressLine2"/>
+        <executeJS function="return '{$amazonAddressLine3Raw}' !== 'null' ? '{$amazonAddressLine3Raw}' : ''" stepKey="amazonAddressLine3"/>
+        <grabAttributeFrom selector="{{AmazonCheckoutSection.countryNameByCode({$amazonAddressCountryCode})}}" userInput="data-title" stepKey="amazonAddressCountryName"/>
+        <!--Verify correct shipping address is displayed-->
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressName" stepKey="seeAmazonAddressName"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressLine1" stepKey="seeAmazonAddressLine1"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressLine2" stepKey="seeAmazonAddressLine2"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressLine3" stepKey="seeAmazonAddressLine3"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressCity" stepKey="seeAmazonAddressCity"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressZipCode" stepKey="seeAmazonAddressZipCode"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressCountryName" stepKey="seeAmazonAddressCountryName"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressPhoneNumber" stepKey="seeAmazonAddressPhoneNumber"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AmazonAllowCurrencyValue" type="allow">
+        <array key="value">
+            <item>USD</item>
+            <item>EUR</item>
+        </array>
+    </entity>
+    <entity name="AmazonAllowMultiCurrencyValue" type="allow">
+        <array key="value">
+            <item>USD</item>
+            <item>EUR</item>
+            <item>GBP</item>
+            <item>JPY</item>
+            <item>NOK</item>
+            <item>CZK</item>
+            <item>EUR</item>
+            <item>CZK</item>
+        </array>
+    </entity>
+    <entity name="EUAmazonCurrencyConfig" type="amazon_currency_config">
+        <requiredEntity type="base">EUAmazonBaseCurrencyValue</requiredEntity>
+        <requiredEntity type="default">EUAmazonDefaultCurrencyValue</requiredEntity>
+        <requiredEntity type="allow">AmazonAllowCurrencyValue</requiredEntity>
+    </entity>
+    <entity name="EUAmazonMultiCurrencyConfig" type="amazon_currency_config">
+        <requiredEntity type="base">EUAmazonBaseCurrencyValue</requiredEntity>
+        <requiredEntity type="default">EUAmazonDefaultMultiCurrencyValue</requiredEntity>
+        <requiredEntity type="allow">AmazonAllowMultiCurrencyValue</requiredEntity>
+    </entity>
+    <entity name="EUAmazonInvalidMultiCurrencyConfig" type="amazon_currency_config">
+        <requiredEntity type="base">EUAmazonBaseCurrencyValue</requiredEntity>
+        <requiredEntity type="default">EUAmazonNoMultiCurrencyValue</requiredEntity>
+        <requiredEntity type="allow">AmazonAllowMultiCurrencyValue</requiredEntity>
+    </entity>
+    <entity name="EUAmazonBaseCurrencyValue" type="base">
+        <data key="value">EUR</data>
+    </entity>
+    <entity name="EUAmazonDefaultCurrencyValue" type="default">
+        <data key="value">EUR</data>
+    </entity>
+    <entity name="EUAmazonMultiCurrencyValue" type="default">
+        <data key="value">USD</data>
+    </entity>
+    <entity name="EUAmazonNoMultiCurrencyValue" type="default">
+        <data key="value">CZK</data>
+    </entity>
+    <entity name="DefaultAmazonCurrencyConfig" type="default_amazon_currency_config">
+        <requiredEntity type="amazonCurrencyBaseFlagZero">DefaultAmazonCurrencyBaseFlagZero</requiredEntity>
+        <requiredEntity type="amazonCurrencyDefaultFlagZero">DefaultAmazonCurrencyDefaultFlagZero</requiredEntity>
+        <requiredEntity type="amazonCurrencyAllowFlagZero">DefaultAmazonCurrencyAllowFlagZero</requiredEntity>
+    </entity>
+    <entity name="DefaultAmazonCurrencyBaseFlagZero" type="amazonCurrencyBaseFlagZero">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultAmazonCurrencyDefaultFlagZero" type="amazonCurrencyDefaultFlagZero">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultAmazonCurrencyAllowFlagZero" type="amazonCurrencyAllowFlagZero">
+        <data key="value">1</data>
+    </entity>
+</entities>

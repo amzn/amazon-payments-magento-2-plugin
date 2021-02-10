@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonInvoicePendingCaptured" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Invoice"/>
+            <title value="Amazon Invoice after 7 Days (Captured case)."/>
+            <description value="User should be able to create invoice after 7 Days (Captured case)."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_invoice"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <!--Go to payment method-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <!--Verify Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <!--Place order-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--Login as admin-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!--Open created order in backend-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <!--Create Invoice-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoicePage"/>
+        <!--Add simulation string-->
+        <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="{&quot;x-amz-pay-simulation-code&quot;:&quot;CaptureInitiated&quot;}" stepKey="writeComment"/>
+        <!--Submit and verify the invoice created-->
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
+        <waitForPageLoad stepKey="waitForLoadPage"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage"/>
+        <!--Verify order status is Payment Review-->
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Payment Review" stepKey="seePaymentReviewStatus"/>
+        <!--Update status-->
+        <wait time="30" stepKey="waitForStatusUpdate"/>
+        <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
+        <!--Open order and verify status is Processing-->
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeProcessingStatus"/>
+    </test>
+</tests>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SampleAmazonPaymentV1Config" type="amazon_payment_v1_config">
+        <requiredEntity type="api_version">SampleAmazonPaymentV1ApiVersion</requiredEntity>
+        <requiredEntity type="active">SampleAmazonPaymentV1Active</requiredEntity>
+        <requiredEntity type="merchant_id">SampleAmazonPaymentV1MerchantId</requiredEntity>
+        <requiredEntity type="access_key">SampleAmazonPaymentV1AccessKey</requiredEntity>
+        <requiredEntity type="secret_key">SampleAmazonPaymentV1SecretKey</requiredEntity>
+        <requiredEntity type="client_id">SampleAmazonPaymentV1ClientId</requiredEntity>
+        <requiredEntity type="client_secret">SampleAmazonPaymentV1ClientSecret</requiredEntity>
+        <requiredEntity type="payment_region">SampleAmazonPaymentV1PaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">SampleAmazonPaymentV1Sandbox</requiredEntity>
+    </entity>
+    <entity name="SampleAmazonPaymentV1ApiVersion" type="api_version">
+        <data key="value">1</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1Active" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1MerchantId" type="merchant_id">
+        <data key="value">{{_CREDS.amazon/v1_merchant_id}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1AccessKey" type="access_key">
+        <data key="value">{{_CREDS.amazon/v1_access_key}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1SecretKey" type="secret_key">
+        <data key="value">{{_CREDS.amazon/v1_secret_key}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1ClientId" type="client_id">
+        <data key="value">{{_CREDS.amazon/v1_client_id}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1ClientSecret" type="client_secret">
+        <data key="value">{{_CREDS.amazon/v1_client_secret}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1PaymentRegion" type="payment_region">
+        <data key="value">{{_CREDS.amazon/v1_region}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentV1Sandbox" type="sandbox">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="SampleAmazonPaymentConfig" type="amazon_payment_config">
+        <requiredEntity type="api_version">SampleAmazonPaymentApiVersion</requiredEntity>
+        <requiredEntity type="active">SampleAmazonPaymentActive</requiredEntity>
+        <requiredEntity type="private_key">SampleAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="public_key_id">SampleAmazonPaymentPublicKeyId</requiredEntity>
+        <requiredEntity type="merchant_id">SampleAmazonPaymentMerchantId</requiredEntity>
+        <requiredEntity type="store_id">SampleAmazonPaymentStoreId</requiredEntity>
+        <requiredEntity type="payment_region">SampleAmazonPaymentPaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">SampleAmazonPaymentSandbox</requiredEntity>
+        <requiredEntity type="lwa_enabled">SampleAmazonPaymentLwaDisabled</requiredEntity>
+    </entity>
+    <entity name="SampleAmazonPaymentApiVersion" type="api_version">
+        <data key="value">2</data>
+    </entity>
+    <entity name="SampleAmazonPaymentActive" type="active">
+        <data key="value">1</data>
+    </entity>
+    <entity name="SampleAmazonPaymentPrivateKey" type="private_key">
+        <data key="value">{{_CREDS.amazon/private_key}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentPublicKeyId" type="public_key_id">
+        <data key="value">{{_CREDS.amazon/public_key_id}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentMerchantId" type="merchant_id">
+        <data key="value">{{_CREDS.amazon/merchant_id}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentStoreId" type="store_id">
+        <data key="value">{{_CREDS.amazon/store_id}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentPaymentRegion" type="payment_region">
+        <data key="value">{{_CREDS.amazon/region}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentSandbox" type="sandbox">
+        <data key="value">1</data>
+    </entity>
+    <entity name="SampleAmazonPaymentLwaEnabled" type="lwa_enabled">
+        <data key="value">1</data>
+    </entity>
+    <entity name="SampleAmazonPaymentLwaDisabled" type="lwa_enabled">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="EUAmazonPaymentConfig" type="amazon_payment_config">
+        <requiredEntity type="api_version">SampleAmazonPaymentApiVersion</requiredEntity>
+        <requiredEntity type="active">SampleAmazonPaymentActive</requiredEntity>
+        <requiredEntity type="private_key">EUAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="public_key_id">EUAmazonPaymentPublicKeyId</requiredEntity>
+        <requiredEntity type="merchant_id">EUAmazonPaymentMerchantId</requiredEntity>
+        <requiredEntity type="store_id">EUAmazonPaymentStoreId</requiredEntity>
+        <requiredEntity type="payment_region">EUAmazonPaymentPaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">SampleAmazonPaymentSandbox</requiredEntity>
+        <requiredEntity type="lwa_enabled">SampleAmazonPaymentLwaDisabled</requiredEntity>
+    </entity>
+    <entity name="EUAmazonPaymentPrivateKey" type="private_key">
+        <data key="value">{{_CREDS.amazon/eu_private_key}}</data>
+    </entity>
+    <entity name="EUAmazonPaymentPublicKeyId" type="public_key_id">
+        <data key="value">{{_CREDS.amazon/eu_public_key_id}}</data>
+    </entity>
+    <entity name="EUAmazonPaymentMerchantId" type="merchant_id">
+        <data key="value">{{_CREDS.amazon/eu_merchant_id}}</data>
+    </entity>
+    <entity name="EUAmazonPaymentStoreId" type="store_id">
+        <data key="value">{{_CREDS.amazon/eu_store_id}}</data>
+    </entity>
+    <entity name="EUAmazonPaymentPaymentRegion" type="payment_region">
+        <data key="value">{{_CREDS.amazon/eu_region}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentSandbox" type="sandbox">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="SampleAmazonPaymentConfigLwa" type="amazon_payment_config">
+        <requiredEntity type="api_version">SampleAmazonPaymentApiVersion</requiredEntity>
+        <requiredEntity type="active">SampleAmazonPaymentActive</requiredEntity>
+        <requiredEntity type="private_key">SampleAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="public_key_id">SampleAmazonPaymentPublicKeyId</requiredEntity>
+        <requiredEntity type="merchant_id">SampleAmazonPaymentMerchantId</requiredEntity>
+        <requiredEntity type="store_id">SampleAmazonPaymentStoreId</requiredEntity>
+        <requiredEntity type="payment_region">SampleAmazonPaymentPaymentRegion</requiredEntity>
+        <requiredEntity type="sandbox">SampleAmazonPaymentSandbox</requiredEntity>
+        <requiredEntity type="lwa_enabled">SampleAmazonPaymentLwaEnabled</requiredEntity>
+    </entity>
+</entities>

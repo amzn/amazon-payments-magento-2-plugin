@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutAsyncSuccess" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Checkout Async Success"/>
+            <title value="Amazon Checkout Async Success"/>
+            <description value="Async transactions that are approved should go to processing"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_checkout"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set payment/amazon_payment/authorization_mode synchronous_possible" stepKey="setAuthModeAutomatic" before="flushCache"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set payment/amazon_payment/authorization_mode synchronous" stepKey="setAuthModeImmediate"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup">
+            <argument name="cc" value="0701" />
+        </actionGroup>
+        <!--Go to payment method-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <!--Verify Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <!--Place order-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--Login as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!--Open created order in backend-->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Payment Review" stepKey="seePaymentReviewedStatus"/>
+
+        <!-- run async processing, which will put the order in Processing -->
+        <wait time="30" stepKey="waitForStatusUpdate"/>
+        <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
+
+        <!--Open order and verify status is Processing-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderAgain">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeProcessingStatus"/>
+    </test>
+</tests>

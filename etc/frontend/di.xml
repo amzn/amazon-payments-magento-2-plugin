@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Amazon\Pay\Block\Minicart\Button">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Amazon_Pay::minicart-button.phtml</item>
+                <item name="alias" xsi:type="string">amazon.pay.button.mini-cart</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="amazon_pay_checkout_processor" type="Amazon\Pay\Plugin\CheckoutProcessor" />
+    </type>
+    <type name="Amazon\Core\Helper\Data">
+        <plugin name="amazon_pay_amazon_core_helper" type="Amazon\Pay\Plugin\AmazonCoreHelperData" sortOrder="1" />
+    </type>
+</config>

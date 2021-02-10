@@ -1,0 +1,52 @@
+{
+    "amazon_payv2_async": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "is_pending": true,
+            "pending_action": true,
+            "pending_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "AMAZON_PAYV2_ASYNC_IS_PENDING": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "amazon_payv2_checkout_session": {
+        "column": {
+            "id": true,
+            "session_id": true,
+            "quote_id": true,
+            "is_active": true,
+            "created_at": true,
+            "canceled_at": true,
+            "updated_at": true,
+            "completed_at": true
+        },
+        "index": {
+            "AMAZON_PAYV2_CHECKOUT_SESSION_IS_ACTIVE": true,
+            "AMAZON_PAYV2_CHECKOUT_SESSION_QUOTE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMAZON_PAYV2_CHECKOUT_SESSION_QUOTE_ID_QUOTE_ENTITY_ID": true
+        }
+    },
+    "amazon_customer": {
+        "column": {
+            "entity_id": true,
+            "customer_id": true,
+            "amazon_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMAZON_CUSTOMER_CUSTOMER_ID_AMAZON_ID": true,
+            "AMAZON_CUSTOMER_CUSTOMER_ID": true,
+            "AMAZON_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    }
+}
