@@ -1,4 +1,4 @@
-# Overview
+# Amazon Pay for Magento 2
 This extension provides an official integration of your Magento 2 store with **Amazon Pay** services. The extension is a checkout and payment solution that does not share any item level information (product information, prices, basket content, etc) with Amazon. The extension integrates Amazon Pay seamlessly into the Magento 2 shop backend (configuration, order management, billing, etc.).
 
 ## About Amazon Pay
@@ -40,15 +40,15 @@ Starting from version 5.0.0, Amazon Pay is hosted on Magento Marketplace and fea
 * A verified Amazon Pay merchant account - [sign up here](https://pay.amazon.com/signup)!
 
 ## Installation and Configuration
-The extension is available via composer or [Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html). Any previous module versions should be removed. Please refer to the [Installation](/amazon-payments-magento-2-plugin/installation.html) section to get more details concerning installation procedure.
+The extension is available via composer as *amzn/amazon-pay-magento-2-module* or in [Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html). The User Guide can be found [here](https://amzn.github.io/amazon-payments-magento-2-plugin/). Any previous module versions should be removed. Please refer to the [Installation](https://amzn.github.io/amazon-payments-magento-2-plugin/amazon-payments-magento-2-plugin/installation.html) section of our guide to get more details concerning installation procedure.
 
 ## Branch information
-The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column “Latest release” refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. If you are on a Magento version below 2.2.6, please take a look at [Amazon Pay and Amazon Sign-in for Magento 2 (Legacy) documentation](/legacy/installation.html#manual-composer-install-method).
+The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column “Latest release” refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. If you are on a Magento version below 2.2.6, please take a look at [Amazon Pay and Amazon Sign-in for Magento 2 (Legacy) documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/legacy/installation.html#manual-composer-install-method).
 
 Magento Version | Github Branch | Latest release
 ---|---|---
-2.2.6 - 2.2.11 (EOL) | V2Checkout-1.2.x | 1.11.0 (EOL)
-2.3.0 - 2.4.x | master | 5.0.0
+2.2.6 - 2.2.11 (EOL) | [V2Checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2Checkout-1.2.x)  | 1.11.0 (EOL)
+2.3.0 - 2.4.x | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) | 5.0.0
 
 ## Release Notes
 ### 5.0.0
