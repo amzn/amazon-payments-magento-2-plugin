@@ -153,7 +153,20 @@
 <h2>Magento Marketplace Install Method<a class="headerlink" href="#web-setup-wizard-magento-marketplace-install-method" title="Permalink to this headline">¶</a></h2>
 <p>Our extension can be downloaded from Magento Marketplace: <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html</a></p>
 <p>It can then be installed following these steps:</p>
-<p>WIP</p>
+<ul class="simple">
+    <li>Disable the in-core Magento modules:<br />
+    <i>bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</i>
+    </li>
+    <li>Purchase the module from Magento Marketplace and download the .zip file</li>
+    <li>Extract the contents of the .zip file to <i>app/code/Amazon/Pay</i>, you should now see a file <i>app/code/Amazon/Pay/registration.php</i> if the directory nesting is correct</li>
+    <li>Enable the module, and run the normal Magento commands for a module installation:<br />
+    <i>bin/magento module:enable Amazon_Pay</i><br />
+    <i>bin/magento setup:upgrade</i><br />
+    <i>bin/magento setup:di:compile</i><br />
+    <i>bin/magento setup:static-content:deploy</i><br />
+    </li>
+</ul>
+<p>At this point the module is installed, and ready to configure! Proceed to <a href="configuration.html">the configuration section of the docs</a>.</p>
 </div>
 <div class="section" id="manual-composer-install-method">
 <h2>Composer Install Method<a class="headerlink" href="#manual-composer-install-method" title="Permalink to this headline">¶</a></h2>

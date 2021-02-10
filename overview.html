@@ -212,7 +212,17 @@ Here are some of the improvements over the previous module:</p>
   <h2>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h2>
   <p>
     <ul class="simple">
-      <li>5.0.0 - WIP</li>      
+      <li>5.0.0
+        <ul>
+            <li>General Availability release, replacing versions that were previously included in core Magento releases</li>
+            <li>Fixed creating a credit memo against a split capture invoice</li>
+            <li>Added input validation and test upon saving for credentials</li>
+            <li>Changed calling <i>closeChargePermission</i> instead of <i>cancelCharge</i> when voiding an order</li>
+            <li>Fixed loading correct config when switching store view before a cart is initiated</li>
+            <li>Changed the button to create the session directly instead of through Magento</li>
+            <li>Removed redirect to cart on login if the customer has products in cart</li>
+        </ul>
+      </li>
       </ul>
   </p>
   </div>
