@@ -40,7 +40,7 @@ Starting from version 5.0.0, Amazon Pay is hosted on Magento Marketplace and fea
 * A verified Amazon Pay merchant account - [sign up here](https://pay.amazon.com/signup)!
 
 ## Installation and Configuration
-The extension is available via composer as *amzn/amazon-pay-magento-2-module* or in [Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html). The User Guide can be found [here](https://amzn.github.io/amazon-payments-magento-2-plugin/). Any previous module versions should be removed. Please refer to the [Installation](https://amzn.github.io/amazon-payments-magento-2-plugin/amazon-payments-magento-2-plugin/installation.html) section of our guide to get more details concerning installation procedure.
+The extension is available via composer as *amzn/amazon-pay-magento-2-module* or in [Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html). The User Guide can be found [here](https://amzn.github.io/amazon-payments-magento-2-plugin/). Any previous module versions should be removed. Please refer to the [Installation](https://amzn.github.io/amazon-payments-magento-2-plugin/installation.html) section of our guide to get more details concerning installation procedure.
 
 ## Branch information
 The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column “Latest release” refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. If you are on a Magento version below 2.2.6, please take a look at [Amazon Pay and Amazon Sign-in for Magento 2 (Legacy) documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/legacy/installation.html#manual-composer-install-method).
