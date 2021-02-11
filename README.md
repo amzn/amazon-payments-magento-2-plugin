@@ -1,4 +1,4 @@
-# Amazon Pay for Magento 2.2.6-2.2.11 (EOL)
+# Amazon Pay for Magento 2.2.6-2.2.11 (End-Of-Life)
 
 This module will enable "Amazon Pay Checkout v2" on your Magento 2 installation. Amazon Pay Checkout v2 is the next generation web checkout technology of Amazon Pay that provides several advantages over the previous Amazon Pay Checkout solution.
 
@@ -109,4 +109,4 @@ The following table provides an overview on which Git branch is compatible to wh
 
 | Magento Version | Github Branch | Latest release |
 | ------------- | ------------- | ------------- |
-| 2.2.6 - 2.2.11 | [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.11.0 |
+| 2.2.6 - 2.2.11 (EOL)| [V2checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x) | 1.11.0 (EOL)|
