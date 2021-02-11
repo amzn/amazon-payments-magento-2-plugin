@@ -35,7 +35,7 @@ Starting from version 5.0.0, Amazon Pay is hosted on Magento Marketplace and fea
 * [US/JP only] Split Shipments (Multi-authorization) support
 
 ## Prerequisites
-* Magento CE/EE 2.3.0 or higher (limited support for Magento 2.2.6 up to 2.2.11)
+* Magento CE/EE/ECE 2.3.0 or higher (limited support for Magento 2.2.6 up to 2.2.11)
 * valid SSL certificate
 * A verified Amazon Pay merchant account - [sign up here](https://pay.amazon.com/signup)!
 
