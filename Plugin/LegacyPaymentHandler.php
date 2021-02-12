@@ -36,7 +36,7 @@ class LegacyPaymentHandler
      * @param Payment $result
      * @return Payment
      */
-    public function afterGetPayment(Order $subject, Payment $result)
+    public function afterGetPayment(Order $subject, $result)
     {
         if (!empty($result) && $result->getMethod() == 'amazon_payment' && $result->getAuthorizationTransaction()) {
             $result->setMethod('amazon_payment_v2');
