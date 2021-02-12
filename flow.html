@@ -8,9 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Order &amp; payment workflow &mdash; Amazon Pay and Login with Amazon for Magento 2 3.3.1 documentation</title>
+  <title>Order &amp; payment workflow &mdash; Amazon Pay for Magento 2 documentation</title>
   
-
   
   
 
@@ -30,9 +29,9 @@
   
 
   
-    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 3.3.1 documentation" href="index.html"/>
+    <link rel="top" title="Amazon Pay for Magento 2 documentation" href="index.html"/>
         <link rel="next" title="Frontend Customisation" href="customisation.html"/>
-        <link rel="prev" title="Login with Amazon" href="login.html"/> 
+        <link rel="prev" title="Amazon Sign-in" href="login.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -50,29 +49,13 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2
+            <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
           
 
           
           </a>
+      
 
-          
-            
-            
-              <div class="version">
-                3.3.1
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
 
           
         </div>
@@ -85,7 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Order &amp; payment workflow</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#amazon-pay-button"><cite>Amazon Pay</cite> button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#placing-an-order">Placing an order</a></li>
@@ -116,7 +99,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2</a>
+        <a href="index.html">Amazon Pay for Magento 2</a>
       </nav>
 
 
@@ -134,12 +117,7 @@
     <li><a href="index.html">Docs</a> &raquo;</li>
       
     <li>Order &amp; payment workflow</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="_sources/flow.txt" rel="nofollow"> View page source</a>
-          
-        
+      <li class="wy-breadcrumbs-aside">   
       </li>
   </ul>
   <hr/>
@@ -151,52 +129,55 @@
 <h1>Order &amp; payment workflow<a class="headerlink" href="#order-payment-workflow" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="amazon-pay-button">
 <h2><cite>Amazon Pay</cite> button<a class="headerlink" href="#amazon-pay-button" title="Permalink to this headline">¶</a></h2>
-<p>The <cite>Amazon Pay</cite> button appears in several places in the shop</p>
+<p>The <cite>Amazon Pay</cite> button appears on several locations in the shop:</p>
 <ul class="simple">
-<li>on the shipping step of checkout</li>
-<li>on the cart page</li>
-<li>on the minibasket</li>
-<li>on product pages depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a></li>
+<li>on the shipping step of checkout (default location)</li>
+<li>on the cart page (default location)</li>
+<li>on the minicart (optional, depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>)</li>
+<li>on product pages (optional, depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>)</li>
+<li>on the list of payment methods (optional, depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>)</li>
 </ul>
 <img alt="_images/amazon-pay-button.png" src="_images/amazon-pay-button.png" />
 <p>Pressing the <cite>Amazon Pay</cite> button launches the Amazon authentication window, where the customer is asked for their Amazon user account credentials.</p>
 <img alt="_images/sign-in.png" src="_images/sign-in.png" />
-<p>After a successful login the customer is redirected to the checkout</p>
+<p>After a successful sign-in the customer is prompted to select an address and a payment method from their Amazon account, and then they are redirected to Magento checkout page.</p>
+<img alt="_images/step1.png" src="_images/step1.png" />
 </div>
 <div class="section" id="placing-an-order">
 <h2>Placing an order<a class="headerlink" href="#placing-an-order" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Amazon Pay</strong> checkout uses the standard Magento 2 checkout however it replaces certain forms with widgets that populate the data the forms would have requested.</p>
-<p>On the shipping step of checkout the address form is replaced with a shipping widget</p>
-<img alt="_images/shipping-widget.png" src="_images/shipping-widget.png" />
-<p>On the payment step of checkout payment methods are replaced by a payment widget</p>
-<img alt="_images/payment-widget.png" src="_images/payment-widget.png" />
+<p>The <strong>Amazon Pay</strong> checkout uses the standard Magento 2 checkout however it replaces its forms with the data from the Customer's Amazon account the forms would have requested (shipping address details and payment method).</p>
+<p>On the shipping step of checkout the address is taken from the Customer's Amazon account. The shipping address is editable in Amazon hosted page after clicking 'Edit' button.</p>
+<img alt="_images/flow1.png" src="_images/flow1.png" />
+<p>On the payment step of checkout, the billing adddress associated to the payment method chosen on Amazon hosted page is shown (EU/UK Payment Regions only) and can be editable via Magento standard forms clicking on 'Edit Billing Address' button. The customer can return to Amazon hosted page with 'Edit Payment Method' button. </p>
+<img alt="_images/flow2.png" src="_images/flow2.png" />
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">In instances where the billing address is not exposed such as within the US region the shipping address will be used to populate the billing address</p>
+<p class="last">For US/JP Payment Regions, the billing address associated to the payment method is not exposed by Amazon. The shipping address will be used to populate the billing address in Magento backend, but will not be shown and will not be editable by the customer at the payment step.</p>
 </div>
-<p>The actual order flow other than this remains the same, as it is for the standard Magento 2 checkout.</p>
+<p>When the customers selects "Place Order", the buyer is redirected back to Amazon for Payment processing. PSD2 handling and Automatic Decline Handling are managed by Amazon Pay at this step.</p>
+<img alt="_images/flow3.png" src="_images/flow3.png" />
+<p>Based on the final result of the transaction, the customer is then redirected to an order confirmation page or at the initial step of the checkout, exactly as it would happen in Magento 2 standard checkout.</p>
 </div>
 <div class="section" id="payment-authorization">
 <h2>Payment authorization<a class="headerlink" href="#payment-authorization" title="Permalink to this headline">¶</a></h2>
 <p>An authorization is automatically requested on order placement. There are two different authorization flows, Immediate and Automatic, as defined in <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>.</p>
 <div class="section" id="immediate">
 <h3>Immediate<a class="headerlink" href="#immediate" title="Permalink to this headline">¶</a></h3>
-<p>The customer will get instant feedback there are 3 possible outcomes</p>
+<p>The customer will get instant feedback. There are 3 possible outcomes:</p>
 <ol class="arabic simple">
-<li><cite>Authorization OK</cite> - Order is placed with a state of <cite>Processing</cite>, Customer is redirected to the standard Magento 2 confirmation screen</li>
-<li><cite>Soft Decline</cite> - Order is not placed and customer is asked to select an alternative payment instrument from the Amazon Pay widget</li>
-<li><cite>Hard Decline</cite> - Order is not placed, the Amazon Pay specific checkout will be left (widgets are replaced by standard forms) and the customer is asked to select an alternative payment method for this order</li>
+<li><cite>Authorization OK</cite> - Order is placed and moves to <cite>Processing</cite> state. The customer is redirected to the standard Magento 2 confirmation screen.</li>
+<li><cite>Soft Decline</cite> - The customer will still be inside an Amazon checkout and will be asked to update the selected payment method, select a new one and retry the payment or abandon the checkout (resulting in <cite>Authorization OK</cite> or <cite>Hard Decline</cite>).</li>
+<li><cite>Hard Decline</cite> - Order is not placed, the Amazon Pay checkout will be left and the customer will be asked to select an alternative payment method for this order.</li>
 </ol>
 </div>
 <div class="section" id="automatic">
 <h3>Automatic<a class="headerlink" href="#automatic" title="Permalink to this headline">¶</a></h3>
-<p>In this mode, the extension will try to authorize the order immediate (as described above). If this fails due to a timeout, it will fallback to an asynchronous authorization (returns <cite>Pending</cite> state with a <cite>Payment Review</cite> status).</p>
+<p>In this mode, the extension will try to authorize the order immediately (as described above). If this fails due to a timeout, it will fallback to an asynchronous authorization (returns <cite>Pending</cite> state with a <cite>Payment Review</cite> status).</p>
 <p>The customer will always be redirected to the standard Magento 2 confirmation screen as authorization state will be processed by Amazon Pay after the order is placed.</p>
-<p>A status update on the state of the authorization will be delivered by IPN or Cron depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> there are 3 possible outcomes of this process</p>
+<p>A status update on the state of the authorization will be delivered via <cite>Polling</cite> or <cite>IPN</cite> depending on <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>. There are 2 possible outcomes of this process:</p>
 <ol class="arabic simple">
 <li><cite>Authorization OK</cite> - Order moves to state <cite>Processing</cite></li>
-<li><cite>Soft Decline</cite> - Authorization is closed, customer is emailed with a link to select an alternative payment instrument on the Amazon Pay website. When the customer changes the payment instrument, a new authorization is raised</li>
-<li><cite>Hard Decline</cite> - Authorization is closed, customer is emailed with instructions to contact the merchant</li>
+<li><cite>Hard Decline</cite> - Authorization is declined, Order moves to state <cite>Canceled</cite>. Customer is emailed with instructions to contact the merchant.</li>
 </ol>
 </div>
 </div>
@@ -209,10 +190,18 @@
 <li>Submit the invoice form ensuring the <cite>Capture Online</cite> option above the <cite>Submit Invoice</cite> button is selected.</li>
 </ol>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">It is vital that <cite>Capture Online</cite> is selected as otherwise Amazon Pay will not be instructed to capture the payment, resulting in you not receiving any funds.</p>
-</div>
-<p>In case there is a problem taking the payment, a notification will be added to Magento 2 to make you aware there has been a problem.</p>
+  <p class="first admonition-title">Warning</p>
+  <p class="last">It is vital that <cite>Capture Online</cite> is selected as otherwise Amazon Pay will not be instructed to capture the payment, resulting in you not receiving any funds.</p>
+  </div>
+<div class="admonition note">
+  <p class="first admonition-title">Note</p>
+  <p class="last">We recommend creating the invoice and capturing the payment online within 7 days from order creation. After 7 days, the status of the created invoice and of the payment capture will be Pending and be updated at a later time with either <cite>Polling</cite> or <cite>IPN</cite>, depending on your <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>.</p>
+  </div>
+<div class="admonition note">
+  <p class="first admonition-title">Note</p>
+  <p class="last">For US/JP Payment Regions, it is possible to create multiple invoices on the same order (Split Shipments). For EU/UK Payment Regions, only one invoice is allowed due to PSD2 Regulations.</p>
+  </div>
+<p>In case there is an issue while capturing the payment, a notification will be added to Magento 2 to make you aware of it.</p>
 </div>
 <div class="section" id="payment-refund">
 <h2>Payment refund<a class="headerlink" href="#payment-refund" title="Permalink to this headline">¶</a></h2>
@@ -240,7 +229,7 @@
         <a href="customisation.html" class="btn btn-neutral float-right" title="Frontend Customisation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="login.html" class="btn btn-neutral" title="Login with Amazon" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="login.html" class="btn btn-neutral" title="Amazon Sign-in" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -264,22 +253,9 @@
 
   </div>
   
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'3.3.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
+
 
   
 
@@ -290,11 +266,7 @@
 
   
   
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
+
    
 
 </body>

@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; Amazon Pay and Login with Amazon for Magento 2 (Legacy) documentation</title>
+  
+  <style>
+    .wy-side-nav-search {
+      background-color: red !important;
+    }
+  </style>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 (Legacy) documentation" href="index.html"/>
+        <link rel="next" title="Configuration" href="configuration.html"/>
+        <link rel="prev" title="Overview" href="overview.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2 (Legacy)
+          
+
+          
+          </a>
+        
+
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pre-installation-steps">Pre-installation steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web-setup-wizard-magento-marketplace-install-method">Web Setup Wizard / Magento Marketplace Install Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-composer-install-method">Manual Composer Install Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#un-install-method">Un-install Method</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to Magento 2</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">      
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>The extension is available via composer, Magento Marketplace or, with Magento 2.2.4 and higher, already pre-installed as bundled extension.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are using Magento 2.2.4 or higher, the extension is probably already pre-installed and you can head straight to <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>.</p>
+</div>
+<div class="section" id="pre-installation-steps">
+<h2>Pre-installation steps<a class="headerlink" href="#pre-installation-steps" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Create a backup of your shop before proceeding to install.</li>
+</ul>
+</div>
+<div class="section" id="web-setup-wizard-magento-marketplace-install-method">
+<h2>Web Setup Wizard / Magento Marketplace Install Method<a class="headerlink" href="#web-setup-wizard-magento-marketplace-install-method" title="Permalink to this headline">¶</a></h2>
+<p>The installation via the Web Setup Wizard is the recomennded method of installation for our extension when using Magento 2.1 - 2.2.3. For shops using Magento 2.2.4 or higher, the composer method outlined below is recommended.
+Please follow the <a class="reference external" href="http://docs.magento.com/marketplace/user_guide/quick-tour/install-extension.html">Magento Marketplace User Guide</a> to learn how this works.</p>
+<p>Our extension can be found here: <a class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-and-login-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-and-login-magento-2-module.html</a></p>
+</div>
+<div class="section" id="manual-composer-install-method">
+<h2>Manual Composer Install Method<a class="headerlink" href="#manual-composer-install-method" title="Permalink to this headline">¶</a></h2>
+<p>When using Magento 2.2.4, the extension is probably already pre-installed. If not, please follow this procedure to install the extension.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The composer require command below will always install the most current, non-breaking, Amazon Pay extension for you, when you run an update. To fix it to a specifix version, please replace the version behind the colon with the preferred version.</p>
+</div>
+<ul>
+<li><p class="first">Sign in to your server via SSH.</p>
+</li>
+<li><p class="first"><cite>cd</cite> into you Magento installation directory.</p>
+</li>
+<li><p class="first">Install the extension via composer. The right command is dependent on your Magento 2 version:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Magento 2.1 - 2.2.3: <cite>composer require amzn/amazon-payments-magento-2-plugin:1.2.*</cite></li>
+<li>Magento 2.2.4 - 2.2.5: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.0.*</cite></li>
+<li>Magento 2.2.6 - 2.2.x: <cite>composer require amzn/amazon-payments-magento-2-plugin:2.2.*</cite></li>
+<li>Magento 2.3.0 and above: <cite>composer require amzn/amazon-payments-magento-2-plugin:3.*</cite></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Enable the extension: <cite>php bin/magento module:enable Amazon_Core Amazon_Login Amazon_Payment</cite></p>
+</li>
+<li><p class="first">Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></p>
+</li>
+<li><p class="first">Follow any advice the upgrade routine provides</p>
+</li>
+<li><p class="first">Compile code and dependency injection: <cite>php bin/magento setup:di:compile</cite></p>
+</li>
+<li><p class="first">Deploy static view files (production mode only): <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</p>
+</li>
+<li><p class="first">Check permissions on directories and files and set them correctly if needed</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please also have a look at the official Magento documentation for command line configuration: <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html">http://devdocs.magento.com/guides/v2.1/config-guide/cli/config-cli-subcommands.html</a></p>
+</div>
+</div>
+<div class="section" id="un-install-method">
+<h2>Un-install Method<a class="headerlink" href="#un-install-method" title="Permalink to this headline">¶</a></h2>
+<p>If there is a need to disable the module, you can either disable Amazon Pay and Login with Amazon in the extension settings. This will remove all customer facing parts.</p>
+<p>To completely disable the module, please run <cite>php bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</cite></p>
+<p>To completely uninstall the module using composer, please run <cite>composer remove amzn/amazon-payments-magento-2-plugin</cite></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral" title="Overview" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Amazon.com Inc or its affiliates.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+
+
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+
+   
+
+</body>
+</html>

@@ -8,9 +8,8 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Troubleshooting &mdash; Amazon Pay and Login with Amazon for Magento 2 3.3.1 documentation</title>
+  <title>Troubleshooting &mdash; Amazon Pay for Magento 2 documentation</title>
   
-
   
   
 
@@ -30,7 +29,7 @@
   
 
   
-    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 3.3.1 documentation" href="index.html"/>
+    <link rel="top" title="Amazon Pay for Magento 2 documentation" href="index.html"/>
         <link rel="next" title="Frequently Asked Questions (FAQ)" href="faq.html"/>
         <link rel="prev" title="Testing your integration" href="testing.html"/> 
 
@@ -50,29 +49,13 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2
+            <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
           
 
           
           </a>
+       
 
-          
-            
-            
-              <div class="version">
-                3.3.1
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
 
           
         </div>
@@ -85,7 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
 <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend Customisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
@@ -109,7 +92,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2</a>
+        <a href="index.html">Amazon Pay for Magento 2</a>
       </nav>
 
 
@@ -127,12 +110,7 @@
     <li><a href="index.html">Docs</a> &raquo;</li>
       
     <li>Troubleshooting</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="_sources/troubleshooting.txt" rel="nofollow"> View page source</a>
-          
-        
+      <li class="wy-breadcrumbs-aside">    
       </li>
   </ul>
   <hr/>
@@ -144,17 +122,17 @@
 <h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="event-logs">
 <h2>Event logs<a class="headerlink" href="#event-logs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Amazon Pay and Login with Amazon</strong> extension provides a convenient logging system. It is enabled by default, but you can disable it in the extension settings, refer to the <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> section for more details.</p>
+<p>The <strong>Amazon Pay</strong> extension provides a convenient logging system. It is enabled by default, but you can disable it in the extension settings, refer to the <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> section for more details.</p>
 </div>
 <div class="section" id="log-files-location">
 <h2>Log files location<a class="headerlink" href="#log-files-location" title="Permalink to this headline">¶</a></h2>
-<p>The Logger saves details concerning all API calls and all incoming IPN notifications that occurred within the <strong>Amazon Pay and Login with Amazon</strong> extension scope. Logs are stored in the following locations:</p>
+<p>The Logger saves details concerning all API calls and all incoming IPN notifications that occurred within the <strong>Amazon Pay and Amazon Sign-in</strong> extension scope. Logs are stored in the following locations:</p>
 <ul>
 <li><p class="first">API call logs:</p>
 <p><code class="docutils literal"><span class="pre">var/log/paywithamazon.log</span></code></p>
 </li>
-<li><p class="first">IPN notificationslogs:</p>
-<p><code class="docutils literal"><span class="pre">var/log/amazonipn.log</span></code></p>
+<li><p class="first">IPN notifications logs:</p>
+<p><code class="docutils literal"><span class="pre">var/log/amazon_async_ipn.log</span></code></p>
 </li>
 </ul>
 </div>
@@ -195,21 +173,9 @@
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'3.3.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
+
 
   
 
@@ -220,11 +186,7 @@
 
   
   
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
+
    
 
 </body>

@@ -8,10 +8,9 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Testing your integration &mdash; Amazon Pay and Login with Amazon for Magento 2 3.3.1 documentation</title>
+  <title>Testing your integration &mdash; Amazon Pay for Magento 2 documentation</title>
   
 
-  
   
 
   
@@ -30,7 +29,7 @@
   
 
   
-    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 3.3.1 documentation" href="index.html"/>
+    <link rel="top" title="Amazon Pay for Magento 2 documentation" href="index.html"/>
         <link rel="next" title="Troubleshooting" href="troubleshooting.html"/>
         <link rel="prev" title="Frontend Customisation" href="customisation.html"/> 
 
@@ -50,29 +49,13 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2
+            <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
           
 
           
           </a>
+     
 
-          
-            
-            
-              <div class="version">
-                3.3.1
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
 
           
         </div>
@@ -85,11 +68,11 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
 <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend Customisation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Testing your integration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-create-sandbox-test-account">How to create Sandbox test account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-create-sandbox-test-account">How to create a Sandbox test account</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#available-simulations">Available Simulations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#no-simulation">No Simulation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#authorization-soft-decline">Authorization soft decline</a></li>
@@ -118,7 +101,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2</a>
+        <a href="index.html">Amazon Pay for Magento 2</a>
       </nav>
 
 
@@ -136,12 +119,7 @@
     <li><a href="index.html">Docs</a> &raquo;</li>
       
     <li>Testing your integration</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="_sources/testing.txt" rel="nofollow"> View page source</a>
-          
-        
+      <li class="wy-breadcrumbs-aside">   
       </li>
   </ul>
   <hr/>
@@ -151,15 +129,18 @@
             
   <div class="section" id="testing-your-integration">
 <h1>Testing your integration<a class="headerlink" href="#testing-your-integration" title="Permalink to this headline">¶</a></h1>
-<p>After a successful configuration, you should test your installation. Only after successfully testing in the Sandbox mode you should switch to the live environment and make the button visible for all your customers.</p>
+<p>After a successful configuration, you should test your installation. Only after successfully testing in the Sandbox mode you should switch to the Live environment and make the button visible for all your customers.</p>
 <p>These tests should cover the different workflows that you encounter while processing orders. Include the standard process like receiving an order, invoicing, shipment and alternative processes like refunding orders. Verify that all objects in your Magento admin are in the expected status and you correctly received all order information including the shipping address, contact details and the billing address (if applicable).</p>
-<p>Next you should test also declines. You can use the sandbox Toolbox to simulate soft and hard declines of authorizations. After your testing verify the log files to make sure no exceptions have occurred.</p>
-<p>To receive the complete testing scenarios contact Amazon Pay.</p>
+<p>Next you should test also declines. You can use the test payment methods provided in Sandbox mode to simulate transaction declines. After your testing, verify the log files to make sure no exceptions have occurred.</p>
+<div class="admonition note">
+  <p class="first admonition-title">Note</p>
+  <p class="last">PSD2 Handling and Automatic Decline Handling are not testable in Sandbox mode. Your website will always receive the final result of the transaction if <cite>Authorization mode</cite> is set to <cite>Immediate</cite>. If <cite>Authorization mode</cite> is set to <cite>Automatic</cite>, the final result of the transaction might come at a later time (always within 24 hours).</p>
+  </div>
 <div class="section" id="how-to-create-sandbox-test-account">
-<h2>How to create Sandbox test account<a class="headerlink" href="#how-to-create-sandbox-test-account" title="Permalink to this headline">¶</a></h2>
+<h2>How to create a Sandbox test account<a class="headerlink" href="#how-to-create-sandbox-test-account" title="Permalink to this headline">¶</a></h2>
 <p>To use the sandbox environment, you need to create specific test accounts for the sandbox environment.</p>
 <ul class="simple">
-<li>Login into <a class="reference external" href="https://sellercentral-europe.amazon.com">Seller Central</a>.</li>
+<li>Login into <a target="_blank" class="reference external" href="https://sellercentral.amazon.com">Seller Central</a>.</li>
 <li>Choose the menu <span class="menuselection">Integration ‣ Test accounts</span>.</li>
 </ul>
 <img alt="_images/testing_screenshot_1.png" src="_images/testing_screenshot_1.png" />
@@ -178,41 +159,45 @@
 </div>
 <div class="section" id="available-simulations">
 <h2>Available Simulations<a class="headerlink" href="#available-simulations" title="Permalink to this headline">¶</a></h2>
-<img alt="_images/testing_simulations.png" src="_images/testing_simulations.png" />
-<div class="section" id="no-simulation">
-<h3>No Simulation<a class="headerlink" href="#no-simulation" title="Permalink to this headline">¶</a></h3>
-<p>No simulation will be done. All payment flows will be successful.</p>
+<img alt="_images/test_cards.png" src="_images/test_cards.png" />
+<div class="section" id="happy-flow">
+<h3>1111, 0005, 4444, 54 - Immediate Happy Flow <a class="headerlink" href="#happy-flow" title="Permalink to this headline">¶</a></h3>
+<p>With these test payment methods, the test transaction will be immediately successful (Happy Flow) and the buyer will be redirected to an order confirmation page.</p>
 </div>
-<div class="section" id="authorization-soft-decline">
-<h3>Authorization soft decline<a class="headerlink" href="#authorization-soft-decline" title="Permalink to this headline">¶</a></h3>
-<p>The payment authorization will come back as declined. For this kind of decline, customers are able to react, leading to a payment that can be taken.
-Depending on your <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> the customer can react in the checkout or will be notified via email with instructions.</p>
+<div class="section" id="buyer-canceled">
+<h3>3064 - BuyerCanceled<a class="headerlink" href="#buyer-canceled" title="Permalink to this headline">¶</a></h3>
+<p>The payment authorization will immediately come back as declined due to a buyer action inside Amazon Pay hosted page. The buyer will be redirected to the initial step of the checkout and dedicated error message will be shown.</p>
 </div>
 <div class="section" id="authorization-hard-decline">
-<h3>Authorization hard decline<a class="headerlink" href="#authorization-hard-decline" title="Permalink to this headline">¶</a></h3>
-<p>The payment authorization will come back as declined. For this kind of decline, customers are not able to react, leading to a payment that can not be taken.
-Depending on your <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> the customer will be informed in the checkout or via email.</p>
+<h3>3434 - Declined<a class="headerlink" href="#authorization-hard-decline" title="Permalink to this headline">¶</a></h3>
+<p>The payment authorization will immediately come back as declined due to a Payment Processor decline. The buyer will be redirected to the initial step of the checkout and dedicated error message will be shown.</p>
 </div>
-<div class="section" id="authorization-timed-out">
-<h3>Authorization timed out<a class="headerlink" href="#authorization-timed-out" title="Permalink to this headline">¶</a></h3>
-<p>The payment authorization will come back as declined. For this kind of decline, customers are not able to react, leading to a payment that can not be taken.
-This is a form of decline which will only happen for synchronous authorizations.</p>
+<div class="section" id="async-ok">
+<h3>0701 - Pending then Success (Deferred Happy Flow) <a class="headerlink" href="#async-ok" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When using <cite>Synchronous if possible</cite> in your <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a>, this decline will lead to an asynchronous authorization.</p>
+  <p class="first admonition-title">Note</p>
+  <p class="last">You need to test this payment method, in addition to the previous ones, only if <cite>Authorization Mode</cite> is set to <cite>Automatic</cite>.</p>
+  </div>
+<p>The payment authorization result will be pending during checkout. The buyer will be redirected to an order confirmation page, but the order status will be <cite>Payment Review</cite>. Order status will be updated asynchronously (via <cite>Polling</cite> or <cite>IPN</cite>) and will turn into <cite>Processing</cite>.</p>
 </div>
-</div>
-<div class="section" id="capture-declined">
-<h3>Capture declined<a class="headerlink" href="#capture-declined" title="Permalink to this headline">¶</a></h3>
-<p>The capture will come back as declined. You will receive a notification in the Magento admin, informing you about this.</p>
-</div>
+<div class="section" id="async-ko">
+  <h3>0701 - Pending then Declined (Deferred Decline) <a class="headerlink" href="#async-ko" title="Permalink to this headline">¶</a></h3>
+  <div class="admonition note">
+    <p class="first admonition-title">Note</p>
+    <p class="last">You need to test this payment method, in addition to the previous ones, only if <cite>Authorization Mode</cite> is set to <cite>Automatic</cite>.</p>
+    </div>
+  <p>The payment authorization result will be pending during checkout. The buyer will be redirected to an order confirmation page, but the order status will be <cite>Payment Review</cite>. Order status will be updated asynchronously (via <cite>Polling</cite> or <cite>IPN</cite>) and will turn into <cite>Canceled</cite>.</p>
+  </div>
 <div class="section" id="capture-pending">
-<h3>Capture pending<a class="headerlink" href="#capture-pending" title="Permalink to this headline">¶</a></h3>
-<p>The Capture will come back pending. The invoice will be pending as well. Depending on oyur update strategy, the IPN or polling mechanism will update the invoice accordingly.</p>
+<h3>Capture Pending<a class="headerlink" href="#capture-pending" title="Permalink to this headline">¶</a></h3>
+<p>You can simulate a Pending response returned for a Payment capture during invoice creation (only when <cite>Payment Action</cite> is set to <cite>Charge on Shipment</cite>). In order to do it, submit the following Invoice comment during invoice creation:
+  <div class="highlight-xml"><div class="highlight"><pre>
+    {
+      "x-amz-pay-simulation-code": "CaptureInitiated"
+    }
+</pre></div>
 </div>
-<div class="section" id="refund-declined">
-<h3>Refund declined<a class="headerlink" href="#refund-declined" title="Permalink to this headline">¶</a></h3>
-<p>The refund will come back as declined. There will be a notification in the Magento admin, informing you about this.</p>
+  The created invoice will be Pending as well. Depending on your update strategy, <cite>Polling</cite> or <cite>IPN</cite> will update the invoice status accordingly at a later time.</p>
 </div>
 </div>
 </div>
@@ -253,20 +238,9 @@ This is a form of decline which will only happen for synchronous authorizations.
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'3.3.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
+
 
   
 
@@ -277,11 +251,7 @@ This is a form of decline which will only happen for synchronous authorizations.
 
   
   
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
+
    
 
 </body>

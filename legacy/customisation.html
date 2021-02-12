@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Frontend Customisation &mdash; Amazon Pay and Login with Amazon for Magento 2 (Legacy) documentation</title>
+  
+  <style>
+    .wy-side-nav-search {
+      background-color: red !important;
+    }
+  </style>
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 (Legacy) documentation" href="index.html"/>
+        <link rel="next" title="Testing your integration" href="testing.html"/>
+        <link rel="prev" title="Order &amp; payment workflow" href="flow.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2 (Legacy)
+          
+
+          
+          </a>
+
+      
+
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frontend Customisation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">Q: I&#8217;d like to add a <cite>Amazon Pay</cite> or <cite>Login with Amazon</cite> button elsewhere on my site</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to Magento 2</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2 (Legacy)</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Frontend Customisation</li>
+      <li class="wy-breadcrumbs-aside">      
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="frontend-customisation">
+<h1>Frontend Customisation<a class="headerlink" href="#frontend-customisation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">
+<h2>Q: I&#8217;d like to add a <cite>Amazon Pay</cite> or <cite>Login with Amazon</cite> button elsewhere on my site<a class="headerlink" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site" title="Permalink to this headline">¶</a></h2>
+<p>If you are wanting to add one of these buttons to a new location on your site you need to update the <strong>XML</strong> for the page you want to add it to.</p>
+<p>For instance if you wish to add a <cite>Login with Amazon</cite> button to the category page you would update the following file.</p>
+<p>In your theme directory, you would create:
+<code class="docutils literal"><span class="pre">app/design/frontend/&lt;your_namspace&gt;/&lt;your_theme&gt;/Magento_Catalog/layout/catalog_category_view.xml</span></code></p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;page</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="na">layout=</span><span class="s">&quot;1column&quot;</span> <span class="na">xsi:noNamespaceSchemaLocation=</span><span class="s">&quot;urn:magento:framework:View/Layout/etc/page_configuration.xsd&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;referenceBlock</span> <span class="na">name=</span><span class="s">&quot;category.products&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;block</span> <span class="na">class=</span><span class="s">&quot;Amazon\Login\Block\Login&quot;</span> <span class="na">name=</span><span class="s">&quot;amazon_login&quot;</span> <span class="na">after=</span><span class="s">&quot;category.products.list&quot;</span> <span class="na">template=</span><span class="s">&quot;Amazon_Login::login.phtml&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/referenceBlock&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/page&gt;</span>
+</pre></div>
+</div>
+<p>Here you are referencing the block <strong>category.products</strong> and then simply inserting the <cite>Login with Amazon</cite> button template into this block to be positioned after the block <strong>category.products.list</strong></p>
+<p>Amazon Pay</p>
+<p>If you wish to add a <cite>Amazon Pay</cite> button elsewhere in your store, you can follow the same process above, using a different template, like so.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;block</span> <span class="na">class=</span><span class="s">&quot;Amazon\Payment\Block\PaymentLink&quot;</span> <span class="na">name=</span><span class="s">&quot;amazon.pay.button&quot;</span> <span class="na">after=</span><span class="s">&quot;-&quot;</span> <span class="na">template=</span><span class="s">&quot;Amazon_Payment::payment-link.phtml&quot;</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>You can position and target which block the button appears in as with the <cite>Login with Amazon</cite> button. If you need more information on how to position and add new blocks into Magento 2 please see the <a class="reference external" href="http://devdocs.magento.com/guides/v2.1/frontend-dev-guide/layouts/layout-overview.html">Magento 2 documentation</a></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing your integration" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="flow.html" class="btn btn-neutral" title="Order &amp; payment workflow" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Amazon.com Inc or its affiliates.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+
+   
+
+</body>
+</html>

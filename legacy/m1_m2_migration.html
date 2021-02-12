@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Migration: Magento 1 to Magento 2 &mdash; Amazon Pay and Login with Amazon for Magento 2 (Legacy) documentation</title>
+  
+  <style>
+    .wy-side-nav-search {
+      background-color: red !important;
+    }
+  </style>
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Amazon Pay and Login with Amazon for Magento 2 (Legacy) documentation" href="index.html"/>
+        <link rel="prev" title="Frequently Asked Questions (FAQ)" href="faq.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Amazon Pay and Login with Amazon for Magento 2 (Legacy)
+          
+
+          
+          </a>
+     
+
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="login.html">Login with Amazon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend Customisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Migration: Magento 1 to Magento 2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-verify-extension-installation">Step 1: Verify extension installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-configure-the-extension">Step 2: Configure the extension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-review-the-below-settings">Step 3: Review the below settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-front-end-customization">Step 4: Front-end Customization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-test-your-integration">Step 5: Test your integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-go-live">Step 6: Go live</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Amazon Pay and Login with Amazon for Magento 2 (Legacy)</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Migration: Magento 1 to Magento 2</li>
+      <li class="wy-breadcrumbs-aside">  
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="migration-magento-1-to-magento-2">
+<h1>Migration: Magento 1 to Magento 2<a class="headerlink" href="#migration-magento-1-to-magento-2" title="Permalink to this headline">¶</a></h1>
+<p>To migrate your Amazon Pay integration successfully from Magento 1 to Magento 2, please follow the instructions below carefully.</p>
+<div class="section" id="step-1-verify-extension-installation">
+<h2>Step 1: Verify extension installation<a class="headerlink" href="#step-1-verify-extension-installation" title="Permalink to this headline">¶</a></h2>
+<p>With Magento 2.2.4 and higher, the Amazon Pay extension is bundled along with Magento 2. To verify if it&#8217;s installed successfully, open the Magento 2 admin and go to Stores –&gt; Configuration –&gt; Sales –&gt; Payment Methods. Amazon Pay should be listed under &#8220;OTHER PAYMENT METHODS&#8221; like shown below.</p>
+<img alt="_images/configuration_amazon_pay.png" src="_images/configuration_amazon_pay.png" />
+<p>If Amazon Pay is not listed here, please refer to the <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> section to get more details concerning installation procedure.</p>
+</div>
+<div class="section" id="step-2-configure-the-extension">
+<h2>Step 2: Configure the extension<a class="headerlink" href="#step-2-configure-the-extension" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Add the <strong>Allowed JavaScript Origins and Allowed Return URLs</strong> to your Login with Amazon section of the Seller Central. Please note that the Allowed JavaScript Origins URL must only be changed if the base URL of your shop has changed (e.g. www.myshop.com =&gt; www.mygreatnewshop.com ). The Allowed Return URL <strong>must be</strong> changed as this requires a full URL and is different from the one used in Magento 1.</li>
+<li>Add the <strong>IPN URL</strong> to the field Merchant URL at Settings ‣ Integration Settings of the Seller Central. Please note that the IPN URL can be specified separately for Production and Sandbox view, so please verify that it has been set correctly for both environment.</li>
+<li>Refer to <a class="reference internal" href="configuration.html"><span class="doc">Configuration</span></a> to get more information about the other configuration settings.</li>
+</ul>
+</div>
+<div class="section" id="step-3-review-the-below-settings">
+<h2>Step 3: Review the below settings<a class="headerlink" href="#step-3-review-the-below-settings" title="Permalink to this headline">¶</a></h2>
+<p>In order to use the same settings you were using in your Magento 1 integration, please review the below table and choose the appropriate Amazon Pay settings for your shop. Please note that there are two different Amazon Pay extensions available for Magento 1, one for EU and one for US region. The table below lists the options from each extension and the corresponding option for Magento 2.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="28%" />
+<col width="26%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Magento 1 (EU)</th>
+<th class="head">Magento 1 (US)</th>
+<th class="head">Magento 2</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="2">Payment Action</td>
+<td>Authorize and capture</td>
+<td>Authorize and capture</td>
+<td>Charge on order</td>
+</tr>
+<tr class="row-odd"><td>Authorize</td>
+<td>Authorize</td>
+<td>Charge on shipment</td>
+</tr>
+<tr class="row-even"><td rowspan="3">Authorization Mode</td>
+<td>Auto</td>
+<td>&nbsp;</td>
+<td>Automatic</td>
+</tr>
+<tr class="row-odd"><td>Synchronous</td>
+<td>Async Mode: &#8216;No&#8217;</td>
+<td>Immediate</td>
+</tr>
+<tr class="row-even"><td>Asynchronous</td>
+<td>Async Mode: &#8216;Yes&#8217;</td>
+<td>Automatic</td>
+</tr>
+<tr class="row-odd"><td rowspan="2">Update Mechanism</td>
+<td>Instant Payment Notif.</td>
+<td>N/A</td>
+<td>Instant Payment N.</td>
+</tr>
+<tr class="row-even"><td>Data polling</td>
+<td>Default</td>
+<td>Data polling</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="step-4-front-end-customization">
+<h2>Step 4: Front-end Customization<a class="headerlink" href="#step-4-front-end-customization" title="Permalink to this headline">¶</a></h2>
+<p>If your are using a custom template please read the following sections from our documentation carefully:</p>
+<ul class="simple">
+<li><a class="reference internal" href="customisation.html"><span class="doc">Frontend Customisation</span></a></li>
+<li><a class="reference internal" href="faq.html"><span class="doc">Frequently Asked Questions (FAQ)</span></a></li>
+</ul>
+</div>
+<div class="section" id="step-5-test-your-integration">
+<h2>Step 5: Test your integration<a class="headerlink" href="#step-5-test-your-integration" title="Permalink to this headline">¶</a></h2>
+<p>Before go-live, please thoroughly test the integration as described in <a class="reference internal" href="testing.html"><span class="doc">Testing your integration</span></a>.</p>
+</div>
+<div class="section" id="step-6-go-live">
+<h2>Step 6: Go live<a class="headerlink" href="#step-6-go-live" title="Permalink to this headline">¶</a></h2>
+<p>Now that your Magento 2 integration is up-to-date with your Magento 1 integration and is functioning normally, please diable the sandbox mode and remove any IP address whitelisting. It is best practice to perform a test transaction in live mode to ensure the integration is working as expected.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="faq.html" class="btn btn-neutral" title="Frequently Asked Questions (FAQ)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Amazon.com Inc or its affiliates.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+
+   
+
+</body>
+</html>
