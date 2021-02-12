@@ -82,7 +82,9 @@ abstract class AbstractOperation
      */
     protected function getTransaction($transactionId, $type = null)
     {
-        $this->searchCriteriaBuilder->addFilter(Transaction::TXN_ID, $transactionId);
+        // we want to find the auth transaction, but don't know if it is an 'A' or a 'C' so match either
+        $transactionId = substr_replace($transactionId, '%', 20, 1);
+        $this->searchCriteriaBuilder->addFilter(Transaction::TXN_ID, $transactionId, 'like');
 
         if ($type) {
             $this->searchCriteriaBuilder->addFilter(Transaction::TXN_TYPE, $type);
