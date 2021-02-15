@@ -18,7 +18,7 @@ namespace Amazon\PayV2\Controller\Login;
 use Amazon\PayV2\Api\CustomerLinkManagementInterface;
 use Amazon\PayV2\Domain\ValidationCredentials;
 use Amazon\PayV2\Helper\Session;
-use Amazon\PayV2\Model\Customer\Account\Redirect as AccountRedirect;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;

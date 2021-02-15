@@ -15,15 +15,6 @@
  */
 ?>
 <?php /** @var \Amazon\PayV2\Block\Login $block */?>
-<?php
-
-$buttonPayload = $block->getAmazonLoginPayload();
-$buttonSignature = $block->getAmazonLoginSignature($buttonPayload);
-$amazonPublicKeyId = $block->getAmazonPublicKeyId();
-
-//$buttonPayload = '{\"signInReturnUrl\":\"https:\/\/m23v2.docksal\/\",\"storeId\":\"AY7CV2FF6QJU1\",\"signInScopes\":[\"name\",\"email\"]}';
-
-?>
 <div class="block block-amazon-login">
     <div class="block-title">
         <strong id="block-amazon-login-heading" role="heading" aria-level="2">
@@ -40,7 +31,7 @@ $amazonPublicKeyId = $block->getAmazonPublicKeyId();
                     <div class="amazon-button-container__cell">
                         <div id="AmazonPayButton"
                              class="login-with-amazon"
-                             data-mage-init='{"amazonPayV2LoginButton": {"payload": "<?= addslashes($buttonPayload) ?>", "signature": "<?= $buttonSignature ?>", "public_key_id": "<?= $amazonPublicKeyId ?>" }}'>
+                             data-mage-init='{"amazonPayV2LoginButton": {}}'>
                         </div>
                     </div>
                     <div class="amazon-button-container__cell">

@@ -32,6 +32,29 @@
         }
     }
 
+    /* for the "Amazon Sign-in" button */
+    .amazon-button-container {
+        display: table;
+        margin: 0 0 22px;
+
+        &__cell {
+            display: table-cell;
+            min-width: 45px;
+            position: relative;
+        }
+
+        img {
+            display: block;
+        }
+
+        .field-tooltip {
+            margin: -12px 0 0;
+            right: 5px;
+            top: 50%;
+        }
+    }
+
+
     .cart-summary {
         .amazon-button-container-v2 {
             .checkout-methods-items {
@@ -92,4 +115,38 @@
             margin-top: 20px;
         }
     }
+
+    .login-container {
+        .block {
+            &-amazon-login {
+                clear: none;
+                float: right;
+                .actions-toolbar {
+                    margin-top: 25px;
+                }
+            }
+            &:nth-child(2) + .block-amazon-login {
+                clear: none;
+            }
+        }
+    }
+
+    .amazon-validate-container {
+        margin: 40px auto 0 auto;
+        width: 500px;
+
+        .primary {
+            width: 190px;
+        }
+
+        .continue-as-guest {
+            width: 130px;
+        }
+
+        .forgot-password {
+            text-align: right;
+            width: 175px;
+        }
+    }
+
 }

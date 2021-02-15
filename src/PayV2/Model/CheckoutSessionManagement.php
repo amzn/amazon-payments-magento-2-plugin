@@ -341,7 +341,8 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     {
         $result = [];
         if ($this->isAvailable($cartId)) {
-            $buttonPayload = $this->amazonAdapter->generateButtonPayload();
+            $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
+            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
 
             $result = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
@@ -350,8 +351,10 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
                 'language' => $this->amazonConfig->getLanguage(),
                 'pay_only' => $this->amazonHelper->isPayOnly($this->getCart($cartId)),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),
-                'payload' => $buttonPayload,
-                'signature' => $this->amazonAdapter->signButton($buttonPayload),
+                'login_payload' => $loginButtonPayload,
+                'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
+                'checkout_payload' => $checkoutButtonPayload,
+                'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
                 'public_key_id' => $this->amazonConfig->getPublicKeyId(),
             ];
         }
@@ -361,21 +364,18 @@ class CheckoutSessionManagement implements \Amazon\PayV2\Api\CheckoutSessionMana
     /**
      * {@inheritdoc}
      */
-    public function createCheckoutSession($cartId)
+    public function storeCheckoutSession($cartId, $checkoutSessionId)
     {
         $result = [];
         $this->cancelCheckoutSession($cartId);
-        if ($this->isAvailable($cartId)) {
-            $result = $this->amazonAdapter->createCheckoutSession($this->storeManager->getStore()->getId());
-            if (isset($result['checkoutSessionId'])) {
-                $checkoutSession = $this->checkoutSessionFactory->create([
-                    'data' => [
-                        CheckoutSessionInterface::KEY_QUOTE_ID => $this->getCart($cartId)->getId(),
-                        CheckoutSessionInterface::KEY_SESSION_ID => $result['checkoutSessionId'],
-                    ]
-                ]);
-                $this->checkoutSessionRepository->save($checkoutSession);
-            }
+        if ($this->isAvailable($cartId) && $checkoutSessionId) {
+            $checkoutSession = $this->checkoutSessionFactory->create([
+                'data' => [
+                    CheckoutSessionInterface::KEY_QUOTE_ID => $this->getCart($cartId)->getId(),
+                    CheckoutSessionInterface::KEY_SESSION_ID => $checkoutSessionId,
+                ]
+            ]);
+            $this->checkoutSessionRepository->save($checkoutSession);
         }
         return $result;
     }
