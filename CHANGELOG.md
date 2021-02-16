@@ -1,4 +1,8 @@
 # Change Log
+
+## <new version>
+* Fixes product page button hover and tooltip button placement
+
 ## 5.0.0
 * General Availability release, replacing versions that were previously included in core Magento releases
 * Fixed creating a credit memo against a split capture invoice
