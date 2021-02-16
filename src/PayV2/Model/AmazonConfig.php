@@ -152,7 +152,8 @@ class AmazonConfig
     public function getLanguage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         $paymentRegion = $this->getRegion($scope, $scopeCode);
-        @list($lang, $region) = explode('_', $this->localeResolver->getLocale());
+        $localeParts = explode('_', $this->localeResolver->getLocale());
+        $lang = $localeParts[0];
         switch ($lang) {
             case 'de':
                 $result = self::LANG_DE;

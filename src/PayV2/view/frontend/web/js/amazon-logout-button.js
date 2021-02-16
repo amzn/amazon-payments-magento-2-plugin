@@ -20,33 +20,15 @@ define([
 ], function ($, amazonCheckout) {
     'use strict';
 
-    $.widget('amazon.AmazonLogout', {
-        options: {
-            onInit: false
-        },
-
-        /**
-         * Create Amazon Logout Widget
-         * @private
-         */
-        _create: function () {
-            if (this.options.onInit) {
-                amazonCheckout.withAmazonCheckout(function (amazon, args) {
-                    amazon.Pay.signout(); //logout amazon user on init
-                });
+    $('.amazon-logout-button').click(function() {
+        amazonCheckout.withAmazonCheckout(function (amazon, args) {
+            amazon.Pay.signout();
+            var redirectUrl = '/customer/account/login';
+            var myParams = new URLSearchParams(window.location.search);
+            if (myParams.has('amazonCheckoutSessionId')) {
+                redirectUrl = '/checkout/';
             }
-        },
-
-        /**
-         * Logs out a user if called directly
-         * @private
-         */
-        _logoutAmazonUser: function () {
-            amazonCheckout.withAmazonCheckout(function (amazon, args) {
-                amazon.Pay.signout();
-            });
-        }
+            window.location.assign(redirectUrl);
+        });
     });
-
-    return $.amazon.AmazonLogout;
 });

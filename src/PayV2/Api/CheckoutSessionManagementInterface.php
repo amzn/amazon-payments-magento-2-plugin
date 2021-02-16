@@ -28,9 +28,10 @@ interface CheckoutSessionManagementInterface
 
     /**
      * @param mixed $cartId
+     * @param mixed $checkoutSessionId
      * @return mixed
      */
-    public function createCheckoutSession($cartId);
+    public function storeCheckoutSession($cartId, $checkoutSessionId);
 
     /**
      * @param mixed $cartId

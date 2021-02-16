@@ -44,16 +44,17 @@ define([
                     if (!$.isEmptyObject(checkoutSessionConfig)) {
                         callback({
                             merchantId: checkoutSessionConfig['merchant_id'],
-                            createCheckoutSession: {
-                                url: url.build('amazon_payv2/checkout/createSession'),
-                                method: 'PUT'
-                            },
                             ledgerCurrency: checkoutSessionConfig['currency'],
-                            buttonColor: checkoutSessionConfig['button_color'],
+                            sandbox: checkoutSessionConfig['sandbox'],
                             checkoutLanguage: checkoutSessionConfig['language'],
                             productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
                             placement: this.options.placement,
-                            sandbox: checkoutSessionConfig['sandbox'],
+                            buttonColor: checkoutSessionConfig['button_color'],
+                            createCheckoutSessionConfig: {
+                                payloadJSON: checkoutSessionConfig['checkout_payload'],
+                                signature: checkoutSessionConfig['checkout_signature'],
+                                publicKeyId: checkoutSessionConfig['public_key_id'],
+                            }
                         });
 
                         if (this.options.placement !== "Checkout") {
@@ -99,7 +100,7 @@ define([
                     $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
                     $buttonContainer.empty().append($buttonRoot);
                     this._loadButtonConfig(function (buttonConfig) {
-                        amazon.Pay.renderButton('#' + $buttonRoot.empty().uniqueId().attr('id'), buttonConfig);
+                        amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
                         $('.amazon-button-container-v2 .field-tooltip').fadeIn();
                     });
                 }, this);
@@ -110,11 +111,14 @@ define([
             **/
             _redraw: function () {
                 var self = this;
-                var cartData = customerData.get('cart');
-                cartData.subscribe(function (updatedCart) {
-                    if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
-                        self._draw();
-                    }
+
+                amazonCheckout.withAmazonCheckout(function (amazon, args) {
+                    var cartData = customerData.get('cart');
+                    cartData.subscribe(function (updatedCart) {
+                        if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
+                            self._draw();
+                        }
+                    });
                 });
 
             },
