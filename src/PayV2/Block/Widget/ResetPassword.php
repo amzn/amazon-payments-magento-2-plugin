@@ -13,33 +13,62 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\PayV2\Block;
+
+namespace Amazon\PayV2\Block\Widget;
 
 use Amazon\PayV2\Model\AmazonConfig;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Customer\Model\Url;
+use Magento\Customer\Model\Session;
+use Amazon\PayV2\Api\CustomerLinkRepositoryInterface;
 
 /**
  * @api
  */
-class Login extends Template
+class ResetPassword extends Template
 {
+
+    private $urlModel;
+
+    private $session;
+
+    private $customerLink;
+
     /**
      * @var AmazonConfig
      */
     private $amazonConfig;
 
-    /**
-     * Login constructor.
-     * @param Context $context
-     * @param AmazonConfig $amazonConfig
-     */
     public function __construct(
         Context $context,
-        AmazonConfig $amazonConfig
+        Url $urlModel,
+        Session $session,
+        CustomerLinkRepositoryInterface $customerLink,
+        AmazonConfig $amazonConfig,
+        array $data = []
     ) {
+        parent::__construct($context, $data);
+        $this->urlModel = $urlModel;
+        $this->session = $session;
+        $this->customerLink = $customerLink;
         $this->amazonConfig = $amazonConfig;
-        parent::__construct($context);
+    }
+
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+        if (!$this->getTemplate()) {
+            $this->setTemplate('widget/resetpassword.phtml');
+        }
+        return $this;
+    }
+
+    public function getLink()
+    {
+        $url = $this->urlModel->getLogoutUrl();
+
+        return $url;
     }
 
     /**

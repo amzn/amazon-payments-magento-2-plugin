@@ -31,7 +31,7 @@ define([
         return localStorage;
     };
     return function (callback) {
-        var cartId = customerData.get('cart')()['data_id'] || 0;
+        var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         if (cartId !== getLocalStorage().get('cart_id')) {
             callbacks.push(callback);
             if (callbacks.length == 1) {

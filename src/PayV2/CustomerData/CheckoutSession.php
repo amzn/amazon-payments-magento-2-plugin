@@ -74,12 +74,4 @@ class CheckoutSession
     {
         return $this->checkoutSessionManagement->completeCheckoutSession($this->session->getQuote());
     }
-
-    /**
-     * Create Amazon Checkout Session
-     */
-    public function createCheckoutSession()
-    {
-        return $this->checkoutSessionManagement->createCheckoutSession($this->session->getQuote());
-    }
 }
