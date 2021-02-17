@@ -309,4 +309,7 @@
     <type name="Magento\Config\Model\Config">
         <plugin name="amazon_pay_config" type="Amazon\Pay\Plugin\ConfigCredentialsValidator" sortOrder="100" disabled="false"/>
     </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="amazon_payv2_legacy_order" type="Amazon\Pay\Plugin\LegacyPaymentHandler" />
+    </type>
 </config>
