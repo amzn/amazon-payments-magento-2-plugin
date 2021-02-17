@@ -1,4 +1,4 @@
-# Amazon Pay Checkout v2
+# Amazon Pay for Magento 2.2.6-2.2.11 (End-Of-Life)
 
 This module will enable "Amazon Pay Checkout v2" on your Magento 2 installation. Amazon Pay Checkout v2 is the next generation web checkout technology of Amazon Pay that provides several advantages over the previous Amazon Pay Checkout solution.
 
@@ -16,9 +16,8 @@ This module will enable "Amazon Pay Checkout v2" on your Magento 2 installation.
 Amazon Pay offers a familiar and convenient buying experience that can help your customers spend more time shopping and less time checking out. Amazon Pay is used by large and small companies. From years of shopping safely with Amazon, customers trust their personal information will remain secure and know many transactions are covered by the Amazon A-to-z Guarantee. Businesses have the reassurance of our advanced fraud protection and payment protection policy.
 
 ### Requirements: ###
-* Magento minimum version requirement: 2.2.6 and above
-* Amazon Pay plugin minimum version requirement: 2.1.0 and above
-* Supported PHP versions: 7.1.3, 7.2 and 7.3
+* Magento version requirement: from 2.2.6 up to 2.2.11
+* Amazon Pay Legacy plugin version requirement: 2.1.0 up to 2.3.1
 
 ## Dependencies
 
@@ -78,12 +77,14 @@ Amazon Pay does not provide any specific extension points.
 
 ### Amazon Pay V2 configuration ###
 
+[View Complete User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin).
+
 Upon successful installation of the module, please follow the steps below for configuring it:
 
 1. Go to Stores -> Configuration -> Sales -> Payment Methods -> Amazon Pay -> Configure
 1. Switch to 'V2' under the Amazon Pay Product Version
 1. To obtain the required keys, please log in to your Amazon Pay merchant account via Seller Central and follow [these instructions](http://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/get-set-up-for-integration.html#4-get-your-public-key-id) to receive your Public Key Id. You will also need the associated secret key in order to configure the plugin.
-1. The rest of the settings are all similar to the V1 module settings. We recommend to use the same settings as used in V1 module, with the only difference that "clientId" is referenced as "storeId" in V2 module.[View V1 Configuration documentation](https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html).
+1. The rest of the settings are all similar to the V1 module settings. We recommend to use the same settings as used in V1 module, with the only difference that "clientId" is referenced as "storeId" in V2 module. 
 
 ## Alexa Notifications
 
