@@ -161,16 +161,14 @@
   <blockquote>
   <div><ul class="simple">
   <li>Magento 2.1.0 - 2.2.5: <br>Not supported by this extension. Please take a look at our Legacy extension <a class="reference internal" href="legacy/index.html"><span class="doc">here</span></a>. 
-  <li>Magento 2.2.6 - 2.2.11 (EOL): <br><cite>composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout-1.2.x</cite></li>
-  <li>Magento 2.3.0 and above: Purchase our free module from <a target="_blank" class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">Magento Marketplace</a> and then run: <cite>composer require amzn/amazon-pay-magento-2-module:5.*</cite></li>
+  <li>Magento 2.2.6 - 2.2.11 (EOL): <br><cite>composer require amzn/amazon-payments-magento-2-plugin:dev-V2checkout-1.2.x</cite><br><cite>php bin/magento module:enable Amazon_PayV2 --clear-static-content</cite></li>
+  <li>Magento 2.3.0 and above: Purchase our free module from <a target="_blank" class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">Magento Marketplace</a> and then run: <cite>composer require amzn/amazon-pay-magento-2-module:5.*</cite><br><cite>php bin/magento module:enable Amazon_Pay --clear-static-content</cite></li>
   <div class="admonition warning">
     <p class="first admonition-title">Warning</p>
-    <p class="last">Marketplace extension is yet to be published and will be released in the next weeks. Until it is published, you can install it from composer running: <br><cite>composer require amzn/amazon-payments-magento-2-plugin:5.*</cite></p>
+    <p class="last">Marketplace extension is yet to be published and will be released in the next weeks. Until it is published, you can install it from composer running: <br><cite>composer require amzn/amazon-payments-magento-2-plugin:5.*</cite><br><cite>php bin/magento module:enable Amazon_Pay --clear-static-content</cite></p>
     </div>
   </ul>
   </div></blockquote>
-  </li>
-  <li><p class="first">Enable the extension: <cite>php bin/magento module:enable Amazon_Pay --clear-static-content</cite></p>
   </li>
   <li><p class="first">Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></p>
   </li>
@@ -198,7 +196,9 @@
     </li>
     <!-- <li>Purchase our free module from <a target="_blank" class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">Magento Marketplace</a> and download the .zip file</li> -->
     <li>Extract the contents of the .zip file to <i>app/code/Amazon/Pay</i>, you should now see a file <i>app/code/Amazon/Pay/registration.php</i> if the directory nesting is correct</li>
-    <li>Enable the module, and run the normal Magento commands for a module installation:<br />
+    <li>Install dependencies and enable the module. Then run the normal Magento commands for a module installation:<br />
+    <i>composer require amzn/amazon-pay-api-sdk-php</i>
+    <i>composer require aws/aws-php-sns-message-validator</i>
     <i>bin/magento module:enable Amazon_Pay --clear-static-content</i><br />
     <i>bin/magento setup:upgrade</i><br />
     <i>bin/magento setup:di:compile</i><br />
