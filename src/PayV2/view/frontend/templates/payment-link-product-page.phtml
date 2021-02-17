@@ -22,7 +22,11 @@
 
 <div class="amazon-checkout-now" style="display: none;"><?= __('Checkout now') ?></div>
 <div class="amazon-button-container-v2 amazon-button-product-page" style="display: none;">
-    <div class="amazon-button-column">
+    <div class="amazon-button-column amazon-product-button">
+      <a href="javascript:;"
+           class="amazon-addtoCart"
+           id="amazon-addtoCart-<?= /* @noEscape */ $block->getJsId() ?>"
+           data-mage-init='{"amazonPayV2ProductAdd": {}}'>
         <div id="PayWithAmazon-Product"
              class="amazon-checkout-button"
              data-mage-init='<?= json_encode([
@@ -33,11 +37,7 @@
                  ],
              ]) ?>'>
         </div>
-        <a href="javascript:;"
-           class="amazon-addtoCart"
-           id="amazon-addtoCart-<?= /* @noEscape */ $block->getJsId() ?>"
-           data-mage-init='{"amazonPayV2ProductAdd": {}}'>
-        </a>
+      </a>
     </div>
     <div class="amazon-button-column amazon-button-column-tooltip">
         <div class="field-tooltip toggle">
