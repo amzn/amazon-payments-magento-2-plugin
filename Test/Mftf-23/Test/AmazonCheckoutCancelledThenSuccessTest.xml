@@ -6,7 +6,7 @@
             <title value="Amazon Checkout Cancelled then Successful"/>
             <description value="User should be able to checkout with Amazon Pay after cancelling their checkout session."/>
             <severity value="CRITICAL"/>
-            <group value="amazon_pay"/>
+            <group value="amazon_pay_disabled"/>
             <group value="amazon_pay_checkout"/>
         </annotations>
 

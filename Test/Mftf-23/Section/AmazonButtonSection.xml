@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
     <section name="AmazonButtonSection">
-        <element name="v1Product" type="button" selector="#amazon-addtoCart-amazon-pay-button-product"/>
         <element name="v1MiniCart" type="button" selector="#minicart-amazon-pay-button .amazonpay-button-inner-image"/>
         <element name="v1Checkout" type="button" selector="#PayWithAmazon_amazon-pay-button .amazonpay-button-inner-image"/>
         <element name="v1Payment" type="button" selector="#PayWithAmazon .amazonpay-button-inner-image"/>
-        <element name="v2Product" type="button" selector="#amazon-addtoCart-amazon-pay-v2-button-product"/>
-        <element name="v2MiniCart" type="button" selector="#PayWithAmazon-Cart div"/>
-        <element name="v2Checkout" type="button" selector=".amazon-button-container-v2 #PayWithAmazon_amazon-pay-button div"/>
-        <element name="v2Payment" type="button" selector="#PayWithAmazonButton div"/>
+        <element name="product" type="button" selector="#amazon-addtoCart-amazon-pay-button-product"/>
+        <element name="miniCart" type="button" selector="#PayWithAmazon-Cart div"/>
+        <element name="checkout" type="button" selector=".amazon-button-container #PayWithAmazon_amazon-pay-button div"/>
+        <element name="payment" type="button" selector="#PayWithAmazonButton div"/>
     </section>
 </sections>

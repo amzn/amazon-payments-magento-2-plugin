@@ -48,7 +48,7 @@
         <requiredEntity type="store_id">SampleAmazonPaymentStoreId</requiredEntity>
         <requiredEntity type="payment_region">SampleAmazonPaymentPaymentRegion</requiredEntity>
         <requiredEntity type="sandbox">SampleAmazonPaymentSandbox</requiredEntity>
-        <requiredEntity type="v2_lwa_enabled">SampleAmazonPaymentLwaDisabled</requiredEntity>
+        <requiredEntity type="lwa_enabled">SampleAmazonPaymentLwaDisabled</requiredEntity>
     </entity>
     <entity name="SampleAmazonPaymentApiVersion" type="api_version">
         <data key="value">2</data>
