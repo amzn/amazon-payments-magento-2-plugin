@@ -5,9 +5,9 @@ This extension provides an official integration of your Magento 2 store with **A
 Amazon Pay offers a familiar and convenient buying experience that can help your customers spend more time shopping and less time checking out. Amazon Pay is used by large and small companies. From years of shopping safely with Amazon, customers trust their personal information will remain secure and know many transactions are covered by the Amazon A-to-z Guarantee. Businesses have the reassurance of our advanced fraud protection and payment protection policy.
 
 ## What's new in Amazon Pay for Magento 2?
-Starting from version 5.0.0, Amazon Pay is hosted on Magento Marketplace and features our next generation web checkout technology. This places the Amazon shipping and payment widgets outside the Magento checkout template system, improving usability and transaction error handling. Here are some of the improvements over the previous module:
+Starting from version 5.0.0, Amazon Pay is hosted on the Magento Marketplace and features our next generation web checkout technology. This places the Amazon shipping and payment widgets outside the Magento checkout template system, improving usability and transaction error handling. Here are some of the improvements over the previous module:
 
-* Hosted checkout experience (replacing inline widgets solution)
+* An Amazon-Hosted checkout experience (replacing inline widgets solution)
 * Fewer checkout steps (merging consent and address/payment selection screen)
 * Avoids problems on browsers that have active cookie blocking or tracking protection mechanisms
 * Supports digital goods as well as physical goods
@@ -19,7 +19,7 @@ Starting from version 5.0.0, Amazon Pay is hosted on Magento Marketplace and fea
 * _Amazon Pay_ button in the shopping cart, mini-cart, on product pages and in the 1st step of checkout
 * _Amazon Sign-in_ optional button on customer login and registration page
 * _Amazon Pay_ in the list of available payment methods during the final step of checkout
-* Configuration of _Amazon Pay_ extension from within Magento admin
+* Configuration of _Amazon Pay_ extension from within Magento Admin
 * Support for payment authorizations, captures and refunds (also partial refunds)
 * Support for synchronous and asynchronous authorization mode
 * Supports _Amazon Pay_ Instant Payment Notifications
@@ -40,6 +40,8 @@ Starting from version 5.0.0, Amazon Pay is hosted on Magento Marketplace and fea
 * A verified Amazon Pay merchant account - [sign up here](https://pay.amazon.com/signup)!
 
 ## Installation and Configuration
+> :warning: Please note that the 5.0.X Release series is currently in Beta, due to the significant re-working of our extension to be completely stand-alone from previous versions.  Please report any issues you may have with this extension to us by submitting a GitHub Issue!
+
 The extension is available via composer as *amzn/amazon-payments-magento-2-plugin*. It will also soon be available as *amzn/amazon-pay-magento-2-module* or in [Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html). The User Guide can be found [here](https://amzn.github.io/amazon-payments-magento-2-plugin/). Any previous module versions should be removed. Please refer to the [Installation](https://amzn.github.io/amazon-payments-magento-2-plugin/installation.html) section of our guide to get more details concerning installation procedure.
 
 ## Branch information
@@ -52,10 +54,10 @@ Magento Version | Github Branch | Latest release
 
 ## Release Notes
 ### 5.0.0
-* General Availability release, replacing versions that were previously included in core Magento releases
-* Fixed creating a credit memo against a split capture invoice
-* Added input validation and test upon saving for credentials
-* Changed calling `closeChargePermission` instead of `cancelCharge` when voiding an order
-* Fixed loading correct config when switching store view before a cart is initiated
-* Changed the button to create the session directly instead of through Magento
-* Removed redirect to cart on login if the customer has products in cart
+* Beta release, replacing all versions that were included as part of the "Vendor Bundled Extension" (VBE) program in previous Magento releases.
+* Fixed creating a credit memo against a split capture invoice.
+* Added input validation and test upon saving for credentials.
+* Changed calling `closeChargePermission` instead of `cancelCharge` when voiding an order.
+* Fixed loading correct config when switching store view before a cart is initiated.
+* Changed the button to create the session directly instead of through Magento.
+* Removed redirect to cart on login if the customer has products in cart.
