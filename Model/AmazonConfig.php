@@ -90,10 +90,6 @@ class AmazonConfig
      */
     public function isEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        if ($this->getApiVersion() != '2') {
-            return false;
-        }
-
         if (!$this->clientHasAllowedIp()) {
             return false;
         }
@@ -114,23 +110,6 @@ class AmazonConfig
     {
         return $this->scopeConfig->isSetFlag(
             'payment/amazon_payment_v2/active',
-            $scope,
-            $scopeCode
-        );
-    }
-
-    /**
-     *
-     * @param string $scope
-     * @param null $scopeCode
-     * @param null $store
-     *
-     * @return string
-     */
-    public function getApiVersion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
-    {
-        return $this->scopeConfig->getValue(
-            'payment/amazon_payment/api_version',
             $scope,
             $scopeCode
         );
