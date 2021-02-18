@@ -1,133 +1,80 @@
-
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
   <title>Frontend Customisation &mdash; Amazon Pay for Magento 2 documentation</title>
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="Amazon Pay for Magento 2 documentation" href="index.html"/>
-        <link rel="next" title="Testing your integration" href="testing.html"/>
-        <link rel="prev" title="Order &amp; payment workflow" href="flow.html"/> 
-
-  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="top" title="Amazon Pay for Magento 2 documentation" href="index.html" />
+  <link rel="next" title="Testing your integration" href="testing.html" />
+  <link rel="prev" title="Order &amp; payment workflow" href="flow.html" />
   <script src="_static/js/modernizr.min.js"></script>
-
 </head>
-
 <body class="wy-body-for-nav" role="document">
-
   <div class="wy-grid-for-nav">
-
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search">
-          
-
-          
-            <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
-          
-
-          
+          <a href="index.html" class="icon icon-home"> Amazon Pay for Magento 2
           </a>
-
-      
-
-
-          
         </div>
-
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-                <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
-<li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Frontend Customisation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pwa">Support for <cite>Progressive Web Apps/Headless Commerce/Single Page Applications</cite></a></li>
-<!-- <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li> -->
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to Magento 2</a></li>
-</ul>
-
-            
-          
+          <ul class="current">
+            <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
+            <li class="toctree-l1 current"><a class="current reference internal" href="#">Frontend Customisation</a>
+              <ul>
+                <li class="toctree-l2"><a class="reference internal" href="#pwa">Support for <cite>Progressive Web
+                      Apps/Headless Commerce/Single Page Applications</cite></a></li>
+                <!-- <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li> -->
+              </ul>
+            </li>
+            <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your integration</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a>
+            </li>
+            <li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to
+                Magento 2</a></li>
+          </ul>
         </div>
       </div>
     </nav>
-
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
         <a href="index.html">Amazon Pay for Magento 2</a>
       </nav>
-
-
-      
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="index.html">Docs</a> &raquo;</li>
-      
-    <li>Frontend Customisation</li>
-      <li class="wy-breadcrumbs-aside">      
-      </li>
-  </ul>
-  <hr/>
-</div>
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ul class="wy-breadcrumbs">
+              <li><a href="index.html">Docs</a> &raquo;</li>
+              <li>Frontend Customisation</li>
+              <li class="wy-breadcrumbs-aside">
+              </li>
+            </ul>
+            <hr />
+          </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="frontend-customisation">
-<h1>Frontend Customisation<a class="headerlink" href="#frontend-customisation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pwa">
-  <h2>Support for <cite>Progressive Web Apps/Headless Commerce/Single Page Applications</cite><a class="headerlink" href="pwa" title="Permalink to this headline">¶</a></h2>
-  <p>The module exposes the REST endpoints that needs to set up. You can find them at <a class="reference external" target="_blank" href="https://github.com/amzn/amazon-payments-magento-2-plugin/blob/V2checkout-1.2.x/src/PayV2/etc/webapi.xml"><cite>src/PayV2/etc/webapi.xml</cite>.</a>
-    The front-end needs to be setup by the merchant/developer.</p>
-  </div>
-
-  <!-- <div class="section" id="q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">
+            <div itemprop="articleBody">
+              <div class="section" id="frontend-customisation">
+                <h1>Frontend Customisation<a class="headerlink" href="#frontend-customisation"
+                    title="Permalink to this headline">¶</a></h1>
+                <div class="section" id="pwa">
+                  <h2>Support for <cite>Progressive Web Apps/Headless Commerce/Single Page Applications</cite><a
+                      class="headerlink" href="pwa" title="Permalink to this headline">¶</a></h2>
+                  <p>The module exposes the REST endpoints that needs to set up. You can find them at <a
+                      class="reference external" target="_blank"
+                      href="https://github.com/amzn/amazon-payments-magento-2-plugin/blob/V2checkout-1.2.x/src/PayV2/etc/webapi.xml"><cite>src/PayV2/etc/webapi.xml</cite>.</a>
+                    The front-end needs to be setup by the merchant/developer.</p>
+                </div>
+                <!-- <div class="section" id="q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">
     <h2>How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website<a class="headerlink" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site" title="Permalink to this headline">¶</a></h2>
     <p>If you want to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons to a new position on your website, you need to update the <strong>XML</strong> for the page you want to add it to.</p>
     <p>For instance, if you wish to add a <cite>Amazon Sign-in</cite> button to the category page you would update the following file.</p>
@@ -150,56 +97,29 @@
     </div>
     <p>You can position and target which block the button appears in as with the <cite>Amazon Sign-in</cite> button. If you need more information on how to position and add new blocks into Magento 2 please see the <a class="reference external" target="_blank" href="http://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html">Magento 2 documentation</a></p>
     </div> -->
-</div>
-
-           </div>
+              </div>
+            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="testing.html" class="btn btn-neutral float-right" title="Testing your integration" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="flow.html" class="btn btn-neutral" title="Order &amp; payment workflow" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2017, Amazon.com Inc or its affiliates.
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
+            <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+              <a href="testing.html" class="btn btn-neutral float-right" title="Testing your integration"
+                accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+              <a href="flow.html" class="btn btn-neutral" title="Order &amp; payment workflow" accesskey="p"><span
+                  class="fa fa-arrow-circle-left"></span> Previous</a>
+            </div>
+            <hr />
+            <div role="contentinfo">
+              <p>
+                &copy; Copyright 2021, Amazon.com Inc or its affiliates.
+              </p>
+            </div>
+          </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-
-   
-
+  <script type="text/javascript" src="_static/jquery.js"></script>
+  <script type="text/javascript" src="_static/underscore.js"></script>
+  <script type="text/javascript" src="_static/js/theme.js"></script>
 </body>
 </html>
