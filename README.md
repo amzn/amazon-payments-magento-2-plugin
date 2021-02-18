@@ -40,7 +40,7 @@ Starting from version 5.0.0, Amazon Pay is hosted on the Magento Marketplace and
 * A verified Amazon Pay merchant account - [sign up here](https://pay.amazon.com/signup)!
 
 ## Installation and Configuration
-> :warning: Please note that the 5.0.X Release series is currently in Beta, due to the significant re-working of our extension to be completely stand-alone from previous versions.  Please report any issues you may have with this extension to us by submitting a GitHub Issue!
+> :warning: Please note that the 5.0.X Release series is currently in Beta, due to the significant re-working of our extension to be completely stand-alone from previous versions.  Please report any issues you may have with this extension to us by submitting a [GitHub Issue](https://github.com/amzn/amazon-payments-magento-2-plugin/issues/new)!
 
 The extension is available via composer as *amzn/amazon-payments-magento-2-plugin*. It will also soon be available as *amzn/amazon-pay-magento-2-module* or in [Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html). The User Guide can be found [here](https://amzn.github.io/amazon-payments-magento-2-plugin/). Any previous module versions should be removed. Please refer to the [Installation](https://amzn.github.io/amazon-payments-magento-2-plugin/installation.html) section of our guide to get more details concerning installation procedure.
 
