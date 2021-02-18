@@ -153,40 +153,13 @@
                 <div class="section" id="branch-information">
                   <h2>Branch information<a class="headerlink" href="#branch-information"
                       title="Permalink to this headline">¶</a></h2>
-                  <p>The following table provides an overview on which Git branch is compatible to which Magento 2
+                  <p>The <a class="reference external" target="_blank"
+                    href="https://github.com/amzn/amazon-payments-magento-2-plugin#branch-information">Branch information table</a> provides an overview on which Git branch is compatible to which Magento 2
                     version. The last column &#8220;Latest release&#8221; refers to the latest version of our extension
                     that is compatible to the Magento 2 version in the first column. If you are on a Magento version
                     below 2.2.6, please take a look at <strong><a class="reference external"
                         href="legacy/installation.html#composer-install-method">Amazon Pay and Amazon Sign-in for
                         Magento 2 (Legacy) documentation</a></strong>.</p>
-                  <table border="1" class="docutils">
-                    <colgroup>
-                      <col width="35%" />
-                      <col width="32%" />
-                      <col width="33%" />
-                    </colgroup>
-                    <tbody valign="top">
-                      <tr class="row-odd">
-                        <td><strong>Magento Version</strong></td>
-                        <td><strong>Github Branch</strong></td>
-                        <td><strong>Latest release</strong></td>
-                      </tr>
-                      <tr class="row-even">
-                        <td>2.2.6 - 2.2.11 (EOL)</td>
-                        <td><a class="reference external"
-                            href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2checkout-1.2.x">V2Checkout-1.2.x</a>
-                        </td>
-                        <td>1.11.0 (EOL)</td>
-                      </tr>
-                      <tr class="row-odd">
-                        <td>2.3.0 - 2.4.x</td>
-                        <td><a class="reference external"
-                            href="https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master">master</a></td>
-                        <td>5.0.0</td>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
                 <div class="admonition warning">
                   <p class="first admonition-title">Warning</p>
@@ -197,24 +170,8 @@
                 <div class="section" id="release-notes">
                   <h2>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a>
                   </h2>
-                  <p>
-                  <ul class="simple">
-                    <li>5.0.0
-                      <ul>
-                        <li>Beta release, replacing all versions that were included as part of the "Vendor Bundled Extension" 
-                          (VBE) program in previous Magento releases.                          
-                        </li>
-                        <li>Fixed creating a credit memo against a split capture invoice</li>
-                        <li>Added input validation and test upon saving for credentials</li>
-                        <li>Changed calling <i>closeChargePermission</i> instead of <i>cancelCharge</i> when voiding an
-                          order</li>
-                        <li>Fixed loading correct config when switching store view before a cart is initiated</li>
-                        <li>Changed the button to create the session directly instead of through Magento</li>
-                        <li>Removed redirect to cart on login if the customer has products in cart</li>
-                      </ul>
-                    </li>
-                  </ul>
-                  </p>
+                  <p>See <a class="reference external" target="_blank"
+                    href="https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/CHANGELOG.md">CHANGELOG.md</a></p>
                 </div>
               </div>
             </div>
