@@ -140,9 +140,9 @@
   Then remove all directories and their files from the following paths:
     <ul class="simple">
     <li><i>app/code/Amazon/PayV2</i></li>
-    <li>vendor/amzn/amazon-pay-and-login-with-amazon-core-module</li>
-    <li>vendor/amzn/amazon-pay-module</li>
-    <li>vendor/amzn/login-with-amazon-module</li></ul></i>
+    <li><i>vendor/amzn/amazon-pay-and-login-with-amazon-core-module</i></li>
+    <li><i>vendor/amzn/amazon-pay-module</i></li>
+    <li><i>vendor/amzn/login-with-amazon-module</i></li></ul></i>
 </ul>
 </div>
 <div class="section" id="composer-install-method">
@@ -170,13 +170,13 @@
   </ul>
   </div></blockquote>
   </li>
-  <li><p class="first">Run Magento database scripts: <cite>php bin/magento setup:upgrade</cite></p>
+  <li><p class="first">Run Magento database scripts: <br><cite>- php bin/magento setup:upgrade</cite></p>
   </li>
   <li><p class="first">Follow any advice the upgrade routine provides</p>
   </li>
-  <li><p class="first">Compile code and dependency injection: <cite>php bin/magento setup:di:compile</cite></p>
+  <li><p class="first">Compile code and dependency injection: <br> <cite>- php bin/magento setup:di:compile</cite></p>
   </li>
-  <li><p class="first">Deploy static view files (production mode only): <cite>php bin/magento setup:static-content:deploy xx_XX yy_YY</cite> where xx_XX, yy_YY, ... are the locales you are aiming to support</p>
+  <li><p class="first">Deploy static view files (production mode only): <br><cite>- php bin/magento setup:static-content:deploy xx_XX yy_YY</cite><br> where xx_XX, yy_YY, ... are the locales you are aiming to support</p>
   </li>
   <li><p class="first">Check permissions on directories and files and set them correctly if needed</p>
   </li>
