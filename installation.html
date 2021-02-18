@@ -139,7 +139,7 @@
     <br><i>bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</i> <br><br>
   Then remove all directories and their files from the following paths:
     <ul class="simple">
-    <li><i>app/code/Amazon/PayV2</li>  
+    <li><i>app/code/Amazon/PayV2</i></li>
     <li>vendor/amzn/amazon-pay-and-login-with-amazon-core-module</li>
     <li>vendor/amzn/amazon-pay-module</li>
     <li>vendor/amzn/login-with-amazon-module</li></ul></i>
@@ -170,7 +170,7 @@
   </ul>
   </div></blockquote>
   </li>
-  <li><p class="first">Upgrade the Magento installation: <cite>php bin/magento setup:upgrade</cite></p>
+  <li><p class="first">Run Magento database scripts: <cite>php bin/magento setup:upgrade</cite></p>
   </li>
   <li><p class="first">Follow any advice the upgrade routine provides</p>
   </li>
@@ -197,8 +197,8 @@
     <!-- <li>Purchase our free module from <a target="_blank" class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">Magento Marketplace</a> and download the .zip file</li> -->
     <li>Extract the contents of the .zip file to <i>app/code/Amazon/Pay</i>, you should now see a file <i>app/code/Amazon/Pay/registration.php</i> if the directory nesting is correct</li>
     <li>Install dependencies and enable the module. Then run the normal Magento commands for a module installation:<br />
-    <i>- composer require amzn/amazon-pay-api-sdk-php</i><br />
-    <i>- composer require aws/aws-php-sns-message-validator</i><br />
+    - Download the <a href="https://github.com/amzn/amazon-pay-api-sdk-php/archive/master.zip">Amazon Pay API SDK (PHP)</a> package and extract the <i>Amazon/Pay/API</i> directory as <i>app/code/Amazon/Pay/API/</i><br />
+    - Download the <a href="https://github.com/aws/aws-php-sns-message-validator/archive/master.zip">Amazon SNS Message Validator for PHP</a> package and extract the <i>src</i> directory as <i>app/code/Aws/Sns/</i><br />
     <i>- bin/magento module:enable Amazon_Pay --clear-static-content</i><br />
     <i>- bin/magento setup:upgrade</i><br />
     <i>- bin/magento setup:di:compile</i><br />
