@@ -48,14 +48,7 @@ The following table provides an overview on which Git branch is compatible to wh
 Magento Version | Github Branch | Latest release
 ---|---|---
 2.2.6 - 2.2.11 (EOL) | [V2Checkout-1.2.x](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/V2Checkout-1.2.x)  | 1.20.0 (EOL)
-2.3.0 - 2.4.x | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) | 5.0.0
+2.3.0 - 2.4.x | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) | 5.0.1
 
 ## Release Notes
-### 5.0.0
-* General Availability release, replacing versions that were previously included in core Magento releases
-* Fixed creating a credit memo against a split capture invoice
-* Added input validation and test upon saving for credentials
-* Changed calling `closeChargePermission` instead of `cancelCharge` when voiding an order
-* Fixed loading correct config when switching store view before a cart is initiated
-* Changed the button to create the session directly instead of through Magento
-* Removed redirect to cart on login if the customer has products in cart
+See [CHANGELOG.md](/CHANGELOG.md)

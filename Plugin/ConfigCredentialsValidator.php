@@ -63,6 +63,7 @@ class ConfigCredentialsValidator
     protected function isApplicable(Config $subject)
     {
         $result = $subject->getSection() === 'payment';
+        $active = false;
         if ($result) {
             $scope = $subject->getScope() ?: ScopeInterface::SCOPE_STORE;
             $scopeCode = $subject->getScopeCode();
@@ -71,15 +72,8 @@ class ConfigCredentialsValidator
             if ($active === null) {
                 $active = $this->amazonConfig->isActive($scope, $scopeCode);
             }
-
-            $apiVersion = $subject->getData(self::XML_PATH_API_VERSION);
-            if ($apiVersion === null) {
-                $apiVersion = $this->amazonConfig->getApiVersion($scope, $scopeCode);
-            }
-
-            $result = $active && $apiVersion === '2';
         }
-        return $result;
+        return $active;
     }
 
     /**

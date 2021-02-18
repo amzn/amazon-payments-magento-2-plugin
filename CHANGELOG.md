@@ -1,5 +1,8 @@
 # Change Log
 
+## 5.0.1
+* Remove reliance on legacy config value being set
+
 ## 5.0.0
 * General Availability release, replacing versions that were previously included in core Magento releases
 * Fixed creating a credit memo against a split capture invoice
