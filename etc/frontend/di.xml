@@ -27,7 +27,4 @@
     <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
         <plugin name="amazon_pay_checkout_processor" type="Amazon\Pay\Plugin\CheckoutProcessor" />
     </type>
-    <type name="Amazon\Core\Helper\Data">
-        <plugin name="amazon_pay_amazon_core_helper" type="Amazon\Pay\Plugin\AmazonCoreHelperData" sortOrder="1" />
-    </type>
 </config>
