@@ -1,5 +1,8 @@
 # Change Log
 
+## <new release>
+* Adds tests for refund, multi auth refund, and multi auth with capture initiated
+
 ## 5.0.1
 * Remove reliance on legacy config value being set.
 
