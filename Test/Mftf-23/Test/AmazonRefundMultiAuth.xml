@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonRefundMultiAuth" extends="AmazonCheckoutOrderTwoItems">
+        <annotations>
+            <stories value="Amazon Pay Refund Multi Auth"/>
+            <title value="Admin user must be able to refund multiple times when configuration allows"/>
+            <description value="Admin user must be able to refund multiple times when configuration allows"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_invoice"/>
+        </annotations>
+
+        <!-- Login as admin -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order in backend -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!-- Create Invoice 1 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice1"/>
+        <waitForPageLoad stepKey="waitForInvoicePage1"/>
+        <fillField stepKey="fillQty" userInput="1" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}"/>
+        <fillField stepKey="fillNoQty" userInput="0" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQty"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice1"/>
+        <waitForPageLoad stepKey="waitForLoadPage1"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage1"/>
+
+        <!-- Create Invoice 2 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice2"/>
+        <waitForPageLoad stepKey="waitForInvoicePage2"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2"/>
+        <waitForPageLoad stepKey="waitForLoadPage2"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage2"/>
+
+        <!--Go to first created invoice-->
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoicesTab"/>
+        <waitForPageLoad stepKey="waitForInvoicesPageLoad"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" stepKey="seeInvoiceInGrid"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="openInvoicePage"/>
+        <waitForPageLoad stepKey="waitForInvoicePageLoad"/>
+        <!--Submit refund and verify the refund was successful-->
+        <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateCreditMemo"/>
+        <waitForPageLoad stepKey="waitForCreditMemoPageLoad"/>
+        <!-- adding the raw selector here as the Magento provided one is incorrect -->
+        <click selector=".action-default.scalable.save.submit-button.refund.primary" stepKey="submitRefund"/> 
+        <see userInput="Amazon Pay refund successful." stepKey="seeAmazonMessage"/>
+        <see userInput="You created the credit memo." stepKey="seeMagentoMessage"/>
+
+        <!--Go to second created invoice-->
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoicesTab2"/>
+        <waitForPageLoad stepKey="waitForInvoicesPageLoad2"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.gridRow('2')}}" stepKey="seeInvoiceInGrid2"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('2')}}" stepKey="openInvoicePage2"/>
+        <waitForPageLoad stepKey="waitForInvoicePageLoad2"/>
+        <!--Submit refund and verify the refund was successful-->
+        <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateCreditMemo2"/>
+        <waitForPageLoad stepKey="waitForCreditMemoPageLoad2"/>
+        <!-- adding the raw selector here as the Magento provided one is incorrect -->
+        <click selector=".action-default.scalable.save.submit-button.refund.primary" stepKey="submitRefund2"/> 
+        <see userInput="Amazon Pay refund successful." stepKey="seeAmazonMessage2"/>
+        <see userInput="You created the credit memo." stepKey="seeMagentoMessage2"/>
+    </test>
+</tests>
