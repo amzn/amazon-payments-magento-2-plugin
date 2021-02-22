@@ -1,5 +1,8 @@
 # Change Log
 
+## <new release>
+* Adds Japanese translations and updates translations for other languages
+
 ## 5.0.1
 * Remove reliance on legacy config value being set.
 
