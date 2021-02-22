@@ -39,7 +39,7 @@ Please follow the instructions in the [User Guide](https://amzn.github.io/amazon
 
 ## Branch information
 
-The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column "Latest release" refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. "Latest release" embeds a link to Patch Instructions for upgrading Amazon Pay in Magento 2 versions where the extension is provided natively (in-core).
+The following table provides an overview on which Git branch is compatible to which Magento 2 version. The last column "Latest release" refers to the latest version of our extension that is compatible to the Magento 2 version in the first column. "Latest release" embeds a link to Patch Instructions for upgrading Amazon Pay in Magento 2 versions where the extension is provided natively (in-core). 
 
 | Magento Version  | Github Branch | Latest release |
 | ------------- | ------------- | ------------- |
