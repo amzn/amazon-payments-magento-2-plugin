@@ -3,7 +3,7 @@
   "description": "Official Magento2 Plugin to integrate with Amazon Pay and Login with Amazon",
   "type": "magento2-module",
   "version": "4.2.0",
-  "abandoned": "amzn/amazon-pay-v2-magento-2-module",
+  "abandoned": "amzn/amazon-pay-magento-2-module",
   "license": [
     "Apache-2.0"
   ],
