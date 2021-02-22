@@ -57,6 +57,8 @@ class AmazonPayAdapter
      */
     private $url;
 
+    private $redirect;
+
     /**
      * AmazonPayAdapter constructor.
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
@@ -74,7 +76,8 @@ class AmazonPayAdapter
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Logger\Logger $logger,
-        \Magento\Framework\UrlInterface $url
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Framework\App\Response\RedirectInterface $redirect
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
@@ -83,6 +86,7 @@ class AmazonPayAdapter
         $this->amazonHelper = $amazonHelper;
         $this->logger = $logger;
         $this->url = $url;
+        $this->redirect = $redirect;
     }
 
     /**
@@ -437,6 +441,7 @@ class AmazonPayAdapter
     {
         $payload = [
             'signInReturnUrl' => $this->url->getRouteUrl('amazon_pay/login/authorize/'),
+            'signInCancelUrl' => "-button-page-url-",
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
         ];
@@ -454,6 +459,7 @@ class AmazonPayAdapter
         $payload = [
             'webCheckoutDetails' => [
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
+                'checkoutCancelUrl' => $this->redirect->getRefererUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
         ];

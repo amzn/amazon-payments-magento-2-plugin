@@ -32,7 +32,7 @@ define([
     };
     return function (callback) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
-        if (cartId !== getLocalStorage().get('cart_id')) {
+        // if (cartId !== getLocalStorage().get('cart_id')) {
             callbacks.push(callback);
             if (callbacks.length == 1) {
                 remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {
@@ -43,8 +43,8 @@ define([
                     } while (callbacks.length);
                 });
             }
-        } else {
-            callback(getLocalStorage().get('config'));
-        }
+        // } else {
+        //     callback(getLocalStorage().get('config'));
+        // }
     };
 });
