@@ -140,6 +140,10 @@ class AmazonConfig
      */
     public function getLanguage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
+        if ($lang = $this->scopeConfig->getValue('payment/amazon_payment/button_display_language')) {
+            return $lang;
+        }
+
         $paymentRegion = $this->getRegion($scope, $scopeCode);
         $localeParts = explode('_', $this->localeResolver->getLocale());
         $lang = $localeParts[0];
