@@ -57,6 +57,9 @@ class AmazonPayAdapter
      */
     private $url;
 
+    /**
+     * @var \Magento\Framework\App\Response\RedirectInterface
+     */
     private $redirect;
 
     /**
@@ -67,7 +70,8 @@ class AmazonPayAdapter
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Logger\Logger $logger
-     * @pqram \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      */
     public function __construct(
         \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
@@ -441,7 +445,7 @@ class AmazonPayAdapter
     {
         $payload = [
             'signInReturnUrl' => $this->url->getRouteUrl('amazon_pay/login/authorize/'),
-            'signInCancelUrl' => "-button-page-url-",
+            'signInCancelUrl' => $this->redirect->getRefererUrl(),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
         ];

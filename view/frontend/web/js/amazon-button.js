@@ -51,7 +51,7 @@ define([
                             placement: this.options.placement,
                             buttonColor: checkoutSessionConfig['button_color'],
                             createCheckoutSessionConfig: {
-                                payloadJSON: checkoutSessionConfig['checkout_payload'].replace('-button-page-url-', document.URL),
+                                payloadJSON: checkoutSessionConfig['checkout_payload'],
                                 signature: checkoutSessionConfig['checkout_signature'],
                                 publicKeyId: checkoutSessionConfig['public_key_id'],
                             }

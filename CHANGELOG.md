@@ -1,5 +1,8 @@
 # Change Log
 
+## <new release>
+* Uses the button page URL as the redirect back when cancelling the session. Provides tests for it.
+
 ## 5.0.1
 * Remove reliance on legacy config value being set.
 
