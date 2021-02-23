@@ -1,5 +1,8 @@
 # Change Log
 
+## <next release>
+* Updates Alexa feature name
+
 ## 5.0.1
 * Remove reliance on legacy config value being set.
 
