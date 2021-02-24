@@ -100,10 +100,10 @@
                     </field>
                 </group>
                 <group id="alexa" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Alexa Notifications</label>
+                    <label>Alexa Delivery Notifications</label>
                     <field id="active" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enable Alexa Notifications</label>
-                        <comment><![CDATA[Once enabled, Amazon Pay will deliver Alexa notifications to the customer’s Alexa device, when the order is ‘out for delivery' and when it’s 'delivered'. <a href="https://developer.amazon.com/docs/alexa/amazon-pay-alexa/amazon-pay-apis-for-alexa.html#delivery-notifications" target="_blank">Click here</a> for the customer experience.]]></comment>
+                        <label>Enable Alexa Delivery Notifications</label>
+                        <comment><![CDATA[Once enabled, Amazon Pay will deliver Alexa Delivery Notifications to the customer’s Alexa device, when the order is ‘out for delivery' and when it’s 'delivered'. Click <a href="https://developer.amazon.com/docs/amazon-pay-onetime/delivery-notifications.html#heres-what-your-customer-will-experience" target="_blank">here</a> for the customer experience and <a href="https://eps-eu-external-file-share.s3.eu-central-1.amazonaws.com/Alexa/Delivery+Notifications/amazon-pay-delivery-tracker-supported-carriers-v2.csv" target="_blank">here</a> for the supported carriers.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>
