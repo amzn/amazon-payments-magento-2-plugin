@@ -33,7 +33,7 @@ define([
     return function (callback) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         var config = getLocalStorage().get('config') || false;
-        if (config && !config.checkout_payload.includes(document.URL)) {
+        if (typeof config.checkout_payload === 'undefined' || !config.checkout_payload.includes(document.URL)) {
             callbacks.push(callback);
             if (callbacks.length == 1) {
                 remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {
