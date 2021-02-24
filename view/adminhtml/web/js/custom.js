@@ -22,7 +22,6 @@ require(['jquery', 'domReady!'], function ($) {
                 languageId = $('[data-ui-id=text-groups-amazon-pay-groups-advanced-groups-frontend-fields-display-language-value]'),
                 value = $(this).val();
             if (regions.includes(value)) {
-                languageId.val('');
                 languageRow.show();
             }
             else {
