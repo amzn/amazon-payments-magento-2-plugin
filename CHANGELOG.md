@@ -1,5 +1,9 @@
 # Change Log
 
+## <new release>
+* Adds button language field for European regions.
+* Fixes bug with updating configuration without changing the private key.
+
 ## 5.0.1
 * Remove reliance on legacy config value being set.
 
