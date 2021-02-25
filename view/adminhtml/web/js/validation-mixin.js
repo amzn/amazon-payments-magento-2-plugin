@@ -30,17 +30,6 @@ define(['jquery'], function ($) {
             $.mage.__('Please enter a valid URL. Secure protocol is required (https://).')
         ),
         $.validator.addMethod(
-            'validate-private-key',
-            function (v) {
-                if (v == '******') {
-                    return true;
-                }
-                return (/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s).test(v);
-            },
-            $.mage.__('Private Key field is invalid. It must include header ' +
-                'and footer of the private key. Please check and try again')
-        ),
-        $.validator.addMethod(
             'validate-amzn-merchant-id',
             function (v) {
                 return (/^[0-9A-Z]{13}[0-9A-Z]?$/).test(v);

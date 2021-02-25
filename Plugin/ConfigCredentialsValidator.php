@@ -115,7 +115,19 @@ class ConfigCredentialsValidator
         $scope = $subject->getScope() ?: ScopeInterface::SCOPE_STORE;
         $scopeCode = $subject->getScopeCode();
 
-        $privateKey = $subject->getData(self::XML_PATH_PRIVATE_KEY);
+        $privateKeyArray = $subject->getData(self::XML_PATH_PRIVATE_KEY);
+        if (empty($privateKeyArray['name'])) {
+            $privateKey = '*';
+        }
+        else {
+            $privateKey = file_get_contents($privateKeyArray['tmp_name']);
+            if (!preg_match(
+                '/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s',
+                $privateKey)
+            ) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid key'));
+            }
+        }
         if ($privateKey && (
                 preg_match('/^\*+$/', $privateKey) ||
                 $privateKey === $this->amazonConfig->getPrivateKey($scope, $scopeCode))

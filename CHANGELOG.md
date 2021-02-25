@@ -1,5 +1,8 @@
 # Change Log
 
+## <new release>
+* Replaces private key field with a .pem file parser.
+
 ## 5.0.1
 * Remove reliance on legacy config value being set.
 
