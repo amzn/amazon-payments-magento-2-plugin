@@ -47,7 +47,7 @@ class PrivateKeyPem extends \Magento\Config\Model\Config\Backend\File
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
-        Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
