@@ -53,4 +53,4 @@ Magento Version | Github Branch | Latest release
 2.3.0 - 2.4.x | [master](https://github.com/amzn/amazon-payments-magento-2-plugin/tree/master) | 5.0.1
 
 ## Release Notes
-See [CHANGELOG.md](/CHANGELOG.md)
+See [CHANGELOG.md](/CHANGELOG.md) 
