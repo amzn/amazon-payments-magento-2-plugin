@@ -2,6 +2,9 @@
 
 ## <new release>
 * Uses the button page URL as the redirect back when cancelling the session. Provides tests for it.
+* Adds tests for refund, multi auth refund, and multi auth with capture initiated
+* Updates Alexa feature name
+* Adds Japanese translations and updates translations for other languages
 
 ## 5.0.1
 * Remove reliance on legacy config value being set.

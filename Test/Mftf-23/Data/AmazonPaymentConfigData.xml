@@ -48,7 +48,7 @@
         <requiredEntity type="store_id">SampleAmazonPaymentStoreId</requiredEntity>
         <requiredEntity type="payment_region">SampleAmazonPaymentPaymentRegion</requiredEntity>
         <requiredEntity type="sandbox">SampleAmazonPaymentSandbox</requiredEntity>
-        <requiredEntity type="v2_lwa_enabled">SampleAmazonPaymentLwaDisabled</requiredEntity>
+        <requiredEntity type="lwa_enabled">SampleAmazonPaymentLwaDisabled</requiredEntity>
     </entity>
     <entity name="SampleAmazonPaymentApiVersion" type="api_version">
         <data key="value">2</data>
@@ -79,6 +79,14 @@
     </entity>
     <entity name="SampleAmazonPaymentLwaDisabled" type="lwa_enabled">
         <data key="value">0</data>
+    </entity>
+    <entity name="SampleAmazonPaymentPaymentAction" type="payment_action_v2">
+        <data key="charge_on_shipment">authorize</data>
+        <data key="charge_on_order">authorize_capture</data>
+    </entity>
+    <entity name="SampleAmazonPaymentAuthorizationMode" type="authorization_mode">
+        <data key="immediate">synchronous</data>
+        <data key="automatic">synchronous_possible</data>
     </entity>
 
     <entity name="EUAmazonPaymentConfig" type="amazon_payment_config">

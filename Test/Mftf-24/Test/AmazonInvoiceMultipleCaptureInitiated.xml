@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonInvoiceMultipleCaptureInitiated" extends="AmazonCheckoutOrderTwoItems">
+        <annotations>
+            <stories value="Amazon Pay Multiple Capture Initiated"/>
+            <title value="Admin user must be able to capture multiple times when configuration allows, after 7 days"/>
+            <description value="Admin user must be able to capture multiple times when configuration allows, after 7 days"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_invoice"/>
+        </annotations>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order in backend -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!-- Create Invoice 1 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice1"/>
+        <waitForPageLoad stepKey="waitForInvoicePage1"/>
+        <fillField stepKey="fillQty" userInput="1" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}"/>
+        <fillField stepKey="fillNoQty" userInput="0" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQty"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded"/>
+        <!--Add simulation string-->
+        <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="{{AmazonSimulationString.capture_initiated}}" stepKey="writeComment"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice1"/>
+        <waitForPageLoad stepKey="waitForLoadPage1"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage1"/>
+        <!--Verify order status is Payment Review-->
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Payment Review" stepKey="seePaymentReviewStatus"/>
+        <!--Update status-->
+        <wait time="30" stepKey="waitForStatusUpdate"/>
+        <magentoCLI command="amazon:payment:async:process" stepKey="updateStatus"/>
+        <!--Open order and verify status is Processing-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeProcessingStatus"/>
+
+        <!-- Create Invoice 2 -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice2"/>
+        <waitForPageLoad stepKey="waitForInvoicePage2"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice2"/>
+        <waitForPageLoad stepKey="waitForLoadPage2"/>
+        <see userInput="The invoice has been created." stepKey="seeMessage2"/>
+    </test>
+</tests>

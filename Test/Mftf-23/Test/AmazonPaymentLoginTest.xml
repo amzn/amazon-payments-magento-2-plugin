@@ -12,7 +12,7 @@
 
         <!--Go to Amazon Pay from the payment method and login-->
         <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
-        <click selector="{{AmazonButtonSection.Payment}}" stepKey="clickAmazonButton"/>
+        <click selector="{{AmazonButtonSection.payment}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
     </test>
 </tests>
