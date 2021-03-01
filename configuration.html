@@ -10,7 +10,7 @@
   <title>Configuration &mdash; Amazon Pay for Magento 2 documentation</title>
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="top" title="Amazon Pay for Magento 2 documentation" href="index.html" />
-  <link rel="next" title="Amazon Sign-in" href="login.html" />
+  <link rel="next" title="Amazon Sign-in" href="signin.html" />
   <link rel="prev" title="Installation" href="installation.html" />
   <script src="_static/js/modernizr.min.js"></script>
 </head>
@@ -32,16 +32,12 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="#credentials">Credentials</a>
                   <ul>
-                    <li class="toctree-l3"><a class="reference internal" href="#credentials-json">Credentials JSON</a>
-                    </li>
                     <li class="toctree-l3"><a class="reference internal"
-                        href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret">Merchant Id, Access
-                        Key Id, Secret Access Key, Client Id, Client Secret</a></li>
+                        href="#private-key-public-key-id-merchant-id-store-id">Private Key, Public Key ID, Merchant ID, Store ID</a></li>
                     <li class="toctree-l3"><a class="reference internal" href="#payment-region">Payment Region</a></li>
                     <li class="toctree-l3"><a class="reference internal" href="#sandbox">Sandbox</a></li>
                     <li class="toctree-l3"><a class="reference internal"
-                        href="#allowed-javascript-origins-allowed-return-urls-ipn-url">Allowed Javascript Origins,
-                        Allowed Return URLs, IPN URL</a></li>
+                        href="#ipn-url">IPN URL</a></li>
                   </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="#options">Options</a>
@@ -53,7 +49,7 @@
                         Mode</a></li>
                   </ul>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="#alexa-notifications">Alexa Notifications</a>
+                <li class="toctree-l2"><a class="reference internal" href="#alexa-delivery-notifications">Alexa Notifications</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="#advanced">Advanced</a>
                   <ul>
@@ -93,7 +89,7 @@
                 </li>
               </ul>
             </li>
-            <li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="signin.html">Amazon Sign-in</a></li>
             <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
             <li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend Customisation</a>
             </li>
@@ -160,7 +156,7 @@
                 <div class="section" id="credentials">
                   <h2>Credentials<a class="headerlink" href="#credentials" title="Permalink to this headline">¶</a></h2>
                   <h3>Private Key, Public Key ID, Merchant ID, Store ID<a class="headerlink"
-                      href="#merchant-id-access-key-id-secret-access-key-client-id-client-secret"
+                      href="#private-key-public-key-id-merchant-id-store-id"
                       title="Permalink to this headline">¶</a></h3>
                   <p>The credentials can be found in Seller Central at <span class="menuselection"><i>Integration ‣
                         Integration Central</i></span>. <br> Credentials will be the same on <i>Sandbox</i> and
@@ -241,17 +237,17 @@
               </div>
               <div class="section" id="options">
                 <h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
-                <div class="section" id="enable-login-with-amazon">
-                  <h3>Enable Amazon Sign-in<a class="headerlink" href="#enable-login-with-amazon"
+                <div class="section" id="enable-amazon-signin">
+                  <h3>Enable Amazon Sign-in<a class="headerlink" href="#enable-amazon-signin"
                       title="Permalink to this headline">¶</a></h3>
-                  <p>By switching this option you can toggle <strong>Amazon Sign-in</strong>. When enabled this will log
+                  <p>By switching this option you can toggle <a class="reference internal" href="signin.html"><strong>Amazon Sign-in</strong></a>. When enabled this will log
                     customers into Magento via their Amazon account. If disabled, customers using Amazon Pay will be
                     handled as Guests by default but prompted to optionally create an account during Checkout.
                     if Amazon Sign-in is disabled and Magento Guest Checkout is disabled, the customer will be able to
                     see and use Amazon Pay buttons only if already signed in with a Magento account.</p>
                   <div class="admonition note">
                     <p class="first admonition-title">Note</p>
-                    <p class="last">Amazon Sign-in requires that Amazon Pay is enabled in order to function.</p>
+                    <p class="last"><a href="signin.html"><strong>Amazon Sign-in</strong></a> requires that Amazon Pay is enabled in order to function.</p>
                   </div>
                 </div>
                 <div class="section" id="payment-action">
@@ -284,12 +280,12 @@
                   </div>
                 </div>
               </div>
-              <h2>Alexa Notifications<a class="headerlink" href="#alexa-notifications"
+              <h2>Alexa Delivery Notifications<a class="headerlink" href="#alexa-delivery-notifications"
                   title="Permalink to this headline">¶</a></h2>
               <div class="section" id="button-color">
-                <h4>Enable Alexa Notifications<a class="headerlink" href="#enable-alexa-notifications"
+                <h4>Enable Alexa Delivery Notifications<a class="headerlink" href="#enable-alexa-delivery-notifications"
                     title="Permalink to this headline">¶</a></h4>
-                <p>Once enabled, Amazon Pay will deliver Alexa notifications to the customer’s Alexa device, when the
+                <p>Once enabled, Amazon Pay will deliver Alexa Delivery notifications to the customer’s Alexa device, when the
                   order is ‘out for delivery' and when it’s 'delivered'. Click <a class="reference external"
                     target="_blank"
                     href="https://developer.amazon.com/en-US/docs/alexa/amazon-pay-alexa/amazon-pay-apis-for-alexa.html#delivery-notifications">here</a>
@@ -299,10 +295,10 @@
                 <h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this headline">¶</a></h2>
                 <div class="section" id="frontend">
                   <h3>Frontend<a class="headerlink" href="#frontend" title="Permalink to this headline">¶</a></h3>
-                  <!-- <div class="section" id="button-display-language">
+                  <div class="section" id="button-display-language">
 <h4>Button Display Language<a class="headerlink" href="#button-display-language" title="Permalink to this headline">¶</a></h4>
 <p>Allows input of a locale string to control button language should be in the format <cite>en-gb</cite>. By default the language of the store view is used.</p>
-</div> -->
+</div>
                   <div class="section" id="button-color">
                     <h4>Button Color<a class="headerlink" href="#button-color" title="Permalink to this headline">¶</a>
                     </h4>
@@ -444,7 +440,7 @@
           </div>
           <footer>
             <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-              <a href="login.html" class="btn btn-neutral float-right" title="Amazon Sign-in" accesskey="n">Next <span
+              <a href="signin.html" class="btn btn-neutral float-right" title="Amazon Sign-in" accesskey="n">Next <span
                   class="fa fa-arrow-circle-right"></span></a>
               <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p"><span
                   class="fa fa-arrow-circle-left"></span> Previous</a>

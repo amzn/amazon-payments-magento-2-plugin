@@ -25,7 +25,7 @@
             <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
             <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
             <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-            <li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a></li>
+            <li class="toctree-l1"><a class="reference internal" href="signin.html">Amazon Sign-in</a></li>
             <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment workflow</a></li>
             <li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend Customisation</a>
             </li>
@@ -72,54 +72,54 @@
                         <li class="toctree-l2"><a class="reference internal" href="overview.html#about-amazon-pay">About
                             Amazon Pay</a></li>
                         <li class="toctree-l2"><a class="reference internal"
-                            href="overview.html#extension-features">Extension features</a></li>
+                            href="overview.html#whats-new">What's new in Amazon Pay for Magento 2?</a></li>
                         <li class="toctree-l2"><a class="reference internal"
-                            href="overview.html#prerequisites">Prerequisites</a></li>
+                            href="overview.html#extension-features">Full feature list</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                              href="overview.html#prerequisites">Prerequisites</a></li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="overview.html#installation-and-configuration">Installation and Configuration</a></li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="overview.html#branch-information">Branch information</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                              href="overview.html#release-notes">Release Notes</a></li>
                       </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a>
                       <ul>
                         <li class="toctree-l2"><a class="reference internal"
                             href="installation.html#pre-installation-steps">Pre-installation steps</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                              href="installation.html#composer-install-method">Composer Install Method</a></li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="installation.html#magento-marketplace-install-method">Magento Marketplace Install
                             Method</a></li>
-                        <li class="toctree-l2"><a class="reference internal"
-                            href="installation.html#composer-install-method">Composer Install Method</a></li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="installation.html#un-install-method">Un-install Method</a></li>
                       </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a>
                       <ul>
+                        <li class="toctree-l3"><a class="reference internal"
+                          href="configuration.html#enable-amazon-pay">Enable Amazon Pay</a></li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="configuration.html#credentials">Credentials</a>
                           <ul>
                             <li class="toctree-l3"><a class="reference internal"
-                                href="configuration.html#credentials-json">Credentials JSON</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="configuration.html#merchant-id-access-key-id-secret-access-key-client-id-client-secret">Merchant
-                                Id, Access Key Id, Secret Access Key, Client Id, Client Secret</a></li>
+                                href="configuration.html#private-key-public-key-id-merchant-id-store-id">Private Key, Public Key ID, Merchant ID, Store ID</a></li>
                             <li class="toctree-l3"><a class="reference internal"
                                 href="configuration.html#payment-region">Payment Region</a></li>
                             <li class="toctree-l3"><a class="reference internal"
                                 href="configuration.html#sandbox">Sandbox</a></li>
                             <li class="toctree-l3"><a class="reference internal"
-                                href="configuration.html#allowed-javascript-origins-allowed-return-urls-ipn-url">Allowed
-                                Javascript Origins, Allowed Return URLs, IPN URL</a></li>
+                                href="configuration.html#ipn-url">IPN URL</a></li>
                           </ul>
                         </li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="configuration.html#options">Options</a>
                           <ul>
                             <li class="toctree-l3"><a class="reference internal"
-                                href="configuration.html#enable-amazon-pay">Enable Amazon Pay</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="configuration.html#enable-login-with-amazon">Enable Amazon Sign-in</a></li>
+                                href="configuration.html#enable-amazon-signin">Enable Amazon Sign-in</a></li>
                             <li class="toctree-l3"><a class="reference internal"
                                 href="configuration.html#payment-action">Payment Action</a></li>
                             <li class="toctree-l3"><a class="reference internal"
@@ -128,6 +128,13 @@
                                 href="configuration.html#update-mechanism">Update Mechanism</a></li>
                           </ul>
                         </li>
+                        <li class="toctree-l2"><a class="reference internal"
+                          href="configuration.html#alexa-delivery-notifications">Alexa Delivery Notifications</a>
+                        <ul>
+                          <li class="toctree-l3"><a class="reference internal"
+                              href="configuration.html#enable-alexa-delivery-notifications">Enable Alexa Delivery Notifications</a></li>
+                        </ul>
+                      </li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="configuration.html#advanced">Advanced</a>
                           <ul>
@@ -141,12 +148,12 @@
                         </li>
                       </ul>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="login.html">Amazon Sign-in</a>
+                    <li class="toctree-l1"><a class="reference internal" href="sign-in.html">Amazon Sign-in</a>
                       <ul>
                         <li class="toctree-l2"><a class="reference internal"
-                            href="login.html#requirements">Requirements</a></li>
+                            href="signin.html#requirements">Requirements</a></li>
                         <li class="toctree-l2"><a class="reference internal"
-                            href="login.html#login-with-amazon-button"><cite>Amazon Sign-in</cite> button</a></li>
+                            href="signin.html#amazon-signin"><cite>Amazon Sign-in</cite> button</a></li>
                       </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="flow.html">Order &amp; payment
@@ -173,40 +180,15 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="customisation.html">Frontend
                         Customisation</a>
-                      <ul>
-                        <li class="toctree-l2"><a class="reference internal"
-                            href="customisation.html#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">Q:
-                            I&#8217;d like to add a <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> button
-                            elsewhere on my site</a></li>
-                        <li class="toctree-l2"><a class="reference internal"
-                            href="customisation.html#q-i-d-like-to-customise-the-authorisation-decline-e-mail">Q:
-                            I&#8217;d like to customise the authorisation decline e-mail</a></li>
-                      </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing your
                         integration</a>
                       <ul>
                         <li class="toctree-l2"><a class="reference internal"
-                            href="testing.html#how-to-create-sandbox-test-account">How to create Sandbox test
+                            href="testing.html#how-to-create-sandbox-test-account">How to create a Sandbox test
                             account</a></li>
                         <li class="toctree-l2"><a class="reference internal"
                             href="testing.html#available-simulations">Available Simulations</a>
-                          <ul>
-                            <li class="toctree-l3"><a class="reference internal" href="testing.html#no-simulation">No
-                                Simulation</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="testing.html#authorization-soft-decline">Authorization soft decline</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="testing.html#authorization-hard-decline">Authorization hard decline</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="testing.html#authorization-timed-out">Authorization timed out</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="testing.html#capture-declined">Capture declined</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="testing.html#capture-pending">Capture pending</a></li>
-                            <li class="toctree-l3"><a class="reference internal"
-                                href="testing.html#refund-declined">Refund declined</a></li>
-                          </ul>
                         </li>
                       </ul>
                     </li>
@@ -221,13 +203,6 @@
                     <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions
                         (FAQ)</a>
                       <ul>
-                        <li class="toctree-l2"><a class="reference internal"
-                            href="faq.html#i-am-using-a-custom-theme-what-do-i-have-to-do">I am using a custom theme,
-                            what do I have to do?</a></li>
-                        <li class="toctree-l2"><a class="reference internal"
-                            href="faq.html#amazon-pay-widgets-are-not-surfaced">Amazon Pay Widgets are not surfaced</a>
-                        </li>
-                      </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento
                         1 to Magento 2</a>
