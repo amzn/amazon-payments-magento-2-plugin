@@ -8,7 +8,7 @@
     "Apache-2.0"
   ],
   "require": {
-    "php": "~7.1.3||~7.2.0||~7.3.0",
+    "php": "~7.1.3||~7.2.0||~7.3.0||~7.4.0",
     "amzn/amazon-pay-and-login-with-amazon-core-module": "^3.8.0",
     "amzn/login-with-amazon-module": "^3.8.0",
     "magento/framework": "^102",
