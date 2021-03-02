@@ -1,3 +1,5 @@
+## This Amazon Pay module has been deprecated and [will be removed in Magento 2.5.0](https://devdocs-beta.magento.com/guides/v2.4/release-notes/commerce-2-4-2.html#vendor-developed-extensions). Please download [the new module from Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html) and check the [User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html#whats-new) out for its installation and configuration.
+
 # Amazon Pay and Login with Amazon for Magento 2
 
 This extension provides an official integration of your Magento 2 store with **Amazon Pay and Login with Amazon** services. The extension is a checkout and payment solution that does not share any item level information (product information, prices, basket content, etc) with Amazon. The extension integrates Amazon Pay seamlessly into the Magento 2 shop backend (configuration, order management, billing, etc.).
