@@ -1,3 +1,5 @@
+# This module of Amazon Pay has been deprecated and [will be removed in Magento 2.5.0](https://devdocs-beta.magento.com/guides/v2.4/release-notes/commerce-2-4-2.html#vendor-developed-extensions). Please download [the new module from Magento Marketplace](https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html) and check the [User Guide](https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html#whats-new) out for its installation and configuration. 
+
 ## Instructions to upgrade Amazon Pay in-core installation to Latest Release 
 
 - [Instructions for updating Magento 2.3.0, Amazon Pay 3.0.0 to **Latest Release**](https://gist.github.com/christianzichichi/934438b59a0894b68fdb79f56a98dd00)
