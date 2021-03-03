@@ -4,6 +4,7 @@
 * Adds tests for refund, multi auth refund, and multi auth with capture initiated
 * Updates Alexa feature name
 * Adds Japanese translations and updates translations for other languages
+* Fixed customer data not getting cleared when getting signed in via Amazon Pay checkout
 
 ## 5.0.1
 * Remove reliance on legacy config value being set.
