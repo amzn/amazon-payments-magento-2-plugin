@@ -13,23 +13,27 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Pay\Model\Config\File;
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
- * Class PemFile
- * @package Amazon\Pay\Model\Config\File
+ * Class PrivateKeySelector
+ * @package Amazon\Pay\Block\Adminhtml\System\Config\Form
  */
-class PemFile extends \Magento\Config\Block\System\Config\Form\Field\File
+class PrivateKeySelector extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
+     * @var string
+     */
+    protected $_template = 'Amazon_Pay::system/config/private-key.phtml';
+
+    /**
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _getDeleteCheckbox()
+    protected function _getElementHtml(AbstractElement $element)
     {
-        if ($this->getValue()) {
-            return '<div id="amazon_pay_private_key_pem_file_saved_msg">.PEM key already saved</div>';
-        }
-
-        return '';
+        return $this->_toHtml();
     }
 }

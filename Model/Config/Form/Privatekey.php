@@ -13,23 +13,28 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Pay\Model\Config\File;
+namespace Amazon\Pay\Model\Config\Form;
 
 /**
- * Class PemFile
- * @package Amazon\Pay\Model\Config\File
+ * Frontend model to obscure decrypted textarea
+ *
+ * Class Privatekey
  */
-class PemFile extends \Magento\Config\Block\System\Config\Form\Field\File
+class Privatekey extends \Magento\Config\Block\System\Config\Form\Field
 {
+    const OBSCURED = '******';
+
     /**
+     * Retrieve element HTML markup and add OBSCURED textarea value
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getDeleteCheckbox()
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        if ($this->getValue()) {
-            return '<div id="amazon_pay_private_key_pem_file_saved_msg">.PEM key already saved</div>';
+        if ($element->getValue()) {
+            $element->setValue(self::OBSCURED);
         }
-
-        return '';
+        return $element->getElementHtml();
     }
 }

@@ -26,6 +26,8 @@ class ConfigCredentialsValidator
     const XML_PATH_ACTIVE = 'groups/amazon_pay/groups/credentials/fields/active_v2/value';
     const XML_PATH_ACTIVE_INHERIT = 'groups/amazon_pay/groups/credentials/fields/active_v2/inherit';
     const XML_PATH_PRIVATE_KEY = 'groups/amazon_pay/groups/credentials/fields/private_key/value';
+    const XML_PATH_PRIVATE_KEY_PEM = 'groups/amazon_pay/groups/credentials/fields/private_key_pem/value';
+    const XML_PATH_PRIVATE_KEY_TEXT = 'groups/amazon_pay/groups/credentials/fields/private_key_text/value';
     const XML_PATH_PUBLIC_KEY_ID = 'groups/amazon_pay/groups/credentials/fields/public_key_id/value';
     const XML_PATH_STORE_ID = 'groups/amazon_pay/groups/credentials/fields/store_id/value';
     const XML_PATH_PAYMENT_REGION = 'groups/amazon_pay/groups/credentials/fields/payment_region/value';
@@ -115,19 +117,26 @@ class ConfigCredentialsValidator
         $scope = $subject->getScope() ?: ScopeInterface::SCOPE_STORE;
         $scopeCode = $subject->getScopeCode();
 
-        $privateKeyArray = $subject->getData(self::XML_PATH_PRIVATE_KEY);
-        if (empty($privateKeyArray['name'])) {
-            $privateKey = '*';
+        $privateKey = '*';
+        if ($subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT)) {
+            $privateKey = $subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT);
         }
-        else {
-            $privateKey = file_get_contents($privateKeyArray['tmp_name']);
-            if (!preg_match(
-                '/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s',
-                $privateKey)
-            ) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid key'));
+        else if ($subject->getData(self::XML_PATH_PRIVATE_KEY_PEM)) {
+            $privateKeyArray = $subject->getData(self::XML_PATH_PRIVATE_KEY);
+            if (empty($privateKeyArray['name'])) {
+                $privateKey = '*';
+            }
+            else {
+                $privateKey = file_get_contents($privateKeyArray['tmp_name']);
+                if (!preg_match(
+                    '/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s',
+                    $privateKey)
+                ) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Invalid key'));
+                }
             }
         }
+
         if ($privateKey && (
                 preg_match('/^\*+$/', $privateKey) ||
                 $privateKey === $this->amazonConfig->getPrivateKey($scope, $scopeCode))

@@ -27,4 +27,74 @@ require(['jquery', 'domReady!'], function ($) {
         function() {
             $(this).val($(this).val().toLowerCase());
         });
+
+    // Private Key
+    $('#private_key_pem_button').click(function (e) {
+        e.preventDefault();
+
+        // set selected type
+        $('#payment_us_amazon_pay_credentials_private_key_selected').val('pem');
+        // hide selector row
+        $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
+        // remove saved file feedback text
+        $('#amazon_pay_private_key_pem_file_saved_msg').html('');
+        // show pem row
+        $('#row_payment_us_amazon_pay_credentials_private_key_pem').show();
+        // click pem choose file button
+        $('#payment_us_amazon_pay_credentials_private_key_pem').click();
+    });
+
+    $('#private_key_text_button').click(function (e) {
+        e.preventDefault();
+
+        // set selected type
+        $('#payment_us_amazon_pay_credentials_private_key_selected').val('text');
+        // hide selector row
+        $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
+        // show text area row
+        $('#row_payment_us_amazon_pay_credentials_private_key_text').show();
+        // focus on field
+        $('#payment_us_amazon_pay_credentials_private_key_text').val('').focus();
+    });
+
+    $('.amazon-private-key-change-key-type').click(function (e) {
+        e.preventDefault();
+
+        // reset selected type
+        $('#payment_us_amazon_pay_credentials_private_key_selected').val('');
+        // hide pem row
+        $('#row_payment_us_amazon_pay_credentials_private_key_pem').hide();
+        // hide text row
+        $('#row_payment_us_amazon_pay_credentials_private_key_text').hide();
+        // show selector row
+        $('#row_payment_us_amazon_pay_credentials_private_key_selector').show();
+    });
+
+    $('#payment_us_amazon_pay_credentials-head').click(function () {
+        showPrivateKey($(this), $('#payment_us_amazon_pay_credentials_active_v2').val() == 1);
+    });
+
+    $('#payment_us_amazon_pay_credentials_active_v2').change(function () {
+        showPrivateKey($(this), $(this).val() == 1);
+    });
+
+    function showPrivateKey(field, enabled) {
+        if (enabled) {
+            let value = $('#payment_us_amazon_pay_credentials_private_key_selected').val();
+            if (value === 'pem') {
+                $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
+                $('#row_payment_us_amazon_pay_credentials_private_key_pem').show();
+            } else if (value === 'text') {
+                $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
+                $('#row_payment_us_amazon_pay_credentials_private_key_text').show();
+            } else {
+                $('#row_payment_us_amazon_pay_credentials_private_key_selector').show();
+            }
+        }
+        else {
+            $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
+            $('#row_payment_us_amazon_pay_credentials_private_key_pem').hide();
+            $('#row_payment_us_amazon_pay_credentials_private_key_text').hide();
+        }
+    }
 });

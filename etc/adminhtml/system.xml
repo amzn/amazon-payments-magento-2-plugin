@@ -29,12 +29,28 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/active</config_path>
                     </field>
-                    <field id="private_key" translate="label comment" type="Amazon\Pay\Model\Config\File\PemFile" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Private Key (.pem)</label>
+                    <field id="private_key_pem" translate="label comment" type="Amazon\Pay\Model\Config\File\PemFile" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Private Key</label>
                         <config_path>payment/amazon_payment_v2/private_key</config_path>
                         <backend_model>Amazon\Pay\Model\Config\File\PrivateKeyPem</backend_model>
                         <upload_dir config="system" scope_info="1">amazon</upload_dir>
-                        <depends><field id="active_v2">1</field></depends>
+                        <comment><![CDATA[<a href="#" class="amazon-private-key-change-key-type">Change private key type]]></comment>
+                    </field>
+                    <field id="private_key_text" translate="label comment" type="textarea" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Private Key</label>
+                        <config_path>payment/amazon_payment_v2/private_key</config_path>
+                        <frontend_model>Amazon\Pay\Model\Config\Form\Privatekey</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <validate>validate-private-key</validate>
+                        <comment><![CDATA[<a href="#" class="amazon-private-key-change-key-type">Change private key type]]></comment>
+                    </field>
+                    <field id="private_key_selected" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Private Key Selected</label>
+                        <config_path>payment/amazon_payment_v2/private_key_selected</config_path>
+                    </field>
+                    <field id="private_key_selector" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Private Key</label>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\PrivateKeySelector</frontend_model>
                     </field>
                     <field id="public_key_id" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Public Key ID</label>

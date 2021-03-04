@@ -13,23 +13,10 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Pay\Model\Config\File;
 
-/**
- * Class PemFile
- * @package Amazon\Pay\Model\Config\File
- */
-class PemFile extends \Magento\Config\Block\System\Config\Form\Field\File
-{
-    /**
-     * @return string
-     */
-    protected function _getDeleteCheckbox()
-    {
-        if ($this->getValue()) {
-            return '<div id="amazon_pay_private_key_pem_file_saved_msg">.PEM key already saved</div>';
-        }
+/* @var \Amazon\Pay\Block\Adminhtml\System\Config\Form\PrivateKeySelector $block */
+?>
 
-        return '';
-    }
-}
+<button id="private_key_pem_button"><?= __('Upload .PEM') ?></button>
+<div><?= __('OR') ?></div>
+<button id="private_key_text_button"><?= __('Copy & Paste your<br>file contents') ?></button>
