@@ -210,6 +210,7 @@ class ConfigCredentialsValidator
     {
         try {
             if ($this->isApplicable($subject)) {
+                $subject->load();
                 $config = $this->getUpdatedConfig($subject);
                 if (!empty($config) || $this->isUpdatedActive($subject) || $this->isUpdatedStoreId($subject)) {
                     $this->validateConfig($subject, $config);

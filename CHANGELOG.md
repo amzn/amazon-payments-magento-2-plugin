@@ -1,9 +1,11 @@
 # Change Log
 
 ## <new release>
-* Adds tests for refund, multi auth refund, and multi auth with capture initiated
-* Updates Alexa feature name
-* Adds Japanese translations and updates translations for other languages
+* Added tests for refund, multi auth refund, and multi auth with capture initiated
+* Updated Alexa feature name
+* Added Japanese translations and updated translations for other languages
+* Added button language field for European regions.
+* Fixed bug with updating configuration without changing the private key.
 
 ## 5.0.1
 * Remove reliance on legacy config value being set.
