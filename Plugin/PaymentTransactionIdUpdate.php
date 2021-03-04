@@ -36,7 +36,7 @@ class PaymentTransactionIdUpdate
         $transactionBasedOn = false
     ) {
         $paymentMethodTitle = $payment->getAdditionalInformation('method_title') ?? '';
-        if (str_contains($paymentMethodTitle, 'Amazon Pay') && $type == Transaction::TYPE_VOID) {
+        if (strpos($paymentMethodTitle, 'Amazon Pay') !== false && $type == Transaction::TYPE_VOID) {
             $chargePermissionId = $payment->getAdditionalInformation('charge_permission_id');
             if (empty($chargePermissionId)) {
                 $transactionId = explode('-', $payment->getParentTransactionId());
