@@ -1,5 +1,8 @@
 # Change Log
 
+## <new release>
+* Replaced PHP8 only function being used for a more compatible one.
+
 ## 5.0.1
 * Remove reliance on legacy config value being set.
 
