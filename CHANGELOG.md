@@ -3,12 +3,12 @@
 ## <new release>
 * Added tests for refund, multi auth refund, and multi auth with capture initiated
 * Updated Alexa feature name
-* Added Japanese translations and updated translations for other languages
-* Added button language field for European regions.
+* Added Japanese translations and updates translations for other languages
+* Updated the platform_id for the new module version
 * Fixed bug with updating configuration without changing the private key.
 
 ## 5.0.1
-* Remove reliance on legacy config value being set.
+* Removed reliance on legacy config value being set.
 
 ## 5.0.0
 * Beta release, replacing all versions that were included as part of the "Vendor Bundled Extension" (VBE) program in previous Magento releases.
