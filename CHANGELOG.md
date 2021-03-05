@@ -7,6 +7,7 @@
 * Fixed customer data not getting cleared when getting signed in via Amazon Pay checkout
 * Replaced PHP8 only function being used for a more compatible one.
 * Updated Alexa feature name
+* Updated private key field to also allow usage of a .pem file.
 * Updated the platform_id for the new module version
 
 ## 5.0.1
