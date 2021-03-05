@@ -19,7 +19,7 @@
         </after>
 
         <!--Verify Sign in with Amazon Button is present-->
-        <click selector="{{AmazonLoginSection.Login}}" stepKey="seeSignInWithAmazonButton"/>
+        <click selector="{{AmazonLoginSection.login}}" stepKey="seeSignInWithAmazonButton"/>
 
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
         <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>

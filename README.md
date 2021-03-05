@@ -12,7 +12,7 @@ Starting from version 5.0.0, Amazon Pay is hosted on the Magento Marketplace and
 * Avoids problems on browsers that have active cookie blocking or tracking protection mechanisms
 * Supports digital goods as well as physical goods
 * Automatic, graceful handling of declined authorization, increasing checkout conversion rate
-* Built-in Alexa Notifications feature support
+* Built-in Alexa Delivery Notifications feature support
 * Ability to hide Amazon Pay as a checkout option for specific product categories
 
 ## Full feature list
@@ -28,7 +28,7 @@ Starting from version 5.0.0, Amazon Pay is hosted on the Magento Marketplace and
 * Custom Front-Ends / Headless Commerce support
 * Physical and Digital Goods support
 * Ability to hide Amazon Pay as a checkout option for specific product categories
-* Built-in Alexa Notifications feature support
+* Built-in Alexa Delivery Notifications feature support
 * [EU/UK only] Multi-currency support
 * [EU/UK only] Support for Strong Customer Authorization (PSD2 compliant)
 * [EU/UK only] Billing Address available at checkout

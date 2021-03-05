@@ -1,4 +1,4 @@
-
+"Edit Shipping Address","Editer l'adresse de livraison"
 "Edit Billing Address","Modifier l’Adresse de Facturation"
 "Edit Payment Method","Modifier le Mode de Paiement"
 "Billing address associated with this payment method:","Adresse de Facturation associée à ce mode de paiement:"
@@ -93,7 +93,7 @@
 "Error processing Amazon Login","Erreur lors du traitement de l'identifiant Amazon"
 "A shop account for this email address already exists. Please enter your shop accounts password to log in without leaving the shop.","Un compte pour cette boutique existe déjà avec cette adresse e-mail. Saisissez le mot de passe du compte de cette boutique afin de vous connecter sans quitter la boutique."
 "Login with Amazon","Connectez-vous avec Amazon"
-"With Amazon Pay and Login with Amazon, you can easily sign-in and use the shipping and payment information stored in your Amazon account to place an order on this shop.","Amazon Pay et Connectez-vous avec Amazon vous permet d'utiliser les informations de paiement et d'expédition stockées dans votre compte Amazon pour passer une commande sur ce site Web. <br />Des millions d'utilisateurs bénéficient déjà de ce mode de paiement simple et éprouvé. En sélectionnant Amazon Pay, vous serez invité à vous connecter de manière sécurisée à votre compte Amazon sans quitter le site."
+"With Amazon Pay and Amazon Sign-in, you can easily sign-in and use the shipping and payment information stored in your Amazon account to place an order on this shop.","Amazon Pay et Identifiez-vous avec Amazon vous permet d'utiliser les informations de paiement et d'expédition stockées dans votre compte Amazon pour passer une commande sur ce site Web."
 "Securely login into our website using your existing Amazon details.","Connectez-vous en toute sécurité à notre site Web à l'aide de vos identifiants Amazon existants."
 "Welcome back!","Bienvenue !"
 "Continue as Guest","Continuer en tant qu'invité"
@@ -132,4 +132,3 @@
 "The selected payment method is not available for this transaction. Please select another one or add a new payment method to the wallet widget.","Le mode de paiement sélectionné n'est pas disponible pour cette transaction. Veuillez en sélectionner un autre ou ajouter un nouveau mode de paiement au widget de portefeuille."
 "No payment instrument has been selected for this order, please try to refresh the page or add a new payment instrument in the wallet widget.","Aucun instrument de paiement n'a été sélectionné pour cette commande, veuillez essayer de rafraîchir la page ou d'ajouter un nouvel instrument de paiement dans le widget de portefeuille."
 "The order failed due to a technical error, please select another payment method or contact our support.","La commande a échoué en raison d'une erreur technique, veuillez sélectionner un autre mode de paiement ou contacter notre support."
-"or continue with Standard Checkout","ou continuer avec le Checkout Standard"

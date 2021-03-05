@@ -80,6 +80,14 @@
     <entity name="SampleAmazonPaymentLwaDisabled" type="lwa_enabled">
         <data key="value">0</data>
     </entity>
+    <entity name="SampleAmazonPaymentPaymentAction" type="payment_action_v2">
+        <data key="charge_on_shipment">authorize</data>
+        <data key="charge_on_order">authorize_capture</data>
+    </entity>
+    <entity name="SampleAmazonPaymentAuthorizationMode" type="authorization_mode">
+        <data key="immediate">synchronous</data>
+        <data key="automatic">synchronous_possible</data>
+    </entity>
 
     <entity name="EUAmazonPaymentConfig" type="amazon_payment_config">
         <requiredEntity type="api_version">SampleAmazonPaymentApiVersion</requiredEntity>
