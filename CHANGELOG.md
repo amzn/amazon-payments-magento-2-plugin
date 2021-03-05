@@ -1,6 +1,6 @@
 # Change Log
 
-## 5.0.2
+## 5.1.0
 * Added tests for refund, multi auth refund, and multi auth with capture initiated
 * Added Japanese translations and updates translations for other languages
 * Fixed bug with updating configuration without changing the private key.
