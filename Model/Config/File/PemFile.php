@@ -27,7 +27,7 @@ class PemFile extends \Magento\Config\Block\System\Config\Form\Field\File
     protected function _getDeleteCheckbox()
     {
         if ($this->getValue()) {
-            return '<div id="amazon_pay_private_key_pem_file_saved_msg"><strong>.pem key already saved</strong></div><br>';
+            return '<div id="amazon_pay_private_key_pem_file_saved_msg"><strong>.pem key file already saved</strong></div><br>';
         }
 
         return '';
