@@ -34,6 +34,8 @@ require(['jquery', 'domReady!'], function ($) {
 
         // set selected type
         $('#payment_us_amazon_pay_credentials_private_key_selected').val('pem');
+        // uncheck inherit
+        $('#payment_us_amazon_pay_credentials_private_key_selected_inherit').prop('checked', true).click();
         // hide text row
         $('#row_payment_us_amazon_pay_credentials_private_key_text').hide();
         $('#payment_us_amazon_pay_credentials_private_key_text').val('------');
@@ -53,6 +55,8 @@ require(['jquery', 'domReady!'], function ($) {
 
         // set selected type
         $('#payment_us_amazon_pay_credentials_private_key_selected').val('text');
+        // uncheck inherit
+        $('#payment_us_amazon_pay_credentials_private_key_selected_inherit').prop('checked', true).click();
         // hide file row
         $('#row_payment_us_amazon_pay_credentials_private_key_pem').hide();
         // hide selector row
@@ -69,6 +73,8 @@ require(['jquery', 'domReady!'], function ($) {
 
         // reset selected type
         $('#payment_us_amazon_pay_credentials_private_key_selected').val('');
+        // check inherit
+        $('#payment_us_amazon_pay_credentials_private_key_selected_inherit').prop('checked', false).click();
         // set text field
         $('#payment_us_amazon_pay_credentials_private_key_text').val('------');
         // hide pem row

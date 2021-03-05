@@ -47,6 +47,7 @@
                     <field id="private_key_selected" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Private Key Selected</label>
                         <config_path>payment/amazon_payment_v2/private_key_selected</config_path>
+                        <frontend_model>Amazon\Pay\Model\Config\Form\PrivateKeySelected</frontend_model>
                     </field>
                     <field id="private_key_selector" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Private Key</label>
