@@ -115,6 +115,12 @@
                     </field>
                     <group id="frontend" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Frontend</label>
+                        <field id="display_language" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Button Display Language</label>
+                            <config_path>payment/amazon_pay/button_display_language</config_path>
+                            <comment><![CDATA[Controls button and checkout language. The default value is your shop’s locale. Supported options are en_GB, de_DE, fr_FR, it_IT, or es_ES.]]></comment>
+                            <validate>validate-amzn-display-language</validate>
+                        </field>
                         <field id="button_color_v2" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Button Color</label>
                             <config_path>payment/amazon_payment_v2/button_color</config_path>
