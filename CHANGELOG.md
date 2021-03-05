@@ -5,6 +5,7 @@
 * Updated Alexa feature name
 * Added Japanese translations and updates translations for other languages
 * Updated the platform_id for the new module version
+* Fixed bug with updating configuration without changing the private key.
 
 ## 5.0.1
 * Removed reliance on legacy config value being set.
