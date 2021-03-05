@@ -32,7 +32,7 @@ define(['jquery'], function ($) {
         $.validator.addMethod(
             'validate-private-key',
             function (v) {
-                if (v == '******') {
+                if (v == '******' || v === '------') {
                     return true;
                 }
                 return (/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s).test(v);

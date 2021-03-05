@@ -25,9 +25,9 @@ class ConfigCredentialsValidator
     const XML_PATH_API_VERSION = 'groups/amazon_pay/fields/api_version/value';
     const XML_PATH_ACTIVE = 'groups/amazon_pay/groups/credentials/fields/active_v2/value';
     const XML_PATH_ACTIVE_INHERIT = 'groups/amazon_pay/groups/credentials/fields/active_v2/inherit';
-    const XML_PATH_PRIVATE_KEY = 'groups/amazon_pay/groups/credentials/fields/private_key/value';
     const XML_PATH_PRIVATE_KEY_PEM = 'groups/amazon_pay/groups/credentials/fields/private_key_pem/value';
     const XML_PATH_PRIVATE_KEY_TEXT = 'groups/amazon_pay/groups/credentials/fields/private_key_text/value';
+    const XML_PATH_PRIVATE_KEY_SELECTED = 'groups/amazon_pay/groups/credentials/fields/private_key_selected/value';
     const XML_PATH_PUBLIC_KEY_ID = 'groups/amazon_pay/groups/credentials/fields/public_key_id/value';
     const XML_PATH_STORE_ID = 'groups/amazon_pay/groups/credentials/fields/store_id/value';
     const XML_PATH_PAYMENT_REGION = 'groups/amazon_pay/groups/credentials/fields/payment_region/value';
@@ -117,23 +117,28 @@ class ConfigCredentialsValidator
         $scope = $subject->getScope() ?: ScopeInterface::SCOPE_STORE;
         $scopeCode = $subject->getScopeCode();
 
-        $privateKey = '*';
-        if ($subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT)) {
-            $privateKey = $subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT);
+        $privateKey = '';
+        $privateKeyArray['name'] = '';
+        // check for pem file presence first
+        if ($subject->getData(self::XML_PATH_PRIVATE_KEY_PEM)) {
+            $privateKeyArray = $subject->getData(self::XML_PATH_PRIVATE_KEY_PEM);
         }
-        else if ($subject->getData(self::XML_PATH_PRIVATE_KEY_PEM)) {
-            $privateKeyArray = $subject->getData(self::XML_PATH_PRIVATE_KEY);
-            if (empty($privateKeyArray['name'])) {
-                $privateKey = '*';
+        // if pem file present
+        if (!empty($privateKeyArray['name'])) {
+            $privateKey = file_get_contents($privateKeyArray['tmp_name']);
+            if (!preg_match(
+                '/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s',
+                $privateKey)
+            ) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid key'));
             }
-            else {
-                $privateKey = file_get_contents($privateKeyArray['tmp_name']);
-                if (!preg_match(
-                    '/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s',
-                    $privateKey)
-                ) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Invalid key'));
-                }
+        }
+        // no file present, check for text field
+        else {
+            if ($subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT) &&
+                $subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT) !== '------'
+            ) {
+                $privateKey = $subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT);
             }
         }
 
@@ -142,6 +147,9 @@ class ConfigCredentialsValidator
                 $privateKey === $this->amazonConfig->getPrivateKey($scope, $scopeCode))
         ) {
             $privateKey = null;
+        }
+        else if ($privateKey == '') {
+            throw new ValidatorException(new Phrase('Please provide a Private Key'));
         }
         $publicKeyId = $subject->getData(self::XML_PATH_PUBLIC_KEY_ID);
         if ($publicKeyId && $publicKeyId === $this->amazonConfig->getPublicKeyId($scope, $scopeCode)) {
@@ -194,6 +202,11 @@ class ConfigCredentialsValidator
 
         if (!in_array($response['status'], [200, 201])) {
             $data = json_decode($response['response'], true);
+            if ($data['reasonCode'] == 'InvalidRequestSignature') {
+                throw new ValidatorException(
+                    new Phrase('Unable to sign request, is your RSA private key valid?')
+                );
+            }
             throw new ValidatorException(new Phrase($data['message']));
         }
         return $this;
@@ -239,6 +252,9 @@ class ConfigCredentialsValidator
         } catch (\Exception $e) {
             $this->setDataByPath($subject, self::XML_PATH_ACTIVE_INHERIT, false);
             $this->setDataByPath($subject, self::XML_PATH_ACTIVE, false);
+            $this->setDataByPath($subject, self::XML_PATH_PRIVATE_KEY_PEM, false);
+            $this->setDataByPath($subject, self::XML_PATH_PRIVATE_KEY_TEXT, false);
+            $this->setDataByPath($subject, self::XML_PATH_PRIVATE_KEY_SELECTED, false);
             $this->messageManager->addErrorMessage(__('Failed to enable Amazon Pay: %1', $e->getMessage()));
         }
         return null;
