@@ -445,7 +445,7 @@ class AmazonPayAdapter
     {
         $payload = [
             'signInReturnUrl' => $this->url->getRouteUrl('amazon_pay/login/authorize/'),
-            'signInCancelUrl' => $this->redirect->getRefererUrl(),
+            'signInCancelUrl' => $this->getCancelUrl(),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
         ];
@@ -463,7 +463,7 @@ class AmazonPayAdapter
         $payload = [
             'webCheckoutDetails' => [
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
-                'checkoutCancelUrl' => $this->redirect->getRefererUrl(),
+                'checkoutCancelUrl' => $this->getCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
         ];
@@ -478,5 +478,15 @@ class AmazonPayAdapter
     public function signButton($payload, $storeId = null)
     {
         return $this->clientFactory->create($storeId)->generateButtonSignature($payload);
+    }
+
+    protected function getCancelUrl()
+    {
+        $referer = $this->redirect->getRefererUrl();
+        if ($referer == $this->url->getUrl('checkout')) {
+            return $this->url->getUrl('checkout/cart');
+        }
+
+        return $referer;
     }
 }
