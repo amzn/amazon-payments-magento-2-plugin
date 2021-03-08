@@ -13,28 +13,27 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-namespace Amazon\Pay\Model\Config\Form;
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
- * Frontend model to obscure decrypted textarea
- *
- * Class Privatekey
+ * Class PrivateKeySelector
+ * @package Amazon\Pay\Block\Adminhtml\System\Config\Form
  */
-class Privatekey extends \Magento\Config\Block\System\Config\Form\Field
+class PrivateKeySelector extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const OBSCURED = '******';
+    /**
+     * @var string
+     */
+    protected $_template = 'Amazon_Pay::system/config/private-key.phtml';
 
     /**
-     * Retrieve element HTML markup and add OBSCURED textarea value
-     *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
-        if ($element->getValue()) {
-            $element->setValue(self::OBSCURED);
-        }
-        return $element->getElementHtml();
+        return $this->_toHtml();
     }
 }

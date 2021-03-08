@@ -16,13 +16,13 @@
 namespace Amazon\Pay\Model\Config\Form;
 
 /**
- * Frontend model to obscure decrypted textarea
+ * Frontend model to set private key type in case private key already saved prior to the file/text feature
  *
- * Class Privatekey
+ * Class PrivateKeySelected
  */
-class Privatekey extends \Magento\Config\Block\System\Config\Form\Field
+class PrivateKeySelected extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const OBSCURED = '******';
+    const TEXT_VALUE = 'text';
 
     /**
      * Retrieve element HTML markup and add OBSCURED textarea value
@@ -32,8 +32,10 @@ class Privatekey extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        if ($element->getValue()) {
-            $element->setValue(self::OBSCURED);
+        if (empty($element->getValue()) &&
+            $this->_scopeConfig->getValue('payment/amazon_payment_v2/private_key')
+        ) {
+            $element->setValue(self::TEXT_VALUE);
         }
         return $element->getElementHtml();
     }

@@ -32,7 +32,7 @@ define(['jquery'], function ($) {
         $.validator.addMethod(
             'validate-private-key',
             function (v) {
-                if (v == '******') {
+                if (v == '******' || v === '------') {
                     return true;
                 }
                 return (/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s).test(v);
@@ -40,6 +40,7 @@ define(['jquery'], function ($) {
             $.mage.__('Private Key field is invalid. It must include header ' +
                 'and footer of the private key. Please check and try again')
         ),
+
         $.validator.addMethod(
             'validate-amzn-merchant-id',
             function (v) {
@@ -61,6 +62,18 @@ define(['jquery'], function ($) {
             },
             $.mage.__('Store Id field is invalid. It must start with “amzn1.application-oa2-client.” ' +
                 'and contain 61 characters. Please check and try again')
+        )
+        $.validator.addMethod(
+            'validate-amzn-display-language',
+            function (v) {
+                // allow empty field, as it will default to locale
+                if (v === '') {
+                    return true;
+                }
+                // match specific codes
+                return (/^(en_GB|de_DE|fr_FR|it_IT|es_ES)$/).test(v);
+            },
+            $.mage.__('Entered language is not a supported value for “Button Display Language” in Amazon Pay configuration')
         )
     }
 });
