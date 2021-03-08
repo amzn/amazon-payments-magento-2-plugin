@@ -3,5 +3,6 @@
     <head>
         <css src="Amazon_Pay::styles.css"/>
         <script src="Amazon_Pay::js/credentials.js" />
+        <script src="Amazon_Pay::js/custom.js" />
     </head>
 </page>

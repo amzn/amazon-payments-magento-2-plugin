@@ -27,6 +27,17 @@ class AmazonConfig
     const LANG_JA = 'ja_JP';
     const LANG_UK = 'en_GB';
     const LANG_US = 'en_US';
+    const EUROPEAN_LOCALES = [
+        self::LANG_UK,
+        self::LANG_DE,
+        self::LANG_FR,
+        self::LANG_IT,
+        self::LANG_ES,
+    ];
+    const EUROPEAN_REGIONS = [
+        'de',
+        'uk',
+    ];
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -141,6 +152,21 @@ class AmazonConfig
     public function getLanguage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         $paymentRegion = $this->getRegion($scope, $scopeCode);
+
+        // check if button language is set and it matches allowed region and options
+        $lang = $this->scopeConfig->getValue(
+            'payment/amazon_pay/button_display_language',
+            $scope,
+            $scopeCode
+        );
+
+        if ($lang) {
+            if (in_array($lang, self::EUROPEAN_LOCALES)
+                && in_array($paymentRegion, self::EUROPEAN_REGIONS)) {
+                return $lang;
+            }
+        }
+
         $localeParts = explode('_', $this->localeResolver->getLocale());
         $lang = $localeParts[0];
         switch ($lang) {
