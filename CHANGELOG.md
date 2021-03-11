@@ -1,11 +1,9 @@
 # Change Log
 
-## <new release>
-* Uses the button page URL as the redirect back when cancelling the session. Provides tests for it.
-
 ## 5.1.0
 * Added tests for refund, multi auth refund, and multi auth with capture initiated
 * Added Japanese translations and updates translations for other languages
+* Change to use the button page URL as the redirect back when cancelling the session.
 * Fixed bug with updating configuration without changing the private key.
 * Fixed customer data not getting cleared when getting signed in via Amazon Pay checkout
 * Replaced PHP8 only function being used for a more compatible one.
