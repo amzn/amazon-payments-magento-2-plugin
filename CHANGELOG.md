@@ -1,6 +1,7 @@
 # Change Log
 
 ## 5.1.0
+* General availability release
 * Added tests for refund, multi auth refund, and multi auth with capture initiated
 * Added Japanese translations and updates translations for other languages
 * Change to use the button page URL as the redirect back when cancelling the session.
