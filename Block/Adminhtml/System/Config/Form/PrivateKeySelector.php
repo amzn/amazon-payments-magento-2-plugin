@@ -17,10 +17,6 @@ namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
-/**
- * Class PrivateKeySelector
- * @package Amazon\Pay\Block\Adminhtml\System\Config\Form
- */
 class PrivateKeySelector extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**

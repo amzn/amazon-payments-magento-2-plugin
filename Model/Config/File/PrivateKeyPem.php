@@ -15,10 +15,6 @@
  */
 namespace Amazon\Pay\Model\Config\File;
 
-/**
- * Class PrivateKeyPem
- * @package Amazon\Pay\Model\Config\File
- */
 class PrivateKeyPem extends \Magento\Config\Model\Config\Backend\File
 {
     /**
@@ -52,9 +48,19 @@ class PrivateKeyPem extends \Magento\Config\Model\Config\Backend\File
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
-        parent::__construct($context, $registry, $config, $cacheTypeList, $uploaderFactory, $requestData, $filesystem, $resource, $resourceCollection, $data);
+    ) {
+        parent::__construct(
+            $context,
+            $registry,
+            $config,
+            $cacheTypeList,
+            $uploaderFactory,
+            $requestData,
+            $filesystem,
+            $resource,
+            $resourceCollection,
+            $data
+        );
 
         $this->encryptor = $encryptor;
     }
@@ -73,14 +79,14 @@ class PrivateKeyPem extends \Magento\Config\Model\Config\Backend\File
                 $uploader->setAllowRenameFiles(true);
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 if ($uploader->validateFile()) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $privateKey = file_get_contents($value['tmp_name']);
                     $this->setValue($this->encryptor->encrypt($privateKey));
                 }
             } catch (\Exception $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('%1', $e->getMessage()));
             }
-        }
-        else {
+        } else {
             $this->unsValue();
         }
 

@@ -15,10 +15,6 @@
  */
 namespace Amazon\Pay\Model\Config\File;
 
-/**
- * Class PemFile
- * @package Amazon\Pay\Model\Config\File
- */
 class PemFile extends \Magento\Config\Block\System\Config\Form\Field\File
 {
     /**
@@ -27,6 +23,7 @@ class PemFile extends \Magento\Config\Block\System\Config\Form\Field\File
     protected function _getDeleteCheckbox()
     {
         if ($this->getValue()) {
+            // phpcs:ignore Generic.Files.LineLength
             return '<div id="amazon_pay_private_key_pem_file_saved_msg"><strong>.pem key file already saved</strong></div><br>';
         }
 

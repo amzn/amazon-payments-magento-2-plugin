@@ -125,16 +125,14 @@ class ConfigCredentialsValidator
         }
         // if pem file present
         if (!empty($privateKeyArray['name'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $privateKey = file_get_contents($privateKeyArray['tmp_name']);
-            if (!preg_match(
-                '/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s',
-                $privateKey)
-            ) {
+            $pattern = '/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s';
+            if (!preg_match($pattern, $privateKey)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid key'));
             }
-        }
-        // no file present, check for text field
-        else {
+        } else {
+            // no file present, check for text field
             if ($subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT) &&
                 $subject->getData(self::XML_PATH_PRIVATE_KEY_TEXT) !== '------'
             ) {
@@ -147,8 +145,7 @@ class ConfigCredentialsValidator
                 $privateKey === $this->amazonConfig->getPrivateKey($scope, $scopeCode))
         ) {
             $privateKey = null;
-        }
-        else if ($privateKey == '') {
+        } elseif ($privateKey == '') {
             throw new ValidatorException(new Phrase('Please provide a Private Key'));
         }
         $publicKeyId = $subject->getData(self::XML_PATH_PUBLIC_KEY_ID);
