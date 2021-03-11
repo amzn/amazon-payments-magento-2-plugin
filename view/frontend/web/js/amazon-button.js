@@ -102,6 +102,7 @@ define([
                     this._loadButtonConfig(function (buttonConfig) {
                         amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
                         $('.amazon-button-container .field-tooltip').fadeIn();
+                        $('.amazon-checkout-button').click(function() { customerData.invalidate('*'); });
                     });
                 }, this);
             },

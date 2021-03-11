@@ -32,7 +32,10 @@ define([
     };
     return function (callback) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
-        if (cartId !== getLocalStorage().get('cart_id')) {
+        var config = getLocalStorage().get('config') || false;
+        if (cartId !== getLocalStorage().get('cart_id')
+            || typeof config.checkout_payload === 'undefined'
+            || !config.checkout_payload.includes(document.URL)) {
             callbacks.push(callback);
             if (callbacks.length == 1) {
                 remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {

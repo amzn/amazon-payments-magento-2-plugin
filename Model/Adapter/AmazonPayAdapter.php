@@ -58,6 +58,11 @@ class AmazonPayAdapter
     private $url;
 
     /**
+     * @var \Magento\Framework\App\Response\RedirectInterface
+     */
+    private $redirect;
+
+    /**
      * AmazonPayAdapter constructor.
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
@@ -65,7 +70,8 @@ class AmazonPayAdapter
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Logger\Logger $logger
-     * @pqram \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      */
     public function __construct(
         \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
@@ -74,7 +80,8 @@ class AmazonPayAdapter
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Logger\Logger $logger,
-        \Magento\Framework\UrlInterface $url
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Framework\App\Response\RedirectInterface $redirect
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
@@ -83,6 +90,7 @@ class AmazonPayAdapter
         $this->amazonHelper = $amazonHelper;
         $this->logger = $logger;
         $this->url = $url;
+        $this->redirect = $redirect;
     }
 
     /**
@@ -437,6 +445,7 @@ class AmazonPayAdapter
     {
         $payload = [
             'signInReturnUrl' => $this->url->getRouteUrl('amazon_pay/login/authorize/'),
+            'signInCancelUrl' => $this->getCancelUrl(),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
         ];
@@ -454,6 +463,7 @@ class AmazonPayAdapter
         $payload = [
             'webCheckoutDetails' => [
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
+                'checkoutCancelUrl' => $this->getCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
         ];
@@ -468,5 +478,15 @@ class AmazonPayAdapter
     public function signButton($payload, $storeId = null)
     {
         return $this->clientFactory->create($storeId)->generateButtonSignature($payload);
+    }
+
+    protected function getCancelUrl()
+    {
+        $referer = $this->redirect->getRefererUrl();
+        if ($referer == $this->url->getUrl('checkout')) {
+            return $this->url->getUrl('checkout/cart');
+        }
+
+        return $referer;
     }
 }

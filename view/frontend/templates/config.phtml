@@ -16,13 +16,17 @@
 ?>
 <?php /* @var $block \Amazon\Pay\Block\Config */ ?>
 <?php if ($block->isEnabled()): ?>
+    <?php
+    $frontName = $block->getRequest()->getFrontName();
+    $pathInfo = $block->getRequest()->getPathInfo();
+    ?>
 <script>
 
     require (['uiRegistry'], function(registry) {
         registry.set('amazonPay', <?= /* @noEscape */ \Zend_Json::encode($block->getConfig()); ?>);
     });
 
-    <?php if ($block->getRequest()->getFrontName() != 'checkout'): ?>
+    <?php if ($frontName != 'checkout' || (str_contains($pathInfo, 'checkout/cart') === true)): ?>
     require (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
         amazonStorage.clearAmazonCheckout();
     });

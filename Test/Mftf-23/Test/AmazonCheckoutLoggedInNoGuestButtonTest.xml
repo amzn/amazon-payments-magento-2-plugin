@@ -37,7 +37,6 @@
 
         <!--Verify we don't see either Amazon Button-->
         <dontSeeElement selector="{{AmazonButtonSection.checkout}}" stepKey="dontSeeEnabledAmazonButton"/>
-        <dontSeeElement selector="{{AmazonButtonSection.v1Checkout}}" stepKey="dontSeeDisabledAmazonButton"/>
 
         <!-- Log in via the modal -->
         <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{Simple_Customer_With_Amazon_Account.email}}" stepKey="fillAmazonPageEmailField"/>

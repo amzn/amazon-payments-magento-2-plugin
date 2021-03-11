@@ -29,13 +29,29 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/active</config_path>
                     </field>
-                    <field id="private_key" translate="label comment" type="textarea" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="private_key_pem" translate="label comment" type="Amazon\Pay\Model\Config\File\PemFile" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Private Key</label>
+                        <config_path>payment/amazon_payment_v2/private_key</config_path>
+                        <backend_model>Amazon\Pay\Model\Config\File\PrivateKeyPem</backend_model>
+                        <upload_dir config="system" scope_info="1">amazon</upload_dir>
+                        <comment><![CDATA[<a href="#" class="amazon-private-key-change-key-type">Change Private Key input method]]></comment>
+                    </field>
+                    <field id="private_key_text" translate="label comment" type="textarea" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Private Key</label>
                         <config_path>payment/amazon_payment_v2/private_key</config_path>
                         <frontend_model>Amazon\Pay\Model\Config\Form\Privatekey</frontend_model>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <validate>validate-private-key</validate>
-                        <depends><field id="active_v2">1</field></depends>
+                        <comment><![CDATA[<a href="#" class="amazon-private-key-change-key-type">Change Private Key input method]]></comment>
+                    </field>
+                    <field id="private_key_selected" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Private Key Selected</label>
+                        <config_path>payment/amazon_payment_v2/private_key_selected</config_path>
+                        <frontend_model>Amazon\Pay\Model\Config\Form\PrivateKeySelected</frontend_model>
+                    </field>
+                    <field id="private_key_selector" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Private Key</label>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\PrivateKeySelector</frontend_model>
                     </field>
                     <field id="public_key_id" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Public Key ID</label>
@@ -100,10 +116,10 @@
                     </field>
                 </group>
                 <group id="alexa" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Alexa Notifications</label>
+                    <label>Alexa Delivery Notifications</label>
                     <field id="active" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enable Alexa Notifications</label>
-                        <comment><![CDATA[Once enabled, Amazon Pay will deliver Alexa notifications to the customer’s Alexa device, when the order is ‘out for delivery' and when it’s 'delivered'. <a href="https://developer.amazon.com/docs/alexa/amazon-pay-alexa/amazon-pay-apis-for-alexa.html#delivery-notifications" target="_blank">Click here</a> for the customer experience.]]></comment>
+                        <label>Enable Alexa Delivery Notifications</label>
+                        <comment><![CDATA[Once enabled, Amazon Pay will deliver Alexa Delivery Notifications to the customer’s Alexa device, when the order is ‘out for delivery' and when it’s 'delivered'. Click <a href="https://developer.amazon.com/docs/amazon-pay-onetime/delivery-notifications.html#heres-what-your-customer-will-experience" target="_blank">here</a> for the customer experience and <a href="https://eps-eu-external-file-share.s3.eu-central-1.amazonaws.com/Alexa/Delivery+Notifications/amazon-pay-delivery-tracker-supported-carriers-v2.csv" target="_blank">here</a> for the supported carriers.]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>
@@ -115,6 +131,12 @@
                     </field>
                     <group id="frontend" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Frontend</label>
+                        <field id="display_language" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Button Display Language</label>
+                            <config_path>payment/amazon_pay/button_display_language</config_path>
+                            <comment><![CDATA[Controls button and checkout language. The default value is your shop’s locale. Supported options are en_GB, de_DE, fr_FR, it_IT, or es_ES.]]></comment>
+                            <validate>validate-amzn-display-language</validate>
+                        </field>
                         <field id="button_color_v2" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Button Color</label>
                             <config_path>payment/amazon_payment_v2/button_color</config_path>

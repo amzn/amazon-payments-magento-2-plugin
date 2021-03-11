@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AmazonSimulationString" type="amazon_simulation_string">
+        <data key="capture_initiated">{&quot;x-amz-pay-simulation-code&quot;:&quot;CaptureInitiated&quot;}</data>
+    </entity>
+</entities>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCancelReturnUrl">
+        <annotations>
+            <stories value="Amazon Cancel Return Url"/>
+            <title value="Amazon Cancel Return Url"/>
+            <description value="User should be directed to the page where they clicked the Amazon Pay button when clicking Cancel"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_button"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
+            <createData entity="SampleAmazonPaymentConfigLwa" stepKey="SampleAmazonPaymentConfigLwa"/>
+            <magentoCLI command="config:set {{AmazonButtonProductConfig.path}} 1" stepKey="displayAmazonButtonProduct"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <!-- Click Sign-in button from sign-in page -->
+        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
+        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
+        <click selector="{{AmazonLoginSection.login}}" stepKey="signInWithAmazon"/>
+        
+        <!-- Login to Amazon -->
+        <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="amazonLoginOnlyActionGroup"/>
+        <waitForElement selector="{{AmazonPageSection.loginCancelButton}}" stepKey="waitForCancelLogin"/>
+
+        <!-- Cancel login with Amazon and land back on sign-in Magento page -->
+        <click selector="{{AmazonPageSection.loginCancelButton}}" stepKey="clickLoginCancelButton"/>
+        <waitForPageLoad stepKey="waitForSigninPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="assertLoginUrl"/>
+
+        <!--Go to product page-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStoreFront">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Verify only Amazon Button is present-->
+        <seeElement selector="{{AmazonButtonSection.product}}" stepKey="seeEnabledAmazonButton"/>
+
+        <!-- Click Amazon Pay button on product page and login -->
+        <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
+        <!-- <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/> -->
+
+        <!--Come back to checkout with default address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+
+        <!-- Click edit button on address -->
+        <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
+        <waitForElement selector="{{AmazonPageSection.cancelButton}}" stepKey="waitForCancelCheckout"/>
+
+        <!-- Click cancel button on Amazon hosted page -->
+        <click selector="{{AmazonPageSection.cancelButton}}" stepKey="cancelCheckout"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Assert being back in the product page -->
+        <seeInCurrentUrl url="$$createSimpleProduct.custom_attributes[url_key]$$" stepKey="assertProductUrl"/>
+    </test>
+</tests>
