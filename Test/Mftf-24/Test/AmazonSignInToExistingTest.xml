@@ -20,9 +20,6 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!--Verify Sign in with Amazon Button is present-->
-        <click selector="{{AmazonLoginSection.login}}" stepKey="clickSignInWithAmazonButton"/>
-
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
@@ -39,16 +36,16 @@
 
         <!--Verify Sign in with Amazon Button is present again-->
         <click selector="{{AmazonLoginSection.login}}" stepKey="clickSignInWithAmazonButton2"/>
-
+        <wait time="1" stepKey="allowButtonToActivate"/>
         <switchToNextTab stepKey="switchToLoginWindow"/>
 
         <!-- make sure we are logged out from Amazon by clearing ubid-main cookie -->
         <resetCookie userInput="ubid-main" parameterArray="['domainName' => '.amazon.com']" stepKey="resetCookieForAmazon"/>
         <reloadPage stepKey="reloadAmazonLoginPage"/>
 
-        <actionGroup ref="AmazonLoginOnlyRedirectActionGroup" stepKey="AmazonLoginOnlyActionGroup2"/>
+        <actionGroup ref="AmazonLoginOnlyRedirectActionGroup" stepKey="AmazonLoginOnlyRedirectActionGroup2"/>
         <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
-        <!--Prevent "NoSuchWindowException: window was already closed"-->
+        <!-- Switch back to main window -->
         <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad2"/>

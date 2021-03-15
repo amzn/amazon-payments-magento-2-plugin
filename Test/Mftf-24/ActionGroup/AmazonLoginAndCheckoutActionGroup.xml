@@ -50,6 +50,7 @@
         <wait time="1" stepKey="allowContinueButtonToActivate"/>
         <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="clickAmazonCheckoutButton"/>
 
+        <!-- Switch back to main window -->
         <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
 
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>

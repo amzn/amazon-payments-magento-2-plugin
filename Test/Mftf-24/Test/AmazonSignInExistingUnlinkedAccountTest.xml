@@ -18,9 +18,6 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
-        <!--Verify Sign in with Amazon Button is present-->
-        <click selector="{{AmazonLoginSection.login}}" stepKey="seeSignInWithAmazonButton"/>
-
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
 
         <waitForPageLoad stepKey="waitForLinkAccountPageLoad"/>

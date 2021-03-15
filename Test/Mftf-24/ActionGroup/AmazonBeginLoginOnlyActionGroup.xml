@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AmazonBeginLoginOnlyActionGroup">
-        <!--Save opener window name since popup auto-closes-->
-        <executeJS function="return window.name;" stepKey="openerName"/>
-        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
         <waitForElement selector="{{AmazonPageSection.emailField}}" stepKey="waitForEmailField"/>
         <wait time="1" stepKey="allowButtonToActivate1"/>
         <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="fillAmazonPageEmailField"/>
