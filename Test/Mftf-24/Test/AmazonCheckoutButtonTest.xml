@@ -26,5 +26,6 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
         <!--Verify only Amazon Button is present-->
         <seeElement selector="{{AmazonButtonSection.checkout}}" stepKey="seeEnabledAmazonButton"/>
+        <wait time="1" stepKey="AllowButtonToActivateWorkaround"/>
     </test>
 </tests>

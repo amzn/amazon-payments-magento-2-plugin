@@ -42,7 +42,8 @@
     <entity name="SampleAmazonPaymentConfig" type="amazon_payment_config">
         <requiredEntity type="api_version">SampleAmazonPaymentApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentActive</requiredEntity>
-        <requiredEntity type="private_key">SampleAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="private_key_text">SampleAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="private_key_selected">SampleAmazonPaymentPrivateKeySelectedText</requiredEntity>
         <requiredEntity type="public_key_id">SampleAmazonPaymentPublicKeyId</requiredEntity>
         <requiredEntity type="merchant_id">SampleAmazonPaymentMerchantId</requiredEntity>
         <requiredEntity type="store_id">SampleAmazonPaymentStoreId</requiredEntity>
@@ -56,8 +57,11 @@
     <entity name="SampleAmazonPaymentActive" type="active">
         <data key="value">1</data>
     </entity>
-    <entity name="SampleAmazonPaymentPrivateKey" type="private_key">
+    <entity name="SampleAmazonPaymentPrivateKey" type="private_key_text">
         <data key="value">{{_CREDS.amazon/private_key}}</data>
+    </entity>
+    <entity name="SampleAmazonPaymentPrivateKeySelectedText" type="private_key_selected">
+        <data key="value">text</data>
     </entity>
     <entity name="SampleAmazonPaymentPublicKeyId" type="public_key_id">
         <data key="value">{{_CREDS.amazon/public_key_id}}</data>
@@ -92,7 +96,8 @@
     <entity name="EUAmazonPaymentConfig" type="amazon_payment_config">
         <requiredEntity type="api_version">SampleAmazonPaymentApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentActive</requiredEntity>
-        <requiredEntity type="private_key">EUAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="private_key_text">EUAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="private_key_selected">SampleAmazonPaymentPrivateKeySelectedText</requiredEntity>
         <requiredEntity type="public_key_id">EUAmazonPaymentPublicKeyId</requiredEntity>
         <requiredEntity type="merchant_id">EUAmazonPaymentMerchantId</requiredEntity>
         <requiredEntity type="store_id">EUAmazonPaymentStoreId</requiredEntity>
@@ -100,7 +105,7 @@
         <requiredEntity type="sandbox">SampleAmazonPaymentSandbox</requiredEntity>
         <requiredEntity type="lwa_enabled">SampleAmazonPaymentLwaDisabled</requiredEntity>
     </entity>
-    <entity name="EUAmazonPaymentPrivateKey" type="private_key">
+    <entity name="EUAmazonPaymentPrivateKey" type="private_key_text">
         <data key="value">{{_CREDS.amazon/eu_private_key}}</data>
     </entity>
     <entity name="EUAmazonPaymentPublicKeyId" type="public_key_id">
@@ -122,7 +127,8 @@
     <entity name="SampleAmazonPaymentConfigLwa" type="amazon_payment_config">
         <requiredEntity type="api_version">SampleAmazonPaymentApiVersion</requiredEntity>
         <requiredEntity type="active">SampleAmazonPaymentActive</requiredEntity>
-        <requiredEntity type="private_key">SampleAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="private_key_text">SampleAmazonPaymentPrivateKey</requiredEntity>
+        <requiredEntity type="private_key_selected">SampleAmazonPaymentPrivateKeySelectedText</requiredEntity>
         <requiredEntity type="public_key_id">SampleAmazonPaymentPublicKeyId</requiredEntity>
         <requiredEntity type="merchant_id">SampleAmazonPaymentMerchantId</requiredEntity>
         <requiredEntity type="store_id">SampleAmazonPaymentStoreId</requiredEntity>

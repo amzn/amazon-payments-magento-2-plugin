@@ -22,7 +22,6 @@
         <click selector="{{AmazonLoginSection.login}}" stepKey="seeSignInWithAmazonButton"/>
 
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
-        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
 
         <waitForPageLoad stepKey="waitForLinkAccountPageLoad"/>
         <see userInput="A store account for this email address already exists" stepKey="seeAnAccountExists"/>

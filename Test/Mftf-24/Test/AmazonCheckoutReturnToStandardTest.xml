@@ -11,15 +11,11 @@
         </annotations>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
-        <!--Come back to checkout with default address-->
-        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup"/>
 
         <click selector="{{AmazonCheckoutSection.returnToStandardCheckout}}" stepKey="clickReturnToStandardCheckout"/>
         <waitForPageLoad stepKey="waitForStandardCheckoutPageLoad"/>
 
-
-        <seeInField selector="{{CheckoutShippingSection.postcode}}" userInput="$DefaultAmazonCheckoutActionGroup" stepKey="seeAmazonAddressPostcode"/>
+        <seeInField selector="{{CheckoutShippingSection.postcode}}" userInput="$AmazonLoginAndCheckoutActionGroup" stepKey="seeAmazonAddressPostcode"/>
     </test>
 </tests>

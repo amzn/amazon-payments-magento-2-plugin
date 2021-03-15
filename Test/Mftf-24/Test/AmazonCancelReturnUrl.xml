@@ -26,13 +26,14 @@
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
         <click selector="{{AmazonLoginSection.login}}" stepKey="signInWithAmazon"/>
-        
+
         <!-- Login to Amazon -->
-        <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="amazonLoginOnlyActionGroup"/>
+        <actionGroup ref="AmazonBeginLoginOnlyActionGroup" stepKey="amazonBeginLoginOnlyActionGroup"/>
         <waitForElement selector="{{AmazonPageSection.loginCancelButton}}" stepKey="waitForCancelLogin"/>
 
         <!-- Cancel login with Amazon and land back on sign-in Magento page -->
         <click selector="{{AmazonPageSection.loginCancelButton}}" stepKey="clickLoginCancelButton"/>
+        <switchToNextTab stepKey="switchToParentWindow"/>
         <waitForPageLoad stepKey="waitForSigninPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="assertLoginUrl"/>
 
@@ -45,21 +46,35 @@
 
         <!-- Click Amazon Pay button on product page and login -->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
+
+        <wait time="1" stepKey="testingDelay"/>
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
         <!-- <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/> -->
 
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
 
+        <!--Prevent "NoSuchWindowException: window was already closed"-->
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
+
         <!-- Click edit button on address -->
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
+        <wait time="1" stepKey="testingDelay2"/>
+        <switchToNextTab stepKey="switchToAddressEditPopup"/>
         <waitForElement selector="{{AmazonPageSection.cancelButton}}" stepKey="waitForCancelCheckout"/>
 
         <!-- Click cancel button on Amazon hosted page -->
         <click selector="{{AmazonPageSection.cancelButton}}" stepKey="cancelCheckout"/>
+        <!--Prevent "NoSuchWindowException: window was already closed"-->
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener2" />
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Assert being back in the product page -->
-        <seeInCurrentUrl url="$$createSimpleProduct.custom_attributes[url_key]$$" stepKey="assertProductUrl"/>
+<!--        <seeInCurrentUrl url="$$createSimpleProduct.custom_attributes[url_key]$$" stepKey="assertProductUrl"/>-->
+<!--        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>-->
+        <seeInCurrentUrl url="{{CheckoutPage.url}}" stepKey="assertProductUrl"/>
     </test>
 </tests>

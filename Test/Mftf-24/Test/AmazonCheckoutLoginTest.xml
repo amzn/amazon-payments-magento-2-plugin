@@ -10,8 +10,12 @@
             <group value="amazon_pay_login"/>
         </annotations>
 
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
         <!--Go to Amazon Pay from the checkout and login-->
         <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
+        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
     </test>
 </tests>
