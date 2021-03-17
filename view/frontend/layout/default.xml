@@ -20,5 +20,28 @@
         <referenceContainer name="content">
             <block class="Amazon\Pay\Block\Config" name="amazon_pay_config" template="Amazon_Pay::config.phtml" />
         </referenceContainer>
+
+        <referenceBlock name="authentication-popup">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="authenticationPopup" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="amazon-button" xsi:type="array">
+                                    <item name="component" xsi:type="string">Amazon_Pay/js/view/login-button-wrapper</item>
+                                    <item name="sortOrder" xsi:type="string">0</item>
+                                    <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                    <item name="config" xsi:type="array">
+                                        <item name="tooltip" xsi:type="string" translate="true">Securely login into our website using your existing Amazon details.</item>
+<!--                                        <item name="componentDisabled" xsi:type="helper"-->
+<!--                                              helper="Amazon\Pay\Model\AmazonConfig::isLwaEnabled"/>-->
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>
