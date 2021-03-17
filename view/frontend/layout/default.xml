@@ -33,8 +33,6 @@
                                     <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
                                     <item name="config" xsi:type="array">
                                         <item name="tooltip" xsi:type="string" translate="true">Securely login into our website using your existing Amazon details.</item>
-<!--                                        <item name="componentDisabled" xsi:type="helper"-->
-<!--                                              helper="Amazon\Pay\Model\AmazonConfig::isLwaEnabled"/>-->
                                     </item>
                                 </item>
                             </item>
