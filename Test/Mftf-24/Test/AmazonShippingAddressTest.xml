@@ -11,13 +11,13 @@
         </annotations>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
-        <!--Come back to checkout with default address-->
-        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup"/>
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
         <!--Change shipping address-->
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
         <wait time="1" stepKey="allowButtonToActivate"/>
+        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
         <waitForElement selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForAmazonEditShippingPageLoad"/>
         <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAmazonAddressButton"/>
         <click selector="{{AmazonPageSection.notSelectedAddress}}" stepKey="clickNotSelectedAmazonAddress"/>
