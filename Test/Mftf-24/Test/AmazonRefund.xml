@@ -11,10 +11,7 @@
         </annotations>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
-        <!--Come back to checkout with default address-->
-        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup"/>
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup"/>
         <!--Go to payment method-->
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
         <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
@@ -51,7 +48,7 @@
         <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateCreditMemo"/>
         <waitForPageLoad stepKey="waitForCreditMemoPageLoad"/>
         <!-- adding the raw selector here as the Magento provided one is incorrect -->
-        <click selector=".action-default.scalable.save.submit-button.refund.primary" stepKey="submitRefund"/> 
+        <click selector=".action-default.scalable.save.submit-button.refund.primary" stepKey="submitRefund"/>
         <see userInput="Amazon Pay refund successful." stepKey="seeAmazonMessage"/>
         <see userInput="You created the credit memo." stepKey="seeMagentoMessage"/>
     </test>

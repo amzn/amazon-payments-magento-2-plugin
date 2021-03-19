@@ -20,11 +20,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!--Verify Sign in with Amazon Button is present-->
-        <click selector="{{AmazonLoginSection.login}}" stepKey="clickSignInWithAmazonButton"/>
-
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
-        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
         <see userInput="My Account" stepKey="seeMyAccount"/>
@@ -35,15 +31,22 @@
         <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage2"/>
         <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
 
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
         <!--Verify Sign in with Amazon Button is present again-->
         <click selector="{{AmazonLoginSection.login}}" stepKey="clickSignInWithAmazonButton2"/>
+        <wait time="1" stepKey="allowButtonToActivate"/>
+        <switchToNextTab stepKey="switchToLoginWindow"/>
 
         <!-- make sure we are logged out from Amazon by clearing ubid-main cookie -->
         <resetCookie userInput="ubid-main" parameterArray="['domainName' => '.amazon.com']" stepKey="resetCookieForAmazon"/>
         <reloadPage stepKey="reloadAmazonLoginPage"/>
 
-        <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup2"/>
-        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton2"/>
+        <actionGroup ref="AmazonLoginOnlyRedirectActionGroup" stepKey="AmazonLoginOnlyRedirectActionGroup2"/>
+        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
+        <!-- Switch back to main window -->
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad2"/>
         <see userInput="My Account" stepKey="seeMyAccount2"/>
