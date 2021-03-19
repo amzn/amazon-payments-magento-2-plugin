@@ -25,6 +25,8 @@
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonChangedShippingPageLoad"/>
         <wait time="1" stepKey="allowButtonToActivate2"/>
         <!--Come back to checkout with changed address-->
-        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="ChangedAmazonCheckoutActionGroup"/>
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="ChangedAmazonCheckoutActionGroup">
+            <argument name="openerName" value="{$openerName}"/>
+        </actionGroup>
     </test>
 </tests>
