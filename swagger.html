@@ -53,7 +53,7 @@
   "openapi": "3.0.0",
   "servers": [
     {
-      "url": "https://example-magento-store.com/rest"
+      "url": "https://your-magento-store.com/rest"
     }
   ],
   "info": {
@@ -97,6 +97,37 @@
                     "$ref": "#/components/examples/configResponse"
                   }
                 }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404notFound"
+          }
+        }
+      }
+    },
+    "/V1/amazon-checkout-session/{cartId}/shipping-address": {
+      "get": {
+        "tags": [
+          "amazonPayCheckoutSessionManagementV1"
+        ],
+        "description": "Fetches the shipping address associated with a session for an active cart ID",
+        "operationId": "amazonPayCheckoutSessionManagementV1GetShippingAddressGet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/cartIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "array of shipping addresses associated with the current session"
+                },
+                "example": null
               }
             }
           },
@@ -158,72 +189,6 @@
                   "description": "false if no billing address defined in current session"
                 },
                 "example": false
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
-          }
-        }
-      }
-    },
-    "/V1/amazon-checkout-session/{cartId}/shipping-address": {
-      "get": {
-        "tags": [
-          "amazonPayCheckoutSessionManagementV1"
-        ],
-        "description": "Fetches the shipping address associated with a session for an active cart ID",
-        "operationId": "amazonPayCheckoutSessionManagementV1GetShippingAddressGet",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/cartIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "description": "array of shipping addresses associated with the current session"
-                },
-                "example": null
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
-          }
-        }
-      }
-    },
-    "/V1/amazon-checkout-session/{cartId}/cancel": {
-      "post": {
-        "tags": [
-          "amazonPayCheckoutSessionManagementV1"
-        ],
-        "description": "Cancels a checkout session associated with an active cart ID",
-        "operationId": "amazonPayCheckoutSessionManagementV1CancelCheckoutSessionPost",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/cartIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                },
-                "example": [
-
-                ]
               }
             }
           },
@@ -299,6 +264,41 @@
                     "$ref": "#/components/examples/completeResponseSuccess"
                   }
                 }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404notFound"
+          }
+        }
+      }
+    },
+    "/V1/amazon-checkout-session/{cartId}/cancel": {
+      "post": {
+        "tags": [
+          "amazonPayCheckoutSessionManagementV1"
+        ],
+        "description": "Cancels a checkout session associated with an active cart ID",
+        "operationId": "amazonPayCheckoutSessionManagementV1CancelCheckoutSessionPost",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/cartIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "example": [
+
+                ]
               }
             }
           },
