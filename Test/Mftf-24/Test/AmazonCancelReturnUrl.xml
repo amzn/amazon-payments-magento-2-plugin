@@ -14,11 +14,16 @@
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
             <createData entity="SampleAmazonPaymentConfigLwa" stepKey="SampleAmazonPaymentConfigLwa"/>
             <magentoCLI command="config:set {{AmazonButtonProductConfig.path}} 1" stepKey="displayAmazonButtonProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
 
         <after>
             <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{AmazonAccount.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 

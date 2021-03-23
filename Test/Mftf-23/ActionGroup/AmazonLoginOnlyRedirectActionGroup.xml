@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AmazonLoginOnlyActionGroup">
-        <arguments>
-            <argument name="buttonSelector" defaultValue="{{AmazonLoginSection.login}}" type="string"/>
-        </arguments>
-        <!--Save opener window name since popup auto-closes-->
-        <executeJS function="return window.name;" stepKey="openerName"/>
-
-        <!--Verify Sign in with Amazon Button is present-->
-        <click selector="{{buttonSelector}}" stepKey="clickSignInWithAmazonButton"/>
-        <wait time="1" stepKey="allowPopupToOpen"/>
-        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
-
+    <actionGroup name="AmazonLoginOnlyRedirectActionGroup">
         <waitForElement selector="{{AmazonPageSection.emailField}}" stepKey="waitForEmailField"/>
         <wait time="1" stepKey="allowButtonToActivate1"/>
         <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="fillAmazonPageEmailField"/>
@@ -20,9 +9,5 @@
         <!--Verify successful login by the presence of the continue button-->
         <wait time="1" stepKey="allowButtonToActivate2"/>
         <waitForElement selector="{{AmazonLoginSection.consentButton}}" stepKey="seeAmazonConsentButton"/>
-        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
-
-        <!-- Switch back to main window -->
-        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
     </actionGroup>
 </actionGroups>
