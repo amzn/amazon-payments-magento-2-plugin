@@ -89,6 +89,80 @@
                     normal shopping/checkout flow:
                   </p>
                   <img alt="_images/api_calls.png" src="_images/api_calls.png" />
+                  <div class="section" id="config">
+                    <h3>Checkout Session Config<a class="headerlink" href="#config"
+                      title="Permalink to this headline">¶</a></h3>
+                    <p>
+                      Values returned from this endpoint will be needed to generate the Sign In with Amazon and Amazon Pay buttons. 
+                      The format of this response will be:
+                      <div class="highlight-xml">
+                        <div class="highlight">
+                          <pre>
+    [
+      "merchantId",
+      "ledgerCurrency",
+      "buttonColor",
+      "checkoutLanguage",
+      "productType",
+      "sandbox",
+      "loginPayload",
+      "loginSignature",
+      "checkoutPayload",
+      "checkoutSignature",
+      "publicKeyId"
+    ]</pre>
+                        </div>
+                      </div>
+                      <div class="admonition note">
+                        <p class="first admonition-title">Note</p>
+                        <p class="last">The value for <cite>productType</cite> returned in the response will be a boolean value indicating 
+                        whether the product is PayOnly; true for PayOnly, false for PayAndShip.</p>
+                      </div>
+                      For a detailed explanation on how to use these values to generate:
+                      <br/><br/>
+                      <ul>
+                        <li>
+                          A Sign In With Amazon Button, see <a 
+                            href="https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/amazon-sign-in.html#4-render-the-button"
+                            target="_blank">
+                          Amazon Sign-in (Render the Button)</a>.
+                        </li>
+                        <li>
+                          An Amazon Pay Button, see <a 
+                            href="https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/add-the-amazon-pay-button.html#4-render-the-button"
+                            target="_blank">
+                          Add the Amazon Pay Button (Render the Button)</a>.
+                        </li>
+                      </ul>
+                    </p>
+                  </div>
+                  <div class="section" id="shipping-payment">
+                    <h3>Shipping and Payment Information<a class="headerlink" href="#shipping-payment"
+                      title="Permalink to this headline">¶</a></h3>
+                      <p>
+                        The Shipping Address, Payment Descriptor, and Billing Address endpoints are used to retrieve order summary information 
+                        to display upon checkout review. Shipping and payment method updates can be enabled to allow the user to choose a different 
+                        shipping address or payment instrument before placing an order.
+                        <div class="admonition note">
+                          <p class="first admonition-title">Note</p>
+                          <p class="last">The value for <cite>shippingAddress</cite> should be null for PayOnly product types. Similarly, <cite>billingAddress</cite> 
+                          should only be populated in EU or for PayOnly product types.</p>
+                        </div>
+                      </p>
+                      <p>
+                        For recommended best practices regarding displaying this 
+                        information, see <a 
+                          href="https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/display-shipping-payment-info.html#1-get-shipping-and-payment-info"
+                          target="_blank">
+                        Display shipping and payment info (Best Practice)</a>.
+                      </p>
+                      <p>
+                        For a guide on enabling shipping and payment information updates at checkout review, see <a 
+                          href="https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/display-shipping-payment-info.html#2-enable-shipping-and-payment-updates"
+                          target="_blank">
+                        Enable shipping and payment updates</a>.
+                      </p>
+                  </div>
                 </div>
                 <div class="section" id="docs">
                   <h2>Swagger Documentation<a
