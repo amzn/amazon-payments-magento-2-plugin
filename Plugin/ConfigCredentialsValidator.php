@@ -189,7 +189,7 @@ class ConfigCredentialsValidator
         $client = $this->clientFactory->create($scopeCode, $scope, $config);
         $response = $client->createCheckoutSession([
             'webCheckoutDetails' => [
-                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewUrl(),
+                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
             ],
             'storeId' => $storeId,
             'platformId' => $this->amazonConfig->getPlatformId(),

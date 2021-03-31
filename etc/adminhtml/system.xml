@@ -194,16 +194,14 @@
                             <config_path>payment/amazon_payment/logging</config_path>
                         </field>
                         <field id="checkout_review_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Checkout review URL</label>
-                            <comment><![CDATA[Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address.]]></comment>
+                            <label>Checkout review URL Path</label>
+                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address. Do not use a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_review_url</config_path>
-                            <validate>validate-secure-url</validate>
                         </field>
                         <field id="checkout_result_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Checkout result URL</label>
-                            <comment><![CDATA[Amazon Pay will redirect to this URL after completing the transaction.]]></comment>
+                            <label>Checkout result URL Path</label>
+                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after completing the transaction. Do not use a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_url</config_path>
-                            <validate>validate-secure-url</validate>
                         </field>
                         <field id="loglist_v2" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Developer Logs</label>
