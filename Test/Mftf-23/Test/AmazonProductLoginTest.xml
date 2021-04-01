@@ -10,8 +10,13 @@
             <group value="amazon_pay_login"/>
         </annotations>
 
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
         <!--Add to cart via Amazon Pay button on product page and login-->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
+        <wait time="1" stepKey="allowPopupToOpen"/>
+        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
     </test>
 </tests>

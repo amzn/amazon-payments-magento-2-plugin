@@ -20,11 +20,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!--Verify Sign in with Amazon Button is present-->
-        <click selector="{{AmazonLoginSection.login}}" stepKey="clickSignInWithAmazonButton"/>
-
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup"/>
-        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad"/>
         <see userInput="My Account" stepKey="seeMyAccount"/>

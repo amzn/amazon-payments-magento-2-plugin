@@ -11,10 +11,7 @@
         </annotations>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
-        <!--Come back to checkout with default address-->
-        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup">
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup">
             <argument name="cc" value="3064" />
         </actionGroup>
         <!--Go to payment method-->

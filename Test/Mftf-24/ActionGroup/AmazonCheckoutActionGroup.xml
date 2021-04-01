@@ -3,6 +3,7 @@
     <actionGroup name="AmazonCheckoutActionGroup">
         <arguments>
             <argument name="cc" defaultValue="1111" type="string"/>
+            <argument name="openerName" type="string"/>
         </arguments>
 
         <!--Get shipping address information-->
@@ -25,6 +26,10 @@
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonCheckoutButton"/>
         <wait time="1" stepKey="allowContinueButtonToActivate"/>
         <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="clickAmazonCheckoutButton"/>
+
+        <!-- Switch back to main window -->
+        <switchToWindow userInput="{{openerName}}" stepKey="switchToWindowOpener" />
+
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
         <!--Filter out address data-->
         <executeJS function="return '{$amazonAddressLine1Raw}' !== 'null' ? '{$amazonAddressLine1Raw}' : ''" stepKey="amazonAddressLine1"/>

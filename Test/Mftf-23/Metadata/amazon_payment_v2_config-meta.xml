@@ -14,7 +14,13 @@
                             <object key="active_v2" dataType="active">
                                 <field key="value">string</field>
                             </object>
-                            <object key="private_key" dataType="private_key">
+                            <object key="private_key_text" dataType="private_key_text">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="private_key_pem" dataType="private_key_pem">
+                                <field key="value">string</field>
+                            </object>
+                            <object key="private_key_selected" dataType="private_key_selected">
                                 <field key="value">string</field>
                             </object>
                             <object key="public_key_id" dataType="public_key_id">

@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AmazonCheckoutActionGroup">
+    <!--Open login popup and complete form-->
+    <actionGroup name="AmazonLoginAndCheckoutActionGroup">
         <arguments>
+            <argument name="buttonSelector" defaultValue="{{AmazonButtonSection.checkout}}" type="string"/>
             <argument name="cc" defaultValue="1111" type="string"/>
-            <argument name="openerName" type="string"/>
         </arguments>
+
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <waitForElement selector="{{buttonSelector}}" time="30" stepKey="apWaitForButton"/>
+        <wait time="1" stepKey="allowButtonToActivate"/>
+        <click selector="{{buttonSelector}}" stepKey="clickAmazonButton"/>
+
+        <wait time="1" stepKey="allowPopupToOpen"/>
+        <switchToNextTab stepKey="switchToLoginPopupWindow"/>
+
+        <!-- Fill in login form -->
+        <waitForElement selector="{{AmazonPageSection.emailField}}" time="30" stepKey="apWaitForLogin"/>
+        <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="apEnterEmail"/>
+        <fillField selector="{{AmazonPageSection.passwordField}}" userInput="{{AmazonAccount.password}}" stepKey="apEnterPassword"/>
+        <click selector="{{AmazonPageSection.signInButton}}" stepKey="clickSigninButton"/>
+
+        <!--Verify successful login by the presence of the checkout button-->
+        <wait time="1" stepKey="allowButtonToActivate2"/>
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
+
 
         <!--Get shipping address information-->
         <grabAttributeFrom selector="{{AmazonPageSection.addressId}}" userInput="data-address_id" stepKey="amazonAddressId"/>
@@ -28,9 +51,10 @@
         <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="clickAmazonCheckoutButton"/>
 
         <!-- Switch back to main window -->
-        <switchToWindow userInput="{{openerName}}" stepKey="switchToWindowOpener" />
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
 
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <wait time="1" stepKey="allowAddressToPopulate"/>
         <!--Filter out address data-->
         <executeJS function="return '{$amazonAddressLine1Raw}' !== 'null' ? '{$amazonAddressLine1Raw}' : ''" stepKey="amazonAddressLine1"/>
         <executeJS function="return '{$amazonAddressLine2Raw}' !== 'null' ? '{$amazonAddressLine2Raw}' : ''" stepKey="amazonAddressLine2"/>
@@ -45,5 +69,6 @@
         <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressZipCode" stepKey="seeAmazonAddressZipCode"/>
         <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressCountryName" stepKey="seeAmazonAddressCountryName"/>
         <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressPhoneNumber" stepKey="seeAmazonAddressPhoneNumber"/>
+        <return value="{$amazonAddressZipCode}" stepKey="returnAddressZip"/>
     </actionGroup>
 </actionGroups>
