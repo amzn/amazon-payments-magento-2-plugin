@@ -60,14 +60,15 @@ define([
          */
         getCheckoutSessionId: function () {
             var sessionId = getStorage().get('id');
-            var param = '?amazonCheckoutSessionId=';
-            if (typeof sessionId === 'undefined' && window.location.search.indexOf(param) != -1) {
-                sessionId = window.location.search.replace(param, '');
-                getStorage().set('id', sessionId);
-            }
-            else if(sessionId != window.location.search.replace(param, '') && window.location.search.replace(param, '') != '') {
-                sessionId = window.location.search.replace(param, '');
-                getStorage().set('id', sessionId);
+            var param = 'amazonCheckoutSessionId';
+
+            var myParams = new URLSearchParams(window.location.search);
+            if (myParams.has(param)) {
+                var paramSessionId = myParams.get(param);
+                if (typeof sessionId === 'undefined' || paramSessionId != sessionId) {
+                    sessionId = paramSessionId;
+                    getStorage().set('id', sessionId);
+                }
             }
             return sessionId;
         },
