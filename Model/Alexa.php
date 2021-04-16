@@ -18,6 +18,7 @@ namespace Amazon\Pay\Model;
 
 use Amazon\Pay\Client\ClientFactoryInterface;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Phrase;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 
@@ -94,7 +95,7 @@ class Alexa
             $errorMessage = __('API error:') . ' (' . $status . ') ';
             $errorMessage .= !empty($response['reasonCode']) ? $response['reasonCode'] . ': ' : '';
             $errorMessage .= !empty($response['message']) ? $response['message'] : '';
-            throw new \Magento\Framework\Exception\StateException($errorMessage);
+            throw new \Magento\Framework\Exception\StateException(new Phrase($errorMessage));
         }
         return $response;
     }
@@ -115,7 +116,9 @@ class Alexa
         }
         $transaction = $this->transactionRepository->getByTransactionType($transationType, $payment->getId());
         if (!$transaction) {
-            throw new \Magento\Framework\Exception\NotFoundException('Failed to lookup order transaction');
+            throw new \Magento\Framework\Exception\NotFoundException(
+                new Phrase('Failed to lookup order transaction')
+            );
         }
         $response = $this->apiCall($order->getStoreId(), 'getCharge', [$transaction->getTxnId()]);
         return $response['chargePermissionId'];
