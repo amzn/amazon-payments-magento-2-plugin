@@ -114,6 +114,11 @@
                         <source_model>Amazon\Pay\Model\Config\Source\AuthorizationMode</source_model>
                         <config_path>payment/amazon_payment/authorization_mode</config_path>
                     </field>
+                    <field id="sort_order" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                        <config_path>payment/amazon_payment_v2/sort_order</config_path>
+                    </field>
                 </group>
                 <group id="alexa" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Alexa Delivery Notifications</label>
