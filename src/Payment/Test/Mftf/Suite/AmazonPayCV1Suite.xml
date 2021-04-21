@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="AmazonPayCV1Suite">
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- set EUR => CZK currency conversion -->
+            <createData entity="EUAmazonMultiCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" />
+            <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyConversion">
+                <argument name="firstCurrency" value="EUR"/>
+                <argument name="secondCurrency" value="CZK"/>
+                <argument name="rate" value="1"/>
+            </actionGroup>
+        </before>
+        <include>
+            <group name="amazon_payment"/>
+        </include>
+        <exclude>
+            <group name="skip"/>
+        </exclude>
+        <after>
+        </after>
+    </suite>
+</suites>

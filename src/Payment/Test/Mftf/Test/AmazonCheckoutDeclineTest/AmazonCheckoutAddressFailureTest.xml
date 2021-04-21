@@ -31,7 +31,7 @@
         <switchToIFrame userInput="{$iframeName}" stepKey="switchToIFrameWidget"/>
         <!--Open new address pop-up-->
         <click selector="{{AmazonCheckoutSection.addNewAddress}}" stepKey="clickAddNew"/>
-        <waitForPageLoad stepKey="waitForPageLoadPopup"/>
+        <wait time="3" stepKey="waitForPageLoadPopup"/>
         <executeJS function="return document.getElementById('addShippingAddressForm').target;" stepKey="windowAddressName"/>
         <switchToWindow userInput="{$windowAddressName}" stepKey="switchToWindowAddress"/>
         <waitForElement selector="{{AmazonAddressSection.name}}" time="10" stepKey="apWait"/>
