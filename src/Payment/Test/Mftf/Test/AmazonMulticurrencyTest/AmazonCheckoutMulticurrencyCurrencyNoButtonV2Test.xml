@@ -13,18 +13,7 @@
         <before>
             <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData" before="flushCache"/>
             <createData entity="EUAmazonInvalidMultiCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
-
-            <!-- Login as admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin" before="flushCache"/>
-
-            <!-- set EUR => CZK currency conversion -->
-            <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage" before="flushCache"/>
-            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyConversion">
-                <argument name="firstCurrency" value="EUR"/>
-                <argument name="secondCurrency" value="CZK"/>
-                <argument name="rate" value="1"/>
-            </actionGroup>
-
+            
             <!-- enable multicurrency -->
             <magentoCLI command="config:set payment/amazon_payment/multicurrency 1" stepKey="setMulticurrency" before="flushCache"/>
         </before>
