@@ -21,6 +21,21 @@ var config = {
             'Magento_Tax/js/view/checkout/summary/grand-total': {
                 'Amazon_Pay/js/view/checkout/summary/grand-total-mixin': true,
                 'Amazon_Payment/js/view/checkout/summary/grand-total-mixin': false
+            },
+            'Magento_Checkout/js/view/form/element/email': {
+                'Amazon_Pay/js/view/form/element/email': true
+            },
+            'Magento_Checkout/js/view/shipping-address/list': {
+                'Amazon_Pay/js/view/shipping-address/list': true
+            },
+            'Magento_Checkout/js/view/shipping-address/address-renderer/default': {
+                'Amazon_Pay/js/view/shipping-address/address-renderer/default': true
+            },
+            'Magento_Checkout/js/view/billing-address': {
+                'Amazon_Pay/js/view/billing-address': true
+            },
+            'Magento_Checkout/js/view/shipping': {
+                'Amazon_Pay/js/view/shipping': true
             }
         }
     },
