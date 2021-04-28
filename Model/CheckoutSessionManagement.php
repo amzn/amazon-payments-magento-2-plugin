@@ -251,12 +251,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param mixed $cartId
+     * @param mixed $amazonCheckoutSessionId
      * @return mixed
      */
-    protected function getAmazonSession($cartId)
+    protected function getAmazonSession($amazonSessionId)
     {
-        $amazonSessionId = $this->getCheckoutSession($cartId);
         if (!isset($this->amazonSessions[$amazonSessionId])) {
             $this->amazonSessions[$amazonSessionId] = $this->amazonAdapter->getCheckoutSession(
                 $this->storeManager->getStore()->getId(),
@@ -281,32 +280,32 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param mixed $cartId
+     * @param mixed $amazonCheckoutSessionId
      * @param bool $isShippingAddress
      * @param mixed $addressDataExtractor
      * @return mixed
      */
-    protected function fetchAddress($cartId, $isShippingAddress, $addressDataExtractor)
+    protected function fetchAddress($amazonSessionId, $isShippingAddress, $addressDataExtractor)
     {
         $result = false;
-        if ($this->isAvailable($cartId)) {
-            $session = $this->getAmazonSession($cartId);
+  
+        $session = $this->getAmazonSession($amazonSessionId);
 
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $addressData = call_user_func($addressDataExtractor, $session);
-            if (!empty($addressData)) {
-                $addressData['state'] = $addressData['stateOrRegion'];
-                $addressData['phone'] = $addressData['phoneNumber'];
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $addressData = call_user_func($addressDataExtractor, $session);
+        if (!empty($addressData)) {
+            $addressData['state'] = $addressData['stateOrRegion'];
+            $addressData['phone'] = $addressData['phoneNumber'];
 
-                $address = array_combine(
-                    array_map('ucfirst', array_keys($addressData)),
-                    array_values($addressData)
-                );
+            $address = array_combine(
+                array_map('ucfirst', array_keys($addressData)),
+                array_values($addressData)
+            );
 
-                $result = $this->convertToMagentoAddress($address, $isShippingAddress);
-                $result[0]['email'] = $session['buyer']['email'];
-            }
+            $result = $this->convertToMagentoAddress($address, $isShippingAddress);
+            $result[0]['email'] = $session['buyer']['email'];
         }
+        
         return $result;
     }
 
@@ -386,29 +385,43 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function getShippingAddress($cartId)
+    public function getShippingAddress($amazonSessionId)
     {
-        return $this->fetchAddress($cartId, true, function ($session) {
-            return $session['shippingAddress'] ?? [];
-        });
+        $cartId = $this->magentoCheckoutSession->getQuote()->getId();
+        $result = false;
+
+        if ($this->isAvailable($cartId)) {
+            $result =  $this->fetchAddress($amazonSessionId, true, function ($session) {
+                return $session['shippingAddress'] ?? [];
+            });
+        }
+
+        return $result;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBillingAddress($cartId)
+    public function getBillingAddress($amazonSessionId)
     {
-        return $this->fetchAddress($cartId, false, function ($session) {
-            return $session['billingAddress'] ?? [];
-        });
+        $cartId = $this->magentoCheckoutSession->getQuote()->getId();
+        $result = false;
+
+        if ($this->isAvailable($cartId)) {
+            $result = $this->fetchAddress($amazonSessionId, false, function ($session) {
+                return $session['billingAddress'] ?? [];
+            });
+        }
+
+        return $result;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPaymentDescriptor($cartId)
+    public function getPaymentDescriptor($amazonSessionId)
     {
-        $session = $this->getAmazonSession($cartId);
+        $session = $this->getAmazonSession($amazonSessionId);
         return $session['paymentPreferences'][0]['paymentDescriptor'] ?? '';
     }
 

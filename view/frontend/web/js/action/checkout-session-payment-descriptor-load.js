@@ -18,13 +18,14 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/url-builder',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/model/error-processor'
-], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor) {
+    'Magento_Checkout/js/model/error-processor',
+    'Amazon_Pay/js/model/storage'
+], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor, amazonStorage) {
     'use strict';
 
     return function (callback) {
-        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-session/:cartId/payment-descriptor', {
-            cartId: quote.getQuoteId()
+        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-session/:amazonSessionId/payment-descriptor', {
+            amazonSessionId: amazonStorage.getCheckoutSessionId()
         });
 
         fullScreenLoader.startLoader();

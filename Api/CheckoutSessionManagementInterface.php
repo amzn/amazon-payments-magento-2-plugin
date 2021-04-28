@@ -34,22 +34,22 @@ interface CheckoutSessionManagementInterface
     public function storeCheckoutSession($cartId, $checkoutSessionId);
 
     /**
-     * @param mixed $cartId
+     * @param mixed $amazonSessionId
      * @return mixed
      */
-    public function getShippingAddress($cartId);
+    public function getShippingAddress($amazonSessionId);
 
     /**
-     * @param mixed $cartId
+     * @param mixed $amazonSessionId
      * @return mixed
      */
-    public function getBillingAddress($cartId);
+    public function getBillingAddress($amazonSessionId);
 
     /**
-     * @param mixed $cartId
+     * @param mixed $amazonSessionId
      * @return string
      */
-    public function getPaymentDescriptor($cartId);
+    public function getPaymentDescriptor($amazonSessionId);
 
     /**
      * @param mixed $cartId
