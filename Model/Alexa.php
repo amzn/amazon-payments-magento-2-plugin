@@ -19,6 +19,7 @@ namespace Amazon\Pay\Model;
 use Amazon\Pay\Client\ClientFactoryInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 
@@ -55,6 +56,11 @@ class Alexa
     private $cache;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param AmazonConfig $amazonConfig
      * @param ClientFactoryInterface $clientFactory
      * @param Payment\Transaction\Repository $transactionRepository
@@ -67,7 +73,8 @@ class Alexa
         Payment\Transaction\Repository $transactionRepository,
         Dir $moduleDir,
         \Magento\Framework\File\Csv $csv,
-        \Magento\Framework\Config\CacheInterface $cache
+        \Magento\Framework\Config\CacheInterface $cache,
+        SerializerInterface $serializer
     ) {
         $this->amazonConfig = $amazonConfig;
         $this->clientFactory = $clientFactory;
@@ -75,6 +82,7 @@ class Alexa
         $this->moduleDir = $moduleDir;
         $this->csv = $csv;
         $this->cache = $cache;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -151,13 +159,13 @@ class Alexa
         $result = $this->cache->load($cacheKey);
         if ($result) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $result = \Magento\Framework\Serialize\SerializerInterface::unserialize(gzuncompress($result));
+            $result = $this->serializer->unserialize(gzuncompress($result));
         }
         if (!$result) {
             $result = $this->fetchDeliveryCarriers();
             $this->cache->save(
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                gzcompress(\Magento\Framework\Serialize\SerializerInterface::serialize($result)),
+                gzcompress($this->serializer->serialize($result)),
                 $cacheKey
             );
         }
