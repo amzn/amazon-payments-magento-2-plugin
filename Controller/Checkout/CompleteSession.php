@@ -28,6 +28,11 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     private $amazonCheckoutSession;
 
     /**
+     * @var \Amazon\Pay\Model\CheckoutSessionManagement
+     */
+    private $amazonCheckoutSessionManagement;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
@@ -59,6 +64,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession,
+        \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -66,6 +72,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     ) {
         parent::__construct($context);
         $this->amazonCheckoutSession = $amazonCheckoutSession;
+        $this->amazonCheckoutSessionManagement = $checkoutSessionManagement;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
@@ -81,9 +88,9 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
         try {
             // Bypass cache check in \Magento\PageCache\Model\DepersonalizeChecker
             $this->getRequest()->setParams(['ajax' => 1]);
-            $result = $this->amazonCheckoutSession->completeCheckoutSession();
+            $amazonCheckoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
+            $result = $this->amazonCheckoutSessionManagement->completeCheckoutSession($amazonCheckoutSessionId);
             if (!$result['success']) {
-                $this->amazonCheckoutSession->clearCheckoutSessionId();
                 $this->messageManager->addErrorMessage($result['message']);
 
                 return $this->_redirect('checkout/cart', ['_scope' => $scope]);
@@ -96,7 +103,6 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
             ]);
         } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
-            $this->amazonCheckoutSession->clearCheckoutSessionId();
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 

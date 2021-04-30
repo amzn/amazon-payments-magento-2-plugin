@@ -16,7 +16,7 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/amazon-checkout-session/:cartId/config" method="GET">
+    <route url="/V1/amazon-checkout-session/config" method="GET">
         <service class="Amazon\Pay\Api\CheckoutSessionManagementInterface" method="getConfig"/>
         <resources>
             <resource ref="anonymous" />
@@ -40,19 +40,13 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-checkout-session/:cartId/cancel" method="POST">
-        <service class="Amazon\Pay\Api\CheckoutSessionManagementInterface" method="cancelCheckoutSession"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-    <route url="/V1/amazon-checkout-session/:cartId/update" method="POST">
+    <route url="/V1/amazon-checkout-session/:amazonSessionId/update" method="POST">
         <service class="Amazon\Pay\Api\CheckoutSessionManagementInterface" method="updateCheckoutSession"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-checkout-session/:cartId/complete" method="POST">
+    <route url="/V1/amazon-checkout-session/:amazonSessionId/complete" method="POST">
         <service class="Amazon\Pay\Api\CheckoutSessionManagementInterface" method="completeCheckoutSession"/>
         <resources>
             <resource ref="anonymous" />

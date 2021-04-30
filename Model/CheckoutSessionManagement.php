@@ -97,16 +97,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $addressHelper;
 
     /**
-     * @var \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory
-     */
-    private $checkoutSessionFactory;
-
-    /**
-     * @var \Amazon\Pay\Api\CheckoutSessionRepositoryInterface
-     */
-    private $checkoutSessionRepository;
-
-    /**
      * @var \Amazon\Pay\Helper\Data
      */
     private $amazonHelper;
@@ -154,8 +144,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Checkout\Model\Session $magentoCheckoutSession
      * @param \Amazon\Pay\Domain\AmazonAddressFactory $amazonAddressFactory ,
      * @param \Amazon\Pay\Helper\Address $addressHelper ,
-     * @param \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory
-     * @param \Amazon\Pay\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param AmazonConfig $amazonConfig
      * @param Adapter\AmazonPayAdapter $amazonAdapter
@@ -176,8 +164,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Magento\Checkout\Model\Session $magentoCheckoutSession,
         \Amazon\Pay\Domain\AmazonAddressFactory $amazonAddressFactory,
         \Amazon\Pay\Helper\Address $addressHelper,
-        \Amazon\Pay\Api\Data\CheckoutSessionInterfaceFactory $checkoutSessionFactory,
-        \Amazon\Pay\Api\CheckoutSessionRepositoryInterface $checkoutSessionRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
@@ -197,8 +183,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->magentoCheckoutSession = $magentoCheckoutSession;
         $this->amazonAddressFactory = $amazonAddressFactory;
         $this->addressHelper = $addressHelper;
-        $this->checkoutSessionFactory = $checkoutSessionFactory;
-        $this->checkoutSessionRepository = $checkoutSessionRepository;
         $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
@@ -206,48 +190,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->asyncCharge = $asyncCharge;
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-    }
-
-    /**
-     * @param mixed $cartId
-     * @return CartInterface
-     */
-    protected function getCart($cartId)
-    {
-        if ($cartId instanceof CartInterface) {
-            $result = $cartId;
-        } else {
-            if (!isset($this->carts[$cartId])) {
-                if (is_numeric($cartId)) {
-                    $cart = $this->cartRepository->getActive($cartId);
-                } else {
-                    $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-                    $cart = $this->cartRepository->getActive($quoteIdMask->getQuoteId());
-                }
-                $this->carts[$cartId] = $cart;
-            }
-            $result = $this->carts[$cartId];
-        }
-        return $result;
-    }
-
-    /**
-     * @param mixed $cartId
-     * @return CheckoutSessionInterface
-     */
-    protected function getCheckoutSessionForCart($cartId)
-    {
-        return $this->checkoutSessionRepository->getActiveForCart($this->getCart($cartId));
-    }
-
-    /**
-     * @param mixed $cartId
-     * @param CheckoutSessionInterface $checkoutSession
-     * @return bool
-     */
-    protected function canComplete($cartId, $checkoutSession)
-    {
-        return $this->getCart($cartId)->getIsActive() && $checkoutSession->getUpdatedAt();
     }
 
     /**
@@ -266,17 +208,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param mixed $cartId
      * @return bool
      */
-    protected function isAvailable($cartId)
+    protected function canCheckoutWithAmazon()
     {
-        $result = false;
-        if ($this->amazonConfig->isEnabled()) {
-            $cart = $this->getCart($cartId);
-            $result = !$this->amazonHelper->hasRestrictedProducts($cart);
-        }
-        return $result;
+        return $this->amazonConfig->isEnabled() &&
+            !$this->amazonHelper->hasRestrictedProducts($this->magentoCheckoutSession->getQuote());
     }
 
     /**
@@ -288,7 +225,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     protected function fetchAddress($amazonSessionId, $isShippingAddress, $addressDataExtractor)
     {
         $result = false;
-  
+
         $session = $this->getAmazonSession($amazonSessionId);
 
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -305,7 +242,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $result = $this->convertToMagentoAddress($address, $isShippingAddress);
             $result[0]['email'] = $session['buyer']['email'];
         }
-        
+
         return $result;
     }
 
@@ -339,10 +276,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function getConfig($cartId)
+    public function getConfig()
     {
         $result = [];
-        if ($this->isAvailable($cartId)) {
+        if ($this->canCheckoutWithAmazon()) {
             $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
             $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
 
@@ -351,7 +288,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'currency' => $this->amazonConfig->getCurrencyCode(),
                 'button_color' => $this->amazonConfig->getButtonColor(),
                 'language' => $this->amazonConfig->getLanguage(),
-                'pay_only' => $this->amazonHelper->isPayOnly($this->getCart($cartId)),
+                'pay_only' => $this->amazonHelper->isPayOnly($this->magentoCheckoutSession->getQuote()),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),
                 'login_payload' => $loginButtonPayload,
                 'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
@@ -366,31 +303,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function storeCheckoutSession($cartId, $checkoutSessionId)
-    {
-        $result = [];
-        $this->cancelCheckoutSession($cartId);
-        if ($this->isAvailable($cartId) && $checkoutSessionId) {
-            $checkoutSession = $this->checkoutSessionFactory->create([
-                'data' => [
-                    CheckoutSessionInterface::KEY_QUOTE_ID => $this->getCart($cartId)->getId(),
-                    CheckoutSessionInterface::KEY_SESSION_ID => $checkoutSessionId,
-                ]
-            ]);
-            $this->checkoutSessionRepository->save($checkoutSession);
-        }
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getShippingAddress($amazonSessionId)
     {
-        $cartId = $this->magentoCheckoutSession->getQuote()->getId();
         $result = false;
 
-        if ($this->isAvailable($cartId)) {
+        if ($this->canCheckoutWithAmazon()) {
             $result =  $this->fetchAddress($amazonSessionId, true, function ($session) {
                 return $session['shippingAddress'] ?? [];
             });
@@ -404,10 +321,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function getBillingAddress($amazonSessionId)
     {
-        $cartId = $this->magentoCheckoutSession->getQuote()->getId();
         $result = false;
 
-        if ($this->isAvailable($cartId)) {
+        if ($this->canCheckoutWithAmazon()) {
             $result = $this->fetchAddress($amazonSessionId, false, function ($session) {
                 return $session['billingAddress'] ?? [];
             });
@@ -428,54 +344,20 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function cancelCheckoutSession($cartId)
+    public function updateCheckoutSession($amazonCheckoutSessionId)
     {
-        if ($this->isAvailable($cartId)) {
-            $checkoutSession = $this->getCheckoutSessionForCart($cartId);
-            if ($checkoutSession) {
-                $checkoutSession->cancel();
-                $this->checkoutSessionRepository->save($checkoutSession);
-            }
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCheckoutSession($cartId)
-    {
+        $quote = $this->magentoCheckoutSession->getQuote();
         $result = null;
-        if ($this->isAvailable($cartId)) {
-            $checkoutSession = $this->getCheckoutSessionForCart($cartId);
-            if ($checkoutSession) {
-                $result = $checkoutSession->getSessionId();
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateCheckoutSession($cartId)
-    {
-        $result = null;
-        $checkoutSession = null;
         $paymentIntent = Adapter\AmazonPayAdapter::PAYMENT_INTENT_AUTHORIZE;
-        $cart = $this->getCart($cartId);
-        if ($this->isAvailable($cartId)) {
-            $checkoutSession = $this->getCheckoutSessionForCart($cart);
-        }
-        if ($checkoutSession && $cart->getIsActive()) {
+
+        if ($this->canCheckoutWithAmazon()) {
             $response = $this->amazonAdapter->updateCheckoutSession(
-                $cart,
-                $checkoutSession->getSessionId(),
+                $quote,
+                $amazonCheckoutSessionId,
                 $paymentIntent
             );
             if (!empty($response['webCheckoutDetails']['amazonPayRedirectUrl'])) {
                 $result = $response['webCheckoutDetails']['amazonPayRedirectUrl'];
-                $checkoutSession->setUpdated();
-                $this->checkoutSessionRepository->save($checkoutSession);
             }
         }
         return $result;
@@ -615,15 +497,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function completeCheckoutSession($cartId)
+    public function completeCheckoutSession($amazonSessionId)
     {
-        $result = null;
-        $checkoutSession = null;
-        $cart = $this->getCart($cartId);
-        if ($this->isAvailable($cartId)) {
-            $checkoutSession = $this->getCheckoutSessionForCart($cart);
-        }
-        if (empty($checkoutSession) || !$this->canComplete($cart, $checkoutSession)) {
+        $cart = $this->magentoCheckoutSession->getQuote();
+
+        if (empty($amazonSessionId) || !$this->canCheckoutWithAmazon()) {
             return [
                 'success' => false,
                 'message' => __("Unable to complete Amazon Pay checkout"),
@@ -637,7 +515,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             // check the Amazon session one last time before placing the order
             $amazonSession = $this->amazonAdapter->getCheckoutSession(
                 $cart->getStoreId(),
-                $checkoutSession->getSessionId()
+                $amazonSessionId
             );
             if ($amazonSession['statusDetails']['state'] == 'Canceled') {
                 return [
@@ -648,7 +526,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             // get payment to load it in the session, so that a salesrule that relies on payment method conditions
             // can work as expected
-            $this->magentoCheckoutSession->getQuote()->getPayment();
+            $payment = $this->magentoCheckoutSession->getQuote()->getPayment();
+
+            // set amazon session id on payment object to be used in authorize
+            $payment->setAdditionalInformation('amazon_session_id', $amazonSessionId);
+
             // collect quote totals before placing order (needed for 2.3.0 and lower)
             // https://github.com/amzn/amazon-payments-magento-2-plugin/issues/992
             $this->magentoCheckoutSession->getQuote()->collectTotals();
@@ -662,7 +544,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
                 $cart->getStoreId(),
-                $checkoutSession->getSessionId(),
+                $amazonSessionId,
                 $cart->getGrandTotal(),
                 $cart->getQuoteCurrencyCode()
             );
@@ -673,7 +555,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
                 $session = $this->amazonAdapter->getCheckoutSession(
                     $cart->getStoreId(),
-                    $checkoutSession->getSessionId()
+                    $amazonSessionId
                 );
                 if (isset($session['chargePermissionId'])) {
                     $this->amazonAdapter->closeChargePermission(
@@ -742,12 +624,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             );
             $this->updateTransactionId($chargeId, $payment, $transaction);
 
-            $checkoutSession->complete();
-            $this->checkoutSessionRepository->save($checkoutSession);
         } catch (\Exception $e) {
             $session = $this->amazonAdapter->getCheckoutSession(
                 $cart->getStoreId(),
-                $checkoutSession->getSessionId()
+                $amazonSessionId
             );
 
             if (isset($session['chargePermissionId'])) {
@@ -758,7 +638,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     true
                 );
             }
-            $this->cancelCheckoutSession($cartId);
 
             // cancel order
             if (isset($order)) {
