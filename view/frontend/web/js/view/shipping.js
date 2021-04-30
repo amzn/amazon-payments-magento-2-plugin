@@ -2,39 +2,41 @@
 define(
     [
         'jquery',
-        'Magento_Checkout/js/view/shipping',
         'Amazon_Pay/js/model/storage'
     ],
     function (
         $,
-        Component,
         amazonStorage
     ) {
         'use strict';
 
-        return Component.extend({
-
-            /**
-             * Initialize shipping
-             */
-            initialize: function () {
-                this._super();
-                if (amazonStorage.isAmazonCheckout()) {
-                    this.isNewAddressAdded(true);
-                }
-                return this;
-            },
-
-            /**
-             * Validate guest email
-             */
-            validateGuestEmail: function () {
-                var loginFormSelector = 'form[data-role=email-with-possible-login]';
-
-                $(loginFormSelector).validation();
-
-                return $(loginFormSelector + ' input[type=email]').valid();
+        return function(Component) {
+            if (!amazonStorage.isAmazonCheckout()) {
+                return Component;
             }
-        });
+
+            return Component.extend({
+
+                /**
+                 * Initialize shipping
+                 */
+                initialize: function () {
+                    this._super();
+                    this.isNewAddressAdded(true);
+                    return this;
+                },
+
+                /**
+                 * Validate guest email
+                 */
+                validateGuestEmail: function () {
+                    var loginFormSelector = 'form[data-role=email-with-possible-login]';
+
+                    $(loginFormSelector).validation();
+
+                    return $(loginFormSelector + ' input[type=email]').valid();
+                }
+            });
+        }
     }
 );
