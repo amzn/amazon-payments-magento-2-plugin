@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Swagger - Amazon Checkout Session API</title>
+    <title>Swagger UI</title>
     <style>
       html
       {
@@ -53,7 +53,7 @@
   "openapi": "3.0.0",
   "servers": [
     {
-      "url": "https://your-magento-store.com/rest"
+      "url": "https://example-magento-store.com/rest"
     }
   ],
   "info": {
@@ -63,23 +63,18 @@
   },
   "tags": [
     {
-      "name": "amazonPayCheckoutSessionManagementV1",
+      "name": "amazonPayCheckoutSessionManagement",
       "description": "Manage Amazon Checkout Sessions"
     }
   ],
   "paths": {
-    "/V1/amazon-checkout-session/{cartId}/config": {
+    "/V1/amazon-checkout-session/config": {
       "get": {
         "tags": [
-          "amazonPayCheckoutSessionManagementV1"
+          "amazonPayCheckoutSessionManagement"
         ],
         "description": "Fetches configuration values used to generate an Amazon Pay button",
-        "operationId": "amazonPayCheckoutSessionManagementV1GetConfigGet",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/cartIdParam"
-          }
-        ],
+        "operationId": "amazonPayCheckoutSessionManagementGetConfigGet",
         "responses": {
           "200": {
             "description": "200 Success",
@@ -99,54 +94,20 @@
                 }
               }
             }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
           }
         }
       }
     },
-    "/V1/amazon-checkout-session/{cartId}/shipping-address": {
+    "/V1/amazon-checkout-session/{checkout-session-id}/payment-descriptor": {
       "get": {
         "tags": [
-          "amazonPayCheckoutSessionManagementV1"
-        ],
-        "description": "Fetches the shipping address associated with a session for an active cart ID",
-        "operationId": "amazonPayCheckoutSessionManagementV1GetShippingAddressGet",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/cartIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "description": "array of shipping addresses associated with the current session"
-                },
-                "example": null
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
-          }
-        }
-      }
-    },
-    "/V1/amazon-checkout-session/{cartId}/payment-descriptor": {
-      "get": {
-        "tags": [
-          "amazonPayCheckoutSessionManagementV1"
+          "amazonPayCheckoutSessionManagement"
         ],
         "description": "Returns a string to display next to the amazon payment method at checkout",
-        "operationId": "amazonPayCheckoutSessionManagementV1GetPaymentDescriptorGet",
+        "operationId": "amazonPayCheckoutSessionManagementGetPaymentDescriptorGet",
         "parameters": [
           {
-            "$ref": "#/components/parameters/cartIdParam"
+            "$ref": "#/components/parameters/checkoutSessionIdParam"
           }
         ],
         "responses": {
@@ -160,23 +121,20 @@
                 "example": "Your selected Amazon payment method"
               }
             }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
           }
         }
       }
     },
-    "/V1/amazon-checkout-session/{cartId}/billing-address": {
+    "/V1/amazon-checkout-session/{checkout-session-id}/billing-address": {
       "get": {
         "tags": [
-          "amazonPayCheckoutSessionManagementV1"
+          "amazonPayCheckoutSessionManagement"
         ],
         "description": "Fetches the billing address associated with a session for an active cart ID",
-        "operationId": "amazonPayCheckoutSessionManagementV1GetBillingAddressGet",
+        "operationId": "amazonPayCheckoutSessionManagementGetBillingAddressGet",
         "parameters": [
           {
-            "$ref": "#/components/parameters/cartIdParam"
+            "$ref": "#/components/parameters/checkoutSessionIdParam"
           }
         ],
         "responses": {
@@ -191,23 +149,59 @@
                 "example": false
               }
             }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
           }
         }
       }
     },
-    "/V1/amazon-checkout-session/{cartId}/update": {
-      "post": {
+    "/V1/amazon-checkout-session/{checkout-session-id}/shipping-address": {
+      "get": {
         "tags": [
-          "amazonPayCheckoutSessionManagementV1"
+          "amazonPayCheckoutSessionManagement"
         ],
-        "description": "Updates an Amazon checkout session with shipping and payment information set in a Magento checkout flow",
-        "operationId": "amazonPayCheckoutSessionManagementV1UpdateCheckoutSessionPost",
+        "description": "Fetches the shipping address associated with a session for an active cart ID",
+        "operationId": "amazonPayCheckoutSessionManagementGetShippingAddressGet",
         "parameters": [
           {
-            "$ref": "#/components/parameters/cartIdParam"
+            "$ref": "#/components/parameters/checkoutSessionIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "array of shipping addresses associated with the current session"
+                },
+                "examples": {
+                  "shippingResponse": {
+                    "$ref": "#/components/examples/shippingResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/V1/amazon-checkout-session/{checkout-session-id}/update": {
+      "post": {
+        "tags": [
+          "amazonPayCheckoutSessionManagement"
+        ],
+        "description": "Updates an Amazon checkout session with shipping and payment information set in a Magento checkout flow <br/><br/> * Requires a customer authentication token.",
+        "operationId": "amazonPayCheckoutSessionManagementUpdateCheckoutSessionPost",
+        "security": [
+          {
+            "bearerAuth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/checkoutSessionIdParam"
           }
         ],
         "responses": {
@@ -228,20 +222,17 @@
                 }
               }
             }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
           }
         }
       }
     },
-    "/V1/amazon-checkout-session/{cartId}/complete": {
+    "/V1/amazon-checkout-session/{checkout-session-id}/complete": {
       "post": {
         "tags": [
-          "amazonPayCheckoutSessionManagementV1"
+          "amazonPayCheckoutSessionManagement"
         ],
         "description": "Completes the checkout session and returns a success indicator and a Magento order ID <br/><br/> * Requires a customer authentication token.",
-        "operationId": "amazonPayCheckoutSessionManagementV1CompleteCheckoutSessionPost",
+        "operationId": "amazonPayCheckoutSessionManagementCompleteCheckoutSessionPost",
         "security": [
           {
             "bearerAuth": [
@@ -251,7 +242,7 @@
         ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/cartIdParam"
+            "$ref": "#/components/parameters/checkoutSessionIdParam"
           }
         ],
         "responses": {
@@ -266,44 +257,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
-          }
-        }
-      }
-    },
-    "/V1/amazon-checkout-session/{cartId}/cancel": {
-      "post": {
-        "tags": [
-          "amazonPayCheckoutSessionManagementV1"
-        ],
-        "description": "Cancels a checkout session associated with an active cart ID",
-        "operationId": "amazonPayCheckoutSessionManagementV1CancelCheckoutSessionPost",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/cartIdParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "200 Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                },
-                "example": [
-
-                ]
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/404notFound"
           }
         }
       }
@@ -317,58 +270,13 @@
       }
     },
     "parameters": {
-      "cartIdParam": {
-        "name": "cartId",
+      "checkoutSessionIdParam": {
+        "name": "checkout-session-id",
         "in": "path",
-        "description": "Magento cart ID associated with the active Amazon checkout session",
+        "description": "Amazin checkout session ID associated with the active cutomer cart/quote",
         "required": true,
         "schema": {
-          "type": "integer"
-        }
-      }
-    },
-    "responses": {
-      "404notFound": {
-        "description": "404 Not Found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/path-param-error"
-            },
-            "example": {
-              "message": "No such entity with %fieldName = %fieldValue",
-              "parameters": null,
-              "fieldName": "cartId",
-              "fieldValue": 164,
-              "trace": "#0 /var/www/html/vendor/magento/module-quote/Model/QuoteRepository.php(164): Magento\\Framework\\Exception\\NoSuchEntityException::singleField('cartId', 164)\n#1 /var/www/html/vendor/magento/framework/Interception/Interceptor.php(58):....Magento\\Framework\\App\\Bootstrap->run(Object(Magento\\Framework\\App\\Http\\Interceptor))\n\n          #18 {main}"
-            }
-          }
-        }
-      }
-    },
-    "schemas": {
-      "path-param-error": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "Error message indicating problematic parameter"
-          },
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "fieldName": {
-                "type": "string"
-              },
-              "fieldValue": {
-                "type": "integer"
-              }
-            }
-          },
-          "trace": {
-            "type": "string",
-            "description": "Stack trace"
-          }
+          "type": "string"
         }
       }
     },
@@ -387,6 +295,28 @@
           "{\"webCheckoutDetails\":{\"checkoutReviewReturnUrl\":\"https://app.m241.test/amazon_pay/login/checkout/\"},\"storeId\":\"amzn1.application-oa2-client.6f774de2482149b18e5df3796d0aef0f\"}",
           "sdlJgA81KWtzuhdOQ5n21E3fhBDqRAeTtzhLlH/w1Rpd/7z8FWVKR7QxTc1Xa7Z9wBc5vGUlFvE/PHnzpCmdUwTajsbxjrSTWz/whVCQRHzQ1FCg8Y7RB/1vUi0VP/5rUA7HKz+t0f/7QMW3AbplGRpjnOeGfGq78rBhexjCNq02UQfl3FCS8imkvyzvkNRHJXX9sJjcshacKYrILWW59eiealkRP2c47HpM7BVLMI6B3m172tyWsMmyujdf6rsIVmQskx6ODXLwHp/RtU1f5DRwSXBEbPvxfxBgmp52U52BGNn4RH+f9mf2Oa3HgvByyVo7kxak3cdrPE7iv0qE3A==",
           "AGMJ4CRQPX634UDIURL2FUZT"
+        ]
+      },
+      "shippingResponse": {
+        "summary": "Shipping address associated with Amazon account",
+        "value": [
+          {
+            "city": "Chicago",
+            "firstname": "Susie",
+            "lastname": "Smith",
+            "country_id": "US",
+            "street": [
+              "10 Ditka Ave",
+              "Suite 2500"
+            ],
+            "postcode": "60602",
+            "company": "",
+            "telephone": "800-000-0000",
+            "region": "Illinois",
+            "region_id": "23",
+            "region_code": "IL",
+            "email": "spencer+alpha@beargroup.com"
+          }
         ]
       },
       "updateResponseWithCheckoutSession": {
