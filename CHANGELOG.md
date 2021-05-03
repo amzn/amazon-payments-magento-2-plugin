@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.3.0
+* Added sort order to payment method config
+* Changed the REST requests to pass in the Amazon Checkout Session ID instead of the cart ID
+* Fixed bug where multiple url parameters would cause reloading in checkout
+* Fixed bug with the way serializer was called in Alexa notification processing
+* Fixed incorrect exception messaging in Alexa notification
+* Removed quote to Amazon Session mapping table
+* Updated how javascript customizations are implemented
+
 ## 5.2.0
 * Added Sign in with Amazon to the authentication modal
 * Fixed bug where pressing enter on a text input config field would open the file selector for Amazon Private Key
