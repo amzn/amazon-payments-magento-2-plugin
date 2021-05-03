@@ -8,6 +8,7 @@
 * Fixed incorrect exception messaging in Alexa notification
 * Removed quote to Amazon Session mapping table
 * Updated how javascript customizations are implemented
+* Updated the cart and success redirect behavior to be configurable
 
 ## 5.2.0
 * Added Sign in with Amazon to the authentication modal
