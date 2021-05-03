@@ -19,10 +19,4 @@
     <event name="shortcut_buttons_container">
         <observer name="amazon_pay_buttons" instance="Amazon\Pay\Observer\AddAmazonButton"/>
     </event>
-    <event name="checkout_cart_product_add_after">
-        <observer name="amazon_pay_checkout_session_clear" instance="Amazon\Pay\Observer\CheckoutSessionClear"/>
-    </event>
-    <event name="sales_quote_remove_item">
-        <observer name="amazon_pay_checkout_session_clear" instance="Amazon\Pay\Observer\CheckoutSessionClear"/>
-    </event>
 </config>

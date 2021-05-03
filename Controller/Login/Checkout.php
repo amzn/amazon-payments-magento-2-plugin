@@ -28,15 +28,13 @@ class Checkout extends \Amazon\Pay\Controller\Login
     public function execute()
     {
         $checkoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
+        if ($checkoutSessionId == '') {
+            return $this->_redirect('checkout/cart');
+        }
 
         try {
             $checkoutSession = $this->amazonAdapter->getCheckoutSession(
                 $this->storeManager->getStore()->getId(),
-                $checkoutSessionId
-            );
-
-            $this->checkoutSessionManagement->storeCheckoutSession(
-                $this->session->getQuote()->getId(),
                 $checkoutSessionId
             );
 

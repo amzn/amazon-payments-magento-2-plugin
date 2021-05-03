@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.2.0
+* Added Sign in with Amazon to the authentication modal
+* Fixed bug where pressing enter on a text input config field would open the file selector for Amazon Private Key
+* Fixed usage of a php8 str_contains so that installations that don't have the Symfony polyfill will still work correctly
+* Fixed issue that crawlers could trigger by hitting the login/checkout path without an Amazon checkout session
+* Modified Amazon Pay button rendering so that it will be triggered by customer data loading after the Amazon javascript runs
+* Updated MFTF tests to handle authentication popup that happens in desktop view now
+* Updated composer.json requires to specify a few additional dependencies that are used
+
 ## 5.1.0
 * General availability release
 * Added tests for refund, multi auth refund, and multi auth with capture initiated

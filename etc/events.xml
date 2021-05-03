@@ -19,9 +19,6 @@
     <event name="sales_order_shipment_track_save_after">
         <observer name="amazon_pay_sales_order_shipment_track_save_after" instance="Amazon\Pay\Observer\SalesOrderShipmentTrackAfter"/>
     </event>
-    <event name="sales_quote_merge_after">
-        <observer name="amazon_pay_sales_quote_merge_after" instance="Amazon\Pay\Observer\SalesQuoteMergeAfter"/>
-    </event>
     <event name="sales_order_payment_capture">
         <observer name="amazon_payment_order_payment_capture" instance="Amazon\Pay\Observer\OrderPaymentCapture" />
     </event>

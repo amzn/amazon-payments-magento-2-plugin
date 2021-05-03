@@ -158,6 +158,14 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazonlogin/active</config_path>
                         </field>
+                        <field id="sort_order" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sort Order</label>
+                            <frontend_class>validate-number</frontend_class>
+                            <config_path>payment/amazon_payment_v2/sort_order</config_path>
+                            <depends>
+                                <field id="amazonloggin">1</field>
+                            </depends>
+                        </field>
                     </group>
                     <group id="sales_options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sales Options</label>

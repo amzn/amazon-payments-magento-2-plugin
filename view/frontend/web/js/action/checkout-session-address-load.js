@@ -24,10 +24,10 @@ define([
     'use strict';
 
     return function (addressType, callback) {
-        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-session/:cartId/' + addressType + '-address', {
-            cartId: quote.getQuoteId()
+        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-session/:amazonSessionId/' + addressType + '-address', {
+            amazonSessionId: amazonStorage.getCheckoutSessionId()
         });
-
+     
         fullScreenLoader.startLoader();
 
         var handleResponse = function(data) {
