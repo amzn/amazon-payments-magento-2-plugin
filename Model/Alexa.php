@@ -128,7 +128,8 @@ class Alexa
                 new Phrase('Failed to lookup order transaction')
             );
         }
-        $response = $this->apiCall($order->getStoreId(), 'getCharge', [$transaction->getTxnId()]);
+        $txnId = str_replace('-capture', '', $transaction->getTxnId());
+        $response = $this->apiCall($order->getStoreId(), 'getCharge', [$txnId]);
         return $response['chargePermissionId'];
     }
 
