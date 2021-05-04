@@ -50,28 +50,4 @@ class CheckoutSession
     {
         return $this->checkoutSessionManagement->getConfig($this->session->getQuote());
     }
-
-    /**
-     * Clear Amazon Checkout Session Id
-     */
-    public function clearCheckoutSessionId()
-    {
-        $this->checkoutSessionManagement->cancelCheckoutSession($this->session->getQuote());
-    }
-
-    /**
-     * Get Amazon Checkout Session Id
-     */
-    public function getCheckoutSessionId()
-    {
-        return $this->checkoutSessionManagement->getCheckoutSession($this->session->getQuote());
-    }
-
-    /**
-     * Complete Amazon Checkout Session
-     */
-    public function completeCheckoutSession()
-    {
-        return $this->checkoutSessionManagement->completeCheckoutSession($this->session->getQuote());
-    }
 }

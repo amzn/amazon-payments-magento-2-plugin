@@ -51,11 +51,8 @@ class AuthorizationSaleRequestBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
-        try {
-            $amazonCheckoutSessionId = $this->sessionManagement->getCheckoutSession($payment->getOrder()->getQuoteId());
-        } catch (NoSuchEntityException $e) {
-            $amazonCheckoutSessionId = null;
-        }
+
+        $amazonCheckoutSessionId = $payment->getAdditionalInformation('amazon_session_id');
 
         if ($payment->getAmazonDisplayInvoiceAmount()) {
             $total = $payment->getAmazonDisplayInvoiceAmount();

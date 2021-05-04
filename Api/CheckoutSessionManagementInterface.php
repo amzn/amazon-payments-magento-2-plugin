@@ -21,57 +21,37 @@ namespace Amazon\Pay\Api;
 interface CheckoutSessionManagementInterface
 {
     /**
-     * @param mixed $cartId
      * @return mixed
      */
-    public function getConfig($cartId);
+    public function getConfig();
 
     /**
-     * @param mixed $cartId
-     * @param mixed $checkoutSessionId
+     * @param mixed $amazonSessionId
      * @return mixed
      */
-    public function storeCheckoutSession($cartId, $checkoutSessionId);
+    public function getShippingAddress($amazonSessionId);
 
     /**
-     * @param mixed $cartId
+     * @param mixed $amazonSessionId
      * @return mixed
      */
-    public function getShippingAddress($cartId);
+    public function getBillingAddress($amazonSessionId);
 
     /**
-     * @param mixed $cartId
-     * @return mixed
-     */
-    public function getBillingAddress($cartId);
-
-    /**
-     * @param mixed $cartId
+     * @param mixed $amazonSessionId
      * @return string
      */
-    public function getPaymentDescriptor($cartId);
+    public function getPaymentDescriptor($amazonSessionId);
 
     /**
-     * @param mixed $cartId
-     * @return void
-     */
-    public function cancelCheckoutSession($cartId);
-
-    /**
-     * @param mixed $cartId
+     * @param mixed $amazonSessionId
      * @return string
      */
-    public function getCheckoutSession($cartId);
+    public function updateCheckoutSession($amazonSessionId);
 
     /**
-     * @param mixed $cartId
-     * @return string
-     */
-    public function updateCheckoutSession($cartId);
-
-    /**
-     * @param mixed $cartId
+     * @param mixed $amazonSessionId
      * @return int
      */
-    public function completeCheckoutSession($cartId);
+    public function completeCheckoutSession($amazonSessionId);
 }

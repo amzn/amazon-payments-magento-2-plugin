@@ -38,11 +38,6 @@ class Checkout extends \Amazon\Pay\Controller\Login
                 $checkoutSessionId
             );
 
-            $this->checkoutSessionManagement->storeCheckoutSession(
-                $this->session->getQuote()->getId(),
-                $checkoutSessionId
-            );
-
             if (!$this->amazonConfig->isLwaEnabled()) {
                 $userInfo = $checkoutSession['buyer'];
                 if ($userInfo && isset($userInfo['email'])) {
@@ -84,7 +79,8 @@ class Checkout extends \Amazon\Pay\Controller\Login
             $this->_eventManager->dispatch('amazon_login_authorize_error', ['exception' => $e]);
         }
 
-        return $this->_redirect('checkout', ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]);
+        $checkoutUrl = $this->amazonConfig->getCheckoutReviewUrlPath();
+        return $this->_redirect($checkoutUrl, ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]);
     }
 
     protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
