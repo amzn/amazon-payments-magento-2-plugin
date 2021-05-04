@@ -1,6 +1,7 @@
 # Change Log
 
 ## 5.3.0
+* Support for OneStepCheckout v1.2.047+
 * Added sort order to payment method config
 * Changed the REST requests to pass in the Amazon Checkout Session ID instead of the cart ID
 * Fixed bug where multiple url parameters would cause reloading in checkout
