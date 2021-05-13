@@ -188,7 +188,11 @@ abstract class Login extends Action
                 $amazonCustomer = $this->amazonCustomerFactory->create($data);
 
                 return $amazonCustomer;
+
+            }else{
+                $this->logger->error('Amazon buyerId is empty. Token: ' . $token);    
             }
+
         } catch (\Exception $e) {
             $this->logger->error($e);
             $this->messageManager->addErrorMessage(__('Error processing Amazon Login'));
