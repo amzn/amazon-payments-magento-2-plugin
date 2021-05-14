@@ -39,8 +39,9 @@ require(['jquery', 'domReady!'], function ($) {
         // hide text row
         $('#row_payment_us_amazon_pay_credentials_private_key_text').hide();
         $('#payment_us_amazon_pay_credentials_private_key_text').val('------');
-        // hide selector row
+        // hide selector row & make non-inherited
         $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
+        $('#row_payment_us_amazon_pay_credentials_private_key_selector_inherit').prop('checked', true).click()
         // remove saved file feedback text
         $('#amazon_pay_private_key_pem_file_saved_msg').html('');
         // show pem row
@@ -59,8 +60,9 @@ require(['jquery', 'domReady!'], function ($) {
         $('#payment_us_amazon_pay_credentials_private_key_selected_inherit').prop('checked', true).click();
         // hide file row
         $('#row_payment_us_amazon_pay_credentials_private_key_pem').hide();
-        // hide selector row
+        // hide selector row & make non-inherited
         $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
+        $('#row_payment_us_amazon_pay_credentials_private_key_selector_inherit').prop('checked', true).click()
         // show text area row
         $('#row_payment_us_amazon_pay_credentials_private_key_text').show();
         // focus on field

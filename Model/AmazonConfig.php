@@ -393,7 +393,6 @@ class AmazonConfig
      *
      * @param string $scope
      * @param null $scopeCode
-     * @param null $store
      *
      * @return string
      */
@@ -407,11 +406,27 @@ class AmazonConfig
     }
 
     /**
+     * Return Private Key Selected method (text or pem)
+     *
+     * @param string $scope
+     * @param null $scopeCode
+     *
+     * @return string
+     */
+    public function getPrivateKeySelected($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/private_key_selected',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /**
      * Return Public Key
      *
      * @param string $scope
      * @param null $scopeCode
-     * @param null $store
      *
      * @return string
      */
@@ -429,7 +444,6 @@ class AmazonConfig
      *
      * @param string $scope
      * @param null $scopeCode
-     * @param null $store
      *
      * @return string
      */
