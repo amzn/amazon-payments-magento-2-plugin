@@ -222,6 +222,13 @@ class Alexa
         if ($this->canAddDeliveryNotification($track)) {
             $chargePermissionId = $this->getChargePermissionId($track->getShipment()->getOrder());
             $carrierCode = $this->getCarrierCode($track);
+
+            if ($carrierCode == "CUSTOM") {
+                throw new \Magento\Framework\Exception\NotFoundException(
+                    new Phrase('No matched Alexa Notification carrier for: ' . $track->getTitle())
+                );
+            }
+
             $response = $this->apiCall($track->getStoreId(), 'deliveryTrackers', [json_encode([
                 'amazonOrderReferenceId' => $chargePermissionId,
                 'deliveryDetails' => [[
