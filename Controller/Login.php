@@ -189,8 +189,8 @@ abstract class Login extends Action
 
                 return $amazonCustomer;
 
-            }else{
-                $this->logger->error('Amazon buyerId is empty. Token: ' . $token);    
+            } else {
+                $this->logger->error('Amazon buyerId is empty. Token: ' . $token);
             }
 
         } catch (\Exception $e) {
