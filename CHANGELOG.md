@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.4.0
+* Fixed credential validation when inheriting from parent scope
+* Fixed issue to properly handle when Amazon Pay returns empty buyer ID
+* Fixed issue with using Alexa notifications and custom carriers
+
 ## 5.3.0
 * Added sort order to payment method config
 * Changed the REST requests to pass in the Amazon Checkout Session ID instead of the cart ID
