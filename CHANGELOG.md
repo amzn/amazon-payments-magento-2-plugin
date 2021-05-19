@@ -4,6 +4,7 @@
 * Fixed credential validation when inheriting from parent scope
 * Fixed issue to properly handle when Amazon Pay returns empty buyer ID
 * Fixed issue with using Alexa notifications and custom carriers
+* Fixed issue where a quote could be submitted to Magento multiple times
 
 ## 5.3.0
 * Added sort order to payment method config
