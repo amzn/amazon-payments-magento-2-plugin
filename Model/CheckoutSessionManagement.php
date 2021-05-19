@@ -234,6 +234,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     protected function canSubmitQuote($quote)
     {
+        if (!$quote->getIsActive()) return false;
+        
         $orderCollection = $this->orderCollectionFactory->create()
             ->addFieldToSelect('increment_id')
             ->addFieldToFilter('quote_id', ['eq' => $quote->getId()]);
