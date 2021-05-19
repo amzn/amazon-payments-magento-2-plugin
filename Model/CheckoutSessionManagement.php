@@ -132,6 +132,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $carts = [];
 
     /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     */
+    private $orderCollectionFactory;
+
+    /**
      * CheckoutSessionManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
@@ -151,6 +156,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Amazon\Pay\Model\AsyncManagement\Charge $asyncCharge
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -170,7 +176,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Amazon\Pay\Model\AsyncManagement $asyncManagement,
         \Amazon\Pay\Model\AsyncManagement\Charge $asyncCharge,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -190,6 +197,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->asyncCharge = $asyncCharge;
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->orderCollectionFactory = $orderCollectionFactory;
     }
 
     /**
@@ -214,6 +222,23 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     {
         return $this->amazonConfig->isEnabled() &&
             !$this->amazonHelper->hasRestrictedProducts($this->magentoCheckoutSession->getQuote());
+    }
+
+    /**
+     * In some particular cases an error occurs in Magento where an order with the same quoteId
+     * is duplicated in a very short time difference.
+     * This method checks if there is already an order created for that particular Quote.
+     * https://github.com/magento/magento2/issues/13952
+     * @param Quote $quote
+     * @return bool
+     */
+    protected function canSubmitQuote($quote)
+    {
+        $orderCollection = $this->orderCollectionFactory->create()
+            ->addFieldToSelect('increment_id')
+            ->addFieldToFilter('quote_id', ['eq' => $quote->getId()]);
+ 
+        return ($orderCollection->count() == 0);
     }
 
     /**
@@ -501,7 +526,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     {
         $cart = $this->magentoCheckoutSession->getQuote();
 
-        if (empty($amazonSessionId) || !$this->canCheckoutWithAmazon()) {
+        if (empty($amazonSessionId) || !$this->canCheckoutWithAmazon() || !$this->canSubmitQuote($cart)) {
             return [
                 'success' => false,
                 'message' => __("Unable to complete Amazon Pay checkout"),
