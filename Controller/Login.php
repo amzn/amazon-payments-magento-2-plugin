@@ -178,7 +178,7 @@ abstract class Login extends Action
             $userInfo = $this->amazonAdapter
                 ->getBuyer($token);
 
-            if (is_array($userInfo) && isset($userInfo['buyerId'])) {
+            if (is_array($userInfo) && !empty($userInfo['buyerId'])) {
                 $data = [
                     'id'      => $userInfo['buyerId'],
                     'email'   => $userInfo['email'],
@@ -188,7 +188,11 @@ abstract class Login extends Action
                 $amazonCustomer = $this->amazonCustomerFactory->create($data);
 
                 return $amazonCustomer;
+
+            } else {
+                $this->logger->error('Amazon buyerId is empty. Token: ' . $token);
             }
+
         } catch (\Exception $e) {
             $this->logger->error($e);
             $this->messageManager->addErrorMessage(__('Error processing Amazon Login'));
