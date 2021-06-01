@@ -29,6 +29,8 @@ define([
             hideIfUnavailable: ''
         },
 
+        drawing: false,
+
         _loadButtonConfig: function (callback) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                 if (!$.isEmptyObject(checkoutSessionConfig)) {
@@ -84,17 +86,25 @@ define([
         * Draw button
         **/
         _draw: function () {
-            var $buttonContainer = this.element;
-            amazonCheckout.withAmazonCheckout(function (amazon, args) {
-                var $buttonRoot = $('<div></div>');
-                $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
-                $buttonContainer.empty().append($buttonRoot);
-                this._loadButtonConfig(function (buttonConfig) {
-                    amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
-                    $('.amazon-button-container .field-tooltip').fadeIn();
-                    $('.amazon-checkout-button').click(function() { customerData.invalidate('*'); });
-                });
-            }, this);
+            var self = this;
+            
+            if (!this.drawing) {
+                this.drawing = true;
+                var $buttonContainer = this.element;
+                amazonCheckout.withAmazonCheckout(function (amazon, args) {
+                    var $buttonRoot = $('<div></div>');
+                    $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
+                    $buttonContainer.empty().append($buttonRoot);
+
+                    this._loadButtonConfig(function (buttonConfig) {
+                        amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
+                        $('.amazon-button-container .field-tooltip').fadeIn();
+                        $('.amazon-checkout-button').click(function() { customerData.invalidate('*'); });
+
+                        self.drawing = false;
+                    });
+                }, this);
+            }
         },
 
         /**
