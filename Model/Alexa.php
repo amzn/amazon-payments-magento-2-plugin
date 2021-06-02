@@ -17,6 +17,7 @@
 namespace Amazon\Pay\Model;
 
 use Amazon\Pay\Client\ClientFactoryInterface;
+use Amazon\Pay\Logger\AlexaLogger;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -61,6 +62,11 @@ class Alexa
     private $serializer;
 
     /**
+     * @var \Amazon\Pay\Logger\AlexaLogger
+     */
+    private $alexaLogger;
+
+    /**
      * @param AmazonConfig $amazonConfig
      * @param ClientFactoryInterface $clientFactory
      * @param Payment\Transaction\Repository $transactionRepository
@@ -74,7 +80,8 @@ class Alexa
         Dir $moduleDir,
         \Magento\Framework\File\Csv $csv,
         \Magento\Framework\Config\CacheInterface $cache,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        AlexaLogger $alexaLogger
     ) {
         $this->amazonConfig = $amazonConfig;
         $this->clientFactory = $clientFactory;
@@ -83,6 +90,7 @@ class Alexa
         $this->csv = $csv;
         $this->cache = $cache;
         $this->serializer = $serializer;
+        $this->alexaLogger = $alexaLogger;
     }
 
     /**
@@ -96,15 +104,55 @@ class Alexa
     {
         $client = $this->clientFactory->create($storeId, ScopeInterface::SCOPE_STORE);
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $data = call_user_func_array([$client, $method], $arguments);
-        $status = $data['status'];
-        $response = json_decode($data['response'], true);
+        $clientResponse = call_user_func_array([$client, $method], $arguments);
+
+        $response = $this->processResponse($clientResponse, $method);
+
+        $status = isset($response['status']) ? $response['status'] : '';
+    
         if ($status != '200') {
             $errorMessage = __('API error:') . ' (' . $status . ') ';
             $errorMessage .= !empty($response['reasonCode']) ? $response['reasonCode'] . ': ' : '';
             $errorMessage .= !empty($response['message']) ? $response['message'] : '';
             throw new \Magento\Framework\Exception\StateException(new Phrase($errorMessage));
         }
+        return $response;
+    }
+
+    /**
+     * Process SDK client response
+     *
+     * @param $clientResponse
+     * @param $functionName
+     * @return array
+     */
+    protected function processResponse($clientResponse, $functionName)
+    {
+        $response = [];
+
+        if (!isset($clientResponse['response'])) {
+            $this->alexaLogger->debug(__('Unable to ' . $functionName));
+        } else {
+            $response = json_decode($clientResponse['response'], true);
+        }
+
+        // Add HTTP response status code
+        if (isset($clientResponse['status'])) {
+            $response['status'] = $clientResponse['status'];
+        }
+
+        // Log
+        $isError = (!isset($response['status']) || !in_array($response['status'], [200, 201]));
+        if ($isError || $this->amazonConfig->isLoggingEnabled()) {
+            $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+            $this->alexaLogger->debug($functionName . ' <- ', $debugBackTrace[1]['args']);
+            if ($isError) {
+                $this->alexaLogger->error($functionName . ' -> ', $response);
+            } else {
+                $this->alexaLogger->debug($functionName . ' -> ', $response);
+            }
+        }
+
         return $response;
     }
 
@@ -224,6 +272,11 @@ class Alexa
             $carrierCode = $this->getCarrierCode($track);
 
             if ($carrierCode == "CUSTOM") {
+                $this->alexaLogger->debug('addDeliveryNotification: -> No matched Alexa Notification carrier for: ' .
+                                          $track->getTitle() .
+                                          ' - merchantReferenceId: ' .
+                                          $track->getShipment()->getOrder()->getIncrementId());
+
                 throw new \Magento\Framework\Exception\NotFoundException(
                     new Phrase('No matched Alexa Notification carrier for: ' . $track->getTitle())
                 );
