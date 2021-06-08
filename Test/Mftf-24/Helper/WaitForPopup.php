@@ -9,7 +9,6 @@ class WaitForPopup extends Helper {
     public function waitForPopup() {
         /** @var \Magento\FunctionalTestingFramework\Module\MagentoWebDriver $webDriver */
         $webDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
-        $allMods = $this->getModules();
 
         try {
             $webDriver->executeInSelenium(function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {
