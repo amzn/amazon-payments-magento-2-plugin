@@ -178,7 +178,7 @@ abstract class Login extends Action
             $userInfo = $this->amazonAdapter
                 ->getBuyer($token);
 
-            if (is_array($userInfo) && !empty($userInfo['buyerId'])) {
+            if (is_array($userInfo) && array_key_exists('buyerId', $userInfo) && !empty($userInfo['buyerId'])) {
                 $data = [
                     'id'      => $userInfo['buyerId'],
                     'email'   => $userInfo['email'],

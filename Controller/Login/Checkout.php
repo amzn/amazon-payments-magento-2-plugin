@@ -121,8 +121,7 @@ class Checkout extends \Amazon\Pay\Controller\Login
     protected function getAmazonCustomerFromSession($checkoutSession)
     {
         $userInfo = $checkoutSession['buyer'];
-
-        if (is_array($userInfo) && array_key_exists('buyerId', $userInfo)) {
+        if (is_array($userInfo) && array_key_exists('buyerId', $userInfo) && !empty($userInfo['buyerId'])) {
             $data = [
                 'id' => $userInfo['buyerId'],
                 'email' => $userInfo['email'],
@@ -131,6 +130,8 @@ class Checkout extends \Amazon\Pay\Controller\Login
             ];
 
             return $data;
+        } else {
+            $this->logger->error('Amazon buyerId is empty');
         }
 
         return false;
@@ -143,7 +144,10 @@ class Checkout extends \Amazon\Pay\Controller\Login
     protected function createAmazonCustomerFromSession($checkoutSession)
     {
         $data = $this->getAmazonCustomerFromSession($checkoutSession);
-
-        return $this->amazonCustomerFactory->create($data);
+        if ($data) {
+            return $this->amazonCustomerFactory->create($data);
+        } else {
+            return false;
+        }
     }
 }
