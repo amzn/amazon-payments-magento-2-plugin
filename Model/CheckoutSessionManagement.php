@@ -241,7 +241,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $orderCollection = $this->orderCollectionFactory->create()
             ->addFieldToSelect('increment_id')
             ->addFieldToFilter('quote_id', ['eq' => $quote->getId()]);
- 
+
         return ($orderCollection->count() == 0);
     }
 
@@ -309,20 +309,27 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     {
         $result = [];
         if ($this->canCheckoutWithAmazon()) {
+            $magentoQuote = $this->magentoCheckoutSession->getQuote();
             $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
             $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+            $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
+                $magentoQuote,
+                $this->amazonConfig->getPaymentAction()
+            );
 
             $result = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
                 'button_color' => $this->amazonConfig->getButtonColor(),
                 'language' => $this->amazonConfig->getLanguage(),
-                'pay_only' => $this->amazonHelper->isPayOnly($this->magentoCheckoutSession->getQuote()),
+                'pay_only' => $this->amazonHelper->isPayOnly($magentoQuote),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),
                 'login_payload' => $loginButtonPayload,
                 'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
                 'checkout_payload' => $checkoutButtonPayload,
                 'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
+                'paynow_payload' => $payNowButtonPayload,
+                'paynow_signature' => $this->amazonAdapter->signButton($payNowButtonPayload),
                 'public_key_id' => $this->amazonConfig->getPublicKeyId(),
             ];
         }
@@ -551,6 +558,25 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     'success' => false,
                     'message' => $this->getCanceledMessage($amazonSession),
                 ];
+            }
+
+            if ($amazonSession['productType'] == 'PayOnly') {
+                $addressData = $amazonSession['billingAddress'];
+
+                $addressData['state'] = $addressData['stateOrRegion'];
+                $addressData['phone'] = $addressData['phoneNumber'];
+
+                $address = array_combine(
+                    array_map('ucfirst', array_keys($addressData)),
+                    array_values($addressData)
+                );
+                $amazonAddress  = $this->amazonAddressFactory->create(['address' => $address]);
+
+                $customerAddress = $this->addressHelper->convertToMagentoEntity($amazonAddress);
+                $cart->getBillingAddress()->importCustomerAddressData($customerAddress);
+                if (empty($cart->getCustomerEmail())) {
+                    $cart->setCustomerEmail($amazonSession['buyer']['email']);
+                }
             }
 
             // get payment to load it in the session, so that a salesrule that relies on payment method conditions

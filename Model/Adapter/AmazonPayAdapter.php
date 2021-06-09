@@ -16,6 +16,9 @@
 
 namespace Amazon\Pay\Model\Adapter;
 
+use Amazon\Pay\Model\Config\Source\PaymentAction;
+use Magento\Quote\Model\Quote;
+
 class AmazonPayAdapter
 {
     const PAYMENT_INTENT_CONFIRM = 'Confirm';
@@ -470,6 +473,51 @@ class AmazonPayAdapter
 
         if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
             $payload['deliverySpecifications'] = $deliverySpecs;
+        }
+
+        return json_encode($payload, JSON_UNESCAPED_SLASHES);
+    }
+
+    public function generatePayNowButtonPayload(Quote $quote, $paymentIntent = PaymentAction::AUTHORIZE)
+    {
+        // Always use Authorize for now, so that async transactions are handled properly
+        $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE;
+
+        $payload = [
+            'webCheckoutDetails' => [
+                'checkoutMode' => 'ProcessOrder',
+                'checkoutResultReturnUrl' => $this->amazonConfig->getPayNowResultUrl(),
+            ],
+            'storeId' => $this->amazonConfig->getClientId(),
+
+            'paymentDetails' => [
+                'paymentIntent' => $paymentIntent,
+                'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
+                'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
+            ],
+            'merchantMetadata' => [
+                'merchantReferenceId' => $quote->getReservedOrderId(),
+                'merchantStoreName' => $this->amazonConfig->getStoreName(),
+                'customInformation' => $this->getMerchantCustomInformation(),
+            ],
+        ];
+
+        $address = $quote->getShippingAddress();
+        if (!empty($address->getPostcode())) {
+            $addressData = [
+                'name' => $address->getName(),
+                'city' => $address->getCity(),
+                'stateOrRegion' => $address->getRegionCode(),
+                'postalCode' => $address->getPostcode(),
+                'countryCode' => $address->getCountry(),
+                'phoneNumber' => $address->getTelephone(),
+            ];
+            foreach ($address->getStreet() as $index => $streetLine) {
+                $addressKey = 'addressLine' . ($index + 1);
+                $addressData[$addressKey] = $streetLine;
+            }
+
+            $payload['addressDetails'] = $addressData;
         }
 
         return json_encode($payload, JSON_UNESCAPED_SLASHES);
