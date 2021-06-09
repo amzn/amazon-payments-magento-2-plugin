@@ -12,11 +12,8 @@ class WaitForPopup extends Helper {
 
         try {
             $webDriver->executeInSelenium(function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {
-                // Allow popup to appear before switching tabs
-                $handles = $webdriver->getWindowHandles();
-                while(count($handles) < 2) {
-                    $handles = $webdriver->getWindowHandles();
-                }
+                // Wait for up to 30 seconds, poll every 100ms
+                $webdriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
             });
         } catch(\Exception $e) {
             print($e);

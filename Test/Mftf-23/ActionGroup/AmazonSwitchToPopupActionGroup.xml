@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AmazonSwitchToPopupActionGroup">
+        <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {$webdriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));}" stepKey="allowPopupToOpen" />
+    </actionGroup>
+</actionGroups>

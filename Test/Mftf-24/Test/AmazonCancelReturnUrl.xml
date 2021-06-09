@@ -34,7 +34,7 @@
         <!--Save opener window name since popup auto-closes-->
         <executeJS function="return window.name;" stepKey="openerName"/>
         <click selector="{{AmazonLoginSection.login}}" stepKey="signInWithAmazon"/>
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\WaitForPopup" method="waitForPopup" stepKey="allowPopupToOpen" />
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
         <switchToNextTab stepKey="switchToWindowLoginPopup"/>
 
         <!-- Login to Amazon -->
@@ -58,7 +58,7 @@
         <!-- Click Amazon Pay button on product page and login -->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
 
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\WaitForPopup" method="waitForPopup" stepKey="allowPopupToOpen2" />
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
         <switchToNextTab stepKey="switchToWindowLoginPopup2"/>
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
 
@@ -69,7 +69,7 @@
 
         <!-- Click edit button on address -->
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\WaitForPopup" method="waitForPopup" stepKey="allowPopupToOpen3" />
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen3" />
         <switchToNextTab stepKey="switchToAddressEditPopup"/>
         <waitForElement selector="{{AmazonPageSection.cancelButton}}" stepKey="waitForCancelCheckout"/>
 

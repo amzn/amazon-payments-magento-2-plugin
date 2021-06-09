@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AmazonSwitchToPopupActionGroup">
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\WaitForPopup" method="waitForPopup" stepKey="allowPopupToOpen" />
+    </actionGroup>
+</actionGroups>
