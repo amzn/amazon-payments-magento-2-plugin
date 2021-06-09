@@ -34,8 +34,7 @@
         <!--Save opener window name since popup auto-closes-->
         <executeJS function="return window.name;" stepKey="openerName"/>
         <click selector="{{AmazonLoginSection.login}}" stepKey="signInWithAmazon"/>
-        <wait time="1" stepKey="allowPopupToOpen"/>
-        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
 
         <!-- Login to Amazon -->
         <actionGroup ref="AmazonBeginLoginOnlyActionGroup" stepKey="amazonBeginLoginOnlyActionGroup"/>
@@ -58,8 +57,7 @@
         <!-- Click Amazon Pay button on product page and login -->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
 
-        <wait time="1" stepKey="allowPopupToOpen2"/>
-        <switchToNextTab stepKey="switchToWindowLoginPopup2"/>
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
 
         <!--Come back to checkout with default address-->
@@ -69,8 +67,7 @@
 
         <!-- Click edit button on address -->
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
-        <wait time="1" stepKey="allowPopupToOpen3"/>
-        <switchToNextTab stepKey="switchToAddressEditPopup"/>
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen3" />
         <waitForElement selector="{{AmazonPageSection.cancelButton}}" stepKey="waitForCancelCheckout"/>
 
         <!-- Click cancel button on Amazon hosted page -->
