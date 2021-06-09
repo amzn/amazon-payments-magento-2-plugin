@@ -35,7 +35,6 @@
         <executeJS function="return window.name;" stepKey="openerName"/>
         <click selector="{{AmazonLoginSection.login}}" stepKey="signInWithAmazon"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
-        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
 
         <!-- Login to Amazon -->
         <actionGroup ref="AmazonBeginLoginOnlyActionGroup" stepKey="amazonBeginLoginOnlyActionGroup"/>
@@ -59,7 +58,6 @@
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
 
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
-        <switchToNextTab stepKey="switchToWindowLoginPopup2"/>
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
 
         <!--Come back to checkout with default address-->
@@ -70,7 +68,6 @@
         <!-- Click edit button on address -->
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen3" />
-        <switchToNextTab stepKey="switchToAddressEditPopup"/>
         <waitForElement selector="{{AmazonPageSection.cancelButton}}" stepKey="waitForCancelCheckout"/>
 
         <!-- Click cancel button on Amazon hosted page -->
