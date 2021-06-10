@@ -482,6 +482,7 @@ class AmazonPayAdapter
     {
         // Always use Authorize for now, so that async transactions are handled properly
         $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE;
+        $currencyCode = $quote->getQuoteCurrencyCode();
 
         $payload = [
             'webCheckoutDetails' => [
@@ -493,7 +494,8 @@ class AmazonPayAdapter
             'paymentDetails' => [
                 'paymentIntent' => $paymentIntent,
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
-                'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
+                'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $currencyCode),
+                'presentmentCurrency' => $currencyCode,
             ],
             'merchantMetadata' => [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
