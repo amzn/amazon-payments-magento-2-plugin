@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutPayNowSuccess" extends="AmazonCheckoutButton">
+    <test name="AmazonCheckoutPayNowMulticurrencySuccess" extends="AmazonCheckoutButton">
         <annotations>
-            <stories value="Amazon Checkout"/>
-            <title value="Amazon Checkout Pay Now Success"/>
-            <description value="User should get declined message when Amazon Rejects the payment."/>
+            <stories value="Amazon Checkout Pay Now Multicurrency"/>
+            <title value="Amazon Checkout Pay Now Multicurrency Success"/>
+            <description value="User should be able to checkout with Amazon Pay via Pay Now when multicurrency is enabled and they are using a supported currency."/>
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
             <group value="amazon_pay_checkout"/>
+            <group value="amazon_pay_multicurrency"/>
             <group value="amazon_pay_paynow"/>
         </annotations>
+
+        <before>
+            <createData entity="EUAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData" before="flushCache"/>
+            <createData entity="EUAmazonCurrencyConfig" stepKey="SampleAmazonCurrencyConfig" before="flushCache"/>
+            <!-- set default currency to one supported for multicurrency -->
+            <magentoCLI command="config:set currency/options/default USD" stepKey="setDefaultCurrency" before="flushCache"/>
+            <!-- disable multicurrency -->
+            <magentoCLI command="config:set payment/amazon_payment/multicurrency 1" stepKey="setMulticurrency" before="flushCache"/>
+        </before>
+
+        <after>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="DefaultAmazonPaymentConfig"/>
+            <createData entity="DefaultAmazonCurrencyConfig" stepKey="DefaultAmazonCurrencyConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
 
         <!-- shipping-->
         <actionGroup ref="ShipmentFormActionGroup" stepKey="fillShipping" />
@@ -23,7 +39,6 @@
         <executeJS function="return window.name;" stepKey="openerName"/>
         <click selector="{{AmazonButtonSection.payment}}" stepKey="clickAmazonPay" />
 
-        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="switchToPopup" />
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin" />
 
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AmazonCheckoutPayNowDeclinedTest" extends="AmazonCheckoutButton">
+    <test name="AmazonCheckoutPayNowDeclined" extends="AmazonCheckoutButton">
         <annotations>
             <stories value="Amazon Checkout"/>
             <title value="Amazon Checkout Pay Now Declined"/>
@@ -8,6 +8,7 @@
             <severity value="CRITICAL"/>
             <group value="amazon_pay"/>
             <group value="amazon_pay_checkout"/>
+            <group value="amazon_pay_paynow"/>
         </annotations>
 
         <!-- shipping-->
