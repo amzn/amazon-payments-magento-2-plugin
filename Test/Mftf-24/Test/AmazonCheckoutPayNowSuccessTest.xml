@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutPayNowSuccessTest" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Checkout"/>
+            <title value="Amazon Checkout Pay Now Success"/>
+            <description value="User should get declined message when Amazon Rejects the payment."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_checkout"/>
+        </annotations>
+
+        <!-- shipping-->
+        <actionGroup ref="ShipmentFormActionGroup" stepKey="fillShipping" />
+
+        <!-- amazon pay option -->
+        <click selector="{{AmazonCheckoutSection.method}}" stepKey="chooseAmazonMethod" />
+        <waitForPageLoad stepKey="waitForPayButton" />
+
+        <!-- amazon pay button -->
+        <waitForElement selector="{{AmazonButtonSection.payment}}" stepKey="seeAmazonPay" />
+        <executeJS function="return window.name;" stepKey="openerName"/>
+        <click selector="{{AmazonButtonSection.payment}}" stepKey="clickAmazonPay" />
+
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="switchToPopup" />
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin" />
+
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />
+        <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="payNow" />
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
+
+        <waitForPageLoad stepKey="checkoutSuccessLoad" />
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForProcess" />
+
+        <seeInCurrentUrl url="/checkout/onepage/success" stepKey="verifySuccess" />
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{CONST.successGuestCheckoutOrderNumberMessage}}" stepKey="seeOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{CONST.successCheckoutEmailYouMessage}}" stepKey="seeEmailYou"/>
+    </test>
+</tests>
