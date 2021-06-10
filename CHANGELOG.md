@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.5.0
+* Added Auto Key Exchange for configuring the credentials
+* Added PayNow functionality for the button on the final step of checkout
+* Added more logging to the Alexa feature
+* Added more logging to capturing flow
+* Added validation that Amazon API always returns a buyerId
+* Fixed admin stylesheets for non-US locale
+* Fixed race condition that could happen when re-drawing the button
+
 ## 5.4.0
 * Fixed credential validation when inheriting from parent scope
 * Fixed issue to properly handle when Amazon Pay returns empty buyer ID
