@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+/* @var \Amazon\Pay\Block\Adminhtml\System\Config\AutoKeyExchangeAdmin $block */
+?>
+
+<br/>
+
+
+<div data-mage-init='{
+        "Amazon_Pay/js/autokeyexchange": <?= $block->escapeHtml($block->getJsonConfig()) ?> }'
+     id="amazon_autokeyexchange">
+    <?php if (!$block->getCurrency()): // Auto Key Exchange not supported ?>
+        <div id="autokeyexchange_unsupported">
+            <?= $block->escapeHtml(__('An unsupported currency is currently selected. ' .
+                'Please review our configuration guide.')); ?>
+            <span class="note">
+                <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html" target="_blank">
+                (<?= $block->escapeHtml(__('More Information')); ?>)
+                </a>
+            </span>
+        </div>
+
+    <?php else: ?>
+        <div id="autokeyexchange-hint">
+            <?= $block->escapeHtml(
+                __(
+                    'You will be registering/configuring for a %1 account based on the display ' .
+                    'currency of your scope (%2).',
+                    $block->getRegion(),
+                    $block->getCurrency()
+                )
+            ); ?>
+            <span class="note">
+                <a href="https://amzn.github.io/amazon-payments-magento-2-plugin/overview.html" target="_blank">
+                    (<?= $block->escapeHtml(__('More Information')); ?>)
+                </a>
+            </span>
+        </div>
+
+        <span class="apake-getstarted">
+          <button>
+              <span><?= $block->escapeHtml(__('Initiate account registration/configuration')); ?></span>
+          </button>
+        </span>
+        <span class="apake-or">
+        &nbsp; <?= $block->escapeHtml(__('or')); ?> &nbsp;
+          <a href="#" id="autokeyexchange-skip">
+            <?= $block->escapeHtml(__("I've already setup Amazon Pay, I want to edit my settings")); ?>
+          </a>
+        </span>
+        <p id="amazon_https_required">
+            <?= $block->escapeHtml(__("In order to enable automatic account configuration using Amazon's secure key " .
+                'exchange, please turn on secure admin pages in General > Web > Use secure URLs in Admin.')); ?>
+        </p>
+        <p id="amazon_reload">
+            <?= $block->escapeHtml(__('Updating your config with new keys, please wait...')); ?>
+        </p>
+        <div class="reset-auto-key-exchange">
+            <button id="reset-auto-key-exchange-button" type="button">
+                <?= /* @noEscape */ __('Reset account registration/configuration') ?>
+            </button>
+            <br />
+            <span id="reset-auto-key-exchange-message">
+                <?= /* @noEscape */ __('Please wait, resetting Amazon configuration. Once the page reloads, ' .
+                'please retry initiating account registration/configuration.'); ?>
+            </span>
+        </div>
+    <?php endif; ?>
+</div>
+
+<div id="amazon_autokeyexchange_back">
+    <a href="#">&laquo; <?= $block->escapeHtml(__('Back to register or connect an account')); ?></a>
+</div>
