@@ -488,6 +488,7 @@ class AmazonPayAdapter
             'webCheckoutDetails' => [
                 'checkoutMode' => 'ProcessOrder',
                 'checkoutResultReturnUrl' => $this->amazonConfig->getPayNowResultUrl(),
+                'checkoutCancelUrl' => $this->getCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
 
