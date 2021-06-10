@@ -34,6 +34,14 @@ define([
         _loadButtonConfig: function (callback) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                 if (!$.isEmptyObject(checkoutSessionConfig)) {
+                    var payload = (this.options.placement === 'PayNow') ?
+                        checkoutSessionConfig['paynow_payload'] : checkoutSessionConfig['checkout_payload'];
+                    var signature = (this.options.placement === 'PayNow') ?
+                        checkoutSessionConfig['paynow_signature'] : checkoutSessionConfig['checkout_signature'];
+                    if (this.options.placement === 'PayNow') {
+                        this.options.placement = 'Checkout';
+                    }
+
                     callback({
                         merchantId: checkoutSessionConfig['merchant_id'],
                         ledgerCurrency: checkoutSessionConfig['currency'],
@@ -43,13 +51,13 @@ define([
                         placement: this.options.placement,
                         buttonColor: checkoutSessionConfig['button_color'],
                         createCheckoutSessionConfig: {
-                            payloadJSON: checkoutSessionConfig['checkout_payload'],
-                            signature: checkoutSessionConfig['checkout_signature'],
+                            payloadJSON: payload,
+                            signature: signature,
                             publicKeyId: checkoutSessionConfig['public_key_id'],
                         }
                     });
 
-                    if (this.options.placement !== "Checkout") {
+                    if (this.options.placement !== "Checkout" && this.options.placement !== "PayNow") {
                         $(this.options.hideIfUnavailable).show();
                     }
                 } else {
