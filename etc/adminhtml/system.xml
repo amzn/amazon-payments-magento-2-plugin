@@ -80,7 +80,7 @@
                         <config_path>payment/amazon_payment/payment_region</config_path>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
-                    <field id="sandbox" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sandbox" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sandbox</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment/sandbox</config_path>

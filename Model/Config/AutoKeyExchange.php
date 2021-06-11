@@ -76,19 +76,71 @@ class AutoKeyExchange
      * @var AmazonConfig
      */
     private $amazonConfig;
-    private \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config;
-    private \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
-    private \Magento\Framework\App\ProductMetadataInterface $productMeta;
-    private \Magento\Framework\Encryption\EncryptorInterface $encryptor;
-    private UrlInterface $backendUrl;
-    private \Magento\Framework\App\Cache\Manager $cacheManager;
-    private \Magento\Framework\App\ResourceConnection $connection;
-    private State $state;
-    private \Magento\Framework\App\Request\Http $request;
-    private \Magento\Store\Model\StoreManagerInterface $storeManager;
-    private \Psr\Log\LoggerInterface $logger;
-    private \Magento\Framework\Message\ManagerInterface $messageManager;
-    private \Magento\Framework\Math\Random $mathRandom;
+
+    /**
+     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    private $productMeta;
+
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
+     * @var UrlInterface
+     */
+    private $backendUrl;
+
+    /**
+     * @var \Magento\Framework\App\Cache\Manager
+     */
+    private $cacheManager;
+
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $connection;
+
+    /**
+     * @var State
+     */
+    private $state;
+
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
 
     /**
      * @param AmazonHelper $coreHelper
@@ -387,7 +439,9 @@ class AutoKeyExchange
         }
         $this->config->saveConfig(
             'payment/amazon_payment/sandbox',
-            '0'
+            '0',
+            $this->_scope,
+            $this->_scopeId
         );
 
         if ($autoEnable) {
