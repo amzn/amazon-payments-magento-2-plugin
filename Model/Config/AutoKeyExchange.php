@@ -439,7 +439,9 @@ class AutoKeyExchange
         }
         $this->config->saveConfig(
             'payment/amazon_payment/sandbox',
-            '0'
+            '0',
+            $this->_scope,
+            $this->_scopeId
         );
 
         if ($autoEnable) {
