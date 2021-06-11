@@ -3,6 +3,24 @@ var jQuery = (typeof(window) != 'undefined') ? window.jQuery : require('jquery')
 
 // Sphinx theme nav state
 function ThemeNav () {
+    var delta = 5;
+
+    /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
+    var prevScrollpos = window.pageYOffset;
+    window.onscroll = function() {
+      var currentScrollPos = window.pageYOffset;
+
+        
+      if(Math.abs(prevScrollpos - currentScrollPos) <= delta)
+        return
+
+      if ((prevScrollpos > currentScrollPos) || (currentScrollPos < 25)) {
+        $("nav.wy-nav-top").css("top", "0px");
+      } else {
+        $("nav.wy-nav-top").css("top", "-50px");
+      }
+      prevScrollpos = currentScrollPos;
+    }
 
     var nav = {
         navBar: null,
@@ -151,3 +169,5 @@ if (typeof(window) != 'undefined') {
 }
 
 },{"jquery":"jquery"}]},{},["sphinx-rtd-theme"]);
+
+window.SphinxRtdTheme.StickyNav.enable();
