@@ -6,7 +6,9 @@
 * Added more logging to the Alexa feature
 * Added more logging to capturing flow
 * Added validation that Amazon API always returns a buyerId
+* Changed Sandbox config to be available at store view scope
 * Fixed admin stylesheets for non-US locale
+* Fixed issue with one Amazon account logging into multiple stores (thanks @flaviy!)
 * Fixed race condition that could happen when re-drawing the button
 
 ## 5.4.0
@@ -21,7 +23,7 @@
 * Changed the REST requests to pass in the Amazon Checkout Session ID instead of the cart ID
 * Fixed bug where multiple url parameters would cause reloading in checkout
 * Fixed bug with the way serializer was called in Alexa notification processing
-* Fixed incorrect exception messaging in Alexa notification
+* Fixed incorrect exception messaging in Alexa notification (thanks @dmitriyklyuzov!)
 * Removed quote to Amazon Session mapping table
 * Updated how javascript customizations are implemented
 * Updated the cart and success redirect behavior to be configurable
