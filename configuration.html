@@ -40,6 +40,13 @@
                         href="#ipn-url">IPN URL</a></li>
                   </ul>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="#autokey-exchange">AutoKey Exchange</a>
+                  <ul>
+                    <li class="toctree-l3"><a class="reference internal" href="#initiate-exchange">Initiate Configuration</a></li>
+                    <li class="toctree-l3"><a class="reference internal" href="#sc-connect">Connect to Seller Central</a></li>
+                    <li class="toctree-l3"><a class="reference internal" href="#locations-and-transfer">Enter URLs and Transfer Keys</a></li>
+                  </ul>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="#options">Options</a>
                   <ul>
                     <li class="toctree-l3"><a class="reference internal" href="#enable-login-with-amazon">Enable Amazon
@@ -233,6 +240,52 @@
                     <p class="last">The IPN URL settings for the Sandbox - and Production View differ. Please add the
                       correct value to the environment you are currently transacting on.</p>
                   </div>
+                </div>
+              </div>
+              <div class="section" id="autokey-exchange">
+                <h2>AutoKey Exchange<a class="headerlink" href="#autokeyexchange" title="Permalink to this headline">¶</a></h2>
+                <p>In order to ease the process of adding credentials, the Amazon Pay module features AutoKey Exchange. This feature allows 
+                  a merchant to connect to their Seller Central account and automatically retrieve the necessary keys to fill the credentials form. 
+                </p>
+                <div class="section" id="initiate-exchange">
+                  <h3>Initiate Configuration<a class="headerlink" href="#initiate-exchange"
+                    title="Permalink to this headline">¶</a></h3>
+                  <p>To begin automatically transferring keys from your Seller Central account, open the Amazon Pay configuration options and click 
+                    the <cite>Initiate account registration/configuration</cite> button.</p>
+                  <img alt="_images/ake_initiate.png" src="_images/ake_initiate.png" />
+                  <p>A series of Amazon-hosted prompts will follow to finish setting up the transfer from Seller Central.</p>
+                  <div class="admonition note">
+                    <p class="first admonition-title">Note</p>
+                    <p class="last">If you are trying to automatically register/configure your account and it is not working, try clicking the 
+                      <cite>Reset account registration/configuration</cite> button to reset the internal public/private key, and then retry the 
+                      transfer process.</p>
+                  </div>
+                </div>
+                <div class="section" id="sc-connect">
+                  <h3>Connect to Seller Central<a class="headerlink" href="#sc-connect"
+                    title="Permalink to this headline">¶</a></h3>
+                  <p>Select the location of your business and answer any subsequent questions before entering your Seller Center credentials.</p>
+                    <img alt="_images/ake_select_country.png" src="_images/ake_select_country.png" />
+                    <p>Enter the login information for your existing Seller Central account, or create a new account with the 
+                    <cite>Create your Amazon account</cite> button.</p>
+                    <img alt="_images/ake_create_account.png" src="_images/ake_create_account.png" />
+                </div>
+                <div class="section" id="locations-and-transfer">
+                  <h3>Enter URLs and Transfer Keys<a class="headerlink" href="#locations-and-transfer"
+                    title="Permalink to this headline">¶</a></h3>
+                    <p>Next, enter domain information pertaining to the URL(s) on your site where the Amazon Pay button will be rendered, 
+                      and where your privacy policy is located.</p>
+                    <img alt="_images/ake_address.png" src="_images/ake_address.png" />
+                    <p>Finally, ensure that the correct URL is displayed on the <strong>Share access keys with Magento 2</strong> page and 
+                      click the <cite>Transfer access keys</cite> button.</p>
+                    <img alt="" src="_images/ake_transfer_keys.png" />
+                    <p>If your keys were transferred successfully, the following message will be displayed in the popup:</p>
+                    <img alt="_images/ake_success.png" src="_images/ake_success.png" />
+                    <p>At this point, the credentials section of the Amazon Pay module should be populated with the keys associated with 
+                      your Seller Central account.<br/><br/>
+                      See <a href="https://developer.amazon.com/docs/amazon-pay-registration/unhostedregistration.html">
+                        Initiating Merchant Registration for Unhosted Service Providers</a> for detailed information on key transfer.
+                    </p>
                 </div>
               </div>
               <div class="section" id="options">
