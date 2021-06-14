@@ -29,9 +29,20 @@ use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
  */
 class ResetAutoKey extends System
 {
-    private ConfigInterface $config;
-    private Manager $cacheManager;
-    private JsonFactory $jsonResultFactory;
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @var Manager
+     */
+    private $cacheManager;
+
+    /**
+     * @var JsonFactory
+     */
+    private $jsonResultFactory;
 
     /**
      * @param Context $context
