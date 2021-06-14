@@ -278,6 +278,7 @@ class Charge extends AbstractOperation
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
         }
+  
         if ($invoice && ($invoice->canCapture() || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW)) {
             $order = $invoice->getOrder();
             $payment = $order->getPayment();
@@ -303,6 +304,19 @@ class Charge extends AbstractOperation
             $this->setProcessing($order);
             $order->save();
             $this->asyncLogger->info('Captured Order #' . $order->getIncrementId());
+        } else {
+            if (!$invoice) {
+                $errorMessage = 'Cannot create invoice for Order #' . $order->getIncrementId();
+            } else {
+                $errorMessage = 'Invoice cannot be captured -'
+                                . ' Order #' . $order->getIncrementId()
+                                . ' Order Status: ' . $invoice->getOrder()->getStatus();
+            }
+
+            $this->asyncLogger->error($errorMessage);
+            $order->addStatusHistoryComment($errorMessage);
+            $order->save();
+
         }
     }
 }

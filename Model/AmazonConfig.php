@@ -562,6 +562,17 @@ class AmazonConfig
     }
 
     /**
+     * @return string
+     */
+    public function getPayNowResultUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->storeManager->getStore()->getUrl(
+            'amazon_pay/checkout/completeSession',
+            ['_forced_secure' => true]
+        );
+    }
+
+    /**
      * @param string $scope
      * @param mixed $scopeCode
      * @return array

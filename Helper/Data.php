@@ -175,10 +175,10 @@ class Data extends AbstractHelper
     /**
      * Get module composer version
      *
-     * @param $moduleName
+     * @param string $moduleName
      * @return string
      */
-    public function getModuleVersion($moduleName)
+    public function getModuleVersion($moduleName = 'Amazon_Pay')
     {
         $path = $this->componentRegistrar->getPath(
             \Magento\Framework\Component\ComponentRegistrar::MODULE,

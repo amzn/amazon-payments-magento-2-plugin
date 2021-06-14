@@ -22,6 +22,9 @@
                 <label><![CDATA[<div class="amazon-pay-logo"></div><div class="amazon-payment-byline"><strong>Amazon Pay for Magento</strong>Enable a familiar, fast checkout for hundreds of millions of active Amazon customers globally.</div>]]></label>
                 <fieldset_css>complex amazon-pay-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+                <field id="autokeyexchange" type="text" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\AutoKeyExchangeConfig</frontend_model>
+                </field>
                 <group id="credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credentials</label>
                     <field id="active_v2" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -77,7 +80,7 @@
                         <config_path>payment/amazon_payment/payment_region</config_path>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
-                    <field id="sandbox" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="sandbox" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sandbox</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment/sandbox</config_path>

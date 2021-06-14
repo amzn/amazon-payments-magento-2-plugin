@@ -24,22 +24,15 @@ class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverI
     private $alexaModel;
 
     /**
-     * @var \Amazon\Pay\Logger\AlexaLogger
-     */
-    private $alexaLogger;
-
-    /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     private $messageManager;
 
     public function __construct(
         \Amazon\Pay\Model\Alexa $alexaModel,
-        \Amazon\Pay\Logger\AlexaLogger $alexaLogger,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->alexaModel = $alexaModel;
-        $this->alexaLogger = $alexaLogger;
         $this->messageManager = $messageManager;
     }
 
@@ -63,11 +56,6 @@ class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverI
                 $this->messageManager->addSuccessMessage($message);
             }
         } catch (\Exception $e) {
-            $this->alexaLogger->debug(implode('; ', [
-                'ORDER: ' . $track->getOrderId(),
-                'SHIPMENT: ' . $shipment->getId(),
-                'ERROR: ' . $e->getMessage(),
-            ]));
             $this->messageManager->addWarningMessage(__(
                 'Alexa Notification: %1',
                 $e->getMessage()

@@ -33,21 +33,21 @@ require(['jquery', 'domReady!'], function ($) {
         e.preventDefault();
 
         // set selected type
-        $('#payment_us_amazon_pay_credentials_private_key_selected').val('pem');
+        $('tr[id$="_amazon_pay_credentials_private_key_selected"]').val('pem');
         // uncheck inherit
-        $('#payment_us_amazon_pay_credentials_private_key_selected_inherit').prop('checked', true).click();
+        $('input[id$="_amazon_pay_credentials_private_key_selected_inherit"]').prop('checked', true).click();
         // hide text row
-        $('#row_payment_us_amazon_pay_credentials_private_key_text').hide();
-        $('#payment_us_amazon_pay_credentials_private_key_text').val('------');
+        $('tr[id$="_amazon_pay_credentials_private_key_text"]').hide();
+        $('textarea[id$="_amazon_pay_credentials_private_key_text"]').val('------');
         // hide selector row & make non-inherited
-        $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
-        $('#row_payment_us_amazon_pay_credentials_private_key_selector_inherit').prop('checked', true).click()
+        $('tr[id$="_amazon_pay_credentials_private_key_selector"]').hide();
+        $('input[id$="_amazon_pay_credentials_private_key_selector_inherit"]').prop('checked', true).click()
         // remove saved file feedback text
         $('#amazon_pay_private_key_pem_file_saved_msg').html('');
         // show pem row
-        $('#row_payment_us_amazon_pay_credentials_private_key_pem').show();
+        $('tr[id$="_amazon_pay_credentials_private_key_pem"]').show();
         // click pem choose file button
-        $('#payment_us_amazon_pay_credentials_private_key_pem').click();
+        $('textarea[id$="_amazon_pay_credentials_private_key_pem"]').click();
     });
 
     // private key select text
@@ -55,18 +55,18 @@ require(['jquery', 'domReady!'], function ($) {
         e.preventDefault();
 
         // set selected type
-        $('#payment_us_amazon_pay_credentials_private_key_selected').val('text');
+        $('tr[id$="_amazon_pay_credentials_private_key_selected"]').val('text');
         // uncheck inherit
-        $('#payment_us_amazon_pay_credentials_private_key_selected_inherit').prop('checked', true).click();
+        $('input[id$="_amazon_pay_credentials_private_key_selected_inherit"]').prop('checked', true).click();
         // hide file row
-        $('#row_payment_us_amazon_pay_credentials_private_key_pem').hide();
+        $('tr[id$="_amazon_pay_credentials_private_key_pem"]').hide();
         // hide selector row & make non-inherited
-        $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
-        $('#row_payment_us_amazon_pay_credentials_private_key_selector_inherit').prop('checked', true).click()
+        $('tr[id$="_amazon_pay_credentials_private_key_selector"]').hide();
+        $('input[id$="_amazon_pay_credentials_private_key_selector_inherit"]').prop('checked', true).click()
         // show text area row
-        $('#row_payment_us_amazon_pay_credentials_private_key_text').show();
+        $('tr[id$="_amazon_pay_credentials_private_key_text"]').show();
         // focus on field
-        $('#payment_us_amazon_pay_credentials_private_key_text').val('').focus();
+        $('textarea[id$="_amazon_pay_credentials_private_key_text"]').val('').focus();
     });
 
     // change key type
@@ -74,45 +74,45 @@ require(['jquery', 'domReady!'], function ($) {
         e.preventDefault();
 
         // reset selected type
-        $('#payment_us_amazon_pay_credentials_private_key_selected').val('');
+        $('tr[id$="_amazon_pay_credentials_private_key_selected"]').val('');
         // check inherit
-        $('#payment_us_amazon_pay_credentials_private_key_selected_inherit').prop('checked', false).click();
+        $('input[id$="_amazon_pay_credentials_private_key_selected_inherit"]').prop('checked', false).click();
         // set text field
-        $('#payment_us_amazon_pay_credentials_private_key_text').val('------');
+        $('textarea[id$="_amazon_pay_credentials_private_key_text"]').val('------');
         // hide pem row
-        $('#row_payment_us_amazon_pay_credentials_private_key_pem').hide();
+        $('tr[id$="_amazon_pay_credentials_private_key_pem"]').hide();
         // hide text row
-        $('#row_payment_us_amazon_pay_credentials_private_key_text').hide();
+        $('tr[id$="_amazon_pay_credentials_private_key_text"]').hide();
         // show selector row
-        $('#row_payment_us_amazon_pay_credentials_private_key_selector').show();
+        $('tr[id$="_amazon_pay_credentials_private_key_selector"]').show();
     });
 
-    $('#payment_us_amazon_pay_credentials-head').click(function () {
-        showPrivateKey($(this), $('#payment_us_amazon_pay_credentials_active_v2').val() == 1);
+    $('a[id$="_amazon_pay_credentials-head"]').click(function () {
+        showPrivateKey($(this), $('select[id$="_amazon_pay_credentials_active_v2"]').val() == 1);
     });
 
-    $('#payment_us_amazon_pay_credentials_active_v2').change(function () {
+    $('select[id$="_amazon_pay_credentials_active_v2"]').change(function () {
         showPrivateKey($(this), $(this).val() == 1);
     });
 
     function showPrivateKey(field, enabled) {
         if (enabled) {
-            let value = $('#payment_us_amazon_pay_credentials_private_key_selected').val();
+            let value = $('input[id$="_amazon_pay_credentials_private_key_selected"]').val();
             if (value === 'pem') {
-                $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
-                $('#row_payment_us_amazon_pay_credentials_private_key_pem').show();
+                $('tr[id$="_amazon_pay_credentials_private_key_selector"]').hide();
+                $('tr[id$="_amazon_pay_credentials_private_key_pem"]').show();
             } else if (value === 'text') {
-                $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
-                $('#row_payment_us_amazon_pay_credentials_private_key_text').show();
+                $('tr[id$="_amazon_pay_credentials_private_key_selector"]').hide();
+                $('tr[id$="_amazon_pay_credentials_private_key_text"]').show();
             } else {
-                $('#row_payment_us_amazon_pay_credentials_private_key_selector').show();
-                $('#payment_us_amazon_pay_credentials_private_key_text').val('------');
+                $('tr[id$="_amazon_pay_credentials_private_key_selector"]').show();
+                $('textarea[id$="_amazon_pay_credentials_private_key_text"]').val('------');
             }
         }
         else {
-            $('#row_payment_us_amazon_pay_credentials_private_key_selector').hide();
-            $('#row_payment_us_amazon_pay_credentials_private_key_pem').hide();
-            $('#row_payment_us_amazon_pay_credentials_private_key_text').hide();
+            $('tr[id$="_amazon_pay_credentials_private_key_selector"]').hide();
+            $('tr[id$="_amazon_pay_credentials_private_key_pem"]').hide();
+            $('tr[id$="_amazon_pay_credentials_private_key_text"]').hide();
         }
     }
 });

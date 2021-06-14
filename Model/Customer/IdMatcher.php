@@ -19,6 +19,7 @@ use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Amazon\Pay\Model\Customer\MatcherInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Store\Model\StoreManagerInterface;
 
 class IdMatcher implements MatcherInterface
 {
@@ -32,18 +33,24 @@ class IdMatcher implements MatcherInterface
      */
     private $searchCriteriaBuilder;
 
+    /** @var StoreManagerInterface  */
+    private $storeManager;
+
     /**
      * IdMatcher constructor.
      *
      * @param CustomerRepositoryInterface $customerRepository
      * @param SearchCriteriaBuilder       $searchCriteriaBuilder
+     * @param StoreManagerInterface       $storeManager
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        StoreManagerInterface $storeManager
     ) {
         $this->customerRepository    = $customerRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -54,6 +61,9 @@ class IdMatcher implements MatcherInterface
         $this->searchCriteriaBuilder->addFilter(
             'amazon_id',
             $amazonCustomer->getId()
+        )->addFilter(
+            'website_id',
+            $this->storeManager->getWebsite()->getId()
         );
 
         $searchCriteria = $this->searchCriteriaBuilder
