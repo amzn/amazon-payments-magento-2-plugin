@@ -169,14 +169,6 @@ class Charge extends AbstractOperation
                         break;
                 }
 
-                if ($state == 'Authorized' || $state == 'Captured') {
-                    $this->amazonAdapter->updateChargePermission(
-                        $order->getStoreId(),
-                        $charge['chargePermissionId'],
-                        ['merchantReferenceId' => $order->getIncrementId()]
-                    );
-                }
-
                 return $complete;
             }
         }
