@@ -648,6 +648,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $amazonCharge = $this->amazonAdapter->getCharge($cart->getStoreId(), $chargeId);
 
             $chargeState = $amazonCharge['statusDetails']['state'];
+
             switch ($chargeState) {
                 case 'AuthorizationInitiated':
                     $payment->setIsTransactionClosed(false);
@@ -670,6 +671,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                         $this->addCaptureComment($payment, $cart, $chargeId);
                     }
                     break;
+            }
+
+            if ($chargeState == 'Authorized' || $chargeState == 'Captured') {
+                $this->amazonAdapter->updateChargePermission(
+                    $order->getStoreId(),
+                    $amazonCharge['chargePermissionId'],
+                    ['merchantReferenceId' => $order->getIncrementId()]
+                );
             }
 
             // relies on updateTransactionId to save the $payment

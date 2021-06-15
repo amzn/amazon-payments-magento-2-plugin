@@ -170,7 +170,6 @@ class AmazonPayAdapter
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
-                'merchantReferenceId' => $quote->getReservedOrderId(),
                 'merchantStoreName' => $this->amazonConfig->getStoreName(),
                 'customInformation' => $this->getMerchantCustomInformation(),
             ],
@@ -287,6 +286,37 @@ class AmazonPayAdapter
     public function getChargePermission(int $storeId, string $chargePermissionId)
     {
         $response = $this->clientFactory->create($storeId)->getChargePermission($chargePermissionId);
+
+        return $this->processResponse($response, __FUNCTION__);
+    }
+
+    /**
+     * @param int $storeId
+     * @param string $chargePermissionId
+     * @param array $data
+     * @return mixed
+     */
+    public function updateChargePermission(int $storeId, string $chargePermissionId, array $data)
+    {
+        $payload = [
+            'merchantMetadata' => [
+                'merchantReferenceId' => $data['merchantReferenceId']
+            ]
+        ];
+
+        if (isset($data['merchantStoreName'])) {
+            $payload['merchantMetadata']['merchantStoreName'] = $data['merchantStoreName'];
+        }
+
+        if (isset($data['customInformation'])) {
+            $payload['merchantMetadata']['customInformation'] = $data['customInformation'];
+        }
+
+        if (isset($data['noteToBuyer'])) {
+            $payload['merchantMetadata']['noteToBuyer'] = $data['noteToBuyer'];
+        }
+
+        $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
 
         return $this->processResponse($response, __FUNCTION__);
     }
