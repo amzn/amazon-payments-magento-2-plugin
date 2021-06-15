@@ -42,11 +42,6 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
     private $exceptionLogger;
 
     /**
-     * @var \Laminas\Uri\Http
-     */
-    private $uri;
-
-    /**
      * Listener constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory
@@ -57,12 +52,10 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory,
         \Amazon\Pay\Model\Config\AutoKeyExchange $autokeyexchange,
-        \Laminas\Uri\Http $uri,
         ExceptionLogger $exceptionLogger = null
     ) {
         $this->autokeyexchange = $autokeyexchange;
         $this->jsonResultFactory = $jsonResultFactory;
-        $this->uri = $uri;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
         parent::__construct($context);
     }
@@ -74,7 +67,7 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
     {
         try {
             $originHeader = $this->getRequest()->getHeader('Origin');
-            if (!empty($originHeader) && $host = $this->uri->parse($originHeader)->getHost()) {
+            if (!empty($originHeader) && $host = parse_url($originHeader, PHP_URL_HOST)) {
                 if (in_array($host, $this->autokeyexchange->getListenerOrigins())) {
                     $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
                 }
