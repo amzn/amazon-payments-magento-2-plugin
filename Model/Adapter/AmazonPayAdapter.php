@@ -524,6 +524,8 @@ class AmazonPayAdapter
                 $addressData[$addressKey] = $streetLine;
             }
 
+            $addressData = array_filter($addressData);
+
             $payload['addressDetails'] = $addressData;
         }
 
