@@ -67,6 +67,7 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
     {
         try {
             $originHeader = $this->getRequest()->getHeader('Origin');
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (!empty($originHeader) && $host = parse_url($originHeader, PHP_URL_HOST)) {
                 if (in_array($host, $this->autokeyexchange->getListenerOrigins())) {
                     $this->getResponse()->setHeader('Access-Control-Allow-Origin', 'https://' . $host);
@@ -99,41 +100,6 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
             $this->exceptionLogger->logException($e);
             throw $e;
         }
-    }
-
-    /**
-     * Overridden to allow POST without form key
-     *
-     * @return bool
-     */
-    public function _processUrlKeys()
-    {
-        $_isValidFormKey = true;
-        $_isValidSecretKey = true;
-        $_keyErrorMsg = '';
-        if ($this->_auth->isLoggedIn()) {
-            if ($this->_backendUrl->useSecretKey()) {
-                $_isValidSecretKey = $this->_validateSecretKey();
-                $_keyErrorMsg = __('You entered an invalid Secret Key. Please refresh the page.');
-            }
-        }
-        if (!$_isValidFormKey || !$_isValidSecretKey) {
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
-            if ($this->getRequest()->getQuery('isAjax', false) || $this->getRequest()->getQuery('ajax', false)) {
-                $this->getResponse()->representJson(
-                    $this->_objectManager->get(
-                        \Magento\Framework\Json\Helper\Data::class
-                    )->jsonEncode(
-                        ['error' => true, 'message' => $_keyErrorMsg]
-                    )
-                );
-            } else {
-                $this->_redirect($this->_backendUrl->getStartupPageUrl());
-            }
-            return false;
-        }
-        return true;
     }
 
     /**
