@@ -510,15 +510,21 @@ class AmazonPayAdapter
             $addressData = [
                 'name' => $address->getName(),
                 'city' => $address->getCity(),
-                'stateOrRegion' => $address->getRegionCode(),
                 'postalCode' => $address->getPostcode(),
                 'countryCode' => $address->getCountry(),
                 'phoneNumber' => $address->getTelephone(),
             ];
+            // do not submit stateOrRegion for these EU countries as it will fail validation, see EU tab on
+            // https://developer.amazon.com/docs/amazon-pay-checkout/address-formatting-and-validation.html
+            if (!in_array($address->getCountry(), ['UK', 'GB', 'SG', 'AE', 'MX'])) {
+                $addressData['stateOrRegion'] = $address->getRegionCode();
+            }
             foreach ($address->getStreet() as $index => $streetLine) {
                 $addressKey = 'addressLine' . ($index + 1);
                 $addressData[$addressKey] = $streetLine;
             }
+
+            $addressData = array_filter($addressData);
 
             $payload['addressDetails'] = $addressData;
         }

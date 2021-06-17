@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.5.1
+* Add url to csp_whitelist.xml
+* Fix issue with the payment method button and UK addresses
+
 ## 5.5.0
 * Added Auto Key Exchange for configuring the credentials
 * Added PayNow functionality for the button on the final step of checkout
