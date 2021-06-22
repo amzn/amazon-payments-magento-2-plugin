@@ -17,6 +17,7 @@
 namespace Amazon\Pay\Model;
 
 use Amazon\Pay\Api\Data\CheckoutSessionInterface;
+use Amazon\Pay\Gateway\Config\Config;
 use Amazon\Pay\Model\Config\Source\AuthorizationMode;
 use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Amazon\Pay\Model\AsyncManagement;
@@ -582,6 +583,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             // get payment to load it in the session, so that a salesrule that relies on payment method conditions
             // can work as expected
             $payment = $this->magentoCheckoutSession->getQuote()->getPayment();
+
+            // Some checkout flows (especially 3rd party) could get to this point without setting payment method
+            if (empty($payment->getMethod())) {
+                $payment->setMethod(Config::CODE);
+            }
 
             // set amazon session id on payment object to be used in authorize
             $payment->setAdditionalInformation('amazon_session_id', $amazonSessionId);
