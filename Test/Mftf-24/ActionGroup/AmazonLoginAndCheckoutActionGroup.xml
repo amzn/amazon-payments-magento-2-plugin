@@ -15,7 +15,7 @@
         <wait time="1" stepKey="allowButtonToActivate"/>
         <click selector="{{buttonSelector}}" stepKey="clickAmazonButton"/>
 
-        <wait time="1" stepKey="allowPopupToOpen"/>
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\WaitForPopup" method="waitForPopup" stepKey="allowPopupToOpen" />
         <switchToNextTab stepKey="switchToLoginPopupWindow"/>
 
         <!-- Fill in login form -->
