@@ -9,7 +9,7 @@
 
         <!--Verify Sign in with Amazon Button is present-->
         <click selector="{{buttonSelector}}" stepKey="clickSignInWithAmazonButton"/>
-        <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {$webdriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));}" stepKey="allowPopupToOpen" />
+        <wait time="1" stepKey="allowPopupToOpen"/>
         <switchToNextTab stepKey="switchToWindowLoginPopup"/>
 
         <waitForElement selector="{{AmazonPageSection.emailField}}" stepKey="waitForEmailField"/>

@@ -15,7 +15,7 @@
         <wait time="1" stepKey="allowButtonToActivate"/>
         <click selector="{{buttonSelector}}" stepKey="clickAmazonButton"/>
 
-        <executeInSelenium function="function(\Facebook\WebDriver\Remote\RemoteWebDriver $webdriver) {$webdriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));}" stepKey="allowPopupToOpen" />
+        <wait time="1" stepKey="allowPopupToOpen"/>
         <switchToNextTab stepKey="switchToLoginPopupWindow"/>
 
         <!-- Fill in login form -->

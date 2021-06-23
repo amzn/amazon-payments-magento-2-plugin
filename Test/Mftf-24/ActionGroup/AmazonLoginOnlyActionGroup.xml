@@ -9,7 +9,7 @@
 
         <!--Verify Sign in with Amazon Button is present-->
         <click selector="{{buttonSelector}}" stepKey="clickSignInWithAmazonButton"/>
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\WaitForPopup" method="waitForPopup" stepKey="allowPopupToOpen" />
+        <wait time="1" stepKey="allowPopupToOpen"/>
         <switchToNextTab stepKey="switchToWindowLoginPopup"/>
 
         <waitForElement selector="{{AmazonPageSection.emailField}}" stepKey="waitForEmailField"/>
