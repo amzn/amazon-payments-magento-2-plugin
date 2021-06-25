@@ -25,10 +25,10 @@
         </actionGroup>
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="orderNumber" />
-        <magentoCLI command="amazon:payment:sales:cp-verify" arguments="--orderId {$orderNumber}" stepKey="command" />
+        <magentoCLI command="amazon:payment:sales:verify-charge-permission" arguments="--orderId {$orderNumber}" stepKey="command" />
         <assertEquals stepKey="refIdAssert">
-            <actualResult type="string">"${command}"</actualResult>
-            <expectedResult type="string">"${orderNumber}"</expectedResult>
+            <actualResult type="string">${command}</actualResult>
+            <expectedResult type="string">true\n</expectedResult>
         </assertEquals>
     </test>
 </tests>
