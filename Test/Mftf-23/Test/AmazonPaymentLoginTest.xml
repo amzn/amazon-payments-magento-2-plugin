@@ -16,8 +16,7 @@
         <!--Go to Amazon Pay from the payment method and login-->
         <wait time="1" stepKey="allowButtonToActivate"/>
         <click selector="{{AmazonButtonSection.payment}}" stepKey="clickAmazonButton"/>
-        <wait time="1" stepKey="allowPopupToOpen"/>
-        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
         <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
     </test>
 </tests>

@@ -57,6 +57,14 @@
        </arguments>
    </type>
 
+   <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="AmazonChargePermissionCommand" xsi:type="object">Amazon\Pay\Command\Sales\AmazonChargePermissionCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
     <!-- Loggers -->
     <type name="Amazon\Pay\Logger\AlexaLogger">
         <arguments>
