@@ -83,11 +83,14 @@ class AmazonChargePermissionCommand extends Command
                 ->addFilter(OrderInterface::INCREMENT_ID, $orderId)->create();
             
             $orderResults = $this->orderRepository->getList($searchCriteria)->getItems();
-            if (isset($orderResults)) {
-                $order = reset($orderResults);
-                $storeId = $order->getStoreId();
-                $chargePermissionId = $order->getPayment()->getAdditionalInformation('charge_permission_id');
+            if (empty($orderResults)) {
+                $output->writeln('<info>No order found for order number ' . $orderId . '</info>');
+                return;
             }
+            
+            $order = reset($orderResults);
+            $storeId = $order->getStoreId();
+            $chargePermissionId = $order->getPayment()->getAdditionalInformation('charge_permission_id');
 
             try {
                 $resp = $this->amazonAdapter->getChargePermission($storeId, $chargePermissionId);
