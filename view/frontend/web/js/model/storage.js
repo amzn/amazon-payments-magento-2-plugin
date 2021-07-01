@@ -78,22 +78,6 @@ define([
          */
         getRegion: function() {
             return amazonPayConfig.getValue('region');
-        },
-
-        /**
-         * @param value
-         * @returns {exports}
-         */
-        setIsEditPaymentFlag: function (value) {
-            getStorage().set('is_edit_billing_clicked', value);
-            return this;
-        },
-
-        /**
-         * @returns {boolean}
-         */
-        getIsEditPaymentFlag: function () {
-            return getStorage().get('is_edit_billing_clicked');
         }
     };
 });

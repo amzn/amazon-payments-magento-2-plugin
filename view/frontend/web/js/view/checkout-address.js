@@ -55,10 +55,6 @@ define(
                 this._super();
                 if (!this.isPayOnly && this.isAmazonCheckout) {
                     this.getShippingAddressFromAmazon();
-                    if (amazonStorage.getIsEditPaymentFlag()) {
-                        amazonStorage.setIsEditPaymentFlag(false);
-                        stepNavigator.setHash('payment');
-                    }
                 }
             },
 
