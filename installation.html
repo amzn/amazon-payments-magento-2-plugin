@@ -32,8 +32,6 @@
                     steps</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#composer-install-method">Composer Install
                     Method</a></li>
-                <li class="toctree-l2"><a class="reference internal" href="#magento-marketplace-install-method">Magento
-                    Marketplace Install Method</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#un-install-method">Un-install Method</a>
                 </li>
               </ul>
@@ -178,43 +176,16 @@
                       <p class="first">Check permissions on directories and files and set them correctly if needed</p>
                     </li>
                   </ul>
-                  <p>At this point the module is installed, and ready to configured! You can proceed to <a
+                  <p>At this point the module is installed, and ready to be configured! You can proceed to <a
                       href="configuration.html">Configuration</a>.</p>
-                  <div class="section" id="magento-marketplace-install-method">
-                    <h2>Magento Marketplace Install Method<a class="headerlink"
-                        href="#magento-marketplace-install-method" title="Permalink to this headline">¶</a></h2>
-                    <p>Our extension can be downloaded from Magento Marketplace:<br> <a target="_blank"
-                        class="reference external"
-                        href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html</a>
+                  <div class="admonition note">
+                    <p class="first admonition-title">Note</p>
+                    <p class="last">Magento Marketplace has disabled the ability to download packages directly in favor of 
+                      installing packages via the Composer install method. For more information on adding packages via 
+                      Composer, please see <a class="reference external"
+                        href="https://devdocs.magento.com/extensions/install/">General CLI installation</a> 
+                        in the Magento dev docs.
                     </p>
-                    <p>It can then be installed following these steps:</p>
-                    <ul class="simple">
-                      <li>Disable the in-core Legacy Magento modules in case they are still active:<br>
-                        <code>bin/magento module:disable Amazon_Core Amazon_Login Amazon_Payment</code>
-                      </li>
-                      <!-- <li>Purchase our free module from <a target="_blank" class="reference external" href="https://marketplace.magento.com/amzn-amazon-pay-magento-2-module.html">Magento Marketplace</a> and download the .zip file</li> -->
-                      <li>Extract the contents of the .zip file to <code>app/code/Amazon/Pay</code>, you should now see a file
-                        <code>app/code/Amazon/Pay/registration.php</code> if the directory nesting is correct
-                      </li>
-                      <li>Install dependencies and enable the module. Then run the normal Magento commands for a module
-                        installation:<br />
-                        <ul>
-                        <li>Download the <a href="https://github.com/amzn/amazon-pay-api-sdk-php/archive/master.zip">
-                          Amazon Pay API SDK(PHP)</a> package and extract the <code>Amazon/Pay/API</code> directory as 
-                          <code>app/code/Amazon/Pay/API/</code></li>
-                        <li> Download the <a
-                          href="https://github.com/aws/aws-php-sns-message-validator/archive/master.zip">Amazon SNS
-                          Message Validator for PHP</a> package and extract the <code>src</code> directory as
-                        <code>app/code/Aws/Sns/</code></li>
-                        <li>Run <code>bin/magento module:enable Amazon_Pay --clear-static-content</code></li>
-                        <li>Run <code>bin/magento setup:upgrade</code></li>
-                        <li>Run <code>bin/magento setup:di:compile</code></li>
-                        <li>Run <code>bin/magento setup:static-content:deploy</code></li>
-                        </ul>
-                      </li>
-                    </ul>
-                    <p>At this point the module is installed, and ready to configured! You can proceed to <a
-                        href="configuration.html">Configuration</a>.</p>
                   </div>
                   <div class="admonition note">
                     <p class="first admonition-title">Note</p>
