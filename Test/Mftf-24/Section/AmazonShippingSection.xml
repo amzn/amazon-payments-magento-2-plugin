@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+
+    <!--Fill all required fields in shipping form-->
+    <section name="AmazonFillShipmentFormSection">
+        <element name="email" type="input" selector="#customer-email" />
+        <element name="firstname" type="input" selector="//input[@name='firstname']"/>
+        <element name="lastname" type="input" selector="//input[@name='lastname']"/>
+        <element name="street" type="input" selector="//input[contains(@name, 'street')]"/>
+        <element name="city" type="input" selector="//input[@name='city']"/>
+        <element name="postcode" type="input" selector="//input[@name='postcode']"/>
+        <element name="telephone" type="input" selector="//input[@name='telephone']"/>
+        <element name="region" type="button" selector="//*[@name='region_id']"/>
+        <element name="state" type="button" selector="//*[text()='Alabama']"/>
+        <element name="next" type="button" selector="//span[text()='Next']"/>
+    </section>
+</sections>
