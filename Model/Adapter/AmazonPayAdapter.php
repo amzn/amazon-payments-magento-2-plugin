@@ -367,14 +367,13 @@ class AmazonPayAdapter
     public function authorize($data)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
-        if (!empty($data['amazon_checkout_session_id'])) {
-            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
-        } elseif (!empty($data['charge_permission_id'])) {
+        if (!empty($data['charge_permission_id'])) {
             $getChargePermissionResponse = $this->getChargePermission(
                 $quote->getStoreId(),
                 $data['charge_permission_id']
             );
-            if ($getChargePermissionResponse['statusDetails']['state'] == "Chargeable") {
+            if ($getChargePermissionResponse['statusDetails']['state'] == "Chargeable" &&
+                $getChargePermissionResponse['limits']['amountBalance']['amount'] >= $data['amount']) {
                 $response = $this->createCharge(
                     $quote->getStoreId(),
                     $data['charge_permission_id'],
@@ -383,6 +382,8 @@ class AmazonPayAdapter
                     true
                 );
             }
+        } elseif (!empty($data['amazon_checkout_session_id'])) {
+            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
         }
 
         return $response;
