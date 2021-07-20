@@ -57,15 +57,6 @@ define(
                     self.$amazonAutoKeyExchangeBack = $(self.apAutoKeyExchangeBackSelector);
                     self.$container = $(self.apAutoKeyExchangeSelector);
 
-                    if (this.isMultiCurrencyRegion) {
-                        $('#row_payment_' + self.getCountry() + '_amazon_pay_options_multicurrency').show();
-                        $('#row_payment_other_amazon_pay_options_multicurrency').show();
-                    }
-                    else {
-                        $('#row_payment_' + self.getCountry() + '_amazon_pay_options_multicurrency').hide();
-                        $('#row_payment_other_amazon_pay_options_multicurrency').hide();
-                    }
-
                     if (self.$amazonMerchantId.val()) {
                         this.$amazonAutoKeyExchange.hide();
                         this.$amazonAutoKeyExchangeBack.show();
