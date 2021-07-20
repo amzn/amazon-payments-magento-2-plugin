@@ -367,9 +367,7 @@ class AmazonPayAdapter
     public function authorize($data)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
-        if (!empty($data['amazon_checkout_session_id'])) {
-            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
-        } elseif (!empty($data['charge_permission_id'])) {
+        if (!empty($data['charge_permission_id'])) {
             $getChargePermissionResponse = $this->getChargePermission(
                 $quote->getStoreId(),
                 $data['charge_permission_id']
@@ -382,7 +380,11 @@ class AmazonPayAdapter
                     $quote->getQuoteCurrencyCode(),
                     true
                 );
+            } else {
+                $this->logger->debug(__('Charge permission not in Chargeable state: ') . $data['charge_permission_id']);
             }
+        } elseif (!empty($data['amazon_checkout_session_id'])) {
+            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
         }
 
         return $response;
