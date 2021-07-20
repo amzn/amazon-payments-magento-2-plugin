@@ -127,6 +127,13 @@ class Charge extends AbstractOperation
         $order = $this->loadOrder($chargeId);
 
         if ($order) {
+            $invoice = $this->loadInvoice($chargeId, $order);
+            if ($invoice && $invoice->getState() != Order\Invoice::STATE_OPEN) {
+                // Could happen with duplicate IPN messages, don't want to try to capture unless not invoiced
+                $this->asyncLogger->info('Duplicate IPN received after capture for Order #' . $order->getIncrementId());
+                return true;
+            }
+
             $charge = $this->amazonAdapter->getCharge($order->getStoreId(), $chargeId);
 
             // Compare Charge State with Order State
@@ -278,7 +285,7 @@ class Charge extends AbstractOperation
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
         }
-  
+
         if ($invoice && ($invoice->canCapture() || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW)) {
             $order = $invoice->getOrder();
             $payment = $order->getPayment();
