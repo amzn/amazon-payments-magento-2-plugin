@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.6.0
+* Changed the merchantReferenceId to be set on the charge permission after the order is completed
+* Changed IPN handling so that it wouldn’t re-try capture on duplicate messages
+* Changed flow so any changes at billing step route back to shipping details as address could have changed
+* Fixed issue where only the first invoice created would capture payment
+* Fixed issue where sometimes the payment method isn’t set on the payment if the PayNow button is used
+* Fixed issue where the street on German addresses could get set twice
+* Fixed issue with the mobile tooltip being truncated
+
 ## 5.5.1
 * Add url to csp_whitelist.xml
 * Fix issue with the payment method button and UK addresses
