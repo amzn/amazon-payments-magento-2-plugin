@@ -51,6 +51,11 @@ class AmazonPayAdapter
     private $amazonHelper;
 
     /**
+     * @var \Magento\Framework\App\ProductMetadataInterface
+     */
+    private $productMetadata;
+
+    /**
      * @var \Amazon\Pay\Logger\Logger
      */
     private $logger;
@@ -72,6 +77,7 @@ class AmazonPayAdapter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -82,6 +88,7 @@ class AmazonPayAdapter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -91,6 +98,7 @@ class AmazonPayAdapter
         $this->storeManager = $storeManager;
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
+        $this->productMetadata = $productMetadata;
         $this->logger = $logger;
         $this->url = $url;
         $this->redirect = $redirect;
@@ -101,7 +109,11 @@ class AmazonPayAdapter
      */
     protected function getMerchantCustomInformation()
     {
-        return sprintf('Magento Version: 2, Plugin Version: %s', $this->amazonHelper->getModuleVersion('Amazon_Pay'));
+        return sprintf(
+            'Magento Version: %s, Plugin Version: %s',
+            $this->productMetadata->getVersion(),
+            $this->amazonHelper->getModuleVersion('Amazon_Pay')
+        );
     }
 
     /**
@@ -170,7 +182,6 @@ class AmazonPayAdapter
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
-                'merchantReferenceId' => $quote->getReservedOrderId(),
                 'merchantStoreName' => $this->amazonConfig->getStoreName(),
                 'customInformation' => $this->getMerchantCustomInformation(),
             ],
@@ -292,6 +303,37 @@ class AmazonPayAdapter
     }
 
     /**
+     * @param int $storeId
+     * @param string $chargePermissionId
+     * @param array $data
+     * @return mixed
+     */
+    public function updateChargePermission(int $storeId, string $chargePermissionId, array $data)
+    {
+        $payload = [
+            'merchantMetadata' => [
+                'merchantReferenceId' => $data['merchantReferenceId']
+            ]
+        ];
+
+        if (isset($data['merchantStoreName'])) {
+            $payload['merchantMetadata']['merchantStoreName'] = $data['merchantStoreName'];
+        }
+
+        if (isset($data['customInformation'])) {
+            $payload['merchantMetadata']['customInformation'] = $data['customInformation'];
+        }
+
+        if (isset($data['noteToBuyer'])) {
+            $payload['merchantMetadata']['noteToBuyer'] = $data['noteToBuyer'];
+        }
+
+        $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
+
+        return $this->processResponse($response, __FUNCTION__);
+    }
+
+    /**
      * Cancel charge
      *
      * @param $storeId
@@ -337,9 +379,7 @@ class AmazonPayAdapter
     public function authorize($data)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
-        if (!empty($data['amazon_checkout_session_id'])) {
-            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
-        } elseif (!empty($data['charge_permission_id'])) {
+        if (!empty($data['charge_permission_id'])) {
             $getChargePermissionResponse = $this->getChargePermission(
                 $quote->getStoreId(),
                 $data['charge_permission_id']
@@ -352,7 +392,11 @@ class AmazonPayAdapter
                     $quote->getQuoteCurrencyCode(),
                     true
                 );
+            } else {
+                $this->logger->debug(__('Charge permission not in Chargeable state: ') . $data['charge_permission_id']);
             }
+        } elseif (!empty($data['amazon_checkout_session_id'])) {
+            $response = $this->getCheckoutSession($quote->getStoreId(), $data['amazon_checkout_session_id']);
         }
 
         return $response;

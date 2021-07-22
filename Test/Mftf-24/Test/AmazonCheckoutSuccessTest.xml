@@ -23,5 +23,13 @@
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
+
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="orderNumber" />
+        <magentoCLI command="amazon:payment:sales:verify-charge-permission" arguments="--orderId {$orderNumber}" stepKey="command" />
+        <assertEquals stepKey="refIdAssert">
+            <actualResult type="string">${command}</actualResult>
+            <expectedResult type="string">true\n</expectedResult>
+        </assertEquals>
     </test>
 </tests>

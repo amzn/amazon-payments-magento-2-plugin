@@ -16,8 +16,8 @@
         <executeJS function="return window.name;" stepKey="openerName"/>
         <!--Change shipping address-->
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
-        <wait time="1" stepKey="allowButtonToActivate"/>
-        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
+        <wait time="1" stepKey="amazonSignInWorkaround" />
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
         <waitForElement selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForAmazonEditShippingPageLoad"/>
         <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAmazonAddressButton"/>
         <click selector="{{AmazonPageSection.notSelectedAddress}}" stepKey="clickNotSelectedAmazonAddress"/>

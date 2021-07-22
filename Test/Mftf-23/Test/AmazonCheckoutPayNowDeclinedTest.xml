@@ -11,8 +11,12 @@
             <group value="amazon_pay_paynow"/>
         </annotations>
 
+        <before>
+            <magentoCLI command="config:set {{AmazonButtonPaymentConfig.path}} 1" stepKey="displayAmazonButtonPayment"/>
+        </before>
+        
         <!-- shipping-->
-        <actionGroup ref="ShipmentFormActionGroup" stepKey="fillShipping" />
+        <actionGroup ref="AmazonShipmentFormActionGroup" stepKey="fillShipping" />
 
         <!-- amazon pay option -->
         <click selector="{{AmazonCheckoutSection.method}}" stepKey="chooseAmazonMethod" />

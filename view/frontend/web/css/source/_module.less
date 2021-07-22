@@ -318,6 +318,51 @@
             .lib-css(border-top, @checkout-payment-option-title__border);
         }
     }
+
+    .checkout-shipping-address {
+        .field-tooltip {
+            .field-tooltip-content {
+                right: -65px;
+
+                &:before,
+                &:after {
+                    right: 64px;
+                }
+            }
+        }
+    }
+
+    .cart-summary{
+        .checkout-methods-items {
+            .field-tooltip {
+                .field-tooltip-content {
+                    right: -35px;
+
+                    &:before,
+                    &:after {
+                        right: 35px;
+                    }
+                }
+            }
+        }
+    }
+
+    .block-minicart {
+        .field-tooltip {
+            right: -115px;
+            top: -45px;
+
+            .field-tooltip-content {
+                right: -21px;
+                top: 46px;
+
+                &:before,
+                &:after {
+                    right: 20px;
+                }
+            }
+        }
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
@@ -362,6 +407,19 @@
 
         .amazon-logout {
             margin-top: 1em;
+        }
+    }
+
+    .checkout-shipping-address {
+        .field-tooltip {
+            .field-tooltip-content {
+                right: -65px;
+
+                &:before,
+                &:after {
+                    right: 64px;
+                }
+            }
         }
     }
 }

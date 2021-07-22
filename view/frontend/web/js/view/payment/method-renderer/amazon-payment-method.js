@@ -68,11 +68,6 @@ define(
                     amazonCheckoutSessionId: amazonStorage.getCheckoutSessionId(),
                     changeAction: 'changePayment'
                 });
-                if (!amazonConfig.getValue('is_pay_only')) {
-                    $elem.click(function () {
-                        amazonStorage.setIsEditPaymentFlag(true);
-                    });
-                }
             },
 
             getLogoUrl: function() {

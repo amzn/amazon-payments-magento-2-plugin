@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AmazonShipmentFormActionGroup">
+        <fillField selector="{{StorefrontCheckoutCheckoutCustomerLoginSection.email}}" userInput="{{AmazonShippingFormData.email}}" stepKey="setCustomerEmail"/>
+        <fillField selector="{{AmazonFillShipmentFormSection.firstname}}" userInput="{{AmazonShippingFormData.fname}}" stepKey="SetCustomerFirstName"/>
+        <fillField selector="{{AmazonFillShipmentFormSection.lastname}}" userInput="{{AmazonShippingFormData.lname}}" stepKey="SetCustomerLastName"/>
+        <fillField selector="{{AmazonFillShipmentFormSection.street}}" userInput="{{AmazonShippingFormData.street}}" stepKey="SetCustomerStreetAddress"/>
+        <fillField selector="{{AmazonFillShipmentFormSection.city}}" userInput="{{AmazonShippingFormData.city}}" stepKey="SetCustomerCity"/>
+        <fillField selector="{{AmazonFillShipmentFormSection.postcode}}" userInput="{{AmazonShippingFormData.postcode}}" stepKey="SetCustomerZipCode"/>
+        <fillField selector="{{AmazonFillShipmentFormSection.telephone}}" userInput="{{AmazonShippingFormData.telephone}}" stepKey="SetCustomerPhoneNumber"/>
+        <click selector="{{AmazonFillShipmentFormSection.region}}" stepKey="clickToSetState"/>
+        <click selector="{{AmazonFillShipmentFormSection.state}}" stepKey="clickToChooseState"/>
+        <click selector="{{AmazonFillShipmentFormSection.next}}" stepKey="clickToSaveShippingInfo"/>
+        <waitForPageLoad time="5" stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
+        <seeInCurrentUrl url="payment" stepKey="reviewAndPaymentIsShown"/>
+    </actionGroup>
+
+</actionGroups>
