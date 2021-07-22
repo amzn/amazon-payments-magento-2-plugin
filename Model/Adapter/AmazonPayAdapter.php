@@ -110,7 +110,7 @@ class AmazonPayAdapter
     protected function getMerchantCustomInformation()
     {
         return sprintf(
-            'Magento Version: %s, Plugin Version: %s (v2)',
+            'Magento Version: %s, Plugin Version: %s',
             $this->productMetadata->getVersion(),
             $this->amazonHelper->getModuleVersion('Amazon_Pay')
         );
