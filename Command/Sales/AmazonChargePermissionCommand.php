@@ -47,6 +47,15 @@ class AmazonChargePermissionCommand extends Command
      */
     private $searchCriteriaBuilder;
 
+    /**
+     * AmazonChargePermissionCommand constructor.
+     *
+     * These dependencies are proxied, update di.xml if changed
+     * @param \Magento\Framework\App\State $state
+     * @param \Magento\Sales\Model\OrderRepository $orderRepository
+     * @param \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     */
     public function __construct(
         \Magento\Framework\App\State $state,
         \Magento\Sales\Model\OrderRepository $orderRepository,

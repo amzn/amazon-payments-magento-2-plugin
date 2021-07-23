@@ -49,15 +49,31 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\Console\CommandList">
-       <arguments>
-           <argument name="commands" xsi:type="array">
-               <item name="AmazonPayAsyncProcess" xsi:type="object">Amazon\Pay\Command\Async\ProcessCommand</item>
-           </argument>
-       </arguments>
-   </type>
+    <type name="Amazon\Pay\Command\Async\ProcessCommand">
+        <arguments>
+            <argument name="asyncCollectionFactory" xsi:type="object">Amazon\Pay\Model\ResourceModel\Async\CollectionFactory\Proxy</argument>
+            <argument name="asyncUpdater" xsi:type="object">Amazon\Pay\Model\AsyncUpdater\Proxy</argument>
+        </arguments>
+    </type>
 
-   <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="AmazonPayAsyncProcess" xsi:type="object">Amazon\Pay\Command\Async\ProcessCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Amazon\Pay\Command\Sales\AmazonChargePermissionCommand">
+        <arguments>
+            <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+            <argument name="orderRepository" xsi:type="object">Magento\Sales\Model\OrderRepository\Proxy</argument>
+            <argument name="amazonAdapter" xsi:type="object">Amazon\Pay\Model\Adapter\AmazonPayAdapter\Proxy</argument>
+            <argument name="searchCriteriaBuilder" xsi:type="object">Magento\Framework\Api\SearchCriteriaBuilder\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="AmazonChargePermissionCommand" xsi:type="object">Amazon\Pay\Command\Sales\AmazonChargePermissionCommand</item>
