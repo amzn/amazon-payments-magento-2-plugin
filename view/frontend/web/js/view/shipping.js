@@ -2,11 +2,15 @@
 define(
     [
         'jquery',
-        'Amazon_Pay/js/model/storage'
+        'Amazon_Pay/js/model/storage',
+        'uiRegistry',
+        'Magento_Checkout/js/model/checkout-data-resolver'
     ],
     function (
         $,
-        amazonStorage
+        amazonStorage,
+        registry,
+        checkoutDataResolver
     ) {
         'use strict';
 
@@ -21,8 +25,10 @@ define(
                  * Initialize shipping
                  */
                 initialize: function () {
+                    this.showFormPopUp();
                     this._super();
                     this.isNewAddressAdded(true);
+                    this.refreshShippingRegion();
                     return this;
                 },
 
@@ -35,6 +41,14 @@ define(
                     $(loginFormSelector).validation();
 
                     return $(loginFormSelector + ' input[type=email]').valid();
+                },
+
+                refreshShippingRegion: function() {
+                    var checkoutProvider = registry.get('checkoutProvider');
+
+                    checkoutProvider.on('shippingAddress.region_id', function (regionId) {
+                        checkoutDataResolver.resolveEstimationAddress();
+                    });
                 }
             });
         }
