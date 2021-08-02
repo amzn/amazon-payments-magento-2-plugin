@@ -160,7 +160,7 @@
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeClient</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\AuthorizeResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -172,7 +172,7 @@
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SaleClient</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\SaleResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -184,7 +184,7 @@
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SettlementClient</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\SettlementHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\SettlementResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -202,7 +202,7 @@
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\RefundHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\RefundClient</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\RefundResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -214,7 +214,7 @@
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\VoidHandler</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\VoidClient</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\VoidResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
