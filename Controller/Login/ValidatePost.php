@@ -84,7 +84,8 @@ class ValidatePost extends Action
 
         if (null !== $credentials && $credentials instanceof ValidationCredentials) {
             $password = $this->getRequest()->getParam('password');
-            $hash     = $this->customerRegistry->retrieveSecureData($credentials->getCustomerId())->getPasswordHash();
+            $customerSecure = $this->customerRegistry->retrieveSecureData($credentials->getCustomerId());
+            $hash = $customerSecure->getPasswordHash() ?? '';
 
             if ($this->encryptor->validateHash($password, $hash)) {
                 $this->customerLinkManagement->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
