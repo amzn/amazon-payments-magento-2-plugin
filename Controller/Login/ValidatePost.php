@@ -91,7 +91,7 @@ class ValidatePost extends Action
                 $this->customerLinkManagement->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
                 $this->session->loginById($credentials->getCustomerId());
             } else {
-                $this->messageManager->addErrorMessage('The password supplied was incorrect');
+                $this->messageManager->addErrorMessage(__('The password supplied was incorrect'));
                 return $this->_redirect($this->_url->getRouteUrl('*/*/validate'));
             }
         }
