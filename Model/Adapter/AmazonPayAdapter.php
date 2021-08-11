@@ -128,7 +128,7 @@ class AmazonPayAdapter
                 $amount = round($amount);
                 break;
             default:
-                $amount = (float)number_format((float)$amount, 2);
+                $amount = (float)number_format($amount, 2, '.', '');
                 break;
         }
         return [
