@@ -20,6 +20,14 @@ class ProcessCommand extends Command
      */
     private $asyncUpdater;
 
+    /**
+     * ProcessCommand constructor.
+     *
+     * These dependencies are proxied, update di.xml if changed
+     * @param \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
+     * @param \Amazon\Pay\Model\AsyncUpdater $asyncUpdater
+     * @param string|null $name
+     */
     public function __construct(
         \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
         \Amazon\Pay\Model\AsyncUpdater $asyncUpdater,
