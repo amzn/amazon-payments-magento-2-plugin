@@ -600,7 +600,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $order = $this->orderRepository->get($orderId);
             $result = [
                 'success' => true,
-                'order_id' => $order->getIncrementId(),
+                'order_id' => $orderId,
+                'increment_id' => $order->getIncrementId()
             ];
 
             $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
