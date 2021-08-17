@@ -33,6 +33,14 @@ class GeneralResponseValidator extends AbstractValidator
      */
     protected $validStates = [];
 
+    public function __construct(
+        \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory,
+        array $validStates = []
+    ) {
+        $this->validStates = $validStates;
+        parent::__construct($resultFactory);
+    }
+
     /**
      * Performs validation of result code
      *
