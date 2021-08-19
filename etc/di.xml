@@ -181,17 +181,17 @@
     <virtualType name="SaleResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
         <arguments>
             <argument name="validStates" xsi:type="array">
-                <item name="state_capture_initiated" xsi:type="string">Capture Initiated</item>
+                <item name="state_capture_initiated" xsi:type="string">CaptureInitiated</item>
                 <item name="state_captured" xsi:type="string">Captured</item>
                 <item name="state_open" xsi:type="string">Open</item>
             </argument>
         </arguments>
     </virtualType>
-    
+
     <virtualType name="SettlementResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
         <arguments>
             <argument name="validStates" xsi:type="array">
-                <item name="state_capture_initiated" xsi:type="string">Capture Initiated</item>
+                <item name="state_capture_initiated" xsi:type="string">CaptureInitiated</item>
                 <item name="state_captured" xsi:type="string">Captured</item>
             </argument>
         </arguments>
@@ -200,7 +200,7 @@
     <virtualType name="RefundResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
         <arguments>
             <argument name="validStates" xsi:type="array">
-                <item name="state_refund_initiated" xsi:type="string">Refund Initiated</item>
+                <item name="state_refund_initiated" xsi:type="string">RefundInitiated</item>
                 <item name="state_refunded" xsi:type="string">Refunded</item>
             </argument>
         </arguments>
