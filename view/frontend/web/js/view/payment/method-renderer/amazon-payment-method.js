@@ -45,7 +45,6 @@ define(
             defaults: {
                 isAmazonCheckout: ko.observable(amazonStorage.isAmazonCheckout()),
                 isBillingAddressVisible: ko.observable(false),
-                isPlaceOrderActionAllowed: billingFormAddressState.isValid,
                 paymentDescriptor: ko.observable(''),
                 logo: 'Amazon_Pay/images/logo/Black-L.png',
                 template: 'Amazon_Pay/payment/amazon-payment-method'
@@ -84,7 +83,6 @@ define(
                 var checkoutProvider = registry.get('checkoutProvider');
                 checkoutSessionAddressLoad('billing', function (amazonAddress) {
                     if ($.isEmptyObject(amazonAddress)) {
-                        self.isPlaceOrderActionAllowed(true);
                         return;
                     }
 
