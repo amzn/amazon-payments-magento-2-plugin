@@ -1,5 +1,16 @@
 # Change Log
 
+## 5.7.0
+* Changed the response of completeCheckoutSession API call to include both increment ID and order ID
+* Fixed issue with logging in when a customer has an empty password hash (thanks @rafczow!)
+* Fixed issue with sending too many decimal points to Amazon API, particularly an issue when using TaxJar as it uses more decimal points than Magento typically does (thanks @vkalchenko!)
+* Fixed issue where the Address Form would not be shown even though Amazon address did not provide a needed field, particularly State/Province
+* Fixed issue where using Amazon Pay in the Payment Methods section did not work on one step checkouts
+* Fixed issue where using Amazon Pay in the Payment Methods section could bypass agreeing to Terms and Conditions
+* Removed usage of isPlaceOrderActionAllowed in js components
+* Updated API calls to take in a masked cart ID so they can be used without relying on Magento sessions
+* Updated response validators to look for specific response code and states
+
 ## 5.6.0
 * Changed the merchantReferenceId to be set on the charge permission after the order is completed
 * Changed IPN handling so that it wouldn’t re-try capture on duplicate messages
