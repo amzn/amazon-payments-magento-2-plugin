@@ -308,6 +308,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function getConfig()
     {
+        // Ensure the totals are up to date, in case the checkout does something to update qty or shipping without
+        // collecting totals
+        $this->magentoCheckoutSession->getQuote()->collectTotals();
+
         $result = [];
         if ($this->canCheckoutWithAmazon()) {
             $magentoQuote = $this->magentoCheckoutSession->getQuote();
