@@ -459,16 +459,34 @@ class AmazonPayAdapter
         // Log
         $isError = !in_array($response['status'], [200, 201]);
         if ($isError || $this->amazonConfig->isLoggingEnabled()) {
-            $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
-            $this->logger->debug($functionName . ' <- ', $debugBackTrace[1]['args']);
-            if ($isError) {
-                $this->logger->error($functionName . ' -> ', $response);
-            } else {
-                $this->logger->debug($functionName . ' -> ', $response);
-            }
+            $this->logSanitized($functionName, $response, $isError);
         }
 
         return $response;
+    }
+
+    protected function logSanitized($functionName, $response, $isError)
+    {
+        $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
+        $buyerKeys = ['buyerId' => '', 'primeMembershipTypes' => '', 'status' => ''];
+
+        if ($functionName == 'getBuyer') {
+            $response = array_intersect_key($response, $buyerKeys);
+            $debugBackTrace[2]['args'] = [];
+        }
+
+        if (isset($response['buyer'])) {
+            $response['buyer'] = array_intersect_key($response['buyer'], $buyerKeys);
+        }
+
+        unset($response['shippingAddress'], $response['billingAddress']);
+
+        $this->logger->debug($functionName . ' <- ', $debugBackTrace[2]['args']);
+        if ($isError) {
+            $this->logger->error($functionName . ' -> ', $response);
+        } else {
+            $this->logger->debug($functionName . ' -> ', $response);
+        }
     }
 
     /**
