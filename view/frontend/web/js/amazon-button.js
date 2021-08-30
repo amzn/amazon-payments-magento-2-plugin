@@ -18,15 +18,17 @@ define([
     'Amazon_Pay/js/model/storage',
     'mage/url',
     'Amazon_Pay/js/amazon-checkout',
-    'Magento_Customer/js/customer-data'
-], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout, customerData) {
+    'Magento_Customer/js/customer-data',
+    'Magento_Checkout/js/model/payment/additional-validators'
+], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout, customerData, additionalValidators) {
     'use strict';
 
     $.widget('amazon.AmazonButton', {
         options: {
             payOnly: null,
             placement: 'Cart',
-            hideIfUnavailable: ''
+            hideIfUnavailable: '',
+            buttonType: 'Normal'
         },
 
         drawing: false,
@@ -34,16 +36,17 @@ define([
         _loadButtonConfig: function (callback) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                 if (!$.isEmptyObject(checkoutSessionConfig)) {
-                    var payload = (this.options.placement === 'PayNow') ?
-                        checkoutSessionConfig['paynow_payload'] : checkoutSessionConfig['checkout_payload'];
-                    var signature = (this.options.placement === 'PayNow') ?
-                        checkoutSessionConfig['paynow_signature'] : checkoutSessionConfig['checkout_signature'];
-                    if (this.options.placement === 'PayNow') {
-                        this.options.placement = 'Checkout';
+                    var payload = checkoutSessionConfig['checkout_payload'];
+                    var signature = checkoutSessionConfig['checkout_signature'];
+
+                    if (this.buttonType === 'PayNow') {
+                        payload = checkoutSessionConfig['paynow_payload'];
+                        signature = checkoutSessionConfig['paynow_signature'];
                     }
 
                     callback({
                         merchantId: checkoutSessionConfig['merchant_id'],
+                        publicKeyId: checkoutSessionConfig['public_key_id'],
                         ledgerCurrency: checkoutSessionConfig['currency'],
                         sandbox: checkoutSessionConfig['sandbox'],
                         checkoutLanguage: checkoutSessionConfig['language'],
@@ -57,7 +60,7 @@ define([
                         }
                     });
 
-                    if (this.options.placement !== "Checkout" && this.options.placement !== "PayNow") {
+                    if (this.options.placement !== "Checkout") {
                         $(this.options.hideIfUnavailable).show();
                     }
                 } else {
@@ -83,19 +86,26 @@ define([
          * Create button
          */
         _create: function () {
+            var self = this;
+            if (this.options.placement === 'PayNow') {
+                // PayNow is not a valid placement for Amazon Pay API, only used for changing payload
+                this.options.placement = 'Checkout';
+                this.buttonType = 'PayNow';
+            }
+
             this._draw();
 
-            if (this.options.placement == 'Product') {
+            if (this.options.placement === 'Product') {
                 this._redraw();
             }
         },
 
         /**
-        * Draw button
-        **/
+         * Draw button
+         **/
         _draw: function () {
             var self = this;
-            
+
             if (!this.drawing) {
                 this.drawing = true;
                 var $buttonContainer = this.element;
@@ -105,9 +115,21 @@ define([
                     $buttonContainer.empty().append($buttonRoot);
 
                     this._loadButtonConfig(function (buttonConfig) {
-                        amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
+                        // do not use session config for decoupled button
+                        delete buttonConfig.createCheckoutSessionConfig;
+                        var amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
+                        amazonPayButton.onClick(function() {
+                            if (self.buttonType === 'PayNow' && !additionalValidators.validate()) {
+                                return false;
+                            }
+
+                            self._loadButtonConfig(function (buttonConfig) {
+                                var initConfig = {createCheckoutSessionConfig: buttonConfig.createCheckoutSessionConfig};
+                                amazonPayButton.initCheckout(initConfig);
+                            });
+                            customerData.invalidate('*');
+                        });
                         $('.amazon-button-container .field-tooltip').fadeIn();
-                        $('.amazon-checkout-button').click(function() { customerData.invalidate('*'); });
 
                         self.drawing = false;
                     });
@@ -116,8 +138,8 @@ define([
         },
 
         /**
-        * Redraw button if needed
-        **/
+         * Redraw button if needed
+         **/
         _redraw: function () {
             var self = this;
 

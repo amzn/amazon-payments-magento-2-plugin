@@ -27,6 +27,21 @@ class GeneralResponseValidator extends AbstractValidator
 {
 
     /**
+     * Acceptable object states
+     *
+     * @var Array $validStates
+     */
+    protected $validStates = [];
+
+    public function __construct(
+        \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory,
+        array $validStates = []
+    ) {
+        $this->validStates = $validStates;
+        parent::__construct($resultFactory);
+    }
+
+    /**
      * Performs validation of result code
      *
      * @param  array $validationSubject
@@ -40,26 +55,24 @@ class GeneralResponseValidator extends AbstractValidator
 
         $response = $validationSubject['response'];
 
+        if (!in_array($response['status'], [200, 201])) {
+            $isValid = false;
+            $errorCodes[] = 'HTTP status code ' . $response['status'];
+        }
+
         if (isset($response['statusDetails'])) {
-            if ($response['statusDetails']['state'] != 'Canceled') {
+            if (!in_array($response['statusDetails']['state'], $this->validStates)) {
+                $isValid = false;
+                $errorMessages[] = 'Invalid State: receieved ' . $response['statusDetails']['state']
+                    . ', expected ' . implode(' | ', $this->validStates);
+
                 if (!empty($response['statusDetails']['reasonCode'])) {
-                    $isValid = false;
                     $errorCodes[] = $response['statusDetails']['reasonCode'];
                 }
                 if (!empty($response['statusDetails']['reasonDescription'])) {
-                    $isValid = false;
                     $errorMessages[] = $response['statusDetails']['reasonDescription'];
                 }
             }
-        }
-
-        if (!empty($response['reasonCode'])) {
-            $isValid = false;
-            $errorCodes[] = $response['reasonCode'];
-        }
-        if (!empty($response['reasonDescription'])) {
-            $isValid = false;
-            $errorMessages[] = $response['reasonDescription'];
         }
 
         return $this->createResult($isValid, $errorMessages, $errorCodes);

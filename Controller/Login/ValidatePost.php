@@ -84,13 +84,14 @@ class ValidatePost extends Action
 
         if (null !== $credentials && $credentials instanceof ValidationCredentials) {
             $password = $this->getRequest()->getParam('password');
-            $hash     = $this->customerRegistry->retrieveSecureData($credentials->getCustomerId())->getPasswordHash();
+            $customerSecure = $this->customerRegistry->retrieveSecureData($credentials->getCustomerId());
+            $hash = $customerSecure->getPasswordHash() ?? '';
 
             if ($this->encryptor->validateHash($password, $hash)) {
                 $this->customerLinkManagement->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
                 $this->session->loginById($credentials->getCustomerId());
             } else {
-                $this->messageManager->addErrorMessage('The password supplied was incorrect');
+                $this->messageManager->addErrorMessage(__('The password supplied was incorrect'));
                 return $this->_redirect($this->_url->getRouteUrl('*/*/validate'));
             }
         }

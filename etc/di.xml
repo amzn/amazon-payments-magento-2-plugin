@@ -169,6 +169,51 @@
         </arguments>
     </type>
 
+    <!-- Gateway Response Validators -->
+    <virtualType name="AuthorizeResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_open" xsi:type="string">Open</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SaleResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_capture_initiated" xsi:type="string">CaptureInitiated</item>
+                <item name="state_captured" xsi:type="string">Captured</item>
+                <item name="state_open" xsi:type="string">Open</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SettlementResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_capture_initiated" xsi:type="string">CaptureInitiated</item>
+                <item name="state_captured" xsi:type="string">Captured</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RefundResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_refund_initiated" xsi:type="string">RefundInitiated</item>
+                <item name="state_refunded" xsi:type="string">Refunded</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VoidResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_closed" xsi:type="string">Closed</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
     <!-- Authorize command -->
     <virtualType name="AmazonPayAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
@@ -176,7 +221,7 @@
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeClient</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">AuthorizeResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -188,7 +233,7 @@
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SaleClient</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">SaleResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -200,7 +245,7 @@
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SettlementClient</argument>
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\SettlementHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">SettlementResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -218,7 +263,7 @@
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\RefundHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\RefundClient</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">RefundResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -230,7 +275,7 @@
             <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\VoidHandler</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\VoidClient</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
-            <argument name="validator" xsi:type="object">Amazon\Pay\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">VoidResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
