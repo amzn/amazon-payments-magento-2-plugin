@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.7.1
+* Fixed issue when phone number not required and entered in Magento
+* Updated API calls to take in a masked cart ID so they can be used without relying on Magento sessions
+* Updated logging to sanitize some data
+
 ## 5.7.0
 * Changed the response of completeCheckoutSession API call to include both increment ID and order ID
 * Fixed issue with logging in when a customer has an empty password hash (thanks @rafczow!)
@@ -8,7 +13,6 @@
 * Fixed issue where using Amazon Pay in the Payment Methods section did not work on one step checkouts
 * Fixed issue where using Amazon Pay in the Payment Methods section could bypass agreeing to Terms and Conditions
 * Removed usage of isPlaceOrderActionAllowed in js components
-* Updated API calls to take in a masked cart ID so they can be used without relying on Magento sessions
 * Updated response validators to look for specific response code and states
 
 ## 5.6.0
