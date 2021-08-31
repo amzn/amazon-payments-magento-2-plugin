@@ -568,7 +568,15 @@ class AmazonPayAdapter
                 $addressData[$addressKey] = $streetLine;
             }
 
-            $addressData = array_filter($addressData);
+            // Remove empty fields, or ones that contain only "-"
+            $addressData = array_filter($addressData, function ($val) {
+                return !empty($val) && $val != "-";
+            });
+
+            // Make sure phone number is set for PayNow button
+            if (!array_key_exists('phoneNumber', $addressData)) {
+                $addressData['phoneNumber'] = "0";
+            }
 
             $payload['addressDetails'] = $addressData;
         }
