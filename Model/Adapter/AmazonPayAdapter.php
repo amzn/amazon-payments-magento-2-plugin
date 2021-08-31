@@ -570,6 +570,10 @@ class AmazonPayAdapter
 
             $addressData = array_filter($addressData);
 
+            if (!array_key_exists('phoneNumber', $addressData)) {
+                $addressData['phoneNumber'] = "0";
+            }
+
             $payload['addressDetails'] = $addressData;
         }
 
