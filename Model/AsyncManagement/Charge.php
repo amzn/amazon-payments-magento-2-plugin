@@ -288,6 +288,7 @@ class Charge extends AbstractOperation
 
         if ($invoice && ($invoice->canCapture() || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW)) {
             $order = $invoice->getOrder();
+            $this->setProcessing($order);
             $payment = $order->getPayment();
             $invoice->setTransactionId($chargeId);
 
@@ -308,7 +309,6 @@ class Charge extends AbstractOperation
             $payment->setDataUsingMethod('base_amount_paid_online', $chargeAmount);
             $payment->addTransactionCommentsToOrder($transaction, $message);
             $transaction->setIsClosed(true);
-            $this->setProcessing($order);
             $order->save();
             $this->asyncLogger->info('Captured Order #' . $order->getIncrementId());
         } else {

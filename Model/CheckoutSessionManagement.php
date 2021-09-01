@@ -477,9 +477,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         if (!empty($invoiceCollection->getItems())) {
             $invoiceCollection->getFirstItem()->pay();
         }
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)->setStatus(
-            \Magento\Sales\Model\Order::STATE_PROCESSING
-        );
+        $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
+        $status = $order->getConfig()->getStateDefaultStatus($state);
+        $order->setState($state)->setStatus($status);
         $this->orderRepository->save($order);
     }
 
