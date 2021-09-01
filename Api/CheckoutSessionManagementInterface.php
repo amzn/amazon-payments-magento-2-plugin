@@ -21,9 +21,10 @@ namespace Amazon\Pay\Api;
 interface CheckoutSessionManagementInterface
 {
     /**
+     * @param mixed|null $cartId
      * @return mixed
      */
-    public function getConfig();
+    public function getConfig($cartId = null);
 
     /**
      * @param mixed $amazonSessionId
@@ -45,13 +46,15 @@ interface CheckoutSessionManagementInterface
 
     /**
      * @param mixed $amazonSessionId
+     * @param mixed|null $cartId
      * @return string
      */
-    public function updateCheckoutSession($amazonSessionId);
+    public function updateCheckoutSession($amazonSessionId, $cartId = null);
 
     /**
      * @param mixed $amazonSessionId
+     * @param mixed|null $cartId
      * @return int
      */
-    public function completeCheckoutSession($amazonSessionId);
+    public function completeCheckoutSession($amazonSessionId, $cartId = null);
 }

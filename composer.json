@@ -2,7 +2,7 @@
   "name": "amzn/amazon-pay-magento-2-module",
   "description": "Official Magento2 Plugin to integrate with Amazon Pay",
   "type": "magento2-module",
-  "version": "5.7.0",
+  "version": "5.7.1",
   "license": [
     "Apache-2.0"
   ],
