@@ -48,6 +48,6 @@ class CheckoutSession
      */
     public function getConfig()
     {
-        return $this->checkoutSessionManagement->getConfig($this->session->getQuote());
+        return $this->checkoutSessionManagement->getConfig();
     }
 }

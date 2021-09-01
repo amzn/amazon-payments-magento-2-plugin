@@ -459,16 +459,34 @@ class AmazonPayAdapter
         // Log
         $isError = !in_array($response['status'], [200, 201]);
         if ($isError || $this->amazonConfig->isLoggingEnabled()) {
-            $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
-            $this->logger->debug($functionName . ' <- ', $debugBackTrace[1]['args']);
-            if ($isError) {
-                $this->logger->error($functionName . ' -> ', $response);
-            } else {
-                $this->logger->debug($functionName . ' -> ', $response);
-            }
+            $this->logSanitized($functionName, $response, $isError);
         }
 
         return $response;
+    }
+
+    protected function logSanitized($functionName, $response, $isError)
+    {
+        $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
+        $buyerKeys = ['buyerId' => '', 'primeMembershipTypes' => '', 'status' => ''];
+
+        if ($functionName == 'getBuyer') {
+            $response = array_intersect_key($response, $buyerKeys);
+            $debugBackTrace[2]['args'] = [];
+        }
+
+        if (isset($response['buyer'])) {
+            $response['buyer'] = array_intersect_key($response['buyer'], $buyerKeys);
+        }
+
+        unset($response['shippingAddress'], $response['billingAddress']);
+
+        $this->logger->debug($functionName . ' <- ', $debugBackTrace[2]['args']);
+        if ($isError) {
+            $this->logger->error($functionName . ' -> ', $response);
+        } else {
+            $this->logger->debug($functionName . ' -> ', $response);
+        }
     }
 
     /**
@@ -568,7 +586,15 @@ class AmazonPayAdapter
                 $addressData[$addressKey] = $streetLine;
             }
 
-            $addressData = array_filter($addressData);
+            // Remove empty fields, or ones that contain only "-"
+            $addressData = array_filter($addressData, function ($val) {
+                return !empty($val) && $val != "-";
+            });
+
+            // Make sure phone number is set for PayNow button
+            if (!array_key_exists('phoneNumber', $addressData)) {
+                $addressData['phoneNumber'] = "0";
+            }
 
             $payload['addressDetails'] = $addressData;
         }
