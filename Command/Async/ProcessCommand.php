@@ -62,7 +62,5 @@ class ProcessCommand extends Command
             /** @var \Amazon\Pay\Model\Async $item */
             $this->asyncUpdater->processPending($item);
         }
-
-        $this->asyncUpdater->processPending(null);
     }
 }
