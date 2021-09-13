@@ -21,7 +21,7 @@ namespace Amazon\Pay\Api;
 interface CheckoutSessionManagementInterface
 {
     /**
-     * @param mixed|null $cartId
+     * @param string|null $cartId
      * @return mixed
      */
     public function getConfig($cartId = null);
