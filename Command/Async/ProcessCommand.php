@@ -21,20 +21,28 @@ class ProcessCommand extends Command
     private $asyncUpdater;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    private $state;
+
+    /**
      * ProcessCommand constructor.
      *
      * These dependencies are proxied, update di.xml if changed
      * @param \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
      * @param \Amazon\Pay\Model\AsyncUpdater $asyncUpdater
+     * @param \Magento\Framework\App\State $state
      * @param string|null $name
      */
     public function __construct(
         \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
         \Amazon\Pay\Model\AsyncUpdater $asyncUpdater,
+        \Magento\Framework\App\State $state,
         string $name = null
     ) {
         $this->asyncCollectionFactory = $asyncCollectionFactory;
         $this->asyncUpdater = $asyncUpdater;
+        $this->state = $state;
         parent::__construct($name);
     }
 
@@ -46,6 +54,7 @@ class ProcessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
         $collection = $this->asyncCollectionFactory->create();
         $collection->addFieldToFilter(AsyncInterface::IS_PENDING, ['eq' => 1]);
         $collection->addOrder(AsyncInterface::ID, Collection::SORT_ORDER_ASC);
@@ -53,5 +62,7 @@ class ProcessCommand extends Command
             /** @var \Amazon\Pay\Model\Async $item */
             $this->asyncUpdater->processPending($item);
         }
+
+        $this->asyncUpdater->processPending(null);
     }
 }
