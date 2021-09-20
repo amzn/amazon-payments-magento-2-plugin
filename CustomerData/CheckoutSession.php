@@ -48,6 +48,10 @@ class CheckoutSession
      */
     public function getConfig()
     {
-        return $this->checkoutSessionManagement->getConfig();
+        $data = $this->checkoutSessionManagement->getConfig();
+        if (count($data) > 0) {
+            $data = $data[0];
+        }
+        return $data;
     }
 }
