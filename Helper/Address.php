@@ -23,6 +23,8 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Eav\Model\Config as EavConfig;
 
 class Address
 {
@@ -46,16 +48,30 @@ class Address
      */
     private $scopeConfig;
 
+    /**
+     * @var eavConfig
+     */
+    private $eavConfig;
+
+    /**
+     * @var productMetadata
+     */
+    private $productMetadata;
+
     public function __construct(
         AddressInterfaceFactory $addressFactory,
         RegionFactory $regionFactory,
         RegionInterfaceFactory $regionDataFactory,
-        ScopeConfigInterface $config
+        ScopeConfigInterface $config,
+        EavConfig $eavConfig,
+        ProductMetadataInterface $productMetadata
     ) {
         $this->addressFactory    = $addressFactory;
         $this->regionFactory     = $regionFactory;
         $this->regionDataFactory = $regionDataFactory;
         $this->scopeConfig = $config;
+        $this->productMetadata = $productMetadata;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -67,11 +83,18 @@ class Address
      */
     public function convertToMagentoEntity(AmazonAddressInterface $amazonAddress)
     {
-        $addressLinesAllowed = (int) $this->scopeConfig->getValue(
-            'customer/address/street_lines',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-
+        if ($this->productMetadata->getEdition() == 'Enterprise') {
+            $addressLinesAllowed = (int) $this->eavConfig->getAttribute(
+                'customer_address',
+                'street'
+            )->getMultilineCount();
+        } else {
+            $addressLinesAllowed = (int) $this->scopeConfig->getValue(
+                'customer/address/street_lines',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
+ 
         $address = $this->addressFactory->create();
         $address->setFirstname($amazonAddress->getFirstName());
         $address->setLastname($amazonAddress->getLastName());
