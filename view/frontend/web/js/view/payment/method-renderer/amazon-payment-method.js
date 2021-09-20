@@ -45,6 +45,7 @@ define(
             defaults: {
                 isAmazonCheckout: ko.observable(amazonStorage.isAmazonCheckout()),
                 isBillingAddressVisible: ko.observable(false),
+                isIosc: ko.observable($('button.iosc-place-order-button').length > 0),
                 paymentDescriptor: ko.observable(''),
                 logo: 'Amazon_Pay/images/logo/Black-L.png',
                 template: 'Amazon_Pay/payment/amazon-payment-method'
@@ -136,6 +137,15 @@ define(
                 }
 
                 return false;
+            },
+
+            /**
+             * Redirect Place Order clicks to Amazon button in Pay Now flow for OSC
+             */
+            payNow: function () {
+                $('#PayWithAmazonButton')
+                    .find('div')
+                    .trigger('click');
             },
 
             /**
