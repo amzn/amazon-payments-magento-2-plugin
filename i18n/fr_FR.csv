@@ -132,3 +132,7 @@
 "The selected payment method is not available for this transaction. Please select another one or add a new payment method to the wallet widget.","Le mode de paiement sélectionné n'est pas disponible pour cette transaction. Veuillez en sélectionner un autre ou ajouter un nouveau mode de paiement au widget de portefeuille."
 "No payment instrument has been selected for this order, please try to refresh the page or add a new payment instrument in the wallet widget.","Aucun instrument de paiement n'a été sélectionné pour cette commande, veuillez essayer de rafraîchir la page ou d'ajouter un nouvel instrument de paiement dans le widget de portefeuille."
 "The order failed due to a technical error, please select another payment method or contact our support.","La commande a échoué en raison d'une erreur technique, veuillez sélectionner un autre mode de paiement ou contacter notre support."
+"Payment declined for your order #%incrementId","Paiement refusé pour votre commande #%incrementId"
+"Valued customer","Cher(e) Client(e)"
+"Unfortunately Amazon Pay declined the payment for your order in our online shop %storeName, please try placing the order again with another payment method.","Malheureusement, Amazon Pay a refusé le paiement de votre commande dans notre boutique en ligne %storeName, veuillez réessayer de passer la commande avec un autre moyen de paiement."
+"Kind regards","Bien Cordialement"

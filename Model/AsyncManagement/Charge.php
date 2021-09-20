@@ -21,6 +21,7 @@ use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
+use Magento\Framework\Event\ManagerInterface;
 
 class Charge extends AbstractOperation
 {
@@ -65,6 +66,11 @@ class Charge extends AbstractOperation
     private $amazonConfig;
 
     /**
+     * @var EventManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Charge constructor.
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -77,6 +83,7 @@ class Charge extends AbstractOperation
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
      * @param \Magento\Backend\Model\UrlInterface $urlBuilder
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -89,7 +96,8 @@ class Charge extends AbstractOperation
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Notification\NotifierInterface $notifier,
         \Magento\Backend\Model\UrlInterface $urlBuilder,
-        \Amazon\Pay\Model\AmazonConfig $amazonConfig
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         parent::__construct($orderRepository, $transactionRepository, $searchCriteriaBuilder);
         $this->amazonAdapter = $amazonAdapter;
@@ -100,6 +108,7 @@ class Charge extends AbstractOperation
         $this->notifier = $notifier;
         $this->urlBuilder = $urlBuilder;
         $this->amazonConfig = $amazonConfig;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -222,6 +231,7 @@ class Charge extends AbstractOperation
             );
 
             $this->asyncLogger->info('Charge declined for Order #' . $order->getIncrementId());
+            $this->eventManager->dispatch('amazon_pay_async_payment_declined', ['order' => $order]);
         }
     }
 
