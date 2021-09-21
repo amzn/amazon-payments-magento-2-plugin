@@ -39,7 +39,7 @@ class PaymentTransactionIdUpdate
         if (strpos($paymentMethodTitle, 'Amazon Pay') !== false && $type == Transaction::TYPE_VOID) {
             $chargePermissionId = $payment->getAdditionalInformation('charge_permission_id');
             if (empty($chargePermissionId)) {
-                $transactionId = explode('-', $payment->getParentTransactionId());
+                $transactionId = explode('-', $payment->getAuthorizationTransaction()->getTxnId());
                 $chargePermissionId = implode('-', array_slice($transactionId, 0, 3));
             }
             $payment->setTransactionId($chargePermissionId . '-void');

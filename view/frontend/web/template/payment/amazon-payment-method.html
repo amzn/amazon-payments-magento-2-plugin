@@ -58,13 +58,13 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <!-- ko if: isAmazonCheckout -->
+        <!-- ko if: isAmazonCheckout() || isIosc() -->
             <div class="actions-toolbar">
                 <div class="primary">
                     <button class="action primary checkout"
                             type="submit"
                             data-bind="
-                            click: placeOrder,
+                            click: isAmazonCheckout() ? placeOrder : payNow,
                             attr: {title: $t('Place Order')},
                             enable: (getCode() == isChecked())
                             "

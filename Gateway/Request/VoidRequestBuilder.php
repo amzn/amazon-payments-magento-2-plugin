@@ -50,7 +50,7 @@ class VoidRequestBuilder implements BuilderInterface
 
         // If we do not have a charge permission on the payment, try the first 3 sections of transaction ID
         if (empty($chargePermissionId)) {
-            $transactionId = explode('-', $paymentDO->getPayment()->getParentTransactionId());
+            $transactionId = explode('-', $paymentDO->getPayment()->getAuthorizationTransaction()->getTxnId());
             $chargePermissionId = implode('-', array_slice($transactionId, 0, 3));
         }
 
