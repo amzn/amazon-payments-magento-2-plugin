@@ -174,7 +174,7 @@ class AmazonPayAdapter
 
         $payload = [
             'webCheckoutDetails' => [
-                'checkoutResultReturnUrl' => $this->url->getRouteUrl('amazon_pay/checkout/completeSession')
+                'checkoutResultReturnUrl' => $this->amazonConfig->getCheckoutResultReturnUrl()
             ],
             'paymentDetails' => [
                 'paymentIntent' => $paymentIntent,
