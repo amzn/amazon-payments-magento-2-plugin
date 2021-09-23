@@ -21,6 +21,9 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 
 class Session
 {
@@ -40,6 +43,16 @@ class Session
     private $eventManager;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
+     * @var MaskedQuoteIdToQuoteIdInterface
+     */
+    private $maskedQuoteIdConverter;
+
+    /**
      * Session constructor.
      * @param CustomerSession $session
      * @param EventManagerInterface $eventManager
@@ -48,11 +61,15 @@ class Session
     public function __construct(
         CustomerSession $session,
         EventManagerInterface $eventManager,
-        CheckoutSession $checkoutSession
+        CheckoutSession $checkoutSession,
+        CartRepositoryInterface $cartRepository,
+        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter
     ) {
         $this->session      = $session;
         $this->checkoutSession = $checkoutSession;
         $this->eventManager = $eventManager;
+        $this->cartRepository = $cartRepository;
+        $this->maskedQuoteIdConverter = $maskedQuoteIdConverter;
     }
 
     /**
@@ -186,5 +203,28 @@ class Session
     public function getQuote()
     {
         return $this->checkoutSession->getQuote();
+    }
+
+
+    /**
+     * Load quote from provided masked quote ID or falls back to loading from the session
+     * @param $cartId null|string
+     * @return false|CartInterface|\Magento\Quote\Model\Quote
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getQuoteFromIdOrSession($cartId = null)
+    {
+        try {
+            if (empty($cartId)) {
+                $quote = $this->session->getQuote();
+            } else {
+                $quoteId = $this->maskedQuoteIdConverter->execute($cartId);
+                $quote = $this->cartRepository->get($quoteId);
+            }
+        } catch (NoSuchEntityException $e) {
+            return false;
+        }
+
+        return $quote;
     }
 }
