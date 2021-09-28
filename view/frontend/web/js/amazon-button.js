@@ -33,7 +33,7 @@ define([
 
         drawing: false,
 
-        _loadButtonConfig: function (callback) {
+        _loadButtonConfig: function (callback, forceReload = false) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                 if (!$.isEmptyObject(checkoutSessionConfig)) {
                     var payload = checkoutSessionConfig['checkout_payload'];
@@ -66,7 +66,7 @@ define([
                 } else {
                     $(this.options.hideIfUnavailable).hide();
                 }
-            }.bind(this));
+            }.bind(this), forceReload);
         },
 
         /**
@@ -126,7 +126,7 @@ define([
                             self._loadButtonConfig(function (buttonConfig) {
                                 var initConfig = {createCheckoutSessionConfig: buttonConfig.createCheckoutSessionConfig};
                                 amazonPayButton.initCheckout(initConfig);
-                            });
+                            }, true);
                             customerData.invalidate('*');
                         });
                         $('.amazon-button-container .field-tooltip').fadeIn();
