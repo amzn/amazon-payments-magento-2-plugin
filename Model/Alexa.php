@@ -240,6 +240,7 @@ class Alexa
                 ]]
             ])]);
             $result = $response['deliveryDetails'][0];
+            $result['carrierTitle'] = $track->getTitle();
         }
         return $result;
     }
