@@ -57,10 +57,7 @@ class CustomerRepository
      */
     public function afterGetById(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        if ($this->amazonConfig->isEnabled()) {
-            $this->customerManagement->setAmazonIdExtensionAttribute($customer);
-        }
-
+        $this->customerManagement->setAmazonIdExtensionAttribute($customer);
         return $customer;
     }
 
@@ -75,10 +72,7 @@ class CustomerRepository
      */
     public function afterGet(CustomerRepositoryInterface $customerRepository, CustomerInterface $customer)
     {
-        if ($this->amazonConfig->isEnabled()) {
-            $this->customerManagement->setAmazonIdExtensionAttribute($customer);
-        }
-
+        $this->customerManagement->setAmazonIdExtensionAttribute($customer);
         return $customer;
     }
 }
