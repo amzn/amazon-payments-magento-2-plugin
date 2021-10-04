@@ -36,7 +36,6 @@
                 <title>Amazon Pay</title>
                 <sort_order>1</sort_order>
                 <model>AmazonPayFacade</model>
-                <order_status>processing</order_status>
                 <payment_action>authorize</payment_action>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>

@@ -22,4 +22,7 @@
     <event name="sales_order_payment_capture">
         <observer name="amazon_payment_order_payment_capture" instance="Amazon\Pay\Observer\OrderPaymentCapture" />
     </event>
+    <event name="amazon_pay_async_payment_declined">
+        <observer name="amazon_pay_async_payment_declined" instance="Amazon\Pay\Observer\OrderPaymentDeclined" />
+    </event>
 </config>

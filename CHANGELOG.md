@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.8.0
+* Added log message if we are unable to complete checkout session due to an existing order with same quoteId
+* Added email when asynchronous order processing is declined
+* Fixed issue with Magento Open Source when configured to only allow a single address line
+* Fixed API output for config endpoint to return key/value pairs
+* Fixed issue generating Swagger docs (thanks @ebaschiera!)
+* Fixed issue with canceling transactions started prior to upgrading to CV2/Marketplace module
+* Fixed issue where the Amazon Pay payment method button on Onestepcheckout_Iosc would not trigger when clicking Place Order
+
 ## 5.7.1
 * Fixed issue when phone number not required and entered in Magento
 * Updated API calls to take in a masked cart ID so they can be used without relying on Magento sessions
