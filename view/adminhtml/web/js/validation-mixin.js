@@ -32,7 +32,7 @@ define(['jquery'], function ($) {
         $.validator.addMethod(
             'validate-private-key',
             function (v) {
-                if (v == '******' || v === '------') {
+                if (v == '******' || v === '------' || v == '') {
                     return true;
                 }
                 return (/^-----BEGIN (RSA )?PRIVATE KEY-----.*-----END (RSA )?PRIVATE KEY-----$/s).test(v);
@@ -62,7 +62,7 @@ define(['jquery'], function ($) {
             },
             $.mage.__('Store Id field is invalid. It must start with “amzn1.application-oa2-client.” ' +
                 'and contain 61 characters. Please check and try again')
-        )
+        ),
         $.validator.addMethod(
             'validate-amzn-display-language',
             function (v) {
