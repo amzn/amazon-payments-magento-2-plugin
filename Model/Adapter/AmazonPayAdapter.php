@@ -509,7 +509,7 @@ class AmazonPayAdapter
     public function generateLoginButtonPayload()
     {
         $payload = [
-            'signInReturnUrl' => $this->url->getRouteUrl('amazon_pay/login/authorize/'),
+            'signInReturnUrl' => $this->getSignInUrl(),
             'signInCancelUrl' => $this->getCancelUrl(),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
@@ -615,5 +615,11 @@ class AmazonPayAdapter
         }
 
         return $referer;
+    }
+
+    protected function getSignInUrl()
+    {
+        $signInUrl = $this->amazonConfig->getSignInResultUrlPath();
+        return $this->url->getUrl($signInUrl);
     }
 }

@@ -23,6 +23,9 @@ use Amazon\Pay\Model\AmazonConfig;
 use Amazon\Pay\Model\Validator\AccessTokenRequestValidator;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Amazon\Pay\Helper\Session;
+use Amazon\Pay\Helper\Customer as CustomerHelper;
+use Amazon\Pay\Model\Adapter\AmazonPayAdapter; 
+use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
@@ -110,7 +113,15 @@ abstract class Login extends Action
      */
     protected $accountManagement;
 
+    /**
+     * @var CheckoutSessionManagement
+     */
     protected $checkoutSessionManagement;
+
+    /**
+     * @var CustomerHelper
+     */
+    protected $customerHelper;
 
     /**
      * Login constructor.
@@ -129,12 +140,14 @@ abstract class Login extends Action
      * @param StoreManager $storeManager
      * @param UrlInterface $url
      * @param AccountManagementInterface $accountManagement
+     * @param CheckoutSessionManagementInterface $checkoutSessionManagement
+     * @param customerHelper $customerHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
         AmazonCustomerFactory $amazonCustomerFactory,
-        \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
+        AmazonPayAdapter $amazonAdapter,
         AmazonConfig $amazonConfig,
         Url $customerUrl,
         AccessTokenRequestValidator $accessTokenRequestValidator,
@@ -147,7 +160,8 @@ abstract class Login extends Action
         StoreManager $storeManager,
         UrlInterface $url,
         AccountManagementInterface $accountManagement,
-        CheckoutSessionManagementInterface $checkoutSessionManagement
+        CheckoutSessionManagementInterface $checkoutSessionManagement,
+        CustomerHelper $customerHelper
     ) {
         $this->amazonCustomerFactory       = $amazonCustomerFactory;
         $this->amazonAdapter               = $amazonAdapter;
@@ -164,41 +178,8 @@ abstract class Login extends Action
         $this->url                         = $url;
         $this->accountManagement           = $accountManagement;
         $this->checkoutSessionManagement   = $checkoutSessionManagement;
+        $this->customerHelper              = $customerHelper;
         parent::__construct($context);
-    }
-
-    /**
-     * Load userinfo from access token
-     *
-     * @return AmazonCustomerInterface|false
-     */
-    protected function getAmazonCustomer($token)
-    {
-        try {
-            $userInfo = $this->amazonAdapter
-                ->getBuyer($token);
-
-            if (is_array($userInfo) && array_key_exists('buyerId', $userInfo) && !empty($userInfo['buyerId'])) {
-                $data = [
-                    'id'      => $userInfo['buyerId'],
-                    'email'   => $userInfo['email'],
-                    'name'    => $userInfo['name'],
-                    'country' => $this->amazonConfig->getRegion(),
-                ];
-                $amazonCustomer = $this->amazonCustomerFactory->create($data);
-
-                return $amazonCustomer;
-
-            } else {
-                $this->logger->error('Amazon buyerId is empty. Token: ' . $token);
-            }
-
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-            $this->messageManager->addErrorMessage(__('Error processing Amazon Login'));
-        }
-
-        return false;
     }
 
     /**
@@ -223,5 +204,34 @@ abstract class Login extends Action
     protected function getRedirectAccount()
     {
         return $this->accountRedirect->getRedirect();
+    }
+
+    protected function getAmazonCustomer($buyerInfo)
+    {
+        return $this->customerHelper->getAmazonCustomer($buyerInfo);
+    }
+
+    protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
+    {
+        $customerData = $this->matcher->match($amazonCustomer);
+
+        if (null === $customerData) {
+            return $this->createCustomer($amazonCustomer);
+        }
+
+        if ($amazonCustomer->getId() != $customerData->getExtensionAttributes()->getAmazonId()) {
+            if (! $this->session->isLoggedIn()) {
+                return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());
+            }
+
+            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
+        }
+
+        return $customerData;
+    }
+
+    protected function createCustomer(AmazonCustomerInterface $amazonCustomer)
+    {
+        return $this->customerHelper->createCustomer($amazonCustomer);
     }
 }

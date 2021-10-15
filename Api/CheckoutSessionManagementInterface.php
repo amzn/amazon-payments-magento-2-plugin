@@ -57,4 +57,10 @@ interface CheckoutSessionManagementInterface
      * @return int
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null);
+
+    /**
+     * @param mixed $buyerToken 
+     * @return mixed
+     */
+    public function signIn($buyerToken);
 }

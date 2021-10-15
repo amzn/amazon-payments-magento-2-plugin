@@ -21,6 +21,9 @@ use Amazon\Pay\Gateway\Config\Config;
 use Amazon\Pay\Model\Config\Source\AuthorizationMode;
 use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Amazon\Pay\Model\AsyncManagement;
+use Amazon\Pay\Helper\Customer as CustomerHelper;
+use Amazon\Pay\Model\Customer\CompositeMatcher as Matcher;
+use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use http\Exception\UnexpectedValueException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
@@ -32,6 +35,9 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
+use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
+use Magento\Authorization\Model\UserContextInterface as UserContext;
+
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
@@ -146,6 +152,29 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $maskedQuoteIdConverter;
 
     /**
+     * @var CustomerHelper
+     */
+    private $customerHelper;
+
+    /**
+     * @var Matcher
+     */
+    private $matcher;
+
+    /**
+     * Token Model
+     *
+     * @var TokenModelFactory
+     */
+    private $tokenModelFactory;
+
+    /**
+     *
+     * @var UserContext 
+     */
+    private $userContext;
+
+    /**
      * @var \Amazon\Pay\Logger\Logger
      */
     private $logger;
@@ -172,6 +201,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter
+     * @param CustomerHelper $customerHelper
+     * @param Matcher $matcher
+     * @param TokenModelFactory $tokenModelFactory
+     * @param UserContext $userContext
      * @param \Amazon\Pay\Logger\Logger $logger
      */
     public function __construct(
@@ -195,6 +228,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter,
+        CustomerHelper $customerHelper,
+        Matcher $matcher,
+        TokenModelFactory $tokenModelFactory,
+        UserContext $userContext,
         \Amazon\Pay\Logger\Logger $logger
     ) {
         $this->storeManager = $storeManager;
@@ -217,6 +254,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderCollectionFactory = $orderCollectionFactory;
         $this->maskedQuoteIdConverter = $maskedQuoteIdConverter;
+        $this->customerHelper = $customerHelper;
+        $this->matcher = $matcher;
+        $this->tokenModelFactory = $tokenModelFactory;
+        $this->userContext = $userContext;
         $this->logger = $logger;
     }
 
@@ -349,39 +390,42 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function getConfig($cartId = null)
     {
-        if (!$quote = $this->getQuoteFromIdOrSession($cartId)) {
-            return [];
-        }
-
-        // Ensure the totals are up to date, in case the checkout does something to update qty or shipping without
-        // collecting totals
-        $quote->collectTotals();
-
         $result = [];
-        if ($this->canCheckoutWithAmazon($quote)) {
-            $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
-            $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
-                $quote,
-                $this->amazonConfig->getPaymentAction()
-            );
+        $config = [];
+        $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
+        $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+        $config = [
+            'merchant_id' => $this->amazonConfig->getMerchantId(),
+            'currency' => $this->amazonConfig->getCurrencyCode(),
+            'button_color' => $this->amazonConfig->getButtonColor(),
+            'language' => $this->amazonConfig->getLanguage(),
+            'sandbox' => $this->amazonConfig->isSandboxEnabled(),
+            'login_payload' => $loginButtonPayload,
+            'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
+            'checkout_payload' => $checkoutButtonPayload,
+            'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
+            'public_key_id' => $this->amazonConfig->getPublicKeyId(),
+        ];
 
-            $result[] = [
-                'merchant_id' => $this->amazonConfig->getMerchantId(),
-                'currency' => $this->amazonConfig->getCurrencyCode(),
-                'button_color' => $this->amazonConfig->getButtonColor(),
-                'language' => $this->amazonConfig->getLanguage(),
-                'pay_only' => $this->amazonHelper->isPayOnly($quote),
-                'sandbox' => $this->amazonConfig->isSandboxEnabled(),
-                'login_payload' => $loginButtonPayload,
-                'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
-                'checkout_payload' => $checkoutButtonPayload,
-                'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
-                'paynow_payload' => $payNowButtonPayload,
-                'paynow_signature' => $this->amazonAdapter->signButton($payNowButtonPayload),
-                'public_key_id' => $this->amazonConfig->getPublicKeyId(),
-            ];
+        $quote = $this->getQuoteFromIdOrSession($cartId);
+
+        if ($quote) {
+            // Ensure the totals are up to date, in case the checkout does something to update qty or shipping without
+            // collecting totals
+            $quote->collectTotals();
+
+            if ($this->canCheckoutWithAmazon($quote)) {
+                $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
+                    $quote,
+                    $this->amazonConfig->getPaymentAction()
+                );
+
+                $config['pay_only'] = $this->amazonHelper->isPayOnly($quote);
+                $config['paynow_payload'] = $payNowButtonPayload;
+                $config['paynow_signature'] = $this->amazonAdapter->signButton($payNowButtonPayload); 
+            }
         }
+        $result[] = $config;
         return $result;
     }
 
@@ -780,5 +824,90 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         return $amazonSession['statusDetails']['reasonDescription'];
+    }
+
+    /**
+     * @param mixed $buyerToken 
+     * @return mixed
+     */
+    public function signIn($buyerToken)
+    {
+        $result = [];
+
+        if (!$this->amazonConfig->isLwaEnabled()) {
+            $result = [
+                'success' => false,
+                'message' => __('Amazon Sign-in is disabled')
+            ];
+
+            return [$result];
+        } 
+
+        try {
+            $buyerInfo = $this->amazonAdapter->getBuyer($buyerToken);
+            $amazonCustomer = $this->getAmazonCustomer($buyerInfo);
+
+            if ($amazonCustomer) {
+                $customer = $this->processAmazonCustomer($amazonCustomer);
+                if ($customer) {
+                    $customerToken =  $this->tokenModelFactory->create()->createCustomerToken($customer->getId())->getToken();
+                    $result = [
+                        'success' => true,  
+                        'customer_id' => $customer->getId(),
+                        'customer_email' => $customer->getEmail(),
+                        'customer_firstname' => $customer->getFirstName(),
+                        'customer_last' => $customer->getLastName(),
+                        'customer_bearer_token' => $customerToken                        
+                    ];  
+                    
+                } else {
+                    //TODO: Customer is already in the database but with no Amazon Id.              
+                }      
+
+            } else {
+                $this->logger->error('Amazon buyerId is empty. Token: ' . $buyerToken);
+                $result = [
+                    'success' => false,
+                    'message' => __('Amazon buyerId is empty')
+                ];
+            }
+
+        } catch (\Exception $e) {
+            $this->logger->error('Error processing Amazon Login: ' . $e->getMessage());
+            $result = [
+                'success' => false,
+                'message' => __($e->getMessage())
+            ];
+        }
+
+        return [$result];
+    }
+
+    protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
+    {
+        $customerData = $this->matcher->match($amazonCustomer);
+
+        if (null === $customerData) {
+            return $this->customerHelper->createCustomer($amazonCustomer);
+        }
+
+        if ($amazonCustomer->getId() != $customerData->getExtensionAttributes()->getAmazonId()) {
+
+            //TODO: Not sure what to do here. This is the case when there is already a customer with the same registered email.
+            // We can't redirect him to enter his password.  
+            /*if (! $this->session->isLoggedIn()) {
+                return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());    
+            }
+            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());*/
+
+            return false;
+        }
+
+        return $customerData;
+    }
+
+    protected function getAmazonCustomer($buyerInfo)
+    {
+        return $this->customerHelper->getAmazonCustomer($buyerInfo);
     }
 }
