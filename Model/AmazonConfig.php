@@ -70,6 +70,11 @@ class AmazonConfig
     private $remoteAddress;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * AmazonConfig constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -77,6 +82,7 @@ class AmazonConfig
      * @param \Magento\Directory\Model\Config\Source\Country $countryConfig
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -84,7 +90,8 @@ class AmazonConfig
         \Magento\Directory\Model\AllowedCountries $countriesAllowed,
         \Magento\Directory\Model\Config\Source\Country $countryConfig,
         \Magento\Framework\Locale\Resolver $localeResolver,
-        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -92,6 +99,7 @@ class AmazonConfig
         $this->countryConfig = $countryConfig;
         $this->localeResolver = $localeResolver;
         $this->remoteAddress = $remoteAddress;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -677,6 +685,32 @@ class AmazonConfig
             $scope,
             $scopeCode
         );
+    }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return array
+     */
+    public function getCarriersMapping($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $mapping = [];
+        $configValues = $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/alexa_carrier_codes',
+            $scope,
+            $scopeCode
+        );
+       
+        if ($configValues) {
+            $configValues = $this->serializer->unserialize($configValues);
+            if (count($configValues) > 0) {
+                foreach (array_values($configValues) as $row) {
+                    $mapping[$row['carrier']] = $row['amazon_carrier'];
+                }
+            }
+        }
+
+        return $mapping;
     }
 
     /**

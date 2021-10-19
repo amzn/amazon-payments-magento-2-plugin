@@ -126,6 +126,16 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>
+                    <field id="carrier_codes" translate="label comment" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">
+                        <label>Carrier Codes</label>
+                        <comment><![CDATA[This option allows to map carriers from your shop to the Amazon Pay predefined carriers. Please use the Carrier codes form by selecting your available carriers and assign them to the matching one in the Amazon Pay carrier list.]]></comment>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\CarrierCodes</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <config_path>payment/amazon_payment_v2/alexa_carrier_codes</config_path>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                    </field>
                 </group>
                 <group id="advanced" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced</label>

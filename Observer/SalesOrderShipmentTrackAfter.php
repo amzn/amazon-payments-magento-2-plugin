@@ -48,7 +48,8 @@ class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverI
             $details = $this->alexaModel->addDeliveryNotification($track);
             if ($details) {
                 $message = __(
-                    'Amazon Pay has received shipping tracking information for carrier %1 and tracking number %2.',
+                    'Amazon Pay has received shipping tracking information for carrier %1 (%2) and tracking number %3',
+                    $details['carrierTitle'],
                     $details['carrierCode'],
                     $details['trackingNumber']
                 );
