@@ -30,10 +30,11 @@ define([
         }
         return localStorage;
     };
-    return function (callback) {
+    return function (callback, forceReload = false) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         var config = getLocalStorage().get('config') || false;
-        if (cartId !== getLocalStorage().get('cart_id')
+        if (forceReload
+            || cartId !== getLocalStorage().get('cart_id')
             || typeof config.checkout_payload === 'undefined'
             || !config.checkout_payload.includes(document.URL)) {
             callbacks.push(callback);
