@@ -205,7 +205,6 @@ class Session
         return $this->checkoutSession->getQuote();
     }
 
-
     /**
      * Load quote from provided masked quote ID or falls back to loading from the session
      * @param $cartId null|string

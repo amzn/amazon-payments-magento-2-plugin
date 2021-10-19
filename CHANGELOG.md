@@ -1,5 +1,12 @@
 # Change Log
 
+## 5.9.0
+* Added custom Carrier Code mapping
+* Added config options to allow headless integrations to change return urls
+* Changed validation on private key to allow empty values
+* Fixed issue with processing an invalid Amazon response
+* Fixed issue with One Step Checkouts having stale data in the Payment Methods button
+
 ## 5.8.0
 * Added log message if we are unable to complete checkout session due to an existing order with same quoteId
 * Added email when asynchronous order processing is declined
