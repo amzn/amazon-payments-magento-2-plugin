@@ -214,6 +214,13 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/logging</config_path>
                         </field>
+                        <field id="loglist_v2" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Developer Logs</label>
+                            <depends>
+                                <field id="logging">1</field>
+                            </depends>
+                            <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\DeveloperLogs</frontend_model>
+                        </field>
                         <field id="checkout_review_return_url" translate="label comment" type="text" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Amazon checkout review return URL</label>
                             <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address. Do not use a leading slash.]]></comment>
@@ -233,13 +240,6 @@
                             <label>Checkout result URL Path</label>
                             <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Magento will redirect to this URL after completing the checkout session. Do not use a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_url</config_path>
-                        </field>
-                        <field id="loglist_v2" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                            <label>Developer Logs</label>
-                            <depends>
-                                <field id="logging">1</field>
-                            </depends>
-                            <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\DeveloperLogs</frontend_model>
                         </field>
                         <field id="allowed_ips_v2" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allowed IPs</label>
