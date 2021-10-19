@@ -48,7 +48,9 @@
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <alexa_active>0</alexa_active>
                 <platform_id>A2ZAYEJU54T1BM</platform_id>
+                <checkout_review_return_url>amazon_pay/login/checkout</checkout_review_return_url>
                 <checkout_review_url>checkout</checkout_review_url>
+                <checkout_result_return_url>amazon_pay/checkout/completeSession</checkout_result_return_url>
                 <checkout_result_url>checkout/onepage/success</checkout_result_url>
                 <can_use_internal>0</can_use_internal>
             </amazon_payment_v2>
