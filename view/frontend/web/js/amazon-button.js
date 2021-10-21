@@ -13,14 +13,28 @@
  * permissions and limitations under the License.
  */
 define([
+    'ko',
     'jquery',
     'Amazon_Pay/js/action/checkout-session-config-load',
     'Amazon_Pay/js/model/storage',
     'mage/url',
     'Amazon_Pay/js/amazon-checkout',
     'Magento_Customer/js/customer-data',
-    'Magento_Checkout/js/model/payment/additional-validators'
-], function ($, checkoutSessionConfigLoad, amazonStorage, url, amazonCheckout, customerData, additionalValidators) {
+    'Magento_Checkout/js/model/payment/additional-validators',
+    'mage/storage',
+    'Magento_Checkout/js/model/error-processor'
+], function (
+        ko,
+        $,
+        checkoutSessionConfigLoad,
+        amazonStorage,
+        url,
+        amazonCheckout,
+        customerData,
+        additionalValidators,
+        storage,
+        errorProcessor
+    ) {
     'use strict';
 
     $.widget('amazon.AmazonButton', {
@@ -28,12 +42,13 @@ define([
             payOnly: null,
             placement: 'Cart',
             hideIfUnavailable: '',
-            buttonType: 'Normal'
+            buttonType: 'Normal',
+            isIosc: ko.observable($('button.iosc-place-order-button').length > 0)
         },
 
         drawing: false,
 
-        _loadButtonConfig: function (callback) {
+        _loadButtonConfig: function (callback, forceReload = false) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                 if (!$.isEmptyObject(checkoutSessionConfig)) {
                     var payload = checkoutSessionConfig['checkout_payload'];
@@ -66,7 +81,7 @@ define([
                 } else {
                     $(this.options.hideIfUnavailable).hide();
                 }
-            }.bind(this));
+            }.bind(this), forceReload);
         },
 
         /**
@@ -122,19 +137,43 @@ define([
                             if (self.buttonType === 'PayNow' && !additionalValidators.validate()) {
                                 return false;
                             }
-
-                            self._loadButtonConfig(function (buttonConfig) {
-                                var initConfig = {createCheckoutSessionConfig: buttonConfig.createCheckoutSessionConfig};
-                                amazonPayButton.initCheckout(initConfig);
-                            });
-                            customerData.invalidate('*');
+                            //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
+                            if (self.buttonType === 'PayNow' && self.options.isIosc()) {
+                                storage.post(
+                                    'checkout/onepage/update',
+                                    "{}",
+                                    false
+                                ).done(
+                                    function (response) {
+                                        if (!response.error) {
+                                            self._initCheckout(amazonPayButton);
+                                        } else {
+                                            errorProcessor.process(response);
+                                        }
+                                    }
+                                ).fail(
+                                    function (response) {
+                                        errorProcessor.process(response);
+                                    }
+                                );
+                            }else{
+                                self._initCheckout(amazonPayButton);
+                            }
                         });
-                        $('.amazon-button-container .field-tooltip').fadeIn();
 
+                        $('.amazon-button-container .field-tooltip').fadeIn();
                         self.drawing = false;
                     });
                 }, this);
             }
+        },
+
+        _initCheckout: function (amazonPayButton) {
+            this._loadButtonConfig(function (buttonConfig) {
+                var initConfig = {createCheckoutSessionConfig: buttonConfig.createCheckoutSessionConfig};
+                amazonPayButton.initCheckout(initConfig);
+            }, true);
+            customerData.invalidate('*');
         },
 
         /**

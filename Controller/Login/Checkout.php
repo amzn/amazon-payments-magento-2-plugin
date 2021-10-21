@@ -17,7 +17,9 @@ namespace Amazon\Pay\Controller\Login;
 
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Amazon\Pay\Domain\ValidationCredentials;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Quote\Api\Data\CartInterface;
 use Zend_Validate;
 
 class Checkout extends \Amazon\Pay\Controller\Login
@@ -28,6 +30,7 @@ class Checkout extends \Amazon\Pay\Controller\Login
     public function execute()
     {
         $checkoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
+        $maskedQuoteId = $this->getRequest()->getParam('magentoCartId');
         if ($checkoutSessionId == '') {
             return $this->_redirect('checkout/cart');
         }
@@ -42,7 +45,7 @@ class Checkout extends \Amazon\Pay\Controller\Login
                 $userInfo = $checkoutSession['buyer'];
                 if ($userInfo && isset($userInfo['email'])) {
                     $userEmail = $userInfo['email'];
-                    $quote = $this->session->getQuote();
+                    $quote = $this->session->getQuoteFromIdOrSession($maskedQuoteId);
 
                     if ($quote) {
                         $quote->setCustomerEmail($userEmail);

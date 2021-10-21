@@ -18,9 +18,8 @@ namespace Amazon\Pay\Model;
 
 use Amazon\Pay\Client\ClientFactoryInterface;
 use Amazon\Pay\Logger\AlexaLogger;
-use Magento\Framework\Module\Dir;
+use Amazon\Pay\Helper\Alexa as AlexaHelper;
 use Magento\Framework\Phrase;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 
@@ -42,54 +41,33 @@ class Alexa
     private $transactionRepository;
 
     /**
-     * @var Dir
-     */
-    private $moduleDir;
-
-    /**
-     * @var \Magento\Framework\File\Csv
-     */
-    private $csv;
-
-    /**
-     * @var \Magento\Framework\Config\CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @var \Amazon\Pay\Logger\AlexaLogger
      */
     private $alexaLogger;
 
     /**
+     * @var AlexaHelper
+     */
+    private $alexaHelper;
+
+    /**
      * @param AmazonConfig $amazonConfig
      * @param ClientFactoryInterface $clientFactory
      * @param Payment\Transaction\Repository $transactionRepository
-     * @param Dir $moduleDir
-     * @param \Magento\Framework\File\Csv $csv
+     * @param AlexaHelper $alexaHelper
+     * @param AlexaLogger $alexaLogger
      */
     public function __construct(
         AmazonConfig $amazonConfig,
         ClientFactoryInterface $clientFactory,
         Payment\Transaction\Repository $transactionRepository,
-        Dir $moduleDir,
-        \Magento\Framework\File\Csv $csv,
-        \Magento\Framework\Config\CacheInterface $cache,
-        SerializerInterface $serializer,
+        AlexaHelper $alexaHelper,
         AlexaLogger $alexaLogger
     ) {
         $this->amazonConfig = $amazonConfig;
         $this->clientFactory = $clientFactory;
         $this->transactionRepository = $transactionRepository;
-        $this->moduleDir = $moduleDir;
-        $this->csv = $csv;
-        $this->cache = $cache;
-        $this->serializer = $serializer;
+        $this->alexaHelper = $alexaHelper;
         $this->alexaLogger = $alexaLogger;
     }
 
@@ -184,39 +162,12 @@ class Alexa
     /**
      * @return array
      */
-    protected function fetchDeliveryCarriers()
-    {
-        $result = [];
-        $fileName = implode(DIRECTORY_SEPARATOR, [
-            $this->moduleDir->getDir('Amazon_Pay', Dir::MODULE_ETC_DIR),
-            'files',
-            'amazon-pay-delivery-tracker-supported-carriers.csv'
-        ]);
-        foreach ($this->csv->getData($fileName) as $row) {
-            list($carrierTitle, $carrierCode) = $row;
-            $result[$carrierTitle] = $carrierCode;
-        }
-        return $result;
-    }
-
-    /**
-     * @return array
-     */
     protected function getDeliveryCarriers()
     {
-        $cacheKey = hash('sha256', __METHOD__);
-        $result = $this->cache->load($cacheKey);
-        if ($result) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $result = $this->serializer->unserialize(gzuncompress($result));
-        }
-        if (!$result) {
-            $result = $this->fetchDeliveryCarriers();
-            $this->cache->save(
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                gzcompress($this->serializer->serialize($result)),
-                $cacheKey
-            );
+        $result = [];
+        $carriers = $this->alexaHelper->getDeliveryCarriers();
+        foreach ($carriers as $carrier) {
+            $result[$carrier['title']] = $carrier['code'];
         }
         return $result;
     }
@@ -228,16 +179,14 @@ class Alexa
     protected function getCarrierCode($track)
     {
         $result = '';
-        $deliveryCarriers = $this->getDeliveryCarriers();
-        if (isset($deliveryCarriers[$track->getTitle()])) {
-            $result = $deliveryCarriers[$track->getTitle()];
+        $carriersMapping = $this->amazonConfig->getCarriersMapping(ScopeInterface::SCOPE_STORE, $track->getStoreId());
+        if (array_key_exists($track->getCarrierCode(), $carriersMapping)) {
+            $result = $carriersMapping[$track->getCarrierCode()];
         }
         if (empty($result)) {
-            foreach (['usps', 'ups', 'fedex'] as $carrierCode) {
-                if (stripos($track->getCarrierCode(), $carrierCode) !== false) {
-                    $result = strtoupper($carrierCode);
-                    break;
-                }
+            $deliveryCarriers = $this->getDeliveryCarriers();
+            if (array_key_exists($track->getTitle(), $deliveryCarriers)) {
+                $result = $deliveryCarriers[$track->getTitle()];
             }
         }
         if (empty($result)) {
@@ -270,15 +219,16 @@ class Alexa
         if ($this->canAddDeliveryNotification($track)) {
             $chargePermissionId = $this->getChargePermissionId($track->getShipment()->getOrder());
             $carrierCode = $this->getCarrierCode($track);
-
-            if ($carrierCode == "CUSTOM") {
-                $this->alexaLogger->debug('addDeliveryNotification: -> No matched Alexa Notification carrier for: ' .
-                                          $track->getTitle() .
+            if ($carrierCode == 'CUSTOM') {
+                $this->alexaLogger->debug('addDeliveryNotification: -> No matched Alexa Notification carrier for ' .
+                                          'Carrier title: ' . $track->getTitle() .
+                                          'Carrier code: ' . $track->getCarrierCode() .
                                           ' - merchantReferenceId: ' .
                                           $track->getShipment()->getOrder()->getIncrementId());
 
                 throw new \Magento\Framework\Exception\NotFoundException(
-                    new Phrase('No matched Alexa Notification carrier for: ' . $track->getTitle())
+                    new Phrase('No matched Alexa Notification carrier for: ' .
+                                $track->getCarrierCode() . ' - ' . $track->getTitle())
                 );
             }
 
@@ -290,6 +240,7 @@ class Alexa
                 ]]
             ])]);
             $result = $response['deliveryDetails'][0];
+            $result['carrierTitle'] = $track->getTitle();
         }
         return $result;
     }

@@ -126,6 +126,16 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>
+                    <field id="carrier_codes" translate="label comment" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">
+                        <label>Carrier Codes</label>
+                        <comment><![CDATA[This option allows to map carriers from your shop to the Amazon Pay predefined carriers. Please use the Carrier codes form by selecting your available carriers and assign them to the matching one in the Amazon Pay carrier list.]]></comment>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\CarrierCodes</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <config_path>payment/amazon_payment_v2/alexa_carrier_codes</config_path>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                    </field>
                 </group>
                 <group id="advanced" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced</label>
@@ -204,24 +214,34 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/amazon_payment/logging</config_path>
                         </field>
-                        <field id="checkout_review_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Checkout review URL Path</label>
-                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address. Do not use a leading slash.]]></comment>
-                            <config_path>payment/amazon_payment_v2/checkout_review_url</config_path>
-                        </field>
-                        <field id="checkout_result_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Checkout result URL Path</label>
-                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after completing the transaction. Do not use a leading slash.]]></comment>
-                            <config_path>payment/amazon_payment_v2/checkout_result_url</config_path>
-                        </field>
-                        <field id="loglist_v2" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <field id="loglist_v2" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Developer Logs</label>
                             <depends>
                                 <field id="logging">1</field>
                             </depends>
                             <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\DeveloperLogs</frontend_model>
                         </field>
-                        <field id="allowed_ips_v2" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="checkout_review_return_url" translate="label comment" type="text" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Amazon checkout review return URL</label>
+                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address. Do not use a leading slash.]]></comment>
+                            <config_path>payment/amazon_payment_v2/checkout_review_return_url</config_path>
+                        </field>
+                        <field id="checkout_review_url" translate="label comment" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Checkout URL Path</label>
+                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Magento redirect to this URL after processing the Amazon session initiation, where checkout happens. Do not use a leading slash.]]></comment>
+                            <config_path>payment/amazon_payment_v2/checkout_review_url</config_path>
+                        </field>
+                        <field id="checkout_result_return_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Amazon checkout result return URL</label>
+                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after initiating the transaction. Do not use a leading slash.]]></comment>
+                            <config_path>payment/amazon_payment_v2/checkout_result_return_url</config_path>
+                        </field>
+                        <field id="checkout_result_url" translate="label comment" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Checkout result URL Path</label>
+                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Magento will redirect to this URL after completing the checkout session. Do not use a leading slash.]]></comment>
+                            <config_path>payment/amazon_payment_v2/checkout_result_url</config_path>
+                        </field>
+                        <field id="allowed_ips_v2" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allowed IPs</label>
                             <comment><![CDATA[Comma separated. The “Amazon Pay" button will only be rendered for clients having the above IPs. If the field is empty, the buttons will be visible to all clients.]]></comment>
                             <config_path>payment/amazon_payment_v2/allowed_ips</config_path>

@@ -55,7 +55,12 @@ class GeneralResponseValidator extends AbstractValidator
 
         $response = $validationSubject['response'];
 
-        if (!in_array($response['status'], [200, 201])) {
+        if (!isset($response['status'])) {
+            $isValid = false;
+            $errorCodes[] = 'No HTTP status code';
+        }
+
+        if (isset($response['status']) && !in_array($response['status'], [200, 201])) {
             $isValid = false;
             $errorCodes[] = 'HTTP status code ' . $response['status'];
         }
