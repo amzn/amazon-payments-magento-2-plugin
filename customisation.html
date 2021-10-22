@@ -33,6 +33,7 @@
                 <li class="toctree-l2"><a class="reference internal" href="#pwa">Support for <cite>Progressive Web
                       Apps/Headless Commerce/Single Page Applications</cite></a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes on the Checkout Session API</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#configurable-urls">Configurable URLs</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#docs">Swagger Documentation</a></li>
                 <!-- <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li> -->
               </ul>
@@ -165,6 +166,32 @@
                         Enable shipping and payment updates</a>.
                       </p>
                   </div>
+                </div>
+                <div class="section" id="configurable-urls">
+                  <h2>Configurable URLs<a class="headerlink" href="#configurable-urls" title="Permalink to this headline">¶</a></h2>
+                  <p>
+                    In order to provide more control over redirects from Amazon during the checkout process, several configuration options are 
+                    available to define locations for checkout session logic in a headless implementation. See the URL options in 
+                    <a class="reference internal" href="configuration.html#developer-options">Developer Options</a> for a description of the configurable 
+                    locations.
+                    </p>
+                    <p>
+                      An example sequence of how these redirects may be used looks like the following:
+                      <ul>
+                        <li>Amazon Pay button is rendered at checkout page</li>
+                        <li>User authenticates through Amazon and is redirected to <strong>Amazon Checkout Review Return URL</strong> with an 
+                        amazonCheckoutSessionId in the query string</li>
+                        <li>Sign user in to Magento store, then redirect to <strong>Checkout Review URL Path</strong> with amazonCheckoutSessionId 
+                        in the query string</li>
+                        <li>Use checkout session ID and checkout session API endpoints to set/display shipping information and payment 
+                        descriptor</li>
+                        <li>User places order, call the checkout session API /update endpoint; a processing URL is returned</li>
+                        <li>Redirect user to processing URL, and Amazon redirects user to <strong>Amazon Checkout Result Return URL</strong></li>
+                        <li>Call checkout session API /complete endpoint, and redirect user to <strong>Checkout Result URL Path</strong> upon 
+                        success</li>
+                      </ul>
+                    </p>
+                  </p>
                 </div>
                 <div class="section" id="docs">
                   <h2>Swagger Documentation<a
