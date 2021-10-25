@@ -35,6 +35,7 @@
                 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes on the Checkout Session API</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#configurable-urls">Configurable URLs</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#docs">Swagger Documentation</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#custom-rendering">Rendering the Amazon Pay Button in a Custom Location</a></li>
                 <!-- <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li> -->
               </ul>
             </li>
@@ -199,6 +200,31 @@
                   <p>
                     Detailed documentation on available endpoints, their usage, and request/response bodies can be found 
                     <a class="reference internal" target="_blank" href="swagger.html">here.</a>
+                  </p>
+                </div>
+                <div class="section" id="custom-rendering">
+                  <h2>Rendering the Amazon Pay Button in a Custom Location<a
+                    class="headerlink" href="#custom-rendering" title="Permalink to this headline">¶</a></h2>
+                  <p>
+                    You may wish to display an Amazon Pay button somewhere other than the default options (cart, minicart, checkout, 
+                    or with payment methods). A recommended solution is loading the amazon-button.js script in a custom block/template 
+                    similar to how the module renders the minicart button:
+                  </p>
+                  <div class="highlight-html">
+                    <div class="highlight">
+                      <pre>
+  &ltdiv id="PayWithAmazon-Cart"
+    class="amazon-checkout-button"
+    data-loaded-at="&lt?= $block->escapeHtml(time()) // added for force re-rendering ?&gt"
+    data-mage-init='{"Amazon_Pay/js/amazon-button": {"hideIfUnavailable": ".amazon-button-container"}}'&gt
+  &lt/div&gt</pre>
+                    </div>
+                  </div>
+                  <p>
+                    See <a class="reference external" 
+                      href="https://github.com/amzn/amazon-payments-magento-2-plugin/blob/master/view/frontend/templates/minicart-button.phtml#L28-L32"
+                      target="_blank">
+                    the minicart button template</a> in the module repository for a full example.
                   </p>
                 </div>
                 <!-- <div class="section" id="q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">
