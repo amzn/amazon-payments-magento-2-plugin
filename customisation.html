@@ -182,13 +182,13 @@
                         <li>Amazon Pay button is rendered at checkout page</li>
                         <li>User authenticates through Amazon and is redirected to <strong>Amazon Checkout Review Return URL</strong> with an 
                         amazonCheckoutSessionId in the query string</li>
-                        <li>Sign user in to Magento store, then redirect to <strong>Checkout Review URL Path</strong> with amazonCheckoutSessionId 
+                        <li>Sign user in to Magento store, then redirect to <strong>Magento Checkout URL Path</strong> with amazonCheckoutSessionId 
                         in the query string</li>
                         <li>Use checkout session ID and checkout session API endpoints to set/display shipping information and payment 
                         descriptor</li>
                         <li>User places order, call the checkout session API /update endpoint; a processing URL is returned</li>
                         <li>Redirect user to processing URL, and Amazon redirects user to <strong>Amazon Checkout Result Return URL</strong></li>
-                        <li>Call checkout session API /complete endpoint, and redirect user to <strong>Checkout Result URL Path</strong> upon 
+                        <li>Call checkout session API /complete endpoint, and redirect user to <strong>Magento Checkout Result URL Path</strong> upon 
                         success</li>
                       </ul>
                     </p>
