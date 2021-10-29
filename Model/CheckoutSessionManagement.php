@@ -31,13 +31,15 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Authorization\Model\UserContextInterface as UserContext;
-
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
@@ -65,6 +67,21 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
     private $orderRepository;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    /**
+     * @var Encryptor
+     */
+    private $encryptor;
 
     /**
      * @var \Magento\Sales\Api\OrderPaymentRepositoryInterface
@@ -170,7 +187,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
     /**
      *
-     * @var UserContext 
+     * @var UserContext
      */
     private $userContext;
 
@@ -186,6 +203,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
+     * @param \Magento\Framework\Encryption\Encryptor $encryptor
      * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $paymentRepository
      * @param \Magento\Framework\Validator\Factory $validatorFactory ,
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory ,
@@ -213,6 +233,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Model\CustomerRegistry $customerRegistry,
+        \Magento\Framework\Encryption\Encryptor $encryptor,
         \Magento\Sales\Api\OrderPaymentRepositoryInterface $paymentRepository,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
@@ -239,6 +262,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->cartManagement = $cartManagement;
         $this->cartRepository = $cartRepository;
         $this->orderRepository = $orderRepository;
+        $this->customerRepository = $customerRepository;
+        $this->customerRegistry = $customerRegistry;
+        $this->encryptor = $encryptor;
         $this->paymentRepository = $paymentRepository;
         $this->validatorFactory = $validatorFactory;
         $this->countryCollectionFactory = $countryCollectionFactory;
@@ -422,7 +448,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
                 $config['pay_only'] = $this->amazonHelper->isPayOnly($quote);
                 $config['paynow_payload'] = $payNowButtonPayload;
-                $config['paynow_signature'] = $this->amazonAdapter->signButton($payNowButtonPayload); 
+                $config['paynow_signature'] = $this->amazonAdapter->signButton($payNowButtonPayload);
             }
         }
         $result[] = $config;
@@ -827,7 +853,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param mixed $buyerToken 
+     * @param mixed $buyerToken
      * @return mixed
      */
     public function signIn($buyerToken)
@@ -841,7 +867,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             ];
 
             return [$result];
-        } 
+        }
 
         try {
             $buyerInfo = $this->amazonAdapter->getBuyer($buyerToken);
@@ -849,35 +875,37 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             if ($amazonCustomer) {
                 $customer = $this->processAmazonCustomer($amazonCustomer);
-                if ($customer) {
-                    $customerToken =  $this->tokenModelFactory->create()->createCustomerToken($customer->getId())->getToken();
+                if ($customer && $customer instanceof \Magento\Customer\Model\Data\Customer) {
+                    $customerToken = $this
+                        ->tokenModelFactory
+                        ->create()
+                        ->createCustomerToken($customer->getId())
+                        ->getToken();
                     $result = [
-                        'success' => true,  
+                        'success' => true,
                         'customer_id' => $customer->getId(),
                         'customer_email' => $customer->getEmail(),
                         'customer_firstname' => $customer->getFirstName(),
                         'customer_last' => $customer->getLastName(),
-                        'customer_bearer_token' => $customerToken                        
-                    ];  
-                    
+                        'customer_bearer_token' => $customerToken
+                    ];
+
                 } else {
-                    //TODO: Customer is already in the database but with no Amazon Id.              
-                }      
+                    // Magento customer exists with same email used for Sign in with Amazon
+                    $result = [
+                        'success' => false,
+                        'customer_email' => $customer->getEmail(),
+                        'message' => __('A shop account for this email address already exists. Please enter your ' .
+                            'shop accounts password to log in without leaving the shop.')
+                    ];
+                }
 
             } else {
-                $this->logger->error('Amazon buyerId is empty. Token: ' . $buyerToken);
-                $result = [
-                    'success' => false,
-                    'message' => __('Amazon buyerId is empty')
-                ];
+                $result = $this->getBuyerIdError($buyerToken);
             }
 
         } catch (\Exception $e) {
-            $this->logger->error('Error processing Amazon Login: ' . $e->getMessage());
-            $result = [
-                'success' => false,
-                'message' => __($e->getMessage())
-            ];
+            $result = $this->getLoginError($e);
         }
 
         return [$result];
@@ -892,15 +920,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         if ($amazonCustomer->getId() != $customerData->getExtensionAttributes()->getAmazonId()) {
-
-            //TODO: Not sure what to do here. This is the case when there is already a customer with the same registered email.
-            // We can't redirect him to enter his password.  
-            /*if (! $this->session->isLoggedIn()) {
-                return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());    
-            }
-            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());*/
-
-            return false;
+            return $amazonCustomer;
         }
 
         return $customerData;
@@ -909,5 +929,60 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     protected function getAmazonCustomer($buyerInfo)
     {
         return $this->customerHelper->getAmazonCustomer($buyerInfo);
+    }
+
+    protected function getBuyerIdError($buyerToken)
+    {
+        $this->logger->error('Amazon buyerId is empty. Token: ' . $buyerToken);
+        return [
+            'success' => false,
+            'message' => __('Amazon buyerId is empty')
+        ];
+    }
+
+    protected function getLoginError($e)
+    {
+        $this->logger->error('Error processing Amazon Login: ' . $e->getMessage());
+        return [
+            'success' => false,
+            'message' => __($e->getMessage())
+        ];
+    }
+
+    /**
+     * @param mixed $buyerToken
+     * @param string $password
+     * @return mixed
+     */
+    public function setCustomerLink($buyerToken, $password)
+    {
+        try {
+            $buyerInfo = $this->amazonAdapter->getBuyer($buyerToken);
+            $amazonCustomer = $this->getAmazonCustomer($buyerInfo);
+
+            if ($amazonCustomer) {
+                $magentoCustomer = $this->customerRepository->get($amazonCustomer->getEmail());
+                $customerSecure = $this->customerRegistry->retrieveSecureData($magentoCustomer->getId());
+                $hash = $customerSecure->getPasswordHash() ?? '';
+
+                if ($this->encryptor->validateHash($password, $hash)) {
+                    $this->customerHelper->updateCustomerLink($magentoCustomer->getId(), $amazonCustomer->getId());
+                    return $this->signIn($buyerToken);
+                } else {
+                    return [
+                        [
+                            'success' => false,
+                            'message' => __('The password supplied was incorrect')
+                        ]
+                    ];
+                }
+            } else {
+                $result = $this->getBuyerIdError($buyerToken);
+            }
+        } catch (\Exception $e) {
+            $result = $this->getLoginError($e);
+        }
+
+        return [$result];
     }
 }

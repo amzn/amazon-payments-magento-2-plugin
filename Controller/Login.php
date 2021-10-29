@@ -24,7 +24,7 @@ use Amazon\Pay\Model\Validator\AccessTokenRequestValidator;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Amazon\Pay\Helper\Session;
 use Amazon\Pay\Helper\Customer as CustomerHelper;
-use Amazon\Pay\Model\Adapter\AmazonPayAdapter; 
+use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session as CustomerSession;

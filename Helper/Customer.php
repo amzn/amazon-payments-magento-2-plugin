@@ -16,6 +16,7 @@
  */
 
 namespace Amazon\Pay\Helper;
+
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Zend_Validate;
 
@@ -42,17 +43,16 @@ class Customer
     private $amazonConfig;
 
     /**
-    * @param Adapter\AmazonPayAdapter $amazonAdapter
-    * @param Domain\AmazonCustomerFactory $amazonCustomerFactory
-    * @param CustomerLinkManagementInterface $customerLinkManagement
-    * @param AmazonConfig $amazonConfig
-    */
+     * @param Adapter\AmazonPayAdapter $amazonAdapter
+     * @param Domain\AmazonCustomerFactory $amazonCustomerFactory
+     * @param CustomerLinkManagementInterface $customerLinkManagement
+     * @param AmazonConfig $amazonConfig
+     */
     public function __construct(
         \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Amazon\Pay\Domain\AmazonCustomerFactory $amazonCustomerFactory,
         \Amazon\Pay\Api\CustomerLinkManagementInterface $customerLinkManagement,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig
-
     ) {
         $this->amazonAdapter = $amazonAdapter;
         $this->amazonCustomerFactory = $amazonCustomerFactory;
@@ -60,7 +60,7 @@ class Customer
         $this->amazonConfig = $amazonConfig;
     }
 
-    public function getAmazonCustomer($buyerInfo) 
+    public function getAmazonCustomer($buyerInfo)
     {
         if (is_array($buyerInfo) && array_key_exists('buyerId', $buyerInfo) && !empty($buyerInfo['buyerId'])) {
             $data = [
@@ -73,7 +73,7 @@ class Customer
 
             return $amazonCustomer;
 
-        } 
+        }
         return false;
     }
 
