@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.9.1
+* Fixed issue with umlauts in PayNow button flow
+* Updated config labels for Magento Checkout redirect paths
+
 ## 5.9.0
 * Added custom Carrier Code mapping
 * Added config options to allow headless integrations to change return urls
