@@ -227,7 +227,7 @@
                             <config_path>payment/amazon_payment_v2/checkout_review_return_url</config_path>
                         </field>
                         <field id="checkout_review_url" translate="label comment" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Checkout URL Path</label>
+                            <label>Magento Checkout URL Path</label>
                             <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Magento redirect to this URL after processing the Amazon session initiation, where checkout happens. Do not use a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_review_url</config_path>
                         </field>
@@ -237,7 +237,7 @@
                             <config_path>payment/amazon_payment_v2/checkout_result_return_url</config_path>
                         </field>
                         <field id="checkout_result_url" translate="label comment" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Checkout result URL Path</label>
+                            <label>Magento Checkout result URL Path</label>
                             <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Magento will redirect to this URL after completing the checkout session. Do not use a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_url</config_path>
                         </field>
