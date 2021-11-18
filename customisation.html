@@ -101,19 +101,21 @@
                         <div class="highlight">
                           <pre>
     [
-      "merchantId",
-      "ledgerCurrency",
-      "buttonColor",
-      "checkoutLanguage",
-      "productType",
-      "sandbox",
-      "loginPayload",
-      "loginSignature",
-      "checkoutPayload",
-      "checkoutSignature",
-      "payNowPayload",
-      "payNowSignature",
-      "publicKeyId"
+      {
+        "merchant_id": string,
+        "currency": string,
+        "button_color": string,
+        "language": string,
+        "sandbox": boolean,
+        "login_payload": string,
+        "login_signature": string,
+        "checkout_payload": string,
+        "checkout_signature": string,
+        "public_key_id": string,
+        "pay_only": boolean
+        "paynow_payload": string,
+        "paynow_signature": string
+      }
     ]</pre>
                         </div>
                       </div>
