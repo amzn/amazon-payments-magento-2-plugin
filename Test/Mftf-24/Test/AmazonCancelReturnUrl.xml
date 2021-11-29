@@ -58,7 +58,11 @@
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
 
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
-        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
+        <wait time="3" stepKey="allowButtonToActivate"/>
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\SecureSignInWorkaround" method="continueAsUser" stepKey="secureWorkaround">
+            <argument name="openerName">{$openerName}</argument>
+            <argument name="editAddress">{{AmazonCheckoutSection.editShippingButton}}</argument>
+        </helper>
 
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup">
