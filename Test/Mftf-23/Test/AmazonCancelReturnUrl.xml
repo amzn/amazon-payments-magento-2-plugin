@@ -58,7 +58,27 @@
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
 
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
-        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
+        <wait time="3" stepKey="allowButtonToActivate"/>
+        
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            $continueAs = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.continueButton}}'));
+
+            if (!empty($continueAs)) {
+                $I->comment('Click Continue as... button and return to checkout');
+                $continueAs[0]->click();
+                $remoteWebDriver->switchTo()->window($openerName);
+                $I->waitForPageLoad(30);
+
+                $I->comment('Wait for Edit button in address details');
+                $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                $I->comment('Click Edit button to return to normal flow');
+                $remoteWebDriver->findElement($editAddressSelector)->click();
+                
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                $I->switchToNextTab();
+            }
+        }" stepKey="secureSignInWorkaround" />
 
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup">

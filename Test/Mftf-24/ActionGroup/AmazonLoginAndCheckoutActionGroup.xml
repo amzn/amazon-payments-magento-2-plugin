@@ -25,9 +25,13 @@
         <click selector="{{AmazonPageSection.signInButton}}" stepKey="clickSigninButton"/>
 
         <!--Verify successful login by the presence of the checkout button-->
-        <wait time="1" stepKey="allowButtonToActivate2"/>
-        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
+        <wait time="3" stepKey="allowButtonToActivate2"/>
 
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\SecureSignInWorkaround" method="continueAsUser" stepKey="secureWorkaround">
+            <argument name="openerName">{$openerName}</argument>
+            <argument name="editAddress">{{AmazonCheckoutSection.editShippingButton}}</argument>
+        </helper>
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
 
         <!--Get shipping address information-->
         <grabAttributeFrom selector="{{AmazonPageSection.addressId}}" userInput="data-address_id" stepKey="amazonAddressId"/>

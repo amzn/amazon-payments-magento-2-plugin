@@ -41,6 +41,7 @@
         <executeJS function="return window.name;" stepKey="openerName"/>
         <click selector="{{AmazonButtonSection.payment}}" stepKey="clickAmazonPay" />
 
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="switchToPopup" />
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin" />
 
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />
