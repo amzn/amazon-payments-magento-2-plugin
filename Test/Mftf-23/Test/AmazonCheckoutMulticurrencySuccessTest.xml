@@ -55,11 +55,6 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForPageLoad stepKey="waitForInvoicePage"/>
 
-        <!-- Verify invoice item qtys cannot be changed -->
-        <dontSeeElement stepKey="dontSeeItemQtyToInvoice1" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}"/>
-        <dontSeeElement stepKey="dontSeeItemQtyToInvoice2" selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}"/>
-        <dontSeeElement stepKey="dontSeeUpdateQty" selector="{{AdminInvoiceItemsSection.updateQty}}"/>
-
         <!-- Submit and verify the invoice created using the presentmentCurrency -->
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
         <waitForPageLoad stepKey="waitForLoadPage"/>
