@@ -417,7 +417,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     public function getConfig($cartId = null)
     {
         $result = [];
-        $config = [];
         $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
         $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
         $config = [
@@ -858,8 +857,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function signIn($buyerToken)
     {
-        $result = [];
-
         if (!$this->amazonConfig->isLwaEnabled()) {
             $result = [
                 'success' => false,
