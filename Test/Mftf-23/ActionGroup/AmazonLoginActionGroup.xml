@@ -10,8 +10,8 @@
         <wait time="1" stepKey="allowButtonToActivate"/>
 
         <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
-            $continueAs = $remoteWebDriver->findElements(WebDriverBy::cssSelector('#maxo_buy_now input[type=submit]'));
-            
+            $continueAs = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('#maxo_buy_now input[type=submit]'));
+
             if (!empty($continueAs)) {
                 $I->comment('Click Continue as... button and return to checkout');
                 $continueAs[0]->click();
