@@ -12,6 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
     const CODE = 'amazon_payment_v2';
+    const VAULT_CODE = 'amazon_payment_vault';
 
     const KEY_ACTIVE = 'active';
 

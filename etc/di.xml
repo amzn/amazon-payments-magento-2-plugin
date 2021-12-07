@@ -128,6 +128,28 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="AmazonPayVaultFacade" type="Magento\Vault\Model\Method\Vault">
+        <arguments>
+            <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
+<!--            <argument name="config" xsi:type="object">AmazonPayVaultConfig</argument>-->
+<!--            <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>-->
+            <argument name="vaultProvider" xsi:type="object">AmazonPayFacade</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AmazonPayVaultAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleVaultRequestBuilder</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeClient</argument>
+            <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleVaultHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">AuthorizeResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+
+
     <!-- Commands infrastructure -->
     <virtualType name="AmazonPayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
@@ -139,6 +161,7 @@
                 <item name="refund" xsi:type="string">AmazonPayRefundCommand</item>
                 <item name="void" xsi:type="string">AmazonPayVoidCommand</item>
                 <item name="cancel" xsi:type="string">AmazonPayVoidCommand</item>
+                <item name="vault_authorize" xsi:type="string">AmazonPayVaultAuthorizeCommand</item>
             </argument>
         </arguments>
     </virtualType>

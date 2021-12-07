@@ -53,7 +53,12 @@
                 <checkout_result_return_url>amazon_pay/checkout/completeSession</checkout_result_return_url>
                 <checkout_result_url>checkout/onepage/success</checkout_result_url>
                 <can_use_internal>0</can_use_internal>
+                <can_authorize_vault>1</can_authorize_vault>
             </amazon_payment_v2>
+            <amazon_payment_vault>
+                <model>AmazonPayVaultFacade</model>
+                <title>Amazon Pay Vault</title>
+            </amazon_payment_vault>
         </payment>
     </default>
 </config>
