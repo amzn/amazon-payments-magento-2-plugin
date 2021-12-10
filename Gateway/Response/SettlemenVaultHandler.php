@@ -20,7 +20,7 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Amazon\Pay\Gateway\Helper\SubjectReader;
 use Amazon\Pay\Model\AsyncManagement;
 
-class SettlementHandler implements HandlerInterface
+class SettlemenVaultHandler implements HandlerInterface
 {
     /**
      * @var SubjectReader
@@ -33,7 +33,7 @@ class SettlementHandler implements HandlerInterface
     private $asyncManagement;
 
     /**
-     * SettlementHandler constructor.
+     * SettlemenVaultHandler constructor.
      * @param SubjectReader $subjectReader
      * @param AsyncManagement $asyncManagement
      */
@@ -50,7 +50,7 @@ class SettlementHandler implements HandlerInterface
      * @param array $response
      */
     public function handle(array $handlingSubject, array $response)
-    {        
+    {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
 

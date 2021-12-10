@@ -40,6 +40,11 @@ class AmazonConfig
     ];
 
     /**
+     * @var array
+     */
+    private $icon = [];
+
+    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfig;
@@ -75,6 +80,12 @@ class AmazonConfig
     private $serializer;
 
     /**
+     * @var CcConfig
+     */
+    private $ccConfig;
+
+
+    /**
      * AmazonConfig constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -83,6 +94,7 @@ class AmazonConfig
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param Magento\Payment\Model\CcConfig $ccConfig
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -91,7 +103,8 @@ class AmazonConfig
         \Magento\Directory\Model\Config\Source\Country $countryConfig,
         \Magento\Framework\Locale\Resolver $localeResolver,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-        \Magento\Framework\Serialize\SerializerInterface $serializer
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Payment\Model\CcConfig $ccConfig
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -100,6 +113,7 @@ class AmazonConfig
         $this->localeResolver = $localeResolver;
         $this->remoteAddress = $remoteAddress;
         $this->serializer = $serializer;
+        $this->ccConfig = $ccConfig;
     }
 
     /**
@@ -211,6 +225,26 @@ class AmazonConfig
             }
         }
         return $result;
+    }
+
+    /**
+     * Get Amazon icon
+     *
+     * @return array
+     */
+    public function getAmazonIcon(): array
+    {
+        if (empty($this->icon)) {
+            $asset = $this->ccConfig->createAsset('Amazon_Pay::images/logo/Black-L.png');
+            list($width, $height) = getimagesize($asset->getSourceFile());
+            $this->icon = [
+                'url' => $asset->getUrl(),
+                'width' => $width,
+                'height' => $height
+            ];
+        }
+
+        return $this->icon;
     }
 
     /**

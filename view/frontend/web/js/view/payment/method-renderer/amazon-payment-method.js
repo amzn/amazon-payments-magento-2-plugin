@@ -16,7 +16,8 @@ define(
         'Amazon_Pay/js/model/storage',
         'Amazon_Pay/js/action/checkout-session-address-load',
         'Amazon_Pay/js/action/checkout-session-payment-descriptor-load',
-        'Amazon_Pay/js/action/place-order'
+        'Amazon_Pay/js/action/place-order',
+        'Magento_Vault/js/view/payment/vault-enabler'
     ],
     function (
         ko,
@@ -35,7 +36,8 @@ define(
         amazonStorage,
         checkoutSessionAddressLoad,
         checkoutSessionPaymentDescriptorLoad,
-        placeOrderAction
+        placeOrderAction,
+        VaultEnabler
     ) {
         'use strict';
 
@@ -48,7 +50,8 @@ define(
                 isIosc: ko.observable($('button.iosc-place-order-button').length > 0),
                 paymentDescriptor: ko.observable(''),
                 logo: 'Amazon_Pay/images/logo/Black-L.png',
-                template: 'Amazon_Pay/payment/amazon-payment-method'
+                template: 'Amazon_Pay/payment/amazon-payment-method',
+                vaultInitialized: false
             },
 
             initialize: function () {
@@ -60,6 +63,40 @@ define(
                     this.initBillingAddress();
                     this.selectPaymentMethod();
                 }
+                this.initVault();
+                
+            },
+
+            initVault: function() {            
+                if (!this.vaultInitialized) {
+                    this.vaultEnabler = new VaultEnabler();
+                    this.vaultEnabler.setPaymentCode(this.getVaultCode());
+                    this.vaultInitialized = true;
+                }
+            },
+
+            isVaultEnabled: function () {
+                return this.vaultEnabler.isVaultEnabled();
+            },
+
+            getVaultCode: function () {
+                return 'amazon_payment_v2_vault';
+            },
+
+            getData: function () {
+
+                this.initVault();
+                var data = {
+                    'method': this.getCode(),
+                    'additional_data': {
+                        'is_active_payment_token_enabler': true
+                    }
+                };
+
+                data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+
+                this.vaultEnabler.visitAdditionalData(data);
+                return data;
             },
 
             bindEditPaymentAction: function (elem) {
