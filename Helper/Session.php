@@ -215,7 +215,7 @@ class Session
     {
         try {
             if (empty($cartId)) {
-                $quote = $this->session->getQuote();
+                $quote = $this->getQuote();
             } else {
                 $quoteId = $this->maskedQuoteIdConverter->execute($cartId);
                 $quote = $this->cartRepository->get($quoteId);
