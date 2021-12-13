@@ -86,16 +86,19 @@ define(
             getData: function () {
 
                 this.initVault();
-                var data = {
-                    'method': this.getCode(),
-                    'additional_data': {
-                        'is_active_payment_token_enabler': true
-                    }
-                };
+                var data = this._super();
+                if (this.isVaultEnabled()) {
+                    data = {
+                        'method': this.getCode(),
+                        'additional_data': {
+                            'is_active_payment_token_enabler': true
+                        }
+                    };
 
-                data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+                    data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
 
-                this.vaultEnabler.visitAdditionalData(data);
+                    this.vaultEnabler.visitAdditionalData(data);
+                }
                 return data;
             },
 

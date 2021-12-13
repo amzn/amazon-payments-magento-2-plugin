@@ -2,7 +2,7 @@
 namespace Amazon\Pay\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Amazon\Pay\Gateway\Config\Config;
+use Amazon\Pay\Model\AmazonConfig;
 
 class ConfigProvider implements ConfigProviderInterface
 {
@@ -17,10 +17,10 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * ConfigProvider constructor.
-     * @param Config $config
+     * @param AmazonConfig $config
      */
     public function __construct(
-        Config $config
+        AmazonConfig $config
     ) {
         $this->config = $config;
     }
@@ -39,13 +39,14 @@ class ConfigProvider implements ConfigProviderInterface
             ]
         ];
 
-        /*if $this->config->isVaultEnabled()*/
+        if ($this->config->isVaultEnabled()) {
 
-        $config['vault'] = [
-            self::VAULT_CODE => [
-                'is_enabled' => true
-            ]
-        ];
+            $config['vault'] = [
+                self::VAULT_CODE => [
+                    'is_enabled' => true
+                ]
+            ];
+        }
 
         return $config;
     }

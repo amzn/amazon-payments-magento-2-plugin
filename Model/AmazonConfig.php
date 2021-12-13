@@ -858,4 +858,18 @@ class AmazonConfig
             $scopeCode
         );
     }
+
+    /**
+     * @param string $scope
+     * @param null $scopeCode
+     * @return bool
+     */
+    public function isVaultEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            'payment/amazon_payment/vault_enabled',
+            $scope,
+            $scopeCode
+        );
+    }
 }

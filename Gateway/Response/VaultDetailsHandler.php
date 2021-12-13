@@ -77,6 +77,9 @@ class VaultDetailsHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
+        if (!$this->config->isVaultEnabled()) {
+            return null;
+        }
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
 

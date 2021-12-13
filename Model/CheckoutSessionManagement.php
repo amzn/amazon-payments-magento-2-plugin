@@ -32,8 +32,9 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
-//use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-//use Magento\Vault\Model\PaymentTokenFactory;
+use Magento\Vault\Api\PaymentTokenRepositoryInterface;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
+use Magento\Vault\Model\PaymentTokenFactory;
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
@@ -148,19 +149,25 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $maskedQuoteIdConverter;
 
     /**
-     * @var \Amazon\Pay\Logger\Logger
-     */
-    private $logger;
-
-    /**
      * @var PaymentTokenRepositoryInterface
      */
-  //  private PaymentTokenRepositoryInterface $paymentTokenRepository;
+    private PaymentTokenRepositoryInterface $paymentTokenRepository;
 
     /**
      * @var PaymentTokenFactory
      */
- //   private PaymentTokenFactory $paymentTokenFactory;
+    private PaymentTokenFactory $paymentTokenFactory;
+
+
+    /**
+     * @var PaymentTokenManagement
+     */
+    private PaymentTokenManagementInterface $paymentTokenManagement;
+
+    /**
+     * @var \Amazon\Pay\Logger\Logger
+     */
+    private $logger;
 
     /**
      * CheckoutSessionManagement constructor.
@@ -184,6 +191,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter
+     * @param PaymentTokenRepositoryInterface $paymentTokenRepository
+     * @param PaymentTokenFactory $paymentTokenFactory
+     * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param \Amazon\Pay\Logger\Logger $logger
      */
     public function __construct(
@@ -207,9 +217,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter,
+        PaymentTokenRepositoryInterface $paymentTokenRepository,
+        PaymentTokenFactory $paymentTokenFactory,
+        PaymentTokenManagementInterface $paymentTokenManagement,
         \Amazon\Pay\Logger\Logger $logger
-        //PaymentTokenRepositoryInterface $paymentTokenRepository,
-        //PaymentTokenFactory $paymentTokenFactory
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -231,9 +242,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderCollectionFactory = $orderCollectionFactory;
         $this->maskedQuoteIdConverter = $maskedQuoteIdConverter;
+        $this->paymentTokenRepository = $paymentTokenRepository;
+        $this->paymentTokenFactory = $paymentTokenFactory;
+        $this->paymentTokenManagement = $paymentTokenManagement;
         $this->logger = $logger;
-        //$this->paymentTokenRepository = $paymentTokenRepository;
-        //$this->paymentTokenFactory = $paymentTokenFactory;
     }
 
     /**
@@ -656,16 +668,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             // set amazon session id on payment object to be used in authorize
             $payment->setAdditionalInformation('amazon_session_id', $amazonSessionId);
 
-/*
-            // @TODO: set (fake) vault info? or create vault token here
-            $token = $this->paymentTokenFactory->create('account');
-//            $token->setType('Amazon Pay');
-            $token->setPaymentMethodCode('amazon_payments_v2');
-            $token->setGatewayToken($amazonSessionId);
-            $token->setPublicHash($amazonSessionId);
-            $this->paymentTokenRepository->save($token);
-            $payment->setAdditionalInformation('public_hash', $amazonSessionId);
-*/
             // collect quote totals before placing order (needed for 2.3.0 and lower)
             // https://github.com/amzn/amazon-payments-magento-2-plugin/issues/992
             $quote->collectTotals();
@@ -769,6 +771,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 $amazonCompleteCheckoutResult['chargePermissionId']
             );
             $this->updateTransactionId($chargeId, $payment, $transaction);
+            $this->updateVaultToken($amazonSessionId, $amazonCompleteCheckoutResult['chargePermissionId'], $quote->getCustomer()->getId());
 
         } catch (\Exception $e) {
             $session = $this->amazonAdapter->getCheckoutSession(
@@ -808,5 +811,18 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         return $amazonSession['statusDetails']['reasonDescription'];
+    }
+
+
+    protected function updateVaultToken($amazonSessionId, $chargePermissionId, $customerId) 
+    {
+        if ($this->amazonConfig->isVaultEnabled()) {
+            $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $customerId);
+            if ($token) {
+                $token->setGatewayToken($chargePermissionId);
+                $token->setIsVisible(true);
+                $this->paymentTokenRepository->save($token);
+            }
+        }
     }
 }
