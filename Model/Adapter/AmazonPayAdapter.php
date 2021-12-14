@@ -173,7 +173,7 @@ class AmazonPayAdapter
         }
 
         $payload = [
-/*            'chargePermissionType' => "Recurring",
+            'chargePermissionType' => "Recurring",
             // @TODO: make this conditional & cart appropriate
             "recurringMetadata" => [
                 "frequency" => [
@@ -184,7 +184,7 @@ class AmazonPayAdapter
 //                    "amount" => "null",
 //                    "currencyCode" => "USD",
 //                ],
-            ],*/
+            ],
             'webCheckoutDetails' => [
                 'checkoutResultReturnUrl' => $this->amazonConfig->getCheckoutResultReturnUrl()
             ],

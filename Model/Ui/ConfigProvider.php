@@ -39,15 +39,6 @@ class ConfigProvider implements ConfigProviderInterface
             ]
         ];
 
-        if ($this->config->isVaultEnabled()) {
-
-            $config['vault'] = [
-                self::VAULT_CODE => [
-                    'is_enabled' => true
-                ]
-            ];
-        }
-
         return $config;
     }
 }

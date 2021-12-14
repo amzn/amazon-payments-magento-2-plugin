@@ -20,6 +20,7 @@
     <preference for="AmazonPay\ClientInterface" type="Amazon\Pay\Client\Client" />
 
     <preference for="Amazon\Pay\Api\CheckoutSessionManagementInterface" type="Amazon\Pay\Model\CheckoutSessionManagement" />
+    <preference for="Amazon\Pay\Api\CheckoutVaultManagementInterface" type="Amazon\Pay\Model\CheckoutVaultManagement" />
     <preference for="Amazon\Pay\Api\Data\AsyncInterface" type="Amazon\Pay\Model\Async" />
 
     <preference for="Amazon\Pay\Domain\AmazonNameInterface" type="Amazon\Pay\Domain\AmazonName" />
@@ -118,9 +119,10 @@
     </type>
 
     <!-- Payment Method Facade configuration -->
+
     <virtualType name="AmazonPayFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::CODE</argument>
+            <argument name="code" xsi:type="const">Amazon\Pay\Model\Ui\ConfigProvider::CODE</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
             <argument name="valueHandlerPool" xsi:type="object">AmazonPayValueHandlerPool</argument>
@@ -128,12 +130,29 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="AmazonPayVaultFacade" type="Magento\Vault\Model\Method\Vault">
+    <virtualType name="AmazonPayVaultConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
-<!--            <argument name="config" xsi:type="object">AmazonPayVaultConfig</argument>-->
-<!--            <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>-->
+            <argument name="methodCode" xsi:type="const">Amazon\Pay\Model\Ui\ConfigProvider::VAULT_CODE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayVaultPaymentValueHandler" type="VaultPaymentDefaultValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">AmazonPayVaultConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayVaultValueHandlerPool" type="VaultPaymentValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">AmazonPayVaultPaymentValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayVaultFacade" type="Amazon\Pay\Model\Method\Vault">
+        <arguments>
+            <argument name="config" xsi:type="object">AmazonPayVaultConfig</argument>
+            <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>
             <argument name="vaultProvider" xsi:type="object">AmazonPayFacade</argument>
+            <argument name="code" xsi:type="const">Amazon\Pay\Model\Ui\ConfigProvider::VAULT_CODE</argument>
         </arguments>
     </virtualType>
 
@@ -163,7 +182,7 @@
     <!-- Configuration reader -->
     <virtualType name="AmazonPayGatewayConfig" type="Amazon\Pay\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">Amazon\Pay\Gateway\Config\Config::CODE</argument>
+            <argument name="methodCode" xsi:type="const">Amazon\Pay\Model\Ui\ConfigProvider::CODE</argument>
         </arguments>
     </virtualType>
 
