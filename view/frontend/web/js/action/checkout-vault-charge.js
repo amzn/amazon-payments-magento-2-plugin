@@ -23,20 +23,17 @@ define([
 ], function (quote, storage, urlBuilder, fullScreenLoader, errorProcessor, amazonStorage) {
     'use strict';
 
-    return function (publicHash,callback) {
-        console.log(publicHash);
-        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-vault/:publicHash/charge',{
-            publicHash: publicHash
-        });
+    return function (callback) {
+        var serviceUrl = urlBuilder.createUrl('/amazon-checkout-vault/charge',{});
 
         fullScreenLoader.startLoader();
 
         return storage.post(serviceUrl).done(function (response) {
             fullScreenLoader.stopLoader(true);
             if (response) {
-                alert('OK !');
+                //alert('OK !');
                 console.log(response);
-                //callback(response);
+                callback(response);
                 fullScreenLoader.stopLoader(true);
             } else {
                 console.log('Invalid Amazon RedirectUrl:');

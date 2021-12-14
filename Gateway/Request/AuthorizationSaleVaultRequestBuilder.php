@@ -39,10 +39,12 @@ class AuthorizationSaleVaultRequestBuilder implements BuilderInterface
      */
     public function __construct(
         \Amazon\Pay\Api\CheckoutSessionManagementInterface $sessionManagement,
-        SubjectReader $subjectReader
+        SubjectReader $subjectReader,
+        \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement
     ) {
         $this->sessionManagement = $sessionManagement;
         $this->subjectReader = $subjectReader;
+        $this->paymentTokenManagement = $paymentTokenManagement;
     }
 
     /**
@@ -52,7 +54,10 @@ class AuthorizationSaleVaultRequestBuilder implements BuilderInterface
     {
         $payment = $this->subjectReader->readPayment($buildSubject)->getPayment();
 
-        $amazonCheckoutSessionId = $payment->getAdditionalInformation('amazon_session_id');
+        $publicHash = $payment->getAdditionalInformation('public_hash');
+        $customerId = $payment->getAdditionalInformation('customer_id');
+        $token = $this->paymentTokenManagement->getByPublicHash($publicHash, $customerId);
+        if (!$token) return false;
 
         if ($payment->getAmazonDisplayInvoiceAmount()) {
             $total = $payment->getAmazonDisplayInvoiceAmount();
@@ -63,8 +68,7 @@ class AuthorizationSaleVaultRequestBuilder implements BuilderInterface
         /* @var $payment \Magento\Sales\Model\Order\Payment */
         return [
             'quote_id' => $payment->getOrder()->getQuoteId(),
-            'amazon_checkout_session_id' => $amazonCheckoutSessionId,
-            'charge_permission_id' => $payment->getAdditionalInformation('charge_permission_id'),
+            'charge_permission_id' => $token->getGatewayToken(),
             'amount' => $total,
         ];
     }

@@ -64,9 +64,10 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
     private $orderRepository;
 
     /**
-     * @var PaymentTokenManagement
+     * @var \Amazon\Pay\Helper\Data
      */
-    private $paymentTokenManagement;
+    private $amazonHelper;
+
 
 
     /**
@@ -81,44 +82,83 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
         \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement,
+        \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Logger\Logger $logger
     ) {
         $this->amazonConfig = $amazonConfig;
         $this->amazonAdapter = $amazonAdapter;
         $this->magentoCheckoutSession = $magentoCheckoutSession;
         $this->cartManagement = $cartManagement;
-        $this->paymentTokenManagement = $paymentTokenManagement;
+        $this->amazonHelper = $amazonHelper;
+        $this->orderRepository = $orderRepository;
         $this->logger = $logger;
     }
 
-    public function createCharge($publicHash)
+    public function createCharge()
     {
         $quote = $this->magentoCheckoutSession->getQuote();
         $customerId = $quote->getCustomer()->getId();
 
-        $token = $this->paymentTokenManagement->getByPublicHash($publicHash, $customerId);
-        if (!$token) return false;
-
-        $result = $this->amazonAdapter->createCharge(
-            $quote->getStoreId(),
-            $token->getGatewayToken(),
-            $quote->getGrandTotal(),
-            $quote->getQuoteCurrencyCode()
-        );
-        $status = $result['status'] ?? '404';
-        if (!preg_match('/^2\d\d$/', $status)) {
-            // Something went wrong, but the order has already been placed, so cancelling it
-            return false;
+        if (!$this->canCheckoutWithAmazon($quote)) {
+            $this->logger->debug("Cannot checkout with Amazon");
+            return [
+                'success' => false,
+                'message' => __("Unable to complete Amazon Pay checkout"),
+            ];
         }
 
-        //$quote->collectTotals();
+        try{
+            $quote->collectTotals();
+            $orderId = $this->cartManagement->placeOrder($quote->getId());
+            $order = $this->orderRepository->get($orderId);
 
-        //$orderId = $this->cartManagement->placeOrder($quote->getId());
-        //$order = $this->orderRepository->get($orderId);
+            //$this->amazonConfig->getCheckoutResultUrlPath();
+        } catch (\Exception $e) {
+            // cancel order
+            if (isset($order)) {
+                $this->cancelOrder($order);
+            }
 
+            throw $e;
+        }
+        return '/' . $this->amazonConfig->getCheckoutResultUrlPath(); 
+    }
 
-        //$this->amazonConfig->getCheckoutResultUrlPath();
-        return true; 
+     /**
+     * @return bool
+     */
+    protected function canCheckoutWithAmazon($quote)
+    {
+        return $this->amazonConfig->isEnabled() &&
+            !$this->amazonHelper->hasRestrictedProducts($quote);
+    }
+
+    /**
+     * Cancel order
+     *
+     * @param $order
+     */
+    private function cancelOrder($order)
+    {
+        // set order as cancelled
+        $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
+            \Magento\Sales\Model\Order::STATE_CANCELED
+        );
+        $order->getPayment()->setIsTransactionClosed(true);
+
+        // cancel invoices
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            $invoice->setState(Invoice::STATE_CANCELED);
+        }
+
+        // delete order comments and add new one
+        foreach ($order->getStatusHistories() as $history) {
+            $history->delete();
+        }
+        $order->addStatusHistoryComment(
+            __('Payment was unable to be successfully captured, the checkout session failed to complete.')
+        );
+
+        $order->save();
     }
 }

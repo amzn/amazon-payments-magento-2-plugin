@@ -71,7 +71,7 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
             /** @var Payment $payment */
             $payment = $paymentDO->getPayment();
 
-            $transactionId = $response['chargeId'] ?? $response['checkoutSessionId'];
+            $transactionId = $response['chargeId'];;
             $payment->setTransactionId($transactionId);
             $payment->setIsTransactionClosed($handlingSubject['partial_capture'] ?? false);
 

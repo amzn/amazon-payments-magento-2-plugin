@@ -31,7 +31,6 @@ define(
 
         return function (paymentData) {
             var serviceUrl, payload;
-            var publicHash = paymentData.additional_data.public_hash;
            
             serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
             payload = {
@@ -40,7 +39,7 @@ define(
                 billingAddress: quote.billingAddress()
             };
             
-
+            console.log(paymentData);
             fullScreenLoader.startLoader();
 
             agreementsAssigner(payload.paymentMethod);
@@ -52,7 +51,7 @@ define(
                 function (response) {
                     // Redirect URL
                     if (response === true) {
-                        checkoutVaultChargeAction(publicHash,function (redirectUrl) {
+                        checkoutVaultChargeAction(function (redirectUrl) {
                             customerData.invalidate(['cart']);
                             customerData.set('checkout-data', {
                                 'selectedShippingAddress': null,

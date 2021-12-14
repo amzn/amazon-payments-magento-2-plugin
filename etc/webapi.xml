@@ -70,7 +70,7 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-checkout-vault/:publicHash/charge" method="POST">
+    <route url="/V1/amazon-checkout-vault/charge" method="POST">
         <service class="Amazon\Pay\Api\CheckoutVaultManagementInterface" method="createCharge"/>
         <resources>
             <resource ref="anonymous" />

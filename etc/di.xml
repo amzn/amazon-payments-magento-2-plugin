@@ -195,7 +195,7 @@
     <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
         <arguments>
             <argument name="executors" xsi:type="array">
-                <item name="amazon_payment" xsi:type="string">AmazonPayCommandManager</item>
+                <item name="amazon_payment_v2" xsi:type="string">AmazonPayCommandManager</item>
             </argument>
         </arguments>
     </type>

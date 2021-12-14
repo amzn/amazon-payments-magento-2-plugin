@@ -21,8 +21,7 @@ namespace Amazon\Pay\Api;
 interface CheckoutVaultManagementInterface
 {
      /**
-     * @param string $publicHash
      * @return mixed
      */
-    public function createCharge($publicHash);
+    public function createCharge();
 }
