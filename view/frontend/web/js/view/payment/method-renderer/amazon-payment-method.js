@@ -83,25 +83,6 @@ define(
                 return 'amazon_payment_v2_vault';
             },
 
-            getData: function () {
-
-                this.initVault();
-                var data = this._super();
-                if (this.isVaultEnabled()) {
-                    data = {
-                        'method': this.getCode(),
-                        'additional_data': {
-                            'is_active_payment_token_enabler': true
-                        }
-                    };
-
-                    data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
-
-                    this.vaultEnabler.visitAdditionalData(data);
-                }
-                return data;
-            },
-
             bindEditPaymentAction: function (elem) {
                 var $elem = $(elem);
                 amazon.Pay.bindChangeAction('#' + $elem.uniqueId().attr('id'), {

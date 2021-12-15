@@ -30,11 +30,14 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig(): array
     {
-    
+
         $config = [
             'payment' => [
                 self::CODE => [
-                    'isActive' => $this->config->isActive(),
+                    'isActive' => $this->config->isActive()
+                ],
+                self::VAULT_CODE => [
+                    'isActive' => $this->config->isVaultEnabled()
                 ]
             ]
         ];

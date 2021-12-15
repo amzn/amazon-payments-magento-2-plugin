@@ -249,7 +249,7 @@
     <virtualType name="AmazonPayAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <!-- <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</argument> -->
-            <argument name="requestBuilder" xsi:type="object">AmazonPayAuthorizeRequest</argument>
+            <argument name="requestBuilder" xsi:type="object">AmazonPayAuthorizeSaleRequest</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeClient</argument>
             <!-- <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument> -->
             <argument name="handler" xsi:type="object">AmazonPayAuthorizationSaleHandler</argument>
@@ -259,10 +259,10 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="AmazonPayAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="AmazonPayAuthorizeSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="authorization" xsi:type="string">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</item>
+                <item name="authorize" xsi:type="string">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</item>
                 <item name="vault" xsi:type="string">Amazon\Pay\Gateway\Request\VaultDataBuilder</item>
             </argument>
         </arguments>
@@ -283,7 +283,7 @@
     <virtualType name="AmazonPaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <!-- <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</argument> -->
-            <argument name="requestBuilder" xsi:type="object">AmazonPaySaleRequest</argument>
+            <argument name="requestBuilder" xsi:type="object">AmazonPayAuthorizeSaleRequest</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SaleClient</argument>
             <!-- <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument> -->
             <argument name="handler" xsi:type="object">AmazonPayAuthorizationSaleHandler</argument>            
@@ -292,17 +292,6 @@
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
-
-     <virtualType name="AmazonPaySaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="authorize" xsi:type="string">AmazonPayAuthorizeRequest</item>
-                <item name="settlement" xsi:type="string">Amazon\Pay\Gateway\Request\SettlementRequestBuilder</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-
 
     <!-- Capture settlement command -->
     <virtualType name="AmazonPaySettlementCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">

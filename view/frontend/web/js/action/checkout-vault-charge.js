@@ -33,7 +33,7 @@ define([
             if (response) {
                 //alert('OK !');
                 console.log(response);
-                callback(response);
+                callback('/checkout/onepage/success');
                 fullScreenLoader.stopLoader(true);
             } else {
                 console.log('Invalid Amazon RedirectUrl:');

@@ -16,25 +16,6 @@
 
 namespace Amazon\Pay\Model;
 
-use Amazon\Pay\Api\Data\CheckoutSessionInterface;
-use Amazon\Pay\Gateway\Config\Config;
-use Amazon\Pay\Model\Config\Source\AuthorizationMode;
-use Amazon\Pay\Model\Config\Source\PaymentAction;
-use Amazon\Pay\Model\AsyncManagement;
-use http\Exception\UnexpectedValueException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\NotFoundException;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Framework\Validator\Exception as ValidatorException;
-use Magento\Framework\Webapi\Exception as WebapiException;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\Order\Payment;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use Magento\Sales\Api\Data\TransactionInterface as Transaction;
-use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\Vault\Api\PaymentTokenManagementInterface;
-use Magento\Vault\Model\PaymentTokenFactory;
 
 class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagementInterface
 {
@@ -68,7 +49,10 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
      */
     private $amazonHelper;
 
-
+    /**
+     * @var \Magento\Vault\Api\PaymentTokenManagementInterface
+     */
+    private $paymentTokenManagement;
 
     /**
      * @var \Amazon\Pay\Logger\Logger
@@ -83,6 +67,7 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
+        \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement,
         \Amazon\Pay\Logger\Logger $logger
     ) {
         $this->amazonConfig = $amazonConfig;
@@ -91,6 +76,7 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
         $this->cartManagement = $cartManagement;
         $this->amazonHelper = $amazonHelper;
         $this->orderRepository = $orderRepository;
+        $this->paymentTokenManagement = $paymentTokenManagement;
         $this->logger = $logger;
     }
 
@@ -111,8 +97,18 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
             $quote->collectTotals();
             $orderId = $this->cartManagement->placeOrder($quote->getId());
             $order = $this->orderRepository->get($orderId);
+            
+            $payment = $order->getPayment();
+            $publicHash = $payment->getAdditionalInformation('public_hash');
+            $customerId = $payment->getAdditionalInformation('customer_id');
+            $token = $this->paymentTokenManagement->getByPublicHash($publicHash, $customerId);
 
-            //$this->amazonConfig->getCheckoutResultUrlPath();
+            $changePermissionResult = $this->amazonAdapter->updateChargePermission(
+                $order->getStoreId(),
+                $token->getGatewayToken(),
+                ['merchantReferenceId' => $order->getIncrementId()]
+            );
+
         } catch (\Exception $e) {
             // cancel order
             if (isset($order)) {
@@ -121,7 +117,7 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
 
             throw $e;
         }
-        return '/' . $this->amazonConfig->getCheckoutResultUrlPath(); 
+        return true; 
     }
 
      /**

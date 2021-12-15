@@ -14,7 +14,8 @@ define([
 
     return VaultComponent.extend({
         defaults: {
-            template: 'Amazon_Pay/payment/amazon-payment-method-vault'
+            template: 'Amazon_Pay/payment/amazon-payment-method-vault',
+            logo: 'Amazon_Pay/images/logo/Black-L.png'
         },
 
         /**
@@ -36,6 +37,10 @@ define([
             }
 
             return false;
+        },
+
+         getLogoUrl: function() {
+            return require.toUrl(this.logo);
         },
 
 

@@ -33,6 +33,11 @@ class AuthorizationSaleVaultRequestBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
+     * @var \Magento\Vault\Api\PaymentTokenManagementInterface
+     */
+    private $paymentTokenManagement;
+
+    /**
      * AuthorizationRequestBuilder constructor.
      * @param \Amazon\Pay\Api\CheckoutSessionManagementInterface $sessionManagement
      * @param SubjectReader $subjectReader
@@ -57,6 +62,7 @@ class AuthorizationSaleVaultRequestBuilder implements BuilderInterface
         $publicHash = $payment->getAdditionalInformation('public_hash');
         $customerId = $payment->getAdditionalInformation('customer_id');
         $token = $this->paymentTokenManagement->getByPublicHash($publicHash, $customerId);
+        
         if (!$token) return false;
 
         if ($payment->getAmazonDisplayInvoiceAmount()) {
