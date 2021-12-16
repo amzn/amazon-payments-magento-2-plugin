@@ -36,6 +36,36 @@
         </arguments>
     </type>
 
+    <type name="Amazon\Pay\Model\Subscription\SubscriptionQuoteManagerFactory">
+        <arguments>
+            <argument name="subscriptionManagerPool" xsi:type="array">                
+                <item name="paradox_labs" xsi:type="array">
+                    <item name="module_name" xsi:type="string">ParadoxLabs_Subscriptions</item>
+                    <item name="module_class" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\QuoteManager</item>                    
+                    <item name="methods" xsi:type="array">
+                        <item name="has_subscription" xsi:type="string">quoteContainsSubscription</item>
+                    </item>
+                </item>                
+            </argument>
+        </arguments>
+    </type>
+
+     <type name="Amazon\Pay\Model\Subscription\SubscriptionItemManagerFactory">
+        <arguments>
+            <argument name="subscriptionManagerPool" xsi:type="array">                
+                <item name="paradox_labs" xsi:type="array">
+                    <item name="module_name" xsi:type="string">ParadoxLabs_Subscriptions</item>
+                    <item name="module_class" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\ItemManager</item>                    
+                    <item name="methods" xsi:type="array">
+                        <item name="get_frecuency_unit" xsi:type="string">getFrequencyUnit</item>
+                        <item name="get_frequency_count" xsi:type="string">getFrequencyCount</item>
+                    </item>
+                </item>                
+            </argument>
+        </arguments>
+    </type>
+
+
     <virtualType name="Amazon_Pay_RemoteAddressWithAdditionalIpHeaders" type="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
         <arguments>
             <argument name="alternativeHeaders" xsi:type="array">
@@ -167,9 +197,9 @@
                 <item name="refund" xsi:type="string">AmazonPayRefundCommand</item>
                 <item name="void" xsi:type="string">AmazonPayVoidCommand</item>
                 <item name="cancel" xsi:type="string">AmazonPayVoidCommand</item>
-                <item name="vault_authorize" xsi:type="string">AmazonPayVaultAuthorizeCommand</item>
+                <!-- <item name="vault_authorize" xsi:type="string">AmazonPayVaultAuthorizeCommand</item> -->
                 <item name="vault_sale" xsi:type="string">AmazonPayVaultSaleCommand</item>
-                <item name="vault_capture" xsi:type="string">AmazonPayVaultCaptureCommand</item>
+                <!-- <item name="vault_capture" xsi:type="string">AmazonPayVaultCaptureCommand</item> -->
             </argument>
         </arguments>
     </virtualType>
@@ -336,7 +366,7 @@
     </virtualType>
 
     <!-- Vault Authorize Command -->
-    <virtualType name="AmazonPayVaultAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <!--<virtualType name="AmazonPayVaultAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleVaultRequestBuilder</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeClient</argument>
@@ -346,6 +376,8 @@
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
+    -->
+
 
     <!-- Vault Authorize and Capture command -->
     <virtualType name="AmazonPayVaultSaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
@@ -360,7 +392,7 @@
     </virtualType>
 
     <!-- Vault Capture settlement command -->
-    <virtualType name="AmazonPayVaultCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <!-- <virtualType name="AmazonPayVaultCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\SettlementVaultRequestBuilder</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SettlementClient</argument>
@@ -370,6 +402,7 @@
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
+    -->
 
     <!-- Value handlers infrastructure -->
     <virtualType name="AmazonPayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">

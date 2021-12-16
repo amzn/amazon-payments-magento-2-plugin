@@ -84,6 +84,11 @@ class AmazonConfig
      */
     private $ccConfig;
 
+    /**
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionFactory 
+     */
+    private $subscriptioQuotenManager;
+
 
     /**
      * AmazonConfig constructor.
@@ -95,6 +100,7 @@ class AmazonConfig
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param Magento\Payment\Model\CcConfig $ccConfig
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionFactory $subscriptionFactory
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -104,7 +110,8 @@ class AmazonConfig
         \Magento\Framework\Locale\Resolver $localeResolver,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
-        \Magento\Payment\Model\CcConfig $ccConfig
+        \Magento\Payment\Model\CcConfig $ccConfig,
+        \Amazon\Pay\Model\Subscription\SubscriptionQuoteManager $subscriptioQuotenManager
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -114,6 +121,7 @@ class AmazonConfig
         $this->remoteAddress = $remoteAddress;
         $this->serializer = $serializer;
         $this->ccConfig = $ccConfig;
+        $this->subscriptioQuotenManager = $subscriptioQuotenManager;
     }
 
     /**
@@ -871,5 +879,10 @@ class AmazonConfig
             $scope,
             $scopeCode
         );
+    }
+
+    public function hasSubscription($quote)
+    {
+        return $this->subscriptioQuotenManager->hasSubscription($quote);
     }
 }

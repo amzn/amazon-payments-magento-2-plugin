@@ -71,6 +71,16 @@ class AmazonPayAdapter
     private $redirect;
 
     /**
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
+     */
+    private $subscriptionQuoteManager;
+
+    /**
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionItemManager
+     */
+    private $subscriptionItemManager;
+
+    /**
      * AmazonPayAdapter constructor.
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
@@ -78,6 +88,8 @@ class AmazonPayAdapter
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptioQuotenManager
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionItemManager $subscriptioItemManager
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -89,6 +101,8 @@ class AmazonPayAdapter
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Amazon\Pay\Model\Subscription\SubscriptionQuoteManager $subscriptionQuoteManager,
+        \Amazon\Pay\Model\Subscription\SubscriptionItemManager $subscriptionItemManager,
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -99,6 +113,8 @@ class AmazonPayAdapter
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
         $this->productMetadata = $productMetadata;
+        $this->subscriptionQuoteManager = $subscriptionQuoteManager;
+        $this->subscriptionItemManager = $subscriptionItemManager;
         $this->logger = $logger;
         $this->url = $url;
         $this->redirect = $redirect;
@@ -173,18 +189,6 @@ class AmazonPayAdapter
         }
 
         $payload = [
-            'chargePermissionType' => "Recurring",
-            // @TODO: make this conditional & cart appropriate
-            "recurringMetadata" => [
-                "frequency" => [
-                    "unit" => "Day",
-                    "value" => "1"
-                ],
-//                "amount" => [
-//                    "amount" => "null",
-//                    "currencyCode" => "USD",
-//                ],
-            ],
             'webCheckoutDetails' => [
                 'checkoutResultReturnUrl' => $this->amazonConfig->getCheckoutResultReturnUrl()
             ],
@@ -199,6 +203,13 @@ class AmazonPayAdapter
             ],
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
+
+        $hasSubscription = $this->subscriptionQuoteManager->hasSubscription($quote);
+        if ($hasSubscription) {
+            $recurringMetadata = $this->getRecurringMetadata($quote);
+            $payload['chargePermissionType'] = 'Recurring';
+            $payload['recurringMetadata'] = $recurringMetadata; 
+        }
 
         $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload);
 
@@ -579,6 +590,13 @@ class AmazonPayAdapter
             ],
         ];
 
+        $hasSubscription = $this->subscriptionQuoteManager->hasSubscription($quote);
+        if ($hasSubscription) {
+            $recurringMetadata = $this->getRecurringMetadata($quote);
+            $payload['chargePermissionType'] = 'Recurring';
+            $payload['recurringMetadata'] = $recurringMetadata; 
+        }
+
         $address = $quote->getShippingAddress();
         if (!empty($address->getPostcode())) {
             $addressData = [
@@ -627,5 +645,20 @@ class AmazonPayAdapter
         }
 
         return $referer;
+    }
+
+    protected function getRecurringMetadata($quote)
+    {
+        foreach ($quote->getAllItems() as $item) {
+            $frecuencyUnit = $this->subscriptionItemManager->getFrequencyUnit($item);
+            $frecuencyCount = $this->subscriptionItemManager->getFrequencyCount($item);
+            //What happens if we have more than one subscription product ??
+        }
+        return [
+                "frequency" => [
+                    "unit" => $frecuencyUnit,
+                    "value" => $frecuencyCount
+                ]
+            ];
     }
 }
