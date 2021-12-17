@@ -828,8 +828,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $quote->getCustomer()->getId());
             if ($token) {
                 $token->setGatewayToken($chargePermissionId);
-                //Set visible to true to see Vault payment in checkout and customer account.
-                $token->setIsVisible(true);
                 $this->paymentTokenRepository->save($token);
             }
         }
