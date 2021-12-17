@@ -63,24 +63,8 @@ define(
                     this.initBillingAddress();
                     this.selectPaymentMethod();
                 }
-                this.initVault();
+
                 
-            },
-
-            initVault: function() {            
-                if (!this.vaultInitialized) {
-                    this.vaultEnabler = new VaultEnabler();
-                    this.vaultEnabler.setPaymentCode(this.getVaultCode());
-                    this.vaultInitialized = true;
-                }
-            },
-
-            /*isVaultEnabled: function () {
-                return this.vaultEnabler.isVaultEnabled();
-            },*/
-
-            getVaultCode: function () {
-                return 'amazon_payment_v2_vault';
             },
 
             bindEditPaymentAction: function (elem) {

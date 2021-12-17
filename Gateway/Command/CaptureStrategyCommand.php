@@ -38,8 +38,6 @@ class CaptureStrategyCommand implements CommandInterface
 
     const PARTIAL_CAPTURE = 'partial_capture';
 
-    const VAULT_CAPTURE = 'vault_capture';
-
     /**
      * @var CommandPoolInterface
      */

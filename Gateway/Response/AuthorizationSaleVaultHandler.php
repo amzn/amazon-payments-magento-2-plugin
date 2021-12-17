@@ -74,15 +74,14 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
             $transactionId = $response['chargeId'];;
             $payment->setTransactionId($transactionId);
             
+            /*
             $payment->setIsTransactionClosed($handlingSubject['partial_capture'] ?? false);
-
-            /*if ($this->scopeConfig->getValue('payment/amazon_payment/authorization_mode') ==
+            if ($this->scopeConfig->getValue('payment/amazon_payment/authorization_mode') ==
                 AuthorizationMode::SYNC_THEN_ASYNC
                 && !($handlingSubject['partial_capture'] ?? false)) {
                 $payment->setIsTransactionPending(true);
             }*/
 
-            // Subsequent charges on separate shipping will land here. Handle for CaptureInitiated in that case
             switch ($response['statusDetails']['state']) {
                 case 'CaptureInitiated':
                     $payment->setIsTransactionPending(true);
