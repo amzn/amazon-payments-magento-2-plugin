@@ -234,14 +234,14 @@ class Session
     public function getQuoteFromIdOrSession($cartId = null)
     {
         try {
-            if (empty($cartId)) {
+            if (empty($cartId) || is_numeric($cartId)) {
                 $userContextCartId = $this->getCartIdViaUserContext();
                 if ($userContextCartId !== null) {
                     return $this->cartRepository->get($userContextCartId);
                 }
                 return $this->session->getQuote();
             }
-            $quoteId = is_numeric($cartId) ? $cartId : $this->maskedQuoteIdConverter->execute($cartId);
+            $quoteId = $this->maskedQuoteIdConverter->execute($cartId);
             return $this->cartRepository->get($quoteId);
         } catch (NoSuchEntityException $e) {
             return false;
