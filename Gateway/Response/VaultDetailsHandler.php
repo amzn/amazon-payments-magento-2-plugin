@@ -19,6 +19,8 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Model\PaymentTokenFactory;
+use Amazon\Pay\Model\Subscription\SubscriptionQuoteManager;
+use Magento\Quote\Model\QuoteFactory;
 use RuntimeException;
 
 /**
@@ -52,10 +54,23 @@ class VaultDetailsHandler implements HandlerInterface
     private $serializer;
 
     /**
+     * @var SubscriptionQuoteManager
+     */
+    private $subscriptioQuotenManager;
+
+    /**
+     * @var QuoteFactory
+     */
+    private $quoteFactory;
+    
+
+    /**
      * VaultDetailsHandler constructor.
      *
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
+     * @param SubscriptionQuoteManager $subscriptioQuotenManager
+     * @param QuoteFactory $quoteFactory
      * @param AmazonConfig $config
      * @param SubjectReader $subjectReader
      * @throws RuntimeException
@@ -63,11 +78,15 @@ class VaultDetailsHandler implements HandlerInterface
     public function __construct(
         PaymentTokenFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
+        SubscriptionQuoteManager $subscriptioQuotenManager,
+        QuoteFactory $quoteFactory,
         AmazonConfig $config,
         SubjectReader $subjectReader
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
+        $this->subscriptioQuotenManager = $subscriptioQuotenManager;
+        $this->quoteFactory = $quoteFactory;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
     }
@@ -80,8 +99,15 @@ class VaultDetailsHandler implements HandlerInterface
         if (!$this->config->isVaultEnabled()) {
             return null;
         }
+
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
+        $quoteId = $payment->getOrder()->getQuoteId();
+        $quote = $this->quoteFactory->create()->load($quoteId);
+
+        if (!$this->subscriptioQuotenManager->hasSubscription($quote)) {
+            return null;
+        }
 
         // add vault payment token entity to extension attributes
         $paymentToken = $this->getVaultPaymentToken($response);
@@ -111,7 +137,11 @@ class VaultDetailsHandler implements HandlerInterface
         $paymentToken = $this->paymentTokenFactory->create(PaymentTokenFactory::TOKEN_TYPE_ACCOUNT);
         $paymentToken->setGatewayToken($token);
         $paymentToken->setExpiresAt($this->getExpirationDate());
-        $paymentToken->setIsVisible(true);
+        $details = json_encode([
+            'checkoutSessionId' => $response['checkoutSessionId'],
+            'paymentPreferences' => $response['paymentPreferences']
+        ]);
+        $paymentToken->setTokenDetails($details);
         return $paymentToken;
     }
    
@@ -134,7 +164,7 @@ class VaultDetailsHandler implements HandlerInterface
     private function getExpirationDate(): string
     {
         $expDate = new DateTime('NOW',new DateTimeZone('UTC'));
-        $expDate->add(new DateInterval('P1Y'));
+        $expDate->add(new DateInterval('P5Y'));
         return $expDate->format('Y-m-d 00:00:00');
     }
 }

@@ -152,7 +152,7 @@ class CheckoutVaultManagement implements \Amazon\Pay\Api\CheckoutVaultManagement
             $history->delete();
         }
         $order->addStatusHistoryComment(
-            __('Payment was unable to be successfully captured, the checkout session failed to complete.')
+            __('Payment was unable to be successfully captured.')
         );
 
         $order->save();

@@ -75,9 +75,9 @@ define(
                 }
             },
 
-            isVaultEnabled: function () {
+            /*isVaultEnabled: function () {
                 return this.vaultEnabler.isVaultEnabled();
-            },
+            },*/
 
             getVaultCode: function () {
                 return 'amazon_payment_v2_vault';

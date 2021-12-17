@@ -85,12 +85,6 @@ class AmazonConfig
     private $ccConfig;
 
     /**
-     * @var \Amazon\Pay\Model\Subscription\SubscriptionFactory 
-     */
-    private $subscriptioQuotenManager;
-
-
-    /**
      * AmazonConfig constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -110,8 +104,7 @@ class AmazonConfig
         \Magento\Framework\Locale\Resolver $localeResolver,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Serialize\SerializerInterface $serializer,
-        \Magento\Payment\Model\CcConfig $ccConfig,
-        \Amazon\Pay\Model\Subscription\SubscriptionQuoteManager $subscriptioQuotenManager
+        \Magento\Payment\Model\CcConfig $ccConfig
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -121,7 +114,6 @@ class AmazonConfig
         $this->remoteAddress = $remoteAddress;
         $this->serializer = $serializer;
         $this->ccConfig = $ccConfig;
-        $this->subscriptioQuotenManager = $subscriptioQuotenManager;
     }
 
     /**
@@ -875,14 +867,9 @@ class AmazonConfig
     public function isVaultEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->scopeConfig->isSetFlag(
-            'payment/amazon_payment/vault_enabled',
+            'payment/amazon_payment_v2_vault/active',
             $scope,
             $scopeCode
         );
-    }
-
-    public function hasSubscription($quote)
-    {
-        return $this->subscriptioQuotenManager->hasSubscription($quote);
     }
 }

@@ -177,7 +177,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AmazonPayVaultFacade" type="Amazon\Pay\Model\Method\Vault">
+    <virtualType name="AmazonPayVaultFacade" type="Magento\Vault\Model\Method\Vault">
         <arguments>
             <argument name="config" xsi:type="object">AmazonPayVaultConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>

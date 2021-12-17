@@ -151,18 +151,23 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * @var PaymentTokenRepositoryInterface
      */
-    private PaymentTokenRepositoryInterface $paymentTokenRepository;
+    private $paymentTokenRepository;
 
     /**
      * @var PaymentTokenFactory
      */
-    private PaymentTokenFactory $paymentTokenFactory;
+    private $paymentTokenFactory;
 
 
     /**
      * @var PaymentTokenManagement
      */
-    private PaymentTokenManagementInterface $paymentTokenManagement;
+    private $paymentTokenManagement;
+
+    /**
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
+     */
+    private $subscriptionQuoteManager;
 
     /**
      * @var \Amazon\Pay\Logger\Logger
@@ -194,6 +199,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param PaymentTokenManagementInterface $paymentTokenManagement
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptioQuotenManager
      * @param \Amazon\Pay\Logger\Logger $logger
      */
     public function __construct(
@@ -220,6 +226,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         PaymentTokenRepositoryInterface $paymentTokenRepository,
         PaymentTokenFactory $paymentTokenFactory,
         PaymentTokenManagementInterface $paymentTokenManagement,
+        \Amazon\Pay\Model\Subscription\SubscriptionQuoteManager $subscriptionQuoteManager,
         \Amazon\Pay\Logger\Logger $logger
     ) {
         $this->storeManager = $storeManager;
@@ -245,6 +252,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->paymentTokenRepository = $paymentTokenRepository;
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentTokenManagement = $paymentTokenManagement;
+        $this->subscriptionQuoteManager = $subscriptionQuoteManager;
         $this->logger = $logger;
     }
 
@@ -771,7 +779,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 $amazonCompleteCheckoutResult['chargePermissionId']
             );
             $this->updateTransactionId($chargeId, $payment, $transaction);
-            $this->updateVaultToken($amazonSessionId, $amazonCompleteCheckoutResult['chargePermissionId'], $quote->getCustomer()->getId());
+            $this->updateVaultToken($amazonSessionId, $amazonCompleteCheckoutResult['chargePermissionId'], $quote);
 
         } catch (\Exception $e) {
             $session = $this->amazonAdapter->getCheckoutSession(
@@ -814,12 +822,13 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
 
-    protected function updateVaultToken($amazonSessionId, $chargePermissionId, $customerId) 
+    protected function updateVaultToken($amazonSessionId, $chargePermissionId, $quote) 
     {
-        if ($this->amazonConfig->isVaultEnabled()) {
-            $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $customerId);
+        if ($this->amazonConfig->isVaultEnabled() && $this->subscriptionQuoteManager->hasSubscription($quote)) {
+            $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $quote->getCustomer()->getId());
             if ($token) {
                 $token->setGatewayToken($chargePermissionId);
+                //Set visible to true to see Vault payment in checkout and customer account.
                 $token->setIsVisible(true);
                 $this->paymentTokenRepository->save($token);
             }

@@ -59,7 +59,7 @@
             <amazon_payment_v2_vault>
                 <model>AmazonPayVaultFacade</model>
                 <title>Amazon Pay Vault</title>
-                <active>1</active>
+                <active>0</active>
             </amazon_payment_v2_vault>
         </payment>
     </default>

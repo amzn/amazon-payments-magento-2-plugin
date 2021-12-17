@@ -11,7 +11,7 @@ class AmazonSubscriptionQuoteManager
 
 	public function getFrequencyUnit($item) 
 	{
-		return 0;
+		return '';
 	} 
 
 	public function getFrequencyCount($item) 
