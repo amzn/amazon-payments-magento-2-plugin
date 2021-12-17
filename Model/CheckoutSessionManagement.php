@@ -18,6 +18,7 @@ namespace Amazon\Pay\Model;
 
 use Amazon\Pay\Api\Data\CheckoutSessionInterface;
 use Amazon\Pay\Gateway\Config\Config;
+use Amazon\Pay\Helper\Session;
 use Amazon\Pay\Model\Config\Source\AuthorizationMode;
 use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Amazon\Pay\Model\AsyncManagement;
@@ -151,6 +152,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $logger;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * CheckoutSessionManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
@@ -173,6 +179,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter
      * @param \Amazon\Pay\Logger\Logger $logger
+     * @param Session $session
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -195,7 +202,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter,
-        \Amazon\Pay\Logger\Logger $logger
+        \Amazon\Pay\Logger\Logger $logger,
+        Session $session
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -218,6 +226,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->orderCollectionFactory = $orderCollectionFactory;
         $this->maskedQuoteIdConverter = $maskedQuoteIdConverter;
         $this->logger = $logger;
+        $this->session = $session;
     }
 
     /**
@@ -323,33 +332,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * Load quote from provided masked quote ID or falls back to loading from the session
-     * @param $cartId null|string
-     * @return false|CartInterface|\Magento\Quote\Model\Quote
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function getQuoteFromIdOrSession($cartId = null)
-    {
-        try {
-            if (empty($cartId)) {
-                $quote = $this->magentoCheckoutSession->getQuote();
-            } else {
-                $quoteId = $this->maskedQuoteIdConverter->execute($cartId);
-                $quote = $this->cartRepository->get($quoteId);
-            }
-        } catch (NoSuchEntityException $e) {
-            return false;
-        }
-
-        return $quote;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getConfig($cartId = null)
     {
-        if (!$quote = $this->getQuoteFromIdOrSession($cartId)) {
+        if (!$quote = $this->session->getQuoteFromIdOrSession($cartId)) {
             return [];
         }
 
@@ -423,7 +410,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function updateCheckoutSession($amazonCheckoutSessionId, $cartId = null)
     {
-        if (!$quote = $this->getQuoteFromIdOrSession($cartId)) {
+        if (!$quote = $this->session->getQuoteFromIdOrSession($cartId)) {
             return [];
         }
 
@@ -581,7 +568,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null)
     {
-        if (!$quote = $this->getQuoteFromIdOrSession($cartId)) {
+        if (!$quote = $this->session->getQuoteFromIdOrSession($cartId)) {
             return ['success' => false];
         }
 
