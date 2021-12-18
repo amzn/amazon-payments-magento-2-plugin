@@ -22,9 +22,7 @@ use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
-use Magento\Payment\Helper\Formatter;
-use \phpseclib\Crypt\RSA;
-use \phpseclib\Crypt\AES;
+use phpseclib3\Crypt\RSA;
 
 class AutoKeyExchange
 {
@@ -274,12 +272,11 @@ class AutoKeyExchange
      */
     public function generateKeys()
     {
-        $rsa = new RSA();
-        $keys = $rsa->createKey(2048);
-        $encrypt = $this->encryptor->encrypt($keys['privatekey']);
+        $keys = RSA::createKey(2048);
+        $encrypt = $this->encryptor->encrypt($keys->__toString());
 
         $this->config
-            ->saveConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, $keys['publickey'], 'default', 0)
+            ->saveConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, $keys->getPublicKey()->__toString(), 'default', 0)
             ->saveConfig(self::CONFIG_XML_PATH_PRIVATE_KEY, $encrypt, 'default', 0);
 
         $this->cacheManager->clean([CacheTypeConfig::TYPE_IDENTIFIER]);
@@ -327,7 +324,7 @@ class AutoKeyExchange
         // Generate key pair
         if (!$publickey || $reset || strlen($publickey) < 300) {
             $keys = $this->generateKeys();
-            $publickey = $keys['publickey'];
+            $publickey = $keys->getPublicKey()->__toString();
         }
 
         if (!$pemformat) {
