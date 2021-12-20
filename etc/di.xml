@@ -510,8 +510,12 @@
         <plugin name="amazon_payv2_legacy_order" type="Amazon\Pay\Plugin\LegacyPaymentHandler" />
     </type>
 
-
+    <!-- Paradox Labs plugins -->
     <type name="ParadoxLabs\Subscriptions\Model\SubscriptionRepository">
-        <plugin name="amazon_pay_susbscription_cancel" type="Amazon\Pay\Plugin\SubscriptionRepository" />
+        <plugin name="amazon_pay_paradox_labs_susbscription_cancel" type="Amazon\Pay\Plugin\SubscriptionRepository" />
     </type>
+    <type name="ParadoxLabs\Subscriptions\Helper\Vault">
+        <plugin name="amazon_pay_paradox_labs_token_name" type="Amazon\Pay\Plugin\VaultHelper" />
+    </type>
+
 </config>
