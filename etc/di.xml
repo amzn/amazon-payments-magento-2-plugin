@@ -509,4 +509,9 @@
     <type name="Magento\Sales\Model\Order">
         <plugin name="amazon_payv2_legacy_order" type="Amazon\Pay\Plugin\LegacyPaymentHandler" />
     </type>
+
+
+    <type name="ParadoxLabs\Subscriptions\Model\SubscriptionRepository">
+        <plugin name="amazon_pay_susbscription_cancel" type="Amazon\Pay\Plugin\SubscriptionRepository" />
+    </type>
 </config>

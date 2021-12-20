@@ -20,7 +20,7 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Amazon\Pay\Model\Subscription\SubscriptionQuoteManager;
-use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Api\CartRepositoryInterface;
 use RuntimeException;
 
 /**
@@ -59,9 +59,9 @@ class VaultDetailsHandler implements HandlerInterface
     private $subscriptioQuotenManager;
 
     /**
-     * @var QuoteFactory
+     * @var CartRepositoryInterface
      */
-    private $quoteFactory;
+    private $quoteRepository;
     
 
     /**
@@ -70,7 +70,7 @@ class VaultDetailsHandler implements HandlerInterface
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param SubscriptionQuoteManager $subscriptioQuotenManager
-     * @param QuoteFactory $quoteFactory
+     * @param CartRepositoryInterface $quoteRepository
      * @param AmazonConfig $config
      * @param SubjectReader $subjectReader
      * @throws RuntimeException
@@ -79,14 +79,14 @@ class VaultDetailsHandler implements HandlerInterface
         PaymentTokenFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         SubscriptionQuoteManager $subscriptioQuotenManager,
-        QuoteFactory $quoteFactory,
+        CartRepositoryInterface $quoteRepository,
         AmazonConfig $config,
         SubjectReader $subjectReader
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->subscriptioQuotenManager = $subscriptioQuotenManager;
-        $this->quoteFactory = $quoteFactory;
+        $this->quoteRepository = $quoteRepository;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
     }
@@ -103,7 +103,7 @@ class VaultDetailsHandler implements HandlerInterface
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
         $quoteId = $payment->getOrder()->getQuoteId();
-        $quote = $this->quoteFactory->create()->load($quoteId);
+        $quote = $this->quoteRepository->get($quoteId);
 
         if (!$this->subscriptioQuotenManager->hasSubscription($quote)) {
             return null;
@@ -164,7 +164,7 @@ class VaultDetailsHandler implements HandlerInterface
     private function getExpirationDate(): string
     {
         $expDate = new DateTime('NOW',new DateTimeZone('UTC'));
-        $expDate->add(new DateInterval('P5Y'));
+        $expDate->add(new DateInterval('P1Y'));
         return $expDate->format('Y-m-d 00:00:00');
     }
 }
