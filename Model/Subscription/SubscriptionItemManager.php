@@ -23,4 +23,9 @@ class SubscriptionItemManager extends SubscriptionManager
 	{
 		return $this->execute('get_frequency_count', $item);
 	}
+
+	public function isSubscription($item)
+	{
+		return $this->execute('is_subscription', $item);	
+	}
 }

@@ -58,6 +58,7 @@
                     <item name="methods" xsi:type="array">
                         <item name="get_frecuency_unit" xsi:type="string">getFrequencyUnit</item>
                         <item name="get_frequency_count" xsi:type="string">getFrequencyCount</item>
+                        <item name="is_subscription" xsi:type="string">isSubscription</item> 
                     </item>
                 </item>                
             </argument>

@@ -650,8 +650,10 @@ class AmazonPayAdapter
     protected function getRecurringMetadata($quote)
     {
         foreach ($quote->getAllItems() as $item) {
-            $frecuencyUnit = $this->subscriptionItemManager->getFrequencyUnit($item);
-            $frecuencyCount = $this->subscriptionItemManager->getFrequencyCount($item);
+            if ($this->subscriptionItemManager->isSubscription($item)) {
+                $frecuencyUnit = $this->subscriptionItemManager->getFrequencyUnit($item);
+                $frecuencyCount = $this->subscriptionItemManager->getFrequencyCount($item);
+            }
             //What happens if we have more than one subscription product ??
         }
         return [
