@@ -22,6 +22,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -234,16 +235,22 @@ class Session
     public function getQuoteFromIdOrSession($cartId = null)
     {
         try {
+            // the intention of is_numeric is to filter out any potential unwanted requests trying to guess quote ids
+            // we only really want to utilize masked ids here unless retrieved elsewhere
             if (empty($cartId) || is_numeric($cartId)) {
-                $userContextCartId = $this->getCartIdViaUserContext();
-                if ($userContextCartId !== null) {
-                    return $this->cartRepository->get($userContextCartId);
+                $quote = $this->getQuote();
+                if (!$quote) {
+                    // here we'll check the user context for any available cart data before moving on
+                    $userContextCartId = $this->getCartIdViaUserContext();
+                    if ($userContextCartId !== null) {
+                        return $this->cartRepository->get($userContextCartId);
+                    }
                 }
-                return $this->session->getQuote();
+                return $quote;
             }
             $quoteId = $this->maskedQuoteIdConverter->execute($cartId);
             return $this->cartRepository->get($quoteId);
-        } catch (NoSuchEntityException $e) {
+        } catch (NoSuchEntityException | LocalizedException $e) {
             return false;
         }
     }
