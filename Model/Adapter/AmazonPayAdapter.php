@@ -204,13 +204,6 @@ class AmazonPayAdapter
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
-        $hasSubscription = $this->subscriptionQuoteManager->hasSubscription($quote);
-        if ($hasSubscription) {
-            $recurringMetadata = $this->getRecurringMetadata($quote);
-            $payload['chargePermissionType'] = 'Recurring';
-            $payload['recurringMetadata'] = $recurringMetadata; 
-        }
-
         $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload);
 
         return $this->processResponse($response, __FUNCTION__);
@@ -546,7 +539,7 @@ class AmazonPayAdapter
      *
      * @return string
      */
-    public function generateCheckoutButtonPayload()
+    public function generateCheckoutButtonPayload(Quote $quote)
     {
         $payload = [
             'webCheckoutDetails' => [
@@ -558,6 +551,13 @@ class AmazonPayAdapter
 
         if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
             $payload['deliverySpecifications'] = $deliverySpecs;
+        }
+
+        $hasSubscription = $this->subscriptionQuoteManager->hasSubscription($quote);
+        if ($hasSubscription) {
+            $recurringMetadata = $this->getRecurringMetadata($quote);
+            $payload['chargePermissionType'] = 'Recurring';
+            $payload['recurringMetadata'] = $recurringMetadata; 
         }
 
         return json_encode($payload, JSON_UNESCAPED_SLASHES);

@@ -25,4 +25,7 @@
     <event name="amazon_pay_async_payment_declined">
         <observer name="amazon_pay_async_payment_declined" instance="Amazon\Pay\Observer\OrderPaymentDeclined" />
     </event>
+        <event name="amazon_pay_vault_authorization_response">
+        <observer name="amazon_pay_vault_authorization_response" instance="Amazon\Pay\Observer\VaultAuthorizationResponse" />
+    </event>
 </config>

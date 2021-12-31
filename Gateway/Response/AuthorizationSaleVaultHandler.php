@@ -22,6 +22,7 @@ use Amazon\Pay\Model\Config\Source\AuthorizationMode;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Framework\Event\ManagerInterface;
 
 class AuthorizationSaleVaultHandler implements HandlerInterface
 {
@@ -41,6 +42,11 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
     private $scopeConfig;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * AuthorizationHandler constructor.
      * @param SubjectReader $subjectReader
      * @param AsyncManagement $asyncManagement
@@ -49,11 +55,14 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
     public function __construct(
         SubjectReader $subjectReader,
         AsyncManagement $asyncManagement,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ManagerInterface $eventManager
+
     ) {
         $this->subjectReader = $subjectReader;
         $this->asyncManagement = $asyncManagement;
         $this->scopeConfig = $scopeConfig;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -94,6 +103,8 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
                 default:
                     break;
             }
+
+            $this->eventManager->dispatch('amazon_pay_vault_authorization_response', ['response' => $response, 'order' => $payment->getOrder()]);
         }
     }
 }
