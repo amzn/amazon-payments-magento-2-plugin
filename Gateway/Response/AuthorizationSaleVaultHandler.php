@@ -103,8 +103,6 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
                 default:
                     break;
             }
-
-            $this->eventManager->dispatch('amazon_pay_vault_authorization_response', ['response' => $response, 'order' => $payment->getOrder()]);
         }
     }
 }

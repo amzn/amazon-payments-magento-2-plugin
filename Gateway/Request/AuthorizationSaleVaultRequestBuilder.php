@@ -74,6 +74,7 @@ class AuthorizationSaleVaultRequestBuilder implements BuilderInterface
         /* @var $payment \Magento\Sales\Model\Order\Payment */
         return [
             'quote_id' => $payment->getOrder()->getQuoteId(),
+            'increment_id' => $payment->getOrder()->getIncrementId(),
             'charge_permission_id' => $token->getGatewayToken(),
             'amount' => $total,
         ];
