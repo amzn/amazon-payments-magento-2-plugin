@@ -646,7 +646,6 @@ class AmazonPayAdapter
         if (!$quote->getReservedOrderId()) {
             try {
                 $quote->reserveOrderId()->save();
-                $logger->info('reserveOrderId' );
             } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage());
             }
