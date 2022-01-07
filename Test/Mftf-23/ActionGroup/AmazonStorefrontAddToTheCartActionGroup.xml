@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddToTheCartActionGroup">
+        <annotations>
+            <description>Scrolls to the Add To Cart button. Clicks on Add To Cart.</description>
+        </annotations>
+
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollTo selector="{{StorefrontProductActionSection.addToCart}}"  stepKey="scrollToAddToCartButton"/>
+
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) {
+            $addToCartSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{StorefrontProductActionSection.addToCart}}');
+            $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($addToCartSelector));
+        }" stepKey="allowAddToCartButtonToLoad" before="addToCart"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
