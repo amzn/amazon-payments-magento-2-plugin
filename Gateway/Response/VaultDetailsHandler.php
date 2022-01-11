@@ -19,7 +19,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Model\PaymentTokenFactory;
-use Amazon\Pay\Model\Subscription\SubscriptionQuoteManager;
+use Amazon\Pay\Model\Subscription\SubscriptionManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use RuntimeException;
 
@@ -54,9 +54,9 @@ class VaultDetailsHandler implements HandlerInterface
     private $serializer;
 
     /**
-     * @var SubscriptionQuoteManager
+     * @var SubscriptionManager
      */
-    private $subscriptioQuotenManager;
+    private $subscriptionManager;
 
     /**
      * @var CartRepositoryInterface
@@ -69,7 +69,7 @@ class VaultDetailsHandler implements HandlerInterface
      *
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
-     * @param SubscriptionQuoteManager $subscriptioQuotenManager
+     * @param SubscriptionManager $subscriptionManager
      * @param CartRepositoryInterface $quoteRepository
      * @param AmazonConfig $config
      * @param SubjectReader $subjectReader
@@ -78,14 +78,14 @@ class VaultDetailsHandler implements HandlerInterface
     public function __construct(
         PaymentTokenFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
-        SubscriptionQuoteManager $subscriptioQuotenManager,
+        SubscriptionManager $subscriptionManager,
         CartRepositoryInterface $quoteRepository,
         AmazonConfig $config,
         SubjectReader $subjectReader
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
-        $this->subscriptioQuotenManager = $subscriptioQuotenManager;
+        $this->subscriptionManager = $subscriptionManager;
         $this->quoteRepository = $quoteRepository;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
@@ -105,7 +105,7 @@ class VaultDetailsHandler implements HandlerInterface
         $quoteId = $payment->getOrder()->getQuoteId();
         $quote = $this->quoteRepository->get($quoteId);
 
-        if (!$this->subscriptioQuotenManager->hasSubscription($quote)) {
+        if (!$this->subscriptionManager->hasSubscription($quote)) {
             return null;
         }
 

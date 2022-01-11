@@ -6,22 +6,38 @@ class SubscriptionManager
 
 	protected $manager;
 
-	protected $methods;
 
 	public function __construct(
         \Amazon\Pay\Model\Subscription\SubscriptionManagerFactory $subscriptionFactory
     ) {
-        $this->manager = $subscriptionFactory->create();
-        $this->methods = $subscriptionFactory->getMethods();
+        $this->manager = $subscriptionFactory->initialize();
     }
 
-	protected function execute($method, $data = null)
+	public function hasSubscription($quote)
 	{
-		if (isset($this->methods[$method])) {
-			$instanceMethod = $this->methods[$method];
-			return $this->manager->$instanceMethod($data);
-		}
+        return $this->manager->hasSubscription($quote);
+    }
+    public function getFrequencyUnit($item)
+    {
+        $unit = $this->manager->getFrequencyUnit($item);
+        if ($unit) {
+            $unit = ucfirst($unit);
+        }
+        return $unit;
+    }
 
-		return false;
+    public function getFrequencyCount($item)
+    {
+        return $this->manager->getFrequencyCount($item);
+    }
+
+    public function isSubscription($item)
+    {
+        return $this->manager->isSubscription($item);
+    }
+
+    public function cancel($order, $subscription = false)
+	{
+        return $this->manager->cancel($order, $subscription);
 	}
 }

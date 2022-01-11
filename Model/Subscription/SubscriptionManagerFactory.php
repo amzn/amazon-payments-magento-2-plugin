@@ -9,9 +9,6 @@ class SubscriptionManagerFactory
 
     protected $subscriptionManagerPool;
 
-    protected $instanceName = false;
-
-    protected $methods = [];
 
     public function __construct(
         \Magento\Framework\Module\Manager $moduleManager,
@@ -24,29 +21,24 @@ class SubscriptionManagerFactory
         $this->subscriptionManagerPool = $subscriptionManagerPool;
     }
 
-    public function create(array $data = [])
+    public function initialize(array $data = [])
     {
-        foreach($this->subscriptionManagerPool as $subscriptionManager) {
-            
-            if ($this->moduleManager->isEnabled($subscriptionManager['module_name'])) {
-                
-                $this->instanceName = $subscriptionManager['module_class'];
-
-                foreach ($subscriptionManager['methods'] as $method => $moduleMethod) {
-                    $this->methods[$method] = $moduleMethod;
+        $manager = false;
+        foreach($this->subscriptionManagerPool as $vendor => $subscriptionManager) {
+            if ($vendor != 'default') {
+                if ($this->moduleManager->isEnabled($subscriptionManager['module_name'])) {
+                    $manager = $this->objectManager->create($subscriptionManager['module_manager'], $data);
+                    foreach($subscriptionManager['module_classes'] as $name => $instance) {
+                        $manager->{$name} =  $this->objectManager->create($instance);
+                    }
                 }
-            } 
-        }
-        
-        if (!$this->instanceName) {
-            $this->createDefaults();
+            }
         }
 
-        return $this->objectManager->create($this->instanceName, $data);
-    }
-
-    public function getMethods()
-    {
-        return $this->methods;
+        if (!$manager) {
+            $moduleManager = $this->subscriptionManagerPool['default']['module_manager'];
+            $manager = $this->objectManager->create($moduleManager, $data);
+        }
+        return $manager;
     }
 }

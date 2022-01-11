@@ -35,36 +35,25 @@
         </arguments>
     </type>
 
-    <type name="Amazon\Pay\Model\Subscription\SubscriptionQuoteManagerFactory">
+    <type name="Amazon\Pay\Model\Subscription\SubscriptionManagerFactory">
         <arguments>
             <argument name="subscriptionManagerPool" xsi:type="array">                
                 <item name="paradox_labs" xsi:type="array">
                     <item name="module_name" xsi:type="string">ParadoxLabs_Subscriptions</item>
-                    <item name="module_class" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\QuoteManager</item>                    
-                    <item name="methods" xsi:type="array">
-                        <item name="has_subscription" xsi:type="string">quoteContainsSubscription</item>
+                    <item name="module_classes" xsi:type="array"> 
+                        <item name="quoteManager" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\QuoteManager</item>
+                        <item name="itemManager" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\ItemManager</item>
+                        <item name="subscriptionRepository" xsi:type="string">ParadoxLabs\Subscriptions\Model\SubscriptionRepository</item>
                     </item>
-                </item>                
+                    <item name="module_manager" xsi:type="string">Amazon\Pay\Model\Subscription\ParadoxLabsSubscriptionManager</item>
+                </item>
+                <item name="default" xsi:type="array">
+                    <item name="module_name" xsi:type="string">Amazon_Pay</item>
+                    <item name="module_manager" xsi:type="string">Amazon\Pay\Model\Subscription\AmazonSubscriptionManager</item>
+                </item>
             </argument>
         </arguments>
     </type>
-
-     <type name="Amazon\Pay\Model\Subscription\SubscriptionItemManagerFactory">
-        <arguments>
-            <argument name="subscriptionManagerPool" xsi:type="array">                
-                <item name="paradox_labs" xsi:type="array">
-                    <item name="module_name" xsi:type="string">ParadoxLabs_Subscriptions</item>
-                    <item name="module_class" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\ItemManager</item>                    
-                    <item name="methods" xsi:type="array">
-                        <item name="get_frecuency_unit" xsi:type="string">getFrequencyUnit</item>
-                        <item name="get_frequency_count" xsi:type="string">getFrequencyCount</item>
-                        <item name="is_subscription" xsi:type="string">isSubscription</item> 
-                    </item>
-                </item>                
-            </argument>
-        </arguments>
-    </type>
-
 
     <virtualType name="Amazon_Pay_RemoteAddressWithAdditionalIpHeaders" type="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
         <arguments>

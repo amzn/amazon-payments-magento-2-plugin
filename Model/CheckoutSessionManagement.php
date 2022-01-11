@@ -199,7 +199,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param PaymentTokenManagementInterface $paymentTokenManagement
-     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptioQuotenManager
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
      * @param \Amazon\Pay\Logger\Logger $logger
      */
     public function __construct(
@@ -226,7 +226,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         PaymentTokenRepositoryInterface $paymentTokenRepository,
         PaymentTokenFactory $paymentTokenFactory,
         PaymentTokenManagementInterface $paymentTokenManagement,
-        \Amazon\Pay\Model\Subscription\SubscriptionQuoteManager $subscriptionQuoteManager,
+        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
         \Amazon\Pay\Logger\Logger $logger
     ) {
         $this->storeManager = $storeManager;
@@ -252,7 +252,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->paymentTokenRepository = $paymentTokenRepository;
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->subscriptionQuoteManager = $subscriptionQuoteManager;
+        $this->subscriptionManager = $subscriptionManager;
         $this->logger = $logger;
     }
 
@@ -588,7 +588,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      *
      * @param $order
      */
-    private function cancelOrder($order)
+    private function cancelOrder($order,$quote)
     {
         // set order as cancelled
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
@@ -610,6 +610,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         );
 
         $order->save();
+
+        if ($this->subscriptionManager->hasSubscription($quote)) {
+            $this->subscriptionManager->cancel($order);
+        }
     }
 
     /**
@@ -698,7 +702,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)) {
                 // Something went wrong, but the order has already been placed, so cancelling it
-                $this->cancelOrder($order);
+                $this->cancelOrder($order,$quote);
 
                 $session = $this->amazonAdapter->getCheckoutSession(
                     $quote->getStoreId(),
@@ -799,7 +803,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             // cancel order
             if (isset($order)) {
-                $this->cancelOrder($order);
+                $this->cancelOrder($order,$quote);
             }
 
             throw $e;
@@ -825,7 +829,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
     protected function updateVaultToken($amazonSessionId, $chargePermissionId, $quote, $order) 
     {
-        if ($this->amazonConfig->isVaultEnabled() && $this->subscriptionQuoteManager->hasSubscription($quote)) {
+        if ($this->amazonConfig->isVaultEnabled() && $this->subscriptionManager->hasSubscription($quote)) {
             $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $order->getCustomerId());
             if ($token) {
                 $token->setGatewayToken($chargePermissionId);

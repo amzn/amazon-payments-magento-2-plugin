@@ -73,12 +73,8 @@ class AmazonPayAdapter
     /**
      * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
      */
-    private $subscriptionQuoteManager;
+    private $subscriptionManager;
 
-    /**
-     * @var \Amazon\Pay\Model\Subscription\SubscriptionItemManager
-     */
-    private $subscriptionItemManager;
 
     /**
      * AmazonPayAdapter constructor.
@@ -88,8 +84,7 @@ class AmazonPayAdapter
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
-     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptioQuotenManager
-     * @param \Amazon\Pay\Model\Subscription\SubscriptionItemManager $subscriptioItemManager
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -101,8 +96,7 @@ class AmazonPayAdapter
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
-        \Amazon\Pay\Model\Subscription\SubscriptionQuoteManager $subscriptionQuoteManager,
-        \Amazon\Pay\Model\Subscription\SubscriptionItemManager $subscriptionItemManager,
+        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -113,8 +107,7 @@ class AmazonPayAdapter
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
         $this->productMetadata = $productMetadata;
-        $this->subscriptionQuoteManager = $subscriptionQuoteManager;
-        $this->subscriptionItemManager = $subscriptionItemManager;
+        $this->subscriptionManager = $subscriptionManager;
         $this->logger = $logger;
         $this->url = $url;
         $this->redirect = $redirect;
@@ -563,7 +556,7 @@ class AmazonPayAdapter
             $payload['deliverySpecifications'] = $deliverySpecs;
         }
 
-        $hasSubscription = $this->subscriptionQuoteManager->hasSubscription($quote);
+        $hasSubscription = $this->subscriptionManager->hasSubscription($quote);
         if ($hasSubscription) {
             $payload = $this->buildSubscriptionPayload($payload, $quote);
         }
@@ -629,7 +622,7 @@ class AmazonPayAdapter
             $payload['addressDetails'] = $addressData;
         }
 
-        $hasSubscription = $this->subscriptionQuoteManager->hasSubscription($quote);
+        $hasSubscription = $this->subscriptionManager->hasSubscription($quote);
         if ($hasSubscription) {
             $payload = $this->buildSubscriptionPayload($payload, $quote);
         }
@@ -673,9 +666,9 @@ class AmazonPayAdapter
     protected function getRecurringMetadata($quote)
     {
         foreach ($quote->getAllItems() as $item) {
-            if ($this->subscriptionItemManager->isSubscription($item)) {
-                $frecuencyUnit = $this->subscriptionItemManager->getFrequencyUnit($item);
-                $frecuencyCount = $this->subscriptionItemManager->getFrequencyCount($item);
+            if ($this->subscriptionManager->isSubscription($item)) {
+                $frecuencyUnit = $this->subscriptionManager->getFrequencyUnit($item);
+                $frecuencyCount = $this->subscriptionManager->getFrequencyCount($item);
             }
         }
         return [
