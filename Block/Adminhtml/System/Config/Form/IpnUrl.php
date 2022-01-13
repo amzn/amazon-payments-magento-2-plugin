@@ -32,10 +32,12 @@ class IpnUrl extends \Magento\Config\Block\System\Config\Form\Field
         $store = $this->_storeManager->getDefaultStoreView();
         $valueReturn = '';
 
-        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
-        if ($baseUrl) {
-            $value       = $baseUrl . 'amazon_pay/payment/ipn/';
-            $valueReturn = "<div>".$this->escapeHtml($value)."</div>";
+        if ($store) {
+            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+            if ($baseUrl) {
+                $value       = $baseUrl . 'amazon_pay/payment/ipn/';
+                $valueReturn = "<div>".$this->escapeHtml($value)."</div>";
+            }
         }
 
         $html = '<td class="value">';
