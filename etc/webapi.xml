@@ -70,4 +70,16 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/amazon-checkout-session/signin/:buyerToken" method="GET">
+        <service class="Amazon\Pay\Api\CheckoutSessionManagementInterface" method="signIn"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/amazon-checkout-session/setcustomerlink" method="POST">
+        <service class="Amazon\Pay\Api\CheckoutSessionManagementInterface" method="setCustomerLink"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>

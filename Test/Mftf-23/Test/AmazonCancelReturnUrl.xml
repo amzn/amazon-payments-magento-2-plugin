@@ -77,6 +77,8 @@
                 
                 $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
                 $I->switchToNextTab();
+                $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
             }
         }" stepKey="secureSignInWorkaround" />
 
