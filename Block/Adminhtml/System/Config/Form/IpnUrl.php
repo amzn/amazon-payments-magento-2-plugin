@@ -38,11 +38,14 @@ class IpnUrl extends \Magento\Config\Block\System\Config\Form\Field
                 $value       = $baseUrl . 'amazon_pay/payment/ipn/';
                 $valueReturn = "<div>".$this->escapeHtml($value)."</div>";
             }
+        } else {
+            $valueReturn = 'You do not have permission to view this setting. The IPN URL is managed
+                from the Default Store View.';
         }
 
         $html = '<td class="value">';
         $html .= $valueReturn;
-        if ($element->getComment()) {
+        if ($element->getComment() && $store) {
             $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
         }
         $html .= '</td>';
