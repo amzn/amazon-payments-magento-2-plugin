@@ -419,7 +419,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             'public_key_id' => $this->amazonConfig->getPublicKeyId(),
         ];
 
-        $quote = $this->getQuoteFromIdOrSession($cartId);
+        $quote = $this->session->getQuoteFromIdOrSession($cartId);
 
         if ($quote) {
             // Ensure the totals are up to date, in case the checkout does something to update qty or shipping without
