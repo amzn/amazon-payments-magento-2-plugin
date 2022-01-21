@@ -31,8 +31,9 @@
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin" />
 
         <!-- choose card -->
+        <waitForJS function="return document.querySelectorAll('{{AmazonPageSection.paymentRadioButtons}}').length > 0;" time="30" stepKey="waitForPaymentMethodRadioButtons"/>
         <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangeAddress"/>
-        <executeJS function="document.querySelectorAll('#maxo_payment_methods .a-radio-label').forEach(function(v,i,o) { if (v.querySelector('.trail_number').innerText.includes('3434')) { v.click() } });" stepKey="executeJsCc"/>
+        <executeJS function="document.querySelectorAll('{{AmazonPageSection.paymentRadioButtons}}').forEach(function(v,i,o) { if (v.querySelector('.trail_number').innerText.includes('3434')) { v.click() } });" stepKey="executeJsCc"/>
         <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethod"/>
 
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />
