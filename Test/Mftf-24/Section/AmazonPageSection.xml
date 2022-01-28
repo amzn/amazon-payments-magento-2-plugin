@@ -14,6 +14,7 @@
         <element name="changePaymentButton" type="button" selector="#change-payment-button"/>
         <element name="notSelectedAddress" type="button" selector="#maxo_addresses li[data-selected=false]"/>
         <element name="useAddressButton" type="button" selector="#buyer-action-button-bottom .a-button-input"/>
+        <element name="paymentRadioButtons" type="input" selector="#maxo_payment_methods .a-radio-label"/>
         <element name="usePaymentButton" type="button" selector="#maxo_payment_methods #buyer-action-button-bottom .a-button-input"/>
     </section>
 </sections>
