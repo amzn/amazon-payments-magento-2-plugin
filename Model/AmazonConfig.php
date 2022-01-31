@@ -593,6 +593,22 @@ class AmazonConfig
     /**
      * @return string
      */
+    public function getSignInResultUrlPath($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $result = $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/sign_in_result_url',
+            $scope,
+            $scopeCode
+        );
+        if (empty($result)) {
+            $result = 'amazon_pay/login/authorize/';
+        }
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
     public function getPayNowResultUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->getCheckoutResultReturnUrl($scope, $scopeCode);

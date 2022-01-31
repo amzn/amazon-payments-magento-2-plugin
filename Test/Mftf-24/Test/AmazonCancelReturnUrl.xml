@@ -33,7 +33,10 @@
 
         <!--Save opener window name since popup auto-closes-->
         <executeJS function="return window.name;" stepKey="openerName"/>
-        <click selector="{{AmazonLoginSection.login}}" stepKey="signInWithAmazon"/>
+
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\SignInWithAmazon" method="clickSignInWithAmazon" stepKey="signInWithAmazon">
+            <argument name="siwaLocator">{{AmazonLoginSection.login}}</argument>
+        </helper>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
 
         <!-- Login to Amazon -->
@@ -58,7 +61,14 @@
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
 
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
-        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
+        <wait time="3" stepKey="allowButtonToActivate"/>
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\SecureSignInWorkaround" method="continueAsUser" stepKey="secureWorkaround">
+            <argument name="openerName">{$openerName}</argument>
+            <argument name="editAddressSelector">{{AmazonCheckoutSection.editShippingButton}}</argument>
+            <argument name="addressIdSelector">{{AmazonPageSection.addressId}}</argument>
+            <argument name="changePaymentSelector">{{AmazonPageSection.changePaymentButton}}</argument>
+            <argument name="usePaymentSelector">{{AmazonPageSection.usePaymentButton}}</argument>
+        </helper>
 
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup">

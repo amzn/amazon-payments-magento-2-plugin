@@ -15,11 +15,9 @@
  */
 namespace Amazon\Pay\Controller\Login;
 
-use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\NotFoundException;
-use Zend_Validate;
 
 class Authorize extends \Amazon\Pay\Controller\Login
 {
@@ -37,9 +35,10 @@ class Authorize extends \Amazon\Pay\Controller\Login
         }
 
         $token = $this->getRequest()->getParam('buyerToken');
-
+  
         try {
-            $amazonCustomer = $this->getAmazonCustomer($token);
+            $buyerInfo = $this->amazonAdapter->getBuyer($token);
+            $amazonCustomer = $this->getAmazonCustomer($buyerInfo);
             if ($amazonCustomer) {
                 $processed = $this->processAmazonCustomer($amazonCustomer);
 
@@ -50,6 +49,8 @@ class Authorize extends \Amazon\Pay\Controller\Login
                 } else {
                     $this->session->login($processed);
                 }
+            } else {
+                $this->logger->error('Amazon buyerId is empty. Token: ' . $token);
             }
         } catch (ValidatorException $e) {
             $this->logger->error($e);
@@ -63,36 +64,5 @@ class Authorize extends \Amazon\Pay\Controller\Login
         }
 
         return $this->getRedirectAccount();
-    }
-
-    protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
-    {
-        $customerData = $this->matcher->match($amazonCustomer);
-
-        if (null === $customerData) {
-            return $this->createCustomer($amazonCustomer);
-        }
-
-        if ($amazonCustomer->getId() != $customerData->getExtensionAttributes()->getAmazonId()) {
-            if (! $this->session->isLoggedIn()) {
-                return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());
-            }
-
-            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
-        }
-
-        return $customerData;
-    }
-
-    protected function createCustomer(AmazonCustomerInterface $amazonCustomer)
-    {
-        if (! Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
-            throw new ValidatorException(__('the email address for your Amazon account is invalid'));
-        }
-
-        $customerData = $this->customerLinkManagement->create($amazonCustomer);
-        $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
-
-        return $customerData;
     }
 }

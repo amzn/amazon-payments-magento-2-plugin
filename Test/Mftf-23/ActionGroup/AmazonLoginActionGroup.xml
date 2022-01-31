@@ -8,6 +8,34 @@
         <click selector="{{AmazonPageSection.signInButton}}" stepKey="clickAmazonPageSignInButton"/>
         <!--Verify successful login by the presence of the checkout button-->
         <wait time="1" stepKey="allowButtonToActivate"/>
+
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            $continueAs = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('#maxo_buy_now input[type=submit]'));
+
+            if (!empty($continueAs)) {
+                $I->comment('Click Continue as... button and return to checkout');
+                $continueAs[0]->click();
+                $remoteWebDriver->switchTo()->window($openerName);
+                $I->waitForPageLoad(30);
+
+                $I->comment('Wait for Edit button in address details');
+                $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                $I->comment('Click Edit button to return to normal flow');
+                $remoteWebDriver->findElement($editAddressSelector)->click();
+                
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                $I->switchToNextTab();
+                $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+
+                $changePaymentSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.changePaymentButton}}');
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($changePaymentSelector));
+                $usePaymentSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.usePaymentButton}}');
+                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($usePaymentSelector));
+            }
+        }" stepKey="secureSignInWorkaround" />
+
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
     </actionGroup>
 </actionGroups>

@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.10.0
+* Added signin REST endpoint
+* Fixed an issue that could occur when rendering the Amazon Pay button more than once
+* Fixed an issue with configuring payment methods at a store scope when the admin user doesn’t have access to the default scope (thanks @barbazul!)
+* Fixed an issue with configuration wizard executed in a store where the admin doesn’t have access to the default store
+* Fixed MFTF tests to allow for different flow on the Amazon authentication popup
+* Updated to allow partial/split capture in EU/UK regions
+* Updated REST endpoints to allow loading session from the user context instead of passing masked cart ID
+
 ## 5.9.1
 * Fixed issue with umlauts in PayNow button flow
 * Updated config labels for Magento Checkout redirect paths

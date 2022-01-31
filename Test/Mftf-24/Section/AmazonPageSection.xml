@@ -5,6 +5,7 @@
         <element name="passwordField" type="input" selector="#ap_password"/>
         <element name="signInButton" type="button" selector="#signInSubmit"/>
         <element name="checkoutButton" type="button" selector="#default-button-content input[type=submit]"/>
+        <element name="continueButton" type="button" selector="#maxo_buy_now input[type=submit]"/>
         <element name="cancelButton" type="button" selector="#return_back_to_merchant_link"/>
         <element name="loginCancelButton" type="button" selector="#consent-wrapper-content [data-action='cancel-consent'] a"/>
         <element name="addressId" type="text" selector="#default .default_address .address_id"/>
@@ -13,6 +14,7 @@
         <element name="changePaymentButton" type="button" selector="#change-payment-button"/>
         <element name="notSelectedAddress" type="button" selector="#maxo_addresses li[data-selected=false]"/>
         <element name="useAddressButton" type="button" selector="#buyer-action-button-bottom .a-button-input"/>
+        <element name="paymentRadioButtons" type="input" selector="#maxo_payment_methods .a-radio-label"/>
         <element name="usePaymentButton" type="button" selector="#maxo_payment_methods #buyer-action-button-bottom .a-button-input"/>
     </section>
 </sections>

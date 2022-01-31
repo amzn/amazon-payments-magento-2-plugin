@@ -17,7 +17,15 @@
         <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-country" stepKey="amazonAddressCountryCode"/>
         <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-phone_number" stepKey="amazonAddressPhoneNumber"/>
 
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) {
+            $changePaymentSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.changePaymentButton}}');
+            $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($changePaymentSelector));
+            $usePaymentSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.usePaymentButton}}');
+            $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($usePaymentSelector));
+        }" stepKey="allowPaymentMethodsToLoad" />
+
         <!-- choose card -->
+        <waitForJS function="return document.querySelectorAll('#maxo_payment_methods .a-radio-label').length > 0;" time="30" stepKey="waitForPaymentMethodRadioButtons"/>
         <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangeAddress"/>
         <executeJS function="document.querySelectorAll('#maxo_payment_methods .a-radio-label').forEach(function(v,i,o) { if (v.querySelector('.trail_number').innerText.includes('{{cc}}')) { v.click() } });" stepKey="executeJsCc"/>
         <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethod"/>

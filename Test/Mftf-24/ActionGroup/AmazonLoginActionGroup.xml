@@ -10,6 +10,15 @@
 
         <!--Verify successful login by the presence of the checkout button-->
         <wait time="1" stepKey="allowButtonToActivate"/>
+
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\SecureSignInWorkaround" method="continueAsUser" stepKey="secureWorkaround">
+            <argument name="openerName">{$openerName}</argument>
+            <argument name="editAddressSelector">{{AmazonCheckoutSection.editShippingButton}}</argument>
+            <argument name="addressIdSelector">{{AmazonPageSection.addressId}}</argument>
+            <argument name="changePaymentSelector">{{AmazonPageSection.changePaymentButton}}</argument>
+            <argument name="usePaymentSelector">{{AmazonPageSection.usePaymentButton}}</argument>
+        </helper>
+
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>
     </actionGroup>
 </actionGroups>

@@ -236,6 +236,11 @@
                             <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after initiating the transaction. Do not use a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_return_url</config_path>
                         </field>
+                        <field id="sign_in_result_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sign In result URL Path</label>
+                            <comment><![CDATA[<strong>Amazon Pay Sign In could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after completing the Sign In process.]]></comment>
+                            <config_path>payment/amazon_payment_v2/sign_in_result_url</config_path>
+                        </field>
                         <field id="checkout_result_url" translate="label comment" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Magento Checkout result URL Path</label>
                             <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Magento will redirect to this URL after completing the checkout session. Do not use a leading slash.]]></comment>
