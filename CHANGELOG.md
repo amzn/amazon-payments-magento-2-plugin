@@ -1,6 +1,6 @@
 # Change Log
 
-##5.10.0
+## 5.10.0
 * Added signin REST endpoint
 * Fixed an issue that could occur when rendering the Amazon Pay button more than once
 * Fixed an issue with configuring payment methods at a store scope when the admin user doesn’t have access to the default scope (thanks @barbazul!)
