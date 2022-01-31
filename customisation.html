@@ -34,6 +34,7 @@
                       Apps/Headless Commerce/Single Page Applications</cite></a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes on the Checkout Session API</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#configurable-urls">Configurable URLs</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#sign-in-with-amazon">Sign in with Amazon</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#docs">Swagger Documentation</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#custom-rendering">Rendering the Amazon Pay Button in a Custom Location</a></li>
                 <!-- <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li> -->
@@ -195,6 +196,93 @@
                       </ul>
                     </p>
                   </p>
+                </div>
+                <div class="section" id="sign-in-with-amazon">
+                  <h2>Sign in with Amazon<a
+                      class="headerlink" href="#sign-in-with-amazon" title="Permalink to this headline">¶</a></h2>
+                  <p>
+                    The module exposes two REST endpoints that enable Sign in with Amazon for headless implementations.
+                  </p>
+                  <div class="section" id"sign-in-config">
+                    <h3>Configuration<a class="headerlink" href="#sign-in-config"
+                      title="Permalink to this headline">¶</a></h3>
+                      <p>
+                        The configurable URL <b>Sign In Result URL Path</b> defines a location where your implementation 
+                        should be able to handle an authentication response from Amazon. By default, this location is 
+                        amazon_pay/login/authorize.
+                      </p>
+                      <div class="admonition note">
+                        <p class="first admonition-title">Note</p>
+                        <p class="last">The configuration value for <cite>Enable Amazon Sign-in</cite> must be set to <b>Yes</b>
+                         in order to receive successful responses from the sign in endpoint.</p>
+                      </div>
+                  </div>
+                  <div class="section" id"sign-in-usage">
+                    <h3>Usage<a class="headerlink" href="#sign-in-usage"
+                      title="Permalink to this headline">¶</a></h3>
+                      <p>
+                        The redirect to the Sign In Result URL will include a buyerToken as a parameter in the URL. This 
+                        buyerToken can be used in a request to <b>/V1/amazon-checkout-session/signin/{buyer-token}</b> which 
+                        will return a response similar to:
+                        <div class="xml-highlight">
+                          <div class="highlight">
+                            <pre>
+    [
+      {
+        "success": true,
+        "customer_id": 201,
+        "customer_firstname": "Susie",
+        "customer_last": "Smith",
+        "customer_bearer_token": "0wjzxdjnaus5dxdy9qwz2kgp9poftu1u"
+      }
+    ]
+                            </pre>
+                          </div>
+                        </div>
+                        The bearer token included in the response can be used in future requests to authenticated resources 
+                        (e.g., My Account page).
+                      </p>
+                  </div>
+                  <div class="section" id"customer-exists">
+                    <h3>Customer Already Exists<a class="headerlink" href="#customer-exists"
+                      title="Permalink to this headline">¶</a></h3>
+                      <p>
+                        In the case that a Magento store customer already exists with the same email address that was 
+                        used to sign in through Amazon, another endpoint is provided in order to link the Amazon 
+                        customer with the store customer. If this happens, the response from the sign in endpoint will 
+                        look similar to:
+                        <div class="xml-highlight">
+                          <div class="highlight">
+                            <pre>
+    [
+      {
+        "success": false,
+        "customer_email": "customer@amazon.com",
+        "message": "A store account for this email address already exists. Please enter your store account password to log in without leaving the store."
+      }
+    ]
+                            </pre>
+                          </div>
+                        </div>
+                        From here, the user should be redirected to a page where they can provide their store password 
+                        and the message included in the previous response can be displayed. Once the password is submitted, 
+                        a POST request can be made to <b>/V1/amazon-checkout-session/setcustomerlink</b> with a body of 
+                        the form:
+                      </p>
+                      <div class="xml-highlight">
+                        <div class="highlight">
+                          <pre>
+  {
+    "buyerToken": "eyJ6aXAiOiJERUYiLCJl...HCGVKINr557b2hxk77webg",
+    "password": "supplied_password"
+  }
+                          </pre>
+                        </div>
+                      </div>
+                      <p>
+                        A successful response will look similar to a success response from the sign in endpoint.
+                      </p>
+                  </div>
                 </div>
                 <div class="section" id="docs">
                   <h2>Swagger Documentation<a

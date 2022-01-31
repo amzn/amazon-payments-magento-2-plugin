@@ -91,6 +91,7 @@
                         <li class="toctree-l4"><a class="reference internal" href="#checkout-url-path">Magento Checkout URL Path</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#amazon-checkout-result-url">Amazon Checkout Result Return URL</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#checkout-result-url-path">Magento Checkout Result URL Path</a></li>
+                        <li class="toctree-l4"><a class="reference internal" href="#sign-in-result-url-path">Sign In Result URL Path</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#allowed-ips">Allowed IPs</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#developer-logs">Developer Logs</a></li>
                       </ul>
@@ -502,6 +503,14 @@
                       <p>Optional parameter. Setting this value could break Amazon Pay Integration. If left empty,
                         "https://base_website_url/checkout/onepage/success" will be used. Magento will
                         redirect to this URL after completing the checkout session.
+                      </p>
+                    </div>
+                    <div class="section" id="sign-in-result-url-path">
+                      <h4>Sign In Result URL Path<a class="headerlink" href="#sign-in-result-url-path"
+                          title="Permalink to this headline">¶</a></h4>
+                      <p>Optional parameter. Setting this value could break Amazon Pay Integration. If left empty,
+                        "https://base_website_url/amazon_pay/login/authorize" will be used. Magento will
+                        redirect to this URL after a successful Amazon login.
                       </p>
                     </div>
                     <div class="section" id="allowed-ips">
