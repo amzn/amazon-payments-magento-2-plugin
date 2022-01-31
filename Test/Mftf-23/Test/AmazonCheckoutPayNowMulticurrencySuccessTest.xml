@@ -45,7 +45,6 @@
 
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />
         <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="payNow" />
-        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
 
         <waitForPageLoad stepKey="checkoutSuccessLoad" />
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForProcess" />

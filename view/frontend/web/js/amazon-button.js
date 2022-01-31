@@ -132,7 +132,12 @@ define([
                     this._loadButtonConfig(function (buttonConfig) {
                         // do not use session config for decoupled button
                         delete buttonConfig.createCheckoutSessionConfig;
-                        var amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
+                        try {
+                            var amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
+                        } catch (e) {
+                            console.log('Amazon Pay button render error: ' + e);
+                            return;
+                        }
                         amazonPayButton.onClick(function() {
                             if (self.buttonType === 'PayNow' && !additionalValidators.validate()) {
                                 return false;
