@@ -22,7 +22,6 @@ use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
-use phpseclib3\Crypt\RSA;
 
 class AutoKeyExchange
 {
@@ -272,11 +271,22 @@ class AutoKeyExchange
      */
     public function generateKeys()
     {
-        $keys = RSA::createKey(2048);
-        $encrypt = $this->encryptor->encrypt($keys->__toString());
+        // Magento 2.4.4 switches to phpseclib3, use that if it exists
+        if (class_exists(\phpseclib3\Crypt\RSA::class, false)) {
+            $keypair = \phpseclib3\Crypt\RSA::createKey(2048);
+            $keys = [
+                "publickey" => $keypair->getPublicKey()->__toString(),
+                "privatekey" => $keypair->__toString()
+            ];
+        } else {
+            $rsa = new \phpseclib\Crypt\RSA();
+            $keys = $rsa->createKey(2048);
+        }
+
+        $encrypt = $this->encryptor->encrypt($keys['privatekey']);
 
         $this->config
-            ->saveConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, $keys->getPublicKey()->__toString(), 'default', 0)
+            ->saveConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, $keys['publickey'], 'default', 0)
             ->saveConfig(self::CONFIG_XML_PATH_PRIVATE_KEY, $encrypt, 'default', 0);
 
         $this->cacheManager->clean([CacheTypeConfig::TYPE_IDENTIFIER]);
@@ -324,7 +334,7 @@ class AutoKeyExchange
         // Generate key pair
         if (!$publickey || $reset || strlen($publickey) < 300) {
             $keys = $this->generateKeys();
-            $publickey = $keys->getPublicKey()->__toString();
+            $publickey = $keys['publickey'];
         }
 
         if (!$pemformat) {
