@@ -51,9 +51,10 @@ define(['jquery'], function ($) {
         $.validator.addMethod(
             'validate-amzn-public-key-id',
             function (v) {
-                return (/^[0-9A-Z]{24}$/).test(v);
+                return (/^((SANDBOX-)?|(LIVE-)?)[0-9A-Z]{24}$/).test(v);
             },
-            $.mage.__('Public Key ID field is invalid. It must contain 24 characters. Please check and try again')
+            $.mage.__('Public Key ID field is invalid. It must contain 24 characters, possibly prefixed with ' +
+                '\'SANDBOX-\' or \'LIVE-\'. Please check and try again')
         ),
         $.validator.addMethod(
             'validate-amzn-store-id',
