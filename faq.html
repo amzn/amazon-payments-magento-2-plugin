@@ -39,6 +39,9 @@
               <ul>
                 <!-- <li class="toctree-l2"><a class="reference internal" href="#i-am-using-a-custom-theme-what-do-i-have-to-do">I am using a custom theme, what do I have to do?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#amazon-pay-widgets-are-not-surfaced">Amazon Pay Widgets are not surfaced</a></li> -->
+                <li class="toctree-l2"><a class="reference internal" href="#display-issues">The Amazon Pay buttons are not displaying correctly</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#checkout-redirect">The Amazon Pay button is not redirecting to my checkout page</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#orders-not-created-in-magento">Why are there some transactions in Seller Central with no associated order in Magento?</a></li>
               </ul>
             </li>
             <li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to
@@ -69,6 +72,58 @@
               <div class="section" id="frequently-asked-questions-faq">
                 <h1>Frequently Asked Questions (FAQ)<a class="headerlink" href="#frequently-asked-questions-faq"
                     title="Permalink to this headline">¶</a></h1>
+                    <div class="admonition note">
+                      <p class="first admonition-title">Note</p>
+                      <p class="last">In order to provide the smoothest merchant/buyer experience possible, always ensure that you are running the latest 
+                        version of the Amazon Pay for Magento 2 Module.</p>
+                    </div>
+                    <div class="section" id="display-issues">
+                      <h2>The Amazon Pay buttons are not displaying correctly<a class="headerlink" 
+                        href="#display-issues" title="Permalink to this headline">¶</a></h2>
+                        <p>If you are experiencing problems with button rendering, check your credentials first in the module configuration. 
+                          Ensure that you are entering settings in the correct site/store scope, and that values aren't being accidentally 
+                          inherited by checking the 'Use default' or 'Use website' checkboxes for a configuration field. Some invalid credential 
+                          values won't allow the module configuration to be saved, but it is possible to save the merchant ID incorrectly or 
+                          select the wrong environment value (Sandbox or Live). In this case, the button may be grayed out or disabled, not 
+                          render at all, or redirect to Amazon with an error message.
+                        </p>
+                        <p>If your configuration values are correct and the button is still not rendering properly, there may be a conflict 
+                          with a custom theme being used in the store. If the theme doesn't extend from the standard Magento Luma or blank 
+                          theme, it's possible some layout elements have been moved/removed that the module relies on to load javascript or 
+                          display the button.
+                        </p>
+                    </div>
+                    <div class="section" id="checkout-redirect">
+                      <h2>The Amazon Pay button is not redirecting to my checkout page<a class="headerlink" 
+                        href="#checkout-redirect" title="Permalink to this headline">¶</a></h2>
+                        <p>This may happen if your store uses a one-step checkout extension. Some OSC modules define custom paths for their 
+                          checkout page, and Amazon Pay needs to know where the checkout page is located in order to pass along checkout 
+                          session information. You can set the value for <em>Magento Checkout URL Path</em> in the module configuration 
+                          under <em>Advanced > Developer Options</em> to be the URL of your checkout page. If your store isn't using an OSC 
+                          module and you need to reset redirect values to default, you can find them below:
+                        </p>
+                        <img alt="_images/default-redirect-values.png" src="_images/default-redirect-values.png" />
+                    </div>
+                  <div class="section" id="orders-not-created-in-magento">
+                    <h2>Why are there some transactions in Seller Central with no associated order in Magento?<a class="headerlink" 
+                      href="#orders-not-created-in-magento" title="Permalink to this headline">¶</a></h2>
+                      <p>There are distinct processes happening between Magento and Amazon Pay when a customer places an order. Occasionally, 
+                        something exceptional may happen in the Magento system when attempting to create an order that will prevent it from 
+                        being placed, whether it's some type of unusual customer behavior or general server error. This type of failure 
+                        is unrelated to Amazon's processing, and in this case, Amazon will process the authorization as usual. However, the 
+                        authorization will be automatically canceled in Seller Central after 24 hours of inactivity. This shouldn't be of 
+                        major concern if there is no further action taken on the transaction. The customer should be able to try the order 
+                        again, either with Amazon Pay or another payment method. If you see a transaction in Seller Central that lists
+                         <em>(Not Provided)</em> as the Seller Order ID, this is a good indication the customer was unable to successfully 
+                         place the order in Magento (see below).
+                      </p>
+                      <img alt="_images/order-not-created.png" src="_images/order-not-created.png" />
+                      <p>If you notice this happening somewhat often in your store, it may help to use a combination of Charge on Shipment 
+                        for Payment Action and Automatic Authorization Mode. See the <a class="reference internal" href="configuration.html">
+                        <span class="doc">Configuration</span></a> section for more details on payment options. You may also want to ensure 
+                        that any other third-party plugins/extensions you may have installed are not prohibiting Amazon Pay as a payment 
+                        method, or otherwise modifying quote data during the order placement process.</p>
+                  </div>
                 <!-- <div class="section" id="i-am-using-a-custom-theme-what-do-i-have-to-do">
 <h2>I am using a custom theme, what do I have to do?<a class="headerlink" href="#i-am-using-a-custom-theme-what-do-i-have-to-do" title="Permalink to this headline">¶</a></h2>
 <p>The styles used in the extension are based on Magento&#8217;s Luma theme. Responsive breakpoints and other variables, like <a class="reference external" href="https://github.com/amzn/amazon-payments-magento-2-plugin/blob/1.2.4/src/Payment/view/frontend/web/css/source/_module.less#L71">&#64;screen__m</a>, in the LESS files are defined by the Luma theme.
