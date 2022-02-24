@@ -51,7 +51,12 @@ define([
                 //only trigger the amazon button click if the user has chosen to add to cart via this method
                 if (addedViaAmazon) {
                     addedViaAmazon = false;
-                    $('#PayWithAmazon-Product').data('amazonAmazonButton').click();
+                    var button = $('#PayWithAmazon-Product').data('amazon-AmazonButton');
+                    if (undefined === button) {
+                        // 2.4.3-p1 and lower have different data key for the button
+                        button = $('#PayWithAmazon-Product').data('amazonAmazonButton');
+                    }
+                    button.click();
                 }
             }, this);
 

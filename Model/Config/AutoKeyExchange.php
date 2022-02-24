@@ -22,9 +22,6 @@ use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
-use Magento\Payment\Helper\Formatter;
-use \phpseclib\Crypt\RSA;
-use \phpseclib\Crypt\AES;
 
 class AutoKeyExchange
 {
@@ -274,8 +271,18 @@ class AutoKeyExchange
      */
     public function generateKeys()
     {
-        $rsa = new RSA();
-        $keys = $rsa->createKey(2048);
+        // Magento 2.4.4 switches to phpseclib3, use that if it exists
+        if (class_exists(\phpseclib3\Crypt\RSA::class, false)) {
+            $keypair = \phpseclib3\Crypt\RSA::createKey(2048);
+            $keys = [
+                "publickey" => $keypair->getPublicKey()->__toString(),
+                "privatekey" => $keypair->__toString()
+            ];
+        } else {
+            $rsa = new \phpseclib\Crypt\RSA();
+            $keys = $rsa->createKey(2048);
+        }
+
         $encrypt = $this->encryptor->encrypt($keys['privatekey']);
 
         $this->config

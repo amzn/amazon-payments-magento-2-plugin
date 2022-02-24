@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.11.0
+* Added compatibility with Adobe Commerce / Magento Open Source 2.4.4
+* Fixed an issue with email population
+* Updated validation on Private Key field to allow SANDBOX- or LIVE- prefixes (thanks @cmorrisonmvnt!)
+
 ## 5.10.0
 * Added signin REST endpoint
 * Fixed an issue that could occur when rendering the Amazon Pay button more than once
