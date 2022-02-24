@@ -13,6 +13,7 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Checkout/js/model/step-navigator',
+        'Magento_Checkout/js/view/form/element/email',
         'uiRegistry',
         'Amazon_Pay/js/action/checkout-session-address-load',
         'Amazon_Pay/js/model/shipping-address/form-address-state',
@@ -30,6 +31,7 @@ define(
         checkoutData,
         checkoutDataResolver,
         stepNavigator,
+        emailComponent,
         registry,
         checkoutSessionAddressLoad,
         shippingFormAddressState,
@@ -100,7 +102,17 @@ define(
              * @param email
              */
             setEmail: function(email) {
-                $('#customer-email').val(email).trigger('change');
+                if (emailComponent.call().hasRendered()) {
+                    $('#customer-email').val(email).trigger('change');
+                } else {
+                    emailComponent.call().hasRendered.subscribe(function (rendered) {
+                        if (rendered) {
+                            $('#customer-email').val(email).trigger('change');
+                            this.dispose();
+                        }
+                    });
+                }
+                
                 checkoutData.setInputFieldEmailValue(email);
                 checkoutData.setValidatedEmailValue(email);
                 quote.guestEmail = email;
