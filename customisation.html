@@ -36,7 +36,7 @@
                 <li class="toctree-l2"><a class="reference internal" href="#configurable-urls">Configurable URLs</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#sign-in-with-amazon">Sign in with Amazon</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#docs">Swagger Documentation</a></li>
-                <li class="toctree-l2"><a class="reference internal" href="#custom-rendering">Rendering the Amazon Pay Button in a Custom Location</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#custom-rendering">Rendering Amazon Buttons in a Custom Location</a></li>
                 <!-- <li class="toctree-l2"><a class="reference internal" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website</a></li> -->
               </ul>
             </li>
@@ -293,7 +293,7 @@
                   </p>
                 </div>
                 <div class="section" id="custom-rendering">
-                  <h2>Rendering the Amazon Pay Button in a Custom Location<a
+                  <h2>Rendering Amazon Buttons in a Custom Location<a
                     class="headerlink" href="#custom-rendering" title="Permalink to this headline">¶</a></h2>
                   <p>
                     You may wish to display an Amazon Pay button somewhere other than the default options (cart, minicart, checkout, 
@@ -316,6 +316,24 @@
                       target="_blank">
                     the minicart button template</a> in the module repository for a full example.
                   </p>
+                  <p>Simlarly, if you wish to add an Amazon Sign In Button somewhere other than the login page, you can do so using the same method:</p>
+                  <div class="highlight-html">
+                    <div class="highlight">
+                      <pre>
+  &ltdiv class="amazon-sign-in-button-container"&gt
+    &ltdiv class="amazon-sign-in-button-container__cell"&gt
+      &ltdiv id="AmazonPayButton"
+          class="login-with-amazon"
+          data-mage-init='{"amazonPayLoginButton": {}}'&gt
+      &lt/div&gt
+    &lt/div&gt
+  &lt/div&gt</pre>
+                    </div>
+                  </div>
+                  <p>Be sure that your block class/layout files check to make sure the module is active, and the <em>Enable Amazon Sign-In</em> 
+                    setting is set to <strong>Yes</strong> before rendering. Refer to <a class="reference external" 
+                    href="https://gist.github.com/sgabhart22/1e2f314ed5f1bdfe185d5a11b92882f7"
+                    target="_blank">this gist</a> for a more complete example.</p>
                 </div>
                 <!-- <div class="section" id="q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site">
     <h2>How to add <cite>Amazon Pay</cite> or <cite>Amazon Sign-in</cite> buttons elsewhere on a website<a class="headerlink" href="#q-i-d-like-to-add-a-amazon-pay-or-login-with-amazon-button-elsewhere-on-my-site" title="Permalink to this headline">¶</a></h2>
