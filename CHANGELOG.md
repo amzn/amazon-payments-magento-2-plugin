@@ -1,5 +1,8 @@
 # Change Log
 
+## 5.11.1
+* Fixed an issue where autoloader is needed to detect version of phpseclib used
+
 ## 5.11.0
 * Added compatibility with Adobe Commerce / Magento Open Source 2.4.4
 * Fixed an issue with email population
