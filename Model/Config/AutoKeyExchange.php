@@ -272,7 +272,7 @@ class AutoKeyExchange
     public function generateKeys()
     {
         // Magento 2.4.4 switches to phpseclib3, use that if it exists
-        if (class_exists(\phpseclib3\Crypt\RSA::class, false)) {
+        if (class_exists(\phpseclib3\Crypt\RSA::class, true)) {
             $keypair = \phpseclib3\Crypt\RSA::createKey(2048);
             $keys = [
                 "publickey" => $keypair->getPublicKey()->__toString(),
