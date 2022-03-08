@@ -390,7 +390,7 @@ class AmazonPayAdapter
      * @return array|mixed
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function authorize($data)
+    public function authorize($data, $captureNow = true)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
         if (!empty($data['charge_permission_id'])) {
@@ -408,7 +408,7 @@ class AmazonPayAdapter
                     $data['charge_permission_id'],
                     $data['amount'],
                     $quote->getQuoteCurrencyCode(),
-                    true,
+                    $captureNow,
                     $merchantReferenceId
                 );
             } else {

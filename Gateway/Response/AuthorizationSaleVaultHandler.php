@@ -19,10 +19,15 @@ namespace Amazon\Pay\Gateway\Response;
 use Amazon\Pay\Gateway\Helper\SubjectReader;
 use Amazon\Pay\Model\AsyncManagement;
 use Amazon\Pay\Model\Config\Source\AuthorizationMode;
+use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Event\ManagerInterface;
+use Amazon\Pay\Model\AsyncManagement\Charge as AsyncCharge;
+use Amazon\Pay\Model\AmazonConfig as AmazonConfig;
+use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 class AuthorizationSaleVaultHandler implements HandlerInterface
 {
@@ -47,22 +52,57 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
     private $eventManager;
 
     /**
+     * @var AsyncManagement\Charge
+     */
+    private $asyncCharge;
+
+    /**
+     * @var AmazonConfig
+     */
+    private $amazonConfig;
+
+    /**
+     * @var Adapter\AmazonPayAdapter
+     */
+    private $amazonAdapter;
+
+    /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     */
+    private $quoteRepository;
+
+
+    /**
      * AuthorizationHandler constructor.
      * @param SubjectReader $subjectReader
      * @param AsyncManagement $asyncManagement
      * @param ScopeConfigInterface $scopeConfig
+     * @param Magento\Framework\Event\ManagerInterface $eventManager
+     * @param Adapter\AmazonPayAdapter $amazonAdapter
+     * @param Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param Amazon\Pay\Model\AsyncManagement\Charge $asyncCharge
+     * @param Amazon\Pay\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
         SubjectReader $subjectReader,
         AsyncManagement $asyncManagement,
         ScopeConfigInterface $scopeConfig,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        AmazonPayAdapter $amazonAdapter,
+        CartRepositoryInterface $quoteRepository,
+        AsyncCharge $asyncCharge,
+        AmazonConfig $amazonConfig
 
     ) {
         $this->subjectReader = $subjectReader;
         $this->asyncManagement = $asyncManagement;
         $this->scopeConfig = $scopeConfig;
         $this->eventManager = $eventManager;
+        $this->amazonAdapter = $amazonAdapter;
+        $this->quoteRepository = $quoteRepository;
+        $this->asyncCharge = $asyncCharge;
+        $this->amazonConfig = $amazonConfig;
+
     }
 
     /**
@@ -79,28 +119,40 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
         if ($paymentDO->getPayment() instanceof Payment) {
             /** @var Payment $payment */
             $payment = $paymentDO->getPayment();
+            $order = $payment->getOrder();
+            $quoteId = $order->getQuoteId();
+            $quote = $this->quoteRepository->get($quoteId);
 
             $transactionId = $response['chargeId'];;
             $payment->setTransactionId($transactionId);
             
-            /*
-            $payment->setIsTransactionClosed($handlingSubject['partial_capture'] ?? false);
-            if ($this->scopeConfig->getValue('payment/amazon_payment/authorization_mode') ==
-                AuthorizationMode::SYNC_THEN_ASYNC
-                && !($handlingSubject['partial_capture'] ?? false)) {
-                $payment->setIsTransactionPending(true);
-            }*/
+            $chargeState = $response['statusDetails']['state'];
+            if ($chargeState != 'Captured' && 
+                $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
+                
+                // capture on Amazon Pay
+                $this->amazonAdapter->captureCharge(
+                    $quote->getStoreId(),
+                    $transactionId,
+                    $quote->getGrandTotal(),
+                    $quote->getQuoteCurrencyCode()
+                );
+            }
 
-            switch ($response['statusDetails']['state']) {
-                case 'CaptureInitiated':
+            $amazonCharge = $this->amazonAdapter->getCharge($quote->getStoreId(), $transactionId);
+
+            switch ($chargeState) {
+                case 'AuthorizationInitiated':
                     $payment->setIsTransactionPending(true);
                     $payment->setIsTransactionClosed(false);
-                    $this->asyncManagement->queuePendingAuthorization($response['chargeId']);
+                    $this->asyncManagement->queuePendingAuthorization($transactionId);
+                    break;
+                case 'Authorized':
+                    $payment->setIsTransactionClosed(false);
                     break;
                 case 'Captured':
+                    $this->asyncCharge->capture($order, $transactionId, $quote->getGrandTotal());
                     $payment->setIsTransactionClosed(true);
-                    break;
-                default:
                     break;
             }
         }
