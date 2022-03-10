@@ -1,4 +1,12 @@
 type Query {
+    checkoutSessionConfig(cartId: String!): CheckoutSessionConfigOutput
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionConfig")
+
+    checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails")
+
+    checkoutSessionSignIn(buyerToken: String!): CheckoutSessionSignInOutput
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionSignIn")
 }
 
 type Mutation {
@@ -14,6 +22,18 @@ type Mutation {
     @doc(description: "Update Checkout Session")
     @resolver(class: "Amazon\\Pay\\Model\\Resolver\\UpdateCheckoutSession")
 
+}
+
+type CheckoutSessionDetailsOutput {
+    response: String!
+}
+
+type CheckoutSessionConfigOutput {
+    config: [String!]
+}
+
+type CheckoutSessionSignInOutput {
+    response: [String!]
 }
 
 type SetCustomerLinkOutput {
