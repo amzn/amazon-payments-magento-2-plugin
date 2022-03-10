@@ -1,0 +1,31 @@
+type Query {
+}
+
+type Mutation {
+    setCustomerLink(buyerToken: String!, password: String!): SetCustomerLinkOutput
+    @doc(description:"Set Customer Link")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\SetCustomerLink")
+
+    completeCheckoutSession(cartId: String!, checkoutSessionId: String!): CompleteCheckoutSessionOutput
+    @doc(description: "Complete Checkout Session")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\CompleteCheckoutSession")
+
+    updateCheckoutSession(cartId: String!, checkoutSessionId: String!): UpdateCheckoutSessionOutput
+    @doc(description: "Update Checkout Session")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\UpdateCheckoutSession")
+
+}
+
+type SetCustomerLinkOutput {
+    success: Boolean
+    message: String
+}
+
+type CompleteCheckoutSessionOutput {
+    success: Boolean
+    message: String
+}
+
+type UpdateCheckoutSessionOutput {
+    redirectUrl: String
+}
