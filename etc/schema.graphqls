@@ -29,7 +29,16 @@ type CheckoutSessionDetailsOutput {
 }
 
 type CheckoutSessionConfigOutput {
-    config: [String!]
+    merchant_id: String
+    currency: String
+    button_color: String
+    language: String
+    sandbox: Boolean
+    login_payload: String
+    login_signature: String
+    checkout_payload: String
+    checkout_signature: String
+    public_key_id: String
 }
 
 type CheckoutSessionSignInOutput {
