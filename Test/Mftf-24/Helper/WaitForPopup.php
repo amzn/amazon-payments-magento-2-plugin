@@ -19,7 +19,8 @@ class WaitForPopup extends Helper
                 $webdriver->wait(30, 100)->until(WebDriverExpectedCondition::numberOfWindowsToBe(2));
             });
         } catch (\Exception $e) {
-            print_r($e);
+            // Avoid out of memory error sometimes caused by print_r
+            // print_r($e);
         }
     }
 }

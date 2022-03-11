@@ -66,7 +66,8 @@ class SecureSignInWorkaround extends Helper
                 }
             });
         } catch (\Exception $e) {
-            print_r($e->getMessage());
+            // Avoid out of memory error sometimes caused by print_r
+            // print_r($e->getMessage());
         }
     }
 }
