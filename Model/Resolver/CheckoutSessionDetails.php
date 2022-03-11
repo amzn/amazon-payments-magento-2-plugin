@@ -53,8 +53,7 @@ class CheckoutSessionDetails implements ResolverInterface
 
         $response = [];
         foreach ($queryTypes as $queryType) {
-            $response[$queryType] = $this->getQueryTypesData($amazonSessionId, $queryType) ?: 'Query type: ' .
-                $queryType . 'is not a supported type. ';
+            $response[$queryType] = $this->getQueryTypesData($amazonSessionId, $queryType) ?:  [];
         }
 
         return [

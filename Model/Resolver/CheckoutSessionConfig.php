@@ -17,6 +17,9 @@ class CheckoutSessionConfig implements ResolverInterface
      */
     private $checkoutSessionManagement;
 
+    /**
+     * @param CheckoutSessionManagement $checkoutSessionManagement
+     */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagement
     ){
@@ -35,6 +38,8 @@ class CheckoutSessionConfig implements ResolverInterface
     {
         $cartId = $args['cartId'] ?? null;
 
-        return $this->checkoutSessionManagement->getConfig($cartId)[0] ?? [];
+        return  [
+            'config' => ($this->checkoutSessionManagement->getConfig($cartId)[0] ?? [])
+        ];
     }
 }
