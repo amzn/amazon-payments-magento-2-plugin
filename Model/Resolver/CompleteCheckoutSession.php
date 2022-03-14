@@ -39,7 +39,7 @@ class CompleteCheckoutSession implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $cartId = $args['cartId'] ?? false;
-        $checkoutSessionId = $args['checkoutSessionId'] ?? false;
+        $checkoutSessionId = $args['amazonSessionId'] ?? false;
 
         if (!$cartId) {
             throw new GraphQlInputException(__('Required parameter "cartId" is missing'));

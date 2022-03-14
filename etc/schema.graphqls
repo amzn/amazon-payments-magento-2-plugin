@@ -14,11 +14,11 @@ type Mutation {
     @doc(description:"Set Customer Link")
     @resolver(class: "Amazon\\Pay\\Model\\Resolver\\SetCustomerLink")
 
-    completeCheckoutSession(cartId: String!, checkoutSessionId: String!): CompleteCheckoutSessionOutput
+    completeCheckoutSession(cartId: String!, amazonSessionId: String!): CompleteCheckoutSessionOutput
     @doc(description: "Complete Checkout Session")
     @resolver(class: "Amazon\\Pay\\Model\\Resolver\\CompleteCheckoutSession")
 
-    updateCheckoutSession(cartId: String!, checkoutSessionId: String!): UpdateCheckoutSessionOutput
+    updateCheckoutSession(cartId: String!, amazonSessionId: String!): UpdateCheckoutSessionOutput
     @doc(description: "Update Checkout Session")
     @resolver(class: "Amazon\\Pay\\Model\\Resolver\\UpdateCheckoutSession")
 

@@ -39,7 +39,7 @@ class UpdateCheckoutSession implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $cartId = $args['cartId'] ?? false;
-        $checkoutSessionId = $args['checkoutSessionId'] ?? false;
+        $checkoutSessionId = $args['amazonSessionId'] ?? false;
 
         if (!$cartId) {
             throw new GraphQlInputException(__('Required parameter "cartId" is missing'));
@@ -49,19 +49,10 @@ class UpdateCheckoutSession implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "checkoutSessionId" is missing'));
         }
 
-        $updateResponse = $this->checkoutSessionManagementModel->updateCheckoutSession($checkoutSessionId, $cartId);
-
-        $redirectUrl = $updateResponse['webCheckoutDetails']['amazonPayRedirectUrl'] ?? false;
-        if ($redirectUrl) {
-            return [
-                'redirectUrl' => $redirectUrl
-            ];
-        }
-
-        // N/A would likely only be coalesced to if config isn't set. After running through some test cases will
-        // update fallback messaging to be a bit more specific
         return [
-            'redirectUrl' => $updateResponse['status'] ?? 'N/A'
+            'redirectUrl' => $this->checkoutSessionManagementModel->updateCheckoutSession($checkoutSessionId,
+                    $cartId) ?? 'N/A'
         ];
     }
+
 }
