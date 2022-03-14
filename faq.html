@@ -42,6 +42,7 @@
                 <li class="toctree-l2"><a class="reference internal" href="#display-issues">The Amazon Pay buttons are not displaying correctly</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#checkout-redirect">The Amazon Pay button is not redirecting to my checkout page</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#orders-not-created-in-magento">Why are there some transactions in Seller Central with no associated order in Magento?</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#transaction-ids-changed">Amazon Pay transaction IDs used to contain an 'A'; why do they now show a 'C'?</a></li>
               </ul>
             </li>
             <li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to
@@ -124,6 +125,20 @@
                         <span class="doc">Configuration</span></a> section for more details on payment options. You may also want to ensure 
                         that any other third-party plugins/extensions you may have installed are not prohibiting Amazon Pay as a payment 
                         method, or otherwise modifying quote data during the order placement process.</p>
+                  </div>
+                  <div class="section" id="transaction-ids-changed">
+                    <h2>Amazon Pay transaction IDs used to contain an 'A'; why do they now show a 'C'?<a class="headerlink" 
+                      href="#transaction-ids-changed" title="Permalink to this headline">¶</a></h2>
+                      <p>The legacy version of the Amazon Pay module used a different version of the Amazon Pay API (CV1). This version of the 
+                        API expected authorization IDs for certain requests; these are the transaction IDs whose last section is prefixed with 'A'. 
+                        The newer version of the API (CV2) is built on different concepts, and many requests will accept a charge ID, which has a 'C' 
+                        in the displayed transaction ID in Magento. This ID can be used for both authorization and capture in CV2 of the API.</p>
+                      <p>To better understand the differences between these formats, and how they are used in the 2 versions of the API, refer to 
+                        the documentation on <a href="https://developer.amazon.com/docs/amazon-pay-checkout/upgrading-to-v2-checkout.html#managing-checkout-v1-orders-using-checkout-v2-apis"
+                        target="blank">migrating from CV1 to CV2.</a> If your store uses an ERP, or other 3rd party order processing software that depends on 
+                        the CV1 transaction IDs, you can apply the translation steps in reverse to obtain the needed authorization ID (for each 
+                        transaction, replace the 'C' with an 'A'). 
+                      </p>
                   </div>
                 <!-- <div class="section" id="i-am-using-a-custom-theme-what-do-i-have-to-do">
 <h2>I am using a custom theme, what do I have to do?<a class="headerlink" href="#i-am-using-a-custom-theme-what-do-i-have-to-do" title="Permalink to this headline">¶</a></h2>
