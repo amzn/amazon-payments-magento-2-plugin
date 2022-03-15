@@ -123,7 +123,7 @@
                                 "schema": {
                                     "type": "string"
                                 },
-                                "example": "Your selected Amazon payment method"
+                                "example": "Visa ****1111 (Amazon Pay)"
                             }
                         }
                     }
@@ -455,19 +455,21 @@
             "configResponse": {
                 "summary": "Array of cart config values",
                 "value": [
-                    "AY7CV2FF6QJU1",
-                    "USD",
-                    "Gold",
-                    "en_US",
-                    true,
-                    true,
-                    "{\"signInReturnUrl\":\"https://app.m242.test/amazon_pay/login/authorize/\",\"signInCancelUrl\":\"https://app.m242.test/\",\"storeId\":\"amzn1.application-oa2-client.6f774de2482149b18e5df3796d0aef0f\",\"signInScopes\":[\"name\",\"email\"]}",
-                    "jbAeuENvsxhtonat+82IHmEYYGBtiVxaufSdTdF+8h0OaP+efVqTDaBCC42ubIIw/vEgrLjgHtZ8xspKsasycWYAe+Pr/W9Ja3/q2B3YsScZZ74QTMPad5IVguUI2F24LxK5WCw0B1yRsLphdRvqntWMoJLDdn+qYsl6wheN7+S7i+eKeR0jqkOoSVvFHpFYgktHO0aRMBSyvi/G6CfaMbJBfDb94dRPrS/IRNJ+zP0v5UySQ5T5WQn8j/R55KWhh+LntNInbqdyXaGjatNGkkfW7QZWSb0E6Rh5svDg267UtsEpN+6NXjJ0WwxVT56Avkn+5VOVRN73oFkVOnMLWQ==",
-                    "{\"webCheckoutDetails\":{\"checkoutReviewReturnUrl\":\"https://app.m242.test/amazon_pay/login/checkout/\",\"checkoutCancelUrl\":\"https://app.m242.test/\"},\"storeId\":\"amzn1.application-oa2-client.6f774de2482149b18e5df3796d0aef0f\"}",
-                    "LWzCGzOyZYBB6qP/NgeOyGi9ZT209md2wc/9QEqHrgsBasUB7FnpbNC4MQ0vgeU2acMaUM4kAXAd0Z7gpJXOPbqpLWkIx5gh25cahTVc0BusImZkC80Zc4VSuf4xY4gL/Yt4zDZ9mkbs0cO7tG/B4hNMhn0k5Myb4u7cQAS7HuJ0Q4uar+RWEeeYGObrN1TjBWI24N/aMZcXh5B0hIcx1o035TOlET8Aj0R/dwOBdLm3rAVnmwQVAiRygN9GyG7RtVelzjlOaWfMbWMURfaEciV8qVKDBIxRO7INw1+vaap+wg6Bw0G1ZRaDAsDSx13RuHupOiXQNB4+eHRJd+z8WQ==",
-                    "{\"webCheckoutDetails\":{\"checkoutMode\":\"ProcessOrder\",\"checkoutResultReturnUrl\":\"https://app.m242.test/amazon_pay/checkout/completeSession/\",\"checkoutCancelUrl\":\"https://app.m242.test/\"},\"storeId\":\"amzn1.application-oa2-client.6f774de2482149b18e5df3796d0aef0f\",\"paymentDetails\":{\"paymentIntent\":\"Authorize\",\"canHandlePendingAuthorization\":false,\"chargeAmount\":{\"amount\":0,\"currencyCode\":null},\"presentmentCurrency\":null},\"merchantMetadata\":{\"merchantReferenceId\":null,\"merchantStoreName\":null,\"customInformation\":\"Magento Version: 2.4.2, Plugin Version: 5.6.0\"}}",
-                    "EwBIDcl3DCBb8Vw8VCduhmFX0VK0ATG87OZfZm2S2evue2cOMYS8DxLwlV9F1HgsRTACpyS9bOMFP+BQtZptJ6gaH5MwtEeZHeh4ntBM23HShw0ILDh5NQGgmotknAcWg3N4zUgYPhXbK3KQ0Aln9qby1nPgGjyvnD8r9ymzwUVbEsz54esivb/TBpNfNx8f7qFNqV1qU71u8oodzacIn8twep+4SJ/KReyo4SnuFRGwj2+iE8p0orMkBDLMsCa6etuiOSGpiKuw3btoffXasXRZOhhr7Yy3f0KdRWlE34UxHaYZz379mvFRBSnedO+SMeGzgaPpx8C8VY1CUyK2lg==",
-                    "AGMJ4CRQPX634UDIURL2FUZT"
+                    {
+                        "merchant_id": "AY7CV2FF6QJU1",
+                        "currency": "USD",
+                        "button_color": "Gold",
+                        "language": "en_US",
+                        "sandbox": true,
+                        "login_payload": "{\"signInReturnUrl\":\"https://app.asd-884.test/amazon_pay/login/authorize/\",\"signInCancelUrl\":\"https://app.asd-884.test/\",\"storeId\":\"amzn1.application-oa2-client.6f774de2482149b18e5df3796d0aef0f\",\"signInScopes\":[\"name\",\"email\"]}",
+                        "login_signature": "A/W9//eqo71QpQQtbB7JfTouzrblsNC4HQXy7s0sEHtSrmedGzGo4aMz3SmaOzzExmsyO098Q2NHrInnc2O1HDHg+knSC4JEjhEtzXMqAorJYiGW2ppoAJKgJk9EoPRvDQGAR64VHvX0YvXGL6AGOH9/YXCk9xujuRK3NNSqkrmKMz9maLINLXxqDvhdycvPwNrJEfwyzTzoWj1ul0puJ5cCPPsZH7CmgqznTMk6R2OrxQU2z2xMsDE3MTSTZQ7IQwD6YgK/V3fb2tOKVpZ39Xj3s8Oq2Ps2kfxMaH199UF5g6Dgn1+QDzetty88WqRuLYIGpDG+eWJ8k+6bjW6sLw==",
+                        "checkout_payload": "{\"webCheckoutDetails\":{\"checkoutReviewReturnUrl\":\"https://app.asd-884.test/amazon_pay/login/checkout/\",\"checkoutCancelUrl\":\"https://app.asd-884.test/\"},\"storeId\":\"amzn1.application-oa2-client.6f774de2482149b18e5df3796d0aef0f\"}",
+                        "checkout_signature": "dOXqyYOJFeRihVEnDmelANDFrFQtbsG69dh3AoaYGQDsxf1bFvWUJoSVvbR1RJtQQuG3qmAbHkHGuezxM9wDooBZ5L+CP7JZve5wddrl6m7yuchDMUxYT00qBZV/gtlsAwxOq6FUTabVKGuMn92N5MnxBGUXGs3cdNpX1QBtVxCFhFDF3VKvEBzRorqfOdBDnArudBJTqW/2E+Cq1oQII8B32JKT0IYR5thIhWn0/dJBhAzN+YBJDPKJrEV5VUoUuwS0C+JqGK//bIuU8w1PE6MsBXPHMJWfy7SyIFgn8RSGx8kh29wFs3N1i/smP3eFxjooXOLGzU3xAC30MqtKgQ==",
+                        "public_key_id": "AGMJ4CRQPX634UDIURL2FUZT",
+                        "pay_only": true,
+                        "paynow_payload": "{\"webCheckoutDetails\":{\"checkoutMode\":\"ProcessOrder\",\"checkoutResultReturnUrl\":\"https://app.asd-884.test/amazon_pay/checkout/completeSession/\",\"checkoutCancelUrl\":\"https://app.asd-884.test/\"},\"storeId\":\"amzn1.application-oa2-client.6f774de2482149b18e5df3796d0aef0f\",\"paymentDetails\":{\"paymentIntent\":\"Authorize\",\"canHandlePendingAuthorization\":false,\"chargeAmount\":{\"amount\":0,\"currencyCode\":null},\"presentmentCurrency\":null},\"merchantMetadata\":{\"merchantReferenceId\":null,\"merchantStoreName\":null,\"customInformation\":\"Magento Version: 2.4.3, Plugin Version: 5.11.1\"}}",
+                        "paynow_signature": "CCw7lVnsQVaEuEVOymQYyHJwwUQX94hdUXK2u6z3VT/EocNbtsxUKvy7Ho6C8Bm4CE9NXAwCCsPBDoIs2T7sc+Pas66wQhlTnsekyUIAOo3RP/dQDvM0kdleND/VY/4kIP0LFg/EFyp+/m281Ccn2IGGnCaZ+qM3zBaUvqxQIS9VWBfbn4PiZ6RYiDefmJqxidvm6XPMOc40OckRQYxzNEKxIwAbjKoJpMu5ILYO52wLCm46A17UPZ5btYUzZzoidq6poeKE2GEHNUu1ECos2JkbokvyRbDEK6tagd3KA0rFapDhO/+PLgFixaeQNNBVABM+ugiOPegwDPGrpEvJ8w=="
+                    }
                 ]
             },
             "shippingResponse": {
