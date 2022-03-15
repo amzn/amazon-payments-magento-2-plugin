@@ -1,5 +1,5 @@
 type Query {
-    checkoutSessionConfig(cartId: String!): CheckoutSessionConfigOutput
+    checkoutSessionConfig(cartId: String): CheckoutSessionConfigOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionConfig")
 
     checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
@@ -29,7 +29,7 @@ type CheckoutSessionDetailsOutput {
 }
 
 type CheckoutSessionConfigOutput {
-    config: [String]
+    config: String
 }
 
 type CheckoutSessionSignInOutput {
