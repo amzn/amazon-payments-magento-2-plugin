@@ -20,7 +20,8 @@ class AddToCart extends Helper
                 $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::elementToBeClickable($addToCart));
             });
         } catch (\Exception $e) {
-            print_r($e);
+            // Avoid out of memory error sometimes caused by print_r
+            // print_r($e);
         }
     }
 }
