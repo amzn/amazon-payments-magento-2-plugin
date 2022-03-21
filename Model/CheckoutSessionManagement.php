@@ -406,7 +406,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $result = [];
         $quote = $this->session->getQuoteFromIdOrSession($cartId);
 
-        if ($this->canCheckoutWithAmazon($quote)) {   
+        if ($this->canCheckoutWithAmazon($quote)) {
             $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
             $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
             $config = [
@@ -423,8 +423,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             ];
     
             if ($quote) {
-                // Ensure the totals are up to date, in case the checkout does something to update qty or shipping without
-                // collecting totals
+                // Ensure the totals are up to date, in case the checkout does something to update qty or shipping
+                                // without collecting totals
                 $quote->collectTotals();
     
                 $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
