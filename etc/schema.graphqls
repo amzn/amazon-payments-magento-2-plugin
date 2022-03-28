@@ -44,6 +44,7 @@ type SetCustomerLinkOutput {
 type CompleteCheckoutSessionOutput {
     success: Boolean
     message: String
+    increment_id: String
 }
 
 type UpdateCheckoutSessionOutput {
