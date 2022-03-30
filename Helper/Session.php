@@ -28,7 +28,6 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use function PHPUnit\Framework\returnArgument;
 
 class Session
 {
