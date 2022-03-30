@@ -391,7 +391,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 ->getSize();
 
             if (1 != $collectionSize) {
-                throw new WebapiException(__('the country for your address is not allowed for this store'));
+                throw new WebapiException(__('The store doesn\'t support the country that was entered. To review allowed countries, go to General > General > Allow Countries list. Enter a supported country and try again. '));
             }
         }
 
@@ -626,7 +626,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $history->delete();
         }
         $order->addStatusHistoryComment(
-            __('Payment was unable to be successfully captured, the checkout session failed to complete.')
+            __('Something went wrong. Choose another payment method for checkout and try again.')
         );
 
         $order->save();
@@ -735,7 +735,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 return [
                     'success' => false,
                     'message' => __(
-                        'Payment was unable to be successfully captured, the checkout session failed to complete.'
+                        'Something went wrong. Choose another payment method for checkout and try again.'
                     ),
                 ];
             }
@@ -926,7 +926,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
     protected function getLoginError($e)
     {
-        $this->logger->error('Error processing Amazon Login: ' . $e->getMessage());
+        $this->logger->error('An error occurred while matching your Amazon account with your store account. : ' . $e->getMessage());
         return [
             'success' => false,
             'message' => __($e->getMessage())

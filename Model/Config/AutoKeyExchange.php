@@ -391,11 +391,12 @@ class AutoKeyExchange
             $link = 'https://amzn.github.io/amazon-payments-magento-2-plugin/configuration.html';
             $this->messageManager->addError(
                 __(
-                    "If you're experiencing consistent errors with transferring keys, " .
-                    "click <a href=\"%1\" target=\"_blank\">Manual Transfer Instructions</a> to learn more.",
+                    "If you experience consistent errors during key transfer " .
+                    "click <a href=\"%1\" target=\"_blank\">Amazon Pay for Magento 2</a> for detailed instructions.",
                     $link
                 )
             );
+
         }
 
         return false;
