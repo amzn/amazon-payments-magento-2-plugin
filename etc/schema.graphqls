@@ -37,7 +37,7 @@ type CheckoutSessionSignInOutput {
 }
 
 type SetCustomerLinkOutput {
-    response: [String!]
+    response: String
 }
 
 type CompleteCheckoutSessionOutput {

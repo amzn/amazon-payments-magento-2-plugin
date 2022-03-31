@@ -49,7 +49,7 @@ class SetCustomerLink implements ResolverInterface
         }
 
         return [
-            'response' => array_merge(...$this->checkoutSessionManagementModel->setCustomerLink($buyerToken, $password))
+            'response' => json_encode(array_merge(...$this->checkoutSessionManagementModel->setCustomerLink($buyerToken, $password)))
         ];
 
     }
