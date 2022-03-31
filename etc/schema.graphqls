@@ -37,8 +37,7 @@ type CheckoutSessionSignInOutput {
 }
 
 type SetCustomerLinkOutput {
-    success: Boolean
-    message: String
+    response: [String!]
 }
 
 type CompleteCheckoutSessionOutput {
