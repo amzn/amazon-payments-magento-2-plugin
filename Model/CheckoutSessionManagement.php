@@ -336,7 +336,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         $orderCollection = $this->orderCollectionFactory->create()
             ->addFieldToSelect('increment_id')
-            ->addFieldToFilter('quote_id', ['eq' => $quote->getId()]);
+            ->addFieldToFilter('quote_id', ['eq' => $quote->getId()])
+            ->addFieldToFilter('status', ['neq' => \Magento\Sales\Model\Order::STATE_CANCELED]);
 
         return ($orderCollection->count() == 0);
     }
