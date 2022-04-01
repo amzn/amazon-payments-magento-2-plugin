@@ -397,7 +397,7 @@ class ConfigCredentialsValidator
         } catch (\Exception $e) {
             $this->setDataByPath($subject, self::XML_PATH_ACTIVE_INHERIT, false);
             $this->setDataByPath($subject, self::XML_PATH_ACTIVE, false);
-            $this->messageManager->addErrorMessage(__('Failed to Amazon Pay: %1', $e->getMessage()));
+            $this->messageManager->addErrorMessage(__('Failed to enable Amazon Pay: %1', $e->getMessage()));
         }
         return null;
     }

@@ -136,3 +136,4 @@
 "Valued customer","Estimado cliente"
 "Unfortunately Amazon Pay declined the payment for your order in our online shop %storeName, please try placing the order again with another payment method.","Desafortunadamente Amazon Pay ha rechazado el pago de tu compra en nuestra tienda online %storeName, por favor intente realizar la compra de nuevo con otro metodo de pago."
 "Kind regards","Un cordial saludo"
+"Note: Amazon Pay only supports multi-currency functionality for the payment regions United Kingdom and Euro region. Supported currencies: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF, USD.","Nota: Amazon Pay solo admite la funcionalidad multidivisas en las regiones de pago del Reino Unido y la Eurozona. Divisas admitidas: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF, USD."

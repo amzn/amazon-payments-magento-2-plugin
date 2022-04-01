@@ -110,7 +110,7 @@
                         <label>Multi-currency Functionality</label>
                         <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment/multicurrency</config_path>
-                        <comment><![CDATA[Note: If you've disabled both, Amazon Sign-in and Magento Guest Checkout, your customers will only be able to use Amazon Pay after they signed in with a Magento account.]]></comment>
+                        <comment><![CDATA["Note: Amazon Pay only supports multi-currency functionality for the payment regions United Kingdom and Euro region. Supported currencies: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF, USD."]]></comment>
                     </field>
                     <field id="authorization_mode" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Authorization Mode</label>
@@ -233,7 +233,7 @@
                         </field>
                         <field id="checkout_result_return_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Amazon checkout result return URL</label>
-                            <comment><![CDATA[<strong>Only change this value if required. Improper modifications can break the integration. After your customer chose their payment method and delivery address, they will be redirected to this URL. Don't enter a leading slash.]]></comment>
+                            <comment><![CDATA[<strong>Only change this value if required. Improper modifications can break the integration. After the order is complete, you customer will be redirected to this URL. Don't enter a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_return_url</config_path>
                         </field>
                         <field id="sign_in_result_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
