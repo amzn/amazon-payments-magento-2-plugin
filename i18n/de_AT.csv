@@ -78,7 +78,7 @@
 "--","--"
 "Amazon Pay button in minicart","Amazon Pay-Button im Mini-Warenkorb"
 "The base currency set for your store isn't supported. For more information, see Amazon Pay for Magento 2.","Die für Ihren Shop festgelegte Basiswährung wird nicht unterstützt. Weitere Informationen finden Sie unter Amazon Pay für Magento2."
-"You'll be connecting/registering a US account based on your display currency of your store scope. For more information, see Amazon Pay for Magento 2.","Sie verknüpfen/registrieren ein US-Konto basierend auf der Anzeigewährung Ihres Shops. Weitere Informationen finden Sie auf der Seite Amazon Pay für Magento2."
+"You'll be connecting/registering a %1 account based on your display currency of your store scope. For more information, see Amazon Pay for Magento 2.","Sie verknüpfen/registrieren ein %1 basierend auf der Anzeigewährung Ihres Shops. Weitere Informationen finden Sie auf der Seite Amazon Pay für Magento2."
 "Start account connection/registration","Kontoverknüpfung/Registrierung starten"
 "My account is ready, I need to connect it to Magento","Ich habe bereits ein Amazon Pay Konto, I möchte es mit Magento verbinden."
 "or","oder"

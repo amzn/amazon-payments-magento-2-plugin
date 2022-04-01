@@ -38,7 +38,8 @@
         <div id="autokeyexchange-hint">
             <?= $block->escapeHtml(
                 __(
-                    "You'll be connecting/registering a US account based on your display currency of your store scope. For more information, see Amazon Pay for Magento 2."
+                    "You'll be connecting/registering a %1 account based on your display currency of your store scope. For more information, see Amazon Pay for Magento 2.",
+                    $block->getRegion()
                 )
             ); ?>
             <span class="note">
