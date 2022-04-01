@@ -44,8 +44,6 @@ class CheckoutSessionSignIn implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "buyerToken" is missing'));
         }
 
-        return [
-            'response' => $this->checkoutSessionManagement->signIn($buyerToken)[0] ?? []
-        ];
+        return array_merge(...$this->checkoutSessionManagement->signIn($buyerToken));
     }
 }

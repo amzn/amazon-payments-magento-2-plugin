@@ -38,8 +38,6 @@ class CheckoutSessionConfig implements ResolverInterface
     {
         $cartId = $args['cartId'] ?? null;
 
-        return  [
-            'config' => json_encode(($this->checkoutSessionManagement->getConfig($cartId) ?? []))
-        ];
+        return array_merge(...$this->checkoutSessionManagement->getConfig($cartId));
     }
 }

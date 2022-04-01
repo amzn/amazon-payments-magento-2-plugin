@@ -48,9 +48,7 @@ class SetCustomerLink implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "password" is missing'));
         }
 
-        return [
-            'response' => json_encode(array_merge(...$this->checkoutSessionManagementModel->setCustomerLink($buyerToken, $password)))
-        ];
+        return array_merge(...$this->checkoutSessionManagementModel->setCustomerLink($buyerToken, $password));
 
     }
 }

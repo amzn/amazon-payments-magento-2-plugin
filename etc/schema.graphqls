@@ -29,21 +29,45 @@ type CheckoutSessionDetailsOutput {
 }
 
 type CheckoutSessionConfigOutput {
-    config: String
+    button_color: String
+    checkout_payload: String
+    checkout_signature: String
+    currency: String
+    sandbox: String
+    language: String
+    login_payload: String
+    login_signature: String
+    merchant_id: String
+    pay_only: String
+    paynow_payload: String
+    paynow_signature: String
+    public_key_id: String
 }
 
 type CheckoutSessionSignInOutput {
-    response: [String!]
+    customer_id: String
+    customer_email: String
+    customer_firstname: String
+    customer_last: String
+    customer_bearer_token: String
+    message: String
+    success: Boolean
 }
 
 type SetCustomerLinkOutput {
-    response: String
+    customer_id: String
+    customer_email: String
+    customer_firstname: String
+    customer_last: String
+    customer_bearer_token: String
+    message: String
+    success: Boolean
 }
 
 type CompleteCheckoutSessionOutput {
-    success: Boolean
-    message: String
     increment_id: String
+    message: String
+    success: Boolean
 }
 
 type UpdateCheckoutSessionOutput {
