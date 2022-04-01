@@ -33,12 +33,12 @@ type CheckoutSessionConfigOutput {
     checkout_payload: String
     checkout_signature: String
     currency: String
-    sandbox: String
+    sandbox: Boolean
     language: String
     login_payload: String
     login_signature: String
     merchant_id: String
-    pay_only: String
+    pay_only: Boolean
     paynow_payload: String
     paynow_signature: String
     public_key_id: String
