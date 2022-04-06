@@ -59,7 +59,8 @@ class Authorize extends \Amazon\Pay\Controller\Login
             $this->_eventManager->dispatch('amazon_login_authorize_error', ['exception' => $e]);
         } catch (\Exception $e) {
             $this->logger->error($e);
-            $this->messageManager->addErrorMessage(__('An error occurred while matching your Amazon account with your store account. '));
+            $this->messageManager->addErrorMessage(__('An error occurred while matching your Amazon account with ' .
+                'your store account. '));
             $this->_eventManager->dispatch('amazon_login_authorize_error', ['exception' => $e]);
         }
 

@@ -17,7 +17,6 @@
 
 namespace Amazon\Pay\Model\Config\Source;
 
-
 class EnabledDisabled implements \Magento\Framework\Option\ArrayInterface
 {
     /**

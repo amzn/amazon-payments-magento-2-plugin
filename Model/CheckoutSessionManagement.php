@@ -391,7 +391,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 ->getSize();
 
             if (1 != $collectionSize) {
-                throw new WebapiException(__('The store doesn\'t support the country that was entered. To review allowed countries, go to General > General > Allow Countries list. Enter a supported country and try again. '));
+                throw new WebapiException(__('The store doesn\'t support the country that was entered. ' .
+                    'To review allowed countries, go to General > General > Allow Countries list. Enter ' .
+                    'a supported country and try again. '));
             }
         }
 
@@ -928,7 +930,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
     protected function getLoginError($e)
     {
-        $this->logger->error('An error occurred while matching your Amazon account with your store account. : ' . $e->getMessage());
+        $this->logger->error('An error occurred while matching your Amazon account with ' .
+            'your store account. : ' . $e->getMessage());
         return [
             'success' => false,
             'message' => __($e->getMessage())
