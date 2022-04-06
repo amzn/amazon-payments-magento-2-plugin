@@ -28,8 +28,8 @@
                 <group id="credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credentials</label>
                     <field id="active_v2" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enable Amazon Pay</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <label>Amazon Pay</label>
+                        <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment_v2/active</config_path>
                     </field>
                     <field id="private_key_pem" translate="label comment" type="Amazon\Pay\Model\Config\File\PemFile" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -69,7 +69,7 @@
                     </field>
                     <field id="store_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Store Id</label>
-                        <comment><![CDATA[Referred as clientId in SellerCentral.]]></comment>
+                        <comment><![CDATA[Sometimes referred to as "Client ID" in Seller Central.]]></comment>
                         <config_path>payment/amazon_payment_v2/store_id</config_path>
                         <validate>validate-amzn-store-id</validate>
                         <depends><field id="active_v2">1</field></depends>
@@ -82,24 +82,24 @@
                     </field>
                     <field id="sandbox" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sandbox</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment/sandbox</config_path>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
                     <field id="ipn_url_v2" type="note" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>IPN URL</label>
                         <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\IpnUrl</frontend_model>
-                        <comment><![CDATA[Add this url in SellerCentral to enable IPN.]]></comment>
+                        <comment><![CDATA[To enable instant payment notifications (IPN), go to Seller Central, click Settings > Integration Settings > Edit, and then paste the above URL in the Merchant URL field, and click Save.]]></comment>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
                 </group>
                 <group id="options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Options</label>
                     <field id="v2_lwa_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enable Amazon Sign-in</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <label>Amazon Sign-in</label>
+                        <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment_v2/lwa_enabled</config_path>
-                        <comment><![CDATA[Please note that if Amazon Sign-in is disabled and Magento Guest Checkout is disabled, the customer will be able to use Amazon Pay only if already signed in with a Magento account]]></comment>
+                        <comment><![CDATA[Note: If you've disabled both, Amazon Sign-in and Magento Guest Checkout, your customers will only be able to use Amazon Pay after they signed in with a Magento account.]]></comment>
                     </field>
                     <field id="payment_action_v2" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Payment Action</label>
@@ -107,10 +107,10 @@
                         <config_path>payment/amazon_payment_v2/payment_action</config_path>
                     </field>
                     <field id="multicurrency" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Use Multi-currency</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <label>Multi-currency Functionality</label>
+                        <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment/multicurrency</config_path>
-                        <comment><![CDATA[Amazon Pay currently supports multi-currency only for UK and EU endpoints. Currencies supported include: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF USD.]]></comment>
+                        <comment><![CDATA["Note: Amazon Pay only supports multi-currency functionality for the payment regions United Kingdom and Euro region. Supported currencies: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF, USD."]]></comment>
                     </field>
                     <field id="authorization_mode" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Authorization Mode</label>
@@ -121,9 +121,9 @@
                 <group id="alexa" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Alexa Delivery Notifications</label>
                     <field id="active" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Enable Alexa Delivery Notifications</label>
-                        <comment><![CDATA[Once enabled, Amazon Pay will deliver Alexa Delivery Notifications to the customer’s Alexa device, when the order is ‘out for delivery' and when it’s 'delivered'. Click <a href="https://developer.amazon.com/docs/amazon-pay-onetime/delivery-notifications.html#heres-what-your-customer-will-experience" target="_blank">here</a> for the customer experience and <a href="https://eps-eu-external-file-share.s3.eu-central-1.amazonaws.com/Alexa/Delivery+Notifications/amazon-pay-delivery-tracker-supported-carriers-v2.csv" target="_blank">here</a> for the supported carriers.]]></comment>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <label>Alexa Delivery Notifications</label>
+                        <comment><![CDATA[Note: If you enable Alexa Delivery Notifications, Amazon Pay will send notifications to the customer’s Alexa device when the order is out for delivery and when it’s delivered. For more information, see Setting up delivery notifications <a href="https://amazonpaylegacyintegrationguide.s3.amazonaws.com/docs/amazon-pay-onetime/delivery-notifications.html" target="_blank">here</a> and supported carriers <a href="https://eps-eu-external-file-share.s3.eu-central-1.amazonaws.com/Alexa/Delivery+Notifications/amazon-pay-delivery-tracker-supported-carriers-v2.csv" target="_blank">here</a>]]></comment>
+                        <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>
                     <field id="carrier_codes" translate="label comment" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">
@@ -156,19 +156,19 @@
                             <source_model>Amazon\Pay\Model\Config\Source\ButtonColor</source_model>
                         </field>
                         <field id="pwa_pp_button_is_visible" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Show Amazon Pay button on product page</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <label>Amazon Pay button on product page</label>
+                            <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                             <config_path>payment/amazon_payment/pwa_pp_button_is_visible</config_path>
                         </field>
                         <field id="minicart_button_is_visible" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Show Amazon Pay button in minicart</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <label>Amazon Pay button in minicart</label>
+                            <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                             <config_path>payment/amazon_payment/minicart_button_is_visible</config_path>
                         </field>
                         <field id="amazonloggin" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Show Amazon Pay in payment methods</label>
-                            <comment><![CDATA[If enabled, Amazon Pay is presented as an option in the list of available payment methods during the final step of checkout.]]></comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <label>Amazon Pay in final checkout step</label>
+                            <comment><![CDATA[Note: When enabled, Amazon Pay will appear in the list of available payment methods at the final checkout step.]]></comment>
+                            <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                             <config_path>payment/amazonlogin/active</config_path>
                         </field>
                         <field id="sort_order" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -195,15 +195,15 @@
                     <group id="shipping_restrictions" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Shipping Restrictions</label>
                         <field id="po_boxes" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Restrict PO Boxes</label>
-                            <comment><![CDATA[Marks PO box addresses in US, CA, GB, FR, DE, ES, PT, IT, AU as restricted]]></comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <label>Restrict Post Office Boxes</label>
+                            <comment><![CDATA[Note: When enabled, post office box addresses in US, CA, UK, FR, DE, ES, PT, IT, AU aren't accepted.]]></comment>
+                            <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                             <config_path>payment/amazon_payment_v2/shipping_restrict_po_boxes</config_path>
                         </field>
                         <field id="packstations" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Restrict Packstations</label>
-                            <comment><![CDATA[Marks packstation addresses in DE as restricted]]></comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment><![CDATA[Note: Packstations are only available in Germany. When enabled, Packstation addresses aren't accepted.]]></comment>
+                            <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                             <config_path>payment/amazon_payment_v2/shipping_restrict_packstations</config_path>
                         </field>
                     </group>
@@ -211,7 +211,7 @@
                         <label>Developer Options</label>
                         <field id="logging" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                             <label>Logging</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                             <config_path>payment/amazon_payment/logging</config_path>
                         </field>
                         <field id="loglist_v2" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -223,7 +223,7 @@
                         </field>
                         <field id="checkout_review_return_url" translate="label comment" type="text" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Amazon checkout review return URL</label>
-                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after the buyer selects their preferred payment instrument and shipping address. Do not use a leading slash.]]></comment>
+                            <comment><![CDATA[<strong>Only change this value if required. Improper modifications can break the integration. After your customer chose their payment method and delivery address, they will be redirected to this URL. Don't enter a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_review_return_url</config_path>
                         </field>
                         <field id="checkout_review_url" translate="label comment" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -233,7 +233,7 @@
                         </field>
                         <field id="checkout_result_return_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Amazon checkout result return URL</label>
-                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL after initiating the transaction. Do not use a leading slash.]]></comment>
+                            <comment><![CDATA[<strong>Only change this value if required. Improper modifications can break the integration. After the order is complete, you customer will be redirected to this URL. Don't enter a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_return_url</config_path>
                         </field>
                         <field id="sign_in_result_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -248,7 +248,7 @@
                         </field>
                         <field id="allowed_ips_v2" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allowed IPs</label>
-                            <comment><![CDATA[Comma separated. The “Amazon Pay" button will only be rendered for clients having the above IPs. If the field is empty, the buttons will be visible to all clients.]]></comment>
+                            <comment><![CDATA[Enter IPs seperated by commas. Note: The Amazon Pay button will only be visible to clients with corresponding IP addresses.]]></comment>
                             <config_path>payment/amazon_payment_v2/allowed_ips</config_path>
                             <backend_model>Magento\Developer\Model\Config\Backend\AllowedIps</backend_model>
                         </field>

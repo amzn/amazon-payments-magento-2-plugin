@@ -116,7 +116,7 @@ class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
 
             return $output;
         }
-        return __('No logs are currently available.');
+        return __('No logs available');
     }
 
     /**

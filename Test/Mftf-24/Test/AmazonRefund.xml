@@ -49,7 +49,7 @@
         <waitForPageLoad stepKey="waitForCreditMemoPageLoad"/>
         <!-- adding the raw selector here as the Magento provided one is incorrect -->
         <click selector=".action-default.scalable.save.submit-button.refund.primary" stepKey="submitRefund"/>
-        <see userInput="Amazon Pay refund successful." stepKey="seeAmazonMessage"/>
+        <see userInput="The refund through Amazon Pay was successful." stepKey="seeAmazonMessage"/>
         <see userInput="You created the credit memo." stepKey="seeMagentoMessage"/>
     </test>
 </tests>
