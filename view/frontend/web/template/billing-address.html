@@ -1,7 +1,9 @@
 <div if="isAddressLoaded" id="amazon-billing-address" class="checkout-billing-address">
     <render args="detailsTemplate"></render>
-    <fieldset class="fieldset" data-bind="visible: isAddressFormVisible()">
-        <render args="formTemplate"></render>
+    <fieldset class="fieldset" data-bind="visible: !isAddressDetailsVisible()">
+        <div data-bind="fadeVisible: isAddressFormVisible">
+            <render args="formTemplate"></render>
+        </div>
         <render args="actionsTemplate"></render>
     </fieldset>
 </div>
