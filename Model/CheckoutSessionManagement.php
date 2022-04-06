@@ -404,29 +404,29 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     public function getConfig($cartId = null)
     {
         $result = [];
-        $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-        $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
-        $config = [
-            'merchant_id' => $this->amazonConfig->getMerchantId(),
-            'currency' => $this->amazonConfig->getCurrencyCode(),
-            'button_color' => $this->amazonConfig->getButtonColor(),
-            'language' => $this->amazonConfig->getLanguage(),
-            'sandbox' => $this->amazonConfig->isSandboxEnabled(),
-            'login_payload' => $loginButtonPayload,
-            'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
-            'checkout_payload' => $checkoutButtonPayload,
-            'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
-            'public_key_id' => $this->amazonConfig->getPublicKeyId(),
-        ];
-
         $quote = $this->session->getQuoteFromIdOrSession($cartId);
 
-        if ($quote) {
-            // Ensure the totals are up to date, in case the checkout does something to update qty or shipping without
-            // collecting totals
-            $quote->collectTotals();
-
-            if ($this->canCheckoutWithAmazon($quote)) {
+        if ($this->canCheckoutWithAmazon($quote)) {
+            $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
+            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+            $config = [
+                'merchant_id' => $this->amazonConfig->getMerchantId(),
+                'currency' => $this->amazonConfig->getCurrencyCode(),
+                'button_color' => $this->amazonConfig->getButtonColor(),
+                'language' => $this->amazonConfig->getLanguage(),
+                'sandbox' => $this->amazonConfig->isSandboxEnabled(),
+                'login_payload' => $loginButtonPayload,
+                'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
+                'checkout_payload' => $checkoutButtonPayload,
+                'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
+                'public_key_id' => $this->amazonConfig->getPublicKeyId(),
+            ];
+    
+            if ($quote) {
+                // Ensure the totals are up to date, in case the checkout does something to update qty or shipping
+                                // without collecting totals
+                $quote->collectTotals();
+    
                 $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
                     $quote,
                     $this->amazonConfig->getPaymentAction()
@@ -436,8 +436,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 $config['paynow_payload'] = $payNowButtonPayload;
                 $config['paynow_signature'] = $this->amazonAdapter->signButton($payNowButtonPayload);
             }
+
+            $result[] = $config;
         }
-        $result[] = $config;
+        
         return $result;
     }
 

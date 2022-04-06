@@ -13,7 +13,8 @@ define(
     ) {
         'use strict';
 
-        if (amazonStorage.isAmazonCheckout() || amazonConfig.getValue('is_method_available')) {
+        if ((amazonStorage.isAmazonCheckout() || amazonConfig.getValue('is_method_available'))
+            && !amazonConfig.getValue('has_restricted_products')) {
             rendererList.push(
                 {
                     type: amazonConfig.getCode(),
