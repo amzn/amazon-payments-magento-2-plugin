@@ -421,12 +421,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
                 'public_key_id' => $this->amazonConfig->getPublicKeyId(),
             ];
-    
+
             if ($quote) {
                 // Ensure the totals are up to date, in case the checkout does something to update qty or shipping
-                                // without collecting totals
+                // without collecting totals
                 $quote->collectTotals();
-    
+
                 $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
                     $quote,
                     $this->amazonConfig->getPaymentAction()
@@ -439,7 +439,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             $result[] = $config;
         }
-        
+
         return $result;
     }
 
