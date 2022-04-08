@@ -28,7 +28,7 @@
             <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
             <li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a>
               <ul>
-                <li class="toctree-l2"><a class="reference internal" href="#enable-amazon-pay">Enable Amazon Pay</a>
+                <li class="toctree-l2"><a class="reference internal" href="#enable-amazon-pay">Amazon Pay</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="#credentials">Credentials</a>
                   <ul>
@@ -49,7 +49,7 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="#options">Options</a>
                   <ul>
-                    <li class="toctree-l3"><a class="reference internal" href="#enable-login-with-amazon">Enable Amazon
+                    <li class="toctree-l3"><a class="reference internal" href="#enable-login-with-amazon">Amazon
                         Sign-in</a></li>
                     <li class="toctree-l3"><a class="reference internal" href="#payment-action">Payment Action</a></li>
                     <li class="toctree-l3"><a class="reference internal" href="#authorization-mode">Authorization
@@ -66,15 +66,15 @@
                             Display Language</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#button-color">Button Color</a></li>
                         <li class="toctree-l4"><a class="reference internal"
-                            href="#show-amazon-pay-button-on-product-page">Show Amazon Pay button on product page</a>
+                            href="#show-amazon-pay-button-on-product-page">Amazon Pay button on product page</a>
                         </li>
                         <li class="toctree-l4"><a class="reference internal"
-                            href="#show-amazon-pay-button-in-minicart">Show Amazon Pay button in minicart</a></li>
-                        <li class="toctree-l4"><a class="reference internal"
-                            href="#show-login-with-amazon-in-authentication-popup">Show Amazon Sign-in in authentication
-                            popup</a></li>
-                        <li class="toctree-l4"><a class="reference internal" href="#show-amazon-pay-method">Show Amazon
-                            Pay Method</a></li>
+                            href="#show-amazon-pay-button-in-minicart">Amazon Pay button in minicart</a></li>
+                        <!-- <li class="toctree-l4"><a class="reference internal"
+                            href="#show-login-with-amazon-in-authentication-popup">Amazon Sign-in in authentication
+                            popup</a></li> -->
+                        <li class="toctree-l4"><a class="reference internal" href="#show-amazon-pay-method">Amazon
+                            Pay in final checkout step</a></li>
                       </ul>
                     </li>
                     <li class="toctree-l3"><a class="reference internal" href="#sales-options">Sales Options</a>
@@ -159,7 +159,7 @@
                   href="https://sellercentral.amazon.com/cu/contact-us">https://sellercentral.amazon.com/cu/contact-us</a>.
                 </p>
                 <div class="section" id="enable-amazon-pay">
-                  <h2>Enable Amazon Pay<a class="headerlink" href="#enable-amazon-pay"
+                  <h2>Amazon Pay<a class="headerlink" href="#enable-amazon-pay"
                       title="Permalink to this headline">¶</a></h2>
                   <p>By switching this option you can enable or disable <strong>Amazon Pay</strong>. This option must be
                     enabled if you want to provide the Amazon Pay service to your customers.</p>
@@ -255,13 +255,13 @@
                   <h3>Initiate Configuration<a class="headerlink" href="#initiate-exchange"
                     title="Permalink to this headline">¶</a></h3>
                   <p>To begin automatically transferring keys from your Seller Central account, open the Amazon Pay configuration options and click 
-                    the <cite>Initiate account registration/configuration</cite> button.</p>
+                    the <cite>Start account connection/registration</cite> button.</p>
                   <img alt="_images/ake_initiate.png" src="_images/ake_initiate.png" />
                   <p>A series of Amazon-hosted prompts will follow to finish setting up the transfer from Seller Central.</p>
                   <div class="admonition note">
                     <p class="first admonition-title">Note</p>
                     <p class="last">If you are trying to automatically register/configure your account and it is not working, try clicking the 
-                      <cite>Reset account registration/configuration</cite> button to reset the internal public/private key, and then retry the 
+                      <cite>Reset configuration</cite> button to reset the internal public/private key, and then retry the 
                       transfer process.</p>
                   </div>
                 </div>
@@ -294,8 +294,46 @@
               </div>
               <div class="section" id="options">
                 <h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+                <div class="section" id="use-multi-currency">
+                  <h4>Multi-currency Functionality<a class="headerlink" href="#use-multi-currency"
+                      title="Permalink to this headline">¶</a></h4>
+                  <p>Enables the multi-currency feature of Amazon Pay for Magento 2.</p>
+                  <div class="admonition note">
+                    <p class="first admonition-title">Note</p>
+                    <p class="last">Multi-currency is currently supported for <cite>Payment Region Euro Region</cite>
+                      and <cite>United Kingdom</cite> only. If you are using a different <cite>Payment Region</cite>,
+                      this option will not be available. Moreover, Magento <cite>General ‣ Currency Setup ‣ Display
+                        Currency</cite> value should always match <cite>Payment Region</cite> in order for the Amazon
+                      Pay service to be enabled and the Checkout buttons to appear.</p>
+                  </div>
+                  <p>The feature includes the following currencies, that will be able to be included in Magento
+                    <cite>General ‣ Currency Setup ‣ Allowed Currencies</cite>:</p>
+                  <ul class="simple">
+                    <li>Australian Dollar (AUD)</li>
+                    <li>British Pound (GBP)</li>
+                    <li>Danish Krone (DKK)</li>
+                    <li>Euro (EUR)</li>
+                    <li>Hong Kong Dollar (HKD)</li>
+                    <li>Japanese Yen (JPY)</li>
+                    <li>New Zealand Dollar (NZD)</li>
+                    <li>Norwegian Krone (NOK)</li>
+                    <li>South African Rand (ZAR)</li>
+                    <li>Swedish Krone (SEK)</li>
+                    <li>Swiss Franc (CHF)</li>
+                    <li>United States Dollar (USD)</li>
+                  </ul>
+                  <p>The Amazon Pay multi-currency feature is designed for international merchants who list prices in
+                    more than one currency on their website and charge their customers the exact amount quoted on the
+                    site. When you enable multi-currency, you are not limited by the currency associated with your
+                    Amazon Pay merchant account (the ledger currency in which you receive disbursements from Amazon
+                    Pay). The multi-currency feature is offered by Amazon Services Europe SARL.
+                    <br>The benefit to your customers is that they don’t need to worry about currency conversion or
+                    rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out
+                    on your website with their existing Amazon account.
+                  </p>
+                </div>
                 <div class="section" id="enable-amazon-signin">
-                  <h3>Enable Amazon Sign-in<a class="headerlink" href="#enable-amazon-signin"
+                  <h3>Amazon Sign-in<a class="headerlink" href="#enable-amazon-signin"
                       title="Permalink to this headline">¶</a></h3>
                   <p>By switching this option you can toggle <a class="reference internal" href="signin.html"><strong>Amazon Sign-in</strong></a>. When enabled this will log
                     customers into Magento via their Amazon account. If disabled, customers using Amazon Pay will be
@@ -340,7 +378,7 @@
               <h2>Alexa Delivery Notifications<a class="headerlink" href="#alexa-delivery-notifications"
                   title="Permalink to this headline">¶</a></h2>
               <div class="section" id="alexa-delivery-notifications">
-                <h4>Enable Alexa Delivery Notifications<a class="headerlink" href="#enable-alexa-delivery-notifications"
+                <h4>Alexa Delivery Notifications<a class="headerlink" href="#enable-alexa-delivery-notifications"
                     title="Permalink to this headline">¶</a></h4>
                 <p>Once enabled, Amazon Pay will deliver Alexa Delivery notifications to the customer’s Alexa device, when the
                   order is ‘out for delivery' and when it’s 'delivered'. Click <a class="reference external"
@@ -375,17 +413,17 @@
                     <p>Allows selection of button color from a pre determined list.</p>
                   </div>
                   <div class="section" id="show-amazon-pay-button-on-product-page">
-                    <h4>Show Amazon Pay button on product page<a class="headerlink"
+                    <h4>Amazon Pay button on product page<a class="headerlink"
                         href="#show-amazon-pay-button-on-product-page" title="Permalink to this headline">¶</a></h4>
                     <p>Toggles whether to show the <strong>Amazon Pay</strong> button on the product detail pages.</p>
                   </div>
                   <div class="section" id="show-amazon-pay-button-in-minicart">
-                    <h4>Show Amazon Pay button in minicart<a class="headerlink"
+                    <h4>Amazon Pay button in minicart<a class="headerlink"
                         href="#show-amazon-pay-button-in-minicart" title="Permalink to this headline">¶</a></h4>
                     <p>Toggles whether to show the <strong>Amazon Pay</strong> button in the Magento minicart.</p>
                   </div>
                   <div class="section" id="show-amazon-pay-method">
-                    <h4>Show Amazon Pay in payment methods<a class="headerlink" href="#show-amazon-pay-method"
+                    <h4>Amazon Pay in final checkout step<a class="headerlink" href="#show-amazon-pay-method"
                         title="Permalink to this headline">¶</a></h4>
                     <p>If enabled, Amazon Pay is presented as an option in the list of available payment methods during
                       the final step of checkout.</p>
@@ -399,71 +437,34 @@
                 <div class="section" id="sales-options">
                   <h3>Sales Options<a class="headerlink" href="#sales-options" title="Permalink to this headline">¶</a>
                   </h3>
-                  <div class="section" id="use-multi-currency">
-                    <h4>Use Multi-currency<a class="headerlink" href="#use-multi-currency"
+                  <div class="section" id="store-name">
+                    <h4>Store Name<a class="headerlink" href="#store-name" title="Permalink to this headline">¶</a>
+                    </h4>
+                    <p>Allows setting the store name submitted to Amazon Pay per Store View.</p>
+                  </div>
+                  <div class="section" id="hide-product-categories">
+                    <h4>Restrict Product Categories<a class="headerlink" href="#hide-product-categories"
                         title="Permalink to this headline">¶</a></h4>
-                    <p>Enables the multi-currency feature of Amazon Pay for Magento 2.</p>
-                    <div class="admonition note">
-                      <p class="first admonition-title">Note</p>
-                      <p class="last">Multi-currency is currently supported for <cite>Payment Region Euro Region</cite>
-                        and <cite>United Kingdom</cite> only. If you are using a different <cite>Payment Region</cite>,
-                        this option will not be available. Moreover, Magento <cite>General ‣ Currency Setup ‣ Display
-                          Currency</cite> value should always match <cite>Payment Region</cite> in order for the Amazon
-                        Pay service to be enabled and the Checkout buttons to appear.</p>
-                    </div>
-                    <p>The feature includes the following currencies, that will be able to be included in Magento
-                      <cite>General ‣ Currency Setup ‣ Allowed Currencies</cite>:</p>
-                    <ul class="simple">
-                      <li>Australian Dollar (AUD)</li>
-                      <li>British Pound (GBP)</li>
-                      <li>Danish Krone (DKK)</li>
-                      <li>Euro (EUR)</li>
-                      <li>Hong Kong Dollar (HKD)</li>
-                      <li>Japanese Yen (JPY)</li>
-                      <li>New Zealand Dollar (NZD)</li>
-                      <li>Norwegian Krone (NOK)</li>
-                      <li>South African Rand (ZAR)</li>
-                      <li>Swedish Krone (SEK)</li>
-                      <li>Swiss Franc (CHF)</li>
-                      <li>United States Dollar (USD)</li>
-                    </ul>
-                    <p>The Amazon Pay multi-currency feature is designed for international merchants who list prices in
-                      more than one currency on their website and charge their customers the exact amount quoted on the
-                      site. When you enable multi-currency, you are not limited by the currency associated with your
-                      Amazon Pay merchant account (the ledger currency in which you receive disbursements from Amazon
-                      Pay). The multi-currency feature is offered by Amazon Services Europe SARL.
-                      <br>The benefit to your customers is that they don’t need to worry about currency conversion or
-                      rates when shopping with their Amazon account. Any of our global 300MM Amazon buyers can check-out
-                      on your website with their existing Amazon account.
+                    <p>Allows hiding Amazon Pay as a Checkout and payment solution for specific Product Categories.
                     </p>
-                    <div class="section" id="store-name">
-                      <h4>Store Name<a class="headerlink" href="#store-name" title="Permalink to this headline">¶</a>
-                      </h4>
-                      <p>Allows setting the store name submitted to Amazon Pay per Store View.</p>
-                    </div>
-                    <div class="section" id="hide-product-categories">
-                      <h4>Restrict Product Categories<a class="headerlink" href="#hide-product-categories"
-                          title="Permalink to this headline">¶</a></h4>
-                      <p>Allows hiding Amazon Pay as a Checkout and payment solution for specific Product Categories.
-                      </p>
-                    </div>
                   </div>
-                  <div class="section" id="shipping-restrictions">
-                    <h3>Shipping Restrictions<a class="headerlink" href="#shipping-restrictions"
-                        title="Permalink to this headline">¶</a></h3>
-                    <div class="section" id="restrict-po-boxes">
-                      <h4>Restrict PO Boxes<a class="headerlink" href="#restrict-po-boxes"
-                          title="Permalink to this headline">¶</a></h4>
-                      <p>In Amazon hosted page, it marks PO box addresses in US, CA, GB, FR, DE, ES, PT, IT, AU as
-                        restricted in the Customer's shipping address selection.</p>
-                    </div>
-                    <div class="section" id="restrict-packstations">
-                      <h4>Restrict Packstations<a class="headerlink" href="#restrict-packstations"
-                          title="Permalink to this headline">¶</a></h4>
-                      <p>In Amazon hosted page, Marks packstation addresses in DE as restricted in the Customer's
-                        shipping address selection.</p>
-                    </div>
+                </div>
+                <div class="section" id="shipping-restrictions">
+                  <h3>Shipping Restrictions<a class="headerlink" href="#shipping-restrictions"
+                      title="Permalink to this headline">¶</a></h3>
+                  <div class="section" id="restrict-po-boxes">
+                    <h4>Restrict Post Office Boxes<a class="headerlink" href="#restrict-po-boxes"
+                        title="Permalink to this headline">¶</a></h4>
+                    <p>In Amazon hosted page, it marks PO box addresses in US, CA, GB, FR, DE, ES, PT, IT, AU as
+                      restricted in the Customer's shipping address selection.</p>
                   </div>
+                  <div class="section" id="restrict-packstations">
+                    <h4>Restrict Packstations<a class="headerlink" href="#restrict-packstations"
+                        title="Permalink to this headline">¶</a></h4>
+                    <p>In Amazon hosted page, Marks packstation addresses in DE as restricted in the Customer's
+                      shipping address selection.</p>
+                  </div>
+                </div>
                   <div class="section" id="developer-options">
                     <h3>Developer Options<a class="headerlink" href="#developer-options"
                         title="Permalink to this headline">¶</a></h3>
@@ -473,6 +474,11 @@
                         log files can be retrieved directly via the Magento 2 admin at <span
                           class="menuselection">System ‣ Amazon Pay Logs ‣ Client</span>, respectively <span
                           class="menuselection">System ‣ Amazon Pay Logs ‣ IPN</span></p>
+                    </div>
+                    <div class="section" id="developer-logs">
+                      <h4>Developer Logs<a class="headerlink" href="#developer-logs"
+                          title="Permalink to this headline">¶</a></h4>
+                      <p>Downloads a copy of the developer logs of the extension (Client logs and IPN logs).</p>
                     </div>
                     <div class="section" id="amazon-checkout-review-url">
                       <h4>Amazon Checkout Review Return URL<a class="headerlink" href="#amazon-checkout-review-url"
@@ -525,11 +531,6 @@
                         <p class="last">Due to caching restrictions this setting is not reflected on Product pages,
                           Please disable <cite>Amazon Pay button is visible on Product Page</cite> in this instance</p>
                       </div>
-                    </div>
-                    <div class="section" id="developer-logs">
-                      <h4>Developer Logs<a class="headerlink" href="#developer-logs"
-                          title="Permalink to this headline">¶</a></h4>
-                      <p>Downloads a copy of the developer logs of the extension (Client logs and IPN logs).</p>
                     </div>
                   </div>
                 </div>
