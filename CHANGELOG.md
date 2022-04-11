@@ -1,5 +1,13 @@
 # Change Log
 
+## 5.12.0
+* Change to display billing address for US/JP regions to match EU/UK
+* Fixed a regression with restricted categories
+* Fixed an issue where a quote tied to a canceled order couldn’t be re-used with Amazon Pay
+* Fixed an issue where the billing address would not be shown (thanks @ptylek!)
+* Fixed compatibility with jquery-migrate that doesn’t like self-closing tags
+* Updated some strings and translations
+
 ## 5.11.1
 * Fixed an issue where autoloader is needed to detect version of phpseclib used
 

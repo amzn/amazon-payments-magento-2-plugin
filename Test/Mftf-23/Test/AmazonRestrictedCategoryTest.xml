@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonRestricted">
+        <annotations>
+            <stories value="Amazon Pay Restricted Categories"/>
+            <title value="Amazon Pay button shouldn't appear anywhere for carts containing restricted products"/>
+            <description value="Amazon Pay button shouldn't appear anywhere for carts containing restricted products"/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set {{AmazonButtonProductConfig.path}} 1" stepKey="displayAmazonButtonProduct"/>
+            <magentoCLI command="config:set {{AmazonButtonMiniCartConfig.path}} 1" stepKey="displayAmazonButtonMiniCart"/>
+            <magentoCLI command="config:set {{AmazonButtonPaymentConfig.path}} 1" stepKey="displayAmazonButtonPayment"/>
+            <magentoCLI command="config:set {{AmazonRestrictedCategoriesConfig.path}} $$createCategory.id$$" stepKey="setRestrictedCategory"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="config:set {{AmazonRestrictedCategoriesConfig.path}} ''" stepKey="setRestrictedCategory"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStoreFront">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- don't see AP button on PDP -->
+        <dontSeeElement selector="{{AmazonButtonSection.product}}" stepKey="dontSeeHiddenPdpButton"/>
+
+        <!-- don't see AP button in minicart -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <wait time="2" stepKey="waitForButtonToActivate"/>
+        <dontSeeElement selector="{{AmazonButtonSection.miniCart}}" stepKey="dontSeeHiddenMiniCartButton"/>
+
+        <!-- don't see AP button in cart -->
+        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="openCartPage"/>
+        <dontSeeElement selector="{{AmazonButtonSection.cart}}" stepKey="dontSeeHiddenCartButton"/>
+
+        <!-- don't see express checkout -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <dontSeeElement selector="{{AmazonButtonSection.checkout}}" stepKey="dontSeeHiddenExpressCheckoutButton"/>
+
+        <!-- don't see payment method -->
+        <actionGroup ref="AmazonShipmentFormActionGroup" stepKey="guestCheckoutFillingShipping"/>
+        <dontSeeElement selector="{{AmazonCheckoutSection.method}}" stepKey="dontSeeHiddenPaymentMethod"/>
+    </test>
+</tests>
+

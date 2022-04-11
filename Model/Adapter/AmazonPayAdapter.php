@@ -531,6 +531,7 @@ class AmazonPayAdapter
                 'checkoutCancelUrl' => $this->getCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
+            'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
         ];
 
         if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
@@ -553,7 +554,7 @@ class AmazonPayAdapter
                 'checkoutCancelUrl' => $this->getCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
-
+            'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
             'paymentDetails' => [
                 'paymentIntent' => $paymentIntent,
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),

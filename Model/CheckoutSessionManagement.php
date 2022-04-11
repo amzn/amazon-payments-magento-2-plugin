@@ -336,7 +336,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         $orderCollection = $this->orderCollectionFactory->create()
             ->addFieldToSelect('increment_id')
-            ->addFieldToFilter('quote_id', ['eq' => $quote->getId()]);
+            ->addFieldToFilter('quote_id', ['eq' => $quote->getId()])
+            ->addFieldToFilter('status', ['neq' => \Magento\Sales\Model\Order::STATE_CANCELED]);
 
         return ($orderCollection->count() == 0);
     }
@@ -391,7 +392,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 ->getSize();
 
             if (1 != $collectionSize) {
-                throw new WebapiException(__('the country for your address is not allowed for this store'));
+                throw new WebapiException(__('The store doesn\'t support the country that was entered. ' .
+                    'To review allowed countries, go to General > General > Allow Countries list. Enter ' .
+                    'a supported country and try again. '));
             }
         }
 
@@ -404,29 +407,29 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     public function getConfig($cartId = null)
     {
         $result = [];
-        $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-        $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
-        $config = [
-            'merchant_id' => $this->amazonConfig->getMerchantId(),
-            'currency' => $this->amazonConfig->getCurrencyCode(),
-            'button_color' => $this->amazonConfig->getButtonColor(),
-            'language' => $this->amazonConfig->getLanguage(),
-            'sandbox' => $this->amazonConfig->isSandboxEnabled(),
-            'login_payload' => $loginButtonPayload,
-            'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
-            'checkout_payload' => $checkoutButtonPayload,
-            'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
-            'public_key_id' => $this->amazonConfig->getPublicKeyId(),
-        ];
-
         $quote = $this->session->getQuoteFromIdOrSession($cartId);
 
-        if ($quote) {
-            // Ensure the totals are up to date, in case the checkout does something to update qty or shipping without
-            // collecting totals
-            $quote->collectTotals();
+        if ($this->canCheckoutWithAmazon($quote)) {
+            $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
+            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+            $config = [
+                'merchant_id' => $this->amazonConfig->getMerchantId(),
+                'currency' => $this->amazonConfig->getCurrencyCode(),
+                'button_color' => $this->amazonConfig->getButtonColor(),
+                'language' => $this->amazonConfig->getLanguage(),
+                'sandbox' => $this->amazonConfig->isSandboxEnabled(),
+                'login_payload' => $loginButtonPayload,
+                'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
+                'checkout_payload' => $checkoutButtonPayload,
+                'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
+                'public_key_id' => $this->amazonConfig->getPublicKeyId(),
+            ];
 
-            if ($this->canCheckoutWithAmazon($quote)) {
+            if ($quote) {
+                // Ensure the totals are up to date, in case the checkout does something to update qty or shipping
+                // without collecting totals
+                $quote->collectTotals();
+
                 $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
                     $quote,
                     $this->amazonConfig->getPaymentAction()
@@ -436,8 +439,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 $config['paynow_payload'] = $payNowButtonPayload;
                 $config['paynow_signature'] = $this->amazonAdapter->signButton($payNowButtonPayload);
             }
+
+            $result[] = $config;
         }
-        $result[] = $config;
+
         return $result;
     }
 
@@ -626,7 +631,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $history->delete();
         }
         $order->addStatusHistoryComment(
-            __('Payment was unable to be successfully captured, the checkout session failed to complete.')
+            __('Something went wrong. Choose another payment method for checkout and try again.')
         );
 
         $order->save();
@@ -735,7 +740,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 return [
                     'success' => false,
                     'message' => __(
-                        'Payment was unable to be successfully captured, the checkout session failed to complete.'
+                        'Something went wrong. Choose another payment method for checkout and try again.'
                     ),
                 ];
             }
@@ -926,7 +931,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
     protected function getLoginError($e)
     {
-        $this->logger->error('Error processing Amazon Login: ' . $e->getMessage());
+        $this->logger->error('An error occurred while matching your Amazon account with ' .
+            'your store account. : ' . $e->getMessage());
         return [
             'success' => false,
             'message' => __($e->getMessage())
