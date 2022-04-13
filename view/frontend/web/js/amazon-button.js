@@ -16,6 +16,7 @@ define([
     'ko',
     'jquery',
     'Amazon_Pay/js/action/checkout-session-config-load',
+    'Amazon_Pay/js/action/checkout-session-button-payload-load',
     'Amazon_Pay/js/model/storage',
     'mage/url',
     'Amazon_Pay/js/amazon-checkout',
@@ -27,6 +28,7 @@ define([
         ko,
         $,
         checkoutSessionConfigLoad,
+        buttonPayloadLoad,
         amazonStorage,
         url,
         amazonCheckout,
@@ -48,17 +50,9 @@ define([
 
         drawing: false,
 
-        _loadButtonConfig: function (callback, forceReload = false) {
+        _loadButtonConfig: function (callback) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                 if (!$.isEmptyObject(checkoutSessionConfig)) {
-                    var payload = checkoutSessionConfig['checkout_payload'];
-                    var signature = checkoutSessionConfig['checkout_signature'];
-
-                    if (this.buttonType === 'PayNow') {
-                        payload = checkoutSessionConfig['paynow_payload'];
-                        signature = checkoutSessionConfig['paynow_signature'];
-                    }
-
                     callback({
                         merchantId: checkoutSessionConfig['merchant_id'],
                         publicKeyId: checkoutSessionConfig['public_key_id'],
@@ -68,11 +62,7 @@ define([
                         productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
                         placement: this.options.placement,
                         buttonColor: checkoutSessionConfig['button_color'],
-                        createCheckoutSessionConfig: {
-                            payloadJSON: payload,
-                            signature: signature,
-                            publicKeyId: checkoutSessionConfig['public_key_id'],
-                        }
+                        publicKeyId: checkoutSessionConfig['public_key_id']
                     });
 
                     if (this.options.placement !== "Checkout") {
@@ -81,7 +71,21 @@ define([
                 } else {
                     $(this.options.hideIfUnavailable).hide();
                 }
-            }.bind(this), forceReload);
+            }.bind(this));
+        },
+
+        _loadInitCheckoutPayload: function (callback, payloadType) {
+            checkoutSessionConfigLoad(function (checkoutSessionConfig) {
+                buttonPayloadLoad(function (buttonPayload) {
+                    callback({
+                        createCheckoutSessionConfig: {
+                            payloadJSON: buttonPayload[0],
+                            signature: buttonPayload[1],
+                            publicKeyId: checkoutSessionConfig['public_key_id']
+                        }
+                    });
+                }, payloadType);
+            });
         },
 
         /**
@@ -109,10 +113,7 @@ define([
             }
 
             this._draw();
-
-            if (this.options.placement === 'Product') {
-                this._redraw();
-            }
+            this._subscribeToCartUpdates();
         },
 
         /**
@@ -130,8 +131,6 @@ define([
                     $buttonContainer.empty().append($buttonRoot);
 
                     this._loadButtonConfig(function (buttonConfig) {
-                        // do not use session config for decoupled button
-                        delete buttonConfig.createCheckoutSessionConfig;
                         try {
                             var amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
                         } catch (e) {
@@ -174,17 +173,19 @@ define([
         },
 
         _initCheckout: function (amazonPayButton) {
-            this._loadButtonConfig(function (buttonConfig) {
-                var initConfig = {createCheckoutSessionConfig: buttonConfig.createCheckoutSessionConfig};
-                amazonPayButton.initCheckout(initConfig);
-            }, true);
+            var payloadType = this.buttonType ?
+                'paynow' :
+                'checkout';
+            this._loadInitCheckoutPayload(function (initCheckoutPayload) {
+                amazonPayButton.initCheckout(initCheckoutPayload);
+            }, payloadType);
             customerData.invalidate('*');
         },
 
         /**
          * Redraw button if needed
          **/
-        _redraw: function () {
+        _subscribeToCartUpdates: function () {
             var self = this;
 
             amazonCheckout.withAmazonCheckout(function (amazon, args) {
@@ -195,7 +196,6 @@ define([
                     }
                 });
             });
-
         },
 
         click: function () {

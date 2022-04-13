@@ -46,7 +46,8 @@ class Config extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $data = $this->amazonCheckoutSession->getConfig();
+        $omitPayloads = isset($this->getRequest()->getParams()['omit_payloads']);
+        $data = $this->amazonCheckoutSession->getConfig($omitPayloads);
         return $this->resultJsonFactory->create()->setData($data);
     }
 }

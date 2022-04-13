@@ -30,16 +30,13 @@ define([
         }
         return localStorage;
     };
-    return function (callback, forceReload = false) {
+    return function (callback) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         var config = getLocalStorage().get('config') || false;
-        if (forceReload
-            || cartId !== getLocalStorage().get('cart_id')
-            || typeof config.checkout_payload === 'undefined'
-            || !config.checkout_payload.includes(document.URL)) {
+        if (!config || cartId !== getLocalStorage().get('cart_id')) {
             callbacks.push(callback);
             if (callbacks.length == 1) {
-                remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {
+                remoteStorage.get(url.build('amazon_pay/checkout/config?omit_payloads=true')).done(function (config) {
                     getLocalStorage().set('cart_id', cartId);
                     getLocalStorage().set('config', config);
                     do {
@@ -47,8 +44,8 @@ define([
                     } while (callbacks.length);
                 });
             }
-        } else {
-            callback(getLocalStorage().get('config'));
         }
+
+        callback(getLocalStorage().get('config'));
     };
 });
