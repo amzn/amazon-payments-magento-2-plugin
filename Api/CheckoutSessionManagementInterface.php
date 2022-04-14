@@ -54,7 +54,7 @@ interface CheckoutSessionManagementInterface
     /**
      * @param mixed $amazonSessionId
      * @param mixed|null $cartId
-     * @return int
+     * @return mixed
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null);
 
