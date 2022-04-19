@@ -428,7 +428,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 // without collecting totals
                 $quote->collectTotals();
 
-                $config['pay_only'] = $this->amazonHelper->isPayOnly($quote);
                 if (!$omitPayloads) {
                     $config = array_merge($config, $this->getPayNowButtonPayload($quote));
                 }

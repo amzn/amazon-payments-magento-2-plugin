@@ -59,10 +59,9 @@ define([
                         ledgerCurrency: checkoutSessionConfig['currency'],
                         sandbox: checkoutSessionConfig['sandbox'],
                         checkoutLanguage: checkoutSessionConfig['language'],
-                        productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
+                        productType: this._isPayOnly() ? 'PayOnly' : 'PayAndShip',
                         placement: this.options.placement,
-                        buttonColor: checkoutSessionConfig['button_color'],
-                        publicKeyId: checkoutSessionConfig['public_key_id']
+                        buttonColor: checkoutSessionConfig['button_color']
                     });
 
                     if (this.options.placement !== "Checkout") {
@@ -89,16 +88,23 @@ define([
         },
 
         /**
-         * @param {boolean} isCheckoutSessionPayOnly
          * @returns {boolean}
          * @private
          */
-        _isPayOnly: function (isCheckoutSessionPayOnly) {
-            var result = isCheckoutSessionPayOnly;
-            if (result && this.options.payOnly !== null) {
-                result = this.options.payOnly;
+        _isPayOnly: function () {
+            var cartData = customerData.get('cart');
+
+            // No cart data yet or cart is empty, for the pdp button
+            if (typeof cartData().amzn_pay_only === 'undefined' || parseInt(cartData().summary_count) === 0) {
+                return this.options.payOnly
             }
-            return result;
+
+            // Check if cart has items and it's the pdp button
+            if (parseInt(cartData().summary_count) > 0 && this.options.payOnly !== null) {
+                return cartData().amzn_pay_only && this.options.payOnly;
+            }
+
+            return cartData().amzn_pay_only;
         },
 
         /**

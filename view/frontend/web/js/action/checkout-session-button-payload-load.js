@@ -23,8 +23,8 @@
     'use strict';
 
     return function (callback, payloadType) {
-        var serviceUrl = url.build(`/rest/V1/amazon-checkout-session/button-payload/${payloadType}`);
-        
+        var serviceUrl = url.build(`rest/V1/amazon-checkout-session/button-payload/${payloadType}`);
+
         remoteStorage.get(serviceUrl).done(function (payload) {
                 callback(payload);
             });
