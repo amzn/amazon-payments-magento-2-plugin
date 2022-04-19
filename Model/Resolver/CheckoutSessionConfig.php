@@ -38,6 +38,9 @@ class CheckoutSessionConfig implements ResolverInterface
     {
         $cartId = $args['cartId'] ?? null;
 
-        return array_merge(...$this->checkoutSessionManagement->getConfig($cartId));
+        // old php version friendly. later the spread operator can be used for a slight performance increase
+        // array_merge(...$response);
+        $response = $this->checkoutSessionManagement->getConfig($cartId);
+        return array_shift($response);
     }
 }
