@@ -22,7 +22,7 @@ class SetCustomerLink implements ResolverInterface
      */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagementModel
-    ){
+    ) {
         $this->checkoutSessionManagementModel = $checkoutSessionManagementModel;
     }
 
@@ -52,6 +52,5 @@ class SetCustomerLink implements ResolverInterface
         // array_merge(...$response);
         $response = $this->checkoutSessionManagementModel->setCustomerLink($buyerToken, $password);
         return array_shift($response);
-
     }
 }

@@ -23,7 +23,7 @@ class CheckoutSessionSignIn implements ResolverInterface
      */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagement
-    ){
+    ) {
         $this->checkoutSessionManagement = $checkoutSessionManagement;
     }
 

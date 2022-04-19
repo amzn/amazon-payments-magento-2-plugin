@@ -25,7 +25,7 @@ class CheckoutSessionDetails implements ResolverInterface
      */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagement
-    ){
+    ) {
         $this->checkoutSessionManagement = $checkoutSessionManagement;
     }
 
@@ -61,7 +61,6 @@ class CheckoutSessionDetails implements ResolverInterface
         ];
     }
 
-
     /**
      * @param $amazonSessionId
      * @param $queryType
@@ -85,6 +84,4 @@ class CheckoutSessionDetails implements ResolverInterface
 
         return $result;
     }
-
-
 }

@@ -23,7 +23,7 @@ class UpdateCheckoutSession implements ResolverInterface
      */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagementModel
-    ){
+    ) {
         $this->checkoutSessionManagementModel = $checkoutSessionManagementModel;
     }
 
@@ -49,10 +49,9 @@ class UpdateCheckoutSession implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "checkoutSessionId" is missing'));
         }
 
+        $response = $this->checkoutSessionManagementModel->updateCheckoutSession($checkoutSessionId, $cartId) ?? 'N/A';
         return [
-            'redirectUrl' => $this->checkoutSessionManagementModel->updateCheckoutSession($checkoutSessionId,
-                    $cartId) ?? 'N/A'
+            'redirectUrl' => $response
         ];
     }
-
 }

@@ -23,7 +23,7 @@ class CompleteCheckoutSession implements ResolverInterface
      */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagementModel
-    ){
+    ) {
         $this->checkoutSessionManagementModel = $checkoutSessionManagementModel;
     }
 
