@@ -20,8 +20,11 @@
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
         <waitForElement selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForAmazonEditShippingPageLoad"/>
         <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAmazonAddressButton"/>
-        <click selector="{{AmazonPageSection.notSelectedAddress}}" stepKey="clickNotSelectedAmazonAddress"/>
-        <click selector="{{AmazonPageSection.useAddressButton}}" stepKey="clickUseAddressButton"/>
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\UseAddressOrPaymentMethod" method="clickUseAddressOrPaymentMethod" stepKey="clickUseAddress">
+            <argument name="addressOrPaymentMethodRadioButtonSelector">{{AmazonPageSection.notSelectedAddress}}</argument>
+            <argument name="useAddressOrPaymentMethodSelector">{{AmazonPageSection.useAddressButton}}</argument>
+        </helper>
+
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonChangedShippingPageLoad"/>
         <wait time="1" stepKey="allowButtonToActivate2"/>
         <!--Come back to checkout with changed address-->

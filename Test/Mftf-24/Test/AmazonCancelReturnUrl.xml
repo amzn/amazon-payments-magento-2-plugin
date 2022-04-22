@@ -67,7 +67,7 @@
             <argument name="editAddressSelector">{{AmazonCheckoutSection.editShippingButton}}</argument>
             <argument name="addressIdSelector">{{AmazonPageSection.addressId}}</argument>
             <argument name="changePaymentSelector">{{AmazonPageSection.changePaymentButton}}</argument>
-            <argument name="usePaymentSelector">{{AmazonPageSection.usePaymentButton}}</argument>
+            <argument name="changeAddressSelector">{{AmazonPageSection.changeAddressButton}}</argument>
         </helper>
 
         <!--Come back to checkout with default address-->

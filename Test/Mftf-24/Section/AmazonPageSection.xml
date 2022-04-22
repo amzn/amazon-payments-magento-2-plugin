@@ -11,10 +11,11 @@
         <element name="addressId" type="text" selector="#default .default_address .address_id"/>
         <element name="addressDetails" type="text" selector="#change-buyer-details li[data-address_id='{{address_id}}']" parameterized="true"/>
         <element name="changeAddressButton" type="button" selector="#change-address-button"/>
+        <element name="addressBackButton" type="button" selector="#addresses-back-button"/>
         <element name="changePaymentButton" type="button" selector="#change-payment-button"/>
         <element name="notSelectedAddress" type="button" selector="#maxo_addresses li[data-selected=false]"/>
         <element name="useAddressButton" type="button" selector="#buyer-action-button-bottom .a-button-input"/>
-        <element name="paymentRadioButtons" type="input" selector="#maxo_payment_methods .a-radio-label"/>
+        <element name="paymentMethodRadioButton" type="input" selector="li[data-trail_number='{{cc}}']" parameterized="true"/>
         <element name="usePaymentButton" type="button" selector="#maxo_payment_methods #buyer-action-button-bottom .a-button-input"/>
     </section>
 </sections>
