@@ -204,9 +204,12 @@
                     <p class="first admonition-title">Note</p>
                     <p class="last">In order for the Amazon Pay service to be effectively enabled and the Checkout
                       buttons to appear, the value of <cite>General ‣ Currency Setup ‣ Display Currency</cite> of the
-                      Store View where Amazon Pay is configured must always match <cite>Payment Region</cite>. This
+                      Store View where Amazon Pay is configured should match <cite>Payment Region</cite>. This
                       allows to configure different Store Views with different Amazon Pay accounts and corresponding
-                      <cite>Display Currency</cite> / <cite>Payment Region</cite> combinations.
+                      <cite>Display Currency</cite> / <cite>Payment Region</cite> combinations. If <cite>Display Currency</cite> 
+                      does not match <cite>Payment Region</cite>, then <cite>Payment Region</cite> must be either 
+                      <strong>Euro Region</strong> or <strong>United Kingdom</strong>, and the <cite>Multicurrency 
+                      Functionality</cite> option must be <strong>Enabled</strong>.
                     </p>
                   </div>
                   </p>
@@ -300,11 +303,9 @@
                   <p>Enables the multi-currency feature of Amazon Pay for Magento 2.</p>
                   <div class="admonition note">
                     <p class="first admonition-title">Note</p>
-                    <p class="last">Multi-currency is currently supported for <cite>Payment Region Euro Region</cite>
-                      and <cite>United Kingdom</cite> only. If you are using a different <cite>Payment Region</cite>,
-                      this option will not be available. Moreover, Magento <cite>General ‣ Currency Setup ‣ Display
-                        Currency</cite> value should always match <cite>Payment Region</cite> in order for the Amazon
-                      Pay service to be enabled and the Checkout buttons to appear.</p>
+                    <p class="last">Multi-currency is currently supported for <cite>Payment Region</cite> 
+                      <strong>Euro Region</strong> and <strong>United Kingdom</strong> only. If you are using a different <cite>Payment Region</cite>,
+                      this option will not be available.</p>
                   </div>
                   <p>The feature includes the following currencies, that will be able to be included in Magento
                     <cite>General ‣ Currency Setup ‣ Allowed Currencies</cite>:</p>
