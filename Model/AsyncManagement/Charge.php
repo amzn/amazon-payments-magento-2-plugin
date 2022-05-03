@@ -210,7 +210,7 @@ class Charge extends AbstractOperation
             $this->closeLastTransaction($order);
             $this->amazonAdapter->closeChargePermission(
                 $order->getStoreId(),
-                $order->getPayment()->getAdditionalInformation()['charge_permission_id'],
+                array_key_exists('charge_permission_id', $order->getPayment()->getAdditionalInformation()) ? $order->getPayment()->getAdditionalInformation()['charge_permission_id'] : "",
                 'Canceled due to capture declined.',
                 true
             );
