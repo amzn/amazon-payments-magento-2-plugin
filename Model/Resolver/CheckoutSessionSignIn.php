@@ -44,8 +44,6 @@ class CheckoutSessionSignIn implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "buyerToken" is missing'));
         }
 
-        // old php version friendly. later the spread operator can be used for a slight performance increase
-        // array_merge(...$response);
         $response = $this->checkoutSessionManagement->signIn($buyerToken);
         return array_shift($response);
     }
