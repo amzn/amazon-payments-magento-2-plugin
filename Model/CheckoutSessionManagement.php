@@ -413,44 +413,102 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function getConfig($cartId = null)
+    public function getConfig($cartId = null, $omitPayloads = false)
     {
         $result = [];
         $quote = $this->session->getQuoteFromIdOrSession($cartId);
 
         if ($this->canCheckoutWithAmazon($quote)) {
-            $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
             $config = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
                 'button_color' => $this->amazonConfig->getButtonColor(),
                 'language' => $this->amazonConfig->getLanguage(),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),
-                'login_payload' => $loginButtonPayload,
-                'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
-                'checkout_payload' => $checkoutButtonPayload,
-                'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
                 'public_key_id' => $this->amazonConfig->getPublicKeyId(),
             ];
+
+            if (!$omitPayloads) {
+                $config = array_merge($config, $this->getLoginButtonPayload(), $this->getCheckoutButtonPayload());
+            }
 
             if ($quote) {
                 // Ensure the totals are up to date, in case the checkout does something to update qty or shipping
                 // without collecting totals
                 $quote->collectTotals();
 
-                $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
-                    $quote,
-                    $this->amazonConfig->getPaymentAction()
-                );
-
-                $config['pay_only'] = $this->amazonHelper->isPayOnly($quote);
-                $config['paynow_payload'] = $payNowButtonPayload;
-                $config['paynow_signature'] = $this->amazonAdapter->signButton($payNowButtonPayload);
+                if (!$omitPayloads) {
+                    $config = array_merge($config, $this->getPayNowButtonPayload($quote));
+                }
             }
 
             $result[] = $config;
         }
+
+        return $result;
+    }
+
+    public function getButtonPayload($payloadType = 'checkout')
+    {
+        switch ($payloadType) {
+            case 'paynow':
+                $quote = $this->session->getQuoteFromIdOrSession();
+                return $this->getPayNowButtonPayload($quote);
+            case 'login':
+                return $this->getLoginButtonPayload();
+            default:
+                return $this->getCheckoutButtonPayload();
+        }
+    }
+
+    /**
+     * Generate login button payload/signature pair.
+     *
+     * @return mixed
+     */
+    private function getLoginButtonPayload()
+    {
+        $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
+        $result = [
+            'login_payload' => $loginButtonPayload,
+            'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload)
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Generate checkout button payload/signature pair.
+     *
+     * @return mixed
+     */
+    private function getCheckoutButtonPayload()
+    {
+        $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+        $result = [
+            'checkout_payload' => $checkoutButtonPayload,
+            'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload)
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Generate paynow payload/signature pair.
+     *
+     * @param CartInterface $quote
+     * @return mixed
+     */
+    private function getPayNowButtonPayload($quote)
+    {
+        $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
+            $quote,
+            $this->amazonConfig->getPaymentAction()
+        );
+        $result = [
+            'paynow_payload' => $payNowButtonPayload,
+            'paynow_signature' => $this->amazonAdapter->signButton($payNowButtonPayload)
+        ];
 
         return $result;
     }

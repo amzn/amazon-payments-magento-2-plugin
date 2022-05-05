@@ -22,7 +22,6 @@ define([
 ], function ($, _, remoteStorage, url, customerData) {
     'use strict';
 
-    var callbacks = [];
     var localStorage = null;
     var getLocalStorage = function () {
         if (localStorage === null) {
@@ -30,24 +29,18 @@ define([
         }
         return localStorage;
     };
-    return function (callback, forceReload = false) {
+    return function (callback) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         var config = getLocalStorage().get('config') || false;
-        if (forceReload
-            || cartId !== getLocalStorage().get('cart_id')
-            || typeof config.checkout_payload === 'undefined'
-            || !config.checkout_payload.includes(document.URL)) {
-            callbacks.push(callback);
-            if (callbacks.length == 1) {
-                remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {
-                    getLocalStorage().set('cart_id', cartId);
-                    getLocalStorage().set('config', config);
-                    do {
-                        callbacks.shift()(config);
-                    } while (callbacks.length);
-                });
-            }
-        } else {
+        if (!config) {
+            remoteStorage.get(url.build('amazon_pay/checkout/config?omit_payloads=true')).done(function (config) {
+                getLocalStorage().set('cart_id', cartId);
+                getLocalStorage().set('config', config);
+
+                callback(getLocalStorage().get('config'));
+            });
+        }
+        else {
             callback(getLocalStorage().get('config'));
         }
     };
