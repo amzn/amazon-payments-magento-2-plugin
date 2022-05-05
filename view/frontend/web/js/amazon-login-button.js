@@ -46,7 +46,7 @@ define([
                             publicKeyId: checkoutSessionConfig['public_key_id']
                         }
                     });
-                }.bind(this));
+                }.bind(this), false);
             },
 
             /**

@@ -413,7 +413,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function getConfig($cartId = null, $omitPayloads = false)
+    public function getConfig($cartId = null, $omitPayloads = true)
     {
         $result = [];
         $quote = $this->session->getQuoteFromIdOrSession($cartId);

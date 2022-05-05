@@ -29,11 +29,11 @@ define([
         }
         return localStorage;
     };
-    return function (callback) {
+    return function (callback, omitPayloads = true) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         var config = getLocalStorage().get('config') || false;
         if (!config) {
-            remoteStorage.get(url.build('amazon_pay/checkout/config?omit_payloads=true')).done(function (config) {
+            remoteStorage.get(url.build(`amazon_pay/checkout/config?omit_payloads=${omitPayloads}`)).done(function (config) {
                 getLocalStorage().set('cart_id', cartId);
                 getLocalStorage().set('config', config);
 
