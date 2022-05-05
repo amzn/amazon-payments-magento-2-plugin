@@ -1,5 +1,12 @@
 # Change Log
 
+## 5.13.0
+* Added Graphql support
+* Added endpoints to fetch individual config types
+* Change how buttons are rendered so they are not blocked waiting for config
+* Fixed an error when using the REST complete endpoint with a declined card
+* Updated some translations
+
 ## 5.12.0
 * Change to display billing address for US/JP regions to match EU/UK
 * Fixed a regression with restricted categories
