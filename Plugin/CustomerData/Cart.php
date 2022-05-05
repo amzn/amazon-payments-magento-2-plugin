@@ -16,8 +16,7 @@ class Cart
      */
     public function __construct(
         Session $checkoutSession
-    )
-    {
+    ) {
         $this->checkoutSession = $checkoutSession;
     }
 
@@ -33,8 +32,7 @@ class Cart
     public function afterGetSectionData(
         \Magento\Checkout\CustomerData\Cart $subject,
         $result
-    )
-    {
+    ) {
         $result['amzn_pay_only'] = $this->checkoutSession->getQuote()->isVirtual();
 
         return $result;
