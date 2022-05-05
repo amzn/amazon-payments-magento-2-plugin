@@ -1,0 +1,75 @@
+type Query {
+    checkoutSessionConfig(cartId: String): CheckoutSessionConfigOutput
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionConfig")
+
+    checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails")
+
+    checkoutSessionSignIn(buyerToken: String!): CheckoutSessionSignInOutput
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionSignIn")
+}
+
+type Mutation {
+    setCustomerLink(buyerToken: String!, password: String!): SetCustomerLinkOutput
+    @doc(description:"Set Customer Link")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\SetCustomerLink")
+
+    completeCheckoutSession(cartId: String!, amazonSessionId: String!): CompleteCheckoutSessionOutput
+    @doc(description: "Complete Checkout Session")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\CompleteCheckoutSession")
+
+    updateCheckoutSession(cartId: String!, amazonSessionId: String!): UpdateCheckoutSessionOutput
+    @doc(description: "Update Checkout Session")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\UpdateCheckoutSession")
+
+}
+
+type CheckoutSessionDetailsOutput {
+    response: String!
+}
+
+type CheckoutSessionConfigOutput {
+    button_color: String
+    checkout_payload: String
+    checkout_signature: String
+    currency: String
+    sandbox: Boolean
+    language: String
+    login_payload: String
+    login_signature: String
+    merchant_id: String
+    pay_only: Boolean
+    paynow_payload: String
+    paynow_signature: String
+    public_key_id: String
+}
+
+type CheckoutSessionSignInOutput {
+    customer_id: String
+    customer_email: String
+    customer_firstname: String
+    customer_last: String
+    customer_bearer_token: String
+    message: String
+    success: Boolean
+}
+
+type SetCustomerLinkOutput {
+    customer_id: String
+    customer_email: String
+    customer_firstname: String
+    customer_last: String
+    customer_bearer_token: String
+    message: String
+    success: Boolean
+}
+
+type CompleteCheckoutSessionOutput {
+    increment_id: String
+    message: String
+    success: Boolean
+}
+
+type UpdateCheckoutSessionOutput {
+    redirectUrl: String
+}
