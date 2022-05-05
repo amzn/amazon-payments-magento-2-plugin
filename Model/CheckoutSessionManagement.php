@@ -41,6 +41,7 @@ use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Authorization\Model\UserContextInterface as UserContext;
+use Magento\Framework\Phrase\Renderer\Translate as Translate;
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
@@ -203,6 +204,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $session;
 
     /**
+     * @var Translate
+     */
+    private $translationRenderer;
+
+    /**
      * CheckoutSessionManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
@@ -233,6 +239,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param UserContext $userContext
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param Session $session
+     * @param Translate $translationRenderer
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -263,7 +270,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         TokenModelFactory $tokenModelFactory,
         UserContext $userContext,
         \Amazon\Pay\Logger\Logger $logger,
-        Session $session
+        Session $session,
+        Translate $translationRenderer
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -294,6 +302,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->userContext = $userContext;
         $this->logger = $logger;
         $this->session = $session;
+        $this->translationRenderer = $translationRenderer;
     }
 
     /**
@@ -650,7 +659,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $this->logger->debug("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
                 'success' => false,
-                'message' => __("Unable to complete Amazon Pay checkout"),
+                'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
         try {
@@ -739,7 +748,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
                 return [
                     'success' => false,
-                    'message' => __(
+                    'message' => $this->getTranslationString(
                         'Something went wrong. Choose another payment method for checkout and try again.'
                     ),
                 ];
@@ -835,12 +844,31 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     protected function getCanceledMessage($amazonSession)
     {
         if ($amazonSession['statusDetails']['reasonCode'] == 'BuyerCanceled') {
-            return __("This transaction was cancelled. Please try again.");
+            return $this->getTranslationString('This transaction was cancelled. Please try again.');
         } elseif ($amazonSession['statusDetails']['reasonCode'] == 'Declined') {
-            return __("This transaction was declined. Please try again using a different payment method.");
+            return $this->getTranslationString(
+                'This transaction was declined. Please try again using a different payment method.'
+            );
         }
 
         return $amazonSession['statusDetails']['reasonDescription'];
+    }
+
+    /**
+     * Get a translated string to return through the web API
+     *
+     * @param string $message
+     * @return string
+     */
+    private function getTranslationString($message)
+    {
+        try {
+            $translation = $this->translationRenderer->render([$message], []);
+        } catch (\Exception $e) {
+            $translation = $message;
+        }
+
+        return $translation;
     }
 
     /**
