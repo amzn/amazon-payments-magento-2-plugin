@@ -41,6 +41,7 @@ use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Authorization\Model\UserContextInterface as UserContext;
+use Magento\Framework\Phrase\Renderer\Translate as Translate;
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
@@ -203,6 +204,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $session;
 
     /**
+     * @var Translate
+     */
+    private $translationRenderer;
+
+    /**
      * CheckoutSessionManagement constructor.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
@@ -233,6 +239,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param UserContext $userContext
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param Session $session
+     * @param Translate $translationRenderer
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -263,7 +270,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         TokenModelFactory $tokenModelFactory,
         UserContext $userContext,
         \Amazon\Pay\Logger\Logger $logger,
-        Session $session
+        Session $session,
+        Translate $translationRenderer
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -294,6 +302,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->userContext = $userContext;
         $this->logger = $logger;
         $this->session = $session;
+        $this->translationRenderer = $translationRenderer;
     }
 
     /**
@@ -404,44 +413,102 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * {@inheritdoc}
      */
-    public function getConfig($cartId = null)
+    public function getConfig($cartId = null, $omitPayloads = true)
     {
         $result = [];
         $quote = $this->session->getQuoteFromIdOrSession($cartId);
 
         if ($this->canCheckoutWithAmazon($quote)) {
-            $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
             $config = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
                 'button_color' => $this->amazonConfig->getButtonColor(),
                 'language' => $this->amazonConfig->getLanguage(),
                 'sandbox' => $this->amazonConfig->isSandboxEnabled(),
-                'login_payload' => $loginButtonPayload,
-                'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload),
-                'checkout_payload' => $checkoutButtonPayload,
-                'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
                 'public_key_id' => $this->amazonConfig->getPublicKeyId(),
             ];
+
+            if (!$omitPayloads) {
+                $config = array_merge($config, $this->getLoginButtonPayload(), $this->getCheckoutButtonPayload());
+            }
 
             if ($quote) {
                 // Ensure the totals are up to date, in case the checkout does something to update qty or shipping
                 // without collecting totals
                 $quote->collectTotals();
 
-                $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
-                    $quote,
-                    $this->amazonConfig->getPaymentAction()
-                );
-
-                $config['pay_only'] = $this->amazonHelper->isPayOnly($quote);
-                $config['paynow_payload'] = $payNowButtonPayload;
-                $config['paynow_signature'] = $this->amazonAdapter->signButton($payNowButtonPayload);
+                if (!$omitPayloads) {
+                    $config = array_merge($config, $this->getPayNowButtonPayload($quote));
+                }
             }
 
             $result[] = $config;
         }
+
+        return $result;
+    }
+
+    public function getButtonPayload($payloadType = 'checkout')
+    {
+        switch ($payloadType) {
+            case 'paynow':
+                $quote = $this->session->getQuoteFromIdOrSession();
+                return $this->getPayNowButtonPayload($quote);
+            case 'login':
+                return $this->getLoginButtonPayload();
+            default:
+                return $this->getCheckoutButtonPayload();
+        }
+    }
+
+    /**
+     * Generate login button payload/signature pair.
+     *
+     * @return mixed
+     */
+    private function getLoginButtonPayload()
+    {
+        $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
+        $result = [
+            'login_payload' => $loginButtonPayload,
+            'login_signature' => $this->amazonAdapter->signButton($loginButtonPayload)
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Generate checkout button payload/signature pair.
+     *
+     * @return mixed
+     */
+    private function getCheckoutButtonPayload()
+    {
+        $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+        $result = [
+            'checkout_payload' => $checkoutButtonPayload,
+            'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload)
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Generate paynow payload/signature pair.
+     *
+     * @param CartInterface $quote
+     * @return mixed
+     */
+    private function getPayNowButtonPayload($quote)
+    {
+        $payNowButtonPayload = $this->amazonAdapter->generatePayNowButtonPayload(
+            $quote,
+            $this->amazonConfig->getPaymentAction()
+        );
+        $result = [
+            'paynow_payload' => $payNowButtonPayload,
+            'paynow_signature' => $this->amazonAdapter->signButton($payNowButtonPayload)
+        ];
 
         return $result;
     }
@@ -650,7 +717,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $this->logger->debug("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
                 'success' => false,
-                'message' => __("Unable to complete Amazon Pay checkout"),
+                'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
         try {
@@ -739,7 +806,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
                 return [
                     'success' => false,
-                    'message' => __(
+                    'message' => $this->getTranslationString(
                         'Something went wrong. Choose another payment method for checkout and try again.'
                     ),
                 ];
@@ -835,12 +902,31 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     protected function getCanceledMessage($amazonSession)
     {
         if ($amazonSession['statusDetails']['reasonCode'] == 'BuyerCanceled') {
-            return __("This transaction was cancelled. Please try again.");
+            return $this->getTranslationString('This transaction was cancelled. Please try again.');
         } elseif ($amazonSession['statusDetails']['reasonCode'] == 'Declined') {
-            return __("This transaction was declined. Please try again using a different payment method.");
+            return $this->getTranslationString(
+                'This transaction was declined. Please try again using a different payment method.'
+            );
         }
 
         return $amazonSession['statusDetails']['reasonDescription'];
+    }
+
+    /**
+     * Get a translated string to return through the web API
+     *
+     * @param string $message
+     * @return string
+     */
+    private function getTranslationString($message)
+    {
+        try {
+            $translation = $this->translationRenderer->render([$message], []);
+        } catch (\Exception $e) {
+            $translation = $message;
+        }
+
+        return $translation;
     }
 
     /**

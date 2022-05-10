@@ -67,7 +67,7 @@
                         <config_path>payment/amazon_payment_v2/merchant_id</config_path>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
-                    <field id="store_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="store_id" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Store Id</label>
                         <comment><![CDATA[Sometimes referred to as "Client ID" in Seller Central.]]></comment>
                         <config_path>payment/amazon_payment_v2/store_id</config_path>
@@ -86,7 +86,7 @@
                         <config_path>payment/amazon_payment/sandbox</config_path>
                         <depends><field id="active_v2">1</field></depends>
                     </field>
-                    <field id="ipn_url_v2" type="note" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="ipn_url_v2" type="note" translate="label comment" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>IPN URL</label>
                         <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\IpnUrl</frontend_model>
                         <comment><![CDATA[To enable instant payment notifications (IPN), go to Seller Central, click Settings > Integration Settings > Edit, and then paste the above URL in the Merchant URL field, and click Save.]]></comment>
@@ -95,22 +95,22 @@
                 </group>
                 <group id="options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Options</label>
-                    <field id="v2_lwa_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="v2_lwa_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Amazon Sign-in</label>
                         <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment_v2/lwa_enabled</config_path>
-                        <comment><![CDATA[Note: If you've disabled both, Amazon Sign-in and Magento Guest Checkout, your customers will only be able to use Amazon Pay after they signed in with a Magento account.]]></comment>
+                        <comment><![CDATA[Note: If you've disabled both Amazon Sign-in and Magento Guest Checkout, your customers will only be able to use Amazon Pay after they signed in with a Magento account.]]></comment>
                     </field>
                     <field id="payment_action_v2" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Payment Action</label>
+                        <label>Payment</label>
                         <source_model>Amazon\Pay\Model\Config\Source\PaymentAction</source_model>
                         <config_path>payment/amazon_payment_v2/payment_action</config_path>
                     </field>
-                    <field id="multicurrency" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="multicurrency" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Multi-currency Functionality</label>
+                        <comment><![CDATA[Note: Amazon Pay only supports multi-currency functionality for the payment regions United Kingdom and Euro region. Supported currencies: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF, USD.]]></comment>
                         <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment/multicurrency</config_path>
-                        <comment><![CDATA["Note: Amazon Pay only supports multi-currency functionality for the payment regions United Kingdom and Euro region. Supported currencies: AUD, GBP, DKK, EUR, HKD, JPY, NZD, NOK, ZAR, SEK, CHF, USD."]]></comment>
                     </field>
                     <field id="authorization_mode" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Authorization Mode</label>
@@ -122,7 +122,7 @@
                     <label>Alexa Delivery Notifications</label>
                     <field id="active" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Alexa Delivery Notifications</label>
-                        <comment><![CDATA[Note: If you enable Alexa Delivery Notifications, Amazon Pay will send notifications to the customer’s Alexa device when the order is out for delivery and when it’s delivered. For more information, see Setting up delivery notifications <a href="https://amazonpaylegacyintegrationguide.s3.amazonaws.com/docs/amazon-pay-onetime/delivery-notifications.html" target="_blank">here</a> and supported carriers <a href="https://eps-eu-external-file-share.s3.eu-central-1.amazonaws.com/Alexa/Delivery+Notifications/amazon-pay-delivery-tracker-supported-carriers-v2.csv" target="_blank">here</a>]]></comment>
+                        <comment><![CDATA[Note: If you enable Alexa Delivery Notifications, Amazon Pay will send notifications to the customer’s Alexa device when the order is out for delivery and when it’s delivered. For more information, see <a href="https://amazonpaylegacyintegrationguide.s3.amazonaws.com/docs/amazon-pay-onetime/delivery-notifications.html" target="_blank">Setting up delivery notifications</a>, and <a href="https://eps-eu-external-file-share.s3.eu-central-1.amazonaws.com/Alexa/Delivery+Notifications/amazon-pay-delivery-tracker-supported-carriers-v2.csv" target="_blank">supported carriers</a>.]]></comment>
                         <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment_v2/alexa_active</config_path>
                     </field>
@@ -233,7 +233,7 @@
                         </field>
                         <field id="checkout_result_return_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Amazon checkout result return URL</label>
-                            <comment><![CDATA[<strong>Only change this value if required. Improper modifications can break the integration. After the order is complete, you customer will be redirected to this URL. Don't enter a leading slash.]]></comment>
+                            <comment><![CDATA[<strong>Only change this value if required. Improper modifications can break the integration. After the order is complete, your customer will be redirected to this URL. Don't enter a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_return_url</config_path>
                         </field>
                         <field id="sign_in_result_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

@@ -1,5 +1,3 @@
-<?php
-
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -15,21 +13,20 @@
  * permissions and limitations under the License.
  */
 
-namespace Amazon\Pay\Model\Config\Source;
+ define([
+    'jquery',
+    'underscore',
+    'mage/storage',
+    'mage/url',
+    'Magento_Customer/js/customer-data'
+], function ($, _, remoteStorage, url, customerData) {
+    'use strict';
 
-class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
-{
-    const AUTHORIZE = 'authorize';
-    const AUTHORIZE_AND_CAPTURE = 'authorize_capture';
+    return function (callback, payloadType) {
+        var serviceUrl = url.build(`rest/V1/amazon-checkout-session/button-payload/${payloadType}`);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function toOptionArray()
-    {
-        return [
-            ['value' => static::AUTHORIZE, 'label' => __('Charge when order is shipped')],
-            ['value' => static::AUTHORIZE_AND_CAPTURE, 'label' => __('Charge when order is placed')],
-        ];
-    }
-}
+        remoteStorage.get(serviceUrl).done(function (payload) {
+                callback(payload);
+            });
+    };
+});
