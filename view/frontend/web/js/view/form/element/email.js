@@ -1,11 +1,12 @@
 define([
     'jquery',
+    'ko',
     'Magento_Customer/js/customer-data',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/checkout-data',
     'Amazon_Pay/js/model/storage',
     'mage/validation'
-], function ($, customerData, quote, checkoutData, amazonStorage) {
+], function ($, ko, customerData, quote, checkoutData, amazonStorage) {
     'use strict';
 
     return function(Component) {
@@ -18,6 +19,7 @@ define([
                 email: checkoutData.getInputFieldEmailValue(),
                 template: 'Amazon_Pay/form/element/email'
             },
+            hasRendered: ko.observable(false),
 
             /**
              * Init email validator
@@ -35,6 +37,11 @@ define([
                 }
 
                 return this;
+            },
+
+            emailHasChanged: function() {
+                this._super();
+                this.hasRendered(true);
             }
         });
     }

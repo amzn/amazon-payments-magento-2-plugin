@@ -6,6 +6,12 @@
             <argument name="openerName" type="string"/>
         </arguments>
 
+        <!-- Load address list in DOM -->
+        <waitForElementVisible selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForChangeAddressButton"/>
+        <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAddress"/>
+        <waitForElementVisible selector="{{AmazonPageSection.addressBackButton}}" stepKey="waitForAddressBackButton"/>
+        <click selector="{{AmazonPageSection.addressBackButton}}" stepKey="clickAddressBackButton"/>
+
         <!--Get shipping address information-->
         <grabAttributeFrom selector="{{AmazonPageSection.addressId}}" userInput="data-address_id" stepKey="amazonAddressId"/>
         <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-name_on_address" stepKey="amazonAddressName"/>
@@ -18,9 +24,12 @@
         <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-phone_number" stepKey="amazonAddressPhoneNumber"/>
 
         <!-- choose card -->
-        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangeAddress"/>
-        <executeJS function="document.querySelectorAll('#maxo_payment_methods .a-radio-label').forEach(function(v,i,o) { if (v.querySelector('.trail_number').innerText.includes('{{cc}}')) { v.click() } });" stepKey="executeJsCc"/>
-        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.changePaymentButton}}" stepKey="waitForChangePaymentButton"/>
+        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangePaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="waitForPaymentMethods"/>
+        <click selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="clickPaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.usePaymentButton}}" stepKey="waitForUsePaymentMethodButton"/>
+        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethodButton"/>
 
         <!--Go back to checkout-->
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonCheckoutButton"/>

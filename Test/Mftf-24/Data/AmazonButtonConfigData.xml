@@ -9,4 +9,7 @@
     <entity name="AmazonButtonPaymentConfig">
         <data key="path">payment/amazonlogin/active</data>
     </entity>
+    <entity name="AmazonRestrictedCategoriesConfig">
+        <data key="path">payment/amazon_payment_v2/restrict_categories</data>
+    </entity>
 </entities>

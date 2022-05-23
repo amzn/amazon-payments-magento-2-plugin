@@ -2,7 +2,7 @@
   "name": "amzn/amazon-pay-magento-2-module",
   "description": "Official Magento2 Plugin to integrate with Amazon Pay",
   "type": "magento2-module",
-  "version": "5.9.1",
+  "version": "5.13.0",
   "license": [
     "Apache-2.0"
   ],
@@ -15,11 +15,10 @@
     "amzn/amazon-payments-magento-2-plugin": "*"
   },
   "require-dev": {
-    "guzzlehttp/guzzle": "^6.2.0",
-    "phpunit/phpunit": "4.1.0"
+    "guzzlehttp/guzzle": "^6.2.0"
   },
   "require": {
-    "php": "~7.0.13||~7.1.0||~7.2.0||~7.3.0||~7.4.0",
+    "php": "~7.0.13||~7.1.0||~7.2.0||~7.3.0||~7.4.0||~8.0.0||~8.1.0",
     "magento/framework": "^102.0||^103.0",
     "magento/module-sales": "^100.0||^101.0||^102.0||^103.0",
     "magento/module-checkout": "^100.0",
@@ -37,6 +36,7 @@
     "magento/module-media-storage": "^100.0",
     "magento/module-paypal": "^100.0||^101.0",
     "magento/module-vault": "^100.1||^101.2",
+    "phpseclib/phpseclib": "~2.0||~3.0",
     "amzn/amazon-pay-api-sdk-php": "^2.2",
     "aws/aws-php-sns-message-validator": "^1.5"
   },

@@ -3,11 +3,11 @@
         <input type="radio"
                name="payment[method]"
                class="radio"
-               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"></input>
         <label data-bind="attr: {'for': getCode()}" class="label">
             <img alt="Amazon Pay" data-bind="attr: { src: getLogoUrl() } "/>
         </label>
-        <span data-bind="text: paymentDescriptor"/>
+        <span data-bind="text: paymentDescriptor"></span>
     </div>
     <div class="payment-method-content">
         <!-- ko foreach: getRegion('messages') -->
@@ -76,4 +76,3 @@
         <!--/ko-->
     </div>
 </div>
-

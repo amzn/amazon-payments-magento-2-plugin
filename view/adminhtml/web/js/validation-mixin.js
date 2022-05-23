@@ -46,14 +46,16 @@ define(['jquery'], function ($) {
             function (v) {
                 return (/^[0-9A-Z]{13}[0-9A-Z]?$/).test(v);
             },
-            $.mage.__('Merchant Id field is invalid. It must contain 13 or 14 characters. Please check and try again')
+            $.mage.__('The Merchant ID you\'ve entered isn\'t valid. Make sure it contains 13 to 14 characters, then' +
+                ' try again.')
         ),
         $.validator.addMethod(
             'validate-amzn-public-key-id',
             function (v) {
-                return (/^[0-9A-Z]{24}$/).test(v);
+                return (/^((SANDBOX-)?|(LIVE-)?)[0-9A-Z]{24}$/).test(v);
             },
-            $.mage.__('Public Key ID field is invalid. It must contain 24 characters. Please check and try again')
+            $.mage.__('Public Key ID field is invalid. It must contain 24 characters, possibly prefixed with ' +
+                '\'SANDBOX-\' or \'LIVE-\'. Please check and try again')
         ),
         $.validator.addMethod(
             'validate-amzn-store-id',

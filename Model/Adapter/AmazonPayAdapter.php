@@ -528,7 +528,7 @@ class AmazonPayAdapter
     public function generateLoginButtonPayload()
     {
         $payload = [
-            'signInReturnUrl' => $this->url->getRouteUrl('amazon_pay/login/authorize/'),
+            'signInReturnUrl' => $this->getSignInUrl(),
             'signInCancelUrl' => $this->getCancelUrl(),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
@@ -549,7 +549,8 @@ class AmazonPayAdapter
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
                 'checkoutCancelUrl' => $this->getCancelUrl(),
             ],
-            'storeId' => $this->amazonConfig->getClientId()
+            'storeId' => $this->amazonConfig->getClientId(),
+            'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
         ];
 
         if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
@@ -577,7 +578,7 @@ class AmazonPayAdapter
                 'checkoutCancelUrl' => $this->getCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
-
+            'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
             'paymentDetails' => [
                 'paymentIntent' => $paymentIntent,
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
@@ -677,5 +678,11 @@ class AmazonPayAdapter
                     "value" => $frecuencyCount
                 ]
             ];
+    }
+    
+    protected function getSignInUrl()
+    {
+        $signInUrl = $this->amazonConfig->getSignInResultUrlPath();
+        return $this->url->getUrl($signInUrl);
     }
 }

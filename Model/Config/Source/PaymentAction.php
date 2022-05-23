@@ -28,8 +28,8 @@ class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray()
     {
         return [
-            ['value' => static::AUTHORIZE, 'label' => __('Charge on Shipment')],
-            ['value' => static::AUTHORIZE_AND_CAPTURE, 'label' => __('Charge on Order')],
+            ['value' => static::AUTHORIZE, 'label' => __('Charge when order is shipped')],
+            ['value' => static::AUTHORIZE_AND_CAPTURE, 'label' => __('Charge when order is placed')],
         ];
     }
 }

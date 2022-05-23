@@ -1,5 +1,37 @@
 # Change Log
 
+## 5.13.0
+* Added Graphql support
+* Added endpoints to fetch individual config types
+* Change how buttons are rendered so they are not blocked waiting for config
+* Fixed an error when using the REST complete endpoint with a declined card
+* Updated some translations
+
+## 5.12.0
+* Change to display billing address for US/JP regions to match EU/UK
+* Fixed a regression with restricted categories
+* Fixed an issue where a quote tied to a canceled order couldn’t be re-used with Amazon Pay
+* Fixed an issue where the billing address would not be shown (thanks @ptylek!)
+* Fixed compatibility with jquery-migrate that doesn’t like self-closing tags
+* Updated some strings and translations
+
+## 5.11.1
+* Fixed an issue where autoloader is needed to detect version of phpseclib used
+
+## 5.11.0
+* Added compatibility with Adobe Commerce / Magento Open Source 2.4.4
+* Fixed an issue with email population
+* Updated validation on Private Key field to allow SANDBOX- or LIVE- prefixes (thanks @cmorrisonmvnt!)
+
+## 5.10.0
+* Added signin REST endpoint
+* Fixed an issue that could occur when rendering the Amazon Pay button more than once
+* Fixed an issue with configuring payment methods at a store scope when the admin user doesn’t have access to the default scope (thanks @barbazul!)
+* Fixed an issue with configuration wizard executed in a store where the admin doesn’t have access to the default store
+* Fixed MFTF tests to allow for different flow on the Amazon authentication popup
+* Updated to allow partial/split capture in EU/UK regions
+* Updated REST endpoints to allow loading session from the user context instead of passing masked cart ID
+
 ## 5.9.1
 * Fixed issue with umlauts in PayNow button flow
 * Updated config labels for Magento Checkout redirect paths

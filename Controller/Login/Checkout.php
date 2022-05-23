@@ -15,12 +15,10 @@
  */
 namespace Amazon\Pay\Controller\Login;
 
-use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Quote\Api\Data\CartInterface;
-use Zend_Validate;
 
 class Checkout extends \Amazon\Pay\Controller\Login
 {
@@ -53,7 +51,8 @@ class Checkout extends \Amazon\Pay\Controller\Login
                     }
                 }
             } else {
-                $amazonCustomer = $this->createAmazonCustomerFromSession($checkoutSession);
+                $buyerInfo = $checkoutSession['buyer'];
+                $amazonCustomer = $this->getAmazonCustomer($buyerInfo);
                 if ($amazonCustomer) {
                     $processed = $this->processAmazonCustomer($amazonCustomer);
 
@@ -69,6 +68,8 @@ class Checkout extends \Amazon\Pay\Controller\Login
                     } elseif (!$this->customerSession->isLoggedIn()) {
                         $this->session->login($processed);
                     }
+                } else {
+                    $this->logger->error('Amazon buyerId is empty');
                 }
             }
         } catch (ValidatorException $e) {
@@ -78,79 +79,12 @@ class Checkout extends \Amazon\Pay\Controller\Login
             $this->_eventManager->dispatch('amazon_login_authorize_error', ['exception' => $e]);
         } catch (\Exception $e) {
             $this->logger->error($e);
-            $this->messageManager->addErrorMessage(__('Error processing Amazon Login'));
+            $this->messageManager->addErrorMessage(__('An error occurred while matching your Amazon account with ' .
+                'your store account. '));
             $this->_eventManager->dispatch('amazon_login_authorize_error', ['exception' => $e]);
         }
 
         $checkoutUrl = $this->amazonConfig->getCheckoutReviewUrlPath();
         return $this->_redirect($checkoutUrl, ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]);
-    }
-
-    protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
-    {
-        $customerData = $this->matcher->match($amazonCustomer);
-
-        if (null === $customerData) {
-            return $this->createCustomer($amazonCustomer);
-        }
-
-        if ($amazonCustomer->getId() != $customerData->getExtensionAttributes()->getAmazonId()) {
-            if (! $this->session->isLoggedIn()) {
-                return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());
-            }
-
-            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
-        }
-
-        return $customerData;
-    }
-
-    protected function createCustomer(AmazonCustomerInterface $amazonCustomer)
-    {
-        if (! Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
-            throw new ValidatorException(__('the email address for your Amazon account is invalid'));
-        }
-
-        $customerData = $this->customerLinkManagement->create($amazonCustomer);
-        $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
-
-        return $customerData;
-    }
-
-    /**
-     * @param $checkoutSession
-     * @return array|false
-     */
-    protected function getAmazonCustomerFromSession($checkoutSession)
-    {
-        $userInfo = $checkoutSession['buyer'];
-        if (is_array($userInfo) && array_key_exists('buyerId', $userInfo) && !empty($userInfo['buyerId'])) {
-            $data = [
-                'id' => $userInfo['buyerId'],
-                'email' => $userInfo['email'],
-                'name' => $userInfo['name'],
-                'country' => $this->amazonConfig->getRegion(),
-            ];
-
-            return $data;
-        } else {
-            $this->logger->error('Amazon buyerId is empty');
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $checkoutSession
-     * @return \Amazon\Pay\Domain\AmazonCustomer
-     */
-    protected function createAmazonCustomerFromSession($checkoutSession)
-    {
-        $data = $this->getAmazonCustomerFromSession($checkoutSession);
-        if ($data) {
-            return $this->amazonCustomerFactory->create($data);
-        } else {
-            return false;
-        }
     }
 }

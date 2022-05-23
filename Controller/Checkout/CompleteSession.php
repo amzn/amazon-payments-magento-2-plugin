@@ -104,7 +104,8 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
 
                 return $this->_redirect('checkout/cart', ['_scope' => $scope]);
             } elseif (!$result['order_id']) {
-                throw new \Magento\Framework\Exception\NotFoundException(__('Something went wrong. Please try again.'));
+                throw new \Magento\Framework\Exception\NotFoundException(__('Something went wrong. Choose another ' .
+                    'payment method for checkout and try again.'));
             }
             $this->updateVersionCookie();
             $successUrl = $this->amazonConfig->getCheckoutResultUrlPath();

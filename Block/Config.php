@@ -62,6 +62,7 @@ class Config extends \Magento\Framework\View\Element\Template
             'is_pay_only'              => $this->amazonHelper->isPayOnly(),
             'is_lwa_enabled'            => $this->isLwaEnabled(),
             'is_guest_checkout_enabled' => $this->amazonConfig->isGuestCheckoutEnabled(),
+            'has_restricted_products'  => $this->amazonHelper->hasRestrictedProducts()
         ];
 
         return $config;

@@ -32,8 +32,14 @@ class PrivateKeySelected extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
+        $storeId = $this->getRequest()->getParam('store');
+
         if (empty($element->getValue()) &&
-            $this->_scopeConfig->getValue('payment/amazon_payment_v2/private_key')
+            $this->_scopeConfig->getValue(
+                'payment/amazon_payment_v2/private_key',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
         ) {
             $element->setValue(self::TEXT_VALUE);
         }

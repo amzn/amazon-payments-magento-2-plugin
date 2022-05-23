@@ -508,4 +508,7 @@
         <plugin name="amazon_pay_paradox_labs_token_name" type="Amazon\Pay\Plugin\VaultHelper" />
     </type>
 
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="amazon_pay_customerdata_cart" type="Amazon\Pay\Plugin\CustomerData\Cart" />
+    </type>
 </config>

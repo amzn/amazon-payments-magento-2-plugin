@@ -38,10 +38,9 @@
         <div id="autokeyexchange-hint">
             <?= $block->escapeHtml(
                 __(
-                    'You will be registering/configuring for a %1 account based on the display ' .
-                    'currency of your scope (%2).',
-                    $block->getRegion(),
-                    $block->getCurrency()
+                    "You'll be connecting/registering a %1 account based on your display currency of your store " .
+                    "scope. For more information, see Amazon Pay for Magento 2.",
+                    $block->getRegion()
                 )
             ); ?>
             <span class="note">
@@ -53,13 +52,14 @@
 
         <span class="apake-getstarted">
           <button>
-              <span><?= $block->escapeHtml(__('Initiate account registration/configuration')); ?></span>
+              <span><?= $block->escapeHtml(__('Start account connection/registration')); ?></span>
           </button>
         </span>
         <span class="apake-or">
         &nbsp; <?= $block->escapeHtml(__('or')); ?> &nbsp;
           <a href="#" id="autokeyexchange-skip">
-            <?= $block->escapeHtml(__("I've already setup Amazon Pay, I want to edit my settings")); ?>
+            <?= $block->escapeHtml(__("I've already set up Amazon Pay with Magento and I want to edit " .
+             "my configuration.")); ?>
           </a>
         </span>
         <p id="amazon_https_required">
@@ -71,17 +71,17 @@
         </p>
         <div class="reset-auto-key-exchange">
             <button id="reset-auto-key-exchange-button" type="button">
-                <?= /* @noEscape */ __('Reset account registration/configuration') ?>
+                <?= /* @noEscape */ __('Reset configuration') ?>
             </button>
             <br />
             <span id="reset-auto-key-exchange-message">
-                <?= /* @noEscape */ __('Please wait, resetting Amazon configuration. Once the page reloads, ' .
-                'please retry initiating account registration/configuration.'); ?>
+                <?= /* @noEscape */ __('Resetting the Amazon Pay configuration. After the page reloaded, click Start ' .
+                'configuration/registration.'); ?>
             </span>
         </div>
     <?php endif; ?>
 </div>
 
 <div id="amazon_autokeyexchange_back">
-    <a href="#">&laquo; <?= $block->escapeHtml(__('Back to register or connect an account')); ?></a>
+    <a href="#">&laquo; <?= $block->escapeHtml(__('Back to account connection/registration')); ?></a>
 </div>

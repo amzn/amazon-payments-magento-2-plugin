@@ -31,9 +31,12 @@
         <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin" />
 
         <!-- choose card -->
-        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangeAddress"/>
-        <executeJS function="document.querySelectorAll('#maxo_payment_methods .a-radio-label').forEach(function(v,i,o) { if (v.querySelector('.trail_number').innerText.includes('3434')) { v.click() } });" stepKey="executeJsCc"/>
-        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.changePaymentButton}}" stepKey="waitForChangePaymentButton"/>
+        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangePaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.paymentMethodRadioButton('3434')}}" stepKey="waitForPaymentMethods"/>
+        <click selector="{{AmazonPageSection.paymentMethodRadioButton('3434')}}" stepKey="clickPaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.usePaymentButton}}" stepKey="waitForUsePaymentMethodButton"/>
+        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethodButton"/>
 
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />
         <wait time="2" stepKey="allowPayNowButtonToBeClickable" />

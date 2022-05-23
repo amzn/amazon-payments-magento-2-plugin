@@ -6,6 +6,13 @@
             <argument name="openerName" type="string"/>
         </arguments>
 
+        <!-- Load address list in DOM -->
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\LoadAddresses" method="loadAddresses" stepKey="loadAddresses">
+            <argument name="changeAddressSelector">{{AmazonPageSection.changeAddressButton}}</argument>
+            <argument name="addressBackButtonSelector">{{AmazonPageSection.addressBackButton}}</argument>
+            <argument name="defaultAddressSelector">{{AmazonPageSection.addressId}}</argument>
+        </helper>
+
         <!--Get shipping address information-->
         <grabAttributeFrom selector="{{AmazonPageSection.addressId}}" userInput="data-address_id" stepKey="amazonAddressId"/>
         <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-name_on_address" stepKey="amazonAddressName"/>
@@ -18,9 +25,11 @@
         <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-phone_number" stepKey="amazonAddressPhoneNumber"/>
 
         <!-- choose card -->
-        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangeAddress"/>
-        <executeJS function="document.querySelectorAll('#maxo_payment_methods .a-radio-label').forEach(function(v,i,o) { if (v.querySelector('.trail_number').innerText.includes('{{cc}}')) { v.click() } });" stepKey="executeJsCc"/>
-        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethod"/>
+        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangePaymentMethod"/>
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\UseAddressOrPaymentMethod" method="clickUseAddressOrPaymentMethod" stepKey="clickUseAddressOrPaymentMethod">
+            <argument name="addressOrPaymentMethodRadioButtonSelector">{{AmazonPageSection.paymentMethodRadioButton(cc)}}</argument>
+            <argument name="useAddressOrPaymentMethodSelector">{{AmazonPageSection.usePaymentButton}}</argument>
+        </helper>
 
         <!--Go back to checkout-->
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonCheckoutButton"/>

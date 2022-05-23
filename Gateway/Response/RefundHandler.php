@@ -69,7 +69,7 @@ class RefundHandler implements HandlerInterface
             // Verify refund via async
             $this->asyncManagement->queuePendingRefund($payment->getOrder()->getId(), $response['refundId']);
 
-            $this->messageManager->addSuccessMessage(__('Amazon Pay refund successful.'));
+            $this->messageManager->addSuccessMessage(__('The refund through Amazon Pay was successful.'));
         }
     }
 }

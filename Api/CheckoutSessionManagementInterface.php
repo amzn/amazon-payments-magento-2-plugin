@@ -22,9 +22,16 @@ interface CheckoutSessionManagementInterface
 {
     /**
      * @param string|null $cartId
+     * @param boolean $omitPayloads
      * @return mixed
      */
-    public function getConfig($cartId = null);
+    public function getConfig($cartId = null, $omitPayloads = false);
+
+    /**
+     * @param string $payloadType
+     * @return mixed
+     */
+    public function getButtonPayload($payloadType = 'checkout');
 
     /**
      * @param mixed $amazonSessionId
@@ -54,7 +61,20 @@ interface CheckoutSessionManagementInterface
     /**
      * @param mixed $amazonSessionId
      * @param mixed|null $cartId
-     * @return int
+     * @return mixed
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null);
+
+    /**
+     * @param mixed $buyerToken
+     * @return mixed
+     */
+    public function signIn($buyerToken);
+
+    /**
+     * @param mixed $buyerToken
+     * @param string $password
+     * @return mixed
+     */
+    public function setCustomerLink($buyerToken, $password);
 }
