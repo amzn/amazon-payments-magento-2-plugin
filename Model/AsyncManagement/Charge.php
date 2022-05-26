@@ -208,12 +208,19 @@ class Charge extends AbstractOperation
         }
         if ($order->canHold() || $order->isPaymentReview()) {
             $this->closeLastTransaction($order);
-            $this->amazonAdapter->closeChargePermission(
-                $order->getStoreId(),
-                array_key_exists('charge_permission_id', $order->getPayment()->getAdditionalInformation()) ? $order->getPayment()->getAdditionalInformation()['charge_permission_id'] : "",
-                'Canceled due to capture declined.',
-                true
-            );
+            $chargePermissionId = $order->getPayment()->getAdditionalInformation()['charge_permission_id'] ?? '';
+            if (!empty($chargePermissionId)) {
+                $this->amazonAdapter->closeChargePermission(
+                    $order->getStoreId(),
+                    $chargePermissionId,
+                    'Canceled due to capture declined.',
+                    true
+                );
+            } else {
+                $this->asyncLogger->info('Unable to close charge permission for order #' . $order->getIncrementId()
+                    . '; no charge permission ID associated with order');
+            }
+
             $this->setOrderState($order, 'canceled');
             $payment = $order->getPayment();
             $transaction = $this->transactionBuilder->setPayment($payment)
