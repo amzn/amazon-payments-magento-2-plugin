@@ -49,7 +49,7 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="#options">Options</a>
                   <ul>
-                    <li class="toctree-l3"><a class="reference internal" href="#enable-login-with-amazon">Amazon
+                    <li class="toctree-l3"><a class="reference internal" href="#enable-amazon-signin">Amazon
                         Sign-in</a></li>
                     <li class="toctree-l3"><a class="reference internal" href="#payment-action">Payment Action</a></li>
                     <li class="toctree-l3"><a class="reference internal" href="#authorization-mode">Authorization
@@ -367,11 +367,15 @@
                       Amazon Pay needs more time to process the transaction, its result will be returned at a later time
                       (within 24 hours) via <cite>Cron</cite> or <cite>Instant Payment Notification</cite>.</li>
                   </ul>
-                  <p>Independently of the mode you decide for, make sure to only process orders which are successfully
-                    authorized by Amazon Pay (order state: <cite>Processing</cite>).</p>
+                  <div class="admonition warning">
+                    <p class="first admonition-title">Warning</p>
+                    <p class="last">Whether you choose <strong>Immediate</strong> or <strong>Automatic</strong> for <cite>Authorization Mode</cite>,
+                      be sure you are only invoicing/shipping orders that have been successfully authorized by Amazon Pay (Order Status shows as
+                      <cite>Processing</cite>).</p>
+                  </div>
                   <div class="admonition note">
                     <p class="first admonition-title">Note</p>
-                    <p class="last">If you expect high order values, the <strong>Automatic</strong> authorization mode
+                    <p class="last">If you expect high order values, <strong>Automatic</strong> mode
                       might be the best choice for your business.</p>
                   </div>
                 </div>
