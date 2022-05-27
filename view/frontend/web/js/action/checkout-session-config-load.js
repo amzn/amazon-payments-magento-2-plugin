@@ -22,10 +22,15 @@ define([
 ], function ($, _, remoteStorage, url, customerData) {
     'use strict';
 
+    const storageKey = 'amzn-checkout-session-config';
+    $('.switcher-option').on('click', function () {
+        $.localStorage.remove(storageKey);
+    });
+
     var localStorage = null;
     var getLocalStorage = function () {
         if (localStorage === null) {
-            localStorage = $.initNamespaceStorage('amzn-checkout-session-config').localStorage;
+            localStorage = $.initNamespaceStorage(storageKey).localStorage;
         }
         return localStorage;
     };
