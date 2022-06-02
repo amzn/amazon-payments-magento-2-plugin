@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.13.1
+* Fixed issue with invalid array reference if a transaction doesn’t have a charge permission
+* Fixed issue with GraphQL config query supporting omitPayloads
+* Fixed issue with switching stores to refresh the Amazon Pay button config
+
 ## 5.13.0
 * Added Graphql support
 * Added endpoints to fetch individual config types
