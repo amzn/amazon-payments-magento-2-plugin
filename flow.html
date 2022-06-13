@@ -104,24 +104,15 @@
                 <div class="section" id="placing-an-order">
                   <h2>Placing an order<a class="headerlink" href="#placing-an-order"
                       title="Permalink to this headline">¶</a></h2>
-                  <p>The <strong>Amazon Pay</strong> checkout uses the standard Magento 2 checkout however it replaces
-                    its forms with the data from the Customer's Amazon account the forms would have requested (shipping
-                    address details and payment method).</p>
-                  <p>On the shipping step of checkout the address is taken from the Customer's Amazon account. The
-                    shipping address is editable in Amazon hosted page after clicking 'Edit' button.</p>
+                  <p>The <strong>Amazon Pay</strong> checkout uses the standard Magento 2 checkout. However, it automatically
+                    populates its forms with the data from the Customer's Amazon account (shipping address details and payment method).</p>
+                  <p>On the shipping step of checkout, the address is taken from the Customer's Amazon account. The
+                    shipping address is editable in the Amazon hosted page after clicking the 'Edit' button.</p>
                   <img alt="_images/flow1.png" src="_images/flow1.png" />
                   <p>On the payment step of checkout, the billing adddress associated to the payment method chosen on
-                    Amazon hosted page is shown (EU/UK Payment Regions only) and can be editable via Magento standard
-                    forms clicking on 'Edit Billing Address' button. The customer can return to Amazon hosted page with
-                    'Edit Payment Method' button. </p>
+                    Amazon hosted page is shown and can be edited via Magento standard forms by clicking on 'Edit Billing Address' button. 
+                    The customer can return to the Amazon hosted page with the 'Edit Payment Method' button.</p>
                   <img alt="_images/flow2.png" src="_images/flow2.png" />
-                  <div class="admonition note">
-                    <p class="first admonition-title">Note</p>
-                    <p class="last">For US/JP Payment Regions, the billing address associated to the payment method is
-                      not exposed by Amazon. The shipping address will be used to populate the billing address in
-                      Magento backend, but will not be shown and will not be editable by the customer at the payment
-                      step.</p>
-                  </div>
                   <p>When the customers selects "Place Order", the buyer is redirected back to Amazon for Payment
                     processing. PSD2 handling and Automatic Decline Handling are managed by Amazon Pay at this step.</p>
                   <img alt="_images/flow3.png" src="_images/flow3.png" />

@@ -43,6 +43,7 @@
                 <li class="toctree-l2"><a class="reference internal" href="#checkout-redirect">The Amazon Pay button is not redirecting to my checkout page</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#orders-not-created-in-magento">Why are there some transactions in Seller Central with no associated order in Magento?</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#transaction-ids-changed">Amazon Pay transaction IDs used to contain an 'A'; why do they now show a 'C'?</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#cookies">Does the Amazon Pay module create any cookies?</a></li>
               </ul>
             </li>
             <li class="toctree-l1"><a class="reference internal" href="m1_m2_migration.html">Migration: Magento 1 to
@@ -138,6 +139,16 @@
                         target="blank">migrating from CV1 to CV2.</a> If your store uses an ERP, or other 3rd party order processing software that depends on 
                         the CV1 transaction IDs, you can apply the translation steps in reverse to obtain the needed authorization ID (for each 
                         transaction, replace the 'C' with an 'A'). 
+                      </p>
+                  </div>
+                  <div class="section" id="cookies">
+                    <h2>Does the Amazon Pay module create any cookies?<a class="headerlink"
+                      href="#cookies" title="Permalink to this headline">¶</a></h2>
+                      <p>The module does create two entries in the browser's local storage during the standard Amazon Pay Express Checkout flow: <em>amzn-checkout-session-config</em> 
+                        <em>and amzn-checkout-session</em>. The <em>amazon-checkout-session-config</em> cookie holds values needed to render the Pay and Sign In buttons, like merchant ID, 
+                        public key ID, and button signatures, along with preferences like button color and language. Once a customer authenticates with Amazon, they are returned to the 
+                        merchant site with a checkoutSessionId as a URL parameter, which is stored in the <em>amazon-checkout-session</em> cookie for subsequent calls to Amazon for address 
+                        information, and to update the checkout session in Amazon with accurate charge details as the checkout progresses.
                       </p>
                   </div>
                 <!-- <div class="section" id="i-am-using-a-custom-theme-what-do-i-have-to-do">
