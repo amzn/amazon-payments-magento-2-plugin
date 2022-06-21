@@ -95,9 +95,10 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     public function create(AmazonCustomerInterface $amazonCustomer)
     {
         $customerData = $this->customerDataFactory->create();
+        $sanitizedNames = $this->getSanitizedNameData($amazonCustomer);
 
-        $customerData->setFirstname($amazonCustomer->getFirstName());
-        $customerData->setLastname($amazonCustomer->getLastName());
+        $customerData->setFirstname($sanitizedNames['first_name']);
+        $customerData->setLastname($sanitizedNames['last_name']);
         $customerData->setEmail($amazonCustomer->getEmail());
         $password = $this->random->getRandomString(64);
 
@@ -119,5 +120,19 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
             ->setCustomerId($customerId);
 
         $this->customerLinkRepository->save($customerLink);
+    }
+
+    /**
+     * @param AmazonCustomerInterface $customer
+     * @return array
+     */
+    private function getSanitizedNameData($customer)
+    {
+        $pattern = '/([^\p{L}\p{M}\,\-\_\.\'\s\d]){1,255}+/u';
+
+        return [
+            'first_name' => trim(preg_replace($pattern, '', htmlspecialchars_decode($customer->getFirstname()))),
+            'last_name'  => trim(preg_replace($pattern, '', htmlspecialchars_decode($customer->getLastname())))
+        ];
     }
 }
