@@ -510,7 +510,7 @@ class AmazonPayAdapter
     {
         $payload = [
             'signInReturnUrl' => $this->getSignInUrl(),
-            'signInCancelUrl' => $this->getCancelUrl(),
+            'signInCancelUrl' => $this->getSignInCancelUrl(),
             'storeId' => $this->amazonConfig->getClientId(),
             'signInScopes' => ['name', 'email'],
         ];
@@ -528,7 +528,7 @@ class AmazonPayAdapter
         $payload = [
             'webCheckoutDetails' => [
                 'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
-                'checkoutCancelUrl' => $this->getCancelUrl(),
+                'checkoutCancelUrl' => $this->getCheckoutCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
             'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
@@ -551,7 +551,7 @@ class AmazonPayAdapter
             'webCheckoutDetails' => [
                 'checkoutMode' => 'ProcessOrder',
                 'checkoutResultReturnUrl' => $this->amazonConfig->getPayNowResultUrl(),
-                'checkoutCancelUrl' => $this->getCancelUrl(),
+                'checkoutCancelUrl' => $this->getCheckoutCancelUrl(),
             ],
             'storeId' => $this->amazonConfig->getClientId(),
             'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
@@ -608,7 +608,27 @@ class AmazonPayAdapter
         return $this->clientFactory->create($storeId)->generateButtonSignature($payload);
     }
 
-    protected function getCancelUrl()
+    protected function getCheckoutCancelUrl()
+    {
+        $checkoutCancelUrl = $this->amazonConfig->getCheckoutCancelUrl();
+        if (empty($checkoutCancelUrl)) {
+            return $this->getDefaultCancelUrl();
+        }
+
+        return $this->url->getUrl($checkoutCancelUrl);
+    }
+
+    protected function getSignInCancelUrl()
+    {
+        $signInCancelUrl = $this->amazonConfig->getSignInCancelUrl();
+        if (empty($signInCancelUrl)) {
+            return $this->getDefaultCancelUrl();
+        }
+
+        return $this->url->getUrl($signInCancelUrl);
+    }
+
+    protected function getDefaultCancelUrl()
     {
         $referer = $this->redirect->getRefererUrl();
         if ($referer == $this->url->getUrl('checkout')) {
