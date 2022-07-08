@@ -92,6 +92,8 @@
                         <li class="toctree-l4"><a class="reference internal" href="#amazon-checkout-result-url">Amazon Checkout Result Return URL</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#checkout-result-url-path">Magento Checkout Result URL Path</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#sign-in-result-url-path">Sign In Result URL Path</a></li>
+                        <li class="toctree-l4"><a class="reference internal" href="#amazon-checkout-cancel-url-path">Amazon Checkout Cancel URL Path</a></li>
+                        <li class="toctree-l4"><a class="reference internal" href="#amazon-sign-in-cancel-url-path">Amazon Sign In Cancel URL Path</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#allowed-ips">Allowed IPs</a></li>
                         <li class="toctree-l4"><a class="reference internal" href="#developer-logs">Developer Logs</a></li>
                       </ul>
@@ -522,6 +524,24 @@
                       <p>Optional parameter. Setting this value could break Amazon Pay Integration. If left empty,
                         "https://base_website_url/amazon_pay/login/authorize" will be used. Magento will
                         redirect to this URL after a successful Amazon login.
+                      </p>
+                    </div>
+                    <div class="section" id="amazon-checkout-cancel-url-path">
+                      <h4>Amazon Checkout Cancel URL Path<a class="headerlink" href="#amazon-checkout-cancel-url-path"
+                          title="Permalink to this headline">¶</a></h4>
+                      <p>Optional parameter. Setting this value could break Amazon Pay Integration. This is the URL the customer 
+                        will be redirected to after clicking "Cancel Amazon Pay checkout and return to [merchant site]" from the 
+                        Amazon-hosted page/pop up. If left empty, the customer will be returned to the last page visited before initiating 
+                        checkout in the EU/UK payment region, or the Amazon pop up will simply be closed in the US/JP regions.
+                      </p>
+                    </div>
+                    <div class="section" id="amazon-sign-in-cancel-url-path">
+                      <h4>Amazon Sign In Cancel URL Path<a class="headerlink" href="#amazon-sign-in-cancel-url-path"
+                          title="Permalink to this headline">¶</a></h4>
+                      <p>Optional parameter. Setting this value could break Amazon Pay Integration. This is the URL the customer 
+                        will be redirected to after clicking "Cancel" from the Amazon-hosted page/pop up. If left empty, the customer 
+                        will be returned to the last page visited before initiating Amazon Sign In in the EU/UK payment region, or 
+                        the Amazon pop up will simply be closed in the US/JP regions.
                       </p>
                     </div>
                     <div class="section" id="allowed-ips">
