@@ -44,7 +44,7 @@ define(
         return Component.extend({
             defaults: {
                 isAmazonCheckout: ko.observable(amazonStorage.isAmazonCheckout()),
-                isBillingAddressVisible: ko.observable(false),
+                isBillingAddressVisible: ko.observable(!quote.billingAddress()),
                 isIosc: ko.observable($('button.iosc-place-order-button').length > 0),
                 paymentDescriptor: ko.observable(''),
                 logo: 'Amazon_Pay/images/logo/Black-L.png',

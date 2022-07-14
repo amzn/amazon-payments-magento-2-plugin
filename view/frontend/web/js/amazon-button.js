@@ -23,7 +23,9 @@ define([
     'Magento_Customer/js/customer-data',
     'Magento_Checkout/js/model/payment/additional-validators',
     'mage/storage',
-    'Magento_Checkout/js/model/error-processor'
+    'Magento_Checkout/js/model/error-processor',
+    'Magento_Checkout/js/action/set-billing-address',
+    'Magento_Ui/js/model/messageList',
 ], function (
         ko,
         $,
@@ -35,7 +37,9 @@ define([
         customerData,
         additionalValidators,
         storage,
-        errorProcessor
+        errorProcessor,
+        setBillingAddressAction,
+        globalMessageList
     ) {
     'use strict';
 
@@ -173,12 +177,29 @@ define([
 
                         $('.amazon-button-container .field-tooltip').fadeIn();
                         self.drawing = false;
+
+                        if (self.buttonType === 'PayNow' && self._isPayOnly()) {
+                            customerData.get('checkout-data').subscribe(function (checkoutData) {
+                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;    
+
+                                const shadow = $('.amazon-checkout-button > div')[0].shadowRoot;
+                                $(shadow).find('.amazonpay-button-view1').css('opacity', opacity);
+                            });
+                        }
                     });
                 }, this);
             }
         },
 
         _initCheckout: function (amazonPayButton) {
+            if (this.buttonType === 'PayNow' && this._isPayOnly()) {
+                if (!customerData.get('checkout-data')().selectedBillingAddress) {
+                    return;
+                } else {
+                    setBillingAddressAction(globalMessageList);
+                }
+            }
+
             var payloadType = this.buttonType ?
                 'paynow' :
                 'checkout';

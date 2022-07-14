@@ -738,19 +738,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             }
 
             if ($amazonSession['productType'] == 'PayOnly') {
-                $addressData = $amazonSession['billingAddress'];
-
-                $addressData['state'] = $addressData['stateOrRegion'];
-                $addressData['phone'] = $addressData['phoneNumber'];
-
-                $address = array_combine(
-                    array_map('ucfirst', array_keys($addressData)),
-                    array_values($addressData)
-                );
-                $amazonAddress  = $this->amazonAddressFactory->create(['address' => $address]);
-
-                $customerAddress = $this->addressHelper->convertToMagentoEntity($amazonAddress);
-                $quote->getBillingAddress()->importCustomerAddressData($customerAddress);
                 if (empty($quote->getCustomerEmail())) {
                     $quote->setCustomerEmail($amazonSession['buyer']['email']);
                 }
