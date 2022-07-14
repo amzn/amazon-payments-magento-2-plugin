@@ -31,6 +31,9 @@ var config = {
             'Magento_Checkout/js/view/shipping-address/address-renderer/default': {
                 'Amazon_Pay/js/view/shipping-address/address-renderer/default': true
             },
+            'Magento_PurchaseOrder/js/view/checkout/shipping-address/address-renderer/default': {
+                'Amazon_Pay/js/view/shipping-address/address-renderer/default': true
+            },
             'Magento_Checkout/js/view/billing-address': {
                 'Amazon_Pay/js/view/billing-address': true
             },
