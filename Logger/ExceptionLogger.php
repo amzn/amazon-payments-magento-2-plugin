@@ -28,6 +28,6 @@ class ExceptionLogger
     public function logException(\Exception $e)
     {
         $message = (string) $e;
-        $this->logger->addError($message);
+        $this->logger->error($message);
     }
 }
