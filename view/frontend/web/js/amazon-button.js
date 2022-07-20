@@ -49,6 +49,7 @@ define([
         },
 
         drawing: false,
+        amazonPayButton: null,
 
         _loadButtonConfig: function (callback) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
@@ -75,16 +76,43 @@ define([
 
         _loadInitCheckoutPayload: function (callback, payloadType) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
+                var self = this;
                 buttonPayloadLoad(function (buttonPayload) {
-                    callback({
+                    var initCheckoutPayload = {
                         createCheckoutSessionConfig: {
                             payloadJSON: buttonPayload[0],
                             signature: buttonPayload[1],
                             publicKeyId: checkoutSessionConfig['public_key_id']
                         }
-                    });
+                    };
+
+                    if (payloadType !== 'paynow'
+                        && !amazonStorage.isMulticurrencyEnabled
+                        && !JSON.parse(buttonPayload[0]).recurringMetadata)
+                    {
+                        initCheckoutPayload.estimatedOrderAmount = self._getEstimatedAmount();
+                    }
+                    callback(initCheckoutPayload);
                 }, payloadType);
+            }.bind(this));
+        },
+
+        _getEstimatedAmount: function () {
+            var currencyCode;
+            var subtotal = parseFloat(customerData.get('cart')().subtotalAmount).toFixed(2);
+
+            checkoutSessionConfigLoad(function (checkoutSessionConfig) {
+                currencyCode = checkoutSessionConfig['currency'];
             });
+
+            if (currencyCode === 'JPY') {
+                subtotal = parseFloat(subtotal).toFixed(0);
+            }
+
+            return {
+                amount: subtotal,
+                currencyCode: currencyCode
+            };
         },
 
         /**
@@ -138,12 +166,12 @@ define([
 
                     this._loadButtonConfig(function (buttonConfig) {
                         try {
-                            var amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
+                            self.amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
                         } catch (e) {
                             console.log('Amazon Pay button render error: ' + e);
                             return;
                         }
-                        amazonPayButton.onClick(function() {
+                        self.amazonPayButton.onClick(function() {
                             if (self.buttonType === 'PayNow' && !additionalValidators.validate()) {
                                 return false;
                             }
@@ -156,7 +184,7 @@ define([
                                 ).done(
                                     function (response) {
                                         if (!response.error) {
-                                            self._initCheckout(amazonPayButton);
+                                            self._initCheckout();
                                         } else {
                                             errorProcessor.process(response);
                                         }
@@ -167,7 +195,7 @@ define([
                                     }
                                 );
                             }else{
-                                self._initCheckout(amazonPayButton);
+                                self._initCheckout();
                             }
                         });
 
@@ -178,12 +206,13 @@ define([
             }
         },
 
-        _initCheckout: function (amazonPayButton) {
+        _initCheckout: function () {
+            var self = this;
             var payloadType = this.buttonType ?
                 'paynow' :
                 'checkout';
             this._loadInitCheckoutPayload(function (initCheckoutPayload) {
-                amazonPayButton.initCheckout(initCheckoutPayload);
+                self.amazonPayButton.initCheckout(initCheckoutPayload);
             }, payloadType);
             customerData.invalidate('*');
         },
@@ -200,6 +229,10 @@ define([
                     if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
                         self._draw();
                     }
+
+                    if (self.amazonPayButton && self.buttonType !== 'PayNow') {
+                        self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
+                    }
                 });
             });
         },
@@ -208,7 +241,6 @@ define([
             this.element.children().first().trigger('click');
         }
     });
-
 
     var cart = customerData.get('cart'),
         customer = customerData.get('customer'),
