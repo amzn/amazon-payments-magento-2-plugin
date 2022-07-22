@@ -58,6 +58,8 @@ class AutoKeyExchangeAdmin extends \Magento\Framework\View\Element\Template
      */
     public function getCurrency()
     {
-        return $this->autokeyexchange->getCurrency();
+        $currency = $this->autokeyexchange->getCurrency();
+        if($currency) $currency = strtoupper($currency);
+        return $currency;
     }
 }
