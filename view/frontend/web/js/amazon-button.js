@@ -24,7 +24,6 @@ define([
     'Magento_Checkout/js/model/payment/additional-validators',
     'mage/storage',
     'Magento_Checkout/js/model/error-processor',
-    'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
 ], function (
         ko,
@@ -38,7 +37,6 @@ define([
         additionalValidators,
         storage,
         errorProcessor,
-        setBillingAddressAction,
         globalMessageList
     ) {
     'use strict';
@@ -226,6 +224,7 @@ define([
                 if (!customerData.get('checkout-data')().selectedBillingAddress) {
                     return;
                 } else {
+                    var setBillingAddressAction = require('Magento_Checkout/js/action/set-billing-address');
                     setBillingAddressAction(globalMessageList);
                 }
             }
