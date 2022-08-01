@@ -246,6 +246,17 @@
                             <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Magento will redirect to this URL after completing the checkout session. Do not use a leading slash.]]></comment>
                             <config_path>payment/amazon_payment_v2/checkout_result_url</config_path>
                         </field>
+                        <field id="checkout_cancel_url" translate="label comment" type="text" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Amazon Checkout cancel URL Path</label>
+                            <!-- <br /> -->
+                            <comment><![CDATA[<strong>Amazon Pay Checkout could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL if the customer clicks "Cancel Amazon Pay checkout and return to [merchant site]" from the Amazon-hosted page. Do not use a leading slash. Leave blank to return the customer to the last page visited before checkout (EU/UK regions only).]]></comment>
+                            <config_path>payment/amazon_payment_v2/checkout_cancel_url</config_path>
+                        </field>
+                        <field id="signin_cancel_url" translate="label comment" type="text" sortOrder="23" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Amazon Sign In cancel URL Path</label>
+                            <comment><![CDATA[<strong>Amazon Pay Sign In could potentially break if this value is modified. Do it only if it is needed by your website.</strong><br />Amazon Pay will redirect to this URL if the customer clicks "Cancel" from the Amazon-hosted page. Do not use a leading slash. Leave blank to return the customer to the last page visited before sign in (EU/UK regions only).]]></comment>
+                            <config_path>payment/amazon_payment_v2/signin_cancel_url</config_path>
+                        </field>
                         <field id="allowed_ips_v2" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allowed IPs</label>
                             <comment><![CDATA[Enter IPs seperated by commas. Note: The Amazon Pay button will only be visible to clients with corresponding IP addresses.]]></comment>

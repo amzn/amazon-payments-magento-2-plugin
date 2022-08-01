@@ -615,6 +615,34 @@ class AmazonConfig
     }
 
     /**
+     * @return string|null
+     */
+    public function getCheckoutCancelUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $result = $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/checkout_cancel_url',
+            $scope,
+            $scopeCode
+        );
+
+        return $result;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSignInCancelUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        $result = $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/signin_cancel_url',
+            $scope,
+            $scopeCode
+        );
+
+        return $result;
+    }
+
+    /**
      * @param string $scope
      * @param mixed $scopeCode
      * @return array

@@ -31,11 +31,13 @@ define([
 
     var isLwaEnabled = amazonPayConfig.getValue('is_lwa_enabled');
     var isGuestCheckoutEnabled = amazonPayConfig.getValue('is_guest_checkout_enabled');
+    var isMulticurrencyEnabled = amazonPayConfig.getValue('is_multicurrency_enabled');
 
     return {
         isEnabled: isEnabled,
         isLwaEnabled: isLwaEnabled,
         isGuestCheckoutEnabled: isGuestCheckoutEnabled,
+        isMulticurrencyEnabled: isMulticurrencyEnabled,
 
         /**
          * Is checkout using Amazon Pay?

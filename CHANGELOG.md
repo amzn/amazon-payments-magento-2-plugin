@@ -1,5 +1,14 @@
 # Change Log
 
+## 5.14.0
+* Added configurable options for checkout and signin cancel return urls
+* Added estimated order amount to the button payload
+* Fixed issue with ExceptionLogger using a removed method
+* Fixed issue with customer names having characters that Magento doesn’t allow
+* Fixed issue with APB and virtual orders when taxes are applied
+* Improved compatibility with b2b modules and address display
+* Updated config to not show Auto Key Exchange button for JPY as it is not supported
+
 ## 5.13.1
 * Fixed issue with invalid array reference if a transaction doesn’t have a charge permission
 * Fixed issue with GraphQL config query supporting omitPayloads
