@@ -17,6 +17,8 @@
 namespace Amazon\Pay\Model\Adapter;
 
 use Amazon\Pay\Model\Config\Source\PaymentAction;
+use Couchbase\Scope;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote;
 
 class AmazonPayAdapter
@@ -24,6 +26,8 @@ class AmazonPayAdapter
     const PAYMENT_INTENT_CONFIRM = 'Confirm';
     const PAYMENT_INTENT_AUTHORIZE = 'Authorize';
     const PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE = 'AuthorizeWithCapture';
+    const SPC_SYNC_URL_FRAGMENT = 'authCredentials';
+    const SPC_ENABLED_CONFIG = 'payment/amazon_pay/spc_enabled';
 
     /**
      * @var \Amazon\Pay\Client\ClientFactoryInterface
@@ -70,6 +74,8 @@ class AmazonPayAdapter
      */
     private $redirect;
 
+    protected $scopeConfig;
+
     /**
      * AmazonPayAdapter constructor.
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
@@ -81,6 +87,7 @@ class AmazonPayAdapter
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
@@ -91,7 +98,8 @@ class AmazonPayAdapter
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Response\RedirectInterface $redirect
+        \Magento\Framework\App\Response\RedirectInterface $redirect,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
@@ -102,6 +110,7 @@ class AmazonPayAdapter
         $this->logger = $logger;
         $this->url = $url;
         $this->redirect = $redirect;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -525,14 +534,30 @@ class AmazonPayAdapter
      */
     public function generateCheckoutButtonPayload()
     {
-        $payload = [
-            'webCheckoutDetails' => [
-                'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
-                'checkoutCancelUrl' => $this->getCheckoutCancelUrl(),
-            ],
-            'storeId' => $this->amazonConfig->getClientId(),
-            'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
-        ];
+        // Create regular Amazon Pay button payload if SPC disabled
+        if (!$this->scopeConfig->isSetFlag(self::SPC_ENABLED_CONFIG)) {
+            $payload = [
+                'webCheckoutDetails' => [
+                    'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
+                    'checkoutCancelUrl' => $this->getCheckoutCancelUrl(),
+                ],
+                'storeId' => $this->amazonConfig->getClientId(),
+                'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
+            ];
+        }
+        // Supply SPC payload
+        else {
+            $payload = [
+                'webCheckoutDetails' => [
+                    'checkoutReviewReturnUrl' => $this->amazonConfig->getCheckoutReviewReturnUrl(),
+                    'checkoutCancelUrl' => $this->getCheckoutCancelUrl(),
+                    'cartDetails' => $this->getCartDetails(),
+                ],
+                'storeId' => $this->amazonConfig->getClientId(),
+                'scopes' => ['name', 'email', 'phoneNumber', 'billingAddress'],
+            ];
+        }
+
 
         if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
             $payload['deliverySpecifications'] = $deliverySpecs;
@@ -642,5 +667,38 @@ class AmazonPayAdapter
     {
         $signInUrl = $this->amazonConfig->getSignInResultUrlPath();
         return $this->url->getUrl($signInUrl);
+    }
+
+    /**
+     * @return \string[][]
+     */
+    protected function getCartDetails()
+    {
+        return [
+            'singlePageCheckoutDetails' => [
+                'merchantStoreReferenceId',
+                'updateAddressEndpoint',
+                'updateCouponCodeEndpoint',
+                'placeOrderEndpoint',
+            ]
+        ];
+    }
+
+    /**
+     * @param int $storeId
+     * @param string $payload
+     * @param $headers
+     * @return array
+     */
+    public function spcSyncTokens(int $storeId, string $payload, $headers = null)
+    {
+        $response = $this->clientFactory->create($storeId)->apiCall(
+            'POST',
+            self::SPC_SYNC_URL_FRAGMENT,
+            $payload,
+            $headers
+        );
+
+        return $this->processResponse($response, __FUNCTION__);
     }
 }

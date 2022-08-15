@@ -94,4 +94,28 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/cart/:cartId/calculate-tax-and-shipping" method="POST">
+        <service class="Amazon\Pay\Api\SpcTaxAndShippingInterface" method="calculateTaxAndShipping" />
+        <resources>
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+    <route url="/V1/cart/:cartId/apply-coupon" method="POST">
+        <service class="Amazon\Pay\Api\SpcApplyCouponInterface" method="applyCoupon" />
+        <resources>
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+    <route url="/V1/cart/:cartId/shipping-method" method="POST">
+        <service class="Amazon\Pay\Api\SpcShippingMethodInterface" method="shippingMethod" />
+        <resources>
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+    <route url="/V1/cart/:cartId/create-order" method="POST">
+        <service class="Amazon\Pay\Api\SpcCreateOrderInterface" method="createOrder" />
+        <resources>
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
 </routes>

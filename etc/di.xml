@@ -382,4 +382,14 @@
     <type name="Magento\Checkout\CustomerData\Cart">
         <plugin name="amazon_pay_customerdata_cart" type="Amazon\Pay\Plugin\CustomerData\Cart" />
     </type>
+
+    <!-- SPC webapi endpoints -->
+    <preference for="Amazon\Pay\Api\SpcTaxAndShippingInterface"
+                type="Amazon\Pay\Model\Spc\TaxAndShipping" />
+    <preference for="Amazon\Pay\Api\SpcApplyCouponInterface"
+                type="Amazon\Pay\Model\Spc\ApplyCoupon" />
+    <preference for="Amazon\Pay\Api\SpcShippingMethodInterface"
+                type="Amazon\Pay\Model\Spc\ShippingMethod" />
+    <preference for="Amazon\Pay\Api\SpcCreateOrderInterface"
+                type="Amazon\Pay\Model\Spc\CreateOrder" />
 </config>
