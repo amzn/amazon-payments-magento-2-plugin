@@ -235,7 +235,7 @@ class AuthTokens
             ]
         ];
 
-        return $this->amazonPayAdapter->syncTokens($store->getId(), $this->json->serialize($payload));
+        return $this->amazonPayAdapter->spcSyncTokens($store->getId(), $this->json->serialize($payload));
     }
 
     /**
