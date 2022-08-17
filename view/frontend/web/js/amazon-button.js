@@ -16,7 +16,6 @@ define([
     'ko',
     'jquery',
     'Amazon_Pay/js/action/checkout-session-config-load',
-    'Amazon_Pay/js/action/checkout-session-button-payload-load',
     'Amazon_Pay/js/model/storage',
     'mage/url',
     'Amazon_Pay/js/amazon-checkout',
@@ -29,7 +28,6 @@ define([
         ko,
         $,
         checkoutSessionConfigLoad,
-        buttonPayloadLoad,
         amazonStorage,
         url,
         amazonCheckout,
@@ -52,20 +50,45 @@ define([
 
         drawing: false,
         amazonPayButton: null,
+        currencyCode: null,
 
-        _loadButtonConfig: function (callback) {
+        _loadButtonConfig: function (callback, forceReload = false) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                 if (!$.isEmptyObject(checkoutSessionConfig)) {
-                    callback({
+                    var payload = checkoutSessionConfig['checkout_payload'];
+                    var signature = checkoutSessionConfig['checkout_signature'];
+
+                    if (this.buttonType === 'PayNow') {
+                        payload = checkoutSessionConfig['paynow_payload'];
+                        signature = checkoutSessionConfig['paynow_signature'];
+                    }
+
+                    self.currencyCode = checkoutSessionConfig['currency'];
+
+                    var buttonConfig = {
                         merchantId: checkoutSessionConfig['merchant_id'],
                         publicKeyId: checkoutSessionConfig['public_key_id'],
-                        ledgerCurrency: checkoutSessionConfig['currency'],
+                        ledgerCurrency: self.currencyCode,
                         sandbox: checkoutSessionConfig['sandbox'],
                         checkoutLanguage: checkoutSessionConfig['language'],
-                        productType: this._isPayOnly() ? 'PayOnly' : 'PayAndShip',
+                        productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
                         placement: this.options.placement,
-                        buttonColor: checkoutSessionConfig['button_color']
-                    });
+                        buttonColor: checkoutSessionConfig['button_color'],
+                        createCheckoutSessionConfig: {
+                            payloadJSON: payload,
+                            signature: signature,
+                            publicKeyId: checkoutSessionConfig['public_key_id'],
+                        }
+                    };
+
+                    /* TODO: Add estimatedOrderAmount to createCheckoutSessionConfig, only if multicurrency
+                     *       is disabled, -> there is no recurring metadata <-, and the placement is not PayNow
+                     */
+                    if (!amazonStorage.isMulticurrencyEnabled && this.buttonType !== 'PayNow') {
+                        buttonConfig.estimatedOrderAmount = this._getEstimatedAmount();
+                    }
+
+                    callback(buttonConfig);
 
                     if (this.options.placement !== "Checkout") {
                         $(this.options.hideIfUnavailable).show();
@@ -73,68 +96,33 @@ define([
                 } else {
                     $(this.options.hideIfUnavailable).hide();
                 }
-            }.bind(this));
-        },
-
-        _loadInitCheckoutPayload: function (callback, payloadType) {
-            checkoutSessionConfigLoad(function (checkoutSessionConfig) {
-                var self = this;
-                buttonPayloadLoad(function (buttonPayload) {
-                    var initCheckoutPayload = {
-                        createCheckoutSessionConfig: {
-                            payloadJSON: buttonPayload[0],
-                            signature: buttonPayload[1],
-                            publicKeyId: checkoutSessionConfig['public_key_id']
-                        }
-                    };
-
-                    if (payloadType !== 'paynow'
-                        && !amazonStorage.isMulticurrencyEnabled
-                        && !JSON.parse(buttonPayload[0]).recurringMetadata)
-                    {
-                        initCheckoutPayload.estimatedOrderAmount = self._getEstimatedAmount();
-                    }
-                    callback(initCheckoutPayload);
-                }, payloadType);
-            }.bind(this));
+            }.bind(this), forceReload);
         },
 
         _getEstimatedAmount: function () {
-            var currencyCode;
-            var subtotal = parseFloat(customerData.get('cart')().subtotalAmount).toFixed(2);
+            var subtotal = (parseFloat(customerData.get('cart')().subtotalAmount) || 0).toFixed(2);
 
-            checkoutSessionConfigLoad(function (checkoutSessionConfig) {
-                currencyCode = checkoutSessionConfig['currency'];
-            });
-
-            if (currencyCode === 'JPY') {
+            if (self.currencyCode === 'JPY') {
                 subtotal = parseFloat(subtotal).toFixed(0);
             }
 
             return {
                 amount: subtotal,
-                currencyCode: currencyCode
+                currencyCode: self.currencyCode
             };
         },
 
         /**
+         * @param {boolean} isCheckoutSessionPayOnly
          * @returns {boolean}
          * @private
          */
-        _isPayOnly: function () {
-            var cartData = customerData.get('cart');
-
-            // No cart data yet or cart is empty, for the pdp button
-            if (typeof cartData().amzn_pay_only === 'undefined' || parseInt(cartData().summary_count) === 0) {
-                return this.options.payOnly
+         _isPayOnly: function (isCheckoutSessionPayOnly) {
+            var result = isCheckoutSessionPayOnly;
+            if (result && this.options.payOnly !== null) {
+                result = this.options.payOnly;
             }
-
-            // Check if cart has items and it's the pdp button
-            if (parseInt(cartData().summary_count) > 0 && this.options.payOnly !== null) {
-                return cartData().amzn_pay_only && this.options.payOnly;
-            }
-
-            return cartData().amzn_pay_only;
+            return result;
         },
 
         /**
@@ -167,39 +155,48 @@ define([
                     $buttonContainer.empty().append($buttonRoot);
 
                     this._loadButtonConfig(function (buttonConfig) {
+                        // do not use session config for decoupled button
+                        if (self.buttonType === 'PayNow') {
+                            delete buttonConfig.createCheckoutSessionConfig;
+                        }
+
                         try {
                             self.amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
                         } catch (e) {
                             console.log('Amazon Pay button render error: ' + e);
                             return;
                         }
-                        self.amazonPayButton.onClick(function() {
-                            if (self.buttonType === 'PayNow' && !additionalValidators.validate()) {
-                                return false;
-                            }
-                            //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
-                            if (self.buttonType === 'PayNow' && self.options.isIosc()) {
-                                storage.post(
-                                    'checkout/onepage/update',
-                                    "{}",
-                                    false
-                                ).done(
-                                    function (response) {
-                                        if (!response.error) {
-                                            self._initCheckout();
-                                        } else {
+
+                        // If onClick is available on the amazonPayButton, then checkout is decoupled from render, indicating this is an APB button
+                        if (self.amazonPayButton.onClick) {
+                            self.amazonPayButton.onClick(function() {
+                                if (!additionalValidators.validate()) {
+                                    return false;
+                                }
+                                //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
+                                if (self.options.isIosc()) {
+                                    storage.post(
+                                        'checkout/onepage/update',
+                                        "{}",
+                                        false
+                                    ).done(
+                                        function (response) {
+                                            if (!response.error) {
+                                                self._initCheckout();
+                                            } else {
+                                                errorProcessor.process(response);
+                                            }
+                                        }
+                                    ).fail(
+                                        function (response) {
                                             errorProcessor.process(response);
                                         }
-                                    }
-                                ).fail(
-                                    function (response) {
-                                        errorProcessor.process(response);
-                                    }
-                                );
-                            }else{
-                                self._initCheckout();
-                            }
-                        });
+                                    );
+                                }else{
+                                    self._initCheckout();
+                                }
+                            });
+                        }
 
                         $('.amazon-button-container .field-tooltip').fadeIn();
                         self.drawing = false;
@@ -229,17 +226,15 @@ define([
                 }
             }
 
-            var payloadType = this.buttonType ?
-                'paynow' :
-                'checkout';
-            this._loadInitCheckoutPayload(function (initCheckoutPayload) {
-                self.amazonPayButton.initCheckout(initCheckoutPayload);
-            }, payloadType);
+            this._loadButtonConfig(function (buttonConfig) {
+                var initConfig = {createCheckoutSessionConfig: buttonConfig.createCheckoutSessionConfig};
+                self.amazonPayButton.initCheckout(initConfig);
+            }, true);
             customerData.invalidate('*');
         },
 
         /**
-         * Redraw button if needed
+         * Update button if needed
          **/
         _subscribeToCartUpdates: function () {
             var self = this;
@@ -247,10 +242,6 @@ define([
             amazonCheckout.withAmazonCheckout(function (amazon, args) {
                 var cartData = customerData.get('cart');
                 cartData.subscribe(function (updatedCart) {
-                    if (!$(self.options.hideIfUnavailable).first().is(':visible')) {
-                        self._draw();
-                    }
-
                     if (self.amazonPayButton && self.buttonType !== 'PayNow') {
                         self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
                     }
