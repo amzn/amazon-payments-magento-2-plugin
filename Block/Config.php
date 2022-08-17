@@ -35,19 +35,27 @@ class Config extends \Magento\Framework\View\Element\Template
     private $amazonConfig;
 
     /**
+     * @var \ParadoxLabs\Subscriptions\Model\Config
+     */
+    private $subscriptionConfig;
+
+    /**
      * Config constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \ParadoxLabs\Subscriptions\Model\Config $subscriptionConfig
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\Pay\Helper\Data $amazonHelper,
-        \Amazon\Pay\Model\AmazonConfig $amazonConfig
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \ParadoxLabs\Subscriptions\Model\Config $subscriptionConfig
     ) {
         parent::__construct($context);
         $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
+        $this->subscriptionConfig = $subscriptionConfig;
     }
 
     /**
@@ -58,12 +66,14 @@ class Config extends \Magento\Framework\View\Element\Template
         $config = [
             'region'                   => $this->amazonConfig->getRegion(),
             'code'                     => \Amazon\Pay\Gateway\Config\Config::CODE,
+            'vault_code'               => \Amazon\Pay\Gateway\Config\Config::VAULT_CODE,
             'is_method_available'      => $this->amazonConfig->isPayButtonAvailableAsPaymentMethod(),
             'is_pay_only'              => $this->amazonHelper->isPayOnly(),
             'is_lwa_enabled'            => $this->isLwaEnabled(),
             'is_guest_checkout_enabled' => $this->amazonConfig->isGuestCheckoutEnabled(),
             'has_restricted_products'   => $this->amazonHelper->hasRestrictedProducts(),
-            'is_multicurrency_enabled'     => $this->amazonConfig->multiCurrencyEnabled()
+            'is_multicurrency_enabled'     => $this->amazonConfig->multiCurrencyEnabled(),
+            'subscription_label'        => $this->subscriptionConfig->getSubscriptionLabel()
         ];
 
         return $config;

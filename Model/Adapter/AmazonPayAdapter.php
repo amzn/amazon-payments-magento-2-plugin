@@ -71,6 +71,11 @@ class AmazonPayAdapter
     private $redirect;
 
     /**
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
+     */
+    private $subscriptionManager;
+
+    /**
      * AmazonPayAdapter constructor.
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
@@ -78,6 +83,7 @@ class AmazonPayAdapter
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -89,6 +95,7 @@ class AmazonPayAdapter
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -99,6 +106,7 @@ class AmazonPayAdapter
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
         $this->productMetadata = $productMetadata;
+        $this->subscriptionManager = $subscriptionManager;
         $this->logger = $logger;
         $this->url = $url;
         $this->redirect = $redirect;
@@ -214,9 +222,10 @@ class AmazonPayAdapter
      * @param $amount
      * @param $currency
      * @param bool $captureNow
+     * @param $merchantReferenceId
      * @return mixed
      */
-    public function createCharge($storeId, $chargePermissionId, $amount, $currency, $captureNow = false)
+    public function createCharge($storeId, $chargePermissionId, $amount, $currency, $captureNow = false, $merchantReferenceId = null)
     {
         $headers = $this->getIdempotencyHeader();
 
@@ -225,6 +234,10 @@ class AmazonPayAdapter
             'chargeAmount' => $this->createPrice($amount, $currency),
             'captureNow' => $captureNow,
         ];
+
+        if ($merchantReferenceId) {
+            $payload['merchantMetadata']['merchantReferenceId'] = $merchantReferenceId;
+        }
 
         $response = $this->clientFactory->create($storeId)->createCharge($payload, $headers);
 
@@ -328,6 +341,10 @@ class AmazonPayAdapter
             $payload['merchantMetadata']['noteToBuyer'] = $data['noteToBuyer'];
         }
 
+        if (isset($data['recurringMetadata'])) {
+            $payload['recurringMetadata'] = $data['recurringMetadata'];
+        }
+
         $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
 
         return $this->processResponse($response, __FUNCTION__);
@@ -376,7 +393,7 @@ class AmazonPayAdapter
      * @return array|mixed
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function authorize($data)
+    public function authorize($data, $captureNow = true)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
         if (!empty($data['charge_permission_id'])) {
@@ -385,12 +402,17 @@ class AmazonPayAdapter
                 $data['charge_permission_id']
             );
             if ($getChargePermissionResponse['statusDetails']['state'] == "Chargeable") {
+                $merchantReferenceId = null;
+                if (isset($data['increment_id'])) {
+                    $merchantReferenceId = $data['increment_id'];
+                }
                 $response = $this->createCharge(
                     $quote->getStoreId(),
                     $data['charge_permission_id'],
                     $data['amount'],
                     $quote->getQuoteCurrencyCode(),
-                    true
+                    $captureNow,
+                    $merchantReferenceId
                 );
             } else {
                 $this->logger->debug(__('Charge permission not in Chargeable state: ') . $data['charge_permission_id']);
@@ -523,7 +545,7 @@ class AmazonPayAdapter
      *
      * @return string
      */
-    public function generateCheckoutButtonPayload()
+    public function generateCheckoutButtonPayload(Quote $quote)
     {
         $payload = [
             'webCheckoutDetails' => [
@@ -536,6 +558,11 @@ class AmazonPayAdapter
 
         if ($deliverySpecs = $this->amazonConfig->getDeliverySpecifications()) {
             $payload['deliverySpecifications'] = $deliverySpecs;
+        }
+
+        $hasSubscription = $this->subscriptionManager->hasSubscription($quote);
+        if ($hasSubscription) {
+            $payload = $this->buildSubscriptionPayload($payload, $quote);
         }
 
         return json_encode($payload, JSON_UNESCAPED_SLASHES);
@@ -562,9 +589,8 @@ class AmazonPayAdapter
                 'presentmentCurrency' => $currencyCode,
             ],
             'merchantMetadata' => [
-                'merchantReferenceId' => $quote->getReservedOrderId(),
                 'merchantStoreName' => $this->amazonConfig->getStoreName(),
-                'customInformation' => $this->getMerchantCustomInformation(),
+                'customInformation' => $this->getMerchantCustomInformation()
             ],
         ];
 
@@ -600,7 +626,30 @@ class AmazonPayAdapter
             $payload['addressDetails'] = $addressData;
         }
 
+        $hasSubscription = $this->subscriptionManager->hasSubscription($quote);
+        if ($hasSubscription) {
+            $payload = $this->buildSubscriptionPayload($payload, $quote);
+        }
+
         return json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    protected function buildSubscriptionPayload($payload, Quote $quote)
+    {
+        $recurringMetadata = $this->getRecurringMetadata($quote);
+        $payload['chargePermissionType'] = 'Recurring';
+        $payload['recurringMetadata'] = $recurringMetadata;
+
+        if (!$quote->getReservedOrderId()) {
+            try {
+                $quote->reserveOrderId()->save();
+            } catch (\Exception $e) {
+                $this->logger->debug($e->getMessage());
+            }
+        }
+        $payload['merchantMetadata']['merchantReferenceId'] = $quote->getReservedOrderId();
+
+        return $payload;
     }
 
     public function signButton($payload, $storeId = null)
@@ -636,6 +685,22 @@ class AmazonPayAdapter
         }
 
         return $referer;
+    }
+    
+    public function getRecurringMetadata($quote)
+    {
+        foreach ($quote->getAllItems() as $item) {
+            if ($this->subscriptionManager->isSubscription($item)) {
+                $frequencyUnit = $this->subscriptionManager->getFrequencyUnit($item);
+                $frequencyCount = $this->subscriptionManager->getFrequencyCount($item);
+            }
+        }
+        return [
+                "frequency" => [
+                    "unit" => $frequencyUnit,
+                    "value" => $frequencyCount
+                ]
+            ];
     }
 
     protected function getSignInUrl()

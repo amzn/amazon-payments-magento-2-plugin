@@ -28,6 +28,7 @@ use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use http\Exception\UnexpectedValueException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Webapi\Exception as WebapiException;
@@ -39,6 +40,9 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Api\Data\TransactionInterface as Transaction;
+use Magento\Vault\Api\PaymentTokenRepositoryInterface;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
+use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Authorization\Model\UserContextInterface as UserContext;
 use Magento\Framework\Phrase\Renderer\Translate as Translate;
@@ -171,6 +175,26 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $maskedQuoteIdConverter;
 
     /**
+     * @var PaymentTokenRepositoryInterface
+     */
+    private $paymentTokenRepository;
+
+    /**
+     * @var PaymentTokenFactory
+     */
+    private $paymentTokenFactory;
+
+    /**
+     * @var PaymentTokenManagement
+     */
+    private $paymentTokenManagement;
+
+    /**
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
+     */
+    private $subscriptionQuoteManager;
+
+    /**
      * @var CustomerHelper
      */
     private $customerHelper;
@@ -233,6 +257,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter
+     * @param PaymentTokenRepositoryInterface $paymentTokenRepository
+     * @param PaymentTokenFactory $paymentTokenFactory
+     * @param PaymentTokenManagementInterface $paymentTokenManagement
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
      * @param CustomerHelper $customerHelper
      * @param Matcher $matcher
      * @param TokenModelFactory $tokenModelFactory
@@ -265,6 +293,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdConverter,
+        PaymentTokenRepositoryInterface $paymentTokenRepository,
+        PaymentTokenFactory $paymentTokenFactory,
+        PaymentTokenManagementInterface $paymentTokenManagement,
+        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
         CustomerHelper $customerHelper,
         Matcher $matcher,
         TokenModelFactory $tokenModelFactory,
@@ -296,6 +328,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderCollectionFactory = $orderCollectionFactory;
         $this->maskedQuoteIdConverter = $maskedQuoteIdConverter;
+        $this->paymentTokenRepository = $paymentTokenRepository;
+        $this->paymentTokenFactory = $paymentTokenFactory;
+        $this->paymentTokenManagement = $paymentTokenManagement;
+        $this->subscriptionManager = $subscriptionManager;
         $this->customerHelper = $customerHelper;
         $this->matcher = $matcher;
         $this->tokenModelFactory = $tokenModelFactory;
@@ -420,7 +456,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         if ($this->canCheckoutWithAmazon($quote)) {
             $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload($quote);
             $config = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
@@ -621,7 +657,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      *
      * @param $order
      */
-    private function cancelOrder($order)
+    private function cancelOrder($order,$quote)
     {
         // set order as cancelled
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
@@ -643,6 +679,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         );
 
         $order->save();
+
+        if ($this->subscriptionManager->hasSubscription($quote)) {
+            $this->subscriptionManager->cancel($order);
+        }
     }
 
     /**
@@ -702,6 +742,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             $orderId = $this->cartManagement->placeOrder($quote->getId());
             $order = $this->orderRepository->get($orderId);
+            // @TODO: associate token with payment?
             $result = [
                 'success' => true,
                 'order_id' => $orderId,
@@ -717,7 +758,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)) {
                 // Something went wrong, but the order has already been placed, so cancelling it
-                $this->cancelOrder($order);
+                $this->cancelOrder($order,$quote);
 
                 $session = $this->amazonAdapter->getCheckoutSession(
                     $quote->getStoreId(),
@@ -758,6 +799,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             }
             $amazonCharge = $this->amazonAdapter->getCharge($quote->getStoreId(), $chargeId);
 
+            // @TODO: for recurring, the order incremenet ID needs to be updated on the charge
             //Send merchantReferenceId to Amazon
             $this->amazonAdapter->updateChargePermission(
                 $order->getStoreId(),
@@ -796,7 +838,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'charge_permission_id',
                 $amazonCompleteCheckoutResult['chargePermissionId']
             );
+
             $this->updateTransactionId($chargeId, $payment, $transaction);
+            $this->updateVaultToken($amazonSessionId, $amazonCompleteCheckoutResult['chargePermissionId'], $quote, $order);
 
         } catch (\Exception $e) {
             $session = $this->amazonAdapter->getCheckoutSession(
@@ -815,7 +859,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             // cancel order
             if (isset($order)) {
-                $this->cancelOrder($order);
+                $this->cancelOrder($order,$quote);
             }
 
             throw $e;
@@ -838,6 +882,20 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         return $amazonSession['statusDetails']['reasonDescription'];
+    }
+
+    protected function updateVaultToken($amazonSessionId, $chargePermissionId, $quote, $order) 
+    {
+        if ($this->amazonConfig->isVaultEnabled() && $this->subscriptionManager->hasSubscription($quote)) {
+            $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $order->getCustomerId());
+            if ($token) {
+                $token->setGatewayToken($chargePermissionId);
+                $token->setIsVisible(true);
+                $this->paymentTokenRepository->save($token);
+            } else {
+                $this->logger->debug("Unable to update vault token. amazonSessionId: " . $amazonSessionId . ' Customer Id: ' . $order->getCustomerId());
+            }
+        }
     }
 
     /**

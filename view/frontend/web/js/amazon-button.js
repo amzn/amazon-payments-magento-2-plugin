@@ -81,10 +81,10 @@ define([
                         }
                     };
 
-                    /* TODO: Add estimatedOrderAmount to createCheckoutSessionConfig, only if multicurrency
-                     *       is disabled, -> there is no recurring metadata <-, and the placement is not PayNow
-                     */
-                    if (!amazonStorage.isMulticurrencyEnabled && this.buttonType !== 'PayNow') {
+                    if (this.buttonType !== 'PayNow'
+                        && !amazonStorage.isMulticurrencyEnabled 
+                        && !(JSON.parse(checkoutSessionConfig.checkout_payload).recurringMetadata)
+                    ) {
                         buttonConfig.estimatedOrderAmount = this._getEstimatedAmount();
                     }
 
@@ -243,7 +243,21 @@ define([
                 var cartData = customerData.get('cart');
                 cartData.subscribe(function (updatedCart) {
                     if (self.amazonPayButton && self.buttonType !== 'PayNow') {
-                        self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
+                        var hasSubscription = false;
+                        var isSubscriptionOption = (option) => option.label && option.label === amazonStorage.getSubscriptionLabel();
+                        updatedCart.items.forEach((item) => {
+                            // If any cart item has a subscription option, we should redraw the button to exclude estimatedOrderAmount
+                            if (item.options.length && item.options.some(isSubscriptionOption)) {
+                                hasSubscription = true;
+                                return;
+                            }
+                        });
+
+                        if (hasSubscription) {
+                            self._draw();
+                        } else {
+                            self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
+                        }
                     }
                 });
             });
