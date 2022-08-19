@@ -1,8 +1,8 @@
 <?php
 
-namespace Amazon\Pay\Api;
+namespace Amazon\Pay\Api\Spc;
 
-interface SpcCreateOrderInterface
+interface OrderInterface
 {
     /**
      * @param int $cartId

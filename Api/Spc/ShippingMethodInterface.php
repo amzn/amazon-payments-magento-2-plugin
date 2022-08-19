@@ -1,8 +1,8 @@
 <?php
 
-namespace Amazon\Pay\Api;
+namespace Amazon\Pay\Api\Spc;
 
-interface SpcShippingMethodInterface
+interface ShippingMethodInterface
 {
     /**
      * @param int $cartId

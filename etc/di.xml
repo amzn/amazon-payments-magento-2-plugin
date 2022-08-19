@@ -384,12 +384,12 @@
     </type>
 
     <!-- SPC webapi endpoints -->
-    <preference for="Amazon\Pay\Api\SpcTaxAndShippingInterface"
-                type="Amazon\Pay\Model\Spc\TaxAndShipping" />
-    <preference for="Amazon\Pay\Api\SpcApplyCouponInterface"
-                type="Amazon\Pay\Model\Spc\ApplyCoupon" />
-    <preference for="Amazon\Pay\Api\SpcShippingMethodInterface"
+    <preference for="Amazon\Pay\Api\Spc\AddressInterface"
+                type="Amazon\Pay\Model\Spc\Address" />
+    <preference for="Amazon\Pay\Api\Spc\CouponInterface"
+                type="Amazon\Pay\Model\Spc\Coupon" />
+    <preference for="Amazon\Pay\Api\Spc\ShippingMethodInterface"
                 type="Amazon\Pay\Model\Spc\ShippingMethod" />
-    <preference for="Amazon\Pay\Api\SpcCreateOrderInterface"
-                type="Amazon\Pay\Model\Spc\CreateOrder" />
+    <preference for="Amazon\Pay\Api\Spc\OrderInterface"
+                type="Amazon\Pay\Model\Spc\Order" />
 </config>

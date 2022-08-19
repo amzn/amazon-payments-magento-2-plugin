@@ -2,7 +2,7 @@
 
 namespace Amazon\Pay\Model\Spc;
 
-use Amazon\Pay\Api\SpcCreateOrderInterface;
+use Amazon\Pay\Api\Spc\OrderInterface;
 use Amazon\Pay\Model\Config\Source\AuthorizationMode;
 use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -12,7 +12,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
-class CreateOrder implements SpcCreateOrderInterface
+class Order implements OrderInterface
 {
     /**
      * @var CartRepositoryInterface

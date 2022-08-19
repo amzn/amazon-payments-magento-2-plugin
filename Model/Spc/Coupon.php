@@ -2,14 +2,14 @@
 
 namespace Amazon\Pay\Model\Spc;
 
-use Amazon\Pay\Api\SpcApplyCouponInterface;
+use Amazon\Pay\Api\Spc\CouponInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Amazon\Pay\Helper\SpcCart;
+use Amazon\Pay\Helper\Spc\Cart;
 
-class ApplyCoupon implements SpcApplyCouponInterface
+class Coupon implements CouponInterface
 {
     /**
      * @var CartRepositoryInterface
@@ -17,17 +17,17 @@ class ApplyCoupon implements SpcApplyCouponInterface
     protected $cartRepository;
 
     /**
-     * @var SpcCart
+     * @var Cart
      */
     protected $cartHelper;
 
     /**
      * @param CartRepositoryInterface $cartRepository
-     * @param SpcCart $cartHelper
+     * @param Cart $cartHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
-        SpcCart $cartHelper
+        Cart $cartHelper
     )
     {
         $this->cartRepository = $cartRepository;

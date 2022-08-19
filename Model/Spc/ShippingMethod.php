@@ -2,8 +2,8 @@
 
 namespace Amazon\Pay\Model\Spc;
 
-use Amazon\Pay\Api\SpcShippingMethodInterface;
-use Amazon\Pay\Helper\SpcCart;
+use Amazon\Pay\Api\Spc\ShippingMethodInterface;
+use Amazon\Pay\Helper\Spc\Cart;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -12,7 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
 
-class ShippingMethod implements SpcShippingMethodInterface
+class ShippingMethod implements ShippingMethodInterface
 {
     /**
      * @var CartRepositoryInterface
@@ -30,7 +30,7 @@ class ShippingMethod implements SpcShippingMethodInterface
     protected $shippingInformation;
 
     /**
-     * @var SpcCart
+     * @var Cart
      */
     protected $cartHelper;
 
@@ -38,13 +38,13 @@ class ShippingMethod implements SpcShippingMethodInterface
      * @param CartRepositoryInterface $cartRepository
      * @param ShippingInformationManagementInterface $shippingInformationManagement
      * @param ShippingInformationInterface $shippingInformation
-     * @param SpcCart $cartHelper
+     * @param Cart $cartHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         ShippingInformationManagementInterface $shippingInformationManagement,
         ShippingInformationInterface $shippingInformation,
-        SpcCart $cartHelper
+        Cart $cartHelper
     )
     {
         $this->cartRepository = $cartRepository;
