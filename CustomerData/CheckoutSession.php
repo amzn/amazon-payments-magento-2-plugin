@@ -46,9 +46,9 @@ class CheckoutSession
     /**
      * @return array
      */
-    public function getConfig($omitPayloads)
+    public function getConfig()
     {
-        $data = $this->checkoutSessionManagement->getConfig(null, $omitPayloads);
+        $data = $this->checkoutSessionManagement->getConfig();
         if (count($data) > 0) {
             $data = $data[0];
         }
