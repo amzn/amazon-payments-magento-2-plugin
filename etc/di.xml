@@ -379,7 +379,4 @@
     <type name="Magento\Sales\Model\Order">
         <plugin name="amazon_payv2_legacy_order" type="Amazon\Pay\Plugin\LegacyPaymentHandler" />
     </type>
-    <type name="Magento\Checkout\CustomerData\Cart">
-        <plugin name="amazon_pay_customerdata_cart" type="Amazon\Pay\Plugin\CustomerData\Cart" />
-    </type>
 </config>

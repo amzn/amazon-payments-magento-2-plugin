@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-define([
+ define([
     'jquery',
     'underscore',
     'mage/storage',
@@ -22,31 +22,33 @@ define([
 ], function ($, _, remoteStorage, url, customerData) {
     'use strict';
 
-    const storageKey = 'amzn-checkout-session-config';
-    $('.switcher-option').on('click', function () {
-        $.localStorage.remove(storageKey);
-    });
-
+    var callbacks = []; 
     var localStorage = null;
     var getLocalStorage = function () {
         if (localStorage === null) {
-            localStorage = $.initNamespaceStorage(storageKey).localStorage;
+            localStorage = $.initNamespaceStorage('amzn-checkout-session-config').localStorage;
         }
         return localStorage;
-    };
-    return function (callback, omitPayloads = true) {
+    };  
+    return function (callback, forceReload = false) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         var config = getLocalStorage().get('config') || false;
-        if (!config) {
-            remoteStorage.get(url.build(`amazon_pay/checkout/config?omit_payloads=${omitPayloads}`)).done(function (config) {
-                getLocalStorage().set('cart_id', cartId);
-                getLocalStorage().set('config', config);
-
-                callback(getLocalStorage().get('config'));
-            });
-        }
-        else {
+        if (forceReload
+            || cartId !== getLocalStorage().get('cart_id')
+            || typeof config.checkout_payload === 'undefined'
+            || !config.checkout_payload.includes(document.URL.slice(0, -1))) {
+            callbacks.push(callback);
+            if (callbacks.length == 1) {
+                remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {
+                    getLocalStorage().set('cart_id', cartId);
+                    getLocalStorage().set('config', config);
+                    do {
+                        callbacks.shift()(config);
+                    } while (callbacks.length);
+                });
+            }
+        } else {
             callback(getLocalStorage().get('config'));
         }
-    };
+    };  
 });
