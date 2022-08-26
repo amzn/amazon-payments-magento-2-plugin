@@ -43,8 +43,14 @@ class Address implements SpcAddressInterface
      */
     protected $shippingInformation;
 
+    /**
+     * @var AmazonPayAdapter
+     */
     protected $amazonPayAdapter;
 
+    /**
+     * @var CheckoutSessionManagement
+     */
     protected $checkoutSessionManager;
 
     /**
@@ -53,6 +59,16 @@ class Address implements SpcAddressInterface
     protected $cartHelper;
 
 
+    /**
+     * @param CartRepositoryInterface $cartRepository
+     * @param AddressInterface $address
+     * @param Region $region
+     * @param ShippingInformationManagementInterface $shippingInformationManagement
+     * @param ShippingInformationInterface $shippingInformation
+     * @param AmazonPayAdapter $amazonPayAdapter
+     * @param CheckoutSessionManagement $checkoutSessionManagement
+     * @param Cart $cartHelper
+     */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AddressInterface $address,
@@ -77,19 +93,14 @@ class Address implements SpcAddressInterface
     /**
      * @inheritdoc
      */
-    public function saveAddress(int $cartId, $shippingDetails = null, $cartDetails = null)
+    public function saveAddress(int $cartId, $cartDetails = null)
     {
-        try {
-            $quote = $this->cartRepository->get($cartId);
-        } catch (NoSuchEntityException $e) {
-            throw new WebapiException(
-                new Phrase($e->getMessage())
-            );
-        }
+        // Get quote
+        $quote = $this->cartRepository->get($cartId);
 
         $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
 
-        // Update item details
+        // Get addresses for updating
         if ($cartDetails && $checkoutSessionId) {
             $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
 
@@ -100,115 +111,13 @@ class Address implements SpcAddressInterface
                 );
             }
 
-            // todo: check the amazonSession response status
+            $magentoAddress = $this->checkoutSessionManager->getShippingAddress($checkoutSessionId);
+            $shippingAddress = $this->address->setData($magentoAddress[0]);
+            $magentoAddress = $this->checkoutSessionManager->getBillingAddress($checkoutSessionId);
+            $billingAddress = $this->address->setData($magentoAddress[0]);
 
-            // Update shipping details
-//            if ($amazonSession['shippingAddress']) {
-
-                $magentoAddress = $this->checkoutSessionManager->getShippingAddress($checkoutSessionId);
-                $shippingAddress = $this->address->setData($magentoAddress[0]);
-                $magentoAddress = $this->checkoutSessionManager->getBillingAddress($checkoutSessionId);
-                $billingAddress = $this->address->setData($magentoAddress[0]);
-
-                $quote->setShippingAddress($shippingAddress);
-                $quote->setBillingAddress($billingAddress);
-
-
-//                // Country, region, post code
-//                if (isset($shippingDetails['country'])
-//                    && isset($shippingDetails['region'])
-//                    && isset($shippingDetails['zipcode'])) {
-//                    $country = $shippingDetails['country'];
-//
-//                    $regionCode = $shippingDetails['region'];
-//                    $postCode = $shippingDetails['zipcode'];
-//                }
-//                else {
-//                    throw new WebapiException(
-//                        new Phrase('Region, Zip Code, and Country are required.')
-//                    );
-//                }
-
-//                // Street
-//                if (isset($shippingDetails['street'])) {
-//                    $street = $shippingDetails['street'];
-//                }
-//                else {
-//                    $street = null;
-//                }
-//
-//                // City
-//                if (isset($shippingDetails['city'])) {
-//                    $city = $shippingDetails['city'];
-//                }
-//
-//                // Set main address details
-//                $address = $this->address->setStreet($street)
-//                    ->setCity($city)
-//                    ->setPostcode($postCode)
-//                    ->setCountryId($country)
-//                ;
-//
-//                $region = $this->region->loadByCode($regionCode, $country);
-//                if ($region->getId()) {
-//                    $address->setRegion($region->getCode())
-//                        ->setRegionId($region->getId());
-//                }
-//                else {
-//                    $address->setRegion($shippingDetails['region']);
-//                }
-//
-//                // Phone
-//                if (isset($shippingDetails['phone'])) {
-//                    $address->setTelephone($shippingDetails['phone']);
-//                }
-//
-//                // Email
-//                if (isset($shippingDetails['email'])) {
-//                    $address->setEmail($shippingDetails['email']);
-//                    $quote->setCustomerEmail($shippingDetails['email']);
-//                }
-//
-//                // Save address with shipping method
-//                if (isset($shippingDetails['shipping_method'])
-//                    && (strpos($shippingDetails['shipping_method'], '_') !== false)) {
-//                    $shippingInformation = $this->shippingInformation->setShippingAddress($address);
-//
-//                    $shippingMethod = explode('_', $shippingDetails['shipping_method']);
-//                    $shippingInformation->setShippingCarrierCode($shippingMethod[0])
-//                        ->setShippingMethodCode($shippingMethod[1]);
-//
-//                    $this->shippingInformationManagement->saveAddressInformation($cartId, $shippingInformation);
-//                }
-//                // Save address without shipping method
-//                else {
-//                    $quote->setShippingAddress($address);
-//                }
-//            }
-
-
-//            $isQuoteItem = false;
-//
-//            foreach ($cartDetails as $detail) {
-//                foreach ($quote->getAllVisibleItems() as $item) {
-//                    if ($item->getId() == $detail['id']) {
-//                        $item->setQty($detail['quantity']);
-//
-//                        if ($item->getHasError()) {
-//                            throw new LocalizedException(__($item->getMessage()));
-//                        }
-//
-//                        $isQuoteItem = true;
-//                        break;
-//                    }
-//                }
-//            }
-//
-//            if (!$isQuoteItem) {
-//                throw new WebapiException(
-//                    new Phrase('This item(s) is not part of this cart.')
-//                );
-//            }
+            $quote->setShippingAddress($shippingAddress);
+            $quote->setBillingAddress($billingAddress);
         }
 
         // Save and create response

@@ -3,6 +3,7 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\CouponInterface;
+use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
@@ -17,48 +18,70 @@ class Coupon implements CouponInterface
     protected $cartRepository;
 
     /**
+     * @var AmazonPayAdapter
+     */
+    protected $amazonPayAdapter;
+
+    /**
      * @var Cart
      */
     protected $cartHelper;
 
     /**
      * @param CartRepositoryInterface $cartRepository
+     * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
+        AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper
     )
     {
         $this->cartRepository = $cartRepository;
+        $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
     }
 
     /**
      * @inheritdoc
      */
-    public function applyCoupon(int $cartId, string $couponCode)
+    public function applyCoupon(int $cartId, $cartDetails = null)
     {
         // Get quote
-        try {
-            $quote = $this->cartRepository->get($cartId);
-        } catch (NoSuchEntityException $e) {
-            throw new WebapiException(
-                new Phrase($e->getMessage())
-            );
-        }
+        $quote = $this->cartRepository->get($cartId);
 
-        // Attempt to set coupon code
-        $quote->setCouponCode($couponCode);
+        // Get checkoutSessionId
+        $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
 
-        // Save cart
-        $this->cartRepository->save($quote);
+        // Get checkout session for verification
+        if ($cartDetails && $checkoutSessionId) {
+            $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
 
-        // Check if the coupon was applied
-        if ($quote->getCouponCode() != $couponCode) {
-            throw new WebapiException(
-                new Phrase('Coupon code is not applicable.')
-            );
+            $amazonSessionStatus = $amazonSession['status'] ?? '404';
+            if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                throw new WebapiException(
+                    new Phrase($amazonSession['reasonCode'])
+                );
+            }
+
+            // Only grabbing the first one, as Magento only accepts one coupon code
+            if (isset($cartDetails['coupons'][0]['couponCode'])) {
+                $couponCode = $cartDetails['coupons'][0]['couponCode'];
+
+                // Attempt to set coupon code
+                $quote->setCouponCode($couponCode);
+
+                // Save cart
+                $this->cartRepository->save($quote);
+
+                // Check if the coupon was applied
+                if ($quote->getCouponCode() != $couponCode) {
+                    throw new WebapiException(
+                        new Phrase('CouponNotApplicable')
+                    );
+                }
+            }
         }
 
         return $this->cartHelper->createResponse($quote);

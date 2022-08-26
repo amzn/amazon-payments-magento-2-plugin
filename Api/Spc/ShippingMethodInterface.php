@@ -6,8 +6,8 @@ interface ShippingMethodInterface
 {
     /**
      * @param int $cartId
-     * @param mixed $shippingMethod
+     * @param mixed|null $cartDetails
      * @return mixed
      */
-    public function shippingMethod(int $cartId, $shippingMethod);
+    public function shippingMethod(int $cartId, $cartDetails = null);
 }

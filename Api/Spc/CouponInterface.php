@@ -6,8 +6,8 @@ interface CouponInterface
 {
     /**
      * @param int $cartId
-     * @param string $couponCode
+     * @param mixed|null $cartDetails
      * @return mixed
      */
-    public function applyCoupon(int $cartId, string $couponCode);
+    public function applyCoupon(int $cartId, $cartDetails = null);
 }

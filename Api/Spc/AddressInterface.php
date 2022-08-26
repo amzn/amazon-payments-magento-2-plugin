@@ -6,9 +6,8 @@ interface AddressInterface
 {
     /**
      * @param int $cartId
-     * @param mixed|null $shippingDetails
      * @param mixed|null $cartDetails
      * @return mixed
      */
-    public function saveAddress(int $cartId, $shippingDetails = null, $cartDetails = null);
+    public function saveAddress(int $cartId, $cartDetails = null);
 }
