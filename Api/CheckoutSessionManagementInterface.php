@@ -22,16 +22,9 @@ interface CheckoutSessionManagementInterface
 {
     /**
      * @param string|null $cartId
-     * @param boolean $omitPayloads
      * @return mixed
      */
-    public function getConfig($cartId = null, $omitPayloads = false);
-
-    /**
-     * @param string $payloadType
-     * @return mixed
-     */
-    public function getButtonPayload($payloadType = 'checkout');
+    public function getConfig($cartId = null);
 
     /**
      * @param mixed $amazonSessionId

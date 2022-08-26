@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.14.1
+* Changed how buttons are rendered for compatibility with estimated order amount feature
+* Removed estimated order amount from PDP button
+
 ## 5.14.0
 * Added configurable options for checkout and signin cancel return urls
 * Added estimated order amount to the button payload
