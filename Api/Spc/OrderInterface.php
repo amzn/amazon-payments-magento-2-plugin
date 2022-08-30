@@ -6,8 +6,8 @@ interface OrderInterface
 {
     /**
      * @param int $cartId
-     * @param string $checkoutSessionId
+     * @param mixed|null $cartDetails
      * @return mixed
      */
-    public function createOrder(int $cartId, string $checkoutSessionId);
+    public function createOrder(int $cartId, $cartDetails = null);
 }

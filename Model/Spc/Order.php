@@ -3,11 +3,10 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\OrderInterface;
-use Amazon\Pay\Model\Config\Source\AuthorizationMode;
-use Amazon\Pay\Model\Config\Source\PaymentAction;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Amazon\Pay\Helper\Spc\Cart;
+use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Phrase;
-use Magento\Framework\Webapi\Exception;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -25,6 +24,16 @@ class Order implements OrderInterface
     protected $cartManagement;
 
     /**
+     * @var AmazonPayAdapter
+     */
+    protected $amazonPayAdapter;
+
+    /**
+     * @var Cart
+     */
+    protected $cartHelper;
+
+    /**
      * @var OrderRepositoryInterface
      */
     protected $orderRepository;
@@ -32,72 +41,80 @@ class Order implements OrderInterface
     /**
      * @param CartRepositoryInterface $cartRepository
      * @param CartManagementInterface $cartManagement
+     * @param AmazonPayAdapter $amazonPayAdapter
+     * @param Cart $cartHelper
      * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         CartManagementInterface $cartManagement,
+        AmazonPayAdapter $amazonPayAdapter,
+        Cart $cartHelper,
         OrderRepositoryInterface $orderRepository
     )
     {
         $this->cartRepository = $cartRepository;
         $this->cartManagement = $cartManagement;
+        $this->amazonPayAdapter = $amazonPayAdapter;
+        $this->cartHelper = $cartHelper;
         $this->orderRepository = $orderRepository;
     }
 
     /**
      * @inheritdoc
      */
-    public function createOrder(int $cartId, string $checkoutSessionId)
+    public function createOrder(int $cartId, $cartDetails = null)
     {
         // Get quote
-        try {
-            $quote = $this->cartRepository->get($cartId);
-        } catch (NoSuchEntityException $e) {
-            throw new Exception(
-                new Phrase($e->getMessage())
-            );
+        $quote = $this->cartRepository->get($cartId);
+
+        // Get checkoutSessionId
+        $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
+
+        // Get checkout session for verification
+        if ($cartDetails && $checkoutSessionId) {
+            $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
+
+            $amazonSessionStatus = $amazonSession['status'] ?? '404';
+            if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                throw new WebapiException(
+                    new Phrase($amazonSession['reasonCode'])
+                );
+            }
+
+            if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                throw new WebapiException(
+                    new Phrase($amazonSession['statusDetails']['reasonCode'])
+                );
+            }
+
+            // Check that the totals collect okay
+            $quote->collectTotals();
+
+            // Check that all items are still in stock
+            foreach ($quote->getAllVisibleItems() as $item) {
+                if (!$item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()) {
+                    throw new \Magento\Framework\Webapi\Exception(
+                        new Phrase('InvalidCartStatus'), 422, 422
+                    );
+                }
+            }
+
+            // Check that both addresses are set
+            if (is_array($quote->getShippingAddress()->validate()) || is_array($quote->getBillingAddress()->validate())) {
+                throw new \Magento\Framework\Webapi\Exception(
+                    new Phrase('InvalidCartStatus'), 422, 422
+                );
+            }
+
+            // Check that the shipping method has been set
+            if (empty($quote->getShippingAddress()->getShippingMethod())) {
+                throw new \Magento\Framework\Webapi\Exception(
+                    new Phrase('InvalidCartStatus'), 422, 422
+                );
+            }
+
+            return $this->cartHelper->createResponse($quote);
         }
-
-        // Set payment method
-        $quote->getPayment()->importData(['method' => 'checkmo']);
-
-        // Set addresses' final details
-        $shippingAddress = $quote->getShippingAddress();
-        $shippingAddress->setFirstname($shippingAddress->getFirstname() ?: 'First')
-            ->setLastname($shippingAddress->getLastname() ?: 'Last')
-            ->setSameAsBilling(true)
-            ->setEmail($shippingAddress->getEmail() ?: 'test@example.com');
-        $quote->setShippingAddress($shippingAddress);
-        $quote->getBillingAddress()
-            ->setEmail($shippingAddress->getEmail() ?: 'test@example.com')
-            ->setFirstname($shippingAddress->getFirstname())
-            ->setLastname($shippingAddress->getLastname())
-            ->setStreet($shippingAddress->getStreet())
-            ->setCity($shippingAddress->getCity())
-            ->setRegion($shippingAddress->getRegion())
-            ->setRegionId($shippingAddress->getRegionId())
-            ->setCountryId($shippingAddress->getCountryId())
-            ->setPostcode($shippingAddress->getPostcode())
-            ->setTelephone($shippingAddress->getTelephone())
-            ;
-        $quote->setCustomerEmail($shippingAddress->getEmail() ?: 'test@example.com');
-
-        // Collect totals
-        $quote->collectTotals();
-
-        $this->cartRepository->save($quote);
-
-        // Place order
-        $orderId = $this->cartManagement->placeOrder($quote->getId());
-//        $order = $this->orderRepository->get($orderId);
-
-
-        return [
-            [
-                'cartId' => $quote->getId(),
-                'orderId' => $orderId,
-            ]
-        ];
     }
 }

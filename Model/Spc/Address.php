@@ -9,8 +9,6 @@ use Amazon\Pay\Model\CheckoutSessionManagement;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Directory\Model\Region;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -57,7 +55,6 @@ class Address implements SpcAddressInterface
      * @var Cart
      */
     protected $cartHelper;
-
 
     /**
      * @param CartRepositoryInterface $cartRepository
@@ -108,6 +105,12 @@ class Address implements SpcAddressInterface
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
+                );
+            }
+
+            if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                throw new WebapiException(
+                    new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
             }
 

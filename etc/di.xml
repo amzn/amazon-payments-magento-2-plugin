@@ -389,4 +389,8 @@
                 type="Amazon\Pay\Model\Spc\ShippingMethod" />
     <preference for="Amazon\Pay\Api\Spc\OrderInterface"
                 type="Amazon\Pay\Model\Spc\Order" />
+
+    <type name="Magento\Webapi\Controller\Rest">
+        <plugin name="amazon_pay_spc_change_order_status_code" type="Amazon\Pay\Plugin\Spc\OrderEndpointStatusCode" />
+    </type>
 </config>

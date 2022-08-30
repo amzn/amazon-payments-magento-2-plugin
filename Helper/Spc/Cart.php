@@ -5,12 +5,14 @@ namespace Amazon\Pay\Helper\Spc;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class Cart
 {
+    const STATUS_AVAILABLE = 'AVAILABLE';
+    const STATUS_OUT_OF_STOCK = 'OUT_OF_STOCK';
+    const STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS = 'NOT_AVAILABLE_FOR_SHIPPING_ADDRESS';
+
     /**
      * @var ShippingMethodManagementInterface
      */
@@ -21,11 +23,15 @@ class Cart
      */
     protected $cartRepository;
 
+    /**
+     * @var ScopeConfigInterface
+     */
     protected $scopeConfig;
 
     /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param CartRepositoryInterface $cartRepository
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
@@ -46,7 +52,11 @@ class Cart
     {
         /** @var $quote \Magento\Quote\Model\Quote */
 
-        $storeLocale = $this->scopeConfig->getValue('general/locale/code', ScopeInterface::SCOPE_STORE, $quote->getStoreId());
+        $storeLocale = $this->scopeConfig->getValue(
+            'general/locale/code',
+            ScopeInterface::SCOPE_STORE,
+            $quote->getStoreId()
+        );
         $currencyCode = $quote->getQuoteCurrencyCode();
         $lineItems = [];
         foreach ($quote->getAllVisibleItems() as $item) {
@@ -83,21 +93,13 @@ class Cart
                 'additionalAttributes' => $additionalAttributes,
                 // the only reliable way to tell if it's taxable is if a tax has been calculated for it
                 'taxable' => (boolean)$item->getTaxAmount(),
-                'status' => $item->getProduct()->isSalable() ? 'AVAILABLE' : 'UNAVAILABLE',
+                'status' => $item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()
+                    ? self::STATUS_AVAILABLE : self::STATUS_OUT_OF_STOCK,
                 'taxAmount' => [
                     'amount' => $item->getTaxAmount(),
                     'currencyCode' => $currencyCode,
                 ],
                 'requiresShipping' => !(boolean)$item->getIsVirtual(),
-
-
-
-//                'basePrice' => $item->getBasePrice(),
-//                'discountAmount' => $item->getDiscountAmount(),
-//                'deliveryDetails' => [
-//                    'deliveryZipCode' => $quote->getShippingAddress()->getPostcode(),
-//                    'shippingMethod' => $quote->getShippingAddress()->getShippingMethod(),
-//                ],
             ];
         }
 
@@ -122,6 +124,14 @@ class Cart
                         $quote->getShippingAddress()->getShippingMethod() == ($method->getCarrierCode() .'_'. $method->getMethodCode()),
                 ];
             }
+
+            // check if no methods for an already set address
+            if (empty($shippingMethods) && !$quote->getShippingAddress()->isEmpty()) {
+                // loop through the item response to set their status as NOT_AVAILABLE_FOR_SHIPPING_ADDRESS
+                foreach ($lineItems as &$item) {
+                    $item['status'] = self::STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS;
+                }
+            }
         }
 
         return [
@@ -130,12 +140,13 @@ class Cart
                     'cartId' => $quote->getId(),
                     'lineItems' => $lineItems,
                     'deliveryOptions' => $methods,
-                    'coupon' => [
+                    'coupons' => [
                         [
                             'couponCode' => $quote->getCouponCode(),
                             'discountAmount' => $quote->getSubtotal() - $quote->getSubtotalWithDiscount()
                         ]
                     ],
+                    'cartLanguage' => $storeLocale,
                     'totalShippingAmount' => [
                         'amount' => $quote->getShippingAddress()->getShippingAmount(),
                         'currencyCode' => $currencyCode,
@@ -152,7 +163,6 @@ class Cart
                         'amount' => $quote->getGrandTotal(),
                         'currencyCode' => $currencyCode,
                     ],
-                    'cartLanguage' => $storeLocale,
                     'checkoutSessionId' => $checkoutSessionId
                 ]
             ]

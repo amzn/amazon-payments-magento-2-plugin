@@ -7,8 +7,6 @@ use Amazon\Pay\Helper\Spc\Cart;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -81,6 +79,12 @@ class ShippingMethod implements ShippingMethodInterface
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
+                );
+            }
+
+            if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                throw new WebapiException(
+                    new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
             }
 

@@ -4,7 +4,6 @@ namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\CouponInterface;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -62,6 +61,12 @@ class Coupon implements CouponInterface
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
+                );
+            }
+
+            if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                throw new WebapiException(
+                    new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
             }
 
