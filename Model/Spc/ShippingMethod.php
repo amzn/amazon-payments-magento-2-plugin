@@ -89,8 +89,8 @@ class ShippingMethod implements ShippingMethodInterface
             }
 
             // Only grabbing the first one, as Magento only accepts one coupon code
-            if (isset($cartDetails['deliveryOptions']['shippingMethod']['shippingMethodCode'])) {
-                $shippingMethodCode = $cartDetails['deliveryOptions']['shippingMethod']['shippingMethodCode'];
+            if (isset($cartDetails['deliveryOptions'][0]['shippingMethod']['shippingMethodCode'])) {
+                $shippingMethodCode = $cartDetails['deliveryOptions'][0]['shippingMethod']['shippingMethodCode'];
 
                 $address = $quote->getShippingAddress();
 

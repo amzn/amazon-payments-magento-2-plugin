@@ -22,11 +22,12 @@ class OrderEndpointStatusCode
         RequestInterface $request
     )
     {
-        if ($response->getStatusCode() == \Magento\Framework\Webapi\Response::HTTP_OK
-            && strpos($request->getPathInfo(), 'amazon-spc') !== false
-            && strpos($request->getPathInfo(), 'order') !== false) {
-            $response->setStatusCode(201);
-        }
+        // skipping this for now until the endpoint actually creates an order
+//        if ($response->getStatusCode() == \Magento\Framework\Webapi\Response::HTTP_OK
+//            && strpos($request->getPathInfo(), 'amazon-spc') !== false
+//            && strpos($request->getPathInfo(), 'order') !== false) {
+//            $response->setStatusCode(201);
+//        }
 
         return $response;
     }
