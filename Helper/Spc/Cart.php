@@ -168,12 +168,13 @@ class Cart
             ]
         ];
     }
-
+    
     /**
      * @param $quote
+     * @param $checkoutSessionId
      * @return \array[][]
      */
-    public function saveAndCreateResponse($quote)
+    public function saveAndCreateResponse($quote, $checkoutSessionId = null)
     {
         // Force the store to stay as the frontend one, so that the same endpoint can be used for all stores
         $storeId = $quote->getOrigData('store_id');
@@ -185,6 +186,6 @@ class Cart
         // Save cart
         $this->cartRepository->save($quote);
 
-        return $this->createResponse($quote);
+        return $this->createResponse($quote, $checkoutSessionId);
     }
 }
