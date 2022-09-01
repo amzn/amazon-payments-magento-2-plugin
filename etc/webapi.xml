@@ -82,25 +82,25 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/amazon-spc/:cartId/address" method="POST">
+    <route url="/V1/amazon-spc/V1/cart/:cartId/address" method="POST">
         <service class="Amazon\Pay\Api\Spc\AddressInterface" method="saveAddress" />
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/amazon-spc/:cartId/coupon" method="POST">
+    <route url="/V1/amazon-spc/V1/cart/:cartId/coupon" method="POST">
         <service class="Amazon\Pay\Api\Spc\CouponInterface" method="applyCoupon" />
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/amazon-spc/:cartId/shipping-method" method="POST">
+    <route url="/V1/amazon-spc/V1/cart/:cartId/shipping-method" method="POST">
         <service class="Amazon\Pay\Api\Spc\ShippingMethodInterface" method="shippingMethod" />
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/amazon-spc/:cartId/order" method="POST">
+    <route url="/V1/amazon-spc/V1/cart/:cartId/order" method="POST">
         <service class="Amazon\Pay\Api\Spc\OrderInterface" method="createOrder" />
         <resources>
             <resource ref="Magento_Cart::manage" />

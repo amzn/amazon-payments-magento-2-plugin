@@ -10,6 +10,7 @@ use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\ShippingMethodManagementInterface;
 
 class ShippingMethod implements ShippingMethodInterface
 {
@@ -34,15 +35,22 @@ class ShippingMethod implements ShippingMethodInterface
     protected $shippingInformation;
 
     /**
+     * @var ShippingMethodManagementInterface
+     */
+    protected $shippingMethodManagement;
+
+    /**
      * @var Cart
      */
     protected $cartHelper;
+
 
     /**
      * @param CartRepositoryInterface $cartRepository
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param ShippingInformationManagementInterface $shippingInformationManagement
      * @param ShippingInformationInterface $shippingInformation
+     * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param Cart $cartHelper
      */
     public function __construct(
@@ -50,6 +58,7 @@ class ShippingMethod implements ShippingMethodInterface
         AmazonPayAdapter $amazonPayAdapter,
         ShippingInformationManagementInterface $shippingInformationManagement,
         ShippingInformationInterface $shippingInformation,
+        ShippingMethodManagementInterface $shippingMethodManagement,
         Cart $cartHelper
     )
     {
@@ -57,6 +66,7 @@ class ShippingMethod implements ShippingMethodInterface
         $this->amazonPayAdapter = $amazonPayAdapter;
         $this->shippingInformationManagement = $shippingInformationManagement;
         $this->shippingInformation = $shippingInformation;
+        $this->shippingMethodManagement = $shippingMethodManagement;
         $this->cartHelper = $cartHelper;
     }
 
@@ -89,7 +99,8 @@ class ShippingMethod implements ShippingMethodInterface
             }
 
             // Only grabbing the first one, as Magento only accepts one coupon code
-            if (isset($cartDetails['deliveryOptions'][0]['shippingMethod']['shippingMethodCode'])) {
+            if ($quote->getShippingAddress()->validate()
+                && isset($cartDetails['deliveryOptions'][0]['shippingMethod']['shippingMethodCode'])) {
                 $shippingMethodCode = $cartDetails['deliveryOptions'][0]['shippingMethod']['shippingMethodCode'];
 
                 $address = $quote->getShippingAddress();
@@ -101,6 +112,34 @@ class ShippingMethod implements ShippingMethodInterface
                     $shippingMethod = explode('_', $shippingMethodCode);
                     $shippingInformation->setShippingCarrierCode($shippingMethod[0])
                         ->setShippingMethodCode($shippingMethod[1]);
+
+                    $this->shippingInformationManagement->saveAddressInformation($cartId, $shippingInformation);
+                }
+            }
+            // Select the cheapest option
+            else if ($quote->getShippingAddress()->validate()) {
+                $shippingMethods = $this->shippingMethodManagement->getList($quote->getId());
+                $cheapestMethod = [
+                    'carrier' => '',
+                    'code' => '',
+                    'amount' => 100000
+                ];
+
+                foreach ($shippingMethods as $method) {
+                    if ($method->getAmount() < $cheapestMethod['amount']) {
+                        $cheapestMethod['carrier'] = $method->getCarrierCode();
+                        $cheapestMethod['code'] = $method->getMethodCode();
+                        $cheapestMethod['amount'] = $method->getAmount();
+                    }
+                }
+
+                // Save address with shipping method
+                if (!empty($cheapestMethod['carrier'])) {
+                    $address = $quote->getShippingAddress();
+                    $shippingInformation = $this->shippingInformation->setShippingAddress($address);
+
+                    $shippingInformation->setShippingCarrierCode($cheapestMethod['carrier'])
+                        ->setShippingMethodCode($cheapestMethod['code']);
 
                     $this->shippingInformationManagement->saveAddressInformation($cartId, $shippingInformation);
                 }

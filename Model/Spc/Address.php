@@ -3,6 +3,7 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\AddressInterface as SpcAddressInterface;
+use Amazon\Pay\Api\Spc\ShippingMethodInterface;
 use Amazon\Pay\Helper\Spc\Cart;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Amazon\Pay\Model\CheckoutSessionManagement;
@@ -52,6 +53,11 @@ class Address implements SpcAddressInterface
     protected $checkoutSessionManager;
 
     /**
+     * @var ShippingMethodInterface
+     */
+    protected $shippingMethod;
+
+    /**
      * @var Cart
      */
     protected $cartHelper;
@@ -64,6 +70,7 @@ class Address implements SpcAddressInterface
      * @param ShippingInformationInterface $shippingInformation
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param CheckoutSessionManagement $checkoutSessionManagement
+     * @param ShippingMethodInterface $shippingMethod
      * @param Cart $cartHelper
      */
     public function __construct(
@@ -74,6 +81,7 @@ class Address implements SpcAddressInterface
         ShippingInformationInterface $shippingInformation,
         AmazonPayAdapter $amazonPayAdapter,
         CheckoutSessionManagement $checkoutSessionManagement,
+        ShippingMethodInterface $shippingMethod,
         Cart $cartHelper
     )
     {
@@ -84,6 +92,7 @@ class Address implements SpcAddressInterface
         $this->shippingInformation = $shippingInformation;
         $this->checkoutSessionManager = $checkoutSessionManagement;
         $this->amazonPayAdapter = $amazonPayAdapter;
+        $this->shippingMethod = $shippingMethod;
         $this->cartHelper = $cartHelper;
     }
 
@@ -114,13 +123,31 @@ class Address implements SpcAddressInterface
                 );
             }
 
+            // Get and set shipping address
             $magentoAddress = $this->checkoutSessionManager->getShippingAddress($checkoutSessionId);
-            $shippingAddress = $this->address->setData($magentoAddress[0]);
+            $magentoAddress = false;
+            if (isset($magentoAddress[0])) {
+                $shippingAddress = $this->address->setData($magentoAddress[0]);
+                $quote->setShippingAddress($shippingAddress);
+            }
+            else {
+                throw new WebapiException(
+                    new Phrase('InvalidRequest')
+                );
+            }
+            // Get and set billing address
             $magentoAddress = $this->checkoutSessionManager->getBillingAddress($checkoutSessionId);
-            $billingAddress = $this->address->setData($magentoAddress[0]);
+            if (isset($magentoAddress[0])) {
+                $billingAddress = $this->address->setData($magentoAddress[0]);
+                $quote->setBillingAddress($billingAddress);
+            }
+            else {
+                throw new WebapiException(
+                    new Phrase('InvalidRequest')
+                );
+            }
 
-            $quote->setShippingAddress($shippingAddress);
-            $quote->setBillingAddress($billingAddress);
+            $this->shippingMethod->shippingMethod($cartId, $cartDetails);
         }
 
         // Save and create response

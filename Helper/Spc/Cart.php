@@ -76,15 +76,15 @@ class Cart
             }
 
             $lineItems[] = [
-                'id' => $item->getId(),
+                'id' => (string)$item->getId(),
                 'title' => $item->getName(),
-                'quantity' => $item->getQty(),
+                'quantity' => (string)$item->getQty(),
                 'listPrice' => [
-                    'amount' => $item->getPrice(),
+                    'amount' => (string)$item->getPrice(),
                     'currencyCode' => $currencyCode,
                 ],
                 'discountedPrice' => [
-                    'amount' => $item->getPrice() - $item->getDiscountAmount(),
+                    'amount' => (string)($item->getPrice() - $item->getDiscountAmount()),
                     'currencyCode' => $currencyCode,
                 ],
                 'appliedDiscounts' => [
@@ -96,7 +96,7 @@ class Cart
                 'status' => $item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()
                     ? self::STATUS_AVAILABLE : self::STATUS_OUT_OF_STOCK,
                 'taxAmount' => [
-                    'amount' => $item->getTaxAmount(),
+                    'amount' => (string)$item->getTaxAmount(),
                     'currencyCode' => $currencyCode,
                 ],
                 'requiresShipping' => !(boolean)$item->getIsVirtual(),
@@ -104,14 +104,14 @@ class Cart
         }
 
         $methods = [];
-        if ($quote->getShippingAddress()->getPostCode()) {
+        if ($quote->getShippingAddress()->validate()) {
             $shippingMethods = $this->shippingMethodManagement->getList($quote->getId());
 
             foreach ($shippingMethods as $method) {
                 $methods[] = [
                     'id' => $method->getCarrierCode() .'_'. $method->getMethodCode(),
                     'price' => [
-                        'amount' => $method->getAmount(),
+                        'amount' => (string)$method->getAmount(),
                         'currencyCode' => $currencyCode,
                     ],
                     'discountedPrice' => [],
@@ -120,13 +120,13 @@ class Cart
                         'shippingMethodCode' => $method->getCarrierCode() .'_'. $method->getMethodCode(),
                     ],
                     'shippingEstimate' => [],
-                    'selected' =>
+                    'isDefault' =>
                         $quote->getShippingAddress()->getShippingMethod() == ($method->getCarrierCode() .'_'. $method->getMethodCode()),
                 ];
             }
 
             // check if no methods for an already set address
-            if (empty($shippingMethods) && !$quote->getShippingAddress()->isEmpty()) {
+            if (empty($shippingMethods) && $quote->getShippingAddress()->validate()) {
                 // loop through the item response to set their status as NOT_AVAILABLE_FOR_SHIPPING_ADDRESS
                 foreach ($lineItems as &$item) {
                     $item['status'] = self::STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS;
@@ -143,24 +143,24 @@ class Cart
                     'coupons' => [
                         [
                             'couponCode' => $quote->getCouponCode(),
-                            'discountAmount' => $quote->getSubtotal() - $quote->getSubtotalWithDiscount()
+                            'discountAmount' => (string)($quote->getSubtotal() - $quote->getSubtotalWithDiscount())
                         ]
                     ],
                     'cartLanguage' => $storeLocale,
                     'totalShippingAmount' => [
-                        'amount' => $quote->getShippingAddress()->getShippingAmount(),
+                        'amount' => (string)$quote->getShippingAddress()->getShippingAmount(),
                         'currencyCode' => $currencyCode,
                     ],
                     'totalBaseAmount' => [
-                        'amount' => $quote->getSubtotal(),
+                        'amount' => (string)$quote->getSubtotal(),
                         'currencyCode' => $currencyCode,
                     ],
                     'totalTaxAmount' => [
-                        'amount' => $quote->getShippingAddress()->getTaxAmount(),
+                        'amount' => (string)$quote->getShippingAddress()->getTaxAmount(),
                         'currencyCode' => $currencyCode,
                     ],
                     'totalChargeAmount' => [
-                        'amount' => $quote->getGrandTotal(),
+                        'amount' => (string)$quote->getGrandTotal(),
                         'currencyCode' => $currencyCode,
                     ],
                     'checkoutSessionId' => $checkoutSessionId
@@ -168,7 +168,7 @@ class Cart
             ]
         ];
     }
-    
+
     /**
      * @param $quote
      * @param $checkoutSessionId
