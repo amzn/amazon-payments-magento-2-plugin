@@ -125,7 +125,6 @@ class Address implements SpcAddressInterface
 
             // Get and set shipping address
             $magentoAddress = $this->checkoutSessionManager->getShippingAddress($checkoutSessionId);
-            $magentoAddress = false;
             if (isset($magentoAddress[0])) {
                 $shippingAddress = $this->address->setData($magentoAddress[0]);
                 $quote->setShippingAddress($shippingAddress);
