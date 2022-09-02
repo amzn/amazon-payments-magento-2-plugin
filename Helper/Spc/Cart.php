@@ -155,10 +155,17 @@ class Cart
         }
 
         // coupon code description
-        $couponCodeDescription = '';
+        $coupons = [];
         if ($quote->getCouponCode()) {
             $rule = $this->ruleCollection->addFieldToFilter('code', $quote->getCouponCode())->getFirstItem();
             $couponCodeDescription = $rule->getName();
+
+            $coupons = [
+                [
+                    'couponCode' => $quote->getCouponCode(),
+                    'description' => $couponCodeDescription
+                ]
+            ];
         }
 
         return [
@@ -167,12 +174,7 @@ class Cart
                     'cartId' => $quote->getId(),
                     'lineItems' => $lineItems,
                     'deliveryOptions' => $methods,
-                    'coupons' => [
-                        [
-                            'couponCode' => $quote->getCouponCode(),
-                            'description' => $couponCodeDescription
-                        ]
-                    ],
+                    'coupons' => $coupons,
                     'cartLanguage' => $storeLocale,
                     'totalShippingAmount' => [
                         'amount' => (string)$quote->getShippingAddress()->getShippingAmount(),
