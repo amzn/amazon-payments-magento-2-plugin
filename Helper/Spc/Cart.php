@@ -29,19 +29,27 @@ class Cart
     protected $scopeConfig;
 
     /**
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection
+     */
+    protected $ruleCollection;
+
+    /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param CartRepositoryInterface $cartRepository
      * @param ScopeConfigInterface $scopeConfig
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
         CartRepositoryInterface $cartRepository,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection
     )
     {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->cartRepository = $cartRepository;
         $this->scopeConfig = $scopeConfig;
+        $this->ruleCollection = $ruleCollection;
     }
 
     /**
@@ -58,6 +66,8 @@ class Cart
             $quote->getStoreId()
         );
         $currencyCode = $quote->getQuoteCurrencyCode();
+
+        // Loop to get item details
         $lineItems = [];
         foreach ($quote->getAllVisibleItems() as $item) {
             $additionalAttributes = [];
@@ -75,6 +85,18 @@ class Cart
                 ];
             }
 
+            // Get cart rule details
+            $rules = $this->ruleCollection->addFieldToFilter('rule_id', ['in' => $item->getAppliedRuleIds()]);
+            $rulesNameOrCode = [];
+            foreach ($rules as $rule) {
+                if ($rule->getCode()) {
+                    $rulesNameOrCode[] = $rule->getCode();
+                }
+                else {
+                    $rulesNameOrCode[] = $rule->getName();
+                }
+            }
+
             $lineItems[] = [
                 'id' => (string)$item->getId(),
                 'title' => $item->getName(),
@@ -87,9 +109,7 @@ class Cart
                     'amount' => (string)($item->getPrice() - $item->getDiscountAmount()),
                     'currencyCode' => $currencyCode,
                 ],
-                'appliedDiscounts' => [
-                    $item->getAppliedRuleIds()
-                ],
+                'appliedDiscounts' => $rulesNameOrCode,
                 'additionalAttributes' => $additionalAttributes,
                 // the only reliable way to tell if it's taxable is if a tax has been calculated for it
                 'taxable' => (boolean)$item->getTaxAmount(),
@@ -134,6 +154,13 @@ class Cart
             }
         }
 
+        // coupon code description
+        $couponCodeDescription = '';
+        if ($quote->getCouponCode()) {
+            $rule = $this->ruleCollection->addFieldToFilter('code', $quote->getCouponCode())->getFirstItem();
+            $couponCodeDescription = $rule->getName();
+        }
+
         return [
             [
                 'cartDetails' => [
@@ -143,7 +170,7 @@ class Cart
                     'coupons' => [
                         [
                             'couponCode' => $quote->getCouponCode(),
-                            'discountAmount' => (string)($quote->getSubtotal() - $quote->getSubtotalWithDiscount())
+                            'description' => $couponCodeDescription
                         ]
                     ],
                     'cartLanguage' => $storeLocale,

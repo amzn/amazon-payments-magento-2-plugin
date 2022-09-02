@@ -147,6 +147,6 @@ class ShippingMethod implements ShippingMethodInterface
         }
 
         // Construct response
-        return $this->cartHelper->saveAndCreateResponse($quote);
+        return $this->cartHelper->saveAndCreateResponse($quote, $checkoutSessionId);
     }
 }

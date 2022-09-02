@@ -114,7 +114,7 @@ class Order implements OrderInterface
                 );
             }
 
-            return $this->cartHelper->createResponse($quote);
+            return $this->cartHelper->createResponse($quote, $checkoutSessionId);
         }
     }
 }

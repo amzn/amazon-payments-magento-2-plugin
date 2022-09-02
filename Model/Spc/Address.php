@@ -43,11 +43,6 @@ class Address implements SpcAddressInterface
     protected $shippingInformation;
 
     /**
-     * @var AmazonPayAdapter
-     */
-    protected $amazonPayAdapter;
-
-    /**
      * @var CheckoutSessionManagement
      */
     protected $checkoutSessionManager;
@@ -68,7 +63,6 @@ class Address implements SpcAddressInterface
      * @param Region $region
      * @param ShippingInformationManagementInterface $shippingInformationManagement
      * @param ShippingInformationInterface $shippingInformation
-     * @param AmazonPayAdapter $amazonPayAdapter
      * @param CheckoutSessionManagement $checkoutSessionManagement
      * @param ShippingMethodInterface $shippingMethod
      * @param Cart $cartHelper
@@ -79,7 +73,6 @@ class Address implements SpcAddressInterface
         Region $region,
         ShippingInformationManagementInterface $shippingInformationManagement,
         ShippingInformationInterface $shippingInformation,
-        AmazonPayAdapter $amazonPayAdapter,
         CheckoutSessionManagement $checkoutSessionManagement,
         ShippingMethodInterface $shippingMethod,
         Cart $cartHelper
@@ -91,7 +84,6 @@ class Address implements SpcAddressInterface
         $this->shippingInformationManagement = $shippingInformationManagement;
         $this->shippingInformation = $shippingInformation;
         $this->checkoutSessionManager = $checkoutSessionManagement;
-        $this->amazonPayAdapter = $amazonPayAdapter;
         $this->shippingMethod = $shippingMethod;
         $this->cartHelper = $cartHelper;
     }
@@ -108,7 +100,7 @@ class Address implements SpcAddressInterface
 
         // Get addresses for updating
         if ($cartDetails && $checkoutSessionId) {
-            $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
+            $amazonSession = $this->checkoutSessionManager->getAmazonSession($checkoutSessionId);
 
             $amazonSessionStatus = $amazonSession['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
