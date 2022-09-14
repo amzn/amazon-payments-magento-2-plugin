@@ -90,10 +90,16 @@ class Cart
             $rulesNameOrCode = [];
             foreach ($rules as $rule) {
                 if ($rule->getCode()) {
-                    $rulesNameOrCode[] = $rule->getCode();
+                    $rulesNameOrCode[] = [
+                        'couponCode' => $rule->getCode(),
+                        'description' => $rule->getName(),
+                    ];
                 }
                 else {
-                    $rulesNameOrCode[] = $rule->getName();
+                    $rulesNameOrCode[] = [
+                        'couponCode' => '',
+                        'description' => $rule->getName(),
+                    ];
                 }
             }
 
@@ -111,15 +117,14 @@ class Cart
                 ],
                 'appliedDiscounts' => $rulesNameOrCode,
                 'additionalAttributes' => $additionalAttributes,
-                // the only reliable way to tell if it's taxable is if a tax has been calculated for it
-                'taxable' => (boolean)$item->getTaxAmount(),
                 'status' => $item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()
                     ? self::STATUS_AVAILABLE : self::STATUS_OUT_OF_STOCK,
                 'taxAmount' => [
-                    'amount' => (string)$item->getTaxAmount(),
-                    'currencyCode' => $currencyCode,
+                    [
+                        'amount' => (string)$item->getTaxAmount(),
+                        'currencyCode' => $currencyCode,
+                    ]
                 ],
-                'requiresShipping' => !(boolean)$item->getIsVirtual(),
             ];
         }
 

@@ -26,7 +26,7 @@ class AmazonPayAdapter
     const PAYMENT_INTENT_CONFIRM = 'Confirm';
     const PAYMENT_INTENT_AUTHORIZE = 'Authorize';
     const PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE = 'AuthorizeWithCapture';
-    const SPC_SYNC_URL_FRAGMENT = 'authCredentials';
+    const SPC_SYNC_URL_FRAGMENT = 'singlePageCheckoutDetails';
     const SPC_ENABLED_CONFIG = 'payment/amazon_pay/spc_enabled';
 
     /**

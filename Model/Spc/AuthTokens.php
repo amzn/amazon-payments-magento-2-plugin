@@ -17,6 +17,7 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token as TokenResourceModel;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 class AuthTokens
 {
@@ -94,6 +95,11 @@ class AuthTokens
     protected $storeRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param IntegrationFactory $integrationFactory
      * @param Integration $integrationResourceModel
      * @param IntegrationCollection $integrationCollection
@@ -107,6 +113,7 @@ class AuthTokens
      * @param WriterInterface $configWriter
      * @param MutableScopeConfig $mutableScopeConfig
      * @param StoreRepositoryInterface $storeRepository
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         IntegrationFactory $integrationFactory,
@@ -121,7 +128,8 @@ class AuthTokens
         Json $json,
         WriterInterface $configWriter,
         MutableScopeConfig $mutableScopeConfig,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        StoreManagerInterface $storeManager
     )
     {
         $this->integrationFactory = $integrationFactory;
@@ -137,6 +145,7 @@ class AuthTokens
         $this->configWriter = $configWriter;
         $this->mutableScopeConfig = $mutableScopeConfig;
         $this->storeRepository = $storeRepository;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -196,22 +205,20 @@ class AuthTokens
 
     /**
      * @param IntegrationModel $integration
-     * @param $storeCode
+     * @param \Magento\Store\Api\Data\StoreInterface $store
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Oauth\Exception
      */
-    protected function sendTokens(IntegrationModel $integration, $storeCode)
+    protected function sendTokens(IntegrationModel $integration, \Magento\Store\Api\Data\StoreInterface $store)
     {
-        $store = $this->store->load('admin');
-
         $consumer = $this->oauthService->loadConsumer($integration->getConsumerId());
         $accessTokens = $this->oauthService->getAccessToken($consumer->getId());
         parse_str($accessTokens, $accessTokens);
 
         $payload = [
             'authDetails' => [
-                'merchantStoreReferenceId' => $storeCode,
+                'merchantStoreReferenceId' => $store->getCode(),
                 'authInformation' => [
                     [
                         'type' => 'CONSUMER_KEY',
@@ -232,7 +239,12 @@ class AuthTokens
                 ],
                 'auth_timestamp' => time(),
                 'auth_version' => self::AUTH_VERSION
-            ]
+            ],
+            'spiEndpoint' =>
+                $this->storeManager->getStore($store->getId())->getBaseUrl()
+                .'/rest/'.
+                $store->getCode()
+                .'/V1/amazon-spc/v2/cart/',
         ];
 
         return $this->amazonPayAdapter->spcSyncTokens($store->getId(), $this->json->serialize($payload));
@@ -256,7 +268,7 @@ class AuthTokens
             if ($store->getId() == 0) {
                 continue;
             }
-            $response = $this->sendTokens($integration, $store->getCode());
+            $response = $this->sendTokens($integration, $store);
 
             $responseCode = $response['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $responseCode)) {
