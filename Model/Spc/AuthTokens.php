@@ -242,9 +242,9 @@ class AuthTokens
             ],
             'spiEndpoint' =>
                 $this->storeManager->getStore($store->getId())->getBaseUrl()
-                .'/rest/'.
+                .'rest/'.
                 $store->getCode()
-                .'/V1/amazon-spc/v2/cart/',
+                .'/V1/amazon-spc',
         ];
 
         return $this->amazonPayAdapter->spcSyncTokens($store->getId(), $this->json->serialize($payload));
