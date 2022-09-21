@@ -2,6 +2,14 @@
 
 namespace Amazon\Pay\Helper\Spc;
 
+use Amazon\Pay\Api\Spc\Response\AmountInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\CartDetailsInterface;
+use Amazon\Pay\Api\Spc\Response\CartDetailsInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\DeliveryOptionInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\LineItemInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\NameValueInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\PromoInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\ShippingMethodInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
@@ -34,27 +42,83 @@ class Cart
     protected $ruleCollection;
 
     /**
+     * @var CartDetailsInterfaceFactory
+     */
+    protected $cartDetailsFactory;
+
+    /**
+     * @var AmountInterfaceFactory
+     */
+    protected $amountFactory;
+
+    /**
+     * @var PromoInterfaceFactory
+     */
+    protected $promoFactory;
+
+    /**
+     * @var DeliveryOptionInterfaceFactory
+     */
+    protected $deliveryOptionFactory;
+
+    /**
+     * @var ShippingMethodInterfaceFactory
+     */
+    protected $shippingMethodFactory;
+
+    /**
+     * @var LineItemInterfaceFactory
+     */
+    protected $lineItemFactory;
+
+    /**
+     * @var NameValueInterfaceFactory
+     */
+    protected $nameValueFactory;
+
+    /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param CartRepositoryInterface $cartRepository
      * @param ScopeConfigInterface $scopeConfig
      * @param \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection
+     * @param CartDetailsInterfaceFactory $cartDetailsFactory
+     * @param AmountInterfaceFactory $amountFactory
+     * @param PromoInterfaceFactory $promoFactory
+     * @param DeliveryOptionInterfaceFactory $deliveryOptionFactory
+     * @param ShippingMethodInterfaceFactory $shippingMethodFactory
+     * @param LineItemInterfaceFactory $lineItemFactory
+     * @param NameValueInterfaceFactory $nameValueFactory
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
         CartRepositoryInterface $cartRepository,
         ScopeConfigInterface $scopeConfig,
-        \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection
+        \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection,
+        CartDetailsInterfaceFactory $cartDetailsFactory,
+        AmountInterfaceFactory $amountFactory,
+        PromoInterfaceFactory $promoFactory,
+        DeliveryOptionInterfaceFactory $deliveryOptionFactory,
+        ShippingMethodInterfaceFactory $shippingMethodFactory,
+        LineItemInterfaceFactory $lineItemFactory,
+        NameValueInterfaceFactory $nameValueFactory
     )
     {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->cartRepository = $cartRepository;
         $this->scopeConfig = $scopeConfig;
         $this->ruleCollection = $ruleCollection;
+        $this->cartDetailsFactory = $cartDetailsFactory;
+        $this->amountFactory = $amountFactory;
+        $this->promoFactory = $promoFactory;
+        $this->deliveryOptionFactory = $deliveryOptionFactory;
+        $this->shippingMethodFactory = $shippingMethodFactory;
+        $this->lineItemFactory = $lineItemFactory;
+        $this->nameValueFactory = $nameValueFactory;
     }
 
     /**
      * @param $quote
-     * @return \array[][]
+     * @return CartDetailsInterface
      */
     public function createResponse($quote, $checkoutSessionId = null)
     {
@@ -69,92 +133,86 @@ class Cart
 
         // Loop to get item details
         $lineItems = [];
+        $totalBaseAmount = 0;
         foreach ($quote->getAllVisibleItems() as $item) {
-            $additionalAttributes = [];
+            $lineItem = $this->lineItemFactory->create();
 
+            $additionalAttributes = [];
             if ($item->getWeight()) {
-                $additionalAttributes[] = [
-                    'name' => 'weight',
-                    'value' => $item->getWeight(),
-                ];
+                $nameValue = $this->nameValueFactory->create();
+                $nameValue->setName('weight')
+                    ->setValue($item->getWeight());
+                $additionalAttributes[] = $nameValue;
             }
             if ($item->getDescription()) {
-                $additionalAttributes[] = [
-                    'name' => 'description',
-                    'value' => $item->getDescription(),
-                ];
+                $nameValue = $this->nameValueFactory->create();
+                $nameValue->setName('description')
+                    ->setValue($item->getDescription());
+                $additionalAttributes[] = $nameValue;
             }
 
             // Get cart rule details
             $rules = $this->ruleCollection->addFieldToFilter('rule_id', ['in' => $item->getAppliedRuleIds()]);
             $rulesNameOrCode = [];
             foreach ($rules as $rule) {
-                if ($rule->getCode()) {
-                    $rulesNameOrCode[] = [
-                        'couponCode' => $rule->getCode(),
-                        'description' => $rule->getName(),
-                    ];
-                }
-                else {
-                    $rulesNameOrCode[] = [
-                        'couponCode' => '',
-                        'description' => $rule->getName(),
-                    ];
-                }
+                $ruleResponse = $this->promoFactory->create();
+                $ruleResponse->setCouponCode($rule->getCode() ?: '')
+                    ->setDescription($rule->getName());
+
+                $rulesNameOrCode[] = $ruleResponse;
             }
 
-            $lineItems[] = [
-                'id' => (string)$item->getId(),
-                'title' => $item->getName(),
-                'quantity' => (string)$item->getQty(),
-                'listPrice' => [
-                    'amount' => (string)$item->getPrice(),
-                    'currencyCode' => $currencyCode,
-                ],
-                'discountedPrice' => [
-                    'amount' => (string)($item->getPrice() - $item->getDiscountAmount()),
-                    'currencyCode' => $currencyCode,
-                ],
-                'appliedDiscounts' => $rulesNameOrCode,
-                'additionalAttributes' => $additionalAttributes,
-                'status' => $item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()
-                    ? self::STATUS_AVAILABLE : self::STATUS_OUT_OF_STOCK,
-                'taxAmount' => [
-                    [
-                        'amount' => (string)$item->getTaxAmount(),
-                        'currencyCode' => $currencyCode,
-                    ]
-                ],
-            ];
+            $discountedAmount = $item->getPrice() - $item->getDiscountAmount()/$item->getQty();
+            $totalBaseAmount += $discountedAmount * $item->getQty();
+            $lineItem->setId($item->getId())
+                ->setTitle($item->getName())
+                ->setQuantity($item->getQty())
+                ->setListPrice($this->getAmountObject($item->getPrice(), $currencyCode))
+                ->setDiscountedPrice($this->getAmountObject($discountedAmount, $currencyCode))
+                ->setAppliedDiscounts($rulesNameOrCode)
+                ->setAdditionalAttributes($additionalAttributes)
+                ->setStatus(
+                    $item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock() ?
+                        self::STATUS_AVAILABLE : self::STATUS_OUT_OF_STOCK
+                )
+                ->setTaxAmount([$this->getAmountObject($item->getTaxAmount(), $currencyCode)])
+
+                ;
+
+            $lineItems[] = $lineItem;
         }
 
         $methods = [];
         if ($quote->getShippingAddress()->validate()) {
-            $shippingMethods = $this->shippingMethodManagement->getList($quote->getId());
+            $magentoShippingMethods = $this->shippingMethodManagement->getList($quote->getId());
 
-            foreach ($shippingMethods as $method) {
-                $methods[] = [
-                    'id' => $method->getCarrierCode() .'_'. $method->getMethodCode(),
-                    'price' => [
-                        'amount' => (string)$method->getAmount(),
-                        'currencyCode' => $currencyCode,
-                    ],
-                    'discountedPrice' => [],
-                    'shippingMethod' => [
-                        'shippingMethodName' => $method->getCarrierTitle() .' - '. $method->getMethodTitle(),
-                        'shippingMethodCode' => $method->getCarrierCode() .'_'. $method->getMethodCode(),
-                    ],
-                    'shippingEstimate' => [],
-                    'isDefault' =>
-                        $quote->getShippingAddress()->getShippingMethod() == ($method->getCarrierCode() .'_'. $method->getMethodCode()),
-                ];
+            foreach ($magentoShippingMethods as $magentoMethod) {
+                $deliveryOption = $this->deliveryOptionFactory->create();
+
+                $shippingMethod = $this->shippingMethodFactory->create();
+                $shippingMethod->setShippingMethodName($magentoMethod->getCarrierTitle() .' - '. $magentoMethod->getMethodTitle())
+                    ->setShippingMethodCode($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode());
+
+                $discountedPrice = $magentoMethod->getAmount() - $quote->getShippingAddress()->getShippingDiscountAmount();
+                $deliveryOption->setId($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())
+                    ->setPrice($this->getAmountObject($magentoMethod->getAmount(), $currencyCode))
+                    ->setDiscountedPrice(
+                        $this->getAmountObject($discountedPrice > 0 ? $discountedPrice : 0, $currencyCode)
+                    )
+                    ->setShippingMethod($shippingMethod)
+                    ->setShippingEstimate([])
+                    ->setIsDefault(
+                        $quote->getShippingAddress()->getShippingMethod() == ($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())
+                    );
+
+                $methods[] = $deliveryOption;
             }
 
             // check if no methods for an already set address
-            if (empty($shippingMethods) && $quote->getShippingAddress()->validate()) {
+            if (empty($magentoShippingMethods) && $quote->getShippingAddress()->validate()) {
                 // loop through the item response to set their status as NOT_AVAILABLE_FOR_SHIPPING_ADDRESS
                 foreach ($lineItems as &$item) {
-                    $item['status'] = self::STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS;
+                    $item->setStatus(self::STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS);
                 }
             }
         }
@@ -165,48 +223,38 @@ class Cart
             $rule = $this->ruleCollection->addFieldToFilter('code', $quote->getCouponCode())->getFirstItem();
             $couponCodeDescription = $rule->getName();
 
-            $coupons = [
-                [
-                    'couponCode' => $quote->getCouponCode(),
-                    'description' => $couponCodeDescription
-                ]
-            ];
+            $promo = $this->promoFactory->create();
+            $promo->setCouponCode($quote->getCouponCode())
+                ->setDescription($couponCodeDescription);
+
+            $coupons[] = $promo;
         }
 
-        return [
-            [
-                'cartDetails' => [
-                    'cartId' => $quote->getId(),
-                    'lineItems' => $lineItems,
-                    'deliveryOptions' => $methods,
-                    'coupons' => $coupons,
-                    'cartLanguage' => $storeLocale,
-                    'totalShippingAmount' => [
-                        'amount' => (string)$quote->getShippingAddress()->getShippingAmount(),
-                        'currencyCode' => $currencyCode,
-                    ],
-                    'totalBaseAmount' => [
-                        'amount' => (string)$quote->getSubtotal(),
-                        'currencyCode' => $currencyCode,
-                    ],
-                    'totalTaxAmount' => [
-                        'amount' => (string)$quote->getShippingAddress()->getTaxAmount(),
-                        'currencyCode' => $currencyCode,
-                    ],
-                    'totalChargeAmount' => [
-                        'amount' => (string)$quote->getGrandTotal(),
-                        'currencyCode' => $currencyCode,
-                    ],
-                    'checkoutSessionId' => $checkoutSessionId
-                ]
-            ]
-        ];
+        /** @var $cartDetails CartDetailsInterface */
+        $cartDetails = $this->cartDetailsFactory->create();
+        $cartDetails->setCartId($quote->getId())
+            ->setLineItems($lineItems)
+            ->setDeliveryOptions($methods)
+            ->setCoupons($coupons)
+            ->setCartLanguage($storeLocale)
+            ->setTotalShippingAmount(
+                $this->getAmountObject(
+                    $quote->getShippingAddress()->getShippingAmount() - $quote->getShippingAddress()->getShippingDiscountAmount(),
+                    $currencyCode
+                )
+            )
+            ->setTotalBaseAmount($this->getAmountObject($totalBaseAmount, $currencyCode))
+            ->setTotalTaxAmount($this->getAmountObject($quote->getShippingAddress()->getTaxAmount(), $currencyCode))
+            ->setTotalChargeAmount($this->getAmountObject($quote->getGrandTotal(), $currencyCode))
+            ->setCheckoutSessionId($checkoutSessionId);
+
+        return $cartDetails;
     }
 
     /**
      * @param $quote
      * @param $checkoutSessionId
-     * @return \array[][]
+     * @return CartDetailsInterface
      */
     public function saveAndCreateResponse($quote, $checkoutSessionId = null)
     {
@@ -221,5 +269,17 @@ class Cart
         $this->cartRepository->save($quote);
 
         return $this->createResponse($quote, $checkoutSessionId);
+    }
+
+    /**
+     * @param $amount
+     * @param $currencyCode
+     * @return mixed
+     */
+    protected function getAmountObject($amount, $currencyCode)
+    {
+        $object = $this->amountFactory->create();
+
+        return $object->setAmount($amount)->setCurrencyCode($currencyCode);
     }
 }
