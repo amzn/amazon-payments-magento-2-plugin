@@ -270,7 +270,8 @@ class Cart
     {
         $deliveryOptions = [];
         if ($quote->getShippingAddress()->validate()) {
-            $magentoShippingMethods = $this->shippingMethodManagement->getList($quote->getId());
+            $magentoShippingMethods =
+                $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
 
             foreach ($magentoShippingMethods as $magentoMethod) {
                 /** @var DeliveryOptionInterface $deliveryOption */
