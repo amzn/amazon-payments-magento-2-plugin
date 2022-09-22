@@ -2,13 +2,19 @@
 
 namespace Amazon\Pay\Helper\Spc;
 
+use Amazon\Pay\Api\Spc\Response\AmountInterface;
 use Amazon\Pay\Api\Spc\Response\AmountInterfaceFactory;
 use Amazon\Pay\Api\Spc\Response\CartDetailsInterface;
 use Amazon\Pay\Api\Spc\Response\CartDetailsInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\DeliveryOptionInterface;
 use Amazon\Pay\Api\Spc\Response\DeliveryOptionInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\LineItemInterface;
 use Amazon\Pay\Api\Spc\Response\LineItemInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\NameValueInterface;
 use Amazon\Pay\Api\Spc\Response\NameValueInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\PromoInterface;
 use Amazon\Pay\Api\Spc\Response\PromoInterfaceFactory;
+use Amazon\Pay\Api\Spc\Response\ShippingMethodInterface;
 use Amazon\Pay\Api\Spc\Response\ShippingMethodInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -174,6 +180,10 @@ class Cart
         return $this->createResponse($quote, $checkoutSessionId);
     }
 
+    /**
+     * @param $quote
+     * @return mixed
+     */
     protected function getCartLanguage($quote)
     {
         return $this->scopeConfig->getValue(
@@ -183,22 +193,30 @@ class Cart
         );
     }
 
+    /**
+     * @param $quote
+     * @param $currencyCode
+     * @return array
+     */
     protected function getLineItemsAndTotalBaseAmount($quote, $currencyCode)
     {
         $lineItems = [];
         $totalBaseAmount = 0;
 
         foreach ($quote->getAllVisibleItems() as $item) {
+            /** @var LineItemInterface $lineItem */
             $lineItem = $this->lineItemFactory->create();
 
             $additionalAttributes = [];
             if ($item->getWeight()) {
+                /** @var NameValueInterface $nameValue */
                 $nameValue = $this->nameValueFactory->create();
                 $nameValue->setName('weight')
                     ->setValue($item->getWeight());
                 $additionalAttributes[] = $nameValue;
             }
             if ($item->getDescription()) {
+                /** @var NameValueInterface $nameValue */
                 $nameValue = $this->nameValueFactory->create();
                 $nameValue->setName('description')
                     ->setValue($item->getDescription());
@@ -209,6 +227,7 @@ class Cart
             $rules = $this->ruleCollection->addFieldToFilter('rule_id', ['in' => $item->getAppliedRuleIds()]);
             $rulesNameOrCode = [];
             foreach ($rules as $rule) {
+                /** @var PromoInterface $ruleResponse */
                 $ruleResponse = $this->promoFactory->create();
                 $ruleResponse->setCouponCode($rule->getCode() ?: '')
                     ->setDescription($rule->getName());
@@ -239,15 +258,25 @@ class Cart
         return [$lineItems, $totalBaseAmount];
     }
 
+    /**
+     * @param $quote
+     * @param $currencyCode
+     * @param $lineItems
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     */
     protected function getDeliveryOptions($quote, $currencyCode, &$lineItems)
     {
+        $deliveryOptions = [];
         if ($quote->getShippingAddress()->validate()) {
-            $deliveryOptions = [];
             $magentoShippingMethods = $this->shippingMethodManagement->getList($quote->getId());
 
             foreach ($magentoShippingMethods as $magentoMethod) {
+                /** @var DeliveryOptionInterface $deliveryOption */
                 $deliveryOption = $this->deliveryOptionFactory->create();
 
+                /** @var ShippingMethodInterface $shippingMethod */
                 $shippingMethod = $this->shippingMethodFactory->create();
                 $shippingMethod->setShippingMethodName($magentoMethod->getCarrierTitle() .' - '. $magentoMethod->getMethodTitle())
                     ->setShippingMethodCode($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode());
@@ -274,19 +303,22 @@ class Cart
                     $item->setStatus(self::STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS);
                 }
             }
-
-            return $deliveryOptions;
         }
 
-        return [];
+        return $deliveryOptions;
     }
 
+    /**
+     * @param $quote
+     * @return array
+     */
     protected function getCoupons($quote)
     {
         if ($quote->getCouponCode()) {
             $rule = $this->ruleCollection->addFieldToFilter('code', $quote->getCouponCode())->getFirstItem();
             $couponCodeDescription = $rule->getName();
 
+            /** @var PromoInterface $promo */
             $promo = $this->promoFactory->create();
             $promo->setCouponCode($quote->getCouponCode())
                 ->setDescription($couponCodeDescription);
@@ -300,10 +332,11 @@ class Cart
     /**
      * @param $amount
      * @param $currencyCode
-     * @return mixed
+     * @return AmountInterface
      */
     protected function getAmountObject($amount, $currencyCode)
     {
+        /** @var AmountInterface $object */
         $object = $this->amountFactory->create();
 
         return $object->setAmount($amount)->setCurrencyCode($currencyCode);

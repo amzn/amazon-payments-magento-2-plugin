@@ -133,6 +133,14 @@ class LineItem extends DataObject implements LineItemInterface
     /**
      * @inheritDoc
      */
+    public function setAppliedDiscounts(array $appliedDiscounts)
+    {
+        return $this->setData('applied_discounts', $appliedDiscounts);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function setStatus(string $status)
     {
         return $this->setData('status', $status);

@@ -80,6 +80,12 @@ interface LineItemInterface
     public function setDiscountedPrice(AmountInterface $discountedPrice);
 
     /**
+     * @param \Amazon\Pay\Api\Spc\Response\PromoInterface[] $appliedDiscounts
+     * @return $this
+     */
+    public function setAppliedDiscounts(array $appliedDiscounts);
+
+    /**
      * @param array $additionalAttributes
      * @return $this
      */
