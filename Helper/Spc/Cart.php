@@ -124,16 +124,70 @@ class Cart
     {
         /** @var $quote \Magento\Quote\Model\Quote */
 
-        $storeLocale = $this->scopeConfig->getValue(
+        $cartLanguage = $this->getCartLanguage($quote);
+        $currencyCode = $quote->getQuoteCurrencyCode();
+
+        // Get line items and total base amount
+        [$lineItems, $totalBaseAmount] = $this->getLineItemsAndTotalBaseAmount($quote, $currencyCode);
+
+        // Get delivery options
+        $deliveryOptions = $this->getDeliveryOptions($quote, $currencyCode, $lineItems);
+
+        // Get applied coupons
+        $coupons = $this->getCoupons($quote);
+
+        // Create response object
+        /** @var $cartDetails CartDetailsInterface */
+        $cartDetails = $this->cartDetailsFactory->create();
+        $cartDetails->setCartId($quote->getId())
+            ->setLineItems($lineItems)
+            ->setDeliveryOptions($deliveryOptions)
+            ->setCoupons($coupons)
+            ->setCartLanguage($cartLanguage)
+            ->setTotalShippingAmount(
+                $this->getAmountObject(
+                    $quote->getShippingAddress()->getShippingAmount() - $quote->getShippingAddress()->getShippingDiscountAmount(),
+                    $currencyCode
+                )
+            )
+            ->setTotalBaseAmount($this->getAmountObject($totalBaseAmount, $currencyCode))
+            ->setTotalTaxAmount($this->getAmountObject($quote->getShippingAddress()->getTaxAmount(), $currencyCode))
+            ->setTotalChargeAmount($this->getAmountObject($quote->getGrandTotal(), $currencyCode))
+            ->setCheckoutSessionId($checkoutSessionId);
+
+        return $cartDetails;
+    }
+
+    /**
+     * @param $quote
+     * @param $checkoutSessionId
+     * @return CartDetailsInterface
+     */
+    public function saveAndCreateResponse($quote, $checkoutSessionId = null)
+    {
+        // Collect totals
+        $quote->collectTotals();
+
+        // Save cart
+        $this->cartRepository->save($quote);
+
+        return $this->createResponse($quote, $checkoutSessionId);
+    }
+
+    protected function getCartLanguage($quote)
+    {
+        return $this->scopeConfig->getValue(
             'general/locale/code',
             ScopeInterface::SCOPE_STORE,
             $quote->getStoreId()
         );
-        $currencyCode = $quote->getQuoteCurrencyCode();
+    }
 
-        // Loop to get item details
+    protected function getLineItemsAndTotalBaseAmount($quote, $currencyCode)
+    {
         $lineItems = [];
         $totalBaseAmount = 0;
+
         foreach ($quote->getAllVisibleItems() as $item) {
             $lineItem = $this->lineItemFactory->create();
 
@@ -177,13 +231,18 @@ class Cart
                 )
                 ->setTaxAmount([$this->getAmountObject($item->getTaxAmount(), $currencyCode)])
 
-                ;
+            ;
 
             $lineItems[] = $lineItem;
         }
 
-        $methods = [];
+        return [$lineItems, $totalBaseAmount];
+    }
+
+    protected function getDeliveryOptions($quote, $currencyCode, &$lineItems)
+    {
         if ($quote->getShippingAddress()->validate()) {
+            $deliveryOptions = [];
             $magentoShippingMethods = $this->shippingMethodManagement->getList($quote->getId());
 
             foreach ($magentoShippingMethods as $magentoMethod) {
@@ -205,7 +264,7 @@ class Cart
                         $quote->getShippingAddress()->getShippingMethod() == ($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())
                     );
 
-                $methods[] = $deliveryOption;
+                $deliveryOptions[] = $deliveryOption;
             }
 
             // check if no methods for an already set address
@@ -215,10 +274,15 @@ class Cart
                     $item->setStatus(self::STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS);
                 }
             }
+
+            return $deliveryOptions;
         }
 
-        // coupon code description
-        $coupons = [];
+        return [];
+    }
+
+    protected function getCoupons($quote)
+    {
         if ($quote->getCouponCode()) {
             $rule = $this->ruleCollection->addFieldToFilter('code', $quote->getCouponCode())->getFirstItem();
             $couponCodeDescription = $rule->getName();
@@ -227,48 +291,10 @@ class Cart
             $promo->setCouponCode($quote->getCouponCode())
                 ->setDescription($couponCodeDescription);
 
-            $coupons[] = $promo;
+            return [$promo];
         }
 
-        /** @var $cartDetails CartDetailsInterface */
-        $cartDetails = $this->cartDetailsFactory->create();
-        $cartDetails->setCartId($quote->getId())
-            ->setLineItems($lineItems)
-            ->setDeliveryOptions($methods)
-            ->setCoupons($coupons)
-            ->setCartLanguage($storeLocale)
-            ->setTotalShippingAmount(
-                $this->getAmountObject(
-                    $quote->getShippingAddress()->getShippingAmount() - $quote->getShippingAddress()->getShippingDiscountAmount(),
-                    $currencyCode
-                )
-            )
-            ->setTotalBaseAmount($this->getAmountObject($totalBaseAmount, $currencyCode))
-            ->setTotalTaxAmount($this->getAmountObject($quote->getShippingAddress()->getTaxAmount(), $currencyCode))
-            ->setTotalChargeAmount($this->getAmountObject($quote->getGrandTotal(), $currencyCode))
-            ->setCheckoutSessionId($checkoutSessionId);
-
-        return $cartDetails;
-    }
-
-    /**
-     * @param $quote
-     * @param $checkoutSessionId
-     * @return CartDetailsInterface
-     */
-    public function saveAndCreateResponse($quote, $checkoutSessionId = null)
-    {
-        // Force the store to stay as the frontend one, so that the same endpoint can be used for all stores
-        $storeId = $quote->getOrigData('store_id');
-        $quote->setStoreId($storeId);
-
-        // Collect totals
-        $quote->collectTotals();
-
-        // Save cart
-        $this->cartRepository->save($quote);
-
-        return $this->createResponse($quote, $checkoutSessionId);
+        return [];
     }
 
     /**
