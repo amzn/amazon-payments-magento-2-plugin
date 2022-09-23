@@ -79,7 +79,7 @@ class ShippingMethod implements ShippingMethodInterface
         // Get quote
         try {
             /** @var $quote \Magento\Quote\Model\Quote */
-            $quote = $this->cartRepository->get($cartId);
+            $quote = $this->cartRepository->getActive($cartId);
         } catch (NoSuchEntityException $e) {
             throw new \Magento\Framework\Webapi\Exception(
                 new Phrase('InvalidCartId'), 404, 404
