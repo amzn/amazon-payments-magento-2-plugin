@@ -16,6 +16,8 @@ use Amazon\Pay\Api\Spc\Response\PromoInterface;
 use Amazon\Pay\Api\Spc\Response\PromoInterfaceFactory;
 use Amazon\Pay\Api\Spc\Response\ShippingMethodInterface;
 use Amazon\Pay\Api\Spc\Response\ShippingMethodInterfaceFactory;
+use Amazon\Pay\Api\Spc\ResponseInterface;
+use Amazon\Pay\Api\Spc\ResponseInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
@@ -82,6 +84,8 @@ class Cart
      */
     protected $nameValueFactory;
 
+    protected $responseFactory;
+
     /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param CartRepositoryInterface $cartRepository
@@ -106,7 +110,8 @@ class Cart
         DeliveryOptionInterfaceFactory $deliveryOptionFactory,
         ShippingMethodInterfaceFactory $shippingMethodFactory,
         LineItemInterfaceFactory $lineItemFactory,
-        NameValueInterfaceFactory $nameValueFactory
+        NameValueInterfaceFactory $nameValueFactory,
+        ResponseInterfaceFactory $responseFactory
     )
     {
         $this->shippingMethodManagement = $shippingMethodManagement;
@@ -120,11 +125,12 @@ class Cart
         $this->shippingMethodFactory = $shippingMethodFactory;
         $this->lineItemFactory = $lineItemFactory;
         $this->nameValueFactory = $nameValueFactory;
+        $this->responseFactory = $responseFactory;
     }
 
     /**
      * @param $quote
-     * @return CartDetailsInterface
+     * @return ResponseInterface
      */
     public function createResponse($quote, $checkoutSessionId = null)
     {
@@ -161,13 +167,16 @@ class Cart
             ->setTotalChargeAmount($this->getAmountObject($quote->getGrandTotal(), $currencyCode))
             ->setCheckoutSessionId($checkoutSessionId);
 
-        return $cartDetails;
+        /** @var ResponseInterface $response */
+        $response = $this->responseFactory->create();
+
+        return $response->setCartDetails($cartDetails);
     }
 
     /**
      * @param $quote
      * @param $checkoutSessionId
-     * @return CartDetailsInterface
+     * @return ResponseInterface
      */
     public function saveAndCreateResponse($quote, $checkoutSessionId = null)
     {

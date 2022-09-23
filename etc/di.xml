@@ -391,10 +391,12 @@
                 type="Amazon\Pay\Model\Spc\Order" />
 
     <!-- SPC response interfaces -->
-    <preference for="Amazon\Pay\Api\Spc\Response\AmountInterface"
-                type="Amazon\Pay\Model\Spc\Response\Amount" />
+    <preference for="Amazon\Pay\Api\Spc\ResponseInterface"
+                type="Amazon\Pay\Model\Spc\Response" />
     <preference for="Amazon\Pay\Api\Spc\Response\CartDetailsInterface"
                 type="Amazon\Pay\Model\Spc\Response\CartDetails" />
+    <preference for="Amazon\Pay\Api\Spc\Response\AmountInterface"
+                type="Amazon\Pay\Model\Spc\Response\Amount" />
     <preference for="Amazon\Pay\Api\Spc\Response\DeliveryOptionInterface"
                 type="Amazon\Pay\Model\Spc\Response\DeliveryOption" />
     <preference for="Amazon\Pay\Api\Spc\Response\LineItemInterface"

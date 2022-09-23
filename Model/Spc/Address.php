@@ -5,11 +5,11 @@ namespace Amazon\Pay\Model\Spc;
 use Amazon\Pay\Api\Spc\AddressInterface as SpcAddressInterface;
 use Amazon\Pay\Api\Spc\ShippingMethodInterface;
 use Amazon\Pay\Helper\Spc\Cart;
-use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Amazon\Pay\Model\CheckoutSessionManagement;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Directory\Model\Region;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -94,7 +94,14 @@ class Address implements SpcAddressInterface
     public function saveAddress(int $cartId, $cartDetails = null)
     {
         // Get quote
-        $quote = $this->cartRepository->get($cartId);
+        try {
+            /** @var $quote \Magento\Quote\Model\Quote */
+            $quote = $this->cartRepository->get($cartId);
+        } catch (NoSuchEntityException $e) {
+            throw new \Magento\Framework\Webapi\Exception(
+                new Phrase('InvalidCartId'), 404, 404
+            );
+        }
 
         $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
 

@@ -4,6 +4,7 @@ namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\CouponInterface;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -48,7 +49,14 @@ class Coupon implements CouponInterface
     public function applyCoupon(int $cartId, $cartDetails = null)
     {
         // Get quote
-        $quote = $this->cartRepository->get($cartId);
+        try {
+            /** @var $quote \Magento\Quote\Model\Quote */
+            $quote = $this->cartRepository->get($cartId);
+        } catch (NoSuchEntityException $e) {
+            throw new \Magento\Framework\Webapi\Exception(
+                new Phrase('InvalidCartId'), 404, 404
+            );
+        }
 
         // Get checkoutSessionId
         $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;

@@ -2,14 +2,12 @@
 
 namespace Amazon\Pay\Api\Spc;
 
-use Amazon\Pay\Api\Spc\Response\CartDetailsInterface;
-
 interface ShippingMethodInterface
 {
     /**
      * @param int $cartId
      * @param mixed|null $cartDetails
-     * @return CartDetailsInterface
+     * @return ResponseInterface
      */
     public function shippingMethod(int $cartId, $cartDetails = null);
 }
