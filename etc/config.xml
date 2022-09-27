@@ -54,11 +54,9 @@
                 <checkout_result_url>checkout/onepage/success</checkout_result_url>
                 <sign_in_result_url>amazon_pay/login/authorize/</sign_in_result_url>
                 <can_use_internal>0</can_use_internal>
-            </amazon_payment_v2>
-            <amazon_pay>
                 <spc_tokens_sync_status_default>You will find the status of the Sync at the store view level.</spc_tokens_sync_status_default>
                 <spc_tokens_sync_status>No tokens have been synced yet.</spc_tokens_sync_status>
-            </amazon_pay>
+            </amazon_payment_v2>
         </payment>
     </default>
 </config>
