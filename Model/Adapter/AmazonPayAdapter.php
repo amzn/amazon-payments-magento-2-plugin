@@ -573,6 +573,7 @@ class AmazonPayAdapter
                 'presentmentCurrency' => $currencyCode,
             ];
             $payload['cartDetails'] = $quote->getId();
+            $payload['platformId'] = $this->amazonConfig->getPlatformId();
         }
 
         return json_encode($payload, JSON_UNESCAPED_SLASHES);
