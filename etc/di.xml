@@ -60,6 +60,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="AmazonPayAsyncProcess" xsi:type="object">Amazon\Pay\Command\Async\ProcessCommand</item>
+                <item name="AmazonChargePermissionCommand" xsi:type="object">Amazon\Pay\Command\Sales\AmazonChargePermissionCommand</item>
             </argument>
         </arguments>
     </type>
@@ -70,14 +71,6 @@
             <argument name="orderRepository" xsi:type="object">Magento\Sales\Model\OrderRepository\Proxy</argument>
             <argument name="amazonAdapter" xsi:type="object">Amazon\Pay\Model\Adapter\AmazonPayAdapter\Proxy</argument>
             <argument name="searchCriteriaBuilder" xsi:type="object">Magento\Framework\Api\SearchCriteriaBuilder\Proxy</argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\Framework\Console\CommandList">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="AmazonChargePermissionCommand" xsi:type="object">Amazon\Pay\Command\Sales\AmazonChargePermissionCommand</item>
-            </argument>
         </arguments>
     </type>
 
