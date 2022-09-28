@@ -103,7 +103,7 @@ class Address implements SpcAddressInterface
             );
         }
 
-        $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
+        $checkoutSessionId = $cartDetails['checkout_session_id'] ?? null;
 
         // Get addresses for updating
         if ($cartDetails && $checkoutSessionId) {

@@ -59,7 +59,7 @@ class Coupon implements CouponInterface
         }
 
         // Get checkoutSessionId
-        $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
+        $checkoutSessionId = $cartDetails['checkout_session_id'] ?? null;
 
         // Get checkout session for verification
         if ($cartDetails && $checkoutSessionId) {
@@ -79,8 +79,8 @@ class Coupon implements CouponInterface
             }
 
             // Only grabbing the first one, as Magento only accepts one coupon code
-            if (isset($cartDetails['coupons'][0]['couponCode'])) {
-                $couponCode = $cartDetails['coupons'][0]['couponCode'];
+            if (isset($cartDetails['coupons'][0]['coupon_code'])) {
+                $couponCode = $cartDetails['coupons'][0]['coupon_code'];
 
                 // Attempt to set coupon code
                 $quote->setCouponCode($couponCode);

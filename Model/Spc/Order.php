@@ -77,7 +77,7 @@ class Order implements OrderInterface
         }
 
         // Get checkoutSessionId
-        $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
+        $checkoutSessionId = $cartDetails['checkout_session_id'] ?? null;
 
         // Get checkout session for verification
         if ($cartDetails && $checkoutSessionId) {

@@ -87,7 +87,7 @@ class ShippingMethod implements ShippingMethodInterface
         }
 
         // Get checkoutSessionId
-        $checkoutSessionId = $cartDetails['checkoutSessionId'] ?? null;
+        $checkoutSessionId = $cartDetails['checkout_session_id'] ?? null;
 
         // Check checkout session to
         if ($cartDetails && $checkoutSessionId) {
@@ -108,8 +108,8 @@ class ShippingMethod implements ShippingMethodInterface
 
             // Only grabbing the first one, as Magento only accepts one coupon code
             if ($quote->getShippingAddress()->validate()
-                && isset($cartDetails['deliveryOptions'][0]['shippingMethod']['shippingMethodCode'])) {
-                $shippingMethodCode = $cartDetails['deliveryOptions'][0]['shippingMethod']['shippingMethodCode'];
+                && isset($cartDetails['delivery_options'][0]['shipping_method']['shipping_method_code'])) {
+                $shippingMethodCode = $cartDetails['delivery_options'][0]['shipping_method']['shipping_method_code'];
 
                 $address = $quote->getShippingAddress();
 
