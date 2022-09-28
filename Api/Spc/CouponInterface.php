@@ -7,7 +7,7 @@ interface CouponInterface
     /**
      * @param int $cartId
      * @param mixed|null $cartDetails
-     * @return ResponseInterface
+     * @return \Amazon\Pay\Api\Spc\ResponseInterface
      */
     public function applyCoupon(int $cartId, $cartDetails = null);
 }

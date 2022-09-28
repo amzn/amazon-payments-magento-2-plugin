@@ -7,7 +7,7 @@ interface ShippingMethodInterface
     /**
      * @param int $cartId
      * @param mixed|null $cartDetails
-     * @return ResponseInterface
+     * @return \Amazon\Pay\Api\Spc\ResponseInterface
      */
     public function shippingMethod(int $cartId, $cartDetails = null);
 }
