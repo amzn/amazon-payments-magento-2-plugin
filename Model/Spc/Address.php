@@ -145,7 +145,7 @@ class Address implements SpcAddressInterface
                 );
             }
 
-            $this->shippingMethod->shippingMethod($cartId, $cartDetails);
+            $this->shippingMethod->shippingMethod($cartId, $cartDetails, true);
         }
 
         // Save and create response

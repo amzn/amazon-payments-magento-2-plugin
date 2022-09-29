@@ -74,7 +74,7 @@ class ShippingMethod implements ShippingMethodInterface
     /**
      * @inheritdoc
      */
-    public function shippingMethod(int $cartId, $cartDetails = null)
+    public function shippingMethod(int $cartId, $cartDetails = null, $skipSave = false)
     {
         // Get quote
         try {
@@ -154,6 +154,10 @@ class ShippingMethod implements ShippingMethodInterface
             }
         }
 
+        if ($skipSave) {
+            return true;
+        }
+        
         // Construct response
         return $this->cartHelper->saveAndCreateResponse($quote, $checkoutSessionId);
     }
