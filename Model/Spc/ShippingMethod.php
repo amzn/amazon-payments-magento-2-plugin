@@ -126,7 +126,6 @@ class ShippingMethod implements ShippingMethodInterface
             }
             // Select the cheapest option
             else if ($quote->getShippingAddress()->validate()) {
-//                                $shippingMethods = $this->shippingMethodManagement->getList($quote->getId());
                 $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
                 $cheapestMethod = [
                     'carrier' => '',
