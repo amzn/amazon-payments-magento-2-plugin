@@ -12,14 +12,14 @@
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="../../../../../../dev/tests/api-functional/framework/bootstrap.php"
+         bootstrap="../../../dev/tests/api-functional/framework/bootstrap.php"
          testSuiteLoaderClass="Magento\TestFramework\ApiSuiteLoader"
-         testSuiteLoaderFile="../../../../../../dev/tests/api-functional/framework/Magento/TestFramework/ApiSuiteLoader.php"
+         testSuiteLoaderFile="../../../dev/tests/api-functional/framework/Magento/TestFramework/ApiSuiteLoader.php"
 >
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento REST web API functional tests">
-            <file>../../../../../../dev/tests/api-functional/testsuite/Magento/WebApiTest.php</file>
+            <file>../../../dev/tests/api-functional/testsuite/Magento/WebApiTest.php</file>
         </testsuite>
         <testsuite name="Magento REST web API functional tests real suite">
             <directory>./</directory>
@@ -28,8 +28,10 @@
 
     <!-- PHP INI settings and constants definition -->
     <php>
-        <includePath>../../../../../../dev/tests/api-functional/testsuite</includePath>
-        <const name="TESTS_INSTALL_CONFIG_FILE" value="../../../app/code/Amazon/Pay/Test/Api/config/install-config-mysql.php"/>
+        <includePath>../../../dev/tests/api-functional/testsuite</includePath>
+        <const name="TESTS_INSTALL_CONFIG_FILE" value="config/install-config-mysql.php"/>
+        <!-- Local XML post installation configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
+        <const name="TESTS_POST_INSTALL_SETUP_COMMAND_CONFIG_FILE" value="../../../dev/tests/api-functional/config/post-install-setup-command-config.php.dist"/>
         <const name="TESTS_GLOBAL_CONFIG_FILE" value="config/config-global.php"/>
         <!-- WebSerivice Type -->
         <const name="TESTS_WEB_API_ADAPTER" value="rest"/>
@@ -49,7 +51,7 @@
         <ini name="date.timezone" value="America/Los_Angeles"/>
 
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
-        <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../../../etc"/>
+        <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <!-- Whether to cleanup the application before running tests or not -->
         <const name="TESTS_CLEANUP" value="enabled"/>
         <!--Defines if Magento should be installed before tests execution-->

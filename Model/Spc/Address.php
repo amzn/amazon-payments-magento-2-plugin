@@ -145,10 +145,12 @@ class Address implements SpcAddressInterface
                 );
             }
 
+            $this->cartRepository->save($quote);
+
             $this->shippingMethod->shippingMethod($cartId, $cartDetails);
         }
 
         // Save and create response
-        return $this->cartHelper->saveAndCreateResponse($quote, $checkoutSessionId);
+        return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
     }
 }

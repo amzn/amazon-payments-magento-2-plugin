@@ -1,0 +1,20 @@
+{
+  "name": "pwa-api-test",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "e2e-local": "./runners/run-local.sh",
+    "setup-local": "node scripts/setup/setup.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chromedriver": "^90.0.0",
+    "newman": "^5.2.3",
+    "newman-reporter-html": "^1.0.5",
+    "newman-reporter-htmlextra": "^1.20.4",
+    "puppeteer": "^9.1.1"
+  }
+}

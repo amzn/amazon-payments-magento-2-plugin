@@ -103,7 +103,7 @@ class Order implements OrderInterface
             foreach ($quote->getAllVisibleItems() as $item) {
                 if (!$item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()) {
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase('InvalidCartStatus'), 422, 422
+                        new Phrase('InvalidCartStatus1'), 422, 422
                     );
                 }
             }
@@ -111,18 +111,19 @@ class Order implements OrderInterface
             // Check that both addresses are set
             if (is_array($quote->getShippingAddress()->validate()) || is_array($quote->getBillingAddress()->validate())) {
                 throw new \Magento\Framework\Webapi\Exception(
-                    new Phrase('InvalidCartStatus'), 422, 422
+                    new Phrase('InvalidCartStatus2'), 422, 422
                 );
             }
 
             // Check that the shipping method has been set
             if (empty($quote->getShippingAddress()->getShippingMethod())) {
+                var_dump($quote->getShippingAddress()->getShippingMethod());die;
                 throw new \Magento\Framework\Webapi\Exception(
-                    new Phrase('InvalidCartStatus'), 422, 422
+                    new Phrase('InvalidCartStatus3'), 422, 422
                 );
             }
 
-            return $this->cartHelper->createResponse($quote, $checkoutSessionId);
+            return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
         }
     }
 }

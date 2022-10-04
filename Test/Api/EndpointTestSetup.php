@@ -19,6 +19,8 @@ class EndpointTestSetup extends WebapiAbstract
 
     const NON_EXISTENT_CART_ID = 10000000;
 
+    protected $checkoutSessionId;
+
     protected $createdCartId;
 
     protected $createdCartMaskedId;
@@ -27,6 +29,15 @@ class EndpointTestSetup extends WebapiAbstract
 
     protected function setUp(): void
     {
+        $puppeteerQuoteMaskId = file(
+            BP .'/vendor/amzn/amazon-pay-magento-2-module/Test/Api/environments/quote_mask_id');
+        $puppeteerCheckoutSessionId = file(
+            BP .'/vendor/amzn/amazon-pay-magento-2-module/Test/Api/environments/checkout_session_id');
+
+        $this->createdCartMaskedId = trim($puppeteerQuoteMaskId[0]);
+        $this->checkoutSessionId = trim($puppeteerCheckoutSessionId[0]);
+
+
         $this->clearInventoryReservations();
         $this->upStockOnProduct();
 
@@ -53,15 +64,15 @@ class EndpointTestSetup extends WebapiAbstract
     protected function createCart()
     {
         if (!$this->createdCartId) {
-            // create cart
-            $serviceInfo = self::SERVICE_INFO;
-            $serviceInfo['rest']['resourcePath'] = '/V1/guest-carts';
-            $cartMaskedId = $this->_webApiCall($serviceInfo);
-            $this->createdCartMaskedId = $cartMaskedId;
+//            // create cart
+//            $serviceInfo = self::SERVICE_INFO;
+//            $serviceInfo['rest']['resourcePath'] = '/V1/guest-carts';
+//            $cartMaskedId = $this->_webApiCall($serviceInfo);
+//            $this->createdCartMaskedId = $cartMaskedId;
 
             // get cart's db id
             $serviceInfo = self::SERVICE_INFO;
-            $serviceInfo['rest']['resourcePath'] = '/V1/guest-carts/' . $cartMaskedId;
+            $serviceInfo['rest']['resourcePath'] = '/V1/guest-carts/' . $this->createdCartMaskedId;
             $serviceInfo['rest']['httpMethod'] = 'GET';
             $cart = $this->_webApiCall($serviceInfo);
 

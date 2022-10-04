@@ -126,7 +126,8 @@ class ShippingMethod implements ShippingMethodInterface
             }
             // Select the cheapest option
             else if ($quote->getShippingAddress()->validate()) {
-                $shippingMethods = $this->shippingMethodManagement->getList($quote->getId());
+//                                $shippingMethods = $this->shippingMethodManagement->getList($quote->getId());
+                $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
                 $cheapestMethod = [
                     'carrier' => '',
                     'code' => '',
@@ -155,6 +156,6 @@ class ShippingMethod implements ShippingMethodInterface
         }
 
         // Construct response
-        return $this->cartHelper->saveAndCreateResponse($quote, $checkoutSessionId);
+        return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
     }
 }

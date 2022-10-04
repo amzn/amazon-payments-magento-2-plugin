@@ -1,0 +1,6 @@
+package-lock.json
+node_modules
+.phpunit.result.cache
+screens/*
+environments/checkout_session_id
+environments/quote_mask_id

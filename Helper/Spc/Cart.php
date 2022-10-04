@@ -84,6 +84,9 @@ class Cart
      */
     protected $nameValueFactory;
 
+    /**
+     * @var ResponseInterfaceFactory
+     */
     protected $responseFactory;
 
     /**
@@ -129,12 +132,16 @@ class Cart
     }
 
     /**
-     * @param $quote
+     * @param $quoteId
+     * @param $checkoutSessionId
      * @return ResponseInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
      */
-    public function createResponse($quote, $checkoutSessionId = null)
+    public function createResponse($quoteId, $checkoutSessionId = null)
     {
         /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->cartRepository->get($quoteId);
 
         $cartLanguage = $this->getCartLanguage($quote);
         $currencyCode = $quote->getQuoteCurrencyCode();
@@ -171,22 +178,6 @@ class Cart
         $response = $this->responseFactory->create();
 
         return $response->setCartDetails($cartDetails);
-    }
-
-    /**
-     * @param $quote
-     * @param $checkoutSessionId
-     * @return ResponseInterface
-     */
-    public function saveAndCreateResponse($quote, $checkoutSessionId = null)
-    {
-        // Collect totals
-        $quote->collectTotals();
-
-        // Save cart
-        $this->cartRepository->save($quote);
-
-        return $this->createResponse($quote, $checkoutSessionId);
     }
 
     /**

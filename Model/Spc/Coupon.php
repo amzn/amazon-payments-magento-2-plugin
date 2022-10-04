@@ -97,6 +97,6 @@ class Coupon implements CouponInterface
             }
         }
 
-        return $this->cartHelper->createResponse($quote, $checkoutSessionId);
+        return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
     }
 }
