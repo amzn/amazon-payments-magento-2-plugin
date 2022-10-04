@@ -41,12 +41,6 @@
 
         <!-- Login to Amazon -->
         <actionGroup ref="AmazonBeginLoginOnlyActionGroup" stepKey="amazonBeginLoginOnlyActionGroup"/>
-        <waitForElement selector="{{AmazonPageSection.loginCancelButton}}" stepKey="waitForCancelLogin"/>
-
-        <!-- Cancel login with Amazon and land back on sign-in Magento page -->
-        <click selector="{{AmazonPageSection.loginCancelButton}}" stepKey="clickLoginCancelButton"/>
-        <!-- Switch back to main window -->
-        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
         <waitForPageLoad stepKey="waitForSigninPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="assertLoginUrl"/>
 
@@ -59,15 +53,25 @@
 
         <!-- Click Amazon Pay button on product page and login -->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
-
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
         <wait time="3" stepKey="allowButtonToActivate"/>
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\SecureSignInWorkaround" method="continueAsUser" stepKey="secureWorkaround">
+        
+        <!-- Sign in or 'Continue As' Amazon buyer -->
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\SignInOrContinue" method="signInOrContinue" stepKey="signInIfNecessary">
+            <argument name="emailField">{{AmazonPageSection.emailField}}</argument>
+            <argument name="passwordField">{{AmazonPageSection.passwordField}}</argument>
+            <argument name="signInButton">{{AmazonPageSection.signInButton}}</argument>
             <argument name="openerName">{$openerName}</argument>
-            <argument name="editAddressSelector">{{AmazonCheckoutSection.editShippingButton}}</argument>
-            <argument name="addressIdSelector">{{AmazonPageSection.addressId}}</argument>
-            <argument name="changePaymentSelector">{{AmazonPageSection.changePaymentButton}}</argument>
-            <argument name="changeAddressSelector">{{AmazonPageSection.changeAddressButton}}</argument>
+            <argument name="continueButton">{{AmazonPageSection.continueButton}}</argument>
+            <argument name="editShippingButton">{{AmazonCheckoutSection.editShippingButton}}</argument>
+            <argument name="addressId">{{AmazonPageSection.addressId}}</argument>
+        </helper>
+
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\SignInOrContinue" method="handleSecondScreen" stepKey="handlePopupSecondScreen">
+            <argument name="openerName">{$openerName}</argument>
+            <argument name="continueButton">{{AmazonPageSection.continueButton}}</argument>
+            <argument name="editShippingButton">{{AmazonCheckoutSection.editShippingButton}}</argument>
+            <argument name="addressId">{{AmazonPageSection.addressId}}</argument>
         </helper>
 
         <!--Come back to checkout with default address-->

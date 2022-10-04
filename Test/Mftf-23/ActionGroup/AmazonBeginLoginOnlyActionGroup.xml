@@ -5,9 +5,43 @@
         <wait time="1" stepKey="allowButtonToActivate1"/>
         <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="fillAmazonPageEmailField"/>
         <fillField selector="{{AmazonPageSection.passwordField}}" userInput="{{AmazonAccount.password}}" stepKey="fillAmazonPagePasswordField"/>
-        <click selector="{{AmazonPageSection.signInButton}}" stepKey="clickAmazonPageSignInButton"/>
-        <!--Verify successful login by the presence of the continue button-->
-        <wait time="1" stepKey="allowButtonToActivate2"/>
-        <waitForElement selector="{{AmazonLoginSection.consentButton}}" stepKey="seeAmazonConsentButton"/>
+        
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            try {
+                $remoteWebDriver->findElement(
+                    \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.signInButton}}')
+                )->click();
+                $remoteWebDriver->switchTo()->window($openerName);
+                $I->wait(5);
+            } catch (\Exception $ex) {
+                $I->comment('exception caught');
+            } catch (\Error $err) {
+                $I->comment('error caught');
+            }
+        }" stepKey="handlePopupSecondScreen"/>
+
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            try {
+                if (count($remoteWebDriver->getWindowHandles()) > 1) {
+                    $I->comment('Popup remained open, switching back to it');
+                    $I->switchToNextTab();
+    
+                    $loginCancel = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.loginCancelButton}}'));
+    
+                    if (!empty($loginCancel)) {
+                        $I->comment('Cancel login with Amazon and land back on sign-in Magento page');
+                        $loginCancel[0]->click();
+                        $remoteWebDriver->switchTo()->window($openerName);
+                    }
+                } else {
+                    $I->comment('Popup closed, signing out manually and returning to login page');
+                    $I->amOnPage('customer/account/logout/');
+                    $I->wait(5);
+                    $I->amOnPage('/customer/account/login/');
+                }
+            } catch (\Exception $ex) {
+
+            }
+        }" stepKey="handleCancelSignIn"/>
     </actionGroup>
 </actionGroups>
