@@ -65,7 +65,7 @@ export const actions = {
 
             // Login with Amazon
             console.log('Switching to Amazon authentication popup and entering credentials...');
-            // await popup.screenshot({path: 'screens/popup.png'});
+            await popup.screenshot({path: 'screens/popup.png'});
             await popup.waitForSelector(selectors.apEmail);
             await popup.focus(selectors.apEmail).then(() => popup.type(selectors.apEmail, config.ap_user));
             await popup.waitForSelector(selectors.apPassword);
@@ -74,13 +74,13 @@ export const actions = {
             await popup.click(selectors.apSubmit)
 
             await popup.waitForTimeout(200).catch(() => reject());
-            // await popup.screenshot({path: 'screens/popup2.png'}).catch(() => reject());
+            await popup.screenshot({path: 'screens/popup2.png'}).catch(() => reject());
             await popup.waitForTimeout(2000).catch(() => reject());
-            // await popup.screenshot({path: 'screens/popup3.png'}).catch(() => reject());
+            await popup.screenshot({path: 'screens/popup3.png'}).catch(() => reject());
             await popup.waitForTimeout(5000).catch(() => reject());
 
             if (!popup.isClosed()) {
-                // await popup.screenshot({path: 'screens/popup4.png'}).catch(() => reject());
+                await popup.screenshot({path: 'screens/popup4.png'}).catch(() => reject());
                 await popup.waitForXPath(selectors.apContinueText).catch(() => reject());
                 await popup.click(selectors.apContinueButton).catch(() => reject());
             }
