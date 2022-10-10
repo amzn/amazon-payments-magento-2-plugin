@@ -146,7 +146,8 @@ class AmazonPayAdapter
      */
     public function getCheckoutSession($storeId, $checkoutSessionId)
     {
-        $response = $this->clientFactory->create($storeId)->getCheckoutSession($checkoutSessionId);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->getCheckoutSession($checkoutSessionId, $headers);
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -188,7 +189,8 @@ class AmazonPayAdapter
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
-        $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload, $headers);
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -202,7 +204,8 @@ class AmazonPayAdapter
      */
     public function getCharge($storeId, $chargeId)
     {
-        $response = $this->clientFactory->create($storeId)->getCharge($chargeId);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->getCharge($chargeId, $headers);
         return $this->processResponse($response, __FUNCTION__);
     }
 
@@ -218,7 +221,7 @@ class AmazonPayAdapter
      */
     public function createCharge($storeId, $chargePermissionId, $amount, $currency, $captureNow = false)
     {
-        $headers = $this->getIdempotencyHeader();
+        $headers = array_merge($this->getIdempotencyHeader(), $this->getPlatformHeaders());
 
         $payload = [
             'chargePermissionId' => $chargePermissionId,
@@ -243,7 +246,7 @@ class AmazonPayAdapter
      */
     public function captureCharge($storeId, $chargeId, $amount, $currency, $headers = [])
     {
-        $headers = array_merge($headers, $this->getIdempotencyHeader());
+        $headers = array_merge($headers, $this->getIdempotencyHeader(), $this->getPlatformHeaders());
 
         $payload = [
             'captureAmount' => $this->createPrice($amount, $currency),
@@ -265,7 +268,7 @@ class AmazonPayAdapter
      */
     public function createRefund($storeId, $chargeId, $amount, $currency)
     {
-        $headers = $this->getIdempotencyHeader();
+        $headers = array_merge($this->getIdempotencyHeader(), $this->getPlatformHeaders());
 
         $payload = [
             'chargeId' => $chargeId,
@@ -286,7 +289,8 @@ class AmazonPayAdapter
      */
     public function getRefund($storeId, $refundId)
     {
-        $response = $this->clientFactory->create($storeId)->getRefund($refundId);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->getRefund($refundId, $headers);
         return $this->processResponse($response, __FUNCTION__);
     }
 
@@ -297,7 +301,8 @@ class AmazonPayAdapter
      */
     public function getChargePermission(int $storeId, string $chargePermissionId)
     {
-        $response = $this->clientFactory->create($storeId)->getChargePermission($chargePermissionId);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->getChargePermission($chargePermissionId, $headers);
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -328,7 +333,8 @@ class AmazonPayAdapter
             $payload['merchantMetadata']['noteToBuyer'] = $data['noteToBuyer'];
         }
 
-        $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload, $headers);
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -345,7 +351,8 @@ class AmazonPayAdapter
             'cancellationReason' => $reason
         ];
 
-        $response = $this->clientFactory->create($storeId)->cancelCharge($chargeId, $payload);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->cancelCharge($chargeId, $payload, $headers);
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -364,7 +371,8 @@ class AmazonPayAdapter
             'cancelPendingCharges' => $cancelPendingCharges,
         ];
 
-        $response = $this->clientFactory->create($storeId)->closeChargePermission($chargePermissionId, $payload);
+        $headers = $this->getPlatformHeaders();
+        $response = $this->clientFactory->create($storeId)->closeChargePermission($chargePermissionId, $payload, $headers);
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -414,9 +422,11 @@ class AmazonPayAdapter
             'chargeAmount' => $this->createPrice($amount, $currencyCode),
         ];
 
+        $headers = $this->getPlatformHeaders();
         $rawResponse = $this->clientFactory->create($storeId)->completeCheckoutSession(
             $sessionId,
-            json_encode($payload)
+            json_encode($payload),
+            $headers
         );
         return $this->processResponse($rawResponse, __FUNCTION__);
     }
@@ -498,6 +508,20 @@ class AmazonPayAdapter
     {
         return [
             'x-amz-pay-idempotency-key' => uniqid(),
+        ];
+    }
+
+    /**
+     * Create headers for platform and integration/module version
+     *
+     * @return array
+     */
+    protected function getPlatformHeaders()
+    {
+        return[
+            'x-amz-pay-platform-version'    => $this->productMetadata->getVersion(),
+            'x-amz-pay-integrator-version'  => $this->amazonHelper->getModuleVersion('Amazon_Pay'),
+            'x-amz-pay-integrator-id'       => $this->amazonConfig->getPlatformId()
         ];
     }
 
