@@ -237,8 +237,8 @@ class AuthTokens
                         'value' => $accessTokens['oauth_token_secret']
                     ],
                 ],
-                'auth_timestamp' => time(),
-                'auth_version' => self::AUTH_VERSION
+                'authTimestamp' => time(),
+                'authVersion' => self::AUTH_VERSION
             ],
             'spiEndpoint' =>
                 $this->storeManager->getStore($store->getId())->getBaseUrl()
