@@ -27,7 +27,7 @@ class AmazonPayAdapter
     const PAYMENT_INTENT_CONFIRM = 'Confirm';
     const PAYMENT_INTENT_AUTHORIZE = 'Authorize';
     const PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE = 'AuthorizeWithCapture';
-    const SPC_SYNC_URL_FRAGMENT = 'singlePageCheckoutDetails';
+    const SPC_SYNC_URL_FRAGMENT = 'v2/singlePageCheckoutDetails';
     const SPC_ENABLED_CONFIG = 'payment/amazon_pay/spc_enabled';
 
     /**
@@ -560,6 +560,8 @@ class AmazonPayAdapter
             $quote = $this->magentoCheckoutSession->getQuote();
             $currencyCode = $quote->getQuoteCurrencyCode();
 
+            $payload['chargePermissionType'] = 'OneTime'; // probably needs to be dynamic if buying a subscription (feature not released)
+            $payload['platformId'] = $this->amazonConfig->getPlatformId();
             $payload['merchantMetadata'] = [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
                 'merchantStoreReferenceId' => $quote->getStore()->getCode(),
@@ -569,11 +571,11 @@ class AmazonPayAdapter
             $payload['paymentDetails'] = [
                 'paymentIntent' => $paymentIntent,
                 'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
-                'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $currencyCode),
-                'presentmentCurrency' => $currencyCode,
+
             ];
-            $payload['cartDetails'] = $quote->getId();
-            $payload['platformId'] = $this->amazonConfig->getPlatformId();
+            $payload['cartDetails'] = [
+                'cartId' => $quote->getId(),
+            ];
         }
 
         return json_encode($payload, JSON_UNESCAPED_SLASHES);

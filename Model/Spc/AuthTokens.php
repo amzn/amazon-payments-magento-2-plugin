@@ -27,7 +27,7 @@ class AuthTokens
 
     const LAST_SYNC_CONFIG_PATH = 'payment/amazon_pay/spc_tokens_last_sync';
 
-    const AUTH_VERSION = 'OAuth 1.0a';
+    const AUTH_VERSION = 'OAuth1A';
 
     /**
      * @var IntegrationFactory
