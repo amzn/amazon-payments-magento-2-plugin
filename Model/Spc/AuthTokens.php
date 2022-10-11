@@ -237,7 +237,7 @@ class AuthTokens
                         'value' => $accessTokens['oauth_token_secret']
                     ],
                 ],
-                'authTimestamp' => date('c', time()),
+                'authTimestamp' => str_replace('+00:00', 'Z', date('c', time())),
                 'authVersion' => self::AUTH_VERSION
             ],
             'spiEndpoint' =>
