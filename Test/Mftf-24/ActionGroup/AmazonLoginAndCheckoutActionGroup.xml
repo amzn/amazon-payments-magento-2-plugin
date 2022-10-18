@@ -9,13 +9,16 @@
 
         <!--Save opener window name since popup auto-closes-->
         <executeJS function="return window.name;" stepKey="openerName"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMasks"/>
 
         <!--Go to Amazon Pay from the checkout and login-->
-        <waitForElement selector="{{buttonSelector}}" time="30" stepKey="apWaitForButton"/>
         <wait time="1" stepKey="allowButtonToActivate"/>
         <click selector="{{buttonSelector}}" stepKey="clickAmazonButton"/>
 
         <wait time="1" stepKey="allowPopupToOpen"/>
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\EnsurePopupOpened" method="ensurePopupOpened" stepKey="ensurePopupOpened">
+            <argument name="buttonSelector">{{buttonSelector}}</argument>
+        </helper>
         <switchToNextTab stepKey="switchToLoginPopupWindow"/>
 
         <!-- Fill in login form -->
@@ -32,6 +35,8 @@
             <argument name="continueButton">{{AmazonPageSection.continueButton}}</argument>
             <argument name="editShippingButton">{{AmazonCheckoutSection.editShippingButton}}</argument>
             <argument name="addressId">{{AmazonPageSection.addressId}}</argument>
+            <argument name="checkoutButton">{{AmazonPageSection.checkoutButton}}</argument>
+            <argument name="apButton">{{buttonSelector}}</argument>
         </helper>
 
         <wait time="2" stepKey="waitForCheckoutIfNecessary"/>
@@ -40,9 +45,12 @@
             <argument name="changeAddressSelector">{{AmazonPageSection.changeAddressButton}}</argument>
             <argument name="addressBackButtonSelector">{{AmazonPageSection.addressBackButton}}</argument>
             <argument name="defaultAddressSelector">{{AmazonPageSection.addressId}}</argument>
-            <argument name="openerName">{$openerName}</argument>
-            <argument name="editShippingButton">{{AmazonCheckoutSection.editShippingButton}}</argument>
         </helper>
+
+        <!-- <helper class="\Amazon\Pay\Test\Mftf\Helper\EnsurePopupLoaded" method="reloadPopup" stepKey="reloadPopupIfNecessary">
+            <argument name="openerName">{$openerName}</argument>
+            <argument name="continueButton">{{AmazonPageSection.continueButton}}</argument>
+        </helper> -->
 
         <!--Get shipping address information-->
         <grabAttributeFrom selector="{{AmazonPageSection.addressId}}" userInput="data-address_id" stepKey="amazonAddressId"/>

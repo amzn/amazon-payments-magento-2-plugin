@@ -28,7 +28,7 @@
         <click selector="{{AmazonButtonSection.payment}}" stepKey="clickAmazonPay" />
 
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="switchToPopup" />
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin" />
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin"/>
 
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />
         <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="payNow" />

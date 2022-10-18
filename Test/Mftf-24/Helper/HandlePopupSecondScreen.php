@@ -37,7 +37,9 @@ class HandlePopupSecondScreen extends Helper
         $openerName,
         $continueButton,
         $editShippingButton,
-        $addressId
+        $addressId,
+        $checkoutButton,
+        $apButton
     ) {
         /** @var MagentoWebDriver $magentoWebDriver */
         $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
@@ -49,7 +51,9 @@ class HandlePopupSecondScreen extends Helper
             $openerName,
             $continueButton,
             $editShippingButton,
-            $addressId
+            $addressId,
+            $checkoutButton,
+            $apButton
         ) {
             try {
                 if (count($remoteWebDriver->getWindowHandles()) > 1) {
@@ -59,6 +63,27 @@ class HandlePopupSecondScreen extends Helper
                     }
     
                     $continueAs = $remoteWebDriver->findElements(WebDriverBy::cssSelector($continueButton));
+                    $checkout = $remoteWebDriver->findElements(WebDriverBy::cssSelector($checkoutButton));
+
+                    if (empty($continueAs) && empty($checkout)) {
+                        $stepLog[] = 'Popup didn\'t finish loading, closing popup and re-initiating Amazon Pay';
+
+                        // $url = $magentoWebDriver->_getCurrentUri();
+                        // $magentoWebDriver->amOnPage($url);
+                        // $magentoWebDriver->wait(3);
+
+                        $stepLog[] = 'Closing tab';
+                        $magentoWebDriver->closeTab();
+                        $stepLog[] = 'Switching back to opener';
+                        $magentoWebDriver->switchToWindow($openerName);
+                        $stepLog[] = 'Clicking Amazon button on checkout';
+                        $magentoWebDriver->click($apButton);
+                        $stepLog[] = 'Waiting for popup to load and switching back to it';
+                        $magentoWebDriver->wait(3);
+                        $magentoWebDriver->switchToNextTab();
+                        
+                        $continueAs = $remoteWebDriver->findElements(WebDriverBy::cssSelector($continueButton));
+                    }
 
                     if (!empty($continueAs)) {
                         $stepLog[] = 'Click Continue as... button and return to checkout';
