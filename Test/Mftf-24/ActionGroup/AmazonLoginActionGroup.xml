@@ -2,6 +2,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Open login popup and complete form-->
     <actionGroup name="AmazonLoginActionGroup">
+        <arguments>
+            <argument name="buttonSelector" defaultValue="{{AmazonButtonSection.payment}}" type="string"/>
+        </arguments>
+
         <!-- Fill in login form -->
         <waitForElement selector="{{AmazonPageSection.emailField}}" time="30" stepKey="apWaitForLogin"/>
         <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="apEnterEmail"/>
@@ -16,6 +20,8 @@
             <argument name="continueButton">{{AmazonPageSection.continueButton}}</argument>
             <argument name="editShippingButton">{{AmazonCheckoutSection.editShippingButton}}</argument>
             <argument name="addressId">{{AmazonPageSection.addressId}}</argument>
+            <argument name="checkoutButton">{{AmazonPageSection.checkoutButton}}</argument>
+            <argument name="apButton">{{buttonSelector}}</argument>
         </helper>
 
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seeAmazonCheckoutButton"/>

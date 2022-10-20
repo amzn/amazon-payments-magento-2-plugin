@@ -17,5 +17,8 @@
         <element name="useAddressButton" type="button" selector="#buyer-action-button-bottom .a-button-input"/>
         <element name="paymentMethodRadioButton" type="input" selector="li[data-trail_number='{{cc}}']" parameterized="true"/>
         <element name="usePaymentButton" type="button" selector="#maxo_payment_methods #buyer-action-button-bottom .a-button-input"/>
+        <element name="hiddenAddressForm" type="block" selector="#maxo_addresses.hide"/>
+        <element name="buyerMenu" type="button" selector="#header-buyer-popover"/>
+        <element name="signOutButton" type="button" selector="#sign-out-button"/>
     </section>
 </sections>
