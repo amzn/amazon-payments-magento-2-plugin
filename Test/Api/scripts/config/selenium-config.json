@@ -1,5 +1,5 @@
 {
-	"ap_user": "spencer+alpha@beargroup.com",
-	"ap_password": "alpha_123",
-	"base_url": "https://ap244.docksal.site"
+	"ap_user": "",
+	"ap_password": "",
+	"base_url": "https://<magento-url>"
 }
