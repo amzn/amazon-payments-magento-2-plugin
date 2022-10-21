@@ -556,7 +556,7 @@ class AmazonPayAdapter
         // Add to the payload when using SPC
         if ($this->scopeConfig->isSetFlag(self::SPC_ENABLED_CONFIG)) {
             // Add checkoutResultReturnUrl
-            $payload['webCheckoutDetails']['CheckoutResultReturnUrl'] = $this->amazonConfig->getCheckoutResultReturnUrl();
+            $payload['webCheckoutDetails']['checkoutResultReturnUrl'] = $this->amazonConfig->getCheckoutResultReturnUrl();
 
             // Always use Authorize for now, so that async transactions are handled properly
             $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE;
