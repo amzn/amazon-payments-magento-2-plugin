@@ -7,6 +7,18 @@ use Magento\Framework\DataObject;
 
 class Amount extends DataObject implements AmountInterface
 {
+    protected $localeFormat;
+
+    public function __construct(
+        \Magento\Framework\Locale\Format $localeFormat,
+        array $data = []
+    )
+    {
+        parent::__construct($data);
+
+        $this->localeFormat = $localeFormat;
+    }
+
     /**
      * @inheritDoc
      */
@@ -28,7 +40,12 @@ class Amount extends DataObject implements AmountInterface
      */
     public function setAmount($amount)
     {
-        return $this->setData('amount', $amount);
+        // Built in currency formatter is arbitrarily adding currency symbol.
+        // Went with a more direct approach, using the local format and passing it to number_format
+        $format = $this->localeFormat->getPriceFormat();
+        $formattedAmount = number_format($amount, $format['precision'], $format['decimalSymbol'], $format['groupSymbol']);
+
+        return $this->setData('amount', $formattedAmount);
     }
 
     /**

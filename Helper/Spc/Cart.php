@@ -235,13 +235,13 @@ class Cart
                 $rulesNameOrCode[] = $ruleResponse;
             }
 
-            $discountedAmount = $item->getPrice() - $item->getDiscountAmount()/$item->getQty();
-            $totalBaseAmount += $discountedAmount * $item->getQty();
+            $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
+            $totalBaseAmount += $discountedAmount;
             $lineItem->setId($item->getId())
                 ->setTitle($item->getName())
                 ->setQuantity($item->getQty())
-                ->setListPrice($this->getAmountObject($item->getPrice(), $currencyCode))
-                ->setDiscountedPrice($this->getAmountObject($discountedAmount, $currencyCode))
+                ->setListPrice($this->getAmountObject($item->getRowTotal()/$item->getQty(), $currencyCode))
+                ->setDiscountedPrice($this->getAmountObject($discountedAmount/$item->getQty(), $currencyCode))
                 ->setAppliedDiscounts($rulesNameOrCode)
                 ->setAdditionalAttributes($additionalAttributes)
                 ->setStatus(
