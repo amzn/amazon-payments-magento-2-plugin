@@ -309,7 +309,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param mixed $amazonCheckoutSessionId
      * @return mixed
      */
-    protected function getAmazonSession($amazonSessionId)
+    public function getAmazonSession($amazonSessionId)
     {
         if (!isset($this->amazonSessions[$amazonSessionId])) {
             $this->amazonSessions[$amazonSessionId] = $this->amazonAdapter->getCheckoutSession(
@@ -827,7 +827,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param $amazonSession
      * @return \Magento\Framework\Phrase|mixed
      */
-    protected function getCanceledMessage($amazonSession)
+    public function getCanceledMessage($amazonSession)
     {
         if ($amazonSession['statusDetails']['reasonCode'] == 'BuyerCanceled') {
             return $this->getTranslationString('This transaction was cancelled. Please try again.');

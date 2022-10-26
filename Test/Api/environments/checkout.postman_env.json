@@ -1,0 +1,69 @@
+{
+	"_": {
+		"postman_variable_scope": "environment",
+		"postman_exported_at": "2021-08-13T14:20:25.044Z",
+		"postman_exported_using": "Newman/5.2.3"
+	},
+	"id": "be297780-570f-4b2d-9c63-0a031bd40716",
+	"name": "checkout_test_env",
+	"values": [
+		{
+			"type": "any",
+			"value": "https://app.m236.test",
+			"key": "base_url"
+		},
+		{
+			"type": "any",
+			"value": "https://app.m236.test/graphql",
+			"key": "graphql_endpoint"
+		},
+		{
+			"type": "any",
+			"value": "spencer+alpha@beargroup.com",
+			"key": "customer_username"
+		},
+		{
+			"type": "any",
+			"value": "{ \"city\": \"Chicago\", \"firstname\": \"Susie\", \"lastname\": \"Smith\", \"country_id\": \"US\", \"street\": [ \"10 Ditka Ave\", \"Suite 2500\" ], \"postcode\": \"60602\", \"company\": \"\", \"telephone\": \"800-000-0000\", \"region\": \"Illinois\", \"region_id\": \"23\", \"region_code\": \"IL\", \"email\": \"spencer+alpha@beargroup.com\" }",
+			"key": "customer_address"
+		},
+		{
+			"type": "any",
+			"value": "{\"street\":[\"10 Ditka Ave\"],\"city\":\"Chicago\",\"region_id\":\"23\",\"region\":\"Illinois\",\"country_id\":\"US\",\"postcode\":\"60602\",\"email\":\"jsmith@example.com\",\"firstname\":\"Jack\",\"lastname\":\"Smith\",\"company\":\"\",\"telephone\":\"800-000-0000\"}",
+			"key": "customer_address_other"
+		},
+		{
+			"type": "any",
+			"value": "apay-maxo-browser-identifier=64d30480-f897-4e45-9393-049df69e5196; ubid-main=131-6511819-2803726; lc-main=en_US; session-token=RGKs0oqeVn1UEoDRaRoLX74E3jxcRyzW3mDsl+eTIuhngLY9jkEJwpZAEpLQ5K0bM+fPMPibwEA5IpcWz1eYHprsGMbjGJznRvIR1jijpenXpmPqpSvkoos0rOzTmMFszfYkLTmkD9K6UEaGsnG5jbbgWn/W67jnGiBRhTwFtfqeB5t3PiL76lPqHtx2ZECSZalSwktrs0tbVzceRODbsbyHsIlfX+vDonJxrvDxptz4BXQqPx9Xy3AJZAikcVsz; x-main=CAyXu9G4iZyeAIVgUdzaERwqUVusW3s2FbwRpEXIQTgcFDLRpZsy9YovG0hGe110; at-main=Atza|IwEBIGUfmnfOVMukyzZ-lkuBdSkgS7YzYoYPNm-P9cPp1UT7wB7EP6yuAnL1JfgbvHzvleVD0mp7_hvC97y5OTjed9pQ9_OjBakp9d3QTJycswrD8E1XNzYQv-tInslLmPyt58Zf_m57bJDsW64nD6i8_e6aAB-LRISnVegxWY4dPdnPXjHAHtNAe4EcWVi-IkwUwAdrHLDsmilvSxappRKEjJn4vk5qN902uXzVbAXuUYNHBg; sess-at-main=\"2SkhMaPeAmRqYyIdebqhLYWiH/5U4uSZXA11ADT1IHE=\"; session-id-time=1683923847; _fundus_rails-root_session=bXBUbzh0MExheEtQdGIxRjE5cTBiVzBLNm9qTjcrU3NmTVJiL3M5TDVNdGlPSkVDblVFMmJQQ1puMlMybWhDZUtuSHVseGxuQjE2ZDFBSUJlaVBGTWczdWNOTThBTXZUUkp6Z3I2N2ZCc3dwM1I1UUNFc1hSSGw2VnBVMlpXdGJMVkkyekxyZS85NCtDeFJpKzB1ZDNnPT0tLVlYcitnZnIza1NicENKa0toK0JMZEE9PQ%3D%3D--c3b325fe86473a2325dafa69439544a532096971; csm-sid=738-7699338-9994963; session-id=147-3869145-3972469; session-id-apay=147-3869145-3972469; _widgets_rails-root_session=ZzI2Wk8veldOemxBMEFkZDJPMnhObG13L1h1cjdwVytoRHBKQWNFRmFUMWM5TVlacFF4VitxYWdWT1JjYU1nQSt3WEVQdmJ3OUtRUTVJRVkwc2x0MDd6WlFCTUppWDR5WkY3YXp2Q0NiTUpDdkY3dklOOTZVSFJ4clhoM1pTcCtuT1dRVkpUWUNsTnZPSWRUYXlScU91dzQ0b0xGa3Bub2xsVXlYVk1uUDVJYUYrakFxSnVxdm45Syt3MHQzemRXLS01MUtoaXJ2YWNvU2JqcGVEQlR4allBPT0%3D--5fcb751e3549f4ae275e66a229a6844d2acccedf",
+			"key": "charge_cookie"
+		},
+		{
+			"type": "any",
+			"value": "OtHHWZSWnx7T6f2+8mpZAisrL2KX29NAZQ5hs5tNCB9Xj7d082ff292tL5WJf6Y3o5cFtnGlttEDtQ8BzjE6Wg==",
+			"key": "charge_xcsrf_token"
+		},
+		{
+			"type": "any",
+			"value": "d2902893-44f3-4643-8c7b-bb2f1f4effa3",
+			"key": "checkout_session_id"
+		},
+		{
+			"type": "any",
+			"value": "yPIJ0rn1oeHDWfhlbXcnb3CByTc3LSb3",
+			"key": "quote_id_mask"
+		},
+		{
+			"type": "any",
+			"value": "aaa7d7ba-c308-4d2a-8774-b10331c36211",
+			"key": "checkout_session_id_graphql"
+		},
+		{
+			"type": "any",
+			"value": "Z91Xg8SlsQX9YENk2I4c0TC94muUXpsZ",
+			"key": "quote_id_mask_graphql"
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2021-08-13T14:39:17.164Z",
+	"_postman_exported_using": "Newman/5.2.3"
+}
