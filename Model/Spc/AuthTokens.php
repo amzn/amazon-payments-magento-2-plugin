@@ -272,7 +272,7 @@ class AuthTokens
 
             $responseCode = $response['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $responseCode)) {
-                $this->saveStatus(__('Tokens failed to sync on the last attempt'), $store->getId());
+                $this->saveStatus(__('Tokens failed to sync'), $store->getId());
 
                 $errorResponses[] = $response['message'];
 
@@ -300,7 +300,7 @@ class AuthTokens
     {
         $this->configWriter->save(
             AuthTokens::STATUS_CONFIG_PATH,
-            $message .', '. date('Y-m-d H:i:s', time()) .' UTC',
+            $message .' on '. date('Y-m-d H:i:s', time()) .' UTC',
             ScopeInterface::SCOPE_STORES,
             $storeId
         );

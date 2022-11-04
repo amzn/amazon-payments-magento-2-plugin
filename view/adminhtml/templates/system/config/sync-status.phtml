@@ -1,0 +1,7 @@
+<?php
+/** @var $block \Amazon\Pay\Block\Adminhtml\System\Config\SpcTokenSyncStatus */
+?>
+
+<?php foreach ($block->getConfigForAllStores() as $storeConfig): ?>
+    <div><?= $storeConfig['store_name'] ?>: <?= $storeConfig['value'] ?></div>
+<?php endforeach; ?>
