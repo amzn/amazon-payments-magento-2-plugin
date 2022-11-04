@@ -81,6 +81,8 @@ class ShippingMethod implements ShippingMethodInterface
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
         } catch (NoSuchEntityException $e) {
+            $this->cartHelper->logError('SPC ShippingMethod: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
+
             throw new \Magento\Framework\Webapi\Exception(
                 new Phrase('InvalidCartId'), 404, 404
             );
@@ -95,12 +97,20 @@ class ShippingMethod implements ShippingMethodInterface
 
             $amazonSessionStatus = $amazonSession['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                $this->cartHelper->logError(
+                    'SPC ShippingMethod: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
                 );
             }
 
             if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                $this->cartHelper->logError(
+                    'SPC ShippingMethod: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );

@@ -98,6 +98,8 @@ class Address implements SpcAddressInterface
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
         } catch (NoSuchEntityException $e) {
+            $this->cartHelper->logError('SPC Address: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
+
             throw new \Magento\Framework\Webapi\Exception(
                 new Phrase('InvalidCartId'), 404, 404
             );
@@ -111,12 +113,20 @@ class Address implements SpcAddressInterface
 
             $amazonSessionStatus = $amazonSession['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                $this->cartHelper->logError(
+                    'SPC Address: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
                 );
             }
 
             if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                $this->cartHelper->logError(
+                    'SPC Address: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
@@ -129,6 +139,10 @@ class Address implements SpcAddressInterface
                 $quote->setShippingAddress($shippingAddress);
             }
             else {
+                $this->cartHelper->logError(
+                    'SPC Address: InvalidRequest - No shipping address. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase('InvalidRequest')
                 );
@@ -140,6 +154,10 @@ class Address implements SpcAddressInterface
                 $quote->setBillingAddress($billingAddress);
             }
             else {
+                $this->cartHelper->logError(
+                    'SPC Address: InvalidRequest - No billing address. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase('InvalidRequest')
                 );

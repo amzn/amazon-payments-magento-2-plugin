@@ -53,6 +53,8 @@ class Coupon implements CouponInterface
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
         } catch (NoSuchEntityException $e) {
+            $this->cartHelper->logError('SPC Coupon: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
+
             throw new \Magento\Framework\Webapi\Exception(
                 new Phrase('InvalidCartId'), 404, 404
             );
@@ -67,12 +69,20 @@ class Coupon implements CouponInterface
 
             $amazonSessionStatus = $amazonSession['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                $this->cartHelper->logError(
+                    'SPC Coupon: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
                 );
             }
 
             if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                $this->cartHelper->logError(
+                    'SPC Coupon: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
@@ -90,6 +100,10 @@ class Coupon implements CouponInterface
 
                 // Check if the coupon was applied
                 if ($quote->getCouponCode() != $couponCode) {
+                    $this->cartHelper->logError(
+                        'SPC Coupon: CouponNotApplicable - The coupon could not be applied to the cart. CartId: '. $cartId .' - ', $cartDetails
+                    );
+
                     throw new WebapiException(
                         new Phrase('CouponNotApplicable')
                     );

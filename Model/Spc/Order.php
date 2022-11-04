@@ -71,6 +71,8 @@ class Order implements OrderInterface
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
         } catch (NoSuchEntityException $e) {
+            $this->cartHelper->logError('SPC Order: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
+
             throw new \Magento\Framework\Webapi\Exception(
                 new Phrase('InvalidCartId'), 404, 404
             );
@@ -85,12 +87,20 @@ class Order implements OrderInterface
 
             $amazonSessionStatus = $amazonSession['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                $this->cartHelper->logError(
+                    'SPC Order: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
                 );
             }
 
             if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                $this->cartHelper->logError(
+                    'SPC Order: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
@@ -102,6 +112,10 @@ class Order implements OrderInterface
             // Check that all items are still in stock
             foreach ($quote->getAllVisibleItems() as $item) {
                 if (!$item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()) {
+                    $this->cartHelper->logError(
+                        'SPC Order: InvalidCartStatus - Product '. $item->getProduct()->getId() .' not in stock. CartId: '. $cartId .' - ', $cartDetails
+                    );
+
                     throw new \Magento\Framework\Webapi\Exception(
                         new Phrase('InvalidCartStatus'), 422, 422
                     );
@@ -110,6 +124,10 @@ class Order implements OrderInterface
 
             // Check that both addresses are set
             if (is_array($quote->getShippingAddress()->validate()) || is_array($quote->getBillingAddress()->validate())) {
+                $this->cartHelper->logError(
+                    'SPC Order: InvalidCartStatus - Missing addresses. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new \Magento\Framework\Webapi\Exception(
                     new Phrase('InvalidCartStatus'), 422, 422
                 );
@@ -117,6 +135,10 @@ class Order implements OrderInterface
 
             // Check that the shipping method has been set
             if (empty($quote->getShippingAddress()->getShippingMethod())) {
+                $this->cartHelper->logError(
+                    'SPC Order: InvalidCartStatus - No shipping method selected. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new \Magento\Framework\Webapi\Exception(
                     new Phrase('InvalidCartStatus'), 422, 422
                 );

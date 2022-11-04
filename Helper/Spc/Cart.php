@@ -18,6 +18,7 @@ use Amazon\Pay\Api\Spc\Response\ShippingMethodInterface;
 use Amazon\Pay\Api\Spc\Response\ShippingMethodInterfaceFactory;
 use Amazon\Pay\Api\Spc\ResponseInterface;
 use Amazon\Pay\Api\Spc\ResponseInterfaceFactory;
+use Amazon\Pay\Logger\Logger;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
@@ -90,6 +91,11 @@ class Cart
     protected $responseFactory;
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param CartRepositoryInterface $cartRepository
      * @param ScopeConfigInterface $scopeConfig
@@ -101,6 +107,8 @@ class Cart
      * @param ShippingMethodInterfaceFactory $shippingMethodFactory
      * @param LineItemInterfaceFactory $lineItemFactory
      * @param NameValueInterfaceFactory $nameValueFactory
+     * @param ResponseInterfaceFactory $responseFactory
+     * @param Logger $logger
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
@@ -114,7 +122,8 @@ class Cart
         ShippingMethodInterfaceFactory $shippingMethodFactory,
         LineItemInterfaceFactory $lineItemFactory,
         NameValueInterfaceFactory $nameValueFactory,
-        ResponseInterfaceFactory $responseFactory
+        ResponseInterfaceFactory $responseFactory,
+        Logger $logger
     )
     {
         $this->shippingMethodManagement = $shippingMethodManagement;
@@ -129,6 +138,7 @@ class Cart
         $this->lineItemFactory = $lineItemFactory;
         $this->nameValueFactory = $nameValueFactory;
         $this->responseFactory = $responseFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -341,5 +351,15 @@ class Cart
         $object = $this->amountFactory->create();
 
         return $object->setAmount($amount)->setCurrencyCode($currencyCode);
+    }
+
+    /**
+     * @param $message
+     * @param $context
+     * @return void
+     */
+    public function logError($message, $context)
+    {
+        $this->logger->error($message, $context);
     }
 }
