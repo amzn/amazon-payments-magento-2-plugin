@@ -554,13 +554,14 @@ class AmazonPayAdapter
         }
 
         // Add to the payload when using SPC
-        if ($this->scopeConfig->isSetFlag(self::SPC_ENABLED_CONFIG)) {
+        $quote = $this->magentoCheckoutSession->getQuote();
+
+        if ($this->scopeConfig->isSetFlag(self::SPC_ENABLED_CONFIG, 'store', $quote->getStoreId())) {
             // Add checkoutResultReturnUrl
             $payload['webCheckoutDetails']['checkoutResultReturnUrl'] = $this->amazonConfig->getCheckoutResultReturnUrl();
 
             // Always use Authorize for now, so that async transactions are handled properly
             $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE;
-            $quote = $this->magentoCheckoutSession->getQuote();
             $currencyCode = $quote->getQuoteCurrencyCode();
 
             $payload['chargePermissionType'] = 'OneTime'; // probably needs to be dynamic if buying a subscription (feature not released)
