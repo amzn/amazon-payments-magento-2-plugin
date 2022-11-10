@@ -3,15 +3,13 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\ShippingMethodInterface;
+use Amazon\Pay\Helper\Spc\ShippingMethod as ShippingMethodHelper;
 use Amazon\Pay\Helper\Spc\Cart;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
-use Magento\Checkout\Api\Data\ShippingInformationInterface;
-use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\ShippingMethodManagementInterface;
 
 class ShippingMethod implements ShippingMethodInterface
 {
@@ -26,49 +24,32 @@ class ShippingMethod implements ShippingMethodInterface
     protected $amazonPayAdapter;
 
     /**
-     * @var ShippingInformationManagementInterface
-     */
-    protected $shippingInformationManagement;
-
-    /**
-     * @var ShippingInformationInterface
-     */
-    protected $shippingInformation;
-
-    /**
-     * @var ShippingMethodManagementInterface
-     */
-    protected $shippingMethodManagement;
-
-    /**
      * @var Cart
      */
     protected $cartHelper;
 
+    /**
+     * @var ShippingMethodHelper
+     */
+    protected $shippingMethodHelper;
 
     /**
      * @param CartRepositoryInterface $cartRepository
      * @param AmazonPayAdapter $amazonPayAdapter
-     * @param ShippingInformationManagementInterface $shippingInformationManagement
-     * @param ShippingInformationInterface $shippingInformation
-     * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param Cart $cartHelper
+     * @param ShippingMethodHelper $shippingMethodHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AmazonPayAdapter $amazonPayAdapter,
-        ShippingInformationManagementInterface $shippingInformationManagement,
-        ShippingInformationInterface $shippingInformation,
-        ShippingMethodManagementInterface $shippingMethodManagement,
-        Cart $cartHelper
+        Cart $cartHelper,
+        ShippingMethodHelper $shippingMethodHelper
     )
     {
         $this->cartRepository = $cartRepository;
         $this->amazonPayAdapter = $amazonPayAdapter;
-        $this->shippingInformationManagement = $shippingInformationManagement;
-        $this->shippingInformation = $shippingInformation;
-        $this->shippingMethodManagement = $shippingMethodManagement;
         $this->cartHelper = $cartHelper;
+        $this->shippingMethodHelper = $shippingMethodHelper;
     }
 
     /**
@@ -116,52 +97,10 @@ class ShippingMethod implements ShippingMethodInterface
                 );
             }
 
-            // Only grabbing the first one, as Magento only accepts one coupon code
-            if ($quote->getShippingAddress()->validate()
-                && isset($cartDetails['delivery_options'][0]['shipping_method']['shipping_method_code'])) {
-                $shippingMethodCode = $cartDetails['delivery_options'][0]['shipping_method']['shipping_method_code'];
+            // Set the shipping method
+            $methodCode = $cartDetails['delivery_options'][0]['shipping_method']['shipping_method_code'] ?? false;
 
-                $address = $quote->getShippingAddress();
-
-                // Save address with shipping method
-                if ((strpos($shippingMethodCode, '_') !== false)) {
-                    $shippingInformation = $this->shippingInformation->setShippingAddress($address);
-
-                    $shippingMethod = explode('_', $shippingMethodCode);
-                    $shippingInformation->setShippingCarrierCode($shippingMethod[0])
-                        ->setShippingMethodCode($shippingMethod[1]);
-
-                    $this->shippingInformationManagement->saveAddressInformation($cartId, $shippingInformation);
-                }
-            }
-            // Select the cheapest option
-            else if ($quote->getShippingAddress()->validate()) {
-                $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
-                $cheapestMethod = [
-                    'carrier' => '',
-                    'code' => '',
-                    'amount' => 100000
-                ];
-
-                foreach ($shippingMethods as $method) {
-                    if ($method->getAmount() < $cheapestMethod['amount']) {
-                        $cheapestMethod['carrier'] = $method->getCarrierCode();
-                        $cheapestMethod['code'] = $method->getMethodCode();
-                        $cheapestMethod['amount'] = $method->getAmount();
-                    }
-                }
-
-                // Save address with shipping method
-                if (!empty($cheapestMethod['carrier'])) {
-                    $address = $quote->getShippingAddress();
-                    $shippingInformation = $this->shippingInformation->setShippingAddress($address);
-
-                    $shippingInformation->setShippingCarrierCode($cheapestMethod['carrier'])
-                        ->setShippingMethodCode($cheapestMethod['code']);
-
-                    $this->shippingInformationManagement->saveAddressInformation($cartId, $shippingInformation);
-                }
-            }
+            $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $methodCode);
         }
 
         // Construct response
