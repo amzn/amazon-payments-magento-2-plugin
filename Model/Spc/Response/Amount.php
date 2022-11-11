@@ -28,7 +28,10 @@ class Amount extends DataObject implements AmountInterface
      */
     public function setAmount($amount)
     {
-        return $this->setData('amount', $amount);
+        // Formatting to two decimals
+        $formattedAmount = number_format($amount, 2, '.', '');
+
+        return $this->setData('amount', $formattedAmount);
     }
 
     /**

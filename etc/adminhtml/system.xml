@@ -126,11 +126,9 @@
                         <label>SPC Integration User Tokens</label>
                         <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Button</frontend_model>
                     </field>
-                    <field id="spc_tokens_sync_status_default" translate="label" type="label" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
-                        <config_path>payment/amazon_payment_v2/spc_tokens_sync_status_default</config_path>
-                    </field>
-                    <field id="spc_tokens_sync_status" translate="label" type="label" sortOrder="120" showInDefault="0" showInWebsite="0" showInStore="1">
-                        <config_path>payment/amazon_payment_v2/spc_tokens_sync_status</config_path>
+                    <field id="spc_tokens_sync_status" translate="label" type="label" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>SPC Token Sync Status</label>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\SpcTokenSyncStatus</frontend_model>
                     </field>
                 </group>
                 <group id="alexa" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">

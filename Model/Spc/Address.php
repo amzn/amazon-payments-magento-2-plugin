@@ -3,17 +3,14 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\AddressInterface as SpcAddressInterface;
-use Amazon\Pay\Api\Spc\ShippingMethodInterface;
 use Amazon\Pay\Helper\Spc\Cart;
 use Amazon\Pay\Model\CheckoutSessionManagement;
-use Magento\Checkout\Api\Data\ShippingInformationInterface;
-use Magento\Checkout\Api\ShippingInformationManagementInterface;
-use Magento\Directory\Model\Region;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Amazon\Pay\Helper\Spc\ShippingMethod;
 
 class Address implements SpcAddressInterface
 {
@@ -28,29 +25,9 @@ class Address implements SpcAddressInterface
     protected $address;
 
     /**
-     * @var Region
-     */
-    protected $region;
-
-    /**
-     * @var ShippingInformationManagementInterface
-     */
-    protected $shippingInformationManagement;
-
-    /**
-     * @var ShippingInformationInterface
-     */
-    protected $shippingInformation;
-
-    /**
      * @var CheckoutSessionManagement
      */
     protected $checkoutSessionManager;
-
-    /**
-     * @var ShippingMethodInterface
-     */
-    protected $shippingMethod;
 
     /**
      * @var Cart
@@ -58,34 +35,30 @@ class Address implements SpcAddressInterface
     protected $cartHelper;
 
     /**
+     * @var ShippingMethod
+     */
+    protected $shippingMethodHelper;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param AddressInterface $address
-     * @param Region $region
-     * @param ShippingInformationManagementInterface $shippingInformationManagement
-     * @param ShippingInformationInterface $shippingInformation
      * @param CheckoutSessionManagement $checkoutSessionManagement
-     * @param ShippingMethodInterface $shippingMethod
      * @param Cart $cartHelper
+     * @param ShippingMethod $shippingMethodHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AddressInterface $address,
-        Region $region,
-        ShippingInformationManagementInterface $shippingInformationManagement,
-        ShippingInformationInterface $shippingInformation,
         CheckoutSessionManagement $checkoutSessionManagement,
-        ShippingMethodInterface $shippingMethod,
-        Cart $cartHelper
+        Cart $cartHelper,
+        ShippingMethod $shippingMethodHelper
     )
     {
         $this->cartRepository = $cartRepository;
         $this->address = $address;
-        $this->region = $region;
-        $this->shippingInformationManagement = $shippingInformationManagement;
-        $this->shippingInformation = $shippingInformation;
         $this->checkoutSessionManager = $checkoutSessionManagement;
-        $this->shippingMethod = $shippingMethod;
         $this->cartHelper = $cartHelper;
+        $this->shippingMethodHelper = $shippingMethodHelper;
     }
 
     /**
@@ -98,6 +71,8 @@ class Address implements SpcAddressInterface
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
         } catch (NoSuchEntityException $e) {
+            $this->cartHelper->logError('SPC Address: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
+
             throw new \Magento\Framework\Webapi\Exception(
                 new Phrase('InvalidCartId'), 404, 404
             );
@@ -111,12 +86,20 @@ class Address implements SpcAddressInterface
 
             $amazonSessionStatus = $amazonSession['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                $this->cartHelper->logError(
+                    'SPC Address: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['reasonCode'])
                 );
             }
 
             if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                $this->cartHelper->logError(
+                    'SPC Address: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
@@ -129,6 +112,10 @@ class Address implements SpcAddressInterface
                 $quote->setShippingAddress($shippingAddress);
             }
             else {
+                $this->cartHelper->logError(
+                    'SPC Address: InvalidRequest - No shipping address. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase('InvalidRequest')
                 );
@@ -140,6 +127,10 @@ class Address implements SpcAddressInterface
                 $quote->setBillingAddress($billingAddress);
             }
             else {
+                $this->cartHelper->logError(
+                    'SPC Address: InvalidRequest - No billing address. CartId: '. $cartId .' - ', $cartDetails
+                );
+
                 throw new WebapiException(
                     new Phrase('InvalidRequest')
                 );
@@ -147,7 +138,7 @@ class Address implements SpcAddressInterface
 
             $this->cartRepository->save($quote);
 
-            $this->shippingMethod->shippingMethod($cartId, $cartDetails);
+            $this->shippingMethodHelper->setShippingMethodOnQuote($quote);
         }
 
         // Save and create response
