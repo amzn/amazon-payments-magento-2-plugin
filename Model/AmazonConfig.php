@@ -16,6 +16,7 @@
 
 namespace Amazon\Pay\Model;
 
+use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Store\Model\ScopeInterface;
 
 class AmazonConfig
@@ -762,7 +763,7 @@ class AmazonConfig
             $scope,
             $scopeCode
         );
-       
+
         if ($configValues) {
             $configValues = $this->serializer->unserialize($configValues);
             if (count($configValues) > 0) {
@@ -864,6 +865,15 @@ class AmazonConfig
     {
         return $this->scopeConfig->isSetFlag(
             'checkout/options/guest_checkout',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    public function isSpcEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            AmazonPayAdapter::SPC_ENABLED_CONFIG,
             $scope,
             $scopeCode
         );

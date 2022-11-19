@@ -432,6 +432,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'checkout_payload' => $checkoutButtonPayload,
                 'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
                 'public_key_id' => $this->amazonConfig->getPublicKeyId(),
+                'spc_enabled' => $this->amazonConfig->isSpcEnabled('store', $quote->getStoreId()),
             ];
 
             if ($quote) {
