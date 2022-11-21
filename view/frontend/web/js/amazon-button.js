@@ -216,13 +216,15 @@ define([
                             }
 
                             //setup binds for product button click
-                            $('.amazon-addtoCart').off().on('click', function (e) {
-                                var target = e.target;
-                                if (target.classList.contains('amazon-addtoCart') && $(self.options.addToCartForm).valid()) {
-                                    self.addedViaAmazon = true;
-                                    $(self.options.addToCartForm).submit();
-                                }
-                            });
+                            if (self.options.placement === 'Product') {
+                                $('.amazon-addtoCart').off().on('click', function (e) {
+                                    var target = e.target;
+                                    if (target.classList.contains('amazon-addtoCart') && $(self.options.addToCartForm).valid()) {
+                                        self.addedViaAmazon = true;
+                                        $(self.options.addToCartForm).submit();
+                                    }
+                                });
+                            }
 
                             resolve();
                         });
@@ -272,21 +274,23 @@ define([
                     // for product button
                     let cartIdNull = self.buttonConfig.createCheckoutSessionConfig.payloadJSON.includes('cartId":null');
 
-                    if (self.addedViaAmazon
-                        && self.options.placement === 'Product'
-                        && self.buttonConfig.spc_enabled
-                        && cartIdNull
-                    ) {
-                        self.addedViaAmazon = false;
+                    if (self.options.placement === 'Product') {
+                        if (self.addedViaAmazon) {
+                            self.addedViaAmazon = false;
 
-                        self._loadButtonConfig(function () {
-                            self._draw().then(function () {
+                            if (self.buttonConfig.spc_enabled
+                                && cartIdNull
+                            ) {
+                                self._loadButtonConfig(function () {
+                                    self._draw().then(function () {
+                                        self.click();
+                                    });
+                                }, true);
+                            }
+                            else {
                                 self.click();
-                            });
-                        }, true);
-                    }
-                    else {
-                        self.click();
+                            }
+                        }
                     }
                 });
             });
