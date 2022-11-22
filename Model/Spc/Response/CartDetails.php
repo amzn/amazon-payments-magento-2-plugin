@@ -54,6 +54,14 @@ class CartDetails extends DataObject implements CartDetailsInterface
     /**
      * @inheritDoc
      */
+    public function getTotalDiscountAmount()
+    {
+        return $this->_getData('total_discount_amount');
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getTotalShippingAmount()
     {
         return $this->_getData('total_shipping_amount');
@@ -129,6 +137,14 @@ class CartDetails extends DataObject implements CartDetailsInterface
     public function setCartLanguage(string $cartLanguage)
     {
         return $this->setData('cart_language', $cartLanguage);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTotalDiscountAmount(AmountInterface $amount)
+    {
+        return $this->setData('total_discount_amount', $amount);
     }
 
     /**
