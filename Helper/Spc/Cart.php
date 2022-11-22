@@ -166,15 +166,13 @@ class Cart
         $lineItemsTotalDiscounts = $lineItemsResponse['total_discount_amount'];
 
         // Get delivery options
-        $deliveryOptionsResponse = $this->getDeliveryOptions($quote, $currencyCode, $lineItems);
-        $deliveryOptions = $deliveryOptionsResponse['delivery_options'];
-        $deliveryOptionDiscount = $deliveryOptionsResponse['delivery_option_discount'];
+        $deliveryOptions = $this->getDeliveryOptions($quote, $currencyCode, $lineItems);
 
         // Get applied coupons
         $coupons = $this->getCoupons($quote);
 
         // Total discount amount
-        $totalDiscountAmount = $lineItemsTotalDiscounts + $deliveryOptionDiscount;
+        $totalDiscountAmount = $lineItemsTotalDiscounts + $quote->getShippingAddress()->getShippingDiscountAmount();
 
         // Create response object
         /** @var $cartDetails CartDetailsInterface */
@@ -190,7 +188,7 @@ class Cart
             ))
             ->setTotalShippingAmount(
                 $this->getAmountObject(
-                    $quote->getShippingAddress()->getShippingAmount() - $quote->getShippingAddress()->getShippingDiscountAmount(),
+                    $quote->getShippingAddress()->getShippingAmount(),
                     $currencyCode
                 )
             )
@@ -278,8 +276,8 @@ class Cart
                 $rulesNameOrCode[] = $ruleResponse;
             }
 
+            $totalBaseAmount += $item->getRowTotal();
             $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
-            $totalBaseAmount += $discountedAmount;
             $totalDiscountAmount += $item->getDiscountAmount();
 
             $lineItem->setId($item->getId())
@@ -318,7 +316,6 @@ class Cart
     protected function getDeliveryOptions($quote, $currencyCode, &$lineItems)
     {
         $deliveryOptions = [];
-        $deliveryOptionDiscount = 0;
 
         if ($quote->getShippingAddress()->validate()) {
             $magentoShippingMethods =
@@ -330,8 +327,19 @@ class Cart
 
                 /** @var ShippingMethodInterface $shippingMethod */
                 $shippingMethod = $this->shippingMethodFactory->create();
-                $shippingMethod->setShippingMethodName($magentoMethod->getCarrierTitle() .' - '. $magentoMethod->getMethodTitle())
-                    ->setShippingMethodCode($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode());
+
+                // Get shipping method name
+                if (!$magentoMethod->getCarrierTitle()) {
+                    $name = $magentoMethod->getMethodTitle();
+                }
+                else {
+                    $name = $magentoMethod->getCarrierTitle() . ' - ' . $magentoMethod->getMethodTitle();
+                }
+
+                $code = $magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode();
+
+                $shippingMethod->setShippingMethodName($name)
+                    ->setShippingMethodCode($code);
 
                 $discountedPrice = $magentoMethod->getAmount() - $quote->getShippingAddress()->getShippingDiscountAmount();
                 $deliveryOption->setId($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())
@@ -344,7 +352,9 @@ class Cart
 
                 if ($quote->getShippingAddress()->getShippingMethod() == ($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())) {
                     $deliveryOption->setIsDefault(true);
-                    $deliveryOptionDiscount = $quote->getShippingAddress()->getShippingDiscountAmount();
+                }
+                else {
+                    $deliveryOption->setIsDefault(false);
                 }
 
 
@@ -360,10 +370,7 @@ class Cart
             }
         }
 
-        return $deliveryOptionsResponse = [
-            'delivery_options' => $deliveryOptions,
-            'delivery_option_discount' => $deliveryOptionDiscount
-        ];
+        return $deliveryOptions;
     }
 
     /**
