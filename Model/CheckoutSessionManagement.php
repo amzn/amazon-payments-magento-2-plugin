@@ -420,7 +420,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         if ($this->canCheckoutWithAmazon($quote)) {
             $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload($quote);
             $config = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
@@ -432,6 +432,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'checkout_payload' => $checkoutButtonPayload,
                 'checkout_signature' => $this->amazonAdapter->signButton($checkoutButtonPayload),
                 'public_key_id' => $this->amazonConfig->getPublicKeyId(),
+                'spc_enabled' => $this->amazonConfig->isSpcEnabled('store', $quote->getStoreId()),
             ];
 
             if ($quote) {

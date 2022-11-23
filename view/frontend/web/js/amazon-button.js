@@ -45,12 +45,15 @@ define([
             placement: 'Cart',
             hideIfUnavailable: '',
             buttonType: 'Normal',
-            isIosc: ko.observable($('button.iosc-place-order-button').length > 0)
+            isIosc: ko.observable($('button.iosc-place-order-button').length > 0),
+            addToCartForm: '#product_addtocart_form'
         },
 
         drawing: false,
         amazonPayButton: null,
         currencyCode: null,
+        buttonConfig: null,
+        addedViaAmazon: false,
 
         _loadButtonConfig: function (callback, forceReload = false) {
             checkoutSessionConfigLoad(function (checkoutSessionConfig) {
@@ -70,6 +73,7 @@ define([
                         publicKeyId: checkoutSessionConfig['public_key_id'],
                         ledgerCurrency: self.currencyCode,
                         sandbox: checkoutSessionConfig['sandbox'],
+                        spc_enabled: checkoutSessionConfig['spc_enabled'],
                         checkoutLanguage: checkoutSessionConfig['language'],
                         productType: this._isPayOnly(checkoutSessionConfig['pay_only']) ? 'PayOnly' : 'PayAndShip',
                         placement: this.options.placement,
@@ -144,72 +148,89 @@ define([
         _draw: function () {
             var self = this;
 
-            if (!this.drawing) {
-                this.drawing = true;
-                var $buttonContainer = this.element;
-                amazonCheckout.withAmazonCheckout(function (amazon, args) {
-                    var $buttonRoot = $('<div></div>');
-                    $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
-                    $buttonContainer.empty().append($buttonRoot);
+            return new Promise(function (resolve, reject) {
+                if (!self.drawing) {
+                    self.drawing = true;
+                    var $buttonContainer = self.element;
+                    amazonCheckout.withAmazonCheckout(function (amazon, args) {
+                        var $buttonRoot = $('<div></div>');
+                        $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
+                        $buttonContainer.empty().append($buttonRoot);
 
-                    this._loadButtonConfig(function (buttonConfig) {
-                        // do not use session config for decoupled button
-                        if (self.buttonType === 'PayNow') {
-                            delete buttonConfig.createCheckoutSessionConfig;
-                        }
+                        self._loadButtonConfig(function (buttonConfig) {
+                            self.buttonConfig = buttonConfig;
 
-                        try {
-                            self.amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
-                        } catch (e) {
-                            console.log('Amazon Pay button render error: ' + e);
-                            return;
-                        }
+                            // do not use session config for decoupled button
+                            if (self.buttonType === 'PayNow') {
+                                delete buttonConfig.createCheckoutSessionConfig;
+                            }
 
-                        // If onClick is available on the amazonPayButton, then checkout is decoupled from render, indicating this is an APB button
-                        if (self.amazonPayButton.onClick) {
-                            self.amazonPayButton.onClick(function() {
-                                if (!additionalValidators.validate()) {
-                                    return false;
-                                }
-                                //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
-                                if (self.options.isIosc()) {
-                                    storage.post(
-                                        'checkout/onepage/update',
-                                        "{}",
-                                        false
-                                    ).done(
-                                        function (response) {
-                                            if (!response.error) {
-                                                self._initCheckout();
-                                            } else {
+                            try {
+                                self.amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
+                            } catch (e) {
+                                console.log('Amazon Pay button render error: ' + e);
+                                reject();
+                            }
+
+                            // If onClick is available on the amazonPayButton, then checkout is decoupled from render, indicating this is an APB button
+                            if (self.amazonPayButton.onClick) {
+                                self.amazonPayButton.onClick(function () {
+                                    if (!additionalValidators.validate()) {
+                                        return false;
+                                    }
+                                    //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
+                                    if (self.options.isIosc()) {
+                                        storage.post(
+                                            'checkout/onepage/update',
+                                            "{}",
+                                            false
+                                        ).done(
+                                            function (response) {
+                                                if (!response.error) {
+                                                    self._initCheckout();
+                                                } else {
+                                                    errorProcessor.process(response);
+                                                }
+                                            }
+                                        ).fail(
+                                            function (response) {
                                                 errorProcessor.process(response);
                                             }
-                                        }
-                                    ).fail(
-                                        function (response) {
-                                            errorProcessor.process(response);
-                                        }
-                                    );
-                                }else{
-                                    self._initCheckout();
-                                }
-                            });
-                        }
+                                        );
+                                    } else {
+                                        self._initCheckout();
+                                    }
+                                });
+                            }
 
-                        $('.amazon-button-container .field-tooltip').fadeIn();
-                        self.drawing = false;
+                            $('.amazon-button-container .field-tooltip').fadeIn();
+                            self.drawing = false;
 
-                        if (self.buttonType === 'PayNow' && self._isPayOnly()) {
-                            customerData.get('checkout-data').subscribe(function (checkoutData) {
-                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;    
+                            if (self.buttonType === 'PayNow' && self._isPayOnly()) {
+                                customerData.get('checkout-data').subscribe(function (checkoutData) {
+                                    const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;
 
-                                const shadow = $('.amazon-checkout-button > div')[0].shadowRoot;
-                                $(shadow).find('.amazonpay-button-view1').css('opacity', opacity);
-                            });
-                        }
-                    });
-                }, this);
-            }
+                                    const shadow = $('.amazon-checkout-button > div')[0].shadowRoot;
+                                    $(shadow).find('.amazonpay-button-view1').css('opacity', opacity);
+                                });
+                            }
+
+                            //setup binds for product button click
+                            if (self.options.placement === 'Product') {
+                                $('.amazon-addtoCart').off().on('click', function (e) {
+                                    var target = e.target;
+                                    if (target.classList.contains('amazon-addtoCart') && $(self.options.addToCartForm).valid()) {
+                                        self.addedViaAmazon = true;
+                                        $(self.options.addToCartForm).submit();
+                                    }
+                                });
+                            }
+
+                            resolve();
+                        });
+                    }, this);
+                }
+            });
         },
 
         _initCheckout: function () {
@@ -249,9 +270,33 @@ define([
                             self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
                         }
                     }
+
+                    // for product button
+                    let cartIdNull = self.buttonConfig.createCheckoutSessionConfig.payloadJSON.includes('cartId":null');
+
+                    if (self.options.placement === 'Product') {
+                        if (self.addedViaAmazon) {
+                            self.addedViaAmazon = false;
+
+                            if (self.buttonConfig.spc_enabled
+                                && cartIdNull
+                            ) {
+                                self._loadButtonConfig(function () {
+                                    self._draw().then(function () {
+                                        self.click();
+                                    });
+                                }, true);
+                            }
+                            else {
+                                self.click();
+                            }
+                        }
+                    }
                 });
             });
         },
+
+
 
         _shouldUseEstimatedAmount: function () {
             return this.options.buttonType !== 'PayNow'

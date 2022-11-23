@@ -20,6 +20,7 @@ use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Couchbase\Scope;
 use Magento\Checkout\Model\Session as MagentoCheckoutSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 
 class AmazonPayAdapter
@@ -536,9 +537,10 @@ class AmazonPayAdapter
     /**
      * Generate checkout static signature for amazon.Pay.renderButton used by checkout.js
      *
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
      * @return string
      */
-    public function generateCheckoutButtonPayload()
+    public function generateCheckoutButtonPayload($quote)
     {
         $payload = [
             'webCheckoutDetails' => [
@@ -553,16 +555,12 @@ class AmazonPayAdapter
             $payload['deliverySpecifications'] = $deliverySpecs;
         }
 
-        // Add to the payload when using SPC
-        $quote = $this->magentoCheckoutSession->getQuote();
-
         if ($this->scopeConfig->isSetFlag(self::SPC_ENABLED_CONFIG, 'store', $quote->getStoreId())) {
             // Add checkoutResultReturnUrl
             $payload['webCheckoutDetails']['checkoutResultReturnUrl'] = $this->amazonConfig->getCheckoutResultReturnUrl();
 
             // Always use Authorize for now, so that async transactions are handled properly
             $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE;
-            $currencyCode = $quote->getQuoteCurrencyCode();
 
             $payload['chargePermissionType'] = 'OneTime'; // probably needs to be dynamic if buying a subscription (feature not released)
             $payload['platformId'] = $this->amazonConfig->getPlatformId();
