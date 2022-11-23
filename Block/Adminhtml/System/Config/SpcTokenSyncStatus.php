@@ -3,10 +3,9 @@
 namespace Amazon\Pay\Block\Adminhtml\System\Config;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 
 class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -17,11 +16,18 @@ class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
     public function __construct(
         Context $context,
         StoreRepositoryInterface $storeRepository,
-        array $data = [],
-        ?SecureHtmlRenderer $secureRenderer = null
+        ProductMetadataInterface $productMetadata,
+        array $data = []
     )
     {
-        parent::__construct($context, $data, $secureRenderer);
+        // Special case for lower than Magento 2.4 version
+        if ($productMetadata->getVersion() < '2.4') {
+            parent::__construct($context, $data);
+        }
+        // Magento 2.4.0+
+        else {
+            parent::__construct($context, $data, null);
+        }
 
         $this->storeRepository = $storeRepository;
     }
