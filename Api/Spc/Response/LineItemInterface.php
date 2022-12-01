@@ -27,11 +27,6 @@ interface LineItemInterface
     /**
      * @return \Amazon\Pay\Api\Spc\Response\AmountInterface
      */
-    public function getTotalListPrice();
-
-    /**
-     * @return \Amazon\Pay\Api\Spc\Response\AmountInterface
-     */
     public function getDiscountedPrice();
 
     /**
@@ -77,12 +72,6 @@ interface LineItemInterface
      * @return $this
      */
     public function setListPrice(AmountInterface $listPrice);
-
-    /**
-     * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $listPrice
-     * @return $this
-     */
-    public function setTotalListPrice(AmountInterface $listPrice);
 
     /**
      * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $discountedPrice
