@@ -32,11 +32,6 @@ interface CartDetailsInterface
     /**
      * @return \Amazon\Pay\Api\Spc\Response\AmountInterface
      */
-    public function getTotalDiscountAmount();
-
-    /**
-     * @return \Amazon\Pay\Api\Spc\Response\AmountInterface
-     */
     public function getTotalShippingAmount();
 
     /**
@@ -88,12 +83,6 @@ interface CartDetailsInterface
      * @return $this
      */
     public function setCartLanguage(string $cartLanguage);
-
-    /**
-     * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $amount
-     * @return $this
-     */
-    public function setTotalDiscountAmount(AmountInterface $amount);
 
     /**
      * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $amount

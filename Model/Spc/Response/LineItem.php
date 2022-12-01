@@ -45,14 +45,6 @@ class LineItem extends DataObject implements LineItemInterface
     /**
      * @inheritDoc
      */
-    public function getTotalListPrice()
-    {
-        return $this->_getData('total_list_price');
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getDiscountedPrice()
     {
         return $this->_getData('discounted_price');
@@ -120,14 +112,6 @@ class LineItem extends DataObject implements LineItemInterface
     public function setListPrice(AmountInterface $listPrice)
     {
         return $this->setData('list_price', $listPrice);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setTotalListPrice(AmountInterface $totalListPrice)
-    {
-        return $this->setData('total_list_price', $totalListPrice);
     }
 
     /**
