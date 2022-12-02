@@ -218,19 +218,20 @@ class Cart
             $lineItem = $this->lineItemFactory->create();
 
             $additionalAttributes = [];
-            if ($item->getWeight()) {
-                /** @var NameValueInterface $nameValue */
-                $nameValue = $this->nameValueFactory->create();
-                $nameValue->setName('weight')
-                    ->setValue($item->getWeight());
-                $additionalAttributes[] = $nameValue;
-            }
-            if ($item->getDescription()) {
-                /** @var NameValueInterface $nameValue */
-                $nameValue = $this->nameValueFactory->create();
-                $nameValue->setName('description')
-                    ->setValue($item->getDescription());
-                $additionalAttributes[] = $nameValue;
+
+            // check if item is configurable to send options
+            if ($item->getProductType() == Configurable::TYPE_CODE) {
+                $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+
+                if (isset($options['attributes_info'])) {
+                    foreach ($options['attributes_info'] as $option) {
+                        /** @var NameValueInterface $nameValue */
+                        $nameValue = $this->nameValueFactory->create();
+                        $nameValue->setName($option['label'])
+                            ->setValue($option['value']);
+                        $additionalAttributes[] = $nameValue;
+                    }
+                }
             }
 
             // Get cart rule details
