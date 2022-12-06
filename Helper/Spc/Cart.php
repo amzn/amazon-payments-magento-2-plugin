@@ -19,6 +19,7 @@ use Amazon\Pay\Api\Spc\Response\ShippingMethodInterfaceFactory;
 use Amazon\Pay\Api\Spc\ResponseInterface;
 use Amazon\Pay\Api\Spc\ResponseInterfaceFactory;
 use Amazon\Pay\Logger\Logger;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
