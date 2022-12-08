@@ -10,6 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Directory\Model\Currency;
 
 class ShippingMethod implements ShippingMethodInterface
 {
@@ -34,22 +35,30 @@ class ShippingMethod implements ShippingMethodInterface
     protected $shippingMethodHelper;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      * @param ShippingMethodHelper $shippingMethodHelper
+     * @param Currency $currency
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
-        ShippingMethodHelper $shippingMethodHelper
+        ShippingMethodHelper $shippingMethodHelper,
+        Currency $currency
     )
     {
         $this->cartRepository = $cartRepository;
         $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
         $this->shippingMethodHelper = $shippingMethodHelper;
+        $this->currency = $currency;
     }
 
     /**
@@ -96,6 +105,11 @@ class ShippingMethod implements ShippingMethodInterface
                     new Phrase($amazonSession['statusDetails']['reasonCode'])
                 );
             }
+
+            // TODO: Improve on keeping the correct currency code for multi-currency stores
+            // Magento changes it when the store's currency doesn't match the quote's currency on API calls
+            $quoteCurrency = $this->currency->load($quote->getQuoteCurrencyCode());
+            $quote->setForcedCurrency($quoteCurrency);
 
             // Set the shipping method
             $methodCode = $cartDetails['delivery_options'][0]['shipping_method']['shipping_method_code'] ?? false;

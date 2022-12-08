@@ -11,6 +11,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Amazon\Pay\Helper\Spc\ShippingMethod;
+use Magento\Directory\Model\Currency;
 
 class Address implements SpcAddressInterface
 {
@@ -40,18 +41,25 @@ class Address implements SpcAddressInterface
     protected $shippingMethodHelper;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param AddressInterface $address
      * @param CheckoutSessionManagement $checkoutSessionManagement
      * @param Cart $cartHelper
      * @param ShippingMethod $shippingMethodHelper
+     * @param Currency $currency
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AddressInterface $address,
         CheckoutSessionManagement $checkoutSessionManagement,
         Cart $cartHelper,
-        ShippingMethod $shippingMethodHelper
+        ShippingMethod $shippingMethodHelper,
+        Currency $currency
     )
     {
         $this->cartRepository = $cartRepository;
@@ -59,6 +67,7 @@ class Address implements SpcAddressInterface
         $this->checkoutSessionManager = $checkoutSessionManagement;
         $this->cartHelper = $cartHelper;
         $this->shippingMethodHelper = $shippingMethodHelper;
+        $this->currency = $currency;
     }
 
     /**
@@ -135,6 +144,11 @@ class Address implements SpcAddressInterface
                     new Phrase('InvalidRequest')
                 );
             }
+
+            // TODO: Improve on keeping the correct currency code for multi-currency stores
+            // Magento changes it when the store's currency doesn't match the quote's currency on API calls
+            $quoteCurrency = $this->currency->load($quote->getQuoteCurrencyCode());
+            $quote->setForcedCurrency($quoteCurrency);
 
             $this->cartRepository->save($quote);
 
