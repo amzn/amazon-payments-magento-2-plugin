@@ -98,7 +98,7 @@ class ShippingMethod implements ShippingMethodInterface
             }
 
             // Set the shipping method
-            $methodCode = $cartDetails['delivery_options'][0]['shipping_method']['shipping_method_code'] ?? false;
+            $methodCode = $cartDetails['delivery_options'][0]['id'] ?? false;
 
             $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $methodCode);
         }
