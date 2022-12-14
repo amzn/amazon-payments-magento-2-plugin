@@ -4,6 +4,7 @@ namespace Amazon\Pay\Helper\Spc;
 
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 
 class ShippingMethod
@@ -24,6 +25,11 @@ class ShippingMethod
     protected $shippingInformationManagement;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    protected $cartRepository;
+
+    /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param ShippingInformationInterface $shippingInformation
      * @param ShippingInformationManagementInterface $shippingInformationManagement
@@ -31,12 +37,14 @@ class ShippingMethod
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
         ShippingInformationInterface $shippingInformation,
-        ShippingInformationManagementInterface $shippingInformationManagement
+        ShippingInformationManagementInterface $shippingInformationManagement,
+        CartRepositoryInterface $cartRepository
     )
     {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->shippingInformation = $shippingInformation;
         $this->shippingInformationManagement = $shippingInformationManagement;
+        $this->cartRepository = $cartRepository;
     }
 
     /**
@@ -61,35 +69,51 @@ class ShippingMethod
                     ->setShippingMethodCode($shippingMethod[1]);
 
                 $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
+
+                $refreshedQuote = $this->cartRepository->get($quote->getId());
+
+                if ($refreshedQuote->getShippingAddress()->getShippingMethod() != $shippingMethodCode)  {
+                    $this->setCheapestMethod($quote);
+                }
+
             }
         }
         // Select the cheapest option
         else if ($quote->getShippingAddress()->validate()) {
-            $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
-            $cheapestMethod = [
-                'carrier' => '',
-                'code' => '',
-                'amount' => 100000
-            ];
+            $this->setCheapestMethod($quote);
+        }
+    }
 
-            foreach ($shippingMethods as $method) {
-                if ($method->getAmount() < $cheapestMethod['amount']) {
-                    $cheapestMethod['carrier'] = $method->getCarrierCode();
-                    $cheapestMethod['code'] = $method->getMethodCode();
-                    $cheapestMethod['amount'] = $method->getAmount();
-                }
+    /**
+     * @param $quote
+     * @return void
+     */
+    protected function setCheapestMethod($quote)
+    {
+        $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
+        $cheapestMethod = [
+            'carrier' => '',
+            'code' => '',
+            'amount' => 100000
+        ];
+
+        foreach ($shippingMethods as $method) {
+            if ($method->getAmount() < $cheapestMethod['amount']) {
+                $cheapestMethod['carrier'] = $method->getCarrierCode();
+                $cheapestMethod['code'] = $method->getMethodCode();
+                $cheapestMethod['amount'] = $method->getAmount();
             }
+        }
 
-            // Save address with shipping method
-            if (!empty($cheapestMethod['carrier'])) {
-                $address = $quote->getShippingAddress();
-                $shippingInformation = $this->shippingInformation->setShippingAddress($address);
+        // Save address with shipping method
+        if (!empty($cheapestMethod['carrier'])) {
+            $address = $quote->getShippingAddress();
+            $shippingInformation = $this->shippingInformation->setShippingAddress($address);
 
-                $shippingInformation->setShippingCarrierCode($cheapestMethod['carrier'])
-                    ->setShippingMethodCode($cheapestMethod['code']);
+            $shippingInformation->setShippingCarrierCode($cheapestMethod['carrier'])
+                ->setShippingMethodCode($cheapestMethod['code']);
 
-                $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
-            }
+            $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
         }
     }
 }
