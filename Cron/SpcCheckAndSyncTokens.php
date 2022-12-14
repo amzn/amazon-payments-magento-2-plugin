@@ -38,19 +38,17 @@ class SpcCheckAndSyncTokens
      */
     public function execute()
     {
-        if ($this->scopeConfig->isSetFlag('payment/amazon_pay/spc_enabled')) {
-            // disabling cron for now, as no endpoint to send tokens to
-            return;
+        // disabling cron for now
+        return;
 
-            $lastSync = $this->scopeConfig->getValue(AuthTokens::LAST_SYNC_CONFIG_PATH);
-            $lastSync = \DateTime::createFromFormat('Y-m-d H:i:s', $lastSync);
+        $lastSync = $this->scopeConfig->getValue(AuthTokens::LAST_SYNC_CONFIG_PATH);
+        $lastSync = \DateTime::createFromFormat('Y-m-d H:i:s', $lastSync);
 
-            $twoWeeksAgo = new \DateTime('-2 weeks');
+        $twoWeeksAgo = new \DateTime('-2 weeks');
 
-            // Sync if no last sync has been saved, or two weeks have passed
-            if (!$lastSync || $lastSync <= $twoWeeksAgo) {
-                $this->authTokens->createOrRenewAndSendTokens();
-            }
+        // Sync if no last sync has been saved, or two weeks have passed
+        if (!$lastSync || $lastSync <= $twoWeeksAgo) {
+            $this->authTokens->createOrRenewAndSendTokens();
         }
     }
 }
