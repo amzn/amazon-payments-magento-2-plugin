@@ -3,6 +3,7 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\MutableScopeConfig;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -100,6 +101,11 @@ class AuthTokens
     protected $storeManager;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param IntegrationFactory $integrationFactory
      * @param Integration $integrationResourceModel
      * @param IntegrationCollection $integrationCollection
@@ -114,6 +120,7 @@ class AuthTokens
      * @param MutableScopeConfig $mutableScopeConfig
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         IntegrationFactory $integrationFactory,
@@ -129,7 +136,8 @@ class AuthTokens
         WriterInterface $configWriter,
         MutableScopeConfig $mutableScopeConfig,
         StoreRepositoryInterface $storeRepository,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $scopeConfig
     )
     {
         $this->integrationFactory = $integrationFactory;
@@ -146,6 +154,7 @@ class AuthTokens
         $this->mutableScopeConfig = $mutableScopeConfig;
         $this->storeRepository = $storeRepository;
         $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -183,7 +192,7 @@ class AuthTokens
             $this->authorizationService->grantAllPermissions($integration->getId());
 
             // Create Integration user consumer
-            $consumer = $this->oauthService->createConsumer(['name' => 'Prime'. $integration->getId()]);
+            $consumer = $this->oauthService->createConsumer(['name' => 'SPC'. $integration->getId()]);
             $integration->setConsumerId($consumer->getId());
             $this->integrationResourceModel->save($integration);
 
@@ -262,26 +271,30 @@ class AuthTokens
 
         $stores = $this->storeRepository->getList();
 
+        $response = [];
         $errorResponses = [];
 
         foreach ($stores as $store) {
             if ($store->getId() == 0) {
                 continue;
             }
-            $response = $this->sendTokens($integration, $store);
 
-            $responseCode = $response['status'] ?? '404';
-            if (!preg_match('/^2\d\d$/', $responseCode)) {
-                $this->saveStatus(__('Tokens failed to sync'), $store->getId());
+            if ($this->spcActiveForStore($store)) {
+                $response = $this->sendTokens($integration, $store);
 
-                $errorResponses[] = $response['message'];
+                $responseCode = $response['status'] ?? '404';
+                if (!preg_match('/^2\d\d$/', $responseCode)) {
+                    $this->saveStatus(__('Tokens failed to sync'), $store->getId());
 
-                continue;
+                    $errorResponses[] = $response['message'];
+
+                    continue;
+                }
+
+                $this->saveLastSync($store->getId());
+
+                $this->saveStatus(__('Tokens synced successfully'), $store->getId());
             }
-
-            $this->saveLastSync($store->getId());
-
-            $this->saveStatus(__('Tokens synced successfully'), $store->getId());
         }
 
         if (!empty($errorResponses)) {
@@ -289,6 +302,27 @@ class AuthTokens
         }
 
         return $response;
+    }
+
+    /**
+     * Check if APay is enabled and its credentials set, as well as SPC enabled for the store
+     *
+     * @param $store
+     * @return bool
+     */
+    protected function spcActiveForStore($store)
+    {
+        return $this->scopeConfig
+            ->isSetFlag('payment/amazon_payment_v2/spc_enabled', ScopeInterface::SCOPE_STORE, $store->getId())
+            && $this->scopeConfig
+                ->isSetFlag('payment/amazon_payment_v2/active', ScopeInterface::SCOPE_STORE, $store->getId())
+            && $this->scopeConfig
+                ->getValue('payment/amazon_payment_v2/public_key_id', ScopeInterface::SCOPE_STORE, $store->getId())
+            && $this->scopeConfig
+                ->getValue('payment/amazon_payment_v2/merchant_id', ScopeInterface::SCOPE_STORE, $store->getId())
+            && $this->scopeConfig
+                ->getValue('payment/amazon_payment_v2/store_id', ScopeInterface::SCOPE_STORE, $store->getId())
+            ;
     }
 
     /**

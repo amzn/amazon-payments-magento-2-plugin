@@ -152,7 +152,11 @@ class Address implements SpcAddressInterface
 
             $this->cartRepository->save($quote);
 
-            $this->shippingMethodHelper->setShippingMethodOnQuote($quote);
+            // check if a shipping method is already set
+            $shippingMethod = $quote->getShippingAddress()->getShippingMethod() ?? false;
+
+            // set shipping method on the quote
+            $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $shippingMethod);
         }
 
         // Save and create response
