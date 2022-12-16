@@ -6,9 +6,13 @@ use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Amazon\Pay\Logger\Logger;
 
 class ShippingMethod
 {
+    const APPLIED = 'applied';
+    const NOT_APPLIED = 'not_applied';
+
     /**
      * @var ShippingMethodManagementInterface
      */
@@ -30,27 +34,37 @@ class ShippingMethod
     protected $cartRepository;
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param ShippingInformationInterface $shippingInformation
      * @param ShippingInformationManagementInterface $shippingInformationManagement
+     * @param CartRepositoryInterface $cartRepository
+     * @param Logger $logger
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
         ShippingInformationInterface $shippingInformation,
         ShippingInformationManagementInterface $shippingInformationManagement,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        Logger $logger
     )
     {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->shippingInformation = $shippingInformation;
         $this->shippingInformationManagement = $shippingInformationManagement;
         $this->cartRepository = $cartRepository;
+        $this->logger = $logger;
     }
 
     /**
      * @param $quote
      * @param $code
-     * @return void
+     * @return string|void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function setShippingMethodOnQuote($quote, $code = false)
     {
@@ -68,15 +82,23 @@ class ShippingMethod
                 $shippingInformation->setShippingCarrierCode($shippingMethod[0])
                     ->setShippingMethodCode($shippingMethod[1]);
 
-                $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
+                try {
+                    $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
 
-                $refreshedQuote = $this->cartRepository->get($quote->getId());
+                    $refreshedQuote = $this->cartRepository->get($quote->getId());
 
-                if ($refreshedQuote->getShippingAddress()->getShippingMethod() != $shippingMethodCode)  {
-                    $this->setCheapestMethod($quote);
+                    if ($refreshedQuote->getShippingAddress()->getShippingMethod() == $shippingMethodCode)  {
+                        return self::APPLIED;
+                    }
                 }
-
+                catch (\Exception $e) {
+                    $this->logger->info('SPC - Failed to apply shipping method '. $shippingMethodCode .' - cartId: '. $quote->getId());
+                }
             }
+
+            $this->setCheapestMethod($quote);
+
+            return self::NOT_APPLIED;
         }
         // Select the cheapest option
         else if ($quote->getShippingAddress()->validate()) {

@@ -74,33 +74,46 @@ class ShippingMethod implements ShippingMethodInterface
 
         // Check checkout session to
         if ($cartDetails && $checkoutSessionId) {
-            $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
-
-            $amazonSessionStatus = $amazonSession['status'] ?? '404';
-            if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
-                $this->cartHelper->logError(
-                    'SPC ShippingMethod: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                );
-
-                throw new WebapiException(
-                    new Phrase($amazonSession['reasonCode'])
-                );
-            }
-
-            if ($amazonSession['statusDetails']['state'] !== 'Open') {
-                $this->cartHelper->logError(
-                    'SPC ShippingMethod: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                );
-
-                throw new WebapiException(
-                    new Phrase($amazonSession['statusDetails']['reasonCode'])
-                );
-            }
-
-            // Set the shipping method
             $methodCode = $cartDetails['delivery_options'][0]['id'] ?? false;
 
-            $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $methodCode);
+            if (empty($methodCode)) {
+                throw new \Magento\Framework\Webapi\Exception(
+                    new Phrase('InvalidShippingMethod'), 400, 400
+                );
+            }
+            else {
+                $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
+
+                $amazonSessionStatus = $amazonSession['status'] ?? '404';
+                if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
+                    $this->cartHelper->logError(
+                        'SPC ShippingMethod: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                    );
+
+                    throw new WebapiException(
+                        new Phrase($amazonSession['reasonCode'])
+                    );
+                }
+
+                if ($amazonSession['statusDetails']['state'] !== 'Open') {
+                    $this->cartHelper->logError(
+                        'SPC ShippingMethod: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
+                    );
+
+                    throw new WebapiException(
+                        new Phrase($amazonSession['statusDetails']['reasonCode'])
+                    );
+                }
+
+                // Set the shipping method
+                $appliedMethod = $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $methodCode);
+
+                if ($appliedMethod == ShippingMethodHelper::NOT_APPLIED) {
+                    throw new \Magento\Framework\Webapi\Exception(
+                        new Phrase('InvalidShippingMethod'), 400, 400
+                    );
+                }
+            }
         }
 
         // Construct response
