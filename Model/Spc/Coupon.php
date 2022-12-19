@@ -9,10 +9,15 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Amazon\Pay\Helper\Spc\Cart;
-use Magento\Directory\Model\Currency;
+use Magento\Store\Api\Data\StoreInterface;
 
 class Coupon implements CouponInterface
 {
+    /**
+     * @var StoreInterface
+     */
+    protected $store;
+
     /**
      * @var CartRepositoryInterface
      */
@@ -29,27 +34,22 @@ class Coupon implements CouponInterface
     protected $cartHelper;
 
     /**
-     * @var Currency
-     */
-    protected $currency;
-
-    /**
+     * @param StoreInterface $store
      * @param CartRepositoryInterface $cartRepository
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
-     * @param Currency $currency
      */
     public function __construct(
+        StoreInterface $store,
         CartRepositoryInterface $cartRepository,
         AmazonPayAdapter $amazonPayAdapter,
-        Cart $cartHelper,
-        Currency $currency
+        Cart $cartHelper
     )
     {
+        $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
-        $this->currency = $currency;
     }
 
     /**
@@ -61,6 +61,9 @@ class Coupon implements CouponInterface
         try {
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
+
+            // Set currency on the http context
+            $this->store->setCurrentCurrencyCode($quote->getQuoteCurrencyCode());
         } catch (NoSuchEntityException $e) {
             $this->cartHelper->logError('SPC Coupon: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
