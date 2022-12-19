@@ -9,6 +9,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Amazon\Pay\Helper\Spc\Cart;
+use Magento\Directory\Model\Currency;
 
 class Coupon implements CouponInterface
 {
@@ -28,19 +29,27 @@ class Coupon implements CouponInterface
     protected $cartHelper;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
+     * @param Currency $currency
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AmazonPayAdapter $amazonPayAdapter,
-        Cart $cartHelper
+        Cart $cartHelper,
+        Currency $currency
     )
     {
         $this->cartRepository = $cartRepository;
         $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
+        $this->currency = $currency;
     }
 
     /**
@@ -91,6 +100,11 @@ class Coupon implements CouponInterface
             // Only grabbing the first one, as Magento only accepts one coupon code
             if (isset($cartDetails['coupons'][0]['coupon_code'])) {
                 $couponCode = $cartDetails['coupons'][0]['coupon_code'];
+
+                // TODO: Improve on keeping the correct currency code for multi-currency stores
+                // Magento changes it when the store's currency doesn't match the quote's currency on API calls
+                $quoteCurrency = $this->currency->load($quote->getQuoteCurrencyCode());
+                $quote->setForcedCurrency($quoteCurrency);
 
                 // Attempt to set coupon code
                 $quote->setCouponCode($couponCode);

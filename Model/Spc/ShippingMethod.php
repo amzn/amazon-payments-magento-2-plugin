@@ -10,6 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Directory\Model\Currency;
 
 class ShippingMethod implements ShippingMethodInterface
 {
@@ -34,22 +35,30 @@ class ShippingMethod implements ShippingMethodInterface
     protected $shippingMethodHelper;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      * @param ShippingMethodHelper $shippingMethodHelper
+     * @param Currency $currency
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
-        ShippingMethodHelper $shippingMethodHelper
+        ShippingMethodHelper $shippingMethodHelper,
+        Currency $currency
     )
     {
         $this->cartRepository = $cartRepository;
         $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
         $this->shippingMethodHelper = $shippingMethodHelper;
+        $this->currency = $currency;
     }
 
     /**
