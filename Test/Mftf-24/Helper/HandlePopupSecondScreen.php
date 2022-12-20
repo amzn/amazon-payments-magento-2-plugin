@@ -23,6 +23,8 @@ class HandlePopupSecondScreen extends Helper
                 $remoteWebDriver->findElement(
                     WebDriverBy::cssSelector($signInButton)
                 )->click();
+
+                $magentoWebDriver->waitForJS('return document.querySelector(".maxo_spinner.hide") !== null;', 15);
                 $magentoWebDriver->switchToNextTab();
                 $magentoWebDriver->wait(5);
             } catch (\Exception $ex) {
@@ -67,10 +69,6 @@ class HandlePopupSecondScreen extends Helper
 
                     if (empty($continueAs) && empty($checkout)) {
                         $stepLog[] = 'Popup didn\'t finish loading, closing popup and re-initiating Amazon Pay';
-
-                        // $url = $magentoWebDriver->_getCurrentUri();
-                        // $magentoWebDriver->amOnPage($url);
-                        // $magentoWebDriver->wait(3);
 
                         $stepLog[] = 'Closing tab';
                         $magentoWebDriver->closeTab();
