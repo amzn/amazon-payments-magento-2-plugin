@@ -5,14 +5,19 @@ namespace Amazon\Pay\Model\Spc;
 use Amazon\Pay\Api\Spc\OrderInterface;
 use Amazon\Pay\Helper\Spc\Cart;
 use Amazon\Pay\Helper\Spc\CheckoutSession;
-use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 class Order implements OrderInterface
 {
+    /**
+     * @var StoreInterface
+     */
+    protected $store;
+
     /**
      * @var CartRepositoryInterface
      */
@@ -34,18 +39,21 @@ class Order implements OrderInterface
     protected $checkoutSessionHelper;
 
     /**
+     * @param StoreInterface $store
      * @param CartRepositoryInterface $cartRepository
      * @param Cart $cartHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param CheckoutSession $checkoutSessionHelper
      */
     public function __construct(
+        StoreInterface $store,
         CartRepositoryInterface $cartRepository,
         Cart $cartHelper,
         OrderRepositoryInterface $orderRepository,
         CheckoutSession $checkoutSessionHelper
     )
     {
+        $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->cartHelper = $cartHelper;
         $this->orderRepository = $orderRepository;
@@ -61,6 +69,9 @@ class Order implements OrderInterface
         try {
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
+
+            // Set currency on the http context
+            $this->store->setCurrentCurrencyCode($quote->getQuoteCurrencyCode());
         } catch (NoSuchEntityException $e) {
             $this->cartHelper->logError('SPC Order: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 

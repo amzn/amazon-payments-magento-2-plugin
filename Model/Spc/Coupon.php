@@ -4,24 +4,23 @@ namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\CouponInterface;
 use Amazon\Pay\Helper\Spc\CheckoutSession;
-use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Amazon\Pay\Helper\Spc\Cart;
-use Magento\Directory\Model\Currency;
+use Magento\Store\Api\Data\StoreInterface;
 
 class Coupon implements CouponInterface
 {
     /**
+     * @var StoreInterface
+     */
+    protected $store;
+
+    /**
      * @var CartRepositoryInterface
      */
     protected $cartRepository;
-
-    /**
-     * @var AmazonPayAdapter
-     */
-    protected $amazonPayAdapter;
 
     /**
      * @var Cart
@@ -29,34 +28,27 @@ class Coupon implements CouponInterface
     protected $cartHelper;
 
     /**
-     * @var Currency
-     */
-    protected $currency;
-
     /**
      * @var CheckoutSession
      */
     protected $checkoutSessionHelper;
 
     /**
+     * @param StoreInterface $store
      * @param CartRepositoryInterface $cartRepository
-     * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
-     * @param Currency $currency
      * @param CheckoutSession $checkoutSessionHelper
      */
     public function __construct(
+        StoreInterface $store,
         CartRepositoryInterface $cartRepository,
-        AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
-        Currency $currency,
         CheckoutSession $checkoutSessionHelper
     )
     {
+        $this->store = $store;
         $this->cartRepository = $cartRepository;
-        $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
-        $this->currency = $currency;
         $this->checkoutSessionHelper = $checkoutSessionHelper;
     }
 
@@ -69,6 +61,9 @@ class Coupon implements CouponInterface
         try {
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
+
+            // Set currency on the http context
+            $this->store->setCurrentCurrencyCode($quote->getQuoteCurrencyCode());
         } catch (NoSuchEntityException $e) {
             $this->cartHelper->logError('SPC Coupon: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
@@ -86,11 +81,6 @@ class Coupon implements CouponInterface
                 // Only grabbing the first one, as Magento only accepts one coupon code
                 if (isset($cartDetails['coupons'][0]['coupon_code'])) {
                     $couponCode = $cartDetails['coupons'][0]['coupon_code'];
-
-                    // TODO: Improve on keeping the correct currency code for multi-currency stores
-                    // Magento changes it when the store's currency doesn't match the quote's currency on API calls
-                    $quoteCurrency = $this->currency->load($quote->getQuoteCurrencyCode());
-                    $quote->setForcedCurrency($quoteCurrency);
 
                     // Attempt to set coupon code
                     $quote->setCouponCode($couponCode);

@@ -6,23 +6,22 @@ use Amazon\Pay\Api\Spc\ShippingMethodInterface;
 use Amazon\Pay\Helper\Spc\CheckoutSession;
 use Amazon\Pay\Helper\Spc\ShippingMethod as ShippingMethodHelper;
 use Amazon\Pay\Helper\Spc\Cart;
-use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Directory\Model\Currency;
+use Magento\Store\Api\Data\StoreInterface;
 
 class ShippingMethod implements ShippingMethodInterface
 {
     /**
+     * @var StoreInterface
+     */
+    protected $store;
+
+    /**
      * @var CartRepositoryInterface
      */
     protected $cartRepository;
-
-    /**
-     * @var AmazonPayAdapter
-     */
-    protected $amazonPayAdapter;
 
     /**
      * @var Cart
@@ -35,37 +34,29 @@ class ShippingMethod implements ShippingMethodInterface
     protected $shippingMethodHelper;
 
     /**
-     * @var Currency
-     */
-    protected $currency;
-
-    /**
      * @var CheckoutSession
      */
     protected $checkoutSessionHelper;
 
     /**
+     * @param StoreInterface $store
      * @param CartRepositoryInterface $cartRepository
-     * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      * @param ShippingMethodHelper $shippingMethodHelper
-     * @param Currency $currency
      * @param CheckoutSession $checkoutSessionHelper
      */
     public function __construct(
+        StoreInterface $store,
         CartRepositoryInterface $cartRepository,
-        AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
         ShippingMethodHelper $shippingMethodHelper,
-        Currency $currency,
         CheckoutSession $checkoutSessionHelper
     )
     {
+        $this->store = $store;
         $this->cartRepository = $cartRepository;
-        $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
         $this->shippingMethodHelper = $shippingMethodHelper;
-        $this->currency = $currency;
         $this->checkoutSessionHelper = $checkoutSessionHelper;
     }
 
@@ -78,6 +69,9 @@ class ShippingMethod implements ShippingMethodInterface
         try {
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
+
+            // Set currency on the http context
+            $this->store->setCurrentCurrencyCode($quote->getQuoteCurrencyCode());
         } catch (NoSuchEntityException $e) {
             $this->cartHelper->logError('SPC ShippingMethod: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
