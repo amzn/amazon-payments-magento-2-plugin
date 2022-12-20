@@ -19,11 +19,6 @@ class Order implements OrderInterface
     protected $cartRepository;
 
     /**
-     * @var AmazonPayAdapter
-     */
-    protected $amazonPayAdapter;
-
-    /**
      * @var Cart
      */
     protected $cartHelper;
@@ -40,21 +35,18 @@ class Order implements OrderInterface
 
     /**
      * @param CartRepositoryInterface $cartRepository
-     * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param CheckoutSession $checkoutSessionHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
-        AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
         OrderRepositoryInterface $orderRepository,
         CheckoutSession $checkoutSessionHelper
     )
     {
         $this->cartRepository = $cartRepository;
-        $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
         $this->orderRepository = $orderRepository;
         $this->checkoutSessionHelper = $checkoutSessionHelper;
