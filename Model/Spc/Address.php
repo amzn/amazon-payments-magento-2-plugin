@@ -83,7 +83,7 @@ class Address implements SpcAddressInterface
             $this->cartHelper->logError('SPC Address: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase('InvalidCartId'), 404, 404
+                new Phrase('InvalidCartId'), "Cart Id ". $cartId ." not found or inactive", 404
             );
         }
 
@@ -125,8 +125,8 @@ class Address implements SpcAddressInterface
                     'SPC Address: InvalidRequest - No shipping address. CartId: '. $cartId .' - ', $cartDetails
                 );
 
-                throw new WebapiException(
-                    new Phrase('InvalidRequest')
+                throw new \Magento\Framework\Webapi\Exception(
+                    new Phrase('InvalidRequest'), "The Shipping Address is missing", 400
                 );
             }
             // Get and set billing address
@@ -140,8 +140,8 @@ class Address implements SpcAddressInterface
                     'SPC Address: InvalidRequest - No billing address. CartId: '. $cartId .' - ', $cartDetails
                 );
 
-                throw new WebapiException(
-                    new Phrase('InvalidRequest')
+                throw new \Magento\Framework\Webapi\Exception(
+                    new Phrase('InvalidRequest'), "The Billing Address is missing", 400
                 );
             }
 

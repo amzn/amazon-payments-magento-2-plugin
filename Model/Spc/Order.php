@@ -4,10 +4,10 @@ namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\OrderInterface;
 use Amazon\Pay\Helper\Spc\Cart;
+use Amazon\Pay\Helper\Spc\CheckoutSession;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -40,18 +40,25 @@ class Order implements OrderInterface
     protected $orderRepository;
 
     /**
+     * @var CheckoutSession
+     */
+    protected $checkoutSessionHelper;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param CartManagementInterface $cartManagement
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      * @param OrderRepositoryInterface $orderRepository
+     * @param CheckoutSession $checkoutSessionHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         CartManagementInterface $cartManagement,
         AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        CheckoutSession $checkoutSessionHelper
     )
     {
         $this->cartRepository = $cartRepository;
@@ -59,6 +66,7 @@ class Order implements OrderInterface
         $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
         $this->orderRepository = $orderRepository;
+        $this->checkoutSessionHelper = $checkoutSessionHelper;
     }
 
     /**
@@ -74,7 +82,7 @@ class Order implements OrderInterface
             $this->cartHelper->logError('SPC Order: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase('InvalidCartId'), 404, 404
+                new Phrase('InvalidCartId'), "Cart Id ". $cartId ." not found or inactive", 404
             );
         }
 
@@ -83,68 +91,47 @@ class Order implements OrderInterface
 
         // Get checkout session for verification
         if ($cartDetails && $checkoutSessionId) {
-            $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
+            if ($this->checkoutSessionHelper->confirmCheckoutSession($quote, $cartDetails, $checkoutSessionId)) {
+                // Check that the totals collect okay
+                $quote->collectTotals();
 
-            $amazonSessionStatus = $amazonSession['status'] ?? '404';
-            if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
-                $this->cartHelper->logError(
-                    'SPC Order: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                );
+                // Check that all items are still in stock
+                foreach ($quote->getAllVisibleItems() as $item) {
+                    if (!$item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()) {
+                        $this->cartHelper->logError(
+                            'SPC Order: InvalidCartStatus - Product ' . $item->getProduct()->getId() . ' not in stock. CartId: ' . $cartId . ' - ', $cartDetails
+                        );
 
-                throw new WebapiException(
-                    new Phrase($amazonSession['reasonCode'])
-                );
-            }
+                        throw new \Magento\Framework\Webapi\Exception(
+                            new Phrase('InvalidCartStatus'), "Item ". $item->getId() ." for product ". $item->getProduct()->getId() ." is out of stock", 422
+                        );
+                    }
+                }
 
-            if ($amazonSession['statusDetails']['state'] !== 'Open') {
-                $this->cartHelper->logError(
-                    'SPC Order: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                );
-
-                throw new WebapiException(
-                    new Phrase($amazonSession['statusDetails']['reasonCode'])
-                );
-            }
-
-            // Check that the totals collect okay
-            $quote->collectTotals();
-
-            // Check that all items are still in stock
-            foreach ($quote->getAllVisibleItems() as $item) {
-                if (!$item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()) {
+                // Check that both addresses are set
+                if (is_array($quote->getShippingAddress()->validate()) || is_array($quote->getBillingAddress()->validate())) {
                     $this->cartHelper->logError(
-                        'SPC Order: InvalidCartStatus - Product '. $item->getProduct()->getId() .' not in stock. CartId: '. $cartId .' - ', $cartDetails
+                        'SPC Order: InvalidCartStatus - Missing addresses. CartId: ' . $cartId . ' - ', $cartDetails
                     );
 
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase('InvalidCartStatus'), 422, 422
+                        new Phrase('InvalidCartStatus'), "Shipping and/or Billing Address is invalid", 422
                     );
                 }
+
+                // Check that the shipping method has been set
+                if (empty($quote->getShippingAddress()->getShippingMethod())) {
+                    $this->cartHelper->logError(
+                        'SPC Order: InvalidCartStatus - No shipping method selected. CartId: ' . $cartId . ' - ', $cartDetails
+                    );
+
+                    throw new \Magento\Framework\Webapi\Exception(
+                        new Phrase('InvalidCartStatus'), "No Shipping Method has been selected", 422
+                    );
+                }
+
+                return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
             }
-
-            // Check that both addresses are set
-            if (is_array($quote->getShippingAddress()->validate()) || is_array($quote->getBillingAddress()->validate())) {
-                $this->cartHelper->logError(
-                    'SPC Order: InvalidCartStatus - Missing addresses. CartId: '. $cartId .' - ', $cartDetails
-                );
-
-                throw new \Magento\Framework\Webapi\Exception(
-                    new Phrase('InvalidCartStatus'), 422, 422
-                );
-            }
-
-            // Check that the shipping method has been set
-            if (empty($quote->getShippingAddress()->getShippingMethod())) {
-                $this->cartHelper->logError(
-                    'SPC Order: InvalidCartStatus - No shipping method selected. CartId: '. $cartId .' - ', $cartDetails
-                );
-
-                throw new \Magento\Framework\Webapi\Exception(
-                    new Phrase('InvalidCartStatus'), 422, 422
-                );
-            }
-
-            return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
         }
     }
 }

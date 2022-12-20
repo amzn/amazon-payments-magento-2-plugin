@@ -3,12 +3,12 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\ShippingMethodInterface;
+use Amazon\Pay\Helper\Spc\CheckoutSession;
 use Amazon\Pay\Helper\Spc\ShippingMethod as ShippingMethodHelper;
 use Amazon\Pay\Helper\Spc\Cart;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Directory\Model\Currency;
 
@@ -40,18 +40,25 @@ class ShippingMethod implements ShippingMethodInterface
     protected $currency;
 
     /**
+     * @var CheckoutSession
+     */
+    protected $checkoutSessionHelper;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      * @param ShippingMethodHelper $shippingMethodHelper
      * @param Currency $currency
+     * @param CheckoutSession $checkoutSessionHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
         ShippingMethodHelper $shippingMethodHelper,
-        Currency $currency
+        Currency $currency,
+        CheckoutSession $checkoutSessionHelper
     )
     {
         $this->cartRepository = $cartRepository;
@@ -59,6 +66,7 @@ class ShippingMethod implements ShippingMethodInterface
         $this->cartHelper = $cartHelper;
         $this->shippingMethodHelper = $shippingMethodHelper;
         $this->currency = $currency;
+        $this->checkoutSessionHelper = $checkoutSessionHelper;
     }
 
     /**
@@ -74,7 +82,7 @@ class ShippingMethod implements ShippingMethodInterface
             $this->cartHelper->logError('SPC ShippingMethod: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase('InvalidCartId'), 404, 404
+                new Phrase('InvalidCartId'), "Cart Id ". $cartId ." not found or inactive", 404
             );
         }
 
@@ -87,40 +95,19 @@ class ShippingMethod implements ShippingMethodInterface
 
             if (empty($methodCode)) {
                 throw new \Magento\Framework\Webapi\Exception(
-                    new Phrase('InvalidShippingMethod'), 400, 400
+                    new Phrase('InvalidShippingMethod'), "Shipping method id missing", 400
                 );
             }
             else {
-                $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
+                if ($this->checkoutSessionHelper->confirmCheckoutSession($quote, $cartDetails, $checkoutSessionId)) {
+                    // Set the shipping method
+                    $appliedMethod = $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $methodCode);
 
-                $amazonSessionStatus = $amazonSession['status'] ?? '404';
-                if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
-                    $this->cartHelper->logError(
-                        'SPC ShippingMethod: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                    );
-
-                    throw new WebapiException(
-                        new Phrase($amazonSession['reasonCode'])
-                    );
-                }
-
-                if ($amazonSession['statusDetails']['state'] !== 'Open') {
-                    $this->cartHelper->logError(
-                        'SPC ShippingMethod: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                    );
-
-                    throw new WebapiException(
-                        new Phrase($amazonSession['statusDetails']['reasonCode'])
-                    );
-                }
-
-                // Set the shipping method
-                $appliedMethod = $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $methodCode);
-
-                if ($appliedMethod == ShippingMethodHelper::NOT_APPLIED) {
-                    throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase('InvalidShippingMethod'), 400, 400
-                    );
+                    if ($appliedMethod == ShippingMethodHelper::NOT_APPLIED) {
+                        throw new \Magento\Framework\Webapi\Exception(
+                            new Phrase('InvalidShippingMethod'), "Shipping method id was not able to apply to the cart", 400
+                        );
+                    }
                 }
             }
         }
