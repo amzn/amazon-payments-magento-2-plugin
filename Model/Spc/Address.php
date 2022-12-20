@@ -11,10 +11,15 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Amazon\Pay\Helper\Spc\ShippingMethod;
-use Magento\Directory\Model\Currency;
+use Magento\Store\Api\Data\StoreInterface;
 
 class Address implements SpcAddressInterface
 {
+    /**
+     * @var StoreInterface
+     */
+    protected $store;
+
     /**
      * @var CartRepositoryInterface
      */
@@ -41,33 +46,28 @@ class Address implements SpcAddressInterface
     protected $shippingMethodHelper;
 
     /**
-     * @var Currency
-     */
-    protected $currency;
-
-    /**
+     * @param StoreInterface $store
      * @param CartRepositoryInterface $cartRepository
      * @param AddressInterface $address
      * @param CheckoutSessionManagement $checkoutSessionManagement
      * @param Cart $cartHelper
      * @param ShippingMethod $shippingMethodHelper
-     * @param Currency $currency
      */
     public function __construct(
+        StoreInterface $store,
         CartRepositoryInterface $cartRepository,
         AddressInterface $address,
         CheckoutSessionManagement $checkoutSessionManagement,
         Cart $cartHelper,
-        ShippingMethod $shippingMethodHelper,
-        Currency $currency
+        ShippingMethod $shippingMethodHelper
     )
     {
+        $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->address = $address;
         $this->checkoutSessionManager = $checkoutSessionManagement;
         $this->cartHelper = $cartHelper;
         $this->shippingMethodHelper = $shippingMethodHelper;
-        $this->currency = $currency;
     }
 
     /**
@@ -79,6 +79,9 @@ class Address implements SpcAddressInterface
         try {
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
+
+            // Set currency on the http context
+            $this->store->setCurrentCurrencyCode($quote->getQuoteCurrencyCode());
         } catch (NoSuchEntityException $e) {
             $this->cartHelper->logError('SPC Address: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
@@ -144,11 +147,6 @@ class Address implements SpcAddressInterface
                     new Phrase('InvalidRequest')
                 );
             }
-
-            // TODO: Improve on keeping the correct currency code for multi-currency stores
-            // Magento changes it when the store's currency doesn't match the quote's currency on API calls
-            $quoteCurrency = $this->currency->load($quote->getQuoteCurrencyCode());
-            $quote->setForcedCurrency($quoteCurrency);
 
             $this->cartRepository->save($quote);
 

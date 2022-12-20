@@ -11,9 +11,15 @@ use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 class Order implements OrderInterface
 {
+    /**
+     * @var StoreInterface
+     */
+    protected $store;
+
     /**
      * @var CartRepositoryInterface
      */
@@ -40,6 +46,7 @@ class Order implements OrderInterface
     protected $orderRepository;
 
     /**
+     * @param StoreInterface $store
      * @param CartRepositoryInterface $cartRepository
      * @param CartManagementInterface $cartManagement
      * @param AmazonPayAdapter $amazonPayAdapter
@@ -47,6 +54,7 @@ class Order implements OrderInterface
      * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
+        StoreInterface $store,
         CartRepositoryInterface $cartRepository,
         CartManagementInterface $cartManagement,
         AmazonPayAdapter $amazonPayAdapter,
@@ -54,6 +62,7 @@ class Order implements OrderInterface
         OrderRepositoryInterface $orderRepository
     )
     {
+        $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->cartManagement = $cartManagement;
         $this->amazonPayAdapter = $amazonPayAdapter;
@@ -70,6 +79,9 @@ class Order implements OrderInterface
         try {
             /** @var $quote \Magento\Quote\Model\Quote */
             $quote = $this->cartRepository->getActive($cartId);
+
+            // Set currency on the http context
+            $this->store->setCurrentCurrencyCode($quote->getQuoteCurrencyCode());
         } catch (NoSuchEntityException $e) {
             $this->cartHelper->logError('SPC Order: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
