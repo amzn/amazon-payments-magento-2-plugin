@@ -8,7 +8,6 @@ use Amazon\Pay\Helper\Spc\CheckoutSession;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
-use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
@@ -18,11 +17,6 @@ class Order implements OrderInterface
      * @var CartRepositoryInterface
      */
     protected $cartRepository;
-
-    /**
-     * @var CartManagementInterface
-     */
-    protected $cartManagement;
 
     /**
      * @var AmazonPayAdapter
@@ -46,7 +40,6 @@ class Order implements OrderInterface
 
     /**
      * @param CartRepositoryInterface $cartRepository
-     * @param CartManagementInterface $cartManagement
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
      * @param OrderRepositoryInterface $orderRepository
@@ -54,7 +47,6 @@ class Order implements OrderInterface
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
-        CartManagementInterface $cartManagement,
         AmazonPayAdapter $amazonPayAdapter,
         Cart $cartHelper,
         OrderRepositoryInterface $orderRepository,
@@ -62,7 +54,6 @@ class Order implements OrderInterface
     )
     {
         $this->cartRepository = $cartRepository;
-        $this->cartManagement = $cartManagement;
         $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
         $this->orderRepository = $orderRepository;
