@@ -104,11 +104,6 @@ class Coupon implements CouponInterface
             if (isset($cartDetails['coupons'][0]['coupon_code'])) {
                 $couponCode = $cartDetails['coupons'][0]['coupon_code'];
 
-                // TODO: Improve on keeping the correct currency code for multi-currency stores
-                // Magento changes it when the store's currency doesn't match the quote's currency on API calls
-                $quoteCurrency = $this->currency->load($quote->getQuoteCurrencyCode());
-                $quote->setForcedCurrency($quoteCurrency);
-
                 // Attempt to set coupon code
                 $quote->setCouponCode($couponCode);
 

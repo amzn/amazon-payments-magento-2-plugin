@@ -45,6 +45,14 @@ class Order implements OrderInterface
      */
     protected $orderRepository;
 
+    /**
+     * @param StoreInterface $store
+     * @param CartRepositoryInterface $cartRepository
+     * @param CartManagementInterface $cartManagement
+     * @param AmazonPayAdapter $amazonPayAdapter
+     * @param Cart $cartHelper
+     * @param OrderRepositoryInterface $orderRepository
+     */
     public function __construct(
         StoreInterface $store,
         CartRepositoryInterface $cartRepository,
