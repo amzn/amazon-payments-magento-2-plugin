@@ -82,7 +82,7 @@ class Order implements OrderInterface
             $this->cartHelper->logError('SPC Order: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase('InvalidCartId'), "Cart Id ". $cartId ." not found or inactive", 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
             );
         }
 
@@ -103,7 +103,7 @@ class Order implements OrderInterface
                         );
 
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase('InvalidCartStatus'), "Item ". $item->getId() ." for product ". $item->getProduct()->getId() ." is out of stock", 422
+                            new Phrase("Item ". $item->getId() ." for product ". $item->getProduct()->getId() ." is out of stock"), "InvalidCartStatus", 422
                         );
                     }
                 }
@@ -115,7 +115,7 @@ class Order implements OrderInterface
                     );
 
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase('InvalidCartStatus'), "Shipping and/or Billing Address is invalid", 422
+                        new Phrase("Shipping and/or Billing Address is invalid"), "InvalidCartStatus", 422
                     );
                 }
 
@@ -126,7 +126,7 @@ class Order implements OrderInterface
                     );
 
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase('InvalidCartStatus'), "No Shipping Method has been selected", 422
+                        new Phrase("No Shipping Method set on cart"), "InvalidCartStatus", 422
                     );
                 }
 

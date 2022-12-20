@@ -2,17 +2,19 @@
 
 namespace Amazon\Pay\Helper\Spc;
 
+use Amazon\Pay\Api\CheckoutSessionManagementInterface;
 use Amazon\Pay\Logger\Logger;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
+use Amazon\Pay\Model\CheckoutSessionManagement;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
 
 class CheckoutSession
 {
     /**
-     * @var AmazonPayAdapter
+     * @var CheckoutSessionManagementInterface
      */
-    protected $amazonPayAdapter;
+    protected $checkoutSessionManagement;
 
     /**
      * @var Logger
@@ -20,15 +22,15 @@ class CheckoutSession
     protected $logger;
 
     /**
-     * @param AmazonPayAdapter $amazonPayAdapter
+     * @param CheckoutSessionManagementInterface $checkoutSessionManagement
      * @param Logger $logger
      */
     public function __construct(
-        AmazonPayAdapter $amazonPayAdapter,
+        CheckoutSessionManagementInterface $checkoutSessionManagement,
         Logger $logger
     )
     {
-        $this->amazonPayAdapter = $amazonPayAdapter;
+        $this->checkoutSessionManagement = $checkoutSessionManagement;
         $this->logger = $logger;
     }
 
@@ -42,31 +44,49 @@ class CheckoutSession
     public function confirmCheckoutSession($quote, $cartDetails, $checkoutSessionId)
     {
         // load session
-        $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
+        $amazonSession = $this->checkoutSessionManagement->getAmazonSession($checkoutSessionId);
 
         // check status code
         $amazonSessionStatus = $amazonSession['status'] ?? '404';
         if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
-            $this->logger->logError(
-                'SPC ShippingMethod: '. $amazonSession['reasonCode'] .'. CartId: '. $quote->getId() .' - ', $cartDetails
+            $this->logger->error(
+                'SPC ShippingMethod - Session Error: '. $amazonSession['reasonCode'] .'. CartId: '. $quote->getId() .' - ', $cartDetails
             );
 
             throw new WebapiException(
-                new Phrase($amazonSession['reasonCode'])
+                new Phrase($amazonSession['message']), $amazonSession['reasonCode'], 400
             );
         }
 
         // check if still open
         if ($amazonSession['statusDetails']['state'] !== 'Open') {
-            $this->logger->logError(
+            $this->logger->error(
                 'SPC ShippingMethod: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $quote->getId() .' - ', $cartDetails
             );
 
             throw new WebapiException(
-                new Phrase($amazonSession['statusDetails']['reasonCode'])
+                new Phrase($amazonSession['statusDetails']['reasonDescription']), $amazonSession['statusDetails']['reasonCode'], 400
             );
         }
 
         return $amazonSession;
+    }
+
+    /**
+     * @param $checkoutSessionId
+     * @return mixed
+     */
+    public function getShippingAddress($checkoutSessionId)
+    {
+        return $this->checkoutSessionManagement->getShippingAddress($checkoutSessionId);
+    }
+
+    /**
+     * @param $checkoutSessionId
+     * @return mixed
+     */
+    public function getBillingAddress($checkoutSessionId)
+    {
+        return $this->checkoutSessionManagement->getBillingAddress($checkoutSessionId);
     }
 }

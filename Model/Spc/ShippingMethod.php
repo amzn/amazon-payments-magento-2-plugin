@@ -82,7 +82,7 @@ class ShippingMethod implements ShippingMethodInterface
             $this->cartHelper->logError('SPC ShippingMethod: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase('InvalidCartId'), "Cart Id ". $cartId ." not found or inactive", 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
             );
         }
 
@@ -95,7 +95,7 @@ class ShippingMethod implements ShippingMethodInterface
 
             if (empty($methodCode)) {
                 throw new \Magento\Framework\Webapi\Exception(
-                    new Phrase('InvalidShippingMethod'), "Shipping method id missing", 400
+                    new Phrase("Shipping Method id missing"), "InvalidShippingMethod", 400
                 );
             }
             else {
@@ -105,7 +105,7 @@ class ShippingMethod implements ShippingMethodInterface
 
                     if ($appliedMethod == ShippingMethodHelper::NOT_APPLIED) {
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase('InvalidShippingMethod'), "Shipping method id was not able to apply to the cart", 400
+                            new Phrase("Shipping method id '". $methodCode ."' was not able to apply to the cart"), "InvalidShippingMethod", 400
                         );
                     }
                 }

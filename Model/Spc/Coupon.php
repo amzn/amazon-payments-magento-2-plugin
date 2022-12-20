@@ -73,7 +73,7 @@ class Coupon implements CouponInterface
             $this->cartHelper->logError('SPC Coupon: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase('InvalidCartId'), "Cart Id ". $cartId ." not found or inactive", 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
             );
         }
 
@@ -105,7 +105,7 @@ class Coupon implements CouponInterface
                         );
 
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase('CouponNotApplicable'), "The coupon code ". $couponCode ." does not apply", 400
+                            new Phrase("The coupon code '". $couponCode ."' does not apply"), "CouponNotApplicable", 400
                         );
                     }
                 }
