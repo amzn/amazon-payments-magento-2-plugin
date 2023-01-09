@@ -23,7 +23,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
 
-class AutoKeyExchange
+class AutoKeyExchange extends KeyManagement
 {
 
     const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payment/autokeyexchange/privatekey';
@@ -43,26 +43,6 @@ class AutoKeyExchange
         'GBP' => 'uk',
         'JPY' => 'ja',
     ];
-
-    /**
-     * @var
-     */
-    private $_storeId;
-
-    /**
-     * @var
-     */
-    private $_websiteId;
-
-    /**
-     * @var string
-     */
-    private $_scope;
-
-    /**
-     * @var int
-     */
-    private $_scopeId;
 
     /**
      * @var AmazonHelper
@@ -113,16 +93,6 @@ class AutoKeyExchange
      * @var State
      */
     private $state;
-
-    /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    private $request;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -185,46 +155,12 @@ class AutoKeyExchange
         $this->cacheManager  = $cacheManager;
         $this->connection    = $connection;
         $this->state         = $state;
-        $this->request       = $request;
-        $this->storeManager  = $storeManager;
         $this->mathRandom    = $mathRandom;
         $this->logger        = $logger;
 
         $this->messageManager = $messageManager;
 
-        // Find store ID and scope
-        $this->_websiteId = $request->getParam('website', 0);
-        $this->_storeId   = $request->getParam('store', 0);
-        $this->_scope     = $request->getParam('scope');
-
-        // Website scope
-        if ($this->_websiteId) {
-            $this->_scope = !$this->_scope ? 'websites' : $this->_scope;
-        } else {
-            $this->_websiteId = $storeManager->getWebsite()->getId();
-        }
-
-        // Store scope
-        if ($this->_storeId) {
-            $this->_websiteId = $this->storeManager->getStore($this->_storeId)->getWebsite()->getId();
-            $this->_scope = !$this->_scope ? 'stores' : $this->_scope;
-        } else {
-            $this->_storeId = $storeManager->getWebsite($this->_websiteId)->getDefaultStore()->getId();
-        }
-
-        // Set scope ID
-        switch ($this->_scope) {
-            case 'websites':
-                $this->_scopeId = $this->_websiteId;
-                break;
-            case 'stores':
-                $this->_scopeId = $this->_storeId;
-                break;
-            default:
-                $this->_scope = 'default';
-                $this->_scopeId = 0;
-                break;
-        }
+        parent::__construct($request, $storeManager);
     }
 
     /**
@@ -269,20 +205,9 @@ class AutoKeyExchange
     /**
      * Generate and save RSA keys
      */
-    public function generateKeys()
+    protected function generateKeys()
     {
-        // Magento 2.4.4 switches to phpseclib3, use that if it exists
-        if (class_exists(\phpseclib3\Crypt\RSA::class, true)) {
-            $keypair = \phpseclib3\Crypt\RSA::createKey(2048);
-            $keys = [
-                "publickey" => $keypair->getPublicKey()->__toString(),
-                "privatekey" => $keypair->__toString()
-            ];
-        } else {
-            $rsa = new \phpseclib\Crypt\RSA();
-            $keys = $rsa->createKey(2048);
-        }
-
+        $keys = parent::generateKeys();
         $encrypt = $this->encryptor->encrypt($keys['privatekey']);
 
         $this->config
@@ -363,9 +288,9 @@ class AutoKeyExchange
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
     {
         try {
-            $payload = (object) json_decode($payloadJson);
+            $payload = json_decode($payloadJson);
 
-            $publicKeyId = urldecode($payload->publicKeyId);
+            $publicKeyId = urldecode($payload['publicKeyId'] ?? '');
             $decryptedKey = null;
 
             $success = openssl_private_decrypt(
