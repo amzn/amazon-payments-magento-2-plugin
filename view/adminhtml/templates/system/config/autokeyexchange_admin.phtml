@@ -15,6 +15,7 @@
  */
 
 /* @var \Amazon\Pay\Block\Adminhtml\System\Config\AutoKeyExchangeAdmin $block */
+$currency = $block->getCurrency();
 ?>
 
 <br/>
@@ -23,7 +24,7 @@
 <div data-mage-init='{
         "Amazon_Pay/js/autokeyexchange": <?= $block->escapeHtml($block->getJsonConfig()) ?> }'
      id="amazon_autokeyexchange">
-    <?php if (!$block->getCurrency()): // Auto Key Exchange not supported ?>
+    <?php if (!$currency): // Auto Key Exchange not supported ?>
         <div id="autokeyexchange_unsupported">
             <?= $block->escapeHtml(__('An unsupported currency is currently selected. ' .
                 'Please review our configuration guide.')); ?>
@@ -33,7 +34,8 @@
                 </a>
             </span>
         </div>
-
+    <?php elseif ($currency == 'JPY'): // JPY (JA) AKE not supported ?>
+        <div></div>
     <?php else: ?>
         <div id="autokeyexchange-hint">
             <?= $block->escapeHtml(

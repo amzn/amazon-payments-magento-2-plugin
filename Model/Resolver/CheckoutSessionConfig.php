@@ -37,8 +37,9 @@ class CheckoutSessionConfig implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $cartId = $args['cartId'] ?? null;
+        $omitPayloads = $args['omitPayloads'] ?? false;
 
-        $response = $this->checkoutSessionManagement->getConfig($cartId);
+        $response = $this->checkoutSessionManagement->getConfig($cartId, $omitPayloads);
         return array_shift($response);
     }
 }

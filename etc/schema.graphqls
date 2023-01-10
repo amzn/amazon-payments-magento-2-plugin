@@ -1,5 +1,5 @@
 type Query {
-    checkoutSessionConfig(cartId: String): CheckoutSessionConfigOutput
+    checkoutSessionConfig(cartId: String, omitPayloads: Boolean): CheckoutSessionConfigOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionConfig")
 
     checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
