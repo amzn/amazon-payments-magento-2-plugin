@@ -36,15 +36,15 @@ class TokenRenderer extends AbstractTokenRenderer
 
     /**
      * @param Context $context
-     * @param array $data
      * @param AmazonConfig $amazonConfig
      * @param SubscriptionHelper $helper
+     * @param array $data
      */
     public function __construct(
         Context $context,
-        array $data = [],
         AmazonConfig $amazonConfig,
-        SubscriptionHelper $helper
+        SubscriptionHelper $helper,
+        array $data = []
     ) {
         $this->amazonConfig = $amazonConfig;
         $this->helper = $helper;
