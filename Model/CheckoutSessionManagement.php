@@ -890,7 +890,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $order->getCustomerId());
             if ($token) {
                 $token->setGatewayToken($chargePermissionId);
+<<<<<<< HEAD
                 $token->setIsVisible(true);
+=======
+>>>>>>> subscriptions
                 $this->paymentTokenRepository->save($token);
             } else {
                 $this->logger->debug("Unable to update vault token. amazonSessionId: " . $amazonSessionId . ' Customer Id: ' . $order->getCustomerId());

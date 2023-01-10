@@ -81,8 +81,7 @@ define([
                         }
                     };
 
-                    if (this.buttonType !== 'PayNow'
-                        && !amazonStorage.isMulticurrencyEnabled 
+                    if (this._shouldUseEstimatedAmount()
                         && !(JSON.parse(checkoutSessionConfig.checkout_payload).recurringMetadata)
                     ) {
                         buttonConfig.estimatedOrderAmount = this._getEstimatedAmount();
@@ -245,8 +244,9 @@ define([
                     if (self.amazonPayButton && self.buttonType !== 'PayNow') {
                         var hasSubscription = false;
                         var isSubscriptionOption = (option) => option.label && option.label === amazonStorage.getSubscriptionLabel();
+
+                        // If any cart item has a subscription option, we should redraw the button to exclude estimatedOrderAmount
                         updatedCart.items.forEach((item) => {
-                            // If any cart item has a subscription option, we should redraw the button to exclude estimatedOrderAmount
                             if (item.options.length && item.options.some(isSubscriptionOption)) {
                                 hasSubscription = true;
                                 return;
@@ -256,11 +256,26 @@ define([
                         if (hasSubscription) {
                             self._draw();
                         } else {
-                            self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
+                            if (self.options.placement === 'Cart') {
+                                delete self.amazonPayButton;
+                            }
+                            
+                            if (self.amazonPayButton
+                                && self._shouldUseEstimatedAmount()
+                                && updatedCart.summary_count !== 0
+                            ) {
+                                self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
+                            }
                         }
                     }
                 });
             });
+        },
+
+        _shouldUseEstimatedAmount: function () {
+            return this.options.buttonType !== 'PayNow'
+                && this.options.placement !== 'Product'
+                && !amazonStorage.isMulticurrencyEnabled;
         },
 
         click: function () {

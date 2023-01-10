@@ -39,19 +39,15 @@ class SubscriptionRepository
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
-    
+
     public function __construct(
-        \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement,
-        \Magento\Vault\Api\PaymentTokenRepositoryInterface $paymentTokenRepository,
         \Amazon\Pay\Helper\SubscriptionHelper $helper,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->amazonAdapter = $amazonAdapter;
         $this->quoteRepository = $quoteRepository;
         $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->paymentTokenRepository = $paymentTokenRepository;
         $this->helper = $helper;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }

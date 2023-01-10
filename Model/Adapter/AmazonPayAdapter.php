@@ -703,6 +703,7 @@ class AmazonPayAdapter
             ];
     }
 
+    
     protected function getSignInUrl()
     {
         $signInUrl = $this->amazonConfig->getSignInResultUrlPath();

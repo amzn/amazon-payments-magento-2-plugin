@@ -168,10 +168,16 @@
     </virtualType>
     <virtualType name="AmazonPayVaultFacade" type="Magento\Vault\Model\Method\Vault">
         <arguments>
+<<<<<<< HEAD
             <argument name="config" xsi:type="object">AmazonPayVaultConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>
             <argument name="vaultProvider" xsi:type="object">AmazonPayFacade</argument>
             <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
+=======
+            <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
+            <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">AmazonPayFacade</argument>
+>>>>>>> subscriptions
         </arguments>
     </virtualType>
 
@@ -517,4 +523,5 @@
     <type name="Magento\Vault\Model\PaymentTokenRepository">
         <plugin name="amazon_pay_token_delete" type="Amazon\Pay\Plugin\PaymentTokenRepository" />
     </type>
+
 </config>
