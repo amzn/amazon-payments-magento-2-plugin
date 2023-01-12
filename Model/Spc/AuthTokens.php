@@ -224,6 +224,9 @@ class AuthTokens
         $consumer = $this->oauthService->loadConsumer($integration->getConsumerId());
         $accessTokens = $this->oauthService->getAccessToken($consumer->getId());
         parse_str($accessTokens, $accessTokens);
+        $domain = $this->mutableScopeConfig->getValue('payment/amazon_payment_v2/spc_api_domain',
+            ScopeInterface::SCOPE_STORE,
+            $store->getId()) ?: $this->storeManager->getStore(0)->getBaseUrl();
 
         $payload = [
             'authDetails' => [
@@ -250,7 +253,7 @@ class AuthTokens
                 'authVersion' => self::AUTH_VERSION
             ],
             'spiEndpoint' =>
-                $this->storeManager->getStore($store->getId())->getBaseUrl()
+                $domain
                 .'rest/'.
                 $store->getCode()
                 .'/V1/amazon-spc',

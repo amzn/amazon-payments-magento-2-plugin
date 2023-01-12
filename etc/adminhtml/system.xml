@@ -122,6 +122,13 @@
                         <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                         <config_path>payment/amazon_payment_v2/spc_enabled</config_path>
                     </field>
+                    <field id="spc_api_domain" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>SPC Endpoint Domain Override</label>
+                        <config_path>payment/amazon_payment_v2/spc_api_domain</config_path>
+                        <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\SpcApiDomain</frontend_model>
+                        <backend_model>Amazon\Pay\Model\Config\Form\SpcApiDomainBackend</backend_model>
+                        <comment><![CDATA[This domain override will be used when syncing tokens with Amazon Pay. The field defaults to the admin domain. If your admin panel or API endpoint domain differs from this, please enter it here in the format &quot;https://&lt;override-domain&gt;/&quot;, including the slash at the end.<br />Please save the value before syncing the tokens.]]></comment>
+                    </field>
                     <field id="spc_tokens_sync" translate="label" type="button" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>SPC Integration User Tokens</label>
                         <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Button</frontend_model>
