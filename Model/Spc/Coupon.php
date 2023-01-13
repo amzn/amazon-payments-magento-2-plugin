@@ -82,6 +82,11 @@ class Coupon implements CouponInterface
                 if (isset($cartDetails['coupons'][0]['coupon_code'])) {
                     $couponCode = $cartDetails['coupons'][0]['coupon_code'];
 
+                    // Empty out the quote items' rule ids, because of Magento bug
+                    foreach ($quote->getItems() as &$item) {
+                        $item->setAppliedRuleIds(null);
+                    }
+
                     // Attempt to set coupon code
                     $quote->setCouponCode($couponCode);
 
@@ -91,7 +96,7 @@ class Coupon implements CouponInterface
                     // Check if the coupon was applied
                     if ($quote->getCouponCode() != $couponCode) {
                         $this->cartHelper->logError(
-                            'SPC Coupon: CouponNotApplicable - The coupon could not be applied to the cart. CartId: ' . $cartId . ' - ', $cartDetails
+                            'SPC Coupon: CouponNotApplicable - The coupon '. $couponCode .' could not be applied to the cart. CartId: ' . $cartId . ' - ', $cartDetails
                         );
 
                         throw new \Magento\Framework\Webapi\Exception(
@@ -99,7 +104,19 @@ class Coupon implements CouponInterface
                         );
                     }
                 }
+                else {
+                    if (!isset($cartDetails['coupons'][0]['coupon_code']) || $cartDetails['coupons'][0]['coupon_code'] === null) {
+                        throw new \Magento\Framework\Webapi\Exception(
+                            new Phrase("Coupon code is missing"), "CouponNotApplicable", 400
+                        );
+                    }
+                }
             }
+        }
+        else {
+            throw new \Magento\Framework\Webapi\Exception(
+                new Phrase("Cart details are missing on the request body"), "InvalidRequest", 400
+            );
         }
 
         return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);

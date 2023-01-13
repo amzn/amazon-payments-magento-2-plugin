@@ -132,6 +132,11 @@ class Address implements SpcAddressInterface
                 $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $shippingMethod);
             }
         }
+        else {
+            throw new \Magento\Framework\Webapi\Exception(
+                new Phrase("Cart details are missing on the request body"), "InvalidRequest", 400
+            );
+        }
 
         // Save and create response
         return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);

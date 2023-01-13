@@ -23,6 +23,8 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection as SalesRuleCollection;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class Cart
@@ -47,7 +49,7 @@ class Cart
     protected $scopeConfig;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection
+     * @var SalesRuleCollection
      */
     protected $ruleCollection;
 
@@ -100,7 +102,7 @@ class Cart
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param CartRepositoryInterface $cartRepository
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection
+     * @param SalesRuleCollection $ruleCollection
      * @param CartDetailsInterfaceFactory $cartDetailsFactory
      * @param AmountInterfaceFactory $amountFactory
      * @param PromoInterfaceFactory $promoFactory
@@ -115,7 +117,7 @@ class Cart
         ShippingMethodManagementInterface $shippingMethodManagement,
         CartRepositoryInterface $cartRepository,
         ScopeConfigInterface $scopeConfig,
-        \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection,
+        SalesRuleCollection $ruleCollection,
         CartDetailsInterfaceFactory $cartDetailsFactory,
         AmountInterfaceFactory $amountFactory,
         PromoInterfaceFactory $promoFactory,
@@ -327,16 +329,20 @@ class Cart
      */
     protected function getCoupons($quote)
     {
-        if ($quote->getCouponCode()) {
-            $rule = $this->ruleCollection->addFieldToFilter('code', $quote->getCouponCode())->getFirstItem();
-            $couponCodeDescription = $rule->getName();
+        if ($quote->getAppliedRuleIds()) {
+            $rulesNameOrCode = [];
+            $rules = $this->ruleCollection->addFieldToFilter('rule_id', ['in' => $quote->getAppliedRuleIds()]);
 
-            /** @var PromoInterface $promo */
-            $promo = $this->promoFactory->create();
-            $promo->setCouponCode($quote->getCouponCode())
-                ->setDescription($couponCodeDescription);
+            foreach ($rules as $rule) {
+                /** @var PromoInterface $ruleResponse */
+                $ruleResponse = $this->promoFactory->create();
+                $ruleResponse->setCouponCode($rule->getCode() ?: '')
+                    ->setDescription($rule->getName());
 
-            return [$promo];
+                $rulesNameOrCode[] = $ruleResponse;
+            }
+
+            return $rulesNameOrCode;
         }
 
         return [];
