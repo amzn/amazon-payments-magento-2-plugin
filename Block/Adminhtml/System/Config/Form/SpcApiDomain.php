@@ -4,7 +4,6 @@ namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\StoreManagerInterface;
 
 class SpcApiDomain extends \Magento\Config\Block\System\Config\Form\Field
@@ -17,8 +16,8 @@ class SpcApiDomain extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @param Context $context
      * @param StoreManagerInterface $storeManager
+     * @param ProductMetadataInterface $productMetadata
      * @param array $data
-     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         Context $context,
