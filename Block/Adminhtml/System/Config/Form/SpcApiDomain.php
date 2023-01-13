@@ -3,10 +3,11 @@
 namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\StoreManagerInterface;
 
-class SpcApiDomain extends \Magento\Config\Block\System\Config\Form\Field //\Magento\Framework\Data\Form\Element\Text
+class SpcApiDomain extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var StoreManagerInterface
@@ -22,11 +23,18 @@ class SpcApiDomain extends \Magento\Config\Block\System\Config\Form\Field //\Mag
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
-        array $data = [],
-        ?SecureHtmlRenderer $secureRenderer = null
+        ProductMetadataInterface $productMetadata,
+        array $data = []
     )
     {
-        parent::__construct($context, $data, $secureRenderer);
+        // Special case for lower than Magento 2.4 version
+        if ($productMetadata->getVersion() < '2.4') {
+            parent::__construct($context, $data);
+        }
+        // Magento 2.4.0+
+        else {
+            parent::__construct($context, $data, null);
+        }
 
         $this->storeManager = $storeManager;
     }
