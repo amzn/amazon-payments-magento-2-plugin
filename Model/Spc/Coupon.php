@@ -3,10 +3,9 @@
 namespace Amazon\Pay\Model\Spc;
 
 use Amazon\Pay\Api\Spc\CouponInterface;
-use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
+use Amazon\Pay\Helper\Spc\CheckoutSession;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Amazon\Pay\Helper\Spc\Cart;
 use Magento\Store\Api\Data\StoreInterface;
@@ -24,32 +23,33 @@ class Coupon implements CouponInterface
     protected $cartRepository;
 
     /**
-     * @var AmazonPayAdapter
-     */
-    protected $amazonPayAdapter;
-
-    /**
      * @var Cart
      */
     protected $cartHelper;
 
     /**
+    /**
+     * @var CheckoutSession
+     */
+    protected $checkoutSessionHelper;
+
+    /**
      * @param StoreInterface $store
      * @param CartRepositoryInterface $cartRepository
-     * @param AmazonPayAdapter $amazonPayAdapter
      * @param Cart $cartHelper
+     * @param CheckoutSession $checkoutSessionHelper
      */
     public function __construct(
         StoreInterface $store,
         CartRepositoryInterface $cartRepository,
-        AmazonPayAdapter $amazonPayAdapter,
-        Cart $cartHelper
+        Cart $cartHelper,
+        CheckoutSession $checkoutSessionHelper
     )
     {
         $this->store = $store;
         $this->cartRepository = $cartRepository;
-        $this->amazonPayAdapter = $amazonPayAdapter;
         $this->cartHelper = $cartHelper;
+        $this->checkoutSessionHelper = $checkoutSessionHelper;
     }
 
     /**
@@ -68,7 +68,7 @@ class Coupon implements CouponInterface
             $this->cartHelper->logError('SPC Coupon: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase('InvalidCartId'), 404, 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
             );
         }
 
@@ -77,48 +77,27 @@ class Coupon implements CouponInterface
 
         // Get checkout session for verification
         if ($cartDetails && $checkoutSessionId) {
-            $amazonSession = $this->amazonPayAdapter->getCheckoutSession($quote->getStoreId(), $checkoutSessionId);
+            if ($this->checkoutSessionHelper->confirmCheckoutSession($quote, $cartDetails, $checkoutSessionId)) {
+                // Only grabbing the first one, as Magento only accepts one coupon code
+                if (isset($cartDetails['coupons'][0]['coupon_code'])) {
+                    $couponCode = $cartDetails['coupons'][0]['coupon_code'];
 
-            $amazonSessionStatus = $amazonSession['status'] ?? '404';
-            if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
-                $this->cartHelper->logError(
-                    'SPC Coupon: '. $amazonSession['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                );
+                    // Attempt to set coupon code
+                    $quote->setCouponCode($couponCode);
 
-                throw new WebapiException(
-                    new Phrase($amazonSession['reasonCode'])
-                );
-            }
+                    // Save cart
+                    $this->cartRepository->save($quote);
 
-            if ($amazonSession['statusDetails']['state'] !== 'Open') {
-                $this->cartHelper->logError(
-                    'SPC Coupon: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $cartId .' - ', $cartDetails
-                );
+                    // Check if the coupon was applied
+                    if ($quote->getCouponCode() != $couponCode) {
+                        $this->cartHelper->logError(
+                            'SPC Coupon: CouponNotApplicable - The coupon could not be applied to the cart. CartId: ' . $cartId . ' - ', $cartDetails
+                        );
 
-                throw new WebapiException(
-                    new Phrase($amazonSession['statusDetails']['reasonCode'])
-                );
-            }
-
-            // Only grabbing the first one, as Magento only accepts one coupon code
-            if (isset($cartDetails['coupons'][0]['coupon_code'])) {
-                $couponCode = $cartDetails['coupons'][0]['coupon_code'];
-
-                // Attempt to set coupon code
-                $quote->setCouponCode($couponCode);
-
-                // Save cart
-                $this->cartRepository->save($quote);
-
-                // Check if the coupon was applied
-                if ($quote->getCouponCode() != $couponCode) {
-                    $this->cartHelper->logError(
-                        'SPC Coupon: CouponNotApplicable - The coupon could not be applied to the cart. CartId: '. $cartId .' - ', $cartDetails
-                    );
-
-                    throw new WebapiException(
-                        new Phrase('CouponNotApplicable')
-                    );
+                        throw new \Magento\Framework\Webapi\Exception(
+                            new Phrase("The coupon code '". $couponCode ."' does not apply"), "CouponNotApplicable", 400
+                        );
+                    }
                 }
             }
         }
