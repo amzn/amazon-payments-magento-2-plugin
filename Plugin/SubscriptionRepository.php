@@ -74,7 +74,7 @@ class SubscriptionRepository
                 }
             }
         }
-        
+
         return $subscription;
     }
 }

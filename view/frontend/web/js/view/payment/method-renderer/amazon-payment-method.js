@@ -63,8 +63,6 @@ define(
                     this.initBillingAddress();
                     this.selectPaymentMethod();
                 }
-
-                
             },
 
             bindEditPaymentAction: function (elem) {

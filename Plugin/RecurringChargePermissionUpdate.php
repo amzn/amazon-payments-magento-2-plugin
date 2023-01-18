@@ -122,7 +122,7 @@ class RecurringChargePermissionUpdate
                 }
             }
         }
-        
+
         return [$cartId, $paymentMethod, $billingAddress];
     }
 }

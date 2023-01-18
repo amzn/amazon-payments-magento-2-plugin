@@ -19,10 +19,10 @@ use Magento\Vault\Model\PaymentTokenRepository as TokenRepository;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use ParadoxLabs\Subscriptions\Model\Source\Status;
-use ParadoxLabs\Subscriptions\Model\SubscriptionRepository;
 use Amazon\Pay\Helper\SubscriptionHelper;
 use Amazon\Pay\Gateway\Config\Config;
-use Amazon\Pay\Model\Subscription\SubscriptionDependenceManagementFactory;
+use Amazon\Pay\Model\Subscription\SubscriptionManager;
+use Amazon\Pay\Model\Subscription\AmazonSubscriptionManager;
 
 class PaymentTokenRepository
 {
@@ -32,9 +32,9 @@ class PaymentTokenRepository
     private $helper;
 
     /**
-     * @var SubscriptionRepository
+     * @var SubscriptionManager
      */
-    private $subscriptionRepository;
+    private $subscriptionManager;
 
     /**
      * @var SearchCriteriaBuilder
@@ -44,19 +44,16 @@ class PaymentTokenRepository
     /**
      * @param SubscriptionHelper $helper
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param SubscriptionDependenceManagementFactory $subscriptionDependenceManager
+     * @param SubscriptionManager $subscriptionManager
      */
     public function __construct(
         SubscriptionHelper $helper,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        SubscriptionDependenceManagementFactory $subscriptionDependenceManager
+        SubscriptionManager $subscriptionManager
     ) {
         $this->helper = $helper;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-
-        $this->subscriptionRepository = $subscriptionDependenceManager->create([
-            'instance' => SubscriptionDependenceManagementFactory::PARADOX_REPOSITORY
-        ]);
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     public function aroundDelete(
@@ -64,20 +61,20 @@ class PaymentTokenRepository
         callable $proceed,
         PaymentTokenInterface $paymentToken
     ) {
-        if ($this->subscriptionRepository) {  
+        if (!($this->subscriptionManager instanceof AmazonSubscriptionManager)) {
             if ($paymentToken->getPaymentMethodCode() === Config::CODE) {
                 // Cancel associated AP subscriptions
                 $subscriptionsPaidWithToken = $this->helper->getSubscriptionsPaidWithToken($paymentToken);
-    
+
                 $this->helper->cancelToken(reset($subscriptionsPaidWithToken)->getQuote(), $paymentToken);
                 foreach ($subscriptionsPaidWithToken as $amazonSubscription) {
                     $amazonSubscription->setStatus(
                         Status::STATUS_CANCELED,
                         'Subscription canceled due to payment token deletion'
                     );
-                    $this->subscriptionRepository->save($amazonSubscription);
+                    $this->subscriptionManager->save($amazonSubscription);
                 }
-                
+
                 return true;
             }
         }

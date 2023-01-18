@@ -16,14 +16,15 @@
 namespace Amazon\Pay\Helper;
 
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
-use Amazon\Pay\Model\Subscription\SubscriptionDependenceManagementFactory;
-use ParadoxLabs\Subscriptions\Model\SubscriptionRepository;
+use Amazon\Pay\Model\Subscription\SubscriptionManager;
+use Amazon\Pay\Model\Subscription\AmazonSubscriptionManager;
 use ParadoxLabs\Subscriptions\Model\Subscription;
 use ParadoxLabs\Subscriptions\Model\Source\Status;
 use Magento\Quote\Model\Quote;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 
@@ -35,14 +36,14 @@ class SubscriptionHelper
     private $amazonAdapter;
 
     /**
-     * @param PaymentTokenRepository
+     * @var PaymentTokenRepository
      */
     private $paymentTokenRepository;
 
     /**
-     * @var SubscriptionRepository
+     * @var SubscriptionManager
      */
-    private $subscriptionRepository;
+    private $subscriptionManager;
 
     /**
      * @var SearchCriteriaBuilder
@@ -62,7 +63,7 @@ class SubscriptionHelper
     /**
      * @param AmazonPayAdapter $amazonAdapter
      * @param PaymentTokenRepository $paymentTokenRepository
-     * @param SubscriptionDependenceManagementFactory $subscriptionDependenceManager
+     * @param SubscriptionManager $subscriptionManager
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
@@ -70,7 +71,7 @@ class SubscriptionHelper
     public function __construct(
         AmazonPayAdapter $amazonAdapter,
         PaymentTokenRepository $paymentTokenRepository,
-        SubscriptionDependenceManagementFactory $subscriptionDependenceManager,
+        SubscriptionManager $subscriptionManager,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         FilterGroupBuilder $filterGroupBuilder
@@ -80,10 +81,7 @@ class SubscriptionHelper
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
-
-        $this->subscriptionRepository = $subscriptionDependenceManager->create([
-            'instance' => SubscriptionDependenceManagementFactory::PARADOX_REPOSITORY
-        ]);
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     /**
@@ -95,15 +93,17 @@ class SubscriptionHelper
      */
     public function cancelToken(Quote $quote, PaymentToken $token)
     {
-        $this->amazonAdapter->closeChargePermission(
-            $quote->getStoreId(),
-            $token->getGatewayToken(),
-            'Closed due to deleted payment method or cancellation of subscription by customer.'
-        );
+        if ($token->getIsActive()) {
+            $this->amazonAdapter->closeChargePermission(
+                $quote->getStoreId(),
+                $token->getGatewayToken(),
+                'Closed due to deleted payment method or cancellation of subscription by customer.'
+            );
 
-        $token->setIsActive(false);
-        $token->setIsVisible(false);
-        $this->paymentTokenRepository->save($token);
+            $token->setIsActive(false);
+            $token->setIsVisible(false);
+            $this->paymentTokenRepository->save($token);
+        }
     }
 
     /**
@@ -152,54 +152,52 @@ class SubscriptionHelper
      */
     public function getSubscriptionsPaidWithToken(PaymentToken $token)
     {
-        if ($this->subscriptionRepository) {
+        if (!($this->subscriptionManager instanceof AmazonSubscriptionManager)) {
             $publicHash = $token->getPublicHash();
             $customerId = $token->getCustomerId();
-    
-            $customerFilter = $this->filterBuilder
-                ->setField('customer_id')
-                ->setValue($customerId)
-                ->setConditionType('eq')
-                ->create();
-    
-            $activeFilter = $this->filterBuilder
-                ->setField('status')
-                ->setValue(Status::STATUS_ACTIVE)
-                ->setConditionType('eq')
-                ->create();
-    
-            $pausedFilter = $this->filterBuilder
-                ->setField('status')
-                ->setValue(Status::STATUS_PAUSED)
-                ->setConditionType('eq')
-                ->create();
-    
-            $completeFilter = $this->filterBuilder
-                ->setField('status')
-                ->setValue(Status::STATUS_COMPLETE)
-                ->setConditionType('eq')
-                ->create();
-    
+
+            $customerFilter = $this->buildFilter('customer_id', $customerId);
+            $activeFilter = $this->buildFilter('status', Status::STATUS_ACTIVE);
+            $pausedFilter = $this->buildFilter('status', Status::STATUS_PAUSED);
+            $completeFilter = $this->buildFilter('status', Status::STATUS_COMPLETE);
+
             $customerFilterGroup = $this->filterGroupBuilder->setFilters([$customerFilter])->create();
             $statusFilterGroup = $this->filterGroupBuilder->setFilters([
                 $activeFilter, $pausedFilter, $completeFilter
             ])->create();
-    
+
             $searchCriteria = $this->searchCriteriaBuilder
                 ->setFilterGroups([$customerFilterGroup, $statusFilterGroup])
                 ->create();
-    
-            $activeSubscriptions = $this->subscriptionRepository->getList($searchCriteria)
+
+            $activeSubscriptions = $this->subscriptionManager->getList($searchCriteria)
                 ->getItems();
-            $subscriptionsPaidWithToken = array_filter($activeSubscriptions, function ($subscription) use ($publicHash) {
-                return $subscription->getQuote()
-                    ->getPayment()
-                    ->getAdditionalInformation('public_hash') === $publicHash;
-            });
-    
+            $subscriptionsPaidWithToken = array_filter($activeSubscriptions,
+                function ($subscription) use ($publicHash) {
+                    return $subscription->getQuote()
+                        ->getPayment()
+                        ->getAdditionalInformation('public_hash') === $publicHash;
+                });
+
             return $subscriptionsPaidWithToken;
         }
 
         return [];
+    }
+
+    /**
+     * Build a filter for subscription searches
+     *
+     * @param string $field
+     * @param mixed $value
+     * @return Filter
+     */
+    private function buildFilter(string $field, mixed $value)
+    {
+        return $this->filterBuilder
+            ->setField($field)
+            ->setValue($value)
+            ->setConditionType('eq')
+            ->create();
     }
 }

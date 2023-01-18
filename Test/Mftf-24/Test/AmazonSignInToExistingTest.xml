@@ -43,9 +43,6 @@
         <reloadPage stepKey="reloadAmazonLoginPage"/>
 
         <actionGroup ref="AmazonLoginOnlyRedirectActionGroup" stepKey="AmazonLoginOnlyRedirectActionGroup2"/>
-        <click selector="{{AmazonLoginSection.consentButton}}" stepKey="clickAmazonConsentButton"/>
-        <!-- Switch back to main window -->
-        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad2"/>
         <see userInput="My Account" stepKey="seeMyAccount2"/>

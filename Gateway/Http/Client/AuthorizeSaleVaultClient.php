@@ -39,7 +39,7 @@ class AuthorizeSaleVaultClient extends AbstractClient
     ) {
         parent::__construct($logger, $adapter);
         $this->amazonConfig = $amazonConfig;
-    } 
+    }
 
     protected function process(array $data)
     {

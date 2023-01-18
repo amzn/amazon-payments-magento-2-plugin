@@ -27,7 +27,6 @@
                 amazonStorage.clearAmazonCheckout();
             }
         }
-        
     };
 
     return function (target) {

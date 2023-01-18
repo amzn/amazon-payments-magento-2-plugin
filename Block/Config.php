@@ -35,30 +35,26 @@ class Config extends \Magento\Framework\View\Element\Template
     private $amazonConfig;
 
     /**
-     * @var \ParadoxLabs\Subscriptions\Model\Config
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager
      */
-    private $subscriptionConfig;
+    private $subscriptionManager;
 
     /**
      * Config constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
-     * @param \Amazon\Pay\Model\Subscription\SubscriptionDependenceManagementFactory $subscriptionDependenceManager
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
-        \Amazon\Pay\Model\Subscription\SubscriptionDependenceManagementFactory $subscriptionDependenceManager
+        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
     ) {
         parent::__construct($context);
         $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
-
-        $this->subscriptionConfig = $subscriptionDependenceManager->create([
-            'instanceName' => \Amazon\Pay\Model\Subscription\SubscriptionDependenceManagementFactory::PARADOX_CONFIG
-        ]);
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     /**
@@ -78,8 +74,8 @@ class Config extends \Magento\Framework\View\Element\Template
             'is_multicurrency_enabled'  => $this->amazonConfig->multiCurrencyEnabled()
         ];
 
-        if ($this->subscriptionConfig) {
-            $config['subscription_label'] = $this->subscriptionConfig->getSubscriptionLabel();
+        if ($subscriptionLabel = $this->subscriptionManager->getSubscriptionLabel()) {
+            $config['subscription_label'] = $subscriptionLabel;
         }
 
         return $config;

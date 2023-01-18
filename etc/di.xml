@@ -37,13 +37,14 @@
 
     <type name="Amazon\Pay\Model\Subscription\SubscriptionManagerFactory">
         <arguments>
-            <argument name="subscriptionManagerPool" xsi:type="array">                
+            <argument name="subscriptionManagerPool" xsi:type="array">
                 <item name="paradox_labs" xsi:type="array">
                     <item name="module_name" xsi:type="string">ParadoxLabs_Subscriptions</item>
-                    <item name="module_classes" xsi:type="array"> 
+                    <item name="module_classes" xsi:type="array">
                         <item name="quoteManager" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\QuoteManager</item>
                         <item name="itemManager" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\ItemManager</item>
                         <item name="subscriptionRepository" xsi:type="string">ParadoxLabs\Subscriptions\Model\SubscriptionRepository</item>
+                        <item name="subscriptionConfig" xsi:type="string">ParadoxLabs\Subscriptions\Model\Config</item>
                     </item>
                     <item name="module_manager" xsi:type="string">Amazon\Pay\Model\Subscription\ParadoxLabsSubscriptionManager</item>
                 </item>
@@ -168,16 +169,10 @@
     </virtualType>
     <virtualType name="AmazonPayVaultFacade" type="Magento\Vault\Model\Method\Vault">
         <arguments>
-<<<<<<< HEAD
             <argument name="config" xsi:type="object">AmazonPayVaultConfig</argument>
             <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>
             <argument name="vaultProvider" xsi:type="object">AmazonPayFacade</argument>
             <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
-=======
-            <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
-            <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>
-            <argument name="vaultProvider" xsi:type="object">AmazonPayFacade</argument>
->>>>>>> subscriptions
         </arguments>
     </virtualType>
 
@@ -321,7 +316,7 @@
             <argument name="requestBuilder" xsi:type="object">AmazonPayAuthorizeSaleRequest</argument>
             <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SaleClient</argument>
             <!-- <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument> -->
-            <argument name="handler" xsi:type="object">AmazonPayAuthorizationSaleHandler</argument>            
+            <argument name="handler" xsi:type="object">AmazonPayAuthorizationSaleHandler</argument>
             <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
             <argument name="validator" xsi:type="object">SaleResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
@@ -381,7 +376,7 @@
             <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
-    
+
     <!-- Vault Authorize and Capture command -->
     <virtualType name="AmazonPayVaultSaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>

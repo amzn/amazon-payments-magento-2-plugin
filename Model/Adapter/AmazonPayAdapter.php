@@ -71,7 +71,7 @@ class AmazonPayAdapter
     private $redirect;
 
     /**
-     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager
      */
     private $subscriptionManager;
 
@@ -686,7 +686,7 @@ class AmazonPayAdapter
 
         return $referer;
     }
-    
+
     public function getRecurringMetadata($quote)
     {
         foreach ($quote->getAllItems() as $item) {
@@ -703,7 +703,6 @@ class AmazonPayAdapter
             ];
     }
 
-    
     protected function getSignInUrl()
     {
         $signInUrl = $this->amazonConfig->getSignInResultUrlPath();

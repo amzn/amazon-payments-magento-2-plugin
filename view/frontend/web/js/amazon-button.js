@@ -259,7 +259,7 @@ define([
                             if (self.options.placement === 'Cart') {
                                 delete self.amazonPayButton;
                             }
-                            
+
                             if (self.amazonPayButton
                                 && self._shouldUseEstimatedAmount()
                                 && updatedCart.summary_count !== 0
