@@ -15,43 +15,41 @@
  */
 namespace Amazon\Pay\Plugin;
 
+use Amazon\Pay\Gateway\Config\Config;
+use ParadoxLabs\Subscriptions\Model\Source\Status;
+
 class SubscriptionRepository
 {
-   
     /**
-     * @var \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter
-     */
-    private $amazonAdapter;
-
-    /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
-
 
     /**
      * @var \Magento\Vault\Api\PaymentTokenManagementInterface
      */
     private $paymentTokenManagement;
 
+    /**
+     * @var \Amazon\Pay\Helper\SubscriptionHelper
+     */
+    private $helper;
 
     /**
-     * @var \Magento\Vault\Api\PaymentTokenRepositoryInterface
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    private $paymentTokenRepository;
+    protected $searchCriteriaBuilder;
 
-    
     public function __construct(
-        \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement,
-        \Magento\Vault\Api\PaymentTokenRepositoryInterface $paymentTokenRepository
-
+        \Amazon\Pay\Helper\SubscriptionHelper $helper,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->amazonAdapter = $amazonAdapter;
         $this->quoteRepository = $quoteRepository;
-        $this->paymentTokenManagement = $paymentTokenManagement;      
-        $this->paymentTokenRepository = $paymentTokenRepository;
+        $this->paymentTokenManagement = $paymentTokenManagement;
+        $this->helper = $helper;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -59,27 +57,24 @@ class SubscriptionRepository
      */
     public function afterSave($SubscriptionRepository, $subscription)
     {
-
-        if ($subscription->getStatus() == 'canceled') {
+        $status = $subscription->getStatus();
+        if ($status === Status::STATUS_CANCELED || $status === Status::STATUS_PAYMENT_FAILED) {
             $quoteId = $subscription->getQuoteId();
             $quote = $this->quoteRepository->get($quoteId);
             $payment = $quote->getPayment();
-            $publicHash = $payment->getAdditionalInformation('public_hash');
-            $customerId = $payment->getAdditionalInformation('customer_id');
-            $token = $this->paymentTokenManagement->getByPublicHash($publicHash, $customerId);
 
-            if ($token) {
-                $this->amazonAdapter->closeChargePermission(
-                    $quote->getStoreId(),
-                    $token->getGatewayToken(),
-                    'Canceled due to cancellation of subscription by the customer.'
-                );
+            if ($payment->getMethod() === Config::VAULT_CODE) {
+                $customerId = $payment->getAdditionalInformation('customer_id');
+                $publicHash = $payment->getAdditionalInformation('public_hash');
+                $token = $this->paymentTokenManagement->getByPublicHash($publicHash, $customerId);
 
-                $token->setIsActive(false);
-                $this->paymentTokenRepository->save($token);
+                $subscriptionsPaidWithToken = $this->helper->getSubscriptionsPaidWithToken($token);
+                if (empty($subscriptionsPaidWithToken)) {
+                    $this->helper->cancelToken($quote, $token);
+                }
             }
         }
-        
+
         return $subscription;
     }
 }

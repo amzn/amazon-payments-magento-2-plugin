@@ -71,10 +71,9 @@ class AmazonPayAdapter
     private $redirect;
 
     /**
-     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager
      */
     private $subscriptionManager;
-
 
     /**
      * AmazonPayAdapter constructor.
@@ -340,6 +339,10 @@ class AmazonPayAdapter
 
         if (isset($data['noteToBuyer'])) {
             $payload['merchantMetadata']['noteToBuyer'] = $data['noteToBuyer'];
+        }
+
+        if (isset($data['recurringMetadata'])) {
+            $payload['recurringMetadata'] = $data['recurringMetadata'];
         }
 
         $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
@@ -684,22 +687,22 @@ class AmazonPayAdapter
         return $referer;
     }
 
-    protected function getRecurringMetadata($quote)
+    public function getRecurringMetadata($quote)
     {
         foreach ($quote->getAllItems() as $item) {
             if ($this->subscriptionManager->isSubscription($item)) {
-                $frecuencyUnit = $this->subscriptionManager->getFrequencyUnit($item);
-                $frecuencyCount = $this->subscriptionManager->getFrequencyCount($item);
+                $frequencyUnit = $this->subscriptionManager->getFrequencyUnit($item);
+                $frequencyCount = $this->subscriptionManager->getFrequencyCount($item);
             }
         }
         return [
                 "frequency" => [
-                    "unit" => $frecuencyUnit,
-                    "value" => $frecuencyCount
+                    "unit" => $frequencyUnit,
+                    "value" => $frequencyCount
                 ]
             ];
     }
-    
+
     protected function getSignInUrl()
     {
         $signInUrl = $this->amazonConfig->getSignInResultUrlPath();

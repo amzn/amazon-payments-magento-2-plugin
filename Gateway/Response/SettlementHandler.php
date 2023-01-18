@@ -50,7 +50,7 @@ class SettlementHandler implements HandlerInterface
      * @param array $response
      */
     public function handle(array $handlingSubject, array $response)
-    {        
+    {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
 

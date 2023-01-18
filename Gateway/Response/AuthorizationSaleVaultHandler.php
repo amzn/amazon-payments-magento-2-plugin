@@ -71,7 +71,6 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
      */
     private $quoteRepository;
 
-
     /**
      * AuthorizationHandler constructor.
      * @param SubjectReader $subjectReader
@@ -102,11 +101,9 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
         $this->quoteRepository = $quoteRepository;
         $this->asyncCharge = $asyncCharge;
         $this->amazonConfig = $amazonConfig;
-
     }
 
     /**
-     * Handles response
      *
      * @param array $handlingSubject
      * @param array $response
@@ -125,11 +122,10 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
 
             $transactionId = $response['chargeId'];;
             $payment->setTransactionId($transactionId);
-            
+
             $chargeState = $response['statusDetails']['state'];
-            if ($chargeState != 'Captured' && 
+            if ($chargeState != 'Captured' &&
                 $this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE) {
-                
                 // capture on Amazon Pay
                 $this->amazonAdapter->captureCharge(
                     $quote->getStoreId(),

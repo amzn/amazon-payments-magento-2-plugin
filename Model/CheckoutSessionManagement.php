@@ -190,9 +190,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $paymentTokenManagement;
 
     /**
-     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager 
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager
      */
-    private $subscriptionQuoteManager;
+    private $subscriptionManager;
 
     /**
      * @var CustomerHelper
@@ -456,7 +456,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         if ($this->canCheckoutWithAmazon($quote)) {
             $loginButtonPayload = $this->amazonAdapter->generateLoginButtonPayload();
-            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload();
+            $checkoutButtonPayload = $this->amazonAdapter->generateCheckoutButtonPayload($quote);
             $config = [
                 'merchant_id' => $this->amazonConfig->getMerchantId(),
                 'currency' => $this->amazonConfig->getCurrencyCode(),
@@ -884,12 +884,13 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         return $amazonSession['statusDetails']['reasonDescription'];
     }
 
-    protected function updateVaultToken($amazonSessionId, $chargePermissionId, $quote, $order) 
+    protected function updateVaultToken($amazonSessionId, $chargePermissionId, $quote, $order)
     {
         if ($this->amazonConfig->isVaultEnabled() && $this->subscriptionManager->hasSubscription($quote)) {
             $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $order->getCustomerId());
             if ($token) {
                 $token->setGatewayToken($chargePermissionId);
+                $token->setIsVisible(true);
                 $this->paymentTokenRepository->save($token);
             } else {
                 $this->logger->debug("Unable to update vault token. amazonSessionId: " . $amazonSessionId . ' Customer Id: ' . $order->getCustomerId());
