@@ -160,13 +160,19 @@ class Cart
         $currencyCode = $quote->getQuoteCurrencyCode();
 
         // Get line items and total base amount
-        [$lineItems, $totalBaseAmount] = $this->getLineItemsAndTotalBaseAmount($quote, $currencyCode);
+        $lineItemsResponse = $this->getLineItemsAndTotalBaseAmount($quote, $currencyCode);
+        $lineItems = $lineItemsResponse['line_items'];
+        $totalBaseAmount = $lineItemsResponse['total_base_amount'];
+        $lineItemsTotalDiscounts = $lineItemsResponse['total_discount_amount'];
 
         // Get delivery options
         $deliveryOptions = $this->getDeliveryOptions($quote, $currencyCode, $lineItems);
 
         // Get applied coupons
         $coupons = $this->getCoupons($quote);
+
+        // Total discount amount
+        $totalDiscountAmount = $lineItemsTotalDiscounts + $quote->getShippingAddress()->getShippingDiscountAmount();
 
         // Create response object
         /** @var $cartDetails CartDetailsInterface */
@@ -176,15 +182,20 @@ class Cart
             ->setDeliveryOptions($deliveryOptions)
             ->setCoupons($coupons)
             ->setCartLanguage($cartLanguage)
+            ->setTotalDiscountAmount($this->getAmountObject(
+                $quote->getSubtotal() - $quote->getSubtotalWithDiscount(),
+                $currencyCode
+            ))
             ->setTotalShippingAmount(
                 $this->getAmountObject(
-                    $quote->getShippingAddress()->getShippingAmount() - $quote->getShippingAddress()->getShippingDiscountAmount(),
+                    $quote->getShippingAddress()->getShippingAmount(),
                     $currencyCode
                 )
             )
             ->setTotalBaseAmount($this->getAmountObject($totalBaseAmount, $currencyCode))
             ->setTotalTaxAmount($this->getAmountObject($quote->getShippingAddress()->getTaxAmount(), $currencyCode))
             ->setTotalChargeAmount($this->getAmountObject($quote->getGrandTotal(), $currencyCode))
+            ->setTotalDiscountAmount($this->getAmountObject($totalDiscountAmount, $currencyCode))
             ->setCheckoutSessionId($checkoutSessionId);
 
         /** @var ResponseInterface $response */
@@ -215,12 +226,28 @@ class Cart
     {
         $lineItems = [];
         $totalBaseAmount = 0;
+        $totalDiscountAmount = 0;
 
         foreach ($quote->getAllVisibleItems() as $item) {
             /** @var LineItemInterface $lineItem */
             $lineItem = $this->lineItemFactory->create();
 
             $additionalAttributes = [];
+
+            // check if item is configurable to send options
+            if ($item->getProductType() == Configurable::TYPE_CODE) {
+                $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+
+                if (isset($options['attributes_info'])) {
+                    foreach ($options['attributes_info'] as $option) {
+                        /** @var NameValueInterface $nameValue */
+                        $nameValue = $this->nameValueFactory->create();
+                        $nameValue->setName($option['label'])
+                            ->setValue($option['value']);
+                        $additionalAttributes[] = $nameValue;
+                    }
+                }
+            }
 
             // check if item is configurable to send options
             if ($item->getProductType() == Configurable::TYPE_CODE) {
@@ -249,13 +276,16 @@ class Cart
                 $rulesNameOrCode[] = $ruleResponse;
             }
 
+            $totalBaseAmount += $item->getRowTotal();
             $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
-            $totalBaseAmount += $discountedAmount;
+            $totalDiscountAmount += $item->getDiscountAmount();
+
             $lineItem->setId($item->getId())
                 ->setTitle($item->getName())
                 ->setQuantity($item->getQty())
                 ->setListPrice($this->getAmountObject($item->getRowTotal()/$item->getQty(), $currencyCode))
-                ->setDiscountedPrice($this->getAmountObject($discountedAmount/$item->getQty(), $currencyCode))
+                ->setTotalListPrice($this->getAmountObject($item->getRowTotal(), $currencyCode))
+                ->setDiscountedPrice($this->getAmountObject($discountedAmount, $currencyCode))
                 ->setAppliedDiscounts($rulesNameOrCode)
                 ->setAdditionalAttributes($additionalAttributes)
                 ->setStatus(
@@ -263,13 +293,16 @@ class Cart
                         self::STATUS_AVAILABLE : self::STATUS_OUT_OF_STOCK
                 )
                 ->setTaxAmount([$this->getAmountObject($item->getTaxAmount(), $currencyCode)])
-
             ;
 
             $lineItems[] = $lineItem;
         }
 
-        return [$lineItems, $totalBaseAmount];
+        return [
+            'line_items' => $lineItems,
+            'total_base_amount' => $totalBaseAmount,
+            'total_discount_amount' => $totalDiscountAmount
+        ];
     }
 
     /**
@@ -283,6 +316,7 @@ class Cart
     protected function getDeliveryOptions($quote, $currencyCode, &$lineItems)
     {
         $deliveryOptions = [];
+
         if ($quote->getShippingAddress()->validate()) {
             $magentoShippingMethods =
                 $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
@@ -293,8 +327,19 @@ class Cart
 
                 /** @var ShippingMethodInterface $shippingMethod */
                 $shippingMethod = $this->shippingMethodFactory->create();
-                $shippingMethod->setShippingMethodName($magentoMethod->getCarrierTitle() .' - '. $magentoMethod->getMethodTitle())
-                    ->setShippingMethodCode($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode());
+
+                // Get shipping method name
+                if (!$magentoMethod->getCarrierTitle()) {
+                    $name = $magentoMethod->getMethodTitle();
+                }
+                else {
+                    $name = $magentoMethod->getCarrierTitle() . ' - ' . $magentoMethod->getMethodTitle();
+                }
+
+                $code = $magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode();
+
+                $shippingMethod->setShippingMethodName($name)
+                    ->setShippingMethodCode($code);
 
                 $discountedPrice = $magentoMethod->getAmount() - $quote->getShippingAddress()->getShippingDiscountAmount();
                 $deliveryOption->setId($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())
@@ -303,10 +348,15 @@ class Cart
                         $this->getAmountObject($discountedPrice > 0 ? $discountedPrice : 0, $currencyCode)
                     )
                     ->setShippingMethod($shippingMethod)
-                    ->setShippingEstimate([])
-                    ->setIsDefault(
-                        $quote->getShippingAddress()->getShippingMethod() == ($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())
-                    );
+                    ->setShippingEstimate([]);
+
+                if ($quote->getShippingAddress()->getShippingMethod() == ($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())) {
+                    $deliveryOption->setIsDefault(true);
+                }
+                else {
+                    $deliveryOption->setIsDefault(false);
+                }
+
 
                 $deliveryOptions[] = $deliveryOption;
             }
