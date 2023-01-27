@@ -689,10 +689,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             // can work as expected
             $payment = $quote->getPayment();
 
-            // Some checkout flows (especially 3rd party) could get to this point without setting payment method
-            if (empty($payment->getMethod())) {
-                $payment->setMethod(Config::CODE);
-            }
+            // Force payment method in case a 3rd party app hasn't done it yet, or another got selected
+            // before SPC was triggered
+            $payment->setMethod(Config::CODE);
 
             // set amazon session id on payment object to be used in authorize
             $payment->setAdditionalInformation('amazon_session_id', $amazonSessionId);
