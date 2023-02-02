@@ -28,6 +28,8 @@
                 $remoteWebDriver->findElement(
                     \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.signInButton}}')
                 )->click();
+
+                $I->waitForJS('return document.querySelector('.maxo_spinner.hide') !== null;', 15);
                 $remoteWebDriver->switchTo()->window($openerName);
                 $I->wait(5);
             } catch (\Exception $ex) {
@@ -88,6 +90,7 @@
 
         <!-- Load address list in DOM -->
         <waitForElementVisible selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForChangeAddressButton"/>
+        <wait time="2" stepKey="waitForChangeAddressClickable"/>
         <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAddress"/>
         <waitForElementVisible selector="{{AmazonPageSection.addressBackButton}}" stepKey="waitForAddressBackButton"/>
         <click selector="{{AmazonPageSection.addressBackButton}}" stepKey="clickAddressBackButton"/>
