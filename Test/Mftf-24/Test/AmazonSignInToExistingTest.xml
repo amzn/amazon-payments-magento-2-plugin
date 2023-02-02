@@ -38,11 +38,9 @@
         <click selector="{{AmazonLoginSection.login}}" stepKey="clickSignInWithAmazonButton2"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
 
-        <!-- make sure we are logged out from Amazon by clearing ubid-main cookie -->
-        <resetCookie userInput="ubid-main" parameterArray="['domainName' => '.amazon.com']" stepKey="resetCookieForAmazon"/>
-        <reloadPage stepKey="reloadAmazonLoginPage"/>
-
-        <actionGroup ref="AmazonLoginOnlyRedirectActionGroup" stepKey="AmazonLoginOnlyRedirectActionGroup2"/>
+        <actionGroup ref="AmazonLoginOnlyRedirectActionGroup" stepKey="AmazonLoginOnlyRedirectActionGroup2">
+            <argument name="openerName" value="{$openerName}"/>
+        </actionGroup>
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad2"/>
         <see userInput="My Account" stepKey="seeMyAccount2"/>
