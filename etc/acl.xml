@@ -21,6 +21,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Amazon_Pay::Pay" title="Amazon Pay" sortOrder="51">
                     <resource id="Amazon_Pay::downloadlogs" title="Download Logs" translate="true"/>
+                    <resource id="Amazon_Pay::spc" title="Single Page Checkout" translate="true"/>
                 </resource>
             </resource>
         </resources>

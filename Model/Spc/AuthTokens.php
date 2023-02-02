@@ -31,7 +31,7 @@ class AuthTokens
     const AUTH_VERSION = 'OAuth1A';
 
     const ALLOWED_RESOURCES = [
-        'Magento_Cart::manage',
+        'Amazon_Pay::spc',
     ];
 
     /**
