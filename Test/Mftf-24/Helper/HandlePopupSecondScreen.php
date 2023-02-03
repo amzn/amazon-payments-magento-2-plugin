@@ -23,8 +23,6 @@ class HandlePopupSecondScreen extends Helper
                 $remoteWebDriver->findElement(
                     WebDriverBy::cssSelector($signInButton)
                 )->click();
-
-                $magentoWebDriver->waitForJS('return document.querySelector(".maxo_spinner.hide") !== null;', 15);
                 $magentoWebDriver->switchToNextTab();
                 $magentoWebDriver->wait(5);
             } catch (\Exception $ex) {
