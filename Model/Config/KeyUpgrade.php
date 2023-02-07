@@ -26,17 +26,27 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Store\Model\StoreManagerInterface;
 use Amazon\Pay\Api\KeyUpgradeInterface;
+use Amazon\Pay\Helper\Key as KeyHelper;
 use Amazon\Pay\Logger\Logger;
 use Amazon\Pay\Model\AmazonConfig;
-use Amazon\Pay\Model\Config\KeyManagement;
 
-class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
+class KeyUpgrade implements KeyUpgradeInterface
 {
     const ACTION = 'GetPublicKeyId';
 
     const SIGNATURE_METHOD = 'HmacSHA256';
 
     const SIGNATURE_VERSION = '2';
+
+    /**
+     * @var string
+     */
+    private $_scope;
+
+    /**
+     * @var int
+     */
+    private $_scopeId;
 
     /**
      * @var ScopeConfigInterface
@@ -47,6 +57,11 @@ class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
      * @var AmazonConfig
      */
     private $amazonConfig;
+
+    /**
+     * @var KeyHelper
+     */
+    private $keyHelper;
 
     /**
      * @var UrlInterface
@@ -81,6 +96,7 @@ class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param AmazonConfig $amazonConfig
+     * @param KeyHelper $keyHelper
      * @param UrlInterface $backendUrl
      * @param Curl $curl
      * @param Http $request
@@ -92,23 +108,23 @@ class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         AmazonConfig $amazonConfig,
+        KeyHelper $keyHelper,
         UrlInterface $backendUrl,
         Curl $curl,
-        Http $request,
-        StoreManagerInterface $storeManager,
         EncryptorInterface $encryptor,
         ConfigInterface $config,
         Logger $logger
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->amazonConfig = $amazonConfig;
+        $this->keyHelper = $keyHelper;
         $this->backendUrl = $backendUrl;
         $this->curl = $curl;
         $this->encryptor = $encryptor;
         $this->config = $config;
         $this->logger = $logger;
-
-        parent::__construct($request, $storeManager);
+        $this->_scope = $keyHelper->getScope();
+        $this->_scopeId = $keyHelper->getScopeId();
     }
 
     /**
@@ -137,6 +153,8 @@ class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
 
         $serviceUrl = $this->getServiceUrl($scopeType, $scopeCode);
         if (empty($serviceUrl)) {
+            $this->logger->debug('Invalid Amazon Pay region detected in legacy credentials. ' .
+                'Unable to perform automatic key upgrade.');
             return '';
         }
 
@@ -160,7 +178,12 @@ class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
         $request = $this->createCurlRequest($serviceUrl, $resourcePath, $params, $signature, $publicKey);
         
         $this->curl->setOption(CURLOPT_RETURNTRANSFER, 1);
-        $this->curl->get($request);
+        try {
+            $this->curl->get($request);
+        } catch (\Exception $e) {
+            $this->logger->error('Unable to successfully request a key upgrade: ' . $e->getMessage());
+            return '';
+        }
         $output = $this->curl->getBody();
 
         $responseObj = json_decode($output);
@@ -179,7 +202,7 @@ class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
     public function getKeyPair()
     {
         if (empty($this->keys)) {
-            $this->generateKeys();
+            $this->keys = $this->keyHelper->generateKeys();
         }
 
         return $this->keys;
@@ -257,17 +280,6 @@ class KeyUpgrade extends KeyManagement implements KeyUpgradeInterface
             'accessKey'     => $this->getMwsKeyForScope(),
             'keyUpgradeUrl' => $this->backendUrl->getUrl('amazon_pay/pay/manualKeyUpgrade')
         ];
-    }
-
-    /**
-     * Generate RSA keypair
-     *
-     * @return void
-     */
-    protected function generateKeys()
-    {
-        $keys = parent::generateKeys();
-        $this->keys = $keys;
     }
 
     /**

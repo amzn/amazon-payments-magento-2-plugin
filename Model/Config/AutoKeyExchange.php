@@ -18,12 +18,13 @@
 namespace Amazon\Pay\Model\Config;
 
 use Amazon\Pay\Helper\Data as AmazonHelper;
+use Amazon\Pay\Helper\Key as KeyHelper;
 use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Backend\Model\UrlInterface;
 
-class AutoKeyExchange extends KeyManagement
+class AutoKeyExchange
 {
 
     const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payment/autokeyexchange/privatekey';
@@ -45,6 +46,26 @@ class AutoKeyExchange extends KeyManagement
     ];
 
     /**
+     * @var
+     */
+    private $_storeId;
+
+    /**
+     * @var
+     */
+    private $_websiteId;
+
+    /**
+     * @var string
+     */
+    private $_scope;
+
+    /**
+     * @var int
+     */
+    private $_scopeId;
+
+    /**
      * @var AmazonHelper
      */
     private $amazonHelper;
@@ -53,6 +74,11 @@ class AutoKeyExchange extends KeyManagement
      * @var AmazonConfig
      */
     private $amazonConfig;
+
+    /**
+     * @var KeyHelper
+     */
+    private $keyHelper;
 
     /**
      * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
@@ -95,6 +121,11 @@ class AutoKeyExchange extends KeyManagement
     private $state;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -112,6 +143,7 @@ class AutoKeyExchange extends KeyManagement
     /**
      * @param AmazonHelper $coreHelper
      * @param AmazonConfig $amazonConfig
+     * @param KeyHelper $keyHelper
      * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ProductMetadataInterface $productMeta
@@ -119,7 +151,6 @@ class AutoKeyExchange extends KeyManagement
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\ResourceConnection $connection
      * @param \Magento\Framework\App\Cache\Manager $cacheManager
-     * @param \Magento\Framework\App\Request\Http $request
      * @param State $state
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param UrlInterface $backendUrl
@@ -131,6 +162,7 @@ class AutoKeyExchange extends KeyManagement
     public function __construct(
         AmazonHelper $amazonHelper,
         AmazonConfig $amazonConfig,
+        KeyHelper $keyHelper,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMeta,
@@ -138,7 +170,6 @@ class AutoKeyExchange extends KeyManagement
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\ResourceConnection $connection,
         \Magento\Framework\App\Cache\Manager $cacheManager,
-        \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\State $state,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\UrlInterface $backendUrl,
@@ -147,6 +178,7 @@ class AutoKeyExchange extends KeyManagement
     ) {
         $this->amazonHelper  = $amazonHelper;
         $this->amazonConfig  = $amazonConfig;
+        $this->keyHelper     = $keyHelper;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -158,9 +190,13 @@ class AutoKeyExchange extends KeyManagement
         $this->mathRandom    = $mathRandom;
         $this->logger        = $logger;
 
+        $this->storeManager = $storeManager;
         $this->messageManager = $messageManager;
 
-        parent::__construct($request, $storeManager);
+        $this->_storeId = $keyHelper->getStoreId();
+        $this->_websiteId = $keyHelper->getWebsiteId();
+        $this->_scope = $keyHelper->getScope();
+        $this->_scopeId = $keyHelper->getScopeId();
     }
 
     /**
@@ -207,7 +243,7 @@ class AutoKeyExchange extends KeyManagement
      */
     protected function generateKeys()
     {
-        $keys = parent::generateKeys();
+        $keys = $this->keyHelper->generateKeys();
         $encrypt = $this->encryptor->encrypt($keys['privatekey']);
 
         $this->config
