@@ -36,8 +36,6 @@
 
         <!--Verify Sign in with Amazon Button is present again-->
         <seeElement selector="{{AmazonLoginSection.login}}" stepKey="seeSignInWithAmazonButtonCreate"/>
-        <click selector="{{AmazonLoginSection.login}}" stepKey="clickSignInWithAmazonButton2"/>
-        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
         <actionGroup ref="AmazonLoginOnlyActionGroup" stepKey="AmazonLoginOnlyActionGroup2"/>
 
         <waitForPageLoad stepKey="waitForMyAccountPageLoad2"/>
