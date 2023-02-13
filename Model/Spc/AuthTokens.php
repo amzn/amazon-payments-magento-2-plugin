@@ -30,6 +30,10 @@ class AuthTokens
 
     const AUTH_VERSION = 'OAuth1A';
 
+    const ALLOWED_RESOURCES = [
+        'Amazon_Pay::spc',
+    ];
+
     /**
      * @var IntegrationFactory
      */
@@ -189,7 +193,7 @@ class AuthTokens
                 'setup_type' => 0
             ]);
             $this->integrationResourceModel->save($integration);
-            $this->authorizationService->grantAllPermissions($integration->getId());
+            $this->authorizationService->grantPermissions($integration->getId(), self::ALLOWED_RESOURCES);
 
             // Create Integration user consumer
             $consumer = $this->oauthService->createConsumer(['name' => 'SPC'. $integration->getId()]);
