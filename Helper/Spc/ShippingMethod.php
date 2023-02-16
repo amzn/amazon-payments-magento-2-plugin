@@ -78,9 +78,15 @@ class ShippingMethod
             if ((strpos($shippingMethodCode, '_') !== false)) {
                 $shippingInformation = $this->shippingInformation->setShippingAddress($address);
 
-                $shippingMethod = explode('_', $shippingMethodCode);
-                $shippingInformation->setShippingCarrierCode($shippingMethod[0])
-                    ->setShippingMethodCode($shippingMethod[1]);
+                // Separate the carrier from the method, the Magento way
+                // https://github.com/magento/magento2/blob/2.4.5/app/code/Magento/Quote/Model/Quote/ShippingAssignment/ShippingProcessor.php#L68-L71
+                $methodComponents = explode('_', $shippingMethodCode);
+                $carrierCode = array_shift($methodComponents);
+                $methodCode = implode('_', $methodComponents);
+
+                // Set the carrier and method codes
+                $shippingInformation->setShippingCarrierCode($carrierCode)
+                    ->setShippingMethodCode($methodCode);
 
                 try {
                     $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
