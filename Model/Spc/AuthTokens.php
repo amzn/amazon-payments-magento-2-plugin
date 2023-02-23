@@ -2,6 +2,7 @@
 
 namespace Amazon\Pay\Model\Spc;
 
+use Amazon\Pay\Helper\Spc\UniqueId;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -110,6 +111,11 @@ class AuthTokens
     protected $scopeConfig;
 
     /**
+     * @var UniqueId
+     */
+    protected $uniqueIdHelper;
+    
+    /**
      * @param IntegrationFactory $integrationFactory
      * @param Integration $integrationResourceModel
      * @param IntegrationCollection $integrationCollection
@@ -125,6 +131,7 @@ class AuthTokens
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param UniqueId $uniqueIdHelper
      */
     public function __construct(
         IntegrationFactory $integrationFactory,
@@ -141,7 +148,8 @@ class AuthTokens
         MutableScopeConfig $mutableScopeConfig,
         StoreRepositoryInterface $storeRepository,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        UniqueId $uniqueIdHelper
     )
     {
         $this->integrationFactory = $integrationFactory;
@@ -159,6 +167,7 @@ class AuthTokens
         $this->storeRepository = $storeRepository;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
+        $this->uniqueIdHelper = $uniqueIdHelper;
     }
 
     /**
@@ -232,9 +241,12 @@ class AuthTokens
             ScopeInterface::SCOPE_STORE,
             $store->getId()) ?: $this->storeManager->getStore(0)->getBaseUrl();
 
+        // Get unique id for the merchantStoreReferenceId
+        $uniqueId = $this->getUniqueId();
+
         $payload = [
             'authDetails' => [
-                'merchantStoreReferenceId' => $store->getCode(),
+                'merchantStoreReferenceId' => $store->getCode() .'-'. $uniqueId,
                 'authInformation' => [
                     [
                         'type' => 'CONSUMER_KEY',
@@ -282,6 +294,7 @@ class AuthTokens
         $errorResponses = [];
 
         foreach ($stores as $store) {
+            // Skip admin store
             if ($store->getId() == 0) {
                 continue;
             }
@@ -330,6 +343,14 @@ class AuthTokens
             && $this->scopeConfig
                 ->getValue('payment/amazon_payment_v2/store_id', ScopeInterface::SCOPE_STORE, $store->getId())
             ;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    protected function getUniqueId()
+    {
+        return $this->uniqueIdHelper->getUniqueId();
     }
 
     /**
