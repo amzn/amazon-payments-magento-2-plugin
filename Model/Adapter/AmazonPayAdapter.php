@@ -16,8 +16,8 @@
 
 namespace Amazon\Pay\Model\Adapter;
 
+use Amazon\Pay\Helper\Spc\UniqueId;
 use Amazon\Pay\Model\Config\Source\PaymentAction;
-use Couchbase\Scope;
 use Magento\Checkout\Model\Session as MagentoCheckoutSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -76,12 +76,22 @@ class AmazonPayAdapter
      */
     private $redirect;
 
+    /**
+     * @var ScopeConfigInterface
+     */
     protected $scopeConfig;
 
+    /**
+     * @var MagentoCheckoutSession
+     */
     protected $magentoCheckoutSession;
 
     /**
-     * AmazonPayAdapter constructor.
+     * @var UniqueId
+     */
+    protected $uniqueIdHelper;
+
+    /**
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -93,6 +103,7 @@ class AmazonPayAdapter
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param ScopeConfigInterface $scopeConfig
      * @param MagentoCheckoutSession $magentoCheckoutSession
+     * @param UniqueId $uniqueIdHelper
      */
     public function __construct(
         \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
@@ -105,7 +116,8 @@ class AmazonPayAdapter
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect,
         ScopeConfigInterface $scopeConfig,
-        MagentoCheckoutSession $magentoCheckoutSession
+        MagentoCheckoutSession $magentoCheckoutSession,
+        UniqueId $uniqueIdHelper
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
@@ -118,6 +130,7 @@ class AmazonPayAdapter
         $this->redirect = $redirect;
         $this->scopeConfig = $scopeConfig;
         $this->magentoCheckoutSession = $magentoCheckoutSession;
+        $this->uniqueIdHelper = $uniqueIdHelper;
     }
 
     /**
@@ -562,11 +575,14 @@ class AmazonPayAdapter
             // Always use Authorize for now, so that async transactions are handled properly
             $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE;
 
+            // Get unique id for the merchantStoreReferenceId
+            $uniqueId = $this->uniqueIdHelper->getUniqueId();
+
             $payload['chargePermissionType'] = 'OneTime'; // probably needs to be dynamic if buying a subscription (feature not released)
             $payload['platformId'] = $this->amazonConfig->getPlatformId();
             $payload['merchantMetadata'] = [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
-                'merchantStoreReferenceId' => $quote->getStore()->getCode(),
+                'merchantStoreReferenceId' => $quote->getStore()->getCode() .'-'. $uniqueId,
                 'merchantStoreName' => $this->amazonConfig->getStoreName(),
                 'customInformation' => $this->getMerchantCustomInformation(),
             ];
