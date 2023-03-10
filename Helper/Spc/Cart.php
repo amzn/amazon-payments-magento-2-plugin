@@ -265,6 +265,8 @@ class Cart
             }
 
             // Get item rule details
+            $rulesNameOrCode = [];
+            
             if ($quote->getAppliedRuleIds() && $item->getAppliedRuleIds()) {
                 $quoteRules = explode(',', $quote->getAppliedRuleIds());
                 $itemRules = explode(',', $item->getAppliedRuleIds());
@@ -279,7 +281,6 @@ class Cart
                 if (!empty($itemRules)) {
                     $itemRules = implode(',', $itemRules);
                     $rules = $this->ruleCollection->addFieldToFilter('rule_id', ['in' => $itemRules]);
-                    $rulesNameOrCode = [];
                     foreach ($rules as $rule) {
                         /** @var PromoInterface $ruleResponse */
                         $ruleResponse = $this->promoFactory->create();
