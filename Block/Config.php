@@ -70,6 +70,14 @@ class Config extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return string
+     */
+    public function getJsonConfig()
+    {
+        return json_encode($this->getConfig());
+    }
+
+    /**
      * @return bool
      */
     public function isEnabled()

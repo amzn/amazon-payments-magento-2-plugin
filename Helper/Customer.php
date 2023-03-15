@@ -18,7 +18,7 @@
 namespace Amazon\Pay\Helper;
 
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
-use Zend_Validate;
+use Magento\Framework\Validator\ValidatorChain;
 
 class Customer
 {
@@ -79,7 +79,7 @@ class Customer
 
     public function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
-        if (! Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
+        if (! ValidatorChain::is($amazonCustomer->getEmail(), '\Magento\Framework\Validator\EmailAddress')) {
             throw new ValidatorException(__('the email address for your Amazon account is invalid'));
         }
 
