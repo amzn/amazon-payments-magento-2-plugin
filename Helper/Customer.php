@@ -18,7 +18,6 @@
 namespace Amazon\Pay\Helper;
 
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
-use Zend_Validate;
 
 class Customer
 {
@@ -43,6 +42,11 @@ class Customer
     private $amazonConfig;
 
     /**
+     * @var \Magento\Framework\Validator\EmailAddress
+     */
+    private $emailAddressValidator;
+
+    /**
      * @param Adapter\AmazonPayAdapter $amazonAdapter
      * @param Domain\AmazonCustomerFactory $amazonCustomerFactory
      * @param CustomerLinkManagementInterface $customerLinkManagement
@@ -52,12 +56,14 @@ class Customer
         \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter,
         \Amazon\Pay\Domain\AmazonCustomerFactory $amazonCustomerFactory,
         \Amazon\Pay\Api\CustomerLinkManagementInterface $customerLinkManagement,
-        \Amazon\Pay\Model\AmazonConfig $amazonConfig
+        \Amazon\Pay\Model\AmazonConfig $amazonConfig,
+        \Magento\Framework\Validator\EmailAddress $emailAddressValidator
     ) {
         $this->amazonAdapter = $amazonAdapter;
         $this->amazonCustomerFactory = $amazonCustomerFactory;
         $this->customerLinkManagement = $customerLinkManagement;
         $this->amazonConfig = $amazonConfig;
+        $this->emailAddressValidator = $emailAddressValidator;
     }
 
     public function getAmazonCustomer($buyerInfo)
@@ -79,7 +85,7 @@ class Customer
 
     public function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
-        if (! Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
+        if (!$this->emailAddressValidator->isValid($amazonCustomer->getEmail())) {
             throw new ValidatorException(__('the email address for your Amazon account is invalid'));
         }
 

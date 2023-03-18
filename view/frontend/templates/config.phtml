@@ -23,7 +23,7 @@
 <script>
 
     require (['uiRegistry'], function(registry) {
-        registry.set('amazonPay', <?= /* @noEscape */ \Zend_Json::encode($block->getConfig()); ?>);
+        registry.set('amazonPay', <?= /* @noEscape */ \json_encode($block->getConfig()); ?>);
     });
 
     <?php if ($frontName != 'checkout' || (strpos($pathInfo, 'checkout/cart') !== false)): ?>
