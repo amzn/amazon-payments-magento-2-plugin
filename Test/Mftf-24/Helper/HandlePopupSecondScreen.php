@@ -68,10 +68,6 @@ class HandlePopupSecondScreen extends Helper
                     if (empty($continueAs) && empty($checkout)) {
                         $stepLog[] = 'Popup didn\'t finish loading, closing popup and re-initiating Amazon Pay';
 
-                        // $url = $magentoWebDriver->_getCurrentUri();
-                        // $magentoWebDriver->amOnPage($url);
-                        // $magentoWebDriver->wait(3);
-
                         $stepLog[] = 'Closing tab';
                         $magentoWebDriver->closeTab();
                         $stepLog[] = 'Switching back to opener';

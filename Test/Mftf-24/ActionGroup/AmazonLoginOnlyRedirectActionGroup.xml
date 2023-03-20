@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AmazonLoginOnlyRedirectActionGroup">
-        <waitForElement selector="{{AmazonPageSection.emailField}}" stepKey="waitForEmailField"/>
-        <wait time="1" stepKey="allowButtonToActivate1"/>
-        <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="fillAmazonPageEmailField"/>
-        <fillField selector="{{AmazonPageSection.passwordField}}" userInput="{{AmazonAccount.password}}" stepKey="fillAmazonPagePasswordField"/>
-        
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\HandlePopupSecondScreen" method="handleClickOnly" stepKey="handlePopupSecondScreen">
-            <argument name="signInButton">{{AmazonPageSection.signInButton}}</argument>
-        </helper>
+        <arguments>
+            <argument name="openerName" type="string"/>
+        </arguments>
 
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\HandlePopupSecondScreen" method="handleSignInConsent" stepKey="handleSignInConsent">
-            <argument name="consentButton">{{AmazonLoginSection.consentButton}}</argument>
-        </helper>
+        <waitForElement selector="{{AmazonLoginSection.continueButton}}" stepKey="waitForContinueButton"/>
+        <wait time="1" stepKey="allowButtonToActivate1"/>
+        <click selector="{{AmazonLoginSection.continueButton}}" stepKey="clickContinueAsButton"/>
+        <switchToWindow userInput="{{openerName}}" stepKey="switchBackToOpener"/>
     </actionGroup>
 </actionGroups>
