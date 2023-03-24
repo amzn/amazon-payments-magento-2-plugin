@@ -68,6 +68,7 @@ class Session
 
     /**
      * Session constructor.
+     *
      * @param CartManagementInterface $cartManagement
      * @param CustomerSession $session
      * @param EventManagerInterface $eventManager
@@ -123,8 +124,12 @@ class Session
     }
 
     /**
+     * Dispatch 'amazon_customer_authenticated' event
+     *
      * For compatibility with customer_customer_authenticated event dispatched from standard login controller.
      * The observers are also attached to this with the exception of password related ones.
+     *
+     * @return void
      */
     protected function dispatchAuthenticationEvent()
     {
@@ -174,6 +179,9 @@ class Session
     }
 
     /**
+     * Set session flag indicating whether user signed in through Amazon
+     *
+     * @param bool $isLoggedIn
      * @return void
      */
     public function setIsAmazonLoggedIn($isLoggedIn)
@@ -186,6 +194,8 @@ class Session
     }
 
     /**
+     * Associate Amazon customer with session
+     *
      * @param AmazonCustomerInterface $amazonCustomer
      * @return void
      */
@@ -195,6 +205,8 @@ class Session
     }
 
     /**
+     * Disassociate Amazon customer with session
+     *
      * @return void
      */
     public function clearAmazonCustomer()
@@ -203,6 +215,8 @@ class Session
     }
 
     /**
+     * Get Amazon customer information from session
+     *
      * @return AmazonCustomerInterface|null
      */
     public function getAmazonCustomer()
@@ -218,6 +232,8 @@ class Session
     }
 
     /**
+     * Get quote from Magento checkout session
+     *
      * @return CartInterface|\Magento\Quote\Model\Quote
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -228,7 +244,9 @@ class Session
     }
 
     /**
-     * @param $cartId
+     * Get quote from cart ID or user session
+     *
+     * @param mixed $cartId
      * @return false|CartInterface
      */
     public function getQuoteFromIdOrSession($cartId = null)
@@ -255,6 +273,8 @@ class Session
     }
 
     /**
+     * Get cart from customer ID
+     *
      * @return int|null
      */
     public function getCartIdViaUserContext()

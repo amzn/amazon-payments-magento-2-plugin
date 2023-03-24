@@ -21,6 +21,8 @@ use Magento\Framework\Event\ObserverInterface;
 class OrderPaymentCapture implements ObserverInterface
 {
     /**
+     * Ensure payment amount is expressed in display currency instead of base currency
+     *
      * @param Observer $observer
      */
     public function execute(Observer $observer)
@@ -28,7 +30,6 @@ class OrderPaymentCapture implements ObserverInterface
         $payment = $observer->getPayment();
         $invoice = $observer->getInvoice();
 
-        // set custom invoice amount on payment in the display currency, as Magento does everything on the base currency
         $payment->setAmazonDisplayInvoiceAmount($invoice->getGrandTotal());
     }
 }

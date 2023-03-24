@@ -29,6 +29,7 @@ class BackendFieldDependence
 
     /**
      * BackendFieldDependence constructor.
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Paypal\Helper\Backend $backendHelper
      */
@@ -83,7 +84,7 @@ class BackendFieldDependence
     /**
      * Is Amazon config field on Payment section with non-US country?
      *
-     * @param $fieldName
+     * @param string $fieldName
      * @return bool
      */
     private function isAmazonField($fieldName)

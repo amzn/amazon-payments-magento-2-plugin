@@ -46,6 +46,8 @@ class OrderCustomerManagement
     private $amazonConfig;
 
     /**
+     * OrderCustomerManagement constructor
+     *
      * @param LoginSessionHelper $loginSessionHelper
      * @param OrderRepositoryInterface $orderRepository
      * @param CustomerLinkManagementInterface $customerLinkManagement
@@ -64,6 +66,8 @@ class OrderCustomerManagement
     }
 
     /**
+     * Link Amazon/Magento customer data if necessary
+     *
      * @param OrderCustomerManagementInterface $subject
      * @param CustomerInterface $result
      * @param int $orderId

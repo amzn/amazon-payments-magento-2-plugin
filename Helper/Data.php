@@ -50,6 +50,18 @@ class Data extends AbstractHelper
      */
     protected $readFactory;
 
+    /**
+     * Data constructor
+     *
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Magento\Checkout\Helper\Data $helperCheckout
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
+     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResourceModel
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     */
     public function __construct(
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Checkout\Helper\Data $helperCheckout,
@@ -100,6 +112,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Get list of restricted categories from module config
+     *
      * @return array
      */
     protected function getRestrictedCategoryIds()
@@ -121,6 +135,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * True if quote is virtual
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      */
@@ -133,6 +149,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * True if quote contains products in restricted categories
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      */
@@ -153,6 +171,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * True if given product is in a restricted category
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
      */
@@ -164,6 +184,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Get module setup version
+     *
      * @return string
      */
     public function getVersion()

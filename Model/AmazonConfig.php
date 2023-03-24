@@ -20,21 +20,21 @@ use Magento\Store\Model\ScopeInterface;
 
 class AmazonConfig
 {
-    const LANG_DE = 'de_DE';
-    const LANG_FR = 'fr_FR';
-    const LANG_ES = 'es_ES';
-    const LANG_IT = 'it_IT';
-    const LANG_JA = 'ja_JP';
-    const LANG_UK = 'en_GB';
-    const LANG_US = 'en_US';
-    const EUROPEAN_LOCALES = [
+    public const LANG_DE = 'de_DE';
+    public const LANG_FR = 'fr_FR';
+    public const LANG_ES = 'es_ES';
+    public const LANG_IT = 'it_IT';
+    public const LANG_JA = 'ja_JP';
+    public const LANG_UK = 'en_GB';
+    public const LANG_US = 'en_US';
+    public const EUROPEAN_LOCALES = [
         self::LANG_UK,
         self::LANG_DE,
         self::LANG_FR,
         self::LANG_IT,
         self::LANG_ES,
     ];
-    const EUROPEAN_REGIONS = [
+    public const EUROPEAN_REGIONS = [
         'de',
         'uk',
     ];
@@ -76,6 +76,7 @@ class AmazonConfig
 
     /**
      * AmazonConfig constructor.
+     *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Directory\Model\AllowedCountries $countriesAllowed
@@ -103,8 +104,10 @@ class AmazonConfig
     }
 
     /**
-     * Is Pay enabled?
+     * True if AP is enabled and available for customer/store
      *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -121,8 +124,10 @@ class AmazonConfig
     }
 
     /**
+     * True if module is enabled from admin config
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|string $scopeCode
      * @return string
      */
     public function isActive($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -135,6 +140,10 @@ class AmazonConfig
     }
 
     /**
+     * Get Amazon payment region
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -143,8 +152,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured button color
+     *
      * @param string $scope
-     * @param string $scopeCode
+     * @param int|string $scopeCode
      * @return string
      */
     public function getButtonColor($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -153,8 +164,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured display language
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|string $scopeCode
      * @return string
      */
     public function getLanguage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -214,8 +227,15 @@ class AmazonConfig
     }
 
     /**
+     * True if current currency can be used with Amazon Pay
+     *
+     * This is true if:
+     * 1. Currency aligns with Amazon payment region, or
+     * 2. Multicurrency is enabled, available for the payment region, and the current currency is
+     * one of the allowed currencies
+     *
      * @param string $scope
-     * @param string $scopeCode
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isCurrentCurrencySupportedByAmazon($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -226,6 +246,10 @@ class AmazonConfig
     }
 
     /**
+     * Get currency by payment region
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getCurrencyCode($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -243,9 +267,11 @@ class AmazonConfig
     }
 
     /**
+     * True if multicurrency is enabled and the currency code is valid for the store
+     *
      * @param string $currencyCode
      * @param string $scope
-     * @param string $scopeCode
+     * @param int|string $scopeCode
      * @return boolean
      */
     public function canUseCurrency($currencyCode, $scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -258,8 +284,10 @@ class AmazonConfig
     }
 
     /**
+     * Get list of valid currencied for store
+     *
      * @param string $scope
-     * @param string $scopeCode
+     * @param int|string $scopeCode
      * @return array
      */
     public function getValidCurrencies($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -270,6 +298,8 @@ class AmazonConfig
     /**
      * Is debug logging enabled?
      *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isLoggingEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -293,9 +323,10 @@ class AmazonConfig
     }
 
     /**
-     * @param string $scope
-     * @param null $scopeCode
+     * Get configured payment region
      *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return mixed
      */
     public function getPaymentRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -308,6 +339,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured store name
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getStoreName($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -321,9 +356,10 @@ class AmazonConfig
 
     /**
      * Checks to see if store's selected region is a multicurrency region.
+     *
      * @param string $scope
-     * @param null $scopeCode
-     * @param null $store
+     * @param int|string $scopeCode
+     * @param int|string $store
      * @return bool
      */
     public function isMulticurrencyRegion($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
@@ -349,9 +385,8 @@ class AmazonConfig
      * Check to see if multicurrency is enabled and if it's available for given endpoint/region
      *
      * @param string $scope
-     * @param null $scopeCode
-     * @param null $store
-     *
+     * @param int|string $scopeCode
+     * @param int|string $store
      * @return bool
      */
     public function multiCurrencyEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null, $store = null)
@@ -372,7 +407,7 @@ class AmazonConfig
     /**
      * Only certain currency codes are allowed to be used with multi-currency
      *
-     * @param null $store
+     * @param int|string $store
      * @return bool
      */
     public function useMultiCurrency($store = null)
@@ -400,8 +435,7 @@ class AmazonConfig
      * Return Private Key
      *
      * @param string $scope
-     * @param null $scopeCode
-     *
+     * @param int|string $scopeCode
      * @return string
      */
     public function getPrivateKey($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -417,8 +451,7 @@ class AmazonConfig
      * Return Private Key Selected method (text or pem)
      *
      * @param string $scope
-     * @param null $scopeCode
-     *
+     * @param int|string $scopeCode
      * @return string
      */
     public function getPrivateKeySelected($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -434,8 +467,7 @@ class AmazonConfig
      * Return Public Key
      *
      * @param string $scope
-     * @param null $scopeCode
-     *
+     * @param int|string $scopeCode
      * @return string
      */
     public function getPublicKey($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -451,8 +483,7 @@ class AmazonConfig
      * Return Public Key ID
      *
      * @param string $scope
-     * @param null $scopeCode
-     *
+     * @param int|string $scopeCode
      * @return string
      */
     public function getPublicKeyId($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -465,6 +496,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured merchant ID
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getMerchantId($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -477,6 +512,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured client ID
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getClientId($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -489,6 +528,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured payment action (charge on shipment/charge on order)
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getPaymentAction($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -501,8 +544,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured authorization mode (automatic/immediate)
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|string $scopeCode
      * @return mixed
      */
     public function getAuthorizationMode($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -515,6 +560,10 @@ class AmazonConfig
     }
 
     /**
+     * True if configured auth mode is automatic
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return bool
      */
     public function canHandlePendingAuthorization($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -527,6 +576,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured checkout review return URL
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getCheckoutReviewReturnUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -543,6 +596,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured checkout review URL
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getCheckoutReviewUrlPath($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -559,7 +616,11 @@ class AmazonConfig
     }
 
     /**
+     * Get configured checkout result return URL
      *
+     * @param string $scope
+     * @param int|string $scopeCode
+     * @return string
      */
     public function getCheckoutResultReturnUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
@@ -575,6 +636,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured checkout result URL
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getCheckoutResultUrlPath($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -591,6 +656,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured sign in result URL
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getSignInResultUrlPath($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -607,6 +676,10 @@ class AmazonConfig
     }
 
     /**
+     * Get result URL for APB flow
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getPayNowResultUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -615,6 +688,10 @@ class AmazonConfig
     }
 
     /**
+     * Get configured cancel URL if set
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string|null
      */
     public function getCheckoutCancelUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -629,6 +706,10 @@ class AmazonConfig
     }
 
     /**
+     * Get sign in cancel URL if set
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string|null
      */
     public function getSignInCancelUrl($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -643,8 +724,10 @@ class AmazonConfig
     }
 
     /**
+     * Get list of IP addresses for whom Amazon Pay can be used
+     *
      * @param string $scope
-     * @param mixed $scopeCode
+     * @param int|string $scopeCode
      * @return array
      */
     public function getAllowedIps($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -658,6 +741,11 @@ class AmazonConfig
     }
 
     /**
+     * True if client IP is in list of allowed IPs
+     *
+     * Also returns true if no IPs have been declared as allowed, indicating that
+     * all customers should be able to use Amazon Pay.
+     *
      * @return bool
      */
     public function clientHasAllowedIp()
@@ -669,6 +757,10 @@ class AmazonConfig
     }
 
     /**
+     * True if sandbox mode is enabled
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isSandboxEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -681,8 +773,10 @@ class AmazonConfig
     }
 
     /**
+     * True if button is configured to display in minicart
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isPayButtonAvailableInMinicart($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -695,9 +789,10 @@ class AmazonConfig
     }
 
    /**
+    * True if button is configured to display on PDP
+    *
     * @param string $scope
     * @param null|string $scopeCode
-    *
     * @return bool
     */
     public function isPayButtonAvailableOnProductPage($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -710,9 +805,10 @@ class AmazonConfig
     }
 
     /**
-     * @param string $scope
-     * @param null|string $scopeCode
+     * True if button is configured to display at last step of checkout (Pay Now)
      *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isPayButtonAvailableAsPaymentMethod($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -725,8 +821,10 @@ class AmazonConfig
     }
 
     /**
+     * Get list of categories for which Amazon Pay cannot be used
+     *
      * @param string $scope
-     * @param mixed $scopeCode
+     * @param int|string $scopeCode
      * @return array
      */
     public function getRestrictedCategoryIds($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -736,8 +834,10 @@ class AmazonConfig
     }
 
     /**
+     * True if Alexa delivery notifications are enabled
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isAlexaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -750,8 +850,10 @@ class AmazonConfig
     }
 
     /**
+     * Get list of carrier codes => Amazon carrier codes
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|string $scopeCode
      * @return array
      */
     public function getCarriersMapping($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -776,8 +878,10 @@ class AmazonConfig
     }
 
     /**
+     * Get list of allowable addresses
+     *
      * @param string $scope
-     * @param string $scopeCode
+     * @param int|string $scopeCode
      * @return array
      */
     public function getDeliverySpecifications($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -828,6 +932,8 @@ class AmazonConfig
     }
 
     /**
+     * Get platform (Magento) ID
+     *
      * @return string
      */
     public function getPlatformId()
@@ -835,7 +941,11 @@ class AmazonConfig
         return $this->scopeConfig->getValue('payment/amazon_payment_v2/platform_id');
     }
 
-    /*
+    /**
+     * True if Amazon Sign In is enabled
+     *
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isLwaEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
@@ -856,8 +966,10 @@ class AmazonConfig
     }
 
     /**
+     * True if customer can checkout as guest
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|string $scopeCode
      * @return bool
      */
     public function isGuestCheckoutEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)

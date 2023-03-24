@@ -35,7 +35,7 @@ class CustomerRepository
     /**
      * CustomerRepository constructor.
      *
-     * @param CustomerManagementInterface  $customerManagement
+     * @param CustomerManagementInterface $customerManagement
      * @param AmazonConfig $amazonConfig
      */
     public function __construct(
@@ -51,7 +51,6 @@ class CustomerRepository
      *
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerInterface           $customer
-     *
      * @return CustomerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -66,7 +65,6 @@ class CustomerRepository
      *
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerInterface           $customer
-     *
      * @return CustomerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

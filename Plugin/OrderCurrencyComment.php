@@ -22,8 +22,10 @@ use Amazon\Pay\Gateway\Config\Config;
 class OrderCurrencyComment
 {
     /**
+     * Format currency to match payment currency from invoice or credit memo
+     *
      * @param Payment $subject
-     * @param $messagePrependTo
+     * @param mixed $messagePrependTo
      * @return array|null
      */
     public function beforePrependMessage(Payment $subject, $messagePrependTo)
@@ -52,8 +54,10 @@ class OrderCurrencyComment
     }
 
     /**
+     * Handle currency code differences on voids/cancels
+     *
      * @param Payment $subject
-     * @param $result
+     * @param string $result
      * @return string
      */
     public function afterFormatPrice(Payment $subject, $result)

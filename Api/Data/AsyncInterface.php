@@ -22,13 +22,13 @@ use Exception;
  */
 interface AsyncInterface
 {
-    const ID = 'entity_id';
-    const ORDER_ID = 'order_id';
-    const IS_PENDING = 'is_pending';
-    const PENDING_ACTION = 'pending_action';
-    const PENDING_ID = 'pending_id';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+    public const ID = 'entity_id';
+    public const ORDER_ID = 'order_id';
+    public const IS_PENDING = 'is_pending';
+    public const PENDING_ACTION = 'pending_action';
+    public const PENDING_ID = 'pending_id';
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
 
     /**
      * Get entity id

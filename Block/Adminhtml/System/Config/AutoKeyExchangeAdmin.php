@@ -25,8 +25,8 @@ class AutoKeyExchangeAdmin extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Amazon\Pay\Model\Config\AutoKeyExchange        $autokeyexchange
-     * @param array                                            $data
+     * @param \Amazon\Pay\Model\Config\AutoKeyExchange $autokeyexchange
+     * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

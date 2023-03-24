@@ -18,7 +18,7 @@ namespace Amazon\Pay\Model\Config\File;
 class PemFile extends \Magento\Config\Block\System\Config\Form\Field\File
 {
     /**
-     * @return string
+     * @inheritDoc
      */
     protected function _getDeleteCheckbox()
     {

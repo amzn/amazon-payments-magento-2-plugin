@@ -9,11 +9,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    const CODE = 'amazon_payment_v2';
+    public const CODE = 'amazon_payment_v2';
 
-    const KEY_ACTIVE = 'active';
+    public const KEY_ACTIVE = 'active';
 
     /**
+     * Config constructor
+     *
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(

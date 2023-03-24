@@ -28,6 +28,8 @@ class CarrierRenderer extends Select
     protected $shippingConfig;
 
     /**
+     * CarrierRenderer constructor
+     *
      * @param \Magento\Shipping\Model\Config $shippingConfig
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
@@ -55,7 +57,7 @@ class CarrierRenderer extends Select
     /**
      * Set "id" for <select> element
      *
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setInputId($value)
@@ -76,6 +78,11 @@ class CarrierRenderer extends Select
         return parent::_toHtml();
     }
 
+    /**
+     * Get carriers for tracking number dropdown
+     *
+     * @return array
+     */
     private function getSourceOptions(): array
     {
         $options = [];

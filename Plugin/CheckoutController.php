@@ -32,6 +32,12 @@ class CheckoutController
      */
     private $url;
 
+    /**
+     * CheckoutController constructor
+     *
+     * @param Session $session
+     * @param UrlInterface $url
+     */
     public function __construct(Session $session, UrlInterface $url)
     {
         $this->session = $session;
@@ -39,6 +45,11 @@ class CheckoutController
     }
 
     /**
+     * Set redirect URL in customer session
+     *
+     * @param Index $index
+     * @param ResultInterface $result
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(Index $index, ResultInterface $result)

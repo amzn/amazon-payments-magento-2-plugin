@@ -19,11 +19,11 @@ namespace Amazon\Pay\Model\Config\Source;
 
 class PaymentAction implements \Magento\Framework\Data\OptionSourceInterface
 {
-    const AUTHORIZE = 'authorize';
-    const AUTHORIZE_AND_CAPTURE = 'authorize_capture';
+    public const AUTHORIZE = 'authorize';
+    public const AUTHORIZE_AND_CAPTURE = 'authorize_capture';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

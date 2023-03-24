@@ -25,6 +25,8 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     private $amazonAddress;
 
     /**
+     * AmazonAddressDecoratorJp constructor
+     *
      * @param AmazonAddressInterface $amazonAddress
      */
     public function __construct(
@@ -34,7 +36,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLines()
     {
@@ -42,7 +44,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCompany()
     {
@@ -50,7 +52,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFirstName()
     {
@@ -58,7 +60,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLastName()
     {
@@ -66,7 +68,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCity()
     {
@@ -74,7 +76,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getState()
     {
@@ -82,7 +84,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPostCode()
     {
@@ -90,7 +92,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCountryCode()
     {
@@ -98,7 +100,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getTelephone()
     {
@@ -106,7 +108,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLine($lineNumber)
     {
@@ -118,7 +120,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function shiftLines($times)
     {
@@ -126,7 +128,7 @@ class AmazonAddressDecoratorJp implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCompany($company)
     {

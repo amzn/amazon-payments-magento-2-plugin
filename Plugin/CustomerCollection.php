@@ -29,6 +29,8 @@ class CustomerCollection
     private $amazonConfig;
 
     /**
+     * CustomerCollection constructor
+     *
      * @param AmazonConfig $amazonConfig
      */
     public function __construct(
@@ -45,7 +47,6 @@ class CustomerCollection
      * @param AttributeInterface|integer|string|array $attribute
      * @param array|string|null                       $condition
      * @param string                                  $joinType
-     *
      * @return Collection
      */
     public function aroundAddAttributeToFilter(
@@ -67,6 +68,11 @@ class CustomerCollection
     }
 
     /**
+     * Add amazon ID as extension attribute to attributes filter(s)
+     *
+     * @param array $attribute
+     * @param Collection $collection
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function addAmazonIdFilter(array $attribute, Collection $collection)

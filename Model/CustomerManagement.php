@@ -37,7 +37,9 @@ class CustomerManagement implements \Amazon\Pay\Api\CustomerManagementInterface
     private $amazonId;
 
     /**
-     * @param CustomerLinkRepositoryInterface $customerLinkRepository
+     * CustomerManagement
+     *
+     * @param CustomerLinkManagementInterface $customerLinkManagement
      * @param CustomerExtensionFactory $customerExtensionFactory
      */
     public function __construct(
@@ -48,7 +50,7 @@ class CustomerManagement implements \Amazon\Pay\Api\CustomerManagementInterface
         $this->customerExtensionFactory = $customerExtensionFactory;
     }
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAmazonIdExtensionAttribute(CustomerInterface $customer)
     {
