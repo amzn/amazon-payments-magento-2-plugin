@@ -37,7 +37,7 @@
         </actionGroup>
 
         <!-- Move to payments page and verify visibility of billing address -->
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
+        <actionGroup ref="AmazonGoToPaymentMethodActionGroup" stepKey="AmazonGoToPaymentMethodActionGroup"/>
         <seeElement selector="{{AmazonCheckoutSection.billingAddress}}" stepKey="seeBillingAddress"/>
     </test>
 </tests>

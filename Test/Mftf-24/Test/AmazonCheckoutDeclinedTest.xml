@@ -14,9 +14,7 @@
         <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup">
             <argument name="cc" value="3434" />
         </actionGroup>
-        <!--Go to payment method-->
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickCheckoutShippingNext"/>
-        <waitForPageLoad stepKey="waitForCheckoutPaymentPageLoad"/>
+        <actionGroup ref="AmazonGoToPaymentMethodActionGroup" stepKey="AmazonGoToPaymentMethodActionGroup"/>
         <!--Verify only Amazon Pay method is visible-->
         <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
         <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
