@@ -36,6 +36,7 @@ class Config extends \Magento\Framework\View\Element\Template
 
     /**
      * Config constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig

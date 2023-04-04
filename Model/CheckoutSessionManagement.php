@@ -42,6 +42,7 @@ use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Authorization\Model\UserContextInterface as UserContext;
 use Magento\Framework\Phrase\Renderer\Translate as Translate;
+use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
@@ -209,6 +210,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $translationRenderer;
 
     /**
+     * @var UpdateCouponUsages
+     */
+    private $updateCouponUsages;
+
+    /**
      * CheckoutSessionManagement constructor.
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -241,6 +247,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param Session $session
      * @param Translate $translationRenderer
+     * @param UpdateCouponUsages $updateCouponUsages
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -272,7 +279,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         UserContext $userContext,
         \Amazon\Pay\Logger\Logger $logger,
         Session $session,
-        Translate $translationRenderer
+        Translate $translationRenderer,
+        UpdateCouponUsages $updateCouponUsages,
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -304,6 +312,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->logger = $logger;
         $this->session = $session;
         $this->translationRenderer = $translationRenderer;
+        $this->updateCouponUsages = $updateCouponUsages;
     }
 
     /**
@@ -649,6 +658,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         foreach ($order->getInvoiceCollection() as $invoice) {
             $invoice->setState(Invoice::STATE_CANCELED);
         }
+
+        // decrement coupon usages if applicable
+        $this->updateCouponUsages->execute($order, false);
 
         // delete order comments and add new one
         foreach ($order->getStatusHistories() as $history) {

@@ -99,7 +99,7 @@ class Customer
      */
     public function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
-        if (! ValidatorChain::is($amazonCustomer->getEmail(), \Magento\Framework\Validator\EmailAddress::class)) {
+        if (! ValidatorChain::is($amazonCustomer->getEmail(), '\Magento\Framework\Validator\EmailAddress')) {
             throw new ValidatorException(__('the email address for your Amazon account is invalid'));
         }
 
