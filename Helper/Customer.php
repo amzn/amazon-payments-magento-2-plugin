@@ -19,13 +19,10 @@ namespace Amazon\Pay\Helper;
 
 use Amazon\Pay\Api\CustomerLinkManagementInterface;
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
-<<<<<<< HEAD
-=======
 use Amazon\Pay\Domain\AmazonCustomerFactory;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\Exception\ValidatorException;
->>>>>>> php8-codesniff-fixes
 use Magento\Framework\Validator\ValidatorChain;
 
 class Customer
@@ -102,7 +99,7 @@ class Customer
      */
     public function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
-        if (! ValidatorChain::is($amazonCustomer->getEmail(), '\Magento\Framework\Validator\EmailAddress')) {
+        if (! ValidatorChain::is($amazonCustomer->getEmail(), \Magento\Framework\Validator\EmailAddress::class)) {
             throw new ValidatorException(__('the email address for your Amazon account is invalid'));
         }
 
