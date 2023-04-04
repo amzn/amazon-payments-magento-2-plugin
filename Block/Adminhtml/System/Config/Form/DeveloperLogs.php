@@ -24,9 +24,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const DOWNLOAD_PATH = 'amazon_pay/pay/downloadLog';
+    public const DOWNLOAD_PATH = 'amazon_pay/pay/downloadLog';
 
-    const LOGS = [
+    public const LOGS = [
         'async' => ['name' => 'IPN Log', 'path' => \Amazon\Pay\Logger\Handler\AsyncIpn::FILENAME],
         'client' => ['name' => 'Client Log', 'path' => \Amazon\Pay\Logger\Handler\Client::FILENAME],
         'alexa' => ['name' => 'Alexa Log', 'path' => \Amazon\Pay\Logger\Handler\Alexa::FILENAME],

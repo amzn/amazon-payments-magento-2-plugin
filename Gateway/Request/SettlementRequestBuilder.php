@@ -33,7 +33,8 @@ class SettlementRequestBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * AuthorizationRequestBuilder constructor.
+     * SettlementRequestBuilder constructor.
+     *
      * @param AmazonConfig $amazonConfig
      * @param SubjectReader $subjectReader
      */
@@ -46,6 +47,8 @@ class SettlementRequestBuilder implements BuilderInterface
     }
 
     /**
+     * Get invoice associated with payment
+     *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return \Magento\Sales\Model\Order\Invoice
      */
@@ -63,6 +66,8 @@ class SettlementRequestBuilder implements BuilderInterface
     }
 
     /**
+     * Get comment associated with invoice
+     *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return string
      */
@@ -82,6 +87,8 @@ class SettlementRequestBuilder implements BuilderInterface
     }
 
     /**
+     * Get Amazon Pay headers associated with invoice
+     *
      * @param \Magento\Sales\Model\Order\Payment $payment
      * @return array
      */

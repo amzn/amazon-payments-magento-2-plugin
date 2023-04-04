@@ -20,7 +20,7 @@ use Magento\Framework\Option\ArrayInterface;
 class ApiVersion implements ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

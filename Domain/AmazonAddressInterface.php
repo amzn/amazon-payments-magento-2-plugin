@@ -19,15 +19,15 @@ namespace Amazon\Pay\Domain;
 
 interface AmazonAddressInterface
 {
-    const FIRST_NAME = 'first_name';
-    const LAST_NAME  = 'last_name';
-    const CITY = 'city';
-    const POSTAL_CODE = 'postal_code';
-    const COUNTRY_CODE  = 'country_code';
-    const TELEPHONE = 'telephone';
-    const STATE_OR_REGION  = 'state';
-    const LINES = 'lines';
-    const COMPANY = 'company';
+    public const FIRST_NAME = 'first_name';
+    public const LAST_NAME  = 'last_name';
+    public const CITY = 'city';
+    public const POSTAL_CODE = 'postal_code';
+    public const COUNTRY_CODE  = 'country_code';
+    public const TELEPHONE = 'telephone';
+    public const STATE_OR_REGION  = 'state';
+    public const LINES = 'lines';
+    public const COMPANY = 'company';
 
     /**
      * Get first name

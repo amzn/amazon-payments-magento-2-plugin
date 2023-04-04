@@ -19,8 +19,13 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class CustomerLink extends AbstractDb
 {
-    const TABLE_NAME = 'amazon_customer';
+    public const TABLE_NAME = 'amazon_customer';
 
+    /**
+     * CustomerLink constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init(static::TABLE_NAME, 'entity_id');

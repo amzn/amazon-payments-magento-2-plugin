@@ -25,6 +25,13 @@ class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
      */
     private $categoryOptions;
 
+    /**
+     * RestrictCategories constructor
+     *
+     * @param \Magento\Catalog\Ui\Component\Product\Form\Categories\Options $categoryOptions
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param array $data
+     */
     public function __construct(
         \Magento\Catalog\Ui\Component\Product\Form\Categories\Options $categoryOptions,
         \Magento\Backend\Block\Template\Context $context,
@@ -35,6 +42,8 @@ class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Retrieve data from Restricted Categories field
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return array
      */
@@ -54,6 +63,8 @@ class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Create JS data scope from config element
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
@@ -71,6 +82,8 @@ class RestrictCategories extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Render restricted categories element
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */

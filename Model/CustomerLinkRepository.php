@@ -67,13 +67,15 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @param CustomerLinkResourceModel $customerLinkFactory
-     * @param CustomerLinkFactory $resourceModel
+     * CustomerLinkRepository constructor
+     *
+     * @param CustomerLinkResourceModel $resourceModel
+     * @param CustomerLinkFactory $customerLinkFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
+     * @param CustomerLinkSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
-     * @param CollectionProcessorInterface | null $collectionProcessor
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         CustomerLinkResourceModel $resourceModel,
@@ -94,7 +96,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function get($customerId)
     {
@@ -104,7 +106,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getById($entityId)
     {
@@ -114,7 +116,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -127,7 +129,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function delete(CustomerLinkInterface $customerLink)
     {
@@ -140,7 +142,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function deleteById($entityId)
     {
@@ -148,7 +150,7 @@ class CustomerLinkRepository implements CustomerLinkRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function save(CustomerLinkInterface $customerLink)
     {

@@ -25,6 +25,13 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected $helper;
 
+    /**
+     * Version constructor
+     *
+     * @param \Amazon\Pay\Helper\Data $helper
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param array $data
+     */
     public function __construct(
         \Amazon\Pay\Helper\Data $helper,
         \Magento\Backend\Block\Template\Context $context,
@@ -35,6 +42,8 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Render version information
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */

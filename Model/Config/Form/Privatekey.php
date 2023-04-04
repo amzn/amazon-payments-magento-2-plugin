@@ -22,7 +22,7 @@ namespace Amazon\Pay\Model\Config\Form;
  */
 class Privatekey extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const OBSCURED = '******';
+    public const OBSCURED = '******';
 
     /**
      * Retrieve element HTML markup and add OBSCURED textarea value

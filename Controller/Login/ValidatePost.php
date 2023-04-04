@@ -78,6 +78,9 @@ class ValidatePost extends Action
         $this->customerLinkManagement = $customerLinkManagement;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute()
     {
         $credentials = $this->session->getValidationCredentials();
