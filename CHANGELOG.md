@@ -1,5 +1,8 @@
 # Change Log
 
+## 5.14.3
+* Fixed PHP 7 compatibility
+
 ## 5.14.2
 * Removed usage of Zend libraries and updated requirements for PHP 8.2/Magento 2.4.6 compatibility
 * Fixed issue where coupon usage is not properly decremented when placing order fails
