@@ -279,7 +279,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Amazon\Pay\Logger\Logger $logger,
         Session $session,
         Translate $translationRenderer,
-        UpdateCouponUsages $updateCouponUsages,
+        UpdateCouponUsages $updateCouponUsages
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
