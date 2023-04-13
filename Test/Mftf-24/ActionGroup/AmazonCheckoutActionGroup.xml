@@ -6,11 +6,14 @@
             <argument name="openerName" type="string"/>
         </arguments>
 
+        <wait time="2" stepKey="waitForCheckoutIfNecessary"/>
         <!-- Load address list in DOM -->
         <helper class="\Amazon\Pay\Test\Mftf\Helper\LoadAddresses" method="loadAddresses" stepKey="loadAddresses">
             <argument name="changeAddressSelector">{{AmazonPageSection.changeAddressButton}}</argument>
             <argument name="addressBackButtonSelector">{{AmazonPageSection.addressBackButton}}</argument>
             <argument name="defaultAddressSelector">{{AmazonPageSection.addressId}}</argument>
+            <argument name="openerName">{{openerName}}</argument>
+            <argument name="editShippingButton">{{AmazonCheckoutSection.editShippingButton}}</argument>
         </helper>
 
         <!--Get shipping address information-->

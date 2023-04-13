@@ -38,12 +38,6 @@
 
         <!-- Login to Amazon -->
         <actionGroup ref="AmazonBeginLoginOnlyActionGroup" stepKey="amazonBeginLoginOnlyActionGroup"/>
-        <waitForElement selector="{{AmazonPageSection.loginCancelButton}}" stepKey="waitForCancelLogin"/>
-
-        <!-- Cancel login with Amazon and land back on sign-in Magento page -->
-        <click selector="{{AmazonPageSection.loginCancelButton}}" stepKey="clickLoginCancelButton"/>
-        <!-- Switch back to main window -->
-        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
         <waitForPageLoad stepKey="waitForSigninPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="assertLoginUrl"/>
 
@@ -56,31 +50,104 @@
 
         <!-- Click Amazon Pay button on product page and login -->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
-
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
         <wait time="3" stepKey="allowButtonToActivate"/>
-        
+
+        <!-- Sign in or 'Continue As' Amazon buyer -->
         <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
-            $continueAs = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.continueButton}}'));
+            $emailField = $remoteWebDriver->findElements(
+                \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.emailField}}')
+            );
 
-            if (!empty($continueAs)) {
-                $I->comment('Click Continue as... button and return to checkout');
-                $continueAs[0]->click();
-                $remoteWebDriver->switchTo()->window($openerName);
-                $I->waitForPageLoad(30);
+            if (!empty($emailField)) {
+                $I->fillField('{{AmazonPageSection.emailField}}', new \Codeception\Step\Argument\PasswordArgument('pay-demo-eu@amazon.com'));
+                $I->fillField('{{AmazonPageSection.passwordField}}', new \Codeception\Step\Argument\PasswordArgument('demo123'));
 
-                $I->comment('Wait for Edit button in address details');
-                $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
-                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
-                $I->comment('Click Edit button to return to normal flow');
-                $remoteWebDriver->findElement($editAddressSelector)->click();
-                
-                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
-                $I->switchToNextTab();
-                $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
-                $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                try {
+                    $remoteWebDriver->findElement(
+                        \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.signInButton}}')
+                    )->click();
+                    $remoteWebDriver->switchTo()->window($openerName);
+                    $I->wait(5);
+                } catch (\Exception $ex) {
+                    $I->comment('exception caught');
+                } catch (\Error $err) {
+                    $I->comment('error caught');
+                }
+            } else {
+                $I->comment('Popup appeared as normal');
+                $continueAs = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.continueButton}}'));
+
+                if (!empty($continueAs)) {
+                    $I->comment('Click Continue as... button and return to checkout');
+                    $continueAs[0]->click();
+                    $remoteWebDriver->switchTo()->window($openerName);
+                    $I->waitForPageLoad(30);
+
+                    $I->comment('Wait for Edit button in address details');
+                    $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                    $I->comment('Click Edit button to return to normal flow');
+                    $remoteWebDriver->findElement($editAddressSelector)->click();
+                    
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                    $I->switchToNextTab();
+                    $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                } else {
+                    $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                }
             }
-        }" stepKey="secureSignInWorkaround" />
+        }" stepKey="signInIfNecessary" />
+
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            try {
+                if (count($remoteWebDriver->getWindowHandles()) > 1) {
+                    if ($I->executeJS('return window.name;') === $openerName) {
+                        $I->comment('Popup remained open, switching back to it');
+                        $I->switchToNextTab();
+                    }
+    
+                    $continueAs = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.continueButton}}'));
+
+                    if (!empty($continueAs)) {
+                        $I->comment('Click Continue as... button and return to checkout');
+                        $continueAs[0]->click();
+                        $remoteWebDriver->switchTo()->window($openerName);
+                        $I->waitForPageLoad(30);
+
+                        $I->comment('Wait for Edit button in address details');
+                        $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                        $I->comment('Click Edit button to return to normal flow');
+                        $remoteWebDriver->findElement($editAddressSelector)->click();
+                        
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                        $I->switchToNextTab();
+                        $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    } else {
+                        $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    }
+                } else {
+                    $I->comment('Popup closed, allowing checkout page to load');
+                    $I->comment('Wait for Edit button in address details');
+                    $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                    $I->comment('Click Edit button to return to normal flow');
+                    $remoteWebDriver->findElement($editAddressSelector)->click();
+                    
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                    $I->switchToNextTab();
+                    $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                }
+            } catch (\Exception $ex) {
+
+            }
+        }" stepKey="handlePopupSecondScreen2" />
 
         <!--Come back to checkout with default address-->
         <actionGroup ref="AmazonCheckoutActionGroup" stepKey="DefaultAmazonCheckoutActionGroup">

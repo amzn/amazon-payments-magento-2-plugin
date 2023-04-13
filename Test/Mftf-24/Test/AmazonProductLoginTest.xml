@@ -16,6 +16,8 @@
         <!--Add to cart via Amazon Pay button on product page and login-->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin">
+            <argument name="buttonSelector" value="{{AmazonButtonSection.product}}"/>
+        </actionGroup>
     </test>
 </tests>
