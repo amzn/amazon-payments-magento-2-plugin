@@ -19,12 +19,13 @@ use Amazon\Pay\Api\Spc\Response\ShippingMethodInterfaceFactory;
 use Amazon\Pay\Api\Spc\ResponseInterface;
 use Amazon\Pay\Api\Spc\ResponseInterfaceFactory;
 use Amazon\Pay\Logger\Logger;
+use Amazon\Pay\Model\AmazonConfig;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection as SalesRuleCollection;
-use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class Cart
@@ -94,9 +95,20 @@ class Cart
     protected $responseFactory;
 
     /**
+     * @var AmazonConfig
+     */
+    protected $amazonConfig;
+
+    /**
+     * @var DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
      * @var Logger
      */
     protected $logger;
+
 
     /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
@@ -111,6 +123,8 @@ class Cart
      * @param LineItemInterfaceFactory $lineItemFactory
      * @param NameValueInterfaceFactory $nameValueFactory
      * @param ResponseInterfaceFactory $responseFactory
+     * @param AmazonConfig $amazonConfig
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param Logger $logger
      */
     public function __construct(
@@ -126,6 +140,8 @@ class Cart
         LineItemInterfaceFactory $lineItemFactory,
         NameValueInterfaceFactory $nameValueFactory,
         ResponseInterfaceFactory $responseFactory,
+        AmazonConfig $amazonConfig,
+        DataObjectProcessor $dataObjectProcessor,
         Logger $logger
     )
     {
@@ -141,6 +157,8 @@ class Cart
         $this->lineItemFactory = $lineItemFactory;
         $this->nameValueFactory = $nameValueFactory;
         $this->responseFactory = $responseFactory;
+        $this->amazonConfig = $amazonConfig;
+        $this->dataObjectProcessor = $dataObjectProcessor;
         $this->logger = $logger;
     }
 
@@ -200,6 +218,16 @@ class Cart
 
         /** @var ResponseInterface $response */
         $response = $this->responseFactory->create();
+
+        // log response for debugging
+        if ($this->amazonConfig->isLoggingEnabled()) {
+            $this->logger->info(json_encode(
+                $this->dataObjectProcessor->buildOutputDataArray(
+                    $cartDetails,
+                    \Amazon\Pay\Api\Spc\Response\CartDetailsInterface::class)
+                )
+            );
+        }
 
         return $response->setCartDetails($cartDetails);
     }
