@@ -80,6 +80,8 @@ class Coupon implements CouponInterface
             if ($this->checkoutSessionHelper->confirmCheckoutSession($quote, $cartDetails, $checkoutSessionId)) {
                 // Only grabbing the first one, as Magento only accepts one coupon code
                 if (isset($cartDetails['coupons'][0]['coupon_code'])) {
+                    $previousCode = $quote->getCouponCode();
+
                     $couponCode = $cartDetails['coupons'][0]['coupon_code'];
 
                     // Empty out the quote items' rule ids, because of Magento bug
@@ -95,6 +97,15 @@ class Coupon implements CouponInterface
 
                     // Check if the coupon was applied
                     if ($quote->getCouponCode() != $couponCode) {
+                        // When coupon not applied, reapply the previous one
+                        if (!empty($previousCode)) {
+                            // Attempt to set coupon code
+                            $quote->setCouponCode($previousCode);
+
+                            // Save cart
+                            $this->cartRepository->save($quote);
+                        }
+
                         $this->cartHelper->logError(
                             'SPC Coupon: CouponNotApplicable - The coupon '. $couponCode .' could not be applied to the cart. CartId: ' . $cartId . ' - ', $cartDetails
                         );
