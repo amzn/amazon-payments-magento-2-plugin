@@ -16,6 +16,8 @@
         <!--Go to Amazon Pay from the checkout and login-->
         <click selector="{{AmazonButtonSection.checkout}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="AmazonLoginActionGroup">
+            <argument name="buttonSelector" value="{{AmazonButtonSection.checkout}}"/>
+        </actionGroup>
     </test>
 </tests>
