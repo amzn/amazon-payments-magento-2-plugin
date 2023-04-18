@@ -96,8 +96,7 @@ class ShippingMethod
                     if ($refreshedQuote->getShippingAddress()->getShippingMethod() == $shippingMethodCode)  {
                         return self::APPLIED;
                     }
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $this->logger->info('SPC - Failed to apply shipping method '. $shippingMethodCode .' - cartId: '. $quote->getId());
                 }
             }
@@ -118,6 +117,7 @@ class ShippingMethod
      */
     protected function setCheapestMethod($quote)
     {
+        /** @var \Magento\Quote\Api\Data\ShippingMethodInterface[] $shippingMethods */
         $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
         $cheapestMethod = [
             'carrier' => '',
@@ -126,7 +126,7 @@ class ShippingMethod
         ];
 
         foreach ($shippingMethods as $method) {
-            if ($method->getAmount() < $cheapestMethod['amount']) {
+            if ($method->getAvailable() && $method->getAmount() < $cheapestMethod['amount']) {
                 $cheapestMethod['carrier'] = $method->getCarrierCode();
                 $cheapestMethod['code'] = $method->getMethodCode();
                 $cheapestMethod['amount'] = $method->getAmount();
@@ -141,7 +141,11 @@ class ShippingMethod
             $shippingInformation->setShippingCarrierCode($cheapestMethod['carrier'])
                 ->setShippingMethodCode($cheapestMethod['code']);
 
-            $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
+            try {
+                $this->shippingInformationManagement->saveAddressInformation($quote->getId(), $shippingInformation);
+            } catch (\Exception $e) {
+                $this->logger->info('SPC - Failed to set the cheapest shipping method - cartId: '. $quote->getId());
+            }
         }
     }
 }

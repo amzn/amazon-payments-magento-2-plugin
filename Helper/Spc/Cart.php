@@ -318,8 +318,14 @@ class Cart
         $deliveryOptions = [];
 
         if ($quote->getShippingAddress()->validate()) {
+            /** @var \Magento\Quote\Api\Data\ShippingMethodInterface[] $magentoShippingMethods */
             $magentoShippingMethods =
                 $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
+
+            $magentoShippingMethods = array_filter($magentoShippingMethods, function($m) {
+                /** @var \Magento\Quote\Api\Data\ShippingMethodInterface $m */
+                return $m->getAvailable();
+            });
 
             foreach ($magentoShippingMethods as $magentoMethod) {
                 /** @var DeliveryOptionInterface $deliveryOption */
