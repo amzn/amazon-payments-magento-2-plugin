@@ -4,9 +4,6 @@ namespace Amazon\Pay\Model\Spc\Response;
 
 use Amazon\Pay\Api\Spc\Response\AmountInterface;
 use Amazon\Pay\Api\Spc\Response\CartDetailsInterface;
-use Amazon\Pay\Api\Spc\Response\DeliveryOptionInterface;
-use Amazon\Pay\Api\Spc\Response\LineItemInterface;
-use Amazon\Pay\Api\Spc\Response\PromoInterface;
 use Magento\Framework\DataObject;
 
 class CartDetails extends DataObject implements CartDetailsInterface
