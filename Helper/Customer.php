@@ -81,7 +81,8 @@ class Customer
         // Zend classes removed in Magento 2.4.6
         if (class_exists(\Magento\Framework\Validator\ValidatorChain::class, true)) {
             if (! \Magento\Framework\Validator\ValidatorChain::is(
-                $amazonCustomer->getEmail(), \Magento\Framework\Validator\EmailAddress::class
+                $amazonCustomer->getEmail(),
+                \Magento\Framework\Validator\EmailAddress::class
             )) {
                 throw new ValidatorException(__('the email address for your Amazon account is invalid'));
             }
