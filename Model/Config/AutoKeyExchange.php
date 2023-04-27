@@ -18,6 +18,7 @@
 namespace Amazon\Pay\Model\Config;
 
 use Amazon\Pay\Helper\Data as AmazonHelper;
+use Amazon\Pay\Helper\Key as KeyHelper;
 use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
@@ -75,6 +76,11 @@ class AutoKeyExchange
     private $amazonConfig;
 
     /**
+     * @var KeyHelper
+     */
+    private $keyHelper;
+
+    /**
      * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
      */
     private $config;
@@ -115,11 +121,6 @@ class AutoKeyExchange
     private $state;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    private $request;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
@@ -142,6 +143,7 @@ class AutoKeyExchange
     /**
      * @param AmazonHelper $coreHelper
      * @param AmazonConfig $amazonConfig
+     * @param KeyHelper $keyHelper
      * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ProductMetadataInterface $productMeta
@@ -149,7 +151,6 @@ class AutoKeyExchange
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\ResourceConnection $connection
      * @param \Magento\Framework\App\Cache\Manager $cacheManager
-     * @param \Magento\Framework\App\Request\Http $request
      * @param State $state
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param UrlInterface $backendUrl
@@ -161,6 +162,7 @@ class AutoKeyExchange
     public function __construct(
         AmazonHelper $amazonHelper,
         AmazonConfig $amazonConfig,
+        KeyHelper $keyHelper,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMeta,
@@ -168,7 +170,6 @@ class AutoKeyExchange
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\ResourceConnection $connection,
         \Magento\Framework\App\Cache\Manager $cacheManager,
-        \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\State $state,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\UrlInterface $backendUrl,
@@ -177,6 +178,7 @@ class AutoKeyExchange
     ) {
         $this->amazonHelper  = $amazonHelper;
         $this->amazonConfig  = $amazonConfig;
+        $this->keyHelper     = $keyHelper;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -185,46 +187,16 @@ class AutoKeyExchange
         $this->cacheManager  = $cacheManager;
         $this->connection    = $connection;
         $this->state         = $state;
-        $this->request       = $request;
-        $this->storeManager  = $storeManager;
         $this->mathRandom    = $mathRandom;
         $this->logger        = $logger;
 
+        $this->storeManager = $storeManager;
         $this->messageManager = $messageManager;
 
-        // Find store ID and scope
-        $this->_websiteId = $request->getParam('website', 0);
-        $this->_storeId   = $request->getParam('store', 0);
-        $this->_scope     = $request->getParam('scope');
-
-        // Website scope
-        if ($this->_websiteId) {
-            $this->_scope = !$this->_scope ? 'websites' : $this->_scope;
-        } else {
-            $this->_websiteId = $storeManager->getWebsite()->getId();
-        }
-
-        // Store scope
-        if ($this->_storeId) {
-            $this->_websiteId = $this->storeManager->getStore($this->_storeId)->getWebsite()->getId();
-            $this->_scope = !$this->_scope ? 'stores' : $this->_scope;
-        } else {
-            $this->_storeId = $storeManager->getWebsite($this->_websiteId)->getDefaultStore()->getId();
-        }
-
-        // Set scope ID
-        switch ($this->_scope) {
-            case 'websites':
-                $this->_scopeId = $this->_websiteId;
-                break;
-            case 'stores':
-                $this->_scopeId = $this->_storeId;
-                break;
-            default:
-                $this->_scope = 'default';
-                $this->_scopeId = 0;
-                break;
-        }
+        $this->_storeId = $keyHelper->getStoreId();
+        $this->_websiteId = $keyHelper->getWebsiteId();
+        $this->_scope = $keyHelper->getScope();
+        $this->_scopeId = $keyHelper->getScopeId();
     }
 
     /**
@@ -269,20 +241,9 @@ class AutoKeyExchange
     /**
      * Generate and save RSA keys
      */
-    public function generateKeys()
+    protected function generateKeys()
     {
-        // Magento 2.4.4 switches to phpseclib3, use that if it exists
-        if (class_exists(\phpseclib3\Crypt\RSA::class, true)) {
-            $keypair = \phpseclib3\Crypt\RSA::createKey(2048);
-            $keys = [
-                "publickey" => $keypair->getPublicKey()->__toString(),
-                "privatekey" => $keypair->__toString()
-            ];
-        } else {
-            $rsa = new \phpseclib\Crypt\RSA();
-            $keys = $rsa->createKey(2048);
-        }
-
+        $keys = $this->keyHelper->generateKeys();
         $encrypt = $this->encryptor->encrypt($keys['privatekey']);
 
         $this->config
@@ -363,9 +324,9 @@ class AutoKeyExchange
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
     {
         try {
-            $payload = (object) json_decode($payloadJson);
+            $payload = json_decode($payloadJson);
 
-            $publicKeyId = urldecode($payload->publicKeyId);
+            $publicKeyId = urldecode($payload['publicKeyId'] ?? '');
             $decryptedKey = null;
 
             $success = openssl_private_decrypt(

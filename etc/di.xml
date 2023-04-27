@@ -21,6 +21,7 @@
 
     <preference for="Amazon\Pay\Api\CheckoutSessionManagementInterface" type="Amazon\Pay\Model\CheckoutSessionManagement" />
     <preference for="Amazon\Pay\Api\Data\AsyncInterface" type="Amazon\Pay\Model\Async" />
+    <preference for="Amazon\Pay\Api\KeyUpgradeInterface" type="Amazon\Pay\Model\Config\KeyUpgrade" />
 
     <preference for="Amazon\Pay\Domain\AmazonNameInterface" type="Amazon\Pay\Domain\AmazonName" />
     <preference for="Amazon\Pay\Domain\AmazonAddressInterface" type="Amazon\Pay\Domain\AmazonAddress" />

@@ -72,7 +72,12 @@ define([
                     $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
                     $buttonContainer.empty().append($buttonRoot);
                     this._loadButtonConfig(config, function (buttonConfig) {
-                        amazon.Pay.renderButton('#' + $buttonRoot.empty().uniqueId().attr('id'), buttonConfig);
+                         try {
+                            amazon.Pay.renderButton('#' + $buttonRoot.empty().uniqueId().attr('id'), buttonConfig);
+                        } catch (e) {
+                            console.log('Amazon Login button render error: ' + e);
+                            return;
+                        }
                         $('.amazon-sign-in-button-container .field-tooltip').fadeIn();
                         $('.login-with-amazon').click(function() { customerData.invalidate('*'); });
                     });

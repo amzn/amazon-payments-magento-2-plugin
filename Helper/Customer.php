@@ -18,7 +18,6 @@
 namespace Amazon\Pay\Helper;
 
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
-use Magento\Framework\Validator\ValidatorChain;
 
 class Customer
 {
@@ -79,8 +78,18 @@ class Customer
 
     public function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
-        if (! ValidatorChain::is($amazonCustomer->getEmail(), '\Magento\Framework\Validator\EmailAddress')) {
-            throw new ValidatorException(__('the email address for your Amazon account is invalid'));
+        // Zend classes removed in Magento 2.4.6
+        if (class_exists(\Magento\Framework\Validator\ValidatorChain::class, true)) {
+            if (! \Magento\Framework\Validator\ValidatorChain::is(
+                $amazonCustomer->getEmail(),
+                \Magento\Framework\Validator\EmailAddress::class
+            )) {
+                throw new ValidatorException(__('the email address for your Amazon account is invalid'));
+            }
+        } else {
+            if (! \Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
+                throw new ValidatorException(__('the email address for your Amazon account is invalid'));
+            }
         }
 
         $customerData = $this->customerLinkManagement->create($amazonCustomer);
