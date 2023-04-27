@@ -24,17 +24,25 @@ class AutoKeyExchangeAdmin extends \Magento\Framework\View\Element\Template
     private $autokeyexchange;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Amazon\Pay\Model\Config\AutoKeyExchange        $autokeyexchange
-     * @param array                                            $data
+     * @var KeyUpgrade
+     */
+    private $keyUpgrade;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context  $context
+     * @param \Amazon\Pay\Model\Config\AutoKeyExchange          $autokeyexchange
+     * @param \Amazon\Pay\Model\Config\KeyUpgrade               $keyUpgrade
+     * @param array                                             $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\Pay\Model\Config\AutoKeyExchange $autokeyexchange,
+        \Amazon\Pay\Model\Config\KeyUpgrade $keyUpgrade,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->autokeyexchange = $autokeyexchange;
+        $this->keyUpgrade = $keyUpgrade;
     }
 
     /**
@@ -63,5 +71,21 @@ class AutoKeyExchangeAdmin extends \Magento\Framework\View\Element\Template
             $currency = strtoupper($currency);
         }
         return $currency;
+    }
+
+    /**
+     * Whether to display Key Upgrade or AKE
+     */
+    public function canUpgrade()
+    {
+        return $this->keyUpgrade->getMwsKeyForScope();
+    }
+
+    /**
+     * Return Key Upgrade info
+     */
+    public function getKeyUpgradeConfig()
+    {
+        return json_encode($this->keyUpgrade->getJsonAmazonKeyUpgradeConfig());
     }
 }
