@@ -797,6 +797,9 @@ class AmazonConfig
             }
             $restrictions = [];
             foreach ($countries as $country) {
+                if (empty(trim($country))) {
+                    continue;
+                }
                 $restrictions[$country] = new \stdClass();
             }
             $result = [
