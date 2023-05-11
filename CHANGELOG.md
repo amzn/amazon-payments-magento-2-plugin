@@ -1,5 +1,13 @@
 # Change Log
 
+## 5.15.0
+* Added Key Upgrade feature (automatically upgrade CV1 keys to CV2 if updating from legacy module)
+* Fixed backward compatibility with Zend availability
+* Fixed render issue with multiple Amazon Sign In buttons on the same page
+
+## 5.14.3
+* Fixed PHP 7 compatibility
+
 ## 5.14.2
 * Removed usage of Zend libraries and updated requirements for PHP 8.2/Magento 2.4.6 compatibility
 * Fixed issue where coupon usage is not properly decremented when placing order fails

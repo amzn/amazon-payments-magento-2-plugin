@@ -134,3 +134,6 @@ Logging,Logging
 "Valued customer","Valued customer"
 "Unfortunately Amazon Pay declined the payment for your order in our online shop %storeName, please try placing the order again with another payment method.","Unfortunately Amazon Pay declined the payment for your order in our online shop %storeName, please try placing the order again with another payment method."
 "Kind regards","Kind regards"
+"Amazon Pay will not be functional until the legacy keys associated with your configuration are updated. Click the button below to upgrade your credentials.","Amazon Pay will not be functional until the legacy keys associated with your configuration are updated. Click the button below to upgrade your credentials."
+"Upgrade your legacy Amazon Pay credentials","Upgrade your legacy Amazon Pay credentials"
+"Updating your config with new keys, please wait...","Updating your config with new keys, please wait..."
