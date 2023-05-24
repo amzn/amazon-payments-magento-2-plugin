@@ -96,7 +96,7 @@ interface LineItemInterface
     public function setDiscountedPrice(AmountInterface $discountedPrice);
 
     /**
-     * @return \Amazon\Pay\Api\Spc\Response\AmountInterface $priceInclTax
+     * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $priceInclTax
      * @return $this
      */
     public function setPriceInclTax(AmountInterface $priceInclTax);
