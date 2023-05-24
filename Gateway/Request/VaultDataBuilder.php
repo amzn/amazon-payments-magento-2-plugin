@@ -13,8 +13,15 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-?>
-<?php /** @var \Amazon\Pay\Block\Config $block */?>
-<?php if ($block->isLwaEnabled()): ?>
-<div class="amazon-logout-widget" data-mage-init='{"amazonPayLogout": {"onInit": "true"}}'></div>
-<?php endif; ?>
+
+namespace Amazon\Pay\Gateway\Request;
+
+use Magento\Payment\Gateway\Request\BuilderInterface;
+
+class VaultDataBuilder implements BuilderInterface
+{
+    public function build(array $buildSubject): array
+    {
+        return [];
+    }
+}

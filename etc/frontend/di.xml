@@ -24,4 +24,13 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Display AP Vault Token as Stored Payment Method at Checkout -->
+    <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
+        <arguments>
+            <argument name="tokenUiComponentProviders" xsi:type="array">
+                <item name="amazon_payment_v2" xsi:type="object">Amazon\Pay\Model\Subscription\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

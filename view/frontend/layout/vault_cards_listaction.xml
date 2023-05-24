@@ -18,7 +18,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Amazon\Pay\Block\Config" name="amazon_logout" after="customer_logout" template="Amazon_Pay::logout.phtml" />
+            <block class="Magento\Vault\Block\Customer\AccountTokens" name="vault.token.list" cacheable="false" template="Amazon_Pay::token_list.phtml">
+                <block class="Amazon\Pay\Block\TokenRenderer" name="amazon.pay.token.renderer" template="Amazon_Pay::vault_token.phtml"/>
+            </block>
         </referenceContainer>
     </body>
 </page>

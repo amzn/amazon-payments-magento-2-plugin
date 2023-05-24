@@ -12,7 +12,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-define([
+ define([
     'Amazon_Pay/js/model/amazon-pay-config',
     'Amazon_Pay/js/model/storage'
 ], function (amazonConfig, amazonStorage) {
@@ -20,25 +20,11 @@ define([
 
     var mixin = {
         /**
-         * Check if a payment method is applicable with Amazon Pay
-         * @param {String} method
-         * @returns {Boolean}
-         * @private
+         * Clear potential checkout session info after checking out with an AP stored token.
          */
-        _shouldRemovePaymentMethod: function (method) {
-            return amazonStorage.isAmazonCheckout()
-                && !method.includes(amazonConfig.getCode())
-                && method !== 'free';
-        },
-
-        /**
-         * Create renderer.
-         *
-         * @param {Object} paymentMethodData
-         */
-        createRenderer: function (paymentMethodData) {
-            if (!this._shouldRemovePaymentMethod(paymentMethodData.method)) {
-                this._super();
+        afterPlaceOrder: function () {
+            if (this.getCode() === amazonConfig.getVaultCode()) {
+                amazonStorage.clearAmazonCheckout();
             }
         }
     };

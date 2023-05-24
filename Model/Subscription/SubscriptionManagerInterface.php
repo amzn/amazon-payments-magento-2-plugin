@@ -13,8 +13,17 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-?>
-<?php /** @var \Amazon\Pay\Block\Config $block */?>
-<?php if ($block->isLwaEnabled()): ?>
-<div class="amazon-logout-widget" data-mage-init='{"amazonPayLogout": {"onInit": "true"}}'></div>
-<?php endif; ?>
+
+namespace Amazon\Pay\Model\Subscription;
+
+interface SubscriptionManagerInterface
+{
+	public function hasSubscription($quote);
+    public function getFrequencyUnit($item);
+    public function getFrequencyCount($item);
+    public function isSubscription($item);
+    public function cancel($order, $subscription = false);
+    public function getSubscriptionLabel();
+    public function save($subscription);
+    public function getList($searchCriteria);
+}
