@@ -27,6 +27,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection as SalesRuleCollection;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Bundle\Model\Product\Type as BundleProduct;
 
 class Cart
 {
@@ -277,24 +278,18 @@ class Cart
                 }
             }
 
-            // check if item is configurable to send options
-            if ($item->getProductType() == Configurable::TYPE_CODE) {
-                $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+            // check if item is bundle to get the discounts from the child items
+            if ($item->getProductType() == BundleProduct::TYPE_CODE && $item->getHasChildren()) {
+                $bundleChildren = $item->getChildren();
 
-                if (isset($options['attributes_info'])) {
-                    foreach ($options['attributes_info'] as $option) {
-                        /** @var NameValueInterface $nameValue */
-                        $nameValue = $this->nameValueFactory->create();
-                        $nameValue->setName($option['label'])
-                            ->setValue($option['value']);
-                        $additionalAttributes[] = $nameValue;
-                    }
+                foreach ($bundleChildren as $bundleChild) {
+                    $item->setDiscountAmount($item->getDiscountAmount() + $bundleChild->getDiscountAmount());
                 }
             }
 
             // Get item rule details
             $rulesNameOrCode = [];
-            
+
             if ($quote->getAppliedRuleIds() && $item->getAppliedRuleIds()) {
                 $quoteRules = explode(',', $quote->getAppliedRuleIds());
                 $itemRules = explode(',', $item->getAppliedRuleIds());
