@@ -181,6 +181,7 @@ class Cart
         $lineItemsResponse = $this->getLineItemsAndTotalBaseAmount($quote, $currencyCode);
         $lineItems = $lineItemsResponse['line_items'];
         $totalBaseAmount = $lineItemsResponse['total_base_amount'];
+        $totalBaseInclTaxAmount = $lineItemsResponse['total_base_incl_tax_amount'];
         $lineItemsTotalDiscounts = $lineItemsResponse['total_discount_amount'];
 
         // Get delivery options
@@ -211,6 +212,7 @@ class Cart
                 )
             )
             ->setTotalBaseAmount($this->getAmountObject($totalBaseAmount, $currencyCode))
+            ->setTotalBaseInclTaxAmount($this->getAmountObject($totalBaseInclTaxAmount, $currencyCode))
             ->setTotalTaxAmount($this->getAmountObject($quote->getShippingAddress()->getTaxAmount(), $currencyCode))
             ->setTotalChargeAmount($this->getAmountObject($quote->getGrandTotal(), $currencyCode))
             ->setTotalDiscountAmount($this->getAmountObject($totalDiscountAmount, $currencyCode))
@@ -254,6 +256,7 @@ class Cart
     {
         $lineItems = [];
         $totalBaseAmount = 0;
+        $totalBaseInclTaxAmount = 0;
         $totalDiscountAmount = 0;
 
         foreach ($quote->getAllVisibleItems() as $item) {
@@ -294,7 +297,7 @@ class Cart
 
             // Get item rule details
             $rulesNameOrCode = [];
-            
+
             if ($quote->getAppliedRuleIds() && $item->getAppliedRuleIds()) {
                 $quoteRules = explode(',', $quote->getAppliedRuleIds());
                 $itemRules = explode(',', $item->getAppliedRuleIds());
@@ -321,6 +324,7 @@ class Cart
             }
 
             $totalBaseAmount += $item->getRowTotal();
+            $totalBaseInclTaxAmount += $item->getPriceInclTax();
             $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
             $totalDiscountAmount += $item->getDiscountAmount();
 
@@ -330,6 +334,7 @@ class Cart
                 ->setListPrice($this->getAmountObject($item->getRowTotal()/$item->getQty(), $currencyCode))
                 ->setTotalListPrice($this->getAmountObject($item->getRowTotal(), $currencyCode))
                 ->setDiscountedPrice($this->getAmountObject($discountedAmount, $currencyCode))
+                ->setPriceInclTax($this->getAmountObject($item->getPriceInclTax(), $currencyCode))
                 ->setAppliedDiscounts($rulesNameOrCode)
                 ->setAdditionalAttributes($additionalAttributes)
                 ->setStatus(
@@ -345,6 +350,7 @@ class Cart
         return [
             'line_items' => $lineItems,
             'total_base_amount' => $totalBaseAmount,
+            'total_base_incl_tax_amount' => $totalBaseInclTaxAmount,
             'total_discount_amount' => $totalDiscountAmount
         ];
     }
