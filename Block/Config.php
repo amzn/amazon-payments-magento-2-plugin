@@ -41,6 +41,7 @@ class Config extends \Magento\Framework\View\Element\Template
 
     /**
      * Config constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
@@ -58,6 +59,8 @@ class Config extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Package module configuration values for button rendering
+     *
      * @return array
      */
     public function getConfig()
@@ -82,6 +85,8 @@ class Config extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Convert config values to JSON object
+     *
      * @return string
      */
     public function getJsonConfig()
@@ -90,6 +95,8 @@ class Config extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return true if module is enabled
+     *
      * @return bool
      */
     public function isEnabled()
@@ -98,6 +105,8 @@ class Config extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return true if Amazon Sign in is enabled
+     *
      * @return bool
      */
     public function isLwaEnabled()

@@ -19,12 +19,27 @@ use Psr\Log\LoggerInterface;
 
 class ExceptionLogger
 {
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
+    /**
+     * ExceptionLogger constructor
+     *
+     * @param LoggerInterface $logger
+     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
+
+    /**
+     * Add an exception log
+     *
+     * @param \Exception $e
+     * @return void
+     */
     public function logException(\Exception $e)
     {
         $message = (string) $e;

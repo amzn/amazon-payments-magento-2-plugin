@@ -26,12 +26,19 @@ class LegacyPaymentHandler
      */
     private $transactionRepository;
 
+    /**
+     * LegacyPaymentHandler constructor
+     *
+     * @param TransactionRepository $transactionRepository
+     */
     public function __construct(TransactionRepository $transactionRepository)
     {
         $this->transactionRepository = $transactionRepository;
     }
 
     /**
+     * Update transaction IDs if necessary
+     *
      * @param Order $subject
      * @param Payment $result
      * @return Payment

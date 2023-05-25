@@ -32,6 +32,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
 
     /**
      * Async constructor.
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
@@ -59,7 +60,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function _construct()
     {
@@ -67,7 +68,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getOrderId()
     {
@@ -75,7 +76,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setOrderId($orderId)
     {
@@ -83,7 +84,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function isPending()
     {
@@ -91,7 +92,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setIsPending($isPending)
     {
@@ -99,7 +100,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getPendingAction()
     {
@@ -107,7 +108,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setPendingAction($pendingAction)
     {
@@ -115,7 +116,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getPendingId()
     {
@@ -123,7 +124,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setPendingId($pendingId)
     {
@@ -131,7 +132,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -139,7 +140,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getCreatedAt()
     {
@@ -147,7 +148,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -155,7 +156,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getUpdatedAt()
     {
@@ -163,7 +164,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeSave()
     {
@@ -178,7 +179,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setLockOnLoad($lockOnLoad)
     {
@@ -188,7 +189,7 @@ class Async extends AbstractModel implements \Amazon\Pay\Api\Data\AsyncInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function hasLockOnLoad()
     {

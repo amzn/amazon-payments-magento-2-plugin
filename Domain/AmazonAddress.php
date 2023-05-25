@@ -20,7 +20,7 @@ namespace Amazon\Pay\Domain;
 class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddressInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFirstName()
     {
@@ -28,7 +28,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLastName()
     {
@@ -36,7 +36,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLines()
     {
@@ -44,7 +44,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLine($lineNumber)
     {
@@ -55,7 +55,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function shiftLines($times = 1)
     {
@@ -75,7 +75,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCity()
     {
@@ -83,7 +83,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getState()
     {
@@ -91,7 +91,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPostCode()
     {
@@ -99,7 +99,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCountryCode()
     {
@@ -107,7 +107,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getTelephone()
     {
@@ -115,7 +115,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCompany()
     {
@@ -123,7 +123,7 @@ class AmazonAddress extends \Magento\Framework\DataObject implements AmazonAddre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCompany($company)
     {

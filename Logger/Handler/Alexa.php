@@ -23,7 +23,7 @@ use Magento\Framework\Logger\Handler\Base;
  */
 class Alexa extends Base
 {
-    const FILENAME = '/var/log/paywithamazon_delivery_notifications.log';
+    public const FILENAME = '/var/log/paywithamazon_delivery_notifications.log';
 
     /**
      * @var string

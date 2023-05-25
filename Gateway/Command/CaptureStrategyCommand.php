@@ -31,12 +31,12 @@ class CaptureStrategyCommand implements CommandInterface
 {
 
     // Auth & capture
-    const SALE = 'sale';
+    public const SALE = 'sale';
 
     // Capture
-    const CAPTURE = 'settlement';
+    public const CAPTURE = 'settlement';
 
-    const PARTIAL_CAPTURE = 'partial_capture';
+    public const PARTIAL_CAPTURE = 'partial_capture';
 
     /**
      * @var CommandPoolInterface
@@ -118,8 +118,10 @@ class CaptureStrategyCommand implements CommandInterface
     }
 
     /**
-     * Get execution command name - if there's an authorization, this is just a settlement, if not, could be
-     * a partial capture situation where we need to completely auth and capture again against the same order
+     * Get execution command name
+     *
+     * If there's an authorization, this is just a settlement. If not, could be a partial capture
+     * situation where we need to completely auth and capture again against the same order
      *
      * @param  OrderPaymentInterface $payment
      * @return string

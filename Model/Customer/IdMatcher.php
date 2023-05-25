@@ -33,7 +33,9 @@ class IdMatcher implements MatcherInterface
      */
     private $searchCriteriaBuilder;
 
-    /** @var StoreManagerInterface  */
+    /**
+     * @var StoreManagerInterface
+     */
     private $storeManager;
 
     /**
@@ -54,7 +56,7 @@ class IdMatcher implements MatcherInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function match(AmazonCustomerInterface $amazonCustomer)
     {

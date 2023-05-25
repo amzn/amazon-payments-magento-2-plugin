@@ -20,7 +20,7 @@ namespace Amazon\Pay\Domain;
 class AmazonName extends \Magento\Framework\DataObject implements AmazonNameInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFirstName()
     {
@@ -28,7 +28,7 @@ class AmazonName extends \Magento\Framework\DataObject implements AmazonNameInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLastName()
     {

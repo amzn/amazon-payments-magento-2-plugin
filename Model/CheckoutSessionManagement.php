@@ -240,6 +240,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
     /**
      * CheckoutSessionManagement constructor.
+     *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
@@ -351,7 +352,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param mixed $amazonCheckoutSessionId
+     * Get Amazon checkout session info from cache or API call
+     *
+     * @param mixed $amazonSessionId
      * @return mixed
      */
     protected function getAmazonSession($amazonSessionId)
@@ -366,6 +369,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
+     * True if module is enabled, active, and cart contains no restricted products
+     *
+     * @param CartInterface $quote
      * @return bool
      */
     protected function canCheckoutWithAmazon($quote)
@@ -375,11 +381,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
+     * Check if quote ID is associated with another order
+     *
      * In some particular cases an error occurs in Magento where an order with the same quoteId
      * is duplicated in a very short time difference.
      * This method checks if there is already an order created for that particular Quote.
      * https://github.com/magento/magento2/issues/13952
-     * @param Quote $quote
+     *
+     * @param CartInterface $quote
      * @return bool
      */
     protected function canSubmitQuote($quote)
@@ -397,7 +406,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param mixed $amazonCheckoutSessionId
+     * Get Amazon address data from checkout session
+     *
+     * @param mixed $amazonSessionId
      * @param bool $isShippingAddress
      * @param mixed $addressDataExtractor
      * @return mixed
@@ -427,6 +438,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
+     * Format Amazon address data as Magento address
+     *
      * @param array $address
      * @param boolean $isShippingAddress
      * @return array
@@ -456,7 +469,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig($cartId = null)
     {
@@ -500,7 +513,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getShippingAddress($amazonSessionId)
     {
@@ -512,7 +525,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getBillingAddress($amazonSessionId)
     {
@@ -524,7 +537,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPaymentDescriptor($amazonSessionId)
     {
@@ -533,7 +546,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function updateCheckoutSession($amazonCheckoutSessionId, $cartId = null)
     {
@@ -562,7 +575,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * Load transaction.
      *
-     * @param $transactionId
+     * @param mixed $transactionId
      * @param \Magento\Sales\Api\Data\TransactionInterface $type
      * @return mixed
      */
@@ -583,12 +596,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
+     * Update transaction ID associated with payment
+     *
      * Swaps the checkoutSessionId that was originally stored on the sales_payment_transaction record with the
      * real payment charge (transaction) id. Also updates the payment's last transaction id to match.
      *
-     * @param $chargeId
-     * @param $payment
-     * @param $transaction
+     * @param string $chargeId
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface $payment
+     * @param mixed $transaction
      * @return void
      */
     private function updateTransactionId($chargeId, $payment, $transaction)
@@ -642,8 +657,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * Add capture comment to order
      *
      * @param Payment $payment
-     * @param $quote
-     * @param $chargeId
+     * @param CartInterface $quote
+     * @param mixed $chargeId
      */
     protected function addCaptureComment($payment, $quote, $chargeId)
     {
@@ -664,7 +679,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * Cancel order
      *
-     * @param $order
+     * @param \Magento\Sales\Model\Order $order
+     * @return void
      */
     private function cancelOrder($order,$quote)
     {
@@ -698,7 +714,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null)
     {
@@ -880,7 +896,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param $amazonSession
+     * Get display message for failed payment
+     *
+     * @param mixed $amazonSession
      * @return \Magento\Framework\Phrase|mixed
      */
     protected function getCanceledMessage($amazonSession)
@@ -928,6 +946,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
+     * Sign in customer to Magento store via Amazon Sign In
+     *
      * @param mixed $buyerToken
      * @return mixed
      */
@@ -984,6 +1004,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         return [$result];
     }
 
+    /**
+     * Match amazon customer data to existing store customer or create new account
+     *
+     * @param AmazonCustomerInterface $amazonCustomer
+     * @return \Amazon\Pay\Api\Data\AmazonCustomerInterface|\Magento\Customer\Api\Data\CustomerInterface|null
+     */
     protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
     {
         $customerData = $this->matcher->match($amazonCustomer);
@@ -999,11 +1025,23 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         return $customerData;
     }
 
+    /**
+     * Get customer from Amazon buyerInfo
+     *
+     * @param mixed $buyerInfo
+     * @return \Amazon\Pay\Domain\AmazonCustomer|bool
+     */
     protected function getAmazonCustomer($buyerInfo)
     {
         return $this->customerHelper->getAmazonCustomer($buyerInfo);
     }
 
+    /**
+     * Get sign in errors related to empty buyer ID
+     *
+     * @param string $buyerToken
+     * @return array
+     */
     protected function getBuyerIdError($buyerToken)
     {
         $this->logger->error('Amazon buyerId is empty. Token: ' . $buyerToken);
@@ -1013,6 +1051,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         ];
     }
 
+    /**
+     * Get general errors associated with sign in failure
+     *
+     * @param \Exception $e
+     * @return array
+     */
     protected function getLoginError($e)
     {
         $this->logger->error('An error occurred while matching your Amazon account with ' .
@@ -1024,6 +1068,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
+     * Link an amazon_customer to a Magento customer
+     *
      * @param mixed $buyerToken
      * @param string $password
      * @return mixed

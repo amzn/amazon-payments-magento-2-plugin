@@ -18,6 +18,8 @@ class SetCustomerLink implements ResolverInterface
     private $checkoutSessionManagementModel;
 
     /**
+     * SetCustomerLink constructor
+     *
      * @param CheckoutSessionManagement $checkoutSessionManagementModel
      */
     public function __construct(
@@ -27,8 +29,10 @@ class SetCustomerLink implements ResolverInterface
     }
 
     /**
+     * Set customer link through CheckoutSessionManagement if arguments were provided
+     *
      * @param Field $field
-     * @param $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args

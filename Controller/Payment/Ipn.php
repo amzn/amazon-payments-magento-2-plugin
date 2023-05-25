@@ -57,6 +57,7 @@ class Ipn extends \Magento\Framework\App\Action\Action
 
     /**
      * Ipn constructor.
+     *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory
@@ -84,6 +85,8 @@ class Ipn extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Handle incoming IPN messages
+     *
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      * @throws \Exception
      */
@@ -137,7 +140,7 @@ class Ipn extends \Magento\Framework\App\Action\Action
     /**
      * Complete successful async pending action
      *
-     * @param $asyncId
+     * @param string $asyncId
      */
     protected function completePending($asyncId)
     {

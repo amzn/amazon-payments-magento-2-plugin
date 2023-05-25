@@ -53,7 +53,7 @@ interface CustomerLinkRepositoryInterface
     /**
      * Delete customer link.
      *
-     * @param \Amazon\Pay\Api\Data\CustomerLinkInterface Customer link interface.
+     * @param \Amazon\Pay\Api\Data\CustomerLinkInterface $customerLink
      * @return bool
      * @throws CouldNotDeleteException
      */
@@ -72,7 +72,7 @@ interface CustomerLinkRepositoryInterface
     /**
      * Save customer link
      *
-     * @param \Amazon\Pay\Api\Data\CustomerLinkInterface Customer link interface.
+     * @param \Amazon\Pay\Api\Data\CustomerLinkInterface $customerLink
      * @return \Amazon\Pay\Api\Data\CustomerLinkInterface
      * @throws CouldNotSaveException
      */

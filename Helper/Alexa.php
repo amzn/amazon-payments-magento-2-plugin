@@ -41,6 +41,8 @@ class Alexa
     private $serializer;
 
     /**
+     * Alexa constructor
+     *
      * @param Dir $moduleDir
      * @param \Magento\Framework\File\Csv $csv
      * @param \Magento\Framework\Config\CacheInterface $cache
@@ -59,6 +61,8 @@ class Alexa
     }
 
     /**
+     * Get list of delivery carriers from cache or CSV file
+     *
      * @return array
      */
     public function getDeliveryCarriers()
@@ -81,6 +85,8 @@ class Alexa
     }
 
     /**
+     * Load list of delivery carriers from CSV file
+     *
      * @return array
      */
     protected function fetchDeliveryCarriers()

@@ -26,6 +26,7 @@ class AddAmazonButton implements \Magento\Framework\Event\ObserverInterface
 
     /**
      * AddAmazonButton constructor.
+     *
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      */
     public function __construct(
@@ -34,6 +35,12 @@ class AddAmazonButton implements \Magento\Framework\Event\ObserverInterface
         $this->amazonConfig = $amazonConfig;
     }
 
+    /**
+     * Add AP button to shortcut buttons container
+     *
+     * @param Observer $observer
+     * @return void
+     */
     public function execute(Observer $observer)
     {
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */

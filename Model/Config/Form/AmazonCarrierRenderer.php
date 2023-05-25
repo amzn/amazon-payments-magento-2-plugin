@@ -29,6 +29,8 @@ class AmazonCarrierRenderer extends Select
     private $alexaHelper;
 
     /**
+     * AmazonCarrierRenderer constructor
+     *
      * @param AlexaHelper $alexaHelper
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
@@ -56,7 +58,7 @@ class AmazonCarrierRenderer extends Select
     /**
      * Set "id" for <select> element
      *
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setInputId($value)
@@ -77,6 +79,11 @@ class AmazonCarrierRenderer extends Select
         return parent::_toHtml();
     }
 
+    /**
+     * Get options for dropdown from available delivery carriers
+     *
+     * @return array
+     */
     private function getSourceOptions(): array
     {
         $options = [];
