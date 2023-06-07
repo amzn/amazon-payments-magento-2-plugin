@@ -84,19 +84,23 @@ class PerformKeyUpgrade implements DataPatchInterface
                 'scope_id' => $scopeId,
                 'value' => $accessKey
             ]) {
-            $publicKeyId = $this->keyUpgrade->getPublicKeyId(
-                $scopeType,
-                $scopeId,
-                $accessKey
-            );
 
-            if (!empty($publicKeyId)) {
-                $this->keyUpgrade->updateKeysInConfig(
-                    $publicKeyId,
+            if ($accessKey) {
+                $publicKeyId = $this->keyUpgrade->getPublicKeyId(
                     $scopeType,
-                    $scopeId
+                    $scopeId,
+                    $accessKey
                 );
+
+                if (!empty($publicKeyId)) {
+                    $this->keyUpgrade->updateKeysInConfig(
+                        $publicKeyId,
+                        $scopeType,
+                        $scopeId
+                    );
+                }
             }
+
         }
 
         // Upgrade all other configs
