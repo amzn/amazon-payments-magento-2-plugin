@@ -35,6 +35,14 @@ class VaultHelper
         $this->helper = $helper;
     }
 
+    /**
+     * Get token payment descriptor when payment method is used
+     *
+     * @param Vault $vault
+     * @param callable $proceed
+     * @param PaymentTokenInterface $card
+     * @return string
+     */
     public function aroundGetCardLabel(
         Vault $vault,
         callable $proceed,

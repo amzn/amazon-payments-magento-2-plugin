@@ -63,6 +63,8 @@ class TokenRenderer extends AbstractTokenRenderer
     }
 
     /**
+     * Get Amazon icon url
+     *
      * @return string
      */
     public function getIconUrl()
@@ -71,6 +73,8 @@ class TokenRenderer extends AbstractTokenRenderer
     }
 
     /**
+     * Get Amazon icon height
+     *
      * @return int
      */
     public function getIconHeight()
@@ -79,6 +83,8 @@ class TokenRenderer extends AbstractTokenRenderer
     }
 
     /**
+     * Get Amazon icon width
+     *
      * @return int
      */
     public function getIconWidth()
@@ -86,6 +92,11 @@ class TokenRenderer extends AbstractTokenRenderer
         return $this->amazonConfig->getAmazonIcon()['width'];
     }
 
+    /**
+     * Get payment descriptor
+     *
+     * @return string
+     */
     public function getPaymentDescriptor()
     {
         return $this->helper->getTokenPaymentDescriptor($this->getToken());

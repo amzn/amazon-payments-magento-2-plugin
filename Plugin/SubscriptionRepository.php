@@ -40,6 +40,14 @@ class SubscriptionRepository
      */
     protected $searchCriteriaBuilder;
 
+    /**
+     * Plugin constructor
+     *
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement
+     * @param \Amazon\Pay\Helper\SubscriptionHelper $helper
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement,
@@ -53,6 +61,12 @@ class SubscriptionRepository
     }
 
     /**
+     * Cancel token for cancelled subscriptions
+     *
+     * @param ParadoxLabs\Subscriptions\Model\SubscriptionRepository $SubscriptionRepository
+     * @param \ParadoxLabs\Subscriptions\Api\Data\SubscriptionInterface $subscription
+     * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave($SubscriptionRepository, $subscription)

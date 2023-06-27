@@ -40,11 +40,12 @@ class Config extends \Magento\Framework\View\Element\Template
     private $subscriptionManager;
 
     /**
-     * Config constructor.
+     * Config constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

@@ -56,6 +56,14 @@ class PaymentTokenRepository
         $this->subscriptionManager = $subscriptionManager;
     }
 
+    /**
+     * Handle subscription canceled due to payment token deletion
+     *
+     * @param TokenRepository $tokenRepository
+     * @param callable $proceed
+     * @param PaymentTokenInterface $paymentToken
+     * @return true
+     */
     public function aroundDelete(
         TokenRepository $tokenRepository,
         callable $proceed,
