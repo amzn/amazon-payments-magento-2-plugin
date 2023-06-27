@@ -682,7 +682,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Sales\Model\Order $order
      * @return void
      */
-    private function cancelOrder($order,$quote)
+    private function cancelOrder($order, $quote)
     {
         // set order as cancelled
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
@@ -786,7 +786,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
             if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)) {
                 // Something went wrong, but the order has already been placed, so cancelling it
-                $this->cancelOrder($order,$quote);
+                $this->cancelOrder($order, $quote);
 
                 $session = $this->amazonAdapter->getCheckoutSession(
                     $quote->getStoreId(),
@@ -887,7 +887,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             // cancel order
             if (isset($order)) {
-                $this->cancelOrder($order,$quote);
+                $this->cancelOrder($order, $quote);
             }
 
             throw $e;

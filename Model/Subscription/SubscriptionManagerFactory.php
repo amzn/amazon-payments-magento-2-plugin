@@ -51,11 +51,11 @@ class SubscriptionManagerFactory
     public function initialize(array $data = [])
     {
         $manager = false;
-        foreach($this->subscriptionManagerPool as $vendor => $subscriptionManager) {
+        foreach ($this->subscriptionManagerPool as $vendor => $subscriptionManager) {
             if ($vendor != 'default') {
                 if ($this->moduleManager->isEnabled($subscriptionManager['module_name'])) {
                     $manager = $this->objectManager->create($subscriptionManager['module_manager'], $data);
-                    foreach($subscriptionManager['module_classes'] as $name => $instance) {
+                    foreach ($subscriptionManager['module_classes'] as $name => $instance) {
                         $manager->{$name} =  $this->objectManager->create($instance);
                     }
                 }

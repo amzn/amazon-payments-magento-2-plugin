@@ -19,7 +19,7 @@ namespace Amazon\Pay\Model\Subscription;
 class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
 {
 
-	/**
+    /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -54,7 +54,7 @@ class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
     }
 
     public function cancel($order, $subscription = false)
-	{
+    {
         $this->searchCriteriaBuilder->addFilter('keyword_fulltext', '%' . $order->getIncrementId(), 'like');
         $subscriptions = $this->subscriptionRepository->getList($this->searchCriteriaBuilder->create())->getItems();
         if (!empty($subscriptions)) {
@@ -62,7 +62,7 @@ class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
             $subscription->setStatus('canceled');
             $this->subscriptionRepository->save($subscription);
         }
-	}
+    }
 
     public function getSubscriptionLabel()
     {

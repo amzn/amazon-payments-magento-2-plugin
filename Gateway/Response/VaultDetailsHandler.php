@@ -173,7 +173,7 @@ class VaultDetailsHandler implements HandlerInterface
 
     private function getExpirationDate(): string
     {
-        $expDate = new DateTime('NOW',new DateTimeZone('UTC'));
+        $expDate = new DateTime('NOW', new DateTimeZone('UTC'));
         $expDate->add(new DateInterval('P1Y'));
         return $expDate->format('Y-m-d 00:00:00');
     }

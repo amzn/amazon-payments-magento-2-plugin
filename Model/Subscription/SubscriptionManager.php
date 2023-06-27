@@ -56,9 +56,9 @@ class SubscriptionManager
     }
 
     public function cancel($order, $subscription = false)
-	{
+    {
         return $this->manager->cancel($order, $subscription);
-	}
+    }
 
     public function getSubscriptionLabel()
     {

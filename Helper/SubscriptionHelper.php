@@ -172,12 +172,14 @@ class SubscriptionHelper
 
             $activeSubscriptions = $this->subscriptionManager->getList($searchCriteria)
                 ->getItems();
-            $subscriptionsPaidWithToken = array_filter($activeSubscriptions,
+            $subscriptionsPaidWithToken = array_filter(
+                $activeSubscriptions,
                 function ($subscription) use ($publicHash) {
                     return $subscription->getQuote()
                         ->getPayment()
                         ->getAdditionalInformation('public_hash') === $publicHash;
-                });
+                }
+            );
 
             return $subscriptionsPaidWithToken;
         }

@@ -91,7 +91,6 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
         CartRepositoryInterface $quoteRepository,
         AsyncCharge $asyncCharge,
         AmazonConfig $amazonConfig
-
     ) {
         $this->subjectReader = $subjectReader;
         $this->asyncManagement = $asyncManagement;
@@ -120,7 +119,8 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
             $quoteId = $order->getQuoteId();
             $quote = $this->quoteRepository->get($quoteId);
 
-            $transactionId = $response['chargeId'];;
+            $transactionId = $response['chargeId'];
+
             $payment->setTransactionId($transactionId);
 
             $chargeState = $response['statusDetails']['state'];

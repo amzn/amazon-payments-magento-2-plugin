@@ -44,7 +44,7 @@ class AuthorizeSaleVaultClient extends AbstractClient
     protected function process(array $data)
     {
         $captureNow = ($this->amazonConfig->getPaymentAction() == PaymentAction::AUTHORIZE_AND_CAPTURE);
-        $response = $this->adapter->authorize($data,$captureNow);
+        $response = $this->adapter->authorize($data, $captureNow);
         return $response;
     }
 }
