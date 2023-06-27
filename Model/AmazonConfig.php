@@ -85,7 +85,7 @@ class AmazonConfig
     private $ccConfig;
 
     /**
-     * AmazonConfig constructor.
+     * AmazonConfig constructor
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -94,8 +94,7 @@ class AmazonConfig
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
-     * @param Magento\Payment\Model\CcConfig $ccConfig
-     * @param \Amazon\Pay\Model\Subscription\SubscriptionFactory $subscriptionFactory
+     * @param \Magento\Payment\Model\CcConfig $ccConfig
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -249,7 +248,7 @@ class AmazonConfig
     {
         if (empty($this->icon)) {
             $asset = $this->ccConfig->createAsset('Amazon_Pay::images/logo/Black-L.png');
-            list($width, $height) = getimagesize($asset->getSourceFile());
+            list($width, $height) = getimagesizefromstring($asset->getSourceFile());
             $this->icon = [
                 'url' => $asset->getUrl(),
                 'width' => $width,
@@ -898,7 +897,7 @@ class AmazonConfig
             $scope,
             $scopeCode
         );
-       
+
         if ($configValues) {
             $configValues = $this->serializer->unserialize($configValues);
             if (count($configValues) > 0) {
@@ -1019,8 +1018,10 @@ class AmazonConfig
     }
 
     /**
+     * Check if vault is enabled for scope
+     *
      * @param string $scope
-     * @param null $scopeCode
+     * @param int|null|mixed $scopeCode
      * @return bool
      */
     public function isVaultEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)

@@ -32,6 +32,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerRegistry;
@@ -679,7 +680,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * Cancel order
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param OrderInterface $order
+     * @param CartInterface $quote
      * @return void
      */
     private function cancelOrder($order, $quote)
@@ -868,7 +870,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             );
 
             $this->updateTransactionId($chargeId, $payment, $transaction);
-            $this->updateVaultToken($amazonSessionId, $amazonCompleteCheckoutResult['chargePermissionId'], $quote, $order);
+            $this->updateVaultToken(
+                $amazonSessionId,
+                $amazonCompleteCheckoutResult['chargePermissionId'],
+                $quote,
+                $order
+            );
 
         } catch (\Exception $e) {
             $session = $this->amazonAdapter->getCheckoutSession(
@@ -914,16 +921,31 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         return $amazonSession['statusDetails']['reasonDescription'];
     }
 
+    /**
+     * Update vault token
+     *
+     * @param string $amazonSessionId
+     * @param string $chargePermissionId
+     * @param CartInterface $quote
+     * @param OrderInterface $order
+     * @return void
+     */
     protected function updateVaultToken($amazonSessionId, $chargePermissionId, $quote, $order)
     {
         if ($this->amazonConfig->isVaultEnabled() && $this->subscriptionManager->hasSubscription($quote)) {
-            $token = $this->paymentTokenManagement->getByGatewayToken($amazonSessionId, Config::CODE, $order->getCustomerId());
+            $token = $this->paymentTokenManagement->getByGatewayToken(
+                $amazonSessionId,
+                Config::CODE,
+                $order->getCustomerId()
+            );
             if ($token) {
                 $token->setGatewayToken($chargePermissionId);
                 $token->setIsVisible(true);
                 $this->paymentTokenRepository->save($token);
             } else {
-                $this->logger->debug("Unable to update vault token. amazonSessionId: " . $amazonSessionId . ' Customer Id: ' . $order->getCustomerId());
+                $message = "Unable to update vault token. amazonSessionId: " . $amazonSessionId
+                    . ' Customer Id: ' . $order->getCustomerId();
+                $this->logger->debug($message);
             }
         }
     }
