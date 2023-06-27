@@ -16,6 +16,12 @@
 
 namespace Amazon\Pay\Model\Subscription;
 
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use ParadoxLabs\Subscriptions\Api\Data\SubscriptionInterface;
+
 class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
 {
 
@@ -25,6 +31,8 @@ class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
     private $searchCriteriaBuilder;
 
     /**
+     * ParadoxLabsSubscriptionManager constructor
+     *
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
@@ -33,26 +41,57 @@ class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
+    /**
+     * Check quote items for subscription
+     *
+     * @param CartInterface $quote
+     * @return bool
+     */
     public function hasSubscription($quote)
     {
         return $this->quoteManager->quoteContainsSubscription($quote);
     }
 
+    /**
+     * Get frequency unit
+     *
+     * @param CartItemInterface $item
+     * @return mixed
+     */
     public function getFrequencyUnit($item)
     {
         return $this->itemManager->getFrequencyUnit($item);
     }
 
+    /**
+     * Get frequency count
+     *
+     * @param CartItemInterface $item
+     * @return mixed
+     */
     public function getFrequencyCount($item)
     {
         return $this->itemManager->getFrequencyCount($item);
     }
 
+    /**
+     * Is cart item a subscription
+     *
+     * @param CartItemInterface $item
+     * @return bool
+     */
     public function isSubscription($item)
     {
         return $this->itemManager->isSubscription($item);
     }
 
+    /**
+     * Cancel order subscription
+     *
+     * @param OrderInterface $order
+     * @param SubscriptionInterface $subscription
+     * @return void
+     */
     public function cancel($order, $subscription = false)
     {
         $this->searchCriteriaBuilder->addFilter('keyword_fulltext', '%' . $order->getIncrementId(), 'like');
@@ -64,16 +103,33 @@ class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
         }
     }
 
+    /**
+     * Get subscription label
+     *
+     * @return mixed
+     */
     public function getSubscriptionLabel()
     {
         return $this->subscriptionConfig->getSubscriptionLabel();
     }
 
+    /**
+     * Save subscription
+     *
+     * @param SubscriptionInterface $subscription
+     * @return mixed
+     */
     public function save($subscription)
     {
         return $this->subscriptionRepository->save($subscription);
     }
 
+    /**
+     * Get subscription list
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return mixed
+     */
     public function getList($searchCriteria)
     {
         return $this->subscriptionRepository->getList($searchCriteria);

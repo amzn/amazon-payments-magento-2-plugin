@@ -34,11 +34,21 @@ class TokenConfigProvider implements ConfigProviderInterface
         $this->amazonConfig = $amazonConfig;
     }
 
+    /**
+     * Get Amazon config
+     *
+     * @return array
+     */
     public function getIcon()
     {
         return $this->amazonConfig->getAmazonIcon();
     }
 
+    /**
+     * Get config
+     *
+     * @return array
+     */
     public function getConfig()
     {
         return [];

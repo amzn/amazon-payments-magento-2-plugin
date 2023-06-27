@@ -16,6 +16,12 @@
 
 namespace Amazon\Pay\Model\Subscription;
 
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use ParadoxLabs\Subscriptions\Api\Data\SubscriptionInterface;
+
 class SubscriptionManager
 {
     /**
@@ -31,11 +37,23 @@ class SubscriptionManager
         $this->manager = $subscriptionFactory->initialize();
     }
 
+    /**
+     * Check if any of the quote items is a subscription
+     *
+     * @param CartInterface $quote
+     * @return bool
+     */
     public function hasSubscription($quote)
     {
         return $this->manager->hasSubscription($quote);
     }
 
+    /**
+     * Get frequency unit
+     *
+     * @param CartItemInterface $item
+     * @return mixed
+     */
     public function getFrequencyUnit($item)
     {
         $unit = $this->manager->getFrequencyUnit($item);
@@ -45,31 +63,67 @@ class SubscriptionManager
         return $unit;
     }
 
+    /**
+     * Get frequency count
+     *
+     * @param CartItemInterface $item
+     * @return mixed
+     */
     public function getFrequencyCount($item)
     {
         return $this->manager->getFrequencyCount($item);
     }
 
+    /**
+     * Is quote item a subscription
+     *
+     * @param CartItemInterface $item
+     * @return bool
+     */
     public function isSubscription($item)
     {
         return $this->manager->isSubscription($item);
     }
 
+    /**
+     * Cancel an order subscription
+     *
+     * @param OrderInterface $order
+     * @param SubscriptionInterface $subscription
+     * @return mixed
+     */
     public function cancel($order, $subscription = false)
     {
         return $this->manager->cancel($order, $subscription);
     }
 
+    /**
+     * Get subscription label
+     *
+     * @return mixed
+     */
     public function getSubscriptionLabel()
     {
         return $this->manager->getSubscriptionLabel();
     }
 
+    /**
+     * Save subscription
+     *
+     * @param SubscriptionInterface $subscription
+     * @return mixed
+     */
     public function save($subscription)
     {
         return $this->manager->save($subscription);
     }
 
+    /**
+     * Get subscription list
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return mixed
+     */
     public function getList($searchCriteria)
     {
         return $this->manager->getList($searchCriteria);

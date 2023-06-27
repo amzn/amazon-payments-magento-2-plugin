@@ -16,7 +16,6 @@
 
 namespace Amazon\Pay\Model\Subscription;
 
-use Magento\AsyncOrder\Model\CartRepository;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
@@ -53,7 +52,7 @@ interface SubscriptionManagerInterface
      * Is cart item a subscription
      *
      * @param CartItemInterface $item
-     * @return mixed
+     * @return bool
      */
     public function isSubscription($item);
 

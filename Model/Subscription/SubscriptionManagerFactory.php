@@ -34,6 +34,8 @@ class SubscriptionManagerFactory
     protected $subscriptionManagerPool;
 
     /**
+     * SubscriptionManagerFactory constructor
+     *
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $subscriptionManagerPool
@@ -48,6 +50,12 @@ class SubscriptionManagerFactory
         $this->subscriptionManagerPool = $subscriptionManagerPool;
     }
 
+    /**
+     * Initialize manager
+     *
+     * @param array $data
+     * @return mixed
+     */
     public function initialize(array $data = [])
     {
         $manager = false;
