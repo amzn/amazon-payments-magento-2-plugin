@@ -19,41 +19,65 @@ namespace Amazon\Pay\Model\Subscription;
 class AmazonSubscriptionManager implements SubscriptionManagerInterface
 {
 
+    /**
+     * @inheritdoc
+     */
     public function hasSubscription($quote)
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFrequencyUnit($item)
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFrequencyCount($item)
     {
         return 0;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function isSubscription($item)
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function cancel($order, $subscription = false)
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getSubscriptionLabel()
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function save($subscription)
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getList($searchCriteria)
     {
         return false;

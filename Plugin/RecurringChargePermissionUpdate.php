@@ -51,6 +51,15 @@ class RecurringChargePermissionUpdate
      */
     private $subscriptionHelper;
 
+    /**
+     * Plugin constructor
+     *
+     * @param PaymentTokenManagementInterface $paymentTokenManagement
+     * @param CartRepositoryInterface $cartRepository
+     * @param AmazonPayAdapter $amazonAdapter
+     * @param SubscriptionManager $subscriptionManager
+     * @param SubscriptionHelper $subscriptionHelper
+     */
     public function __construct(
         PaymentTokenManagementInterface $paymentTokenManagement,
         CartRepositoryInterface $cartRepository,
@@ -66,11 +75,10 @@ class RecurringChargePermissionUpdate
     }
 
     /**
-     * Check to see if a stored AP token needs to have its recurring metadata updated
-     * before using it for another recurring charge.
+     * Check to see if a stored AP token needs recurring metadata updated before using it for another recurring charge.
      *
      * @param PaymentInformationManagement $subject
-     * @param  $cartId
+     * @param int $cartId
      * @param PaymentInterface $paymentMethod
      * @param AddressInterface|null $billingAddress
      * @return array

@@ -17,6 +17,7 @@
 namespace Amazon\Pay\Model\Adapter;
 
 use Amazon\Pay\Model\Config\Source\PaymentAction;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 
 class AmazonPayAdapter
@@ -223,25 +224,25 @@ class AmazonPayAdapter
      * Create charge
      *
      * @param int|string $storeId
-     * @param mixed $chargePermissionId
-     * @param mixed $amount
+     * @param mixed $chargePermId
+     * @param mixed $amt
      * @param string $currency
      * @param bool $captureNow
-     * @param string|null $merchantReferenceId
+     * @param string|null $merchantRefId
      * @return mixed
      */
-    public function createCharge($storeId, $chargePermissionId, $amount, $currency, $captureNow = false, $merchantReferenceId = null)
+    public function createCharge($storeId, $chargePermId, $amt, $currency, $captureNow = false, $merchantRefId = null)
     {
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
-            'chargePermissionId' => $chargePermissionId,
-            'chargeAmount' => $this->createPrice($amount, $currency),
+            'chargePermissionId' => $chargePermId,
+            'chargeAmount' => $this->createPrice($amt, $currency),
             'captureNow' => $captureNow,
         ];
 
-        if ($merchantReferenceId) {
-            $payload['merchantMetadata']['merchantReferenceId'] = $merchantReferenceId;
+        if ($merchantRefId) {
+            $payload['merchantMetadata']['merchantReferenceId'] = $merchantRefId;
         }
 
         $response = $this->clientFactory->create($storeId)->createCharge($payload, $headers);
@@ -402,6 +403,7 @@ class AmazonPayAdapter
      * AuthorizeClient and SaleClient Gateway Command
      *
      * @param mixed $data
+     * @param bool $captureNow
      * @return array|mixed
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -567,7 +569,8 @@ class AmazonPayAdapter
     /**
      * Generate checkout static signature for amazon.Pay.renderButton used by checkout.js
      *
-     * @return string
+     * @param Quote $quote
+     * @return false|string
      */
     public function generateCheckoutButtonPayload(Quote $quote)
     {
@@ -665,6 +668,13 @@ class AmazonPayAdapter
         return json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Build subscription payload
+     *
+     * @param array $payload
+     * @param Quote $quote
+     * @return mixed
+     */
     protected function buildSubscriptionPayload($payload, Quote $quote)
     {
         $recurringMetadata = $this->getRecurringMetadata($quote);
@@ -740,6 +750,12 @@ class AmazonPayAdapter
         return $referer;
     }
 
+    /**
+     * Get recurring metadata
+     *
+     * @param CartInterface $quote
+     * @return array[]
+     */
     public function getRecurringMetadata($quote)
     {
         foreach ($quote->getAllItems() as $item) {

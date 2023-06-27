@@ -16,14 +16,76 @@
 
 namespace Amazon\Pay\Model\Subscription;
 
+use Magento\AsyncOrder\Model\CartRepository;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+
 interface SubscriptionManagerInterface
 {
-	public function hasSubscription($quote);
+
+    /**
+     * Check if any of the quote items is a subscription
+     *
+     * @param CartRepositoryInterface $quote
+     * @return mixed
+     */
+    public function hasSubscription($quote);
+
+    /**
+     * Get frequency unit
+     *
+     * @param CartItemInterface $item
+     * @return mixed
+     */
     public function getFrequencyUnit($item);
+
+    /**
+     * Get frequency count
+     *
+     * @param CartItemInterface $item
+     * @return mixed
+     */
     public function getFrequencyCount($item);
+
+    /**
+     * Is cart item a subscription
+     *
+     * @param CartItemInterface $item
+     * @return mixed
+     */
     public function isSubscription($item);
+
+    /**
+     * Cancel order subscription
+     *
+     * @param OrderInterface $order
+     * @param mixed $subscription
+     * @return mixed
+     */
     public function cancel($order, $subscription = false);
+
+    /**
+     * Get subscription label
+     *
+     * @return mixed
+     */
     public function getSubscriptionLabel();
+
+    /**
+     * Save subscription
+     *
+     * @param \ParadoxLabs\Subscriptions\Api\Data\SubscriptionInterface $subscription
+     * @return mixed
+     */
     public function save($subscription);
+
+    /**
+     * Get subscription list
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return mixed
+     */
     public function getList($searchCriteria);
 }
