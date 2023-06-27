@@ -48,6 +48,8 @@ class PaymentTokenService
     }
 
     /**
+     * Filter card tokens
+     *
      * @param Payment $paymentService
      * @param PaymentTokenInterface[] $cards
      * @param CartInterface $quote
@@ -90,6 +92,8 @@ class PaymentTokenService
     }
 
     /**
+     * Update charge permission where needed
+     *
      * @param Payment $paymentService
      * @param Quote $quote
      * @param PaymentTokenInterface $card
@@ -107,7 +111,7 @@ class PaymentTokenService
             // Check previous token later in afterUpdatePayment
             $paymentData[] = $previousToken;
 
-            // If moving to another AP method, update its charge permission if the subscriptions's
+            // If moving to another AP method, update its charge permission if the subscription's
             // frequency is shorter than the recurring metadata associated with it
             if ($card->getPaymentMethodCode() === Config::CODE) {
                 $toChargePermission = $this->amazonAdapter->getChargePermission(
@@ -143,8 +147,10 @@ class PaymentTokenService
     }
 
     /**
+     * Delete the previous token if this was the last subscription it was used for
+     *
      * @param Payment $paymentService
-     * @param null $result
+     * @param mixed $result
      * @param Quote $quote
      * @param PaymentTokenInterface $card
      * @param array $paymentData
@@ -157,7 +163,6 @@ class PaymentTokenService
         PaymentTokenInterface $card,
         array $paymentData
     ) {
-        // Delete the previous token if this was the last subscription it was used for
         if (!empty($paymentData)) {
             foreach ($paymentData as $data) {
                 if ($data instanceof \Magento\Vault\Model\PaymentToken
