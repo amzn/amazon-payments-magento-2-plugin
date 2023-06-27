@@ -103,6 +103,7 @@ class AuthorizationSaleVaultHandler implements HandlerInterface
     }
 
     /**
+     * Update transaction state
      *
      * @param array $handlingSubject
      * @param array $response

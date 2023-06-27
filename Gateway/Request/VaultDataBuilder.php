@@ -20,6 +20,10 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 class VaultDataBuilder implements BuilderInterface
 {
+
+    /**
+     * @inheritdoc
+     */
     public function build(array $buildSubject): array
     {
         return [];

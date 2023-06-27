@@ -38,9 +38,11 @@ class AuthorizationSaleVaultRequestBuilder implements BuilderInterface
     private $paymentTokenManagement;
 
     /**
-     * AuthorizationRequestBuilder constructor.
+     * AuthorizationRequestBuilder constructor
+     *
      * @param \Amazon\Pay\Api\CheckoutSessionManagementInterface $sessionManagement
      * @param SubjectReader $subjectReader
+     * @param \Magento\Vault\Api\PaymentTokenManagementInterface $paymentTokenManagement
      */
     public function __construct(
         \Amazon\Pay\Api\CheckoutSessionManagementInterface $sessionManagement,

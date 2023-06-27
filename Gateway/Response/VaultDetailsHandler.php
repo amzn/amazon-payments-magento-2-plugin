@@ -130,7 +130,7 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * Get vault payment token entity
      *
-     * @param $response
+     * @param array $response
      * @return PaymentTokenInterface|null
      * @throws InputException
      * @throws NoSuchEntityException
@@ -171,6 +171,12 @@ class VaultDetailsHandler implements HandlerInterface
         return $extensionAttributes;
     }
 
+    /**
+     * Get 1 year expiration date from now
+     *
+     * @return string
+     * @throws Exception
+     */
     private function getExpirationDate(): string
     {
         $expDate = new DateTime('NOW', new DateTimeZone('UTC'));

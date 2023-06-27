@@ -47,23 +47,31 @@ class Customer
     private $amazonConfig;
 
     /**
+     * @var \Magento\Framework\Validator\EmailAddress
+     */
+    private \Magento\Framework\Validator\EmailAddress $emailAddressValidator;
+
+    /**
      * Customer constructor
      *
      * @param AmazonPayAdapter $amazonAdapter
      * @param AmazonCustomerFactory $amazonCustomerFactory
      * @param CustomerLinkManagementInterface $customerLinkManagement
      * @param AmazonConfig $amazonConfig
+     * @param \Magento\Framework\Validator\EmailAddress $emailAddressValidator
      */
     public function __construct(
         AmazonPayAdapter $amazonAdapter,
         AmazonCustomerFactory $amazonCustomerFactory,
         CustomerLinkManagementInterface $customerLinkManagement,
-        AmazonConfig $amazonConfig
+        AmazonConfig $amazonConfig,
+        \Magento\Framework\Validator\EmailAddress $emailAddressValidator
     ) {
         $this->amazonAdapter = $amazonAdapter;
         $this->amazonCustomerFactory = $amazonCustomerFactory;
         $this->customerLinkManagement = $customerLinkManagement;
         $this->amazonConfig = $amazonConfig;
+        $this->emailAddressValidator = $emailAddressValidator;
     }
 
     /**
@@ -107,7 +115,7 @@ class Customer
                 throw new ValidatorException(__('the email address for your Amazon account is invalid'));
             }
         } else {
-            if (! \Zend_Validate::is($amazonCustomer->getEmail(), 'EmailAddress')) {
+            if (!$this->emailAddressValidator->isValid($amazonCustomer->getEmail())) {
                 throw new ValidatorException(__('the email address for your Amazon account is invalid'));
             }
         }
