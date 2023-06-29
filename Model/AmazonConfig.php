@@ -248,7 +248,9 @@ class AmazonConfig
     {
         if (empty($this->icon)) {
             $asset = $this->ccConfig->createAsset('Amazon_Pay::images/logo/Black-L.png');
-            list($width, $height) = getimagesizefromstring($asset->getSourceFile());
+            $fileData = $asset->getContent();
+            $size_info = getimagesizefromstring($fileData);
+            list($width, $height) = $size_info;
             $this->icon = [
                 'url' => $asset->getUrl(),
                 'width' => $width,
