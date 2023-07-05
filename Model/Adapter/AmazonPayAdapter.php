@@ -626,6 +626,7 @@ class AmazonPayAdapter
                 'merchantStoreName' => $this->amazonConfig->getStoreName(),
                 'customInformation' => $this->getMerchantCustomInformation()
             ],
+            'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $address = $quote->getShippingAddress();
