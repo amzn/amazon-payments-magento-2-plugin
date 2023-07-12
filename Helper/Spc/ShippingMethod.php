@@ -72,11 +72,14 @@ class ShippingMethod
         if ($quote->getShippingAddress()->validate() && $code) {
             $shippingMethodCode = $code;
 
-            $address = $quote->getShippingAddress();
+            $shippingAddress = $quote->getShippingAddress();
+            $billingAddress = $quote->getShippingAddress();
 
             // Save address with shipping method
             if ((strpos($shippingMethodCode, '_') !== false)) {
-                $shippingInformation = $this->shippingInformation->setShippingAddress($address);
+                $shippingInformation = $this->shippingInformation
+                    ->setShippingAddress($shippingAddress)
+                    ->setBillingAddress($billingAddress);
 
                 // Separate the carrier from the method, the Magento way
                 // https://github.com/magento/magento2/blob/2.4.5/app/code/Magento/Quote/Model/Quote/ShippingAssignment/ShippingProcessor.php#L68-L71
