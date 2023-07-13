@@ -73,7 +73,7 @@ class ShippingMethod
             $shippingMethodCode = $code;
 
             $shippingAddress = $quote->getShippingAddress();
-            $billingAddress = $quote->getShippingAddress();
+            $billingAddress = $quote->getBillingAddress();
 
             // Save address with shipping method
             if ((strpos($shippingMethodCode, '_') !== false)) {
