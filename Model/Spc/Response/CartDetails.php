@@ -75,6 +75,14 @@ class CartDetails extends DataObject implements CartDetailsInterface
     /**
      * @inheritDoc
      */
+    public function getTotalBaseInclTaxAmount()
+    {
+        return $this->_getData('total_base_incl_tax_amount');
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getTotalTaxAmount()
     {
         return $this->_getData('total_tax_amount');
@@ -158,6 +166,14 @@ class CartDetails extends DataObject implements CartDetailsInterface
     public function setTotalBaseAmount(AmountInterface $amount)
     {
         return $this->setData('total_base_amount', $amount);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTotalBaseInclTaxAmount(AmountInterface $amount)
+    {
+        return $this->setData('total_base_incl_tax_amount', $amount);
     }
 
     /**

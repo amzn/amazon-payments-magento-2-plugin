@@ -35,6 +35,11 @@ interface LineItemInterface
     public function getDiscountedPrice();
 
     /**
+     * @return \Amazon\Pay\Api\Spc\Response\AmountInterface
+     */
+    public function getPriceInclTax();
+
+    /**
      * @return \Amazon\Pay\Api\Spc\Response\PromoInterface[]
      */
     public function getAppliedDiscounts();
@@ -89,6 +94,12 @@ interface LineItemInterface
      * @return $this
      */
     public function setDiscountedPrice(AmountInterface $discountedPrice);
+
+    /**
+     * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $priceInclTax
+     * @return $this
+     */
+    public function setPriceInclTax(AmountInterface $priceInclTax);
 
     /**
      * @param \Amazon\Pay\Api\Spc\Response\PromoInterface[] $appliedDiscounts

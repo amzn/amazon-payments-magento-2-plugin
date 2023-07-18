@@ -47,6 +47,11 @@ interface CartDetailsInterface
     /**
      * @return \Amazon\Pay\Api\Spc\Response\AmountInterface
      */
+    public function getTotalBaseInclTaxAmount();
+
+    /**
+     * @return \Amazon\Pay\Api\Spc\Response\AmountInterface
+     */
     public function getTotalTaxAmount();
 
     /**
@@ -106,6 +111,12 @@ interface CartDetailsInterface
      * @return $this
      */
     public function setTotalBaseAmount(AmountInterface $amount);
+
+    /**
+     * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $amount
+     * @return $this
+     */
+    public function setTotalBaseInclTaxAmount(AmountInterface $amount);
 
     /**
      * @param \Amazon\Pay\Api\Spc\Response\AmountInterface $amount
