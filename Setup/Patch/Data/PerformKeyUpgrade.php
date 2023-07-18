@@ -107,6 +107,16 @@ class PerformKeyUpgrade implements DataPatchInterface
                 'path' => $path,
                 'value' => $value
             ]) {
+
+            // Prevent overwriting already valid config
+            if($this->v2PathAlreadyExists(
+                self::PATH_TRANSLATION_MAP[$path],
+                $scopeType,
+                $scopeId
+            )) {
+                continue;
+            }
+
             $this->config->saveConfig(
                 self::PATH_TRANSLATION_MAP[$path],
                 $value,
@@ -150,6 +160,22 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
+     * Return all Amazon Pay CV2 config values that already exist in core_config
+     *
+     * @return array
+     */
+    private function getSavedV2Configs()
+    {
+        $conn = $this->moduleDataSetup->getConnection();
+        $select = $conn->select()
+            ->from('core_config_data', ['scope_id', 'scope', 'path', 'value'])
+            ->where('path in (?)', array_values(self::PATH_TRANSLATION_MAP))
+            ->order('scope_id');
+
+        return $conn->fetchAll($select);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function getDependencies()
@@ -171,5 +197,33 @@ class PerformKeyUpgrade implements DataPatchInterface
     public static function getVersion()
     {
         return '5.0.0';
+    }
+
+    /**
+     * Check if passed config already exists
+     *
+     * @param string $path
+     * @param string $scopeType
+     * @param int $scopeId
+     * @return bool
+     */
+    private function v2PathAlreadyExists(
+        string $path,
+        string $scopeType,
+        int $scopeId
+    ) {
+        static $existingPaths = null;
+        if ($existingPaths === null) {
+            $existingPaths = $this->getSavedV2Configs();
+        }
+        foreach($existingPaths as $config) {
+            if ($path == $config['path']
+                && $scopeType == $config['scope']
+                && $scopeId == $config['scope_id']
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
