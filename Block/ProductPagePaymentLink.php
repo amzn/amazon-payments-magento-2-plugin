@@ -35,6 +35,15 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
      */
     private $registry;
 
+    /**
+     * ProductPagePaymentLink constructor
+     *
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Helper\Data $amazonHelper
+     * @param \Magento\Framework\Registry $registry
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
@@ -50,7 +59,7 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _toHtml()
     {
@@ -79,6 +88,8 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get product from registry
+     *
      * @return \Magento\Catalog\Model\Product
      */
     protected function _getProduct()
@@ -87,6 +98,8 @@ class ProductPagePaymentLink extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return true if product is digital
+     *
      * @return bool
      */
     public function isPayOnly()

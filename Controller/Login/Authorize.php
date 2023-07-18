@@ -22,7 +22,7 @@ use Magento\Framework\Exception\NotFoundException;
 class Authorize extends \Amazon\Pay\Controller\Login
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

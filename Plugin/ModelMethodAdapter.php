@@ -16,6 +16,7 @@ class ModelMethodAdapter
 
     /**
      * ModelMethodAdapter constructor.
+     *
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
@@ -25,14 +26,17 @@ class ModelMethodAdapter
     }
 
     /**
+     * Set Magento payment action
+     *
+     * If Amazon auth mode is Immediate, always treat as an authorize for Magento instead of Authorize and Capture.
+     *
      * @param \Magento\Payment\Model\Method\Adapter $subject
-     * @param $result
+     * @param mixed $result
      * @return string
      */
     public function afterGetConfigPaymentAction(\Magento\Payment\Model\Method\Adapter $subject, $result)
     {
         if ($subject->getCode() == Config::CODE) {
-            // If Immediate mode, always treat as an authorize for Magento instead of Authorize and Capture
             if ($this->scopeConfig->getValue('payment/amazon_payment/authorization_mode') == AuthorizationMode::SYNC) {
                 $result = PaymentAction::AUTHORIZE;
             }

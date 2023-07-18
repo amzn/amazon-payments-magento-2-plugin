@@ -47,6 +47,15 @@ class AutoKeyExchangePoll extends System
      */
     private $exceptionLogger;
 
+    /**
+     * AutoKeyExchangePoll constructor
+     *
+     * @param Context $context
+     * @param AutoKeyExchange $autoKeyExchange
+     * @param ScopeConfigInterface $scopeConfig
+     * @param JsonFactory $jsonResultFactory
+     * @param ExceptionLogger|null $exceptionLogger
+     */
     public function __construct(
         Context $context,
         AutoKeyExchange $autoKeyExchange,
@@ -63,6 +72,9 @@ class AutoKeyExchangePoll extends System
 
     /**
      * Detect whether Amazon credentials are set (polled by Ajax)
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @throws \Exception
      */
     public function execute()
     {

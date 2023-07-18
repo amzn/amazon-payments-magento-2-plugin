@@ -25,8 +25,7 @@ class PrivateKeySelector extends \Magento\Config\Block\System\Config\Form\Field
     protected $_template = 'Amazon_Pay::system/config/private-key.phtml';
 
     /**
-     * @param AbstractElement $element
-     * @return string
+     * @inheritDoc
      */
     protected function _getElementHtml(AbstractElement $element)
     {

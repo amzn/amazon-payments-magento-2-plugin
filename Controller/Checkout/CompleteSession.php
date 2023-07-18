@@ -59,6 +59,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
 
     /**
      * CompleteCheckout constructor.
+     *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession
      * @param \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement
@@ -88,8 +89,8 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
         $this->storeManager = $storeManager;
     }
 
-    /*
-     * @inheritdoc
+    /**
+     * @inheritDoc
      */
     public function execute()
     {

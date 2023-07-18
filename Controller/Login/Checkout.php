@@ -23,7 +23,7 @@ use Magento\Quote\Api\Data\CartInterface;
 class Checkout extends \Amazon\Pay\Controller\Login
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

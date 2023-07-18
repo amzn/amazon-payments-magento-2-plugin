@@ -19,7 +19,7 @@ namespace Amazon\Pay\Model\Config\Source;
 class PaymentRegion implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

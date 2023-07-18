@@ -20,9 +20,9 @@ use Magento\Catalog\Block\ShortcutInterface;
 
 class Button extends Template implements ShortcutInterface
 {
-    const ALIAS_ELEMENT_INDEX = 'alias';
+    public const ALIAS_ELEMENT_INDEX = 'alias';
 
-    const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
+    public const CART_BUTTON_ELEMENT_INDEX = 'add_to_cart_selector';
 
     /**
      * @var bool
@@ -79,6 +79,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Return true if module is enabled and configs allow it
+     *
      * @return bool
      */
     protected function shouldRender()
@@ -104,12 +106,19 @@ class Button extends Template implements ShortcutInterface
         return parent::_toHtml();
     }
 
+    /**
+     * Return true if on customer cart page
+     *
+     * @return bool
+     */
     protected function _isOnCartPage()
     {
         return $this->request->getFullActionName() == 'checkout_cart_index';
     }
 
     /**
+     * Returns add to cart selector
+     *
      * @return string
      */
     public function getAddToCartSelector()
@@ -118,6 +127,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Returns image url
+     *
      * @return string
      */
     public function getImageUrl()
@@ -138,6 +149,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Set information if button renders in the mini cart
+     *
      * @param bool $isCatalog
      * @return $this
      */

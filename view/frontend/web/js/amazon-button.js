@@ -81,8 +81,9 @@ define([
                         }
                     };
 
-                    if (this._shouldUseEstimatedAmount())
-                    {
+                    if (this._shouldUseEstimatedAmount()
+                        && !(JSON.parse(checkoutSessionConfig.checkout_payload).recurringMetadata)
+                    ) {
                         buttonConfig.estimatedOrderAmount = this._getEstimatedAmount();
                     }
 
@@ -240,13 +241,31 @@ define([
             amazonCheckout.withAmazonCheckout(function (amazon, args) {
                 var cartData = customerData.get('cart');
                 cartData.subscribe(function (updatedCart) {
-                    if (self.options.placement === 'Cart') {
-                        delete self.amazonPayButton;
-                    }
-                    if (self.amazonPayButton && self._shouldUseEstimatedAmount())
-                    {
-                        if (updatedCart.summary_count !== 0) {
-                            self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
+                    if (self.amazonPayButton && self.buttonType !== 'PayNow') {
+                        var hasSubscription = false;
+                        var isSubscriptionOption = (option) => option.label && option.label === amazonStorage.getSubscriptionLabel();
+
+                        // If any cart item has a subscription option, we should redraw the button to exclude estimatedOrderAmount
+                        updatedCart.items.forEach((item) => {
+                            if (item.options.length && item.options.some(isSubscriptionOption)) {
+                                hasSubscription = true;
+                                return;
+                            }
+                        });
+
+                        if (hasSubscription) {
+                            self._draw();
+                        } else {
+                            if (self.options.placement === 'Cart') {
+                                delete self.amazonPayButton;
+                            }
+
+                            if (self.amazonPayButton
+                                && self._shouldUseEstimatedAmount()
+                                && updatedCart.summary_count !== 0
+                            ) {
+                                self.amazonPayButton.updateButtonInfo(self._getEstimatedAmount());
+                            }
                         }
                     }
                 });

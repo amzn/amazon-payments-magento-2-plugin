@@ -17,6 +17,11 @@ namespace Amazon\Pay\Model\ResourceModel\CustomerLink;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    /**
+     * Collection constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init(\Amazon\Pay\Model\CustomerLink::class, \Amazon\Pay\Model\ResourceModel\CustomerLink::class);

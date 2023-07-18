@@ -58,8 +58,9 @@ class AmazonAddressFactory
     }
 
     /**
-     * @param array $responseData
+     * Parse address data from Amazon and address object
      *
+     * @param array $responseData
      * @return AmazonAddressInterface
      * @throws LocalizedException
      */

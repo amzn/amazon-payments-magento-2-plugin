@@ -17,8 +17,13 @@ namespace Amazon\Pay\Model\ResourceModel;
 
 class Async extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    const TABLE_NAME = 'amazon_payv2_async';
+    public const TABLE_NAME = 'amazon_payv2_async';
 
+    /**
+     * Async constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init(static::TABLE_NAME, \Amazon\Pay\Api\Data\AsyncInterface::ID);
