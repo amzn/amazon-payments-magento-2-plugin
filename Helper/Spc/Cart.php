@@ -28,6 +28,7 @@ use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection as SalesRuleCollection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Bundle\Model\Product\Type as BundleProduct;
+use Magento\Tax\Model\Config as TaxConfig;
 
 class Cart
 {
@@ -191,7 +192,10 @@ class Cart
         $coupons = $this->getCoupons($quote);
 
         // Total discount amount
-        $totalDiscountAmount = $lineItemsTotalDiscounts + $quote->getShippingAddress()->getShippingDiscountAmount();
+        $totalDiscountAmount = 0;
+        if (!$this->isDiscountWithTax($quote->getStoreId())) {
+            $totalDiscountAmount = $lineItemsTotalDiscounts + $quote->getShippingAddress()->getShippingDiscountAmount();
+        }
 
         // Create response object
         /** @var $cartDetails CartDetailsInterface */
@@ -315,8 +319,15 @@ class Cart
                 }
             }
 
-            $totalBaseAmount += $item->getRowTotal();
-            $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
+            if ($this->isDiscountWithTax($quote->getStoreId())) {
+                $discountedAmount = $item->getRowTotal() * (1 - $item->getDiscountPercent()/100);
+                $totalBaseAmount += $discountedAmount;
+            }
+            else {
+                $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
+                $totalBaseAmount += $item->getRowTotal();
+            }
+
             $totalDiscountAmount += $item->getDiscountAmount();
 
             $lineItem->setId($item->getId())
@@ -454,6 +465,19 @@ class Cart
         $object = $this->amountFactory->create();
 
         return $object->setAmount($amount)->setCurrencyCode($currencyCode);
+    }
+
+    /**
+     * @param $storeId
+     * @return bool
+     */
+    protected function isDiscountWithTax($storeId)
+    {
+        return $this->scopeConfig->isSetFlag(
+            TaxConfig::CONFIG_XML_PATH_DISCOUNT_TAX,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     /**
