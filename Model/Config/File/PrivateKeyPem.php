@@ -24,6 +24,7 @@ class PrivateKeyPem extends \Magento\Config\Model\Config\Backend\File
 
     /**
      * PrivateKeyPem constructor.
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -66,6 +67,8 @@ class PrivateKeyPem extends \Magento\Config\Model\Config\Backend\File
     }
 
     /**
+     * Set private key value from file if provided
+     *
      * @return $this|PrivateKeyPem
      */
     public function beforeSave()
@@ -94,6 +97,8 @@ class PrivateKeyPem extends \Magento\Config\Model\Config\Backend\File
     }
 
     /**
+     * Get list of allowed file extensions
+     *
      * @return array|string[]
      */
     public function _getAllowedExtensions()

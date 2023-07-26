@@ -18,12 +18,12 @@ namespace Amazon\Pay\Model\Config\Source;
 
 class AuthorizationMode implements \Magento\Framework\Data\OptionSourceInterface
 {
-    const ASYNC = 'asynchronous';
-    const SYNC = 'synchronous';
-    const SYNC_THEN_ASYNC = 'synchronous_possible';
+    public const ASYNC = 'asynchronous';
+    public const SYNC = 'synchronous';
+    public const SYNC_THEN_ASYNC = 'synchronous_possible';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

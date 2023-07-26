@@ -32,11 +32,11 @@ use Amazon\Pay\Model\AmazonConfig;
 
 class KeyUpgrade implements KeyUpgradeInterface
 {
-    const ACTION = 'GetPublicKeyId';
+    public const ACTION = 'GetPublicKeyId';
 
-    const SIGNATURE_METHOD = 'HmacSHA256';
+    public const SIGNATURE_METHOD = 'HmacSHA256';
 
-    const SIGNATURE_VERSION = '2';
+    public const SIGNATURE_VERSION = '2';
 
     /**
      * @var string
@@ -94,13 +94,13 @@ class KeyUpgrade implements KeyUpgradeInterface
     private $keys;
 
     /**
+     * KeyUpgrade constructor
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param AmazonConfig $amazonConfig
      * @param KeyHelper $keyHelper
      * @param UrlInterface $backendUrl
      * @param Curl $curl
-     * @param Http $request
-     * @param StoreManagerInterface $storeManager
      * @param EncryptorInterface $encryptor
      * @param ConfigInterface $config
      * @param Logger $logger
@@ -128,7 +128,7 @@ class KeyUpgrade implements KeyUpgradeInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getPublicKeyId(
         string $scopeType,
@@ -144,7 +144,7 @@ class KeyUpgrade implements KeyUpgradeInterface
             $scopeType,
             $scopeCode
         );
-        
+
         $secretKey = $this->encryptor->decrypt($this->scopeConfig->getValue(
             'payment/amazon_payment/secret_key',
             $scopeType,
@@ -160,7 +160,7 @@ class KeyUpgrade implements KeyUpgradeInterface
 
         $resourcePathPrefix = $this->getReleaseMode();
         $resourcePath = $resourcePathPrefix . '/v2/publicKeyId';
-        
+
         $timestamp = gmdate("Y-m-d\TH:i:s\\Z", time());
         $params = [
             'AWSAccessKeyId' => $accessKey,
@@ -170,13 +170,13 @@ class KeyUpgrade implements KeyUpgradeInterface
             'SignatureVersion' =>self::SIGNATURE_VERSION,
             'Timestamp' => $timestamp
         ];
-        
+
         $stringToSign = $this->generateStringToSign($params, $serviceUrl, $resourcePath);
         $signature = base64_encode(hash_hmac('sha256', $stringToSign, $secretKey, true));
         $publicKey = str_replace("\r", '', $this->getKeyPair()['publickey']);
 
         $request = $this->createCurlRequest($serviceUrl, $resourcePath, $params, $signature, $publicKey);
-        
+
         $this->curl->setOption(CURLOPT_RETURNTRANSFER, 1);
         try {
             $this->curl->get($request);
@@ -197,7 +197,7 @@ class KeyUpgrade implements KeyUpgradeInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getKeyPair()
     {
@@ -235,7 +235,7 @@ class KeyUpgrade implements KeyUpgradeInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function updateKeysInConfig(
         $publicKeyId,
@@ -249,13 +249,13 @@ class KeyUpgrade implements KeyUpgradeInterface
             $scopeType,
             $scopeId
         );
-        
+
         $this->config->deleteConfig(
             'payment/amazon_payment/access_key',
             $scopeType,
             $scopeId
         );
-        
+
         // Save private key
         $keyPair = $this->getKeyPair();
         $privateKeyValue = $this->encryptor->encrypt($keyPair['privatekey']);

@@ -35,9 +35,11 @@ class Email extends AbstractHelper
     private $asyncLogger;
 
     /**
-     * @param Context           $context
-     * @param TransportBuilder  $transportBuilder
-     * @param StoreManagerInterface $storeManager
+     * Email constructor
+     *
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\Mail\Template\TransportBuilderTransportBuilder $transportBuilder
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger
      */
     public function __construct(
@@ -53,8 +55,9 @@ class Email extends AbstractHelper
     }
 
     /**
-     * @param Order $order
+     * Send email to customer when payment is asynchronously declined
      *
+     * @param Order $order
      * @return void
      */
     public function sendPaymentDeclinedEmail(\Magento\Sales\Model\Order $order)
@@ -82,6 +85,12 @@ class Email extends AbstractHelper
         }
     }
 
+    /**
+     * Get displayed store name
+     *
+     * @param mixed $storeId
+     * @return string
+     */
     protected function getStoreName($storeId)
     {
         $store = $this->storeManager->getStore($storeId);
