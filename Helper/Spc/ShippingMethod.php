@@ -138,8 +138,11 @@ class ShippingMethod
 
         // Save address with shipping method
         if (!empty($cheapestMethod['carrier'])) {
-            $address = $quote->getShippingAddress();
-            $shippingInformation = $this->shippingInformation->setShippingAddress($address);
+            $shippingAddress = $quote->getShippingAddress();
+            $billingAddress = $quote->getBillingAddress();
+            $shippingInformation = $this->shippingInformation
+                ->setShippingAddress($shippingAddress)
+                ->setBillingAddress($billingAddress);
 
             $shippingInformation->setShippingCarrierCode($cheapestMethod['carrier'])
                 ->setShippingMethodCode($cheapestMethod['code']);
