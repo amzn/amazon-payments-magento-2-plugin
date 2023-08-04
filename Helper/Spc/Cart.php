@@ -197,7 +197,7 @@ class Cart
         }
 
         // Calculate total base amount
-        $totalBaseAmount = $quote->getGrandTotal() - $quote->getShippingAddress()->getTaxAmount() - $quote->getShippingAddress()->getShippingAmount();
+        $totalBaseAmount = $quote->getGrandTotal() - $quote->getShippingAddress()->getTaxAmount() - $quote->getShippingAddress()->getShippingAmount() + $totalDiscountAmount;
 
         // Create response object
         /** @var $cartDetails CartDetailsInterface */
