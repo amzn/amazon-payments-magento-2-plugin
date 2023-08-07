@@ -179,10 +179,9 @@ class Cart
         $cartLanguage = $this->getCartLanguage($quote);
         $currencyCode = $quote->getQuoteCurrencyCode();
 
-        // Get line items and total base amount
+        // Get line items
         $lineItemsResponse = $this->getLineItemsAndTotalBaseAmount($quote, $currencyCode);
         $lineItems = $lineItemsResponse['line_items'];
-        $totalBaseAmount = $lineItemsResponse['total_base_amount'];
         $lineItemsTotalDiscounts = $lineItemsResponse['total_discount_amount'];
 
         // Get delivery options
@@ -196,6 +195,9 @@ class Cart
         if (!$this->isDiscountWithTax($quote->getStoreId())) {
             $totalDiscountAmount = $lineItemsTotalDiscounts + $quote->getShippingAddress()->getShippingDiscountAmount();
         }
+
+        // Calculate total base amount
+        $totalBaseAmount = $quote->getGrandTotal() - $quote->getShippingAddress()->getTaxAmount() - $quote->getShippingAddress()->getShippingAmount() + $totalDiscountAmount;
 
         // Create response object
         /** @var $cartDetails CartDetailsInterface */
@@ -321,11 +323,9 @@ class Cart
 
             if ($this->isDiscountWithTax($quote->getStoreId())) {
                 $discountedAmount = $item->getRowTotal() * (1 - $item->getDiscountPercent()/100);
-                $totalBaseAmount += $discountedAmount;
             }
             else {
                 $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
-                $totalBaseAmount += $item->getRowTotal();
             }
 
             $totalDiscountAmount += $item->getDiscountAmount();
@@ -350,7 +350,6 @@ class Cart
 
         return [
             'line_items' => $lineItems,
-            'total_base_amount' => $totalBaseAmount,
             'total_discount_amount' => $totalDiscountAmount
         ];
     }
