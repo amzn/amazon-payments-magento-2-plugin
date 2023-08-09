@@ -8,10 +8,15 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Amazon\Pay\Helper\Spc\Cart;
+use Magento\SalesRule\Api\Data\CouponInterface as SalesRuleCouponInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
 class Coupon implements CouponInterface
 {
+    const NOT_APPLICABLE = 'CouponNotApplicable';
+
+    const INVALID = 'InvalidCouponCode';
+
     /**
      * @var StoreInterface
      */
@@ -33,23 +38,22 @@ class Coupon implements CouponInterface
      */
     protected $checkoutSessionHelper;
 
-    /**
-     * @param StoreInterface $store
-     * @param CartRepositoryInterface $cartRepository
-     * @param Cart $cartHelper
-     * @param CheckoutSession $checkoutSessionHelper
-     */
+    protected $salesRuleCoupon;
+
+
     public function __construct(
         StoreInterface $store,
         CartRepositoryInterface $cartRepository,
         Cart $cartHelper,
-        CheckoutSession $checkoutSessionHelper
+        CheckoutSession $checkoutSessionHelper,
+        SalesRuleCouponInterface $salesRuleCoupon
     )
     {
         $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->cartHelper = $cartHelper;
         $this->checkoutSessionHelper = $checkoutSessionHelper;
+        $this->salesRuleCoupon = $salesRuleCoupon;
     }
 
     /**
@@ -84,7 +88,18 @@ class Coupon implements CouponInterface
 
                     $couponCode = $cartDetails['coupons'][0]['coupon_code'];
 
-                    // Empty out the quote items' rule ids, because of Magento bug
+                    // Check if coupon exists
+                    if (!$this->couponExists($couponCode)) {
+                        $this->cartHelper->logError(
+                            'SPC Coupon: '. self::INVALID .' - The coupon '. $couponCode .' is invalid. CartId: ' . $cartId . ' - ', $cartDetails
+                        );
+
+                        throw new \Magento\Framework\Webapi\Exception(
+                            new Phrase("The coupon code '". $couponCode ."' is invalid"), self::INVALID, 400
+                        );
+                    }
+
+                    // Empty out the quote items' rule ids, because Magento does not
                     foreach ($quote->getItems() as &$item) {
                         $item->setAppliedRuleIds(null);
                     }
@@ -107,18 +122,18 @@ class Coupon implements CouponInterface
                         }
 
                         $this->cartHelper->logError(
-                            'SPC Coupon: CouponNotApplicable - The coupon '. $couponCode .' could not be applied to the cart. CartId: ' . $cartId . ' - ', $cartDetails
+                            'SPC Coupon: '. self::NOT_APPLICABLE .' - The coupon '. $couponCode .' could not be applied to the cart. CartId: ' . $cartId . ' - ', $cartDetails
                         );
 
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase("The coupon code '". $couponCode ."' does not apply"), "CouponNotApplicable", 400
+                            new Phrase("The coupon code '". $couponCode ."' does not apply"), self::NOT_APPLICABLE, 400
                         );
                     }
                 }
                 else {
                     if (!isset($cartDetails['coupons'][0]['coupon_code']) || $cartDetails['coupons'][0]['coupon_code'] === null) {
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase("Coupon code is missing"), "CouponNotApplicable", 400
+                            new Phrase("Coupon code is missing"), self::NOT_APPLICABLE, 400
                         );
                     }
                 }
@@ -131,5 +146,22 @@ class Coupon implements CouponInterface
         }
 
         return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
+    }
+
+    protected function couponExists($couponCode)
+    {
+        try {
+            $coupon = $this->salesRuleCoupon->loadByCode($couponCode);
+
+            if ($coupon->getRuleId()) {
+                return true;
+            }
+
+        }
+        catch (\Exception $e) {
+            return false;
+        }
+
+        return false;
     }
 }
