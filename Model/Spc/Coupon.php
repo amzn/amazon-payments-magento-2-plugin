@@ -38,9 +38,19 @@ class Coupon implements CouponInterface
      */
     protected $checkoutSessionHelper;
 
+    /**
+     * @var SalesRuleCouponInterface
+     */
     protected $salesRuleCoupon;
 
 
+    /**
+     * @param StoreInterface $store
+     * @param CartRepositoryInterface $cartRepository
+     * @param Cart $cartHelper
+     * @param CheckoutSession $checkoutSessionHelper
+     * @param SalesRuleCouponInterface $salesRuleCoupon
+     */
     public function __construct(
         StoreInterface $store,
         CartRepositoryInterface $cartRepository,
@@ -148,6 +158,10 @@ class Coupon implements CouponInterface
         return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
     }
 
+    /**
+     * @param $couponCode
+     * @return bool
+     */
     protected function couponExists($couponCode)
     {
         try {
