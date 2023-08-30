@@ -47,7 +47,7 @@ define(
                 isBillingAddressVisible: ko.observable(!quote.billingAddress()),
                 isIosc: ko.observable($('button.iosc-place-order-button').length > 0),
                 paymentDescriptor: ko.observable(''),
-                logo: 'Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_clr.svg',
+                logo: amazonConfig.getValue('payment_method_logo_path'),
                 template: 'Amazon_Pay/payment/amazon-payment-method'
             },
 

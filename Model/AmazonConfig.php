@@ -762,7 +762,7 @@ class AmazonConfig
             $scope,
             $scopeCode
         );
-       
+
         if ($configValues) {
             $configValues = $this->serializer->unserialize($configValues);
             if (count($configValues) > 0) {
@@ -864,6 +864,25 @@ class AmazonConfig
     {
         return $this->scopeConfig->isSetFlag(
             'checkout/options/guest_checkout',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /**
+     * get configured payment method logo / acceptance mark
+     *
+     * @param $scope
+     * @param $scopeCode
+     * @return string
+     */
+    public function getPaymentLogoPath($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        // todo use config per specification
+        return 'Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_clr.svg';
+//        return 'Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_rev.svg';
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/acceptance_mark_path',
             $scope,
             $scopeCode
         );
