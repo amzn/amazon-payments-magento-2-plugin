@@ -876,13 +876,10 @@ class AmazonConfig
      * @param $scopeCode
      * @return string
      */
-    public function getAcceptanceMarkLogo($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    public function getAcceptanceMark($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
-        // todo use config per specification
-        return 'Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_clr.svg';
-//        return 'Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_rev.svg';
         return $this->scopeConfig->getValue(
-            'payment/amazon_payment_v2/acceptance_mark_logo',
+            'payment/amazon_payment_v2/acceptance_mark',
             $scope,
             $scopeCode
         );

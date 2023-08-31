@@ -19,4 +19,18 @@
     <type name="Magento\Backend\Block\Widget\Form\Element\Dependence">
         <plugin name="amazon_pay_backend_field_dependence" type="Amazon\Pay\Plugin\BackendFieldDependence" sortOrder="1" />
     </type>
+    <type name="Amazon\Pay\Model\Config\Source\AcceptanceMark">
+        <arguments>
+            <argument name="logos" xsi:type="array">
+                <item name="primary_mark" xsi:type="array">
+                    <item name="label" xsi:type="string">Primary (for lighter themes)</item>
+                    <item name="value" xsi:type="string">Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_clr.svg</item>
+                </item>
+                <item name="secondary_mark" xsi:type="array">
+                    <item name="label" xsi:type="string">Secondary (for darker themes)</item>
+                    <item name="value" xsi:type="string">Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_rev.svg</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
