@@ -64,7 +64,7 @@ class Config extends \Magento\Framework\View\Element\Template
             'is_guest_checkout_enabled' => $this->amazonConfig->isGuestCheckoutEnabled(),
             'has_restricted_products'   => $this->amazonHelper->hasRestrictedProducts(),
             'is_multicurrency_enabled'     => $this->amazonConfig->multiCurrencyEnabled(),
-            'payment_method_logo_path' => $this->amazonConfig->getPaymentLogoPath()
+            'acceptanceMarkLogo' => $this->amazonConfig->getAcceptanceMarkLogo()
         ];
 
         return $config;
