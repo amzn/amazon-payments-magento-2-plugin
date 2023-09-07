@@ -662,11 +662,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null)
     {
+        /** @var CartInterface $quote */
         if (!$quote = $this->session->getQuoteFromIdOrSession($cartId)) {
             return ['success' => false];
         }
 
-        if (empty($amazonSessionId) || !$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
+        if (empty($amazonSessionId)) {
             $this->logger->debug("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
                 'success' => false,
@@ -674,52 +675,24 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             ];
         }
         try {
-            if (!$quote->getCustomer()->getId()) {
-                $quote->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
-            }
 
-            // check the Amazon session one last time before placing the order
             $amazonSession = $this->amazonAdapter->getCheckoutSession(
                 $quote->getStoreId(),
                 $amazonSessionId
             );
-            if ($amazonSession['statusDetails']['state'] == 'Canceled') {
-                return [
-                    'success' => false,
-                    'message' => $this->getCanceledMessage($amazonSession),
-                ];
-            }
 
-            if ($amazonSession['productType'] == 'PayOnly') {
-                if (empty($quote->getCustomerEmail())) {
-                    $quote->setCustomerEmail($amazonSession['buyer']['email']);
-                }
-            }
+            $orderId = $quote->getReservedOrderId();
 
-            // get payment to load it in the session, so that a salesrule that relies on payment method conditions
-            // can work as expected
-            $payment = $quote->getPayment();
+            // todo conditionally place order
+//            $orderId = $this->placeOrder($amazonSessionId, $cartId);
 
-            // Some checkout flows (especially 3rd party) could get to this point without setting payment method
-            if (empty($payment->getMethod())) {
-                $payment->setMethod(Config::CODE);
-            }
-
-            // set amazon session id on payment object to be used in authorize
-            $payment->setAdditionalInformation('amazon_session_id', $amazonSessionId);
-
-            // collect quote totals before placing order (needed for 2.3.0 and lower)
-            // https://github.com/amzn/amazon-payments-magento-2-plugin/issues/992
-            $quote->collectTotals();
-
-            $orderId = $this->cartManagement->placeOrder($quote->getId());
             $order = $this->orderRepository->get($orderId);
             $result = [
                 'success' => true,
                 'order_id' => $orderId,
                 'increment_id' => $order->getIncrementId()
             ];
-
+            // todo get storeId some other way
             $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
                 $quote->getStoreId(),
                 $amazonSessionId,
@@ -833,6 +806,62 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             throw $e;
         }
         return $result;
+    }
+
+    public function placeOrder($amazonSessionId, $cartId = null)
+    {
+
+        if (!$quote = $this->session->getQuoteFromIdOrSession($cartId)) {
+            return ['success' => false];
+        }
+
+        if(!$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
+            return[];
+        }
+
+        if (!$quote->getCustomer()->getId()) {
+            $quote->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+        }
+
+        // check the Amazon session one last time before placing the order
+        $amazonSession = $this->amazonAdapter->getCheckoutSession(
+            $quote->getStoreId(),
+            $amazonSessionId
+        );
+
+        if ($amazonSession['statusDetails']['state'] == 'Canceled') {
+            return [
+                'success' => false,
+                'message' => $this->getCanceledMessage($amazonSession),
+            ];
+        }
+
+
+        if ($amazonSession['productType'] == 'PayOnly') {
+            if (empty($quote->getCustomerEmail())) {
+                $quote->setCustomerEmail($amazonSession['buyer']['email']);
+            }
+        }
+
+        // get payment to load it in the session, so that a salesrule that relies on payment method conditions
+        // can work as expected
+        $payment = $quote->getPayment();
+
+        // Some checkout flows (especially 3rd party) could get to this point without setting payment method
+        if (empty($payment->getMethod())) {
+            $payment->setMethod(Config::CODE);
+        }
+
+        // set amazon session id on payment object to be used in authorize
+        $payment->setAdditionalInformation('amazon_session_id', $amazonSessionId);
+
+        // collect quote totals before placing order (needed for 2.3.0 and lower)
+        // https://github.com/amzn/amazon-payments-magento-2-plugin/issues/992
+        $quote->collectTotals();
+
+        $this->cartManagement->placeOrder($quote->getId());
+        // todo maybe store id somewhere
+        return ['success' => true];
     }
 
     /**

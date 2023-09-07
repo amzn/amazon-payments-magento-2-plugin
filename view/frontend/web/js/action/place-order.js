@@ -24,15 +24,14 @@ define(
         'Magento_Checkout/js/model/full-screen-loader',
         'Amazon_Pay/js/action/checkout-session-update',
         'Amazon_Pay/js/model/storage',
+        'Amazon_Pay/js/model/order',
         'Magento_CheckoutAgreements/js/model/agreements-assigner'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customerData, customer, fullScreenLoader, checkoutSessionUpdateAction, amazonStorage, agreementsAssigner) {
+    function (quote, urlBuilder, storage, errorProcessor, customerData, customer, fullScreenLoader, checkoutSessionUpdateAction, amazonStorage, orderModel, agreementsAssigner) {
         'use strict';
 
-        return function (paymentData, redirectOnSuccess) {
+        return function (paymentData) {
             var serviceUrl, payload;
-
-            redirectOnSuccess = redirectOnSuccess !== false;
 
             /** Checkout for guest and registered customer. */
             if (!customer.isLoggedIn()) {
@@ -58,7 +57,7 @@ define(
 
             agreementsAssigner(payload.paymentMethod);
 
-            return storage.post(
+            storage.post(
                 serviceUrl,
                 JSON.stringify(payload)
             ).done(
@@ -66,35 +65,46 @@ define(
                     // Redirect URL
                     if (response === true) {
                         checkoutSessionUpdateAction(function (redirectUrl) {
-                            customerData.invalidate(['cart']);
-                            customerData.set('checkout-data', {
-                                'selectedShippingAddress': null,
-                                'shippingAddressFromData': null,
-                                'newCustomerShippingAddress': null,
-                                'selectedShippingRate': null,
-                                'selectedPaymentMethod': null,
-                                'selectedBillingAddress': null,
-                                'billingAddressFromData': null,
-                                'newCustomerBillingAddress': null
-                            });
-                            amazonStorage.clearAmazonCheckout();
-                            window.location.replace(redirectUrl);
+                            orderModel.place(
+                                amazonStorage.getCheckoutSessionId()
+                            ).done(
+                                function (response) {
+                                    if(response['success'] === false) {
+                                        console.log('Failed to place website order: ');
+                                        handleResponseError(response);
+                                        return;
+                                    }
+                                    customerData.invalidate(['cart']);
+                                    customerData.set('checkout-data', {
+                                        'selectedShippingAddress': null,
+                                        'shippingAddressFromData': null,
+                                        'newCustomerShippingAddress': null,
+                                        'selectedShippingRate': null,
+                                        'selectedPaymentMethod': null,
+                                        'selectedBillingAddress': null,
+                                        'billingAddressFromData': null,
+                                        'newCustomerBillingAddress': null
+                                    });
+                                    amazonStorage.clearAmazonCheckout();
+                                    window.location.replace(redirectUrl);
+                                }
+                            )
                         });
                     } else {
-                        fullScreenLoader.stopLoader(true);
                         console.log('Invalid Amazon RedirectUrl:');
-                        console.log(response);
-                        errorProcessor.process(response);
+                        handleResponseError(response);
                     }
                 }
             ).fail(
                 function (response) {
-                    errorProcessor.process(response);
-                    console.log(response);
-                    fullScreenLoader.stopLoader(true);
+                    handleResponseError(response);
                 }
             );
-
+            function handleResponseError(response) {
+                fullScreenLoader.stopLoader(true);
+                console.log(response);
+                errorProcessor.process(response);
+            }
         };
     }
 );
