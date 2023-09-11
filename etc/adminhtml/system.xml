@@ -213,7 +213,7 @@
                             <label>Buy Now</label>
                             <source_model>Amazon\Pay\Model\Config\Source\EnabledDisabled</source_model>
                             <config_path>payment/amazon_payment_v2/spc_enabled</config_path>
-                            <comment><![CDATA[This feature is still in beta stage. For instructions on how to activate it, contact your account manager or Amazon Pay merchant support.]]></comment>
+                            <comment><![CDATA[This feature is still in beta stage. For instructions on how to activate it, contact your account manager or <a target="_blank" href="https://sellercentral.amazon.com/cu/contact-us?ld=ELUKLPA-sim.amazon.com">Amazon Pay merchant support</a>.]]></comment>
                         </field>
                         <field id="spc_api_domain" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Buy Now Endpoint Domain Override</label>
