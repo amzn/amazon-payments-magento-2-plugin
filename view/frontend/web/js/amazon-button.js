@@ -140,7 +140,7 @@ define([
 
         /**
          * Draw button
-         **/
+         */
         _draw: function () {
             var self = this;
 
@@ -201,7 +201,7 @@ define([
 
                         if (self.buttonType === 'PayNow' && self._isPayOnly()) {
                             customerData.get('checkout-data').subscribe(function (checkoutData) {
-                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;    
+                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;
 
                                 const shadow = $('.amazon-checkout-button > div')[0].shadowRoot;
                                 $(shadow).find('.amazonpay-button-view1').css('opacity', opacity);

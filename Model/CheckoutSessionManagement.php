@@ -541,6 +541,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         if (count($transactionCollection)) {
             return $transactionCollection->getFirstItem();
+        } else {
+            return null;
         }
     }
 
@@ -660,7 +662,25 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null)
     {
-        $orderId = $this->magentoCheckoutSession->getLastOrderId();
+        // If quoteId passed, an order still needs to be placed
+        if ($cartId) {
+            $result = $this->placeOrder($amazonSessionId, $cartId);
+            if($result['success']) {
+                $orderId = $result['orderId'];
+            }
+        } else {
+            $transaction = $this->getTransaction($amazonSessionId);
+            // If no transaction for amazonSessionId, the order still needs placed (APB)
+            if ($transaction) {
+                $orderId = $this->magentoCheckoutSession->getLastOrderId();
+            } else {
+                $result = $this->placeOrder($amazonSessionId);
+                if($result['success']) {
+                    $orderId = $result['orderId'];
+                }
+            }
+        }
+
         if(!$orderId) {
             $this->logger->debug("Unable to complete Amazon Pay checkout. Order Id not found.");
             return [
@@ -677,9 +697,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
         try {
             $order = $this->orderRepository->get($orderId);
-
-            // todo conditionally place order
-//            $orderId = $this->placeOrder($amazonSessionId, $cartId);
 
             $result = [
                 'success' => true,
@@ -869,10 +886,17 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $orderId = $this->cartManagement->placeOrder($quote->getId());
 
         if(!$orderId){
-            return ['success' => false];
+            $this->logger->debug("Unable to complete Amazon Pay checkout. Unable to place order with quote id: " . $quote->getId());
+            return [
+                'success' => false,
+                'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
+            ];
         }
 
-        return ['success' => true];
+        return [
+            'success' => true,
+            'orderId' => $orderId
+        ];
     }
 
     /**
@@ -1041,4 +1065,5 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         return [$result];
     }
+
 }
