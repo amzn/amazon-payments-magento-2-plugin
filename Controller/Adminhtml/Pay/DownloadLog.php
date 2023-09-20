@@ -31,6 +31,7 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
 
     /**
      * DownloadLog constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
@@ -43,6 +44,8 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
     }
 
     /**
+     * Handle request to download developer logs
+     *
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      * @throws NotFoundException
      */
@@ -62,6 +65,7 @@ class DownloadLog extends \Magento\Backend\Controller\Adminhtml\System
 
     /**
      * ACL
+     *
      * @return bool
      */
     protected function _isAllowed()

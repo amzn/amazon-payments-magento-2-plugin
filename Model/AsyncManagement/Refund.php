@@ -52,6 +52,7 @@ class Refund extends AbstractOperation
 
     /**
      * Refund constructor.
+     *
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
@@ -84,6 +85,9 @@ class Refund extends AbstractOperation
 
     /**
      * Verify refund
+     *
+     * @param mixed $refundId
+     * @return bool
      */
     public function processRefund($refundId)
     {

@@ -31,25 +31,6 @@ class LoadAddresses extends Helper
             $stepLog[] = 'Looking for default address';
             $magentoWebDriver->waitForElement($defaultAddressSelector, $waitTime);
             $stepLog[] = 'Found default address';
-        // } catch (\Exception $e) {
-        //     $magentoWebDriver->switchToNextTab();
-
-        //     try {
-        //         $magentoWebDriver->executeInSelenium(function (RemoteWebDriver $remoteWebDriver) use (
-        //             $magentoWebDriver,
-        //             $editShippingButton
-        //         ) {
-        //             $editAddressSelector = WebDriverBy::cssSelector($editShippingButton);
-        //             $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
-        //             $magentoWebDriver->debug('Click Edit button to return to normal flow');
-        //             $remoteWebDriver->findElement($editAddressSelector)->click();
-                    
-        //             $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::numberOfWindowsToBe(2));
-        //             $magentoWebDriver->switchToNextTab();
-        //         });
-        //     } catch (\Exception $e) {
-
-        //     }
         } catch (\Exception $e) {
             // Avoid out of memory error sometimes caused by print_r
             // print_r($e);

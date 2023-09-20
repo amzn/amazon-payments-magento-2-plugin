@@ -28,6 +28,12 @@ class SalesOrderShipmentTrackAfter implements \Magento\Framework\Event\ObserverI
      */
     private $messageManager;
 
+    /**
+     * SalesOrderShipmentTrackAfter constructor
+     *
+     * @param \Amazon\Pay\Model\Alexa $alexaModel
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     */
     public function __construct(
         \Amazon\Pay\Model\Alexa $alexaModel,
         \Magento\Framework\Message\ManagerInterface $messageManager

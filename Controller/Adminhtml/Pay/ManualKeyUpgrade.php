@@ -21,8 +21,11 @@ use Magento\Backend\Controller\Adminhtml\System;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Amazon\Pay\Model\Config\KeyUpgrade;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Manually hits the Key Upgrade endpoint to retrieve a CV2 Public Key ID
@@ -50,6 +53,8 @@ class ManualKeyUpgrade extends System
     private $keyUpgrade;
 
     /**
+     * ManualKeyUpgrade constructor
+     *
      * @param Context $context
      * @param ConfigInterface $config
      * @param JsonFactory $jsonResultFactory
@@ -70,6 +75,11 @@ class ManualKeyUpgrade extends System
         $this->keyUpgrade = $keyUpgrade;
     }
 
+    /**
+     * Execute controller
+     *
+     * @return ResponseInterface|Json|ResultInterface
+     */
     public function execute()
     {
         $scopeType = $this->_request->getParam('scope');

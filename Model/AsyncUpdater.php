@@ -48,6 +48,16 @@ class AsyncUpdater
      */
     private $logger;
 
+    /**
+     * AsyncUpdater constructor
+     *
+     * @param \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory
+     * @param \Amazon\Pay\Model\AsyncManagement\RefundFactory $refundFactory
+     * @param \Amazon\Pay\Api\Data\AsyncInterfaceFactory $asyncFactory
+     * @param \Magento\Framework\Notification\NotifierInterface $adminNotifier
+     * @param \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger
+     * @param \Psr\Log\LoggerInterface $logger
+     */
     public function __construct(
         \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory,
         \Amazon\Pay\Model\AsyncManagement\RefundFactory $refundFactory,
@@ -65,7 +75,10 @@ class AsyncUpdater
     }
 
     /**
+     * Process pending transactions
+     *
      * @param Async $async
+     * @return void
      */
     public function processPending($async)
     {
@@ -99,6 +112,7 @@ class AsyncUpdater
      * Complete successful async pending action
      *
      * @param Async $async
+     * @return void
      */
     protected function completePending($async)
     {

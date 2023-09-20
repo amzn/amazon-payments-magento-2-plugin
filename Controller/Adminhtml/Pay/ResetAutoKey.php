@@ -45,7 +45,12 @@ class ResetAutoKey extends System
     private $jsonResultFactory;
 
     /**
+     * ResetAutoKey constructor
+     *
      * @param Context $context
+     * @param ConfigInterface $config
+     * @param JsonFactory $jsonResultFactory
+     * @param Manager $cacheManager
      */
     public function __construct(
         Context $context,
@@ -61,6 +66,9 @@ class ResetAutoKey extends System
 
     /**
      * Delete all temporary config used for auto key exchange
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @throws \Exception
      */
     public function execute()
     {

@@ -21,12 +21,12 @@ class KeyManagement
 {
 
     /**
-     * @var
+     * @var int
      */
     protected $_storeId;
 
     /**
-     * @var
+     * @var int
      */
     protected $_websiteId;
 

@@ -19,7 +19,7 @@ use Magento\Framework\Logger\Handler\Base;
 
 class AsyncIpn extends Base
 {
-    const FILENAME = '/var/log/amazon_async_ipn.log';
+    public const FILENAME = '/var/log/amazon_async_ipn.log';
 
     /**
      * @var string

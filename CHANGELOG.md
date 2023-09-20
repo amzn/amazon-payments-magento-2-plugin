@@ -1,5 +1,12 @@
 # Change Log
 
+## 5.16.0
+* Added support for subscriptions, requires the ParadoxLabs Adaptive Subscription module
+* Added platformid for APB payload
+* Fixed phpcs warnings for php 8
+* Fixed issue with installing the module when there is no existing CV1 config
+* Fixed issue when an Allowed Country was somehow saved with an empty string
+
 ## 5.15.0
 * Added Key Upgrade feature (automatically upgrade CV1 keys to CV2 if updating from legacy module)
 * Fixed backward compatibility with Zend availability

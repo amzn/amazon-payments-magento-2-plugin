@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -58,6 +58,8 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     private $random;
 
     /**
+     * CustomerLinkManagement constructor
+     *
      * @param CustomerLinkRepositoryInterface $customerLinkRepository
      * @param CustomerLinkFactory             $customerLinkFactory
      * @param CustomerInterface               $customerInterface
@@ -82,7 +84,7 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getByCustomerId($customerId)
     {
@@ -90,7 +92,7 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(AmazonCustomerInterface $amazonCustomer)
     {
@@ -108,7 +110,7 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function updateLink($customerId, $amazonId)
     {
@@ -123,6 +125,8 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     }
 
     /**
+     * Remove special characters allowed in Amazon account names, but not Magento account names
+     *
      * @param AmazonCustomerInterface $customer
      * @return array
      */

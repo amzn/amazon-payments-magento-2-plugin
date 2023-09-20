@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -21,40 +21,45 @@ use Magento\Framework\Model\AbstractModel;
 
 class CustomerLink extends AbstractModel implements CustomerLinkInterface
 {
+    /**
+     * CustomerLink constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init(CustomerLinkResourceModel::class);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setAmazonId($amazonId)
     {
-        return $this->setData('amazon_id', $amazonId);
+        return $this->setData(self::AMAZON_ID, $amazonId);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getAmazonId()
     {
-        return $this->getData('amazon_id');
+        return $this->getData(self::AMAZON_ID);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setCustomerId($customerId)
     {
-        return $this->setData('customer_id', $customerId);
+        return $this->setData(self::CUSTOMER_ID, $customerId);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getCustomerId()
     {
-        return $this->getData('customer_id');
+        return $this->getData(self::CUSTOMER_ID);
     }
 }

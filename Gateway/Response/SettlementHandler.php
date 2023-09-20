@@ -34,6 +34,7 @@ class SettlementHandler implements HandlerInterface
 
     /**
      * SettlementHandler constructor.
+     *
      * @param SubjectReader $subjectReader
      * @param AsyncManagement $asyncManagement
      */
@@ -46,6 +47,8 @@ class SettlementHandler implements HandlerInterface
     }
 
     /**
+     * Handle payment settlement
+     *
      * @param array $handlingSubject
      * @param array $response
      */

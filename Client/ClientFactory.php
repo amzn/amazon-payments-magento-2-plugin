@@ -43,8 +43,9 @@ class ClientFactory implements ClientFactoryInterface
     /**
      * ClientFactory constructor.
      *
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Psr\Log\LoggerInterface        $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $instanceName
      */
     public function __construct(
@@ -60,7 +61,7 @@ class ClientFactory implements ClientFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function create($scopeId = null, $scope = ScopeInterface::SCOPE_STORE, array $config = [])
     {

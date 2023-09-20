@@ -21,7 +21,7 @@ use Magento\Framework\Validator\AbstractValidator;
 class AccessTokenRequestValidator extends AbstractValidator
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($request)
     {
@@ -33,8 +33,9 @@ class AccessTokenRequestValidator extends AbstractValidator
     }
 
     /**
-     * @param RequestInterface $request
+     * True if request indicates there was an error
      *
+     * @param RequestInterface $request
      * @return bool
      */
     public function hasError(RequestInterface $request)
@@ -43,8 +44,9 @@ class AccessTokenRequestValidator extends AbstractValidator
     }
 
     /**
-     * @param RequestInterface $request
+     * True if request contains Amazon buyer token
      *
+     * @param RequestInterface $request
      * @return bool
      */
     public function hasBuyerToken(RequestInterface $request)
@@ -53,8 +55,9 @@ class AccessTokenRequestValidator extends AbstractValidator
     }
 
     /**
-     * @param RequestInterface $request
+     * True if error was due to access restriction
      *
+     * @param RequestInterface $request
      * @return bool
      */
     public function isDeniedAccessError(RequestInterface $request)
