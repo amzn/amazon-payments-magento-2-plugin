@@ -22,7 +22,7 @@ define([
         place: function(amazonCheckoutSessionId) {
             let url = 'amazon_pay/checkout/placeOrder';
             let data = {
-                'amazonCheckoutSessionId':amazonCheckoutSessionId
+                'amazonCheckoutSessionId': amazonCheckoutSessionId
             };
             return $.ajax({
                 url: urlBuilder.build(url),

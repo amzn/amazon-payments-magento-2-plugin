@@ -51,7 +51,7 @@ class PlaceOrder implements HttpPostActionInterface
     protected $request;
 
     /**
-     * CompleteCheckout constructor.
+     * PlaceOrder constructor.
      *
      * @param CheckoutSessionManagement $checkoutSessionManagement
      * @param JsonFactory $jsonFactory

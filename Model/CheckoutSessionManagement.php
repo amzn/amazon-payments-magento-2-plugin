@@ -730,6 +730,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             ];
         }
         // If quoteId passed, an order still needs to be placed
+        $orderId = null;
         if ($cartId) {
             try {
                 $result = $this->placeOrder($amazonSessionId, $cartId);
@@ -771,14 +772,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         if(!$orderId) {
-            $this->logger->debug("Unable to complete Amazon Pay checkout. Order Id not found.");
+            $this->logger->error("Unable to complete Amazon Pay checkout. Order Id not found.");
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
         if (empty($amazonSessionId)) {
-            $this->logger->debug("Unable to complete Amazon Pay checkout. Order Id: " . $orderId);
+            $this->logger->error("Unable to complete Amazon Pay checkout. Order Id: " . $orderId);
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
@@ -929,7 +930,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     {
 
         if (!$quote = $this->session->getQuoteFromIdOrSession($cartId)) {
-            $this->logger->debug("Unable to complete Amazon Pay checkout. Quote not found.");
+            $this->logger->error("Unable to complete Amazon Pay checkout. Quote not found.");
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
@@ -937,7 +938,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         if(!$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
-            $this->logger->debug("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
+            $this->logger->error("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
@@ -983,10 +984,15 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         // https://github.com/amzn/amazon-payments-magento-2-plugin/issues/992
         $quote->collectTotals();
 
-        $orderId = $this->cartManagement->placeOrder($quote->getId());
+        $orderId = null;
+        try {
+            $orderId = $this->cartManagement->placeOrder($quote->getId());
+        } catch (\Exception $e) {
+            $this->logger->error('Unable to place order: ' . $e->getMessage());
+        }
 
         if(!$orderId){
-            $this->logger->debug("Unable to complete Amazon Pay checkout. Unable to place order with quote id: " . $quote->getId());
+            $this->logger->error("Unable to complete Amazon Pay checkout. Unable to place order with quote id: " . $quote->getId());
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
