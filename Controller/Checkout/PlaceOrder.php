@@ -15,21 +15,19 @@
  */
 namespace Amazon\Pay\Controller\Checkout;
 
+use Amazon\Pay\Model\CheckoutSessionManagement;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Amazon\Pay\Logger\ExceptionLogger;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Message\ManagerInterface;
 
-class PlaceOrder extends \Magento\Framework\App\Action\Action
+class PlaceOrder implements HttpPostActionInterface
 {
     /**
-     * @var \Amazon\Pay\Model\CheckoutSessionManagement
+     * @var CheckoutSessionManagement
      */
     private $amazonCheckoutSessionManagement;
-
-    /**
-     * @var ExceptionLogger
-     */
-    private $exceptionLogger;
 
     /**
      * @var JsonFactory
@@ -37,21 +35,31 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
     private $jsonFactory;
 
     /**
+     * @var ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
+     * @var ExceptionLogger
+     */
+    private $exceptionLogger;
+
+    /**
      * CompleteCheckout constructor.
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement
-     * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
+     * @param CheckoutSessionManagement $checkoutSessionManagement
+     * @param JsonFactory $jsonFactory
      * @param ExceptionLogger|null $exceptionLogger
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement,
-        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
-        ExceptionLogger $exceptionLogger = null
-    ) {
-        parent::__construct($context);
+        CheckoutSessionManagement $checkoutSessionManagement,
+        JsonFactory               $jsonFactory,
+        ManagerInterface          $messageManager,
+        ExceptionLogger           $exceptionLogger = null
+    )
+    {
         $this->amazonCheckoutSessionManagement = $checkoutSessionManagement;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
+        $this->messageManager = $messageManager;
         $this->jsonFactory = $jsonFactory;
     }
 
