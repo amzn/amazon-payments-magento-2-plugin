@@ -24,6 +24,7 @@ use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Amazon\Pay\Helper\Customer as CustomerHelper;
 use Amazon\Pay\Model\Customer\CompositeMatcher as Matcher;
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use http\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Quote\Model\Quote;
@@ -720,22 +721,52 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null)
     {
+        if(!$amazonSessionId) {
+            $errMsg = 'Unable to complete Amazon Pay checkout. Missing AmazonSessionId.';
+            $this->logger->error($errMsg);
+            return [
+                'success' => false,
+                'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
+            ];
+        }
         // If quoteId passed, an order still needs to be placed
         if ($cartId) {
-            $result = $this->placeOrder($amazonSessionId, $cartId);
+            try {
+                $result = $this->placeOrder($amazonSessionId, $cartId);
+            } catch (\Exception $e) {
+                $logError = 'Unable to complete Amazon Pay checkout.'
+                    . ' amazonSessionId: ' . $amazonSessionId
+                    . ' cartId: ' . $cartId
+                    . ' Error: ' . $e->getMessage();
+                $this->logger->error($logError);
+                return [
+                    'success' => false,
+                    'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
+                ];
+            }
             if($result['success']) {
                 $orderId = $result['orderId'];
             }
         } else {
-            $transaction = $this->getTransaction($amazonSessionId);
-            // If no transaction for amazonSessionId, the order still needs placed (APB)
-            if ($transaction) {
-                $orderId = $this->magentoCheckoutSession->getLastOrderId();
-            } else {
-                $result = $this->placeOrder($amazonSessionId);
-                if($result['success']) {
-                    $orderId = $result['orderId'];
+            try {
+                $transaction = $this->getTransaction($amazonSessionId);
+                // If no transaction for amazonSessionId, the order still needs placed (APB)
+                if ($transaction) {
+                    $orderId = $this->magentoCheckoutSession->getLastOrderId();
+                } else {
+                    $result = $this->placeOrder($amazonSessionId);
+                    if ($result['success']) {
+                        $orderId = $result['orderId'];
+                    }
                 }
+            } catch (\Exception $e) {
+                $logError = 'Unable to complete Amazon Pay checkout.'
+                    . ' amazonSessionId: ' . $amazonSessionId . $e->getMessage();
+                $this->logger->error($logError);
+                return [
+                    'success' => false,
+                    'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
+                ];
             }
         }
 
