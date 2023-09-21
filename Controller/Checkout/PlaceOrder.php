@@ -19,6 +19,7 @@ use Amazon\Pay\Model\CheckoutSessionManagement;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Amazon\Pay\Logger\ExceptionLogger;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Message\ManagerInterface;
 
@@ -45,21 +46,31 @@ class PlaceOrder implements HttpPostActionInterface
     private $exceptionLogger;
 
     /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    /**
      * CompleteCheckout constructor.
+     *
      * @param CheckoutSessionManagement $checkoutSessionManagement
      * @param JsonFactory $jsonFactory
+     * @param ManagerInterface $messageManager
+     * @param RequestInterface $request
      * @param ExceptionLogger|null $exceptionLogger
      */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagement,
         JsonFactory               $jsonFactory,
         ManagerInterface          $messageManager,
+        RequestInterface          $request,
         ExceptionLogger           $exceptionLogger = null
     )
     {
         $this->amazonCheckoutSessionManagement = $checkoutSessionManagement;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
         $this->messageManager = $messageManager;
+        $this->request = $request;
         $this->jsonFactory = $jsonFactory;
     }
 
@@ -70,8 +81,8 @@ class PlaceOrder implements HttpPostActionInterface
     {
         try {
             // Bypass cache check in \Magento\PageCache\Model\DepersonalizeChecker
-            $this->getRequest()->setParams(['ajax' => 1]);
-            $amazonCheckoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
+            $this->request->setParams(['ajax' => 1]);
+            $amazonCheckoutSessionId = $this->request->getParam('amazonCheckoutSessionId');
 
             $result = $this->amazonCheckoutSessionManagement->placeOrder($amazonCheckoutSessionId);
             if (!$result['success']) {
