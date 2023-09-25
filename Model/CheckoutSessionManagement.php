@@ -640,6 +640,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * Set order as processing
      *
      * @param Payment $payment
+     * @return void
      */
     protected function setProcessing($payment)
     {
@@ -659,8 +660,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * Add capture comment to order
      *
      * @param Payment $payment
-     * @param CartInterface $quote
      * @param mixed $chargeId
+     * @return void
      */
     protected function addCaptureComment($payment, $chargeId)
     {
@@ -729,7 +730,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
-        // If quoteId passed, an order still needs to be placed
+        // If cardId passed, an order still needs to be placed
         $orderId = null;
         if ($cartId) {
             try {
@@ -773,13 +774,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         if(!$orderId) {
             $this->logger->error("Unable to complete Amazon Pay checkout. Order Id not found.");
-            return [
-                'success' => false,
-                'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
-            ];
-        }
-        if (empty($amazonSessionId)) {
-            $this->logger->error("Unable to complete Amazon Pay checkout. Order Id: " . $orderId);
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
@@ -921,22 +915,25 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
     /**
      * @param $amazonSessionId
-     * @param $cartId
+     * @param $quoteId
      * @return array|false[]|true[]
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function placeOrder($amazonSessionId, $cartId = null)
+    public function placeOrder($amazonSessionId, $quoteId = null)
     {
 
-        if (!$quote = $this->session->getQuoteFromIdOrSession($cartId)) {
-            $this->logger->error("Unable to complete Amazon Pay checkout. Quote not found.");
+        if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
+            $errorMsg = "Unable to complete Amazon Pay checkout. Quote not found.";
+            if(!$quoteId) {
+                $errorMsg .= ' quoteId ' . $quoteId;
+            }
+            $this->logger->error($errorMsg);
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
-
         if(!$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
             $this->logger->error("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
@@ -988,7 +985,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         try {
             $orderId = $this->cartManagement->placeOrder($quote->getId());
         } catch (\Exception $e) {
-            $this->logger->error('Unable to place order: ' . $e->getMessage());
+            $errorMsg = 'Unable to place order for quoteId ' . $quote->getId();
+            $this->logger->error($errorMsg . ': ' . $e->getMessage());
         }
 
         if(!$orderId){
