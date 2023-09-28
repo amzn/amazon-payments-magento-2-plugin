@@ -925,8 +925,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
             $errorMsg = "Unable to complete Amazon Pay checkout. Quote not found.";
-            if(!$quoteId) {
-                $errorMsg .= ' quoteId ' . $quoteId;
+            if($quoteId) {
+                $errorMsg .= ' quoteId: ' . $quoteId . '.';
             }
             $this->logger->error($errorMsg);
             return [
