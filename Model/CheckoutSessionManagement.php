@@ -749,7 +749,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         ];
 
         try {
-            $orderId = $orderResult['orderId'];
+            $orderId = $orderResult['order_id'];
             $order = $this->orderRepository->get($orderId);
             $quoteId = $order->getQuoteId();
             $quote = $this->cartRepository->get($quoteId);
@@ -1113,7 +1113,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             'success' => true,
             'order_id' => null
         ];
-        // If cardId passed, an order still needs to be placed
+        // If cartId passed, an order still needs to be placed
         if ($cartId) {
             try {
                 $result = $this->placeOrder($amazonSessionId, $cartId);
@@ -1131,7 +1131,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 $transaction = $this->getTransaction($amazonSessionId);
                 // If no transaction for amazonSessionId, the order still needs placed (APB)
                 if ($transaction) {
-                    $result['orderId'] = $this->magentoCheckoutSession->getLastOrderId();
+                    $result['order_id'] = $this->magentoCheckoutSession->getLastOrderId();
                 } else {
                     $result = $this->placeOrder($amazonSessionId);
                 }
@@ -1143,7 +1143,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 );
             }
         }
-        if(!$result['orderId']) {
+        if(!$result['order_id']) {
             return $this->handleCompleteCheckoutSessionError(
                 self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE,
                 'Order Id not found.'
