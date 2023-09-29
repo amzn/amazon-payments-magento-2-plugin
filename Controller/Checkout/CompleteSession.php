@@ -22,6 +22,7 @@ use Magento\Framework\App\PageCache\Version;
 
 class CompleteSession extends \Magento\Framework\App\Action\Action
 {
+    const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
     /**
      * @var \Amazon\Pay\CustomerData\CheckoutSession
      */
@@ -115,7 +116,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
             ]);
         } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addErrorMessage(self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE);
         }
 
         return $this->_redirect('checkout/cart', [

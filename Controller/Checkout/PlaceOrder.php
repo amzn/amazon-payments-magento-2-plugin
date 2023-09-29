@@ -79,6 +79,7 @@ class PlaceOrder implements HttpPostActionInterface
      */
     public function execute()
     {
+        $result = ['success' => false];
         try {
             // Bypass cache check in \Magento\PageCache\Model\DepersonalizeChecker
             $this->request->setParams(['ajax' => 1]);

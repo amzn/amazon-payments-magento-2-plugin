@@ -793,7 +793,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function placeOrder($amazonSessionId, $quoteId = null)
     {
-
         if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
             $errorMsg = "Unable to complete Amazon Pay checkout. Quote not found.";
             if($quoteId) {
@@ -1136,7 +1135,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     $result = $this->placeOrder($amazonSessionId);
                 }
             } catch (\Exception $e) {
-                $logEntryDetails =  'amazonSessionId: ' . $amazonSessionId . $e->getMessage();
+                $logEntryDetails =  'amazonSessionId: ' . $amazonSessionId . ' ' . $e->getMessage();
                 return $this->handleCompleteCheckoutSessionError(
                     self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE,
                     $logEntryDetails
