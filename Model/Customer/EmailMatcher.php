@@ -39,7 +39,7 @@ class EmailMatcher implements MatcherInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function match(AmazonCustomerInterface $amazonCustomer)
     {

@@ -119,6 +119,8 @@ class Key
     }
 
     /**
+     * Get website id
+     *
      * @return int
      */
     public function getWebsiteId()
@@ -127,6 +129,8 @@ class Key
     }
 
     /**
+     * Get store id
+     *
      * @return int
      */
     public function getStoreId()
@@ -135,6 +139,8 @@ class Key
     }
 
     /**
+     * Get scope
+     *
      * @return string
      */
     public function getScope()
@@ -143,6 +149,8 @@ class Key
     }
 
     /**
+     * Get scope id
+     *
      * @return int
      */
     public function getScopeId()

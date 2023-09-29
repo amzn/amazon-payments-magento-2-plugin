@@ -25,7 +25,7 @@ use Amazon\Pay\Api\KeyUpgradeInterface;
 
 class PerformKeyUpgrade implements DataPatchInterface
 {
-    const PATH_TRANSLATION_MAP = [
+    public const PATH_TRANSLATION_MAP = [
         'payment/amazon_payment/active' => 'payment/amazon_payment_v2/active',
         'payment/amazon_payment/merchant_id' => 'payment/amazon_payment_v2/merchant_id',
         'payment/amazon_payment/client_id' => 'payment/amazon_payment_v2/store_id',
@@ -74,7 +74,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -137,8 +137,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * Return all explicitly saved Amazon Pay CV1 config values that need to have
-     * their paths updated
+     * Return all explicitly saved Amazon Pay CV1 config values that need to have their paths updated
      *
      * @return array
      */
@@ -154,7 +153,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -162,7 +161,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -170,7 +169,9 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get version
+     *
+     * @return string
      */
     public static function getVersion()
     {

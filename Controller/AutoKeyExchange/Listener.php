@@ -43,6 +43,7 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
 
     /**
      * Listener constructor.
+     *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory
      * @param \Amazon\Pay\Model\Config\AutoKeyExchange $autokeyexchange
@@ -62,6 +63,9 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
 
     /**
      * Parse POST request from Amazon and import keys
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @throws \Exception
      */
     public function execute()
     {
@@ -113,6 +117,8 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
 
     /**
      * Disable Magento's CSRF validation.
+     *
+     * Return null if default validation is needed.
      *
      * @inheritDoc
      */

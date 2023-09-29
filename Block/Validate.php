@@ -24,17 +24,32 @@ use Magento\Framework\View\Element\Template\Context;
  */
 class Validate extends Template
 {
+    /**
+     * Build and return 'forgot password' URL
+     *
+     * @return string
+     */
     public function getForgotPasswordUrl()
     {
         return $this->_urlBuilder->getUrl('customer/account/forgotpassword');
     }
 
+    /**
+     * Create guest checkout URL with checkout session ID param
+     *
+     * @return string
+     */
     public function getContinueAsGuestUrl()
     {
         $checkoutSessionId = $this->getRequest()->getParam('amazonCheckoutSessionId');
         return $this->_urlBuilder->getUrl('checkout', ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]);
     }
 
+    /**
+     * Return true if guest checkout is allowed
+     *
+     * @return bool
+     */
     public function isGuestCheckoutEnabled()
     {
         return $this->_scopeConfig->getValue('checkout/options/guest_checkout');

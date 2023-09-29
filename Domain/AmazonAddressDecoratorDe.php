@@ -25,6 +25,8 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     private $amazonAddress;
 
     /**
+     * AmazonAddressDecoratorDe constructor
+     *
      * @param AmazonAddressInterface $amazonAddress
      */
     public function __construct(AmazonAddressInterface $amazonAddress)
@@ -33,6 +35,8 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
+     * Get array of address lines from Amazon address
+     *
      * @return array
      */
     public function getLines()
@@ -65,6 +69,8 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
+     * Get company from Amazon address
+     *
      * @return string
      */
     public function getCompany()
@@ -96,7 +102,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFirstName()
     {
@@ -104,7 +110,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLastName()
     {
@@ -112,7 +118,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCity()
     {
@@ -120,7 +126,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getState()
     {
@@ -128,7 +134,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getPostCode()
     {
@@ -136,7 +142,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCountryCode()
     {
@@ -144,7 +150,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getTelephone()
     {
@@ -164,6 +170,8 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
+     * Return true if address information indicates it is a packstation
+     *
      * @link https://en.wikipedia.org/wiki/Packstation
      * @param string $address
      * @return bool
@@ -177,7 +185,6 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
      * Get an address line
      *
      * @param int $lineNumber
-     *
      * @return null|string
      */
     public function getLine($lineNumber)
@@ -186,7 +193,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function shiftLines($times)
     {
@@ -194,7 +201,7 @@ class AmazonAddressDecoratorDe implements AmazonAddressInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCompany($company)
     {

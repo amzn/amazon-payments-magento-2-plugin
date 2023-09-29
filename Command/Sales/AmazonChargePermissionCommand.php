@@ -25,7 +25,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 class AmazonChargePermissionCommand extends Command
 {
 
-    const ORDER_ID = 'orderId';
+    private const ORDER_ID = 'orderId';
 
     /**
      * @var \Magento\Framework\App\State $state
@@ -51,6 +51,7 @@ class AmazonChargePermissionCommand extends Command
      * AmazonChargePermissionCommand constructor.
      *
      * These dependencies are proxied, update di.xml if changed
+     *
      * @param \Magento\Framework\App\State $state
      * @param \Magento\Sales\Model\OrderRepository $orderRepository
      * @param \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter
@@ -70,6 +71,9 @@ class AmazonChargePermissionCommand extends Command
         parent::__construct();
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function configure()
     {
         $this->setName('amazon:payment:sales:verify-charge-permission');
@@ -83,6 +87,13 @@ class AmazonChargePermissionCommand extends Command
         parent::configure();
     }
 
+    /**
+     * Execute charge permission retrieval by order ID
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);

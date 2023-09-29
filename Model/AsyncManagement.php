@@ -20,14 +20,19 @@ use Magento\Sales\Api\Data\OrderInterface;
 
 class AsyncManagement
 {
-    const ACTION_AUTH   = 'authorization';
-    const ACTION_REFUND = 'refund';
+    public const ACTION_AUTH   = 'authorization';
+    public const ACTION_REFUND = 'refund';
 
     /**
      * @var \Amazon\Pay\Api\Data\AsyncInterfaceFactory
      */
     private $asyncFactory;
 
+    /**
+     * AsyncManagement constructor
+     *
+     * @param \Amazon\Pay\Api\Data\AsyncInterfaceFactory $asyncFactory
+     */
     public function __construct(
         \Amazon\Pay\Api\Data\AsyncInterfaceFactory $asyncFactory
     ) {
@@ -38,6 +43,7 @@ class AsyncManagement
      * Queue pending authorization for async processing.
      *
      * @param string $pendingId (chargePermissionId)
+     * @return void
      */
     public function queuePendingAuthorization($pendingId)
     {
@@ -52,6 +58,7 @@ class AsyncManagement
      *
      * @param int $orderId
      * @param string $pendingId (refundId)
+     * @return void
      */
     public function queuePendingRefund($orderId, $pendingId)
     {

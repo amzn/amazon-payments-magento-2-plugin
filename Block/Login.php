@@ -43,7 +43,7 @@ class Login extends Template
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     protected function _toHtml()
     {

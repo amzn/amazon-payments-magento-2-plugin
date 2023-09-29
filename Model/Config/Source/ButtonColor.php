@@ -20,6 +20,8 @@ namespace Amazon\Pay\Model\Config\Source;
 class ButtonColor implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
+     * Create option array from button color choices
+     *
      * @return array
      */
     public function toOptionArray()

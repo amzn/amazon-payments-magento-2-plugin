@@ -72,6 +72,7 @@ class Charge extends AbstractOperation
 
     /**
      * Charge constructor.
+     *
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
@@ -112,9 +113,11 @@ class Charge extends AbstractOperation
     }
 
     /**
+     * Get invoice from order and charge ID
+     *
      * @param string $chargeId
      * @param OrderInterface $order
-     * @return \Magento\Sales\Model\Order\Invoice
+     * @return \Magento\Sales\Model\Order\Invoice|null
      */
     protected function loadInvoice($chargeId, OrderInterface $order)
     {
@@ -129,6 +132,9 @@ class Charge extends AbstractOperation
 
     /**
      * Process charge state change
+     *
+     * @param mixed $chargeId
+     * @return bool
      */
     public function processStateChange($chargeId)
     {
@@ -197,7 +203,8 @@ class Charge extends AbstractOperation
      *
      * @param \Magento\Sales\Model\Order $order
      * @param string $chargeId
-     * @param string $reason
+     * @param string $detail
+     * @return void
      */
     public function decline($order, $chargeId, $detail)
     {
@@ -246,6 +253,8 @@ class Charge extends AbstractOperation
      * Cancel charge
      *
      * @param \Magento\Sales\Model\Order $order
+     * @param mixed $detail
+     * @return void
      */
     public function cancel($order, $detail)
     {
@@ -259,8 +268,10 @@ class Charge extends AbstractOperation
 
     /**
      * Authorize pending charge (AuthorizationInitiated)
+     *
      * @param \Magento\Sales\Model\Order $order
-     * @param $chargeId
+     * @param string $chargeId
+     * @return void
      */
     public function authorize($order, $chargeId)
     {
@@ -294,6 +305,7 @@ class Charge extends AbstractOperation
      * @param \Magento\Sales\Model\Order|\Magento\Sales\Api\Data\OrderInterface $order
      * @param string $chargeId
      * @param float $chargeAmount
+     * @return void
      */
     public function capture($order, $chargeId, $chargeAmount)
     {
@@ -340,7 +352,6 @@ class Charge extends AbstractOperation
             $this->asyncLogger->error($errorMessage);
             $order->addStatusHistoryComment($errorMessage);
             $order->save();
-
         }
     }
 }
