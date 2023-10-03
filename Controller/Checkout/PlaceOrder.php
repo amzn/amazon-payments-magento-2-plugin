@@ -88,7 +88,6 @@ class PlaceOrder implements HttpPostActionInterface
             $result = $this->amazonCheckoutSessionManagement->placeOrder($amazonCheckoutSessionId);
             if (!$result['success']) {
                 $this->messageManager->addErrorMessage($result['message']);
-                return $result;
             }
         } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
