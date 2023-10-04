@@ -1108,10 +1108,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     private function placeOrCollectOrder($amazonSessionId, $cartId)
     {
-        $result = [
-            'success' => true,
-            'order_id' => null
-        ];
         // If cartId passed, an order still needs to be placed
         if ($cartId) {
             try {
@@ -1130,6 +1126,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 $transaction = $this->getTransaction($amazonSessionId);
                 // If no transaction for amazonSessionId, the order still needs placed (APB)
                 if ($transaction) {
+                    $result = [
+                        'success' => true,
+                        'order_id' => null
+                    ];
                     $result['order_id'] = $this->magentoCheckoutSession->getLastOrderId();
                 } else {
                     $result = $this->placeOrder($amazonSessionId);
@@ -1142,12 +1142,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 );
             }
         }
+
         if(!$result['order_id']) {
             return $this->handleCompleteCheckoutSessionError(
                 self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE,
                 'Order Id not found.'
             );
         }
+
         return $result;
     }
 
@@ -1167,7 +1169,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $order->getGrandTotal(),
             $order->getOrderCurrencyCode()
         );
+
         $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
+
         if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)) {
             // Something went wrong, but the order has already been placed, so cancelling it
             $this->cancelOrder($order, $quote);
@@ -1176,6 +1180,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 $order->getStoreId(),
                 $amazonSessionId
             );
+
             if (isset($session['chargePermissionId'])) {
                 $this->amazonAdapter->closeChargePermission(
                     $order->getStoreId(),
@@ -1184,11 +1189,13 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     true
                 );
             }
+
             return $this->handleCompleteCheckoutSessionError(
                 'Something went wrong. Choose another payment method for checkout and try again.',
                 'Order cancelled due to Amazon checkout session failure'
             );
         }
+
         return [
             'success' => true,
             'amazonCompleteCheckoutResult' => $amazonCompleteCheckoutResult
