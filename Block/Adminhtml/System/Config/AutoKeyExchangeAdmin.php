@@ -78,7 +78,7 @@ class AutoKeyExchangeAdmin extends \Magento\Framework\View\Element\Template
      */
     public function canUpgrade()
     {
-        return $this->keyUpgrade->getMwsKeyForScope();
+        return $this->keyUpgrade->getMwsKeyForScope() && !$this->keyUpgrade->getExistingPublicKeyId();
     }
 
     /**
