@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.16.1
+* Remove platform/module version information from button payloads
+* Fix admin display bug regarding upgrading legacy keys when a CV2 public key ID already exists
+* Fixed invoice comment noise with Automatic Authorization Mode
+
 ## 5.16.0
 * Added support for subscriptions, requires the ParadoxLabs Adaptive Subscription module
 * Added platformid for APB payload
