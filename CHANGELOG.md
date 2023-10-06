@@ -2,7 +2,7 @@
 
 ## 5.16.1
 * Remove platform/module version information from button payloads
-* Fix admin display bug regarding upgrading legacy keys when a CV2 public key ID already exists
+* Fixed admin display bug regarding upgrading legacy keys when a CV2 public key ID already exists
 * Fixed invoice comment noise with Automatic Authorization Mode
 
 ## 5.16.0
