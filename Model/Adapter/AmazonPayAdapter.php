@@ -225,8 +225,7 @@ class AmazonPayAdapter
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
-                'merchantStoreName' => $this->amazonConfig->getStoreName(),
-                'customInformation' => $this->getMerchantCustomInformation(),
+                'merchantStoreName' => $this->amazonConfig->getStoreName()
             ],
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
@@ -364,7 +363,8 @@ class AmazonPayAdapter
     {
         $payload = [
             'merchantMetadata' => [
-                'merchantReferenceId' => $data['merchantReferenceId']
+                'merchantReferenceId' => $data['merchantReferenceId'],
+                'customInformation' => $this->getMerchantCustomInformation()
             ]
         ];
 
@@ -680,8 +680,7 @@ class AmazonPayAdapter
                 'presentmentCurrency' => $currencyCode,
             ],
             'merchantMetadata' => [
-                'merchantStoreName' => $this->amazonConfig->getStoreName(),
-                'customInformation' => $this->getMerchantCustomInformation()
+                'merchantStoreName' => $this->amazonConfig->getStoreName()
             ],
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
