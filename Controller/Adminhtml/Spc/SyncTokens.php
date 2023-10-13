@@ -53,11 +53,11 @@ class SyncTokens extends \Magento\Backend\App\Action
             $this->authTokens->createOrRenewAndSendTokens();
 
             $this->messageManager->addSuccessMessage(
-                __('Single Page Checkout tokens synced successfully.')
+                __('Buy Now tokens synced successfully.')
             );
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(
-                __('Single Page Checkout tokens could not be synced: ') . $e->getMessage()
+                __('Buy Now tokens could not be synced: ') . $e->getMessage()
             );
         }
 
