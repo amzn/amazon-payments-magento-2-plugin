@@ -25,7 +25,7 @@ interface DeliveryOptionInterface
     public function getShippingMethod();
 
     /**
-     * @return array
+     * @return mixed
      */
     public function getShippingEstimate();
 
