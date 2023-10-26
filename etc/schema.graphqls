@@ -5,6 +5,9 @@ type Query {
     checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails")
 
+    checkoutSessionDetailsV2(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutputV2
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetailsV2")
+
     checkoutSessionSignIn(buyerToken: String!): CheckoutSessionSignInOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionSignIn")
 }
@@ -26,6 +29,36 @@ type Mutation {
 
 type CheckoutSessionDetailsOutput {
     response: String!
+}
+
+type CheckoutSessionDetailsOutputV2 {
+    response: CheckoutSessionDetailsResponseOutput
+}
+
+type CheckoutSessionDetailsResponseOutput {
+    shipping: [CheckoutSessionDetailsShippingOutput]
+    billing: [CheckoutSessionDetailsShippingOutput]
+    payment: String
+}
+
+type CheckoutSessionDetailsShippingOutput {
+    city: String
+    firstname: String
+    lastname: String
+    country_id: String
+    street: [String]
+    postcode: String
+    company: String
+    telephone: String
+    region: String
+    region_id: String
+    region_code: String
+    email: String
+}
+
+type AddressOutput {
+    line1: String
+    line2: String
 }
 
 type CheckoutSessionConfigOutput {
