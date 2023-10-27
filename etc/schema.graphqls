@@ -3,7 +3,7 @@ type Query {
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionConfig")
 
     checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
-    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails")
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails") @deprecated
 
     checkoutSessionDetailsV2(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutputV2
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetailsV2")
@@ -38,7 +38,7 @@ type CheckoutSessionDetailsOutputV2 {
 type CheckoutSessionDetailsResponseOutput {
     shipping: [CheckoutSessionDetailsShippingOutput]
     billing: [CheckoutSessionDetailsShippingOutput]
-    payment: String
+    payment: [String]
 }
 
 type CheckoutSessionDetailsShippingOutput {
