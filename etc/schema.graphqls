@@ -4,6 +4,10 @@ type Query {
 
     checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails")
+    @deprecated(reason: "Use amazonPayCheckoutSessionDetailsV2 query.")
+
+    checkoutSessionDetailsV2(amazonSessionId: String!): CheckoutSessionDetailsOutputV2
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetailsV2")
 
     checkoutSessionSignIn(buyerToken: String!): CheckoutSessionSignInOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionSignIn")
@@ -72,4 +76,25 @@ type CompleteCheckoutSessionOutput {
 
 type UpdateCheckoutSessionOutput {
     redirectUrl: String
+}
+
+type CheckoutSessionDetailsOutputV2 {
+    billing: AmazonPayCheckoutSessionDetailAddress
+    shipping: AmazonPayCheckoutSessionDetailAddress
+    payment: String
+}
+
+type AmazonPayCheckoutSessionDetailAddress {
+    city: String
+    firstname: String
+    lastname: String
+    country_id: String
+    street: [String]
+    postcode: String
+    company: String
+    telephone: String
+    region: String
+    region_id: Int
+    region_code: String
+    email: String
 }
