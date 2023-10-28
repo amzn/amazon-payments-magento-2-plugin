@@ -10,6 +10,10 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
+/**
+ * @deprecated Replaced by CheckoutSessionDetailsV2
+ * @see CheckoutSessionDetailsV2
+ */
 class CheckoutSessionDetails implements ResolverInterface
 {
 
