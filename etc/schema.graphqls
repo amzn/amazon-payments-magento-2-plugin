@@ -98,3 +98,7 @@ type CompleteCheckoutSessionOutput {
 type UpdateCheckoutSessionOutput {
     redirectUrl: String
 }
+
+type StoreConfig {
+    amazon_payment_region: String @doc(description: "Payment Region for js import")
+}
