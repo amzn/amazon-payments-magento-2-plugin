@@ -49,7 +49,7 @@ class CheckoutSessionDetailsV2 implements \Magento\Framework\GraphQl\Query\Resol
             $response[$field] = $result;
         }
 
-        if (empty($response)) {
+        if ($response === []) {
             throw new GraphQlInputException(__('Amazon session not found.'));
         }
 
