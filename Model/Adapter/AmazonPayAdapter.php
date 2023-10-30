@@ -25,11 +25,11 @@ use Magento\Quote\Model\Quote;
 
 class AmazonPayAdapter
 {
-    const PAYMENT_INTENT_CONFIRM = 'Confirm';
-    const PAYMENT_INTENT_AUTHORIZE = 'Authorize';
-    const PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE = 'AuthorizeWithCapture';
-    const SPC_SYNC_URL_FRAGMENT = 'v2/singlePageCheckoutDetails';
-    const SPC_ENABLED_CONFIG = 'payment/amazon_payment_v2/spc_enabled';
+    public const PAYMENT_INTENT_CONFIRM = 'Confirm';
+    public const PAYMENT_INTENT_AUTHORIZE = 'Authorize';
+    public const PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE = 'AuthorizeWithCapture';
+    public const SPC_SYNC_URL_FRAGMENT = 'v2/singlePageCheckoutDetails';
+    public const SPC_ENABLED_CONFIG = 'payment/amazon_payment_v2/spc_enabled';
 
     /**
      * @var \Amazon\Pay\Client\ClientFactoryInterface
@@ -92,12 +92,20 @@ class AmazonPayAdapter
     protected $uniqueIdHelper;
 
     /**
+     * @var \Amazon\Pay\Model\Subscription\SubscriptionManager
+     */
+    private $subscriptionManager;
+
+    /**
+     * AmazonPayAdapter constructor.
+     *
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
+     * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
@@ -112,6 +120,7 @@ class AmazonPayAdapter
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect,
@@ -125,6 +134,7 @@ class AmazonPayAdapter
         $this->quoteRepository = $quoteRepository;
         $this->amazonHelper = $amazonHelper;
         $this->productMetadata = $productMetadata;
+        $this->subscriptionManager = $subscriptionManager;
         $this->logger = $logger;
         $this->url = $url;
         $this->redirect = $redirect;
@@ -134,6 +144,8 @@ class AmazonPayAdapter
     }
 
     /**
+     * Get installation metadata for webCheckoutDetails
+     *
      * @return string
      */
     protected function getMerchantCustomInformation()
@@ -146,6 +158,8 @@ class AmazonPayAdapter
     }
 
     /**
+     * Remove decimals for amounts in Yen, format appropriately for other currencies
+     *
      * @param mixed $amount
      * @param string $currencyCode
      * @return array
@@ -169,8 +183,8 @@ class AmazonPayAdapter
     /**
      * Return checkout session details
      *
-     * @param $storeId
-     * @param $checkoutSessionId
+     * @param int|string $storeId
+     * @param mixed $checkoutSessionId
      * @return mixed
      */
     public function getCheckoutSession($storeId, $checkoutSessionId)
@@ -183,9 +197,9 @@ class AmazonPayAdapter
     /**
      * Update Checkout Session to set payment info and transaction metadata
      *
-     * @param $quote
-     * @param $checkoutSessionId
-     * @param $paymentIntent
+     * @param \Magento\Quote\Api\Data\CartInterface $quote
+     * @param mixed $checkoutSessionId
+     * @param string $paymentIntent
      * @return mixed
      */
     public function updateCheckoutSession($quote, $checkoutSessionId, $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE)
@@ -211,8 +225,7 @@ class AmazonPayAdapter
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
-                'merchantStoreName' => $this->amazonConfig->getStoreName(),
-                'customInformation' => $this->getMerchantCustomInformation(),
+                'merchantStoreName' => $this->amazonConfig->getStoreName()
             ],
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
@@ -225,8 +238,8 @@ class AmazonPayAdapter
     /**
      * Get charge
      *
-     * @param $storeId
-     * @param $chargeId
+     * @param int|string $storeId
+     * @param mixed $chargeId
      * @return mixed
      */
     public function getCharge($storeId, $chargeId)
@@ -238,22 +251,27 @@ class AmazonPayAdapter
     /**
      * Create charge
      *
-     * @param $storeId
-     * @param $chargePermissionId
-     * @param $amount
-     * @param $currency
+     * @param int|string $storeId
+     * @param mixed $chargePermId
+     * @param mixed $amt
+     * @param string $currency
      * @param bool $captureNow
+     * @param string|null $merchantRefId
      * @return mixed
      */
-    public function createCharge($storeId, $chargePermissionId, $amount, $currency, $captureNow = false)
+    public function createCharge($storeId, $chargePermId, $amt, $currency, $captureNow = false, $merchantRefId = null)
     {
         $headers = $this->getIdempotencyHeader();
 
         $payload = [
-            'chargePermissionId' => $chargePermissionId,
-            'chargeAmount' => $this->createPrice($amount, $currency),
+            'chargePermissionId' => $chargePermId,
+            'chargeAmount' => $this->createPrice($amt, $currency),
             'captureNow' => $captureNow,
         ];
+
+        if ($merchantRefId) {
+            $payload['merchantMetadata']['merchantReferenceId'] = $merchantRefId;
+        }
 
         $response = $this->clientFactory->create($storeId)->createCharge($payload, $headers);
 
@@ -263,10 +281,10 @@ class AmazonPayAdapter
     /**
      * Capture charge
      *
-     * @param $storeId
-     * @param $chargeId
-     * @param $amount
-     * @param $currency
+     * @param int|string $storeId
+     * @param mixed $chargeId
+     * @param mixed $amount
+     * @param string $currency
      * @param array $headers
      * @return mixed
      */
@@ -286,10 +304,10 @@ class AmazonPayAdapter
     /**
      * Create refund
      *
-     * @param $storeId
-     * @param $chargeId
-     * @param $amount
-     * @param $currency
+     * @param int|string $storeId
+     * @param mixed $chargeId
+     * @param mixed $amount
+     * @param string $currency
      * @return mixed
      */
     public function createRefund($storeId, $chargeId, $amount, $currency)
@@ -309,8 +327,8 @@ class AmazonPayAdapter
     /**
      * Get refund
      *
-     * @param $storeId
-     * @param $refundId
+     * @param int|string $storeId
+     * @param mixed $refundId
      * @return mixed
      */
     public function getRefund($storeId, $refundId)
@@ -320,7 +338,9 @@ class AmazonPayAdapter
     }
 
     /**
-     * @param int $storeId
+     * Get charge permission object from Amazon
+     *
+     * @param int|string $storeId
      * @param string $chargePermissionId
      * @return array
      */
@@ -332,7 +352,9 @@ class AmazonPayAdapter
     }
 
     /**
-     * @param int $storeId
+     * Update charge permission with order metadata
+     *
+     * @param int|string $storeId
      * @param string $chargePermissionId
      * @param array $data
      * @return mixed
@@ -341,7 +363,8 @@ class AmazonPayAdapter
     {
         $payload = [
             'merchantMetadata' => [
-                'merchantReferenceId' => $data['merchantReferenceId']
+                'merchantReferenceId' => $data['merchantReferenceId'],
+                'customInformation' => $this->getMerchantCustomInformation()
             ]
         ];
 
@@ -357,6 +380,10 @@ class AmazonPayAdapter
             $payload['merchantMetadata']['noteToBuyer'] = $data['noteToBuyer'];
         }
 
+        if (isset($data['recurringMetadata'])) {
+            $payload['recurringMetadata'] = $data['recurringMetadata'];
+        }
+
         $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload);
 
         return $this->processResponse($response, __FUNCTION__);
@@ -365,8 +392,9 @@ class AmazonPayAdapter
     /**
      * Cancel charge
      *
-     * @param $storeId
-     * @param $chargeId
+     * @param int|string $storeId
+     * @param mixed $chargeId
+     * @param string $reason
      */
     public function cancelCharge($storeId, $chargeId, $reason = 'ADMIN VOID')
     {
@@ -380,7 +408,9 @@ class AmazonPayAdapter
     }
 
     /**
-     * @param int $storeId
+     * Close charge permission in Amazon
+     *
+     * @param int|string $storeId
      * @param string $chargePermissionId
      * @param string $reason
      * @param boolean $cancelPendingCharges
@@ -401,11 +431,12 @@ class AmazonPayAdapter
     /**
      * AuthorizeClient and SaleClient Gateway Command
      *
-     * @param $data
+     * @param mixed $data
+     * @param bool $captureNow
      * @return array|mixed
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function authorize($data)
+    public function authorize($data, $captureNow = true)
     {
         $quote = $this->quoteRepository->get($data['quote_id']);
         if (!empty($data['charge_permission_id'])) {
@@ -414,12 +445,17 @@ class AmazonPayAdapter
                 $data['charge_permission_id']
             );
             if ($getChargePermissionResponse['statusDetails']['state'] == "Chargeable") {
+                $merchantReferenceId = null;
+                if (isset($data['increment_id'])) {
+                    $merchantReferenceId = $data['increment_id'];
+                }
                 $response = $this->createCharge(
                     $quote->getStoreId(),
                     $data['charge_permission_id'],
                     $data['amount'],
                     $quote->getQuoteCurrencyCode(),
-                    true
+                    $captureNow,
+                    $merchantReferenceId
                 );
             } else {
                 $this->logger->debug(__('Charge permission not in Chargeable state: ') . $data['charge_permission_id']);
@@ -432,10 +468,12 @@ class AmazonPayAdapter
     }
 
     /**
-     * @param $storeId
-     * @param $sessionId
-     * @param $amount
-     * @param $currencyCode
+     * Complete the Amazon checkout session
+     *
+     * @param int|string $storeId
+     * @param mixed $sessionId
+     * @param float|null $amount
+     * @param string $currencyCode
      */
     public function completeCheckoutSession($storeId, $sessionId, $amount, $currencyCode)
     {
@@ -451,7 +489,9 @@ class AmazonPayAdapter
     }
 
     /**
-     * @param $token
+     * Get Amazon buyer information based on bbuyer token
+     *
+     * @param string $token
      * @return array
      */
     public function getBuyer($token)
@@ -466,8 +506,8 @@ class AmazonPayAdapter
     /**
      * Process SDK client response
      *
-     * @param $clientResponse
-     * @param $functionName
+     * @param mixed $clientResponse
+     * @param string $functionName
      * @return array
      */
     protected function processResponse($clientResponse, $functionName)
@@ -494,6 +534,14 @@ class AmazonPayAdapter
         return $response;
     }
 
+    /**
+     * Remove PID from logs that would contain buyer information
+     *
+     * @param string $functionName
+     * @param mixed $response
+     * @param bool $isError
+     * @return void
+     */
     protected function logSanitized($functionName, $response, $isError)
     {
         $debugBackTrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
@@ -550,10 +598,10 @@ class AmazonPayAdapter
     /**
      * Generate checkout static signature for amazon.Pay.renderButton used by checkout.js
      *
-     * @param CartInterface|\Magento\Quote\Model\Quote $quote
-     * @return string
+     * @param Quote $quote
+     * @return false|string
      */
-    public function generateCheckoutButtonPayload($quote)
+    public function generateCheckoutButtonPayload(Quote $quote)
     {
         $payload = [
             'webCheckoutDetails' => [
@@ -596,9 +644,21 @@ class AmazonPayAdapter
             ];
         }
 
+        $hasSubscription = $this->subscriptionManager->hasSubscription($quote);
+        if ($hasSubscription) {
+            $payload = $this->buildSubscriptionPayload($payload, $quote);
+        }
+
         return json_encode($payload, JSON_UNESCAPED_SLASHES);
     }
 
+    /**
+     * Generate payload for APB button
+     *
+     * @param Quote $quote
+     * @param string $paymentIntent
+     * @return mixed
+     */
     public function generatePayNowButtonPayload(Quote $quote, $paymentIntent = PaymentAction::AUTHORIZE)
     {
         // Always use Authorize for now, so that async transactions are handled properly
@@ -620,10 +680,9 @@ class AmazonPayAdapter
                 'presentmentCurrency' => $currencyCode,
             ],
             'merchantMetadata' => [
-                'merchantReferenceId' => $quote->getReservedOrderId(),
-                'merchantStoreName' => $this->amazonConfig->getStoreName(),
-                'customInformation' => $this->getMerchantCustomInformation(),
+                'merchantStoreName' => $this->amazonConfig->getStoreName()
             ],
+            'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $address = $quote->getShippingAddress();
@@ -658,14 +717,56 @@ class AmazonPayAdapter
             $payload['addressDetails'] = $addressData;
         }
 
+        $hasSubscription = $this->subscriptionManager->hasSubscription($quote);
+        if ($hasSubscription) {
+            $payload = $this->buildSubscriptionPayload($payload, $quote);
+        }
+
         return json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Build subscription payload
+     *
+     * @param array $payload
+     * @param Quote $quote
+     * @return mixed
+     */
+    protected function buildSubscriptionPayload($payload, Quote $quote)
+    {
+        $recurringMetadata = $this->getRecurringMetadata($quote);
+        $payload['chargePermissionType'] = 'Recurring';
+        $payload['recurringMetadata'] = $recurringMetadata;
+
+        if (!$quote->getReservedOrderId()) {
+            try {
+                $quote->reserveOrderId()->save();
+            } catch (\Exception $e) {
+                $this->logger->debug($e->getMessage());
+            }
+        }
+        $payload['merchantMetadata']['merchantReferenceId'] = $quote->getReservedOrderId();
+
+        return $payload;
+    }
+
+    /**
+     * Leverage SDK to create unique signature for AP buttons
+     *
+     * @param mixed $payload
+     * @param int|string $storeId
+     * @return mixed
+     */
     public function signButton($payload, $storeId = null)
     {
         return $this->clientFactory->create($storeId)->generateButtonSignature($payload);
     }
 
+    /**
+     * Get checkout cancel URL from config
+     *
+     * @return string
+     */
     protected function getCheckoutCancelUrl()
     {
         $checkoutCancelUrl = $this->amazonConfig->getCheckoutCancelUrl();
@@ -676,6 +777,11 @@ class AmazonPayAdapter
         return $this->url->getUrl($checkoutCancelUrl);
     }
 
+    /**
+     * Get sign in cancel URL from config
+     *
+     * @return string
+     */
     protected function getSignInCancelUrl()
     {
         $signInCancelUrl = $this->amazonConfig->getSignInCancelUrl();
@@ -686,6 +792,11 @@ class AmazonPayAdapter
         return $this->url->getUrl($signInCancelUrl);
     }
 
+    /**
+     * Return user to previous screen by default on cancel
+     *
+     * @return string
+     */
     protected function getDefaultCancelUrl()
     {
         $referer = $this->redirect->getRefererUrl();
@@ -696,6 +807,33 @@ class AmazonPayAdapter
         return $referer;
     }
 
+    /**
+     * Get recurring metadata
+     *
+     * @param CartInterface $quote
+     * @return array[]
+     */
+    public function getRecurringMetadata($quote)
+    {
+        foreach ($quote->getAllItems() as $item) {
+            if ($this->subscriptionManager->isSubscription($item)) {
+                $frequencyUnit = $this->subscriptionManager->getFrequencyUnit($item);
+                $frequencyCount = $this->subscriptionManager->getFrequencyCount($item);
+            }
+        }
+        return [
+                "frequency" => [
+                    "unit" => $frequencyUnit,
+                    "value" => $frequencyCount
+                ]
+            ];
+    }
+
+    /**
+     * Get sign in URL from config
+     *
+     * @return string
+     */
     protected function getSignInUrl()
     {
         $signInUrl = $this->amazonConfig->getSignInResultUrlPath();

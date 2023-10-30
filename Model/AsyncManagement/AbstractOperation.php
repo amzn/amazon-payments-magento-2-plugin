@@ -38,6 +38,7 @@ abstract class AbstractOperation
 
     /**
      * AbstractOperation constructor.
+     *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -52,21 +53,46 @@ abstract class AbstractOperation
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
+    /**
+     * Set order to On Hold
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
     protected function setOnHold(OrderInterface $order)
     {
         $this->setOrderState($order, Order::STATE_HOLDED);
     }
 
+    /**
+     * Set order to Processing
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
     protected function setProcessing(OrderInterface $order)
     {
         $this->setOrderState($order, Order::STATE_PROCESSING);
     }
 
+    /**
+     * Set order to Payment Review
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
     protected function setPaymentReview(OrderInterface $order)
     {
         $this->setOrderState($order, Order::STATE_PAYMENT_REVIEW);
     }
 
+    /**
+     * Set order state
+     *
+     * @param OrderInterface $order
+     * @param string $state
+     * @return void
+     */
     protected function setOrderState(OrderInterface $order, $state)
     {
         $status = $order->getConfig()->getStateDefaultStatus($state);
@@ -76,7 +102,7 @@ abstract class AbstractOperation
     /**
      * Load transaction.
      *
-     * @param $transactionId
+     * @param mixed $transactionId
      * @param \Magento\Sales\Api\Data\TransactionInterface $type
      * @return mixed
      */
@@ -101,7 +127,7 @@ abstract class AbstractOperation
     /**
      * Load order by transaction ID (chargeId)
      *
-     * @param $transactionId
+     * @param mixed $transactionId
      * @return \Magento\Sales\Model\Order $order
      */
     protected function loadOrder($transactionId)
@@ -116,6 +142,7 @@ abstract class AbstractOperation
      * Close last transaction
      *
      * @param \Magento\Sales\Model\Order $order
+     * @return void
      */
     protected function closeLastTransaction($order)
     {

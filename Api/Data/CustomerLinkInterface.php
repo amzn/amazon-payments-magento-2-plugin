@@ -23,17 +23,17 @@ interface CustomerLinkInterface
     /*
      * Entity ID.
      */
-    const ENTITY_ID = 'entity_id';
+    public const ENTITY_ID = 'entity_id';
 
     /*
      * Customer ID.
      */
-    const CUSTOMER_ID = 'customer_id';
+    public const CUSTOMER_ID = 'customer_id';
 
     /*
      * Amazon ID.
      */
-    const AMAZON_ID = 'amazon_id';
+    public const AMAZON_ID = 'amazon_id';
 
     /**
      * Set amazon id

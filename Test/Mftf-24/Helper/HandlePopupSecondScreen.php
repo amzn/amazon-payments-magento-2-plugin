@@ -10,7 +10,7 @@ use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 
 class HandlePopupSecondScreen extends Helper
 {
-    public function handleClickOnly($signInButton) 
+    public function handleClickOnly($signInButton)
     {
         /** @var MagentoWebDriver $magentoWebDriver */
         $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
@@ -89,32 +89,46 @@ class HandlePopupSecondScreen extends Helper
 
                         $stepLog[] = 'Wait for Edit button in address details';
                         $editAddressSelector = WebDriverBy::cssSelector($editShippingButton);
-                        $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                        $remoteWebDriver->wait(30, 100)->until(
+                            WebDriverExpectedCondition::elementToBeClickable($editAddressSelector)
+                        );
                         $stepLog[] = 'Click Edit button to return to normal flow';
                         $remoteWebDriver->findElement($editAddressSelector)->click();
                         
-                        $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                        $remoteWebDriver->wait(30, 100)->until(
+                            WebDriverExpectedCondition::numberOfWindowsToBe(2)
+                        );
                         $magentoWebDriver->switchToNextTab();
                         $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                        $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                        $remoteWebDriver->wait(30, 100)->until(
+                            WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                        );
                     } else {
                         $stepLog[] = 'No continue button, standard maxo/pay now';
                         $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                        $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                        $remoteWebDriver->wait(30, 100)->until(
+                            WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                        );
                     }
                 } else {
                     $stepLog[] = 'Popup closed, allowing checkout page to load';
                     $magentoWebDriver->waitForLoadingMaskToDisappear(30);
                     $stepLog[] = 'Wait for Edit button in address details';
                     $editAddressSelector = WebDriverBy::cssSelector($editShippingButton);
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::elementToBeClickable($editAddressSelector)
+                    );
                     $stepLog[] = 'Click Edit button to return to normal flow';
                     $remoteWebDriver->findElement($editAddressSelector)->click();
                     
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::numberOfWindowsToBe(2)
+                    );
                     $magentoWebDriver->switchToNextTab();
                     $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                    );
                 }
             } catch (\Exception $ex) {
                 $stepLog[] = $ex->getMessage();
@@ -124,7 +138,7 @@ class HandlePopupSecondScreen extends Helper
         });
     }
 
-    public function handleSignInConsent($consentButton) 
+    public function handleSignInConsent($consentButton)
     {
         /** @var MagentoWebDriver $magentoWebDriver */
         $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');

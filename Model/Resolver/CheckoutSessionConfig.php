@@ -18,6 +18,8 @@ class CheckoutSessionConfig implements ResolverInterface
     private $checkoutSessionManagement;
 
     /**
+     * CheckoutSessionConfig constructor
+     *
      * @param CheckoutSessionManagement $checkoutSessionManagement
      */
     public function __construct(
@@ -27,8 +29,10 @@ class CheckoutSessionConfig implements ResolverInterface
     }
 
     /**
+     * Get config from CheckoutSessionManagement
+     *
      * @param Field $field
-     * @param $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args

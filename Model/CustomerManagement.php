@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -37,7 +37,9 @@ class CustomerManagement implements \Amazon\Pay\Api\CustomerManagementInterface
     private $amazonId;
 
     /**
-     * @param CustomerLinkRepositoryInterface $customerLinkRepository
+     * CustomerManagement
+     *
+     * @param CustomerLinkManagementInterface $customerLinkManagement
      * @param CustomerExtensionFactory $customerExtensionFactory
      */
     public function __construct(
@@ -48,7 +50,7 @@ class CustomerManagement implements \Amazon\Pay\Api\CustomerManagementInterface
         $this->customerExtensionFactory = $customerExtensionFactory;
     }
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAmazonIdExtensionAttribute(CustomerInterface $customer)
     {

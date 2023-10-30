@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class CheckoutSessionDetails implements ResolverInterface
 {
 
-    const QUERY_TYPES = ['billing', 'payment', 'shipping'];
+    public const QUERY_TYPES = ['billing', 'payment', 'shipping'];
 
     /**
      * @var CheckoutSessionManagement
@@ -21,6 +21,8 @@ class CheckoutSessionDetails implements ResolverInterface
     private $checkoutSessionManagement;
 
     /**
+     * CheckoutSessionDetails constructor
+     *
      * @param CheckoutSessionManagement $checkoutSessionManagement
      */
     public function __construct(
@@ -30,8 +32,10 @@ class CheckoutSessionDetails implements ResolverInterface
     }
 
     /**
+     * Get one or more of paymentDescriptor, billingAddress, and shippingAddress from Amazon checkout session
+     *
      * @param Field $field
-     * @param $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
@@ -62,9 +66,11 @@ class CheckoutSessionDetails implements ResolverInterface
     }
 
     /**
-     * @param $amazonSessionId
-     * @param $queryType
-     * @return void
+     * Get requested data from Amazon checkout session
+     *
+     * @param mixed $amazonSessionId
+     * @param mixed $queryType
+     * @return mixed
      */
     private function getQueryTypesData($amazonSessionId, $queryType)
     {

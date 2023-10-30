@@ -63,17 +63,23 @@ class SignInOrContinue extends Helper
 
                     $magentoWebDriver->debug('Wait for Edit button in address details');
                     $editAddressSelector = WebDriverBy::cssSelector($editShippingButton);
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::elementToBeClickable($editAddressSelector)
+                    );
                     $magentoWebDriver->debug('Click Edit button to return to normal flow');
                     $remoteWebDriver->findElement($editAddressSelector)->click();
                     
                     $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::numberOfWindowsToBe(2));
                     $magentoWebDriver->switchToNextTab();
                     $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                    );
                 } else {
                     $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                    );
                 }
             }
         });
@@ -112,30 +118,42 @@ class SignInOrContinue extends Helper
 
                         $magentoWebDriver->debug('Wait for Edit button in address details');
                         $editAddressSelector = WebDriverBy::cssSelector($editShippingButton);
-                        $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                        $remoteWebDriver->wait(30, 100)->until(
+                            WebDriverExpectedCondition::elementToBeClickable($editAddressSelector)
+                        );
                         $magentoWebDriver->debug('Click Edit button to return to normal flow');
                         $remoteWebDriver->findElement($editAddressSelector)->click();
                         
                         $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::numberOfWindowsToBe(2));
                         $magentoWebDriver->switchToNextTab();
                         $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                        $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                        $remoteWebDriver->wait(30, 100)->until(
+                            WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                        );
                     } else {
                         $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                        $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                        $remoteWebDriver->wait(30, 100)->until(
+                            WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                        );
                     }
                 } else {
                     $magentoWebDriver->debug('Popup closed, allowing checkout page to load');
                     $magentoWebDriver->debug('Wait for Edit button in address details');
                     $editAddressSelector = WebDriverBy::cssSelector($editShippingButton);
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::elementToBeClickable($editAddressSelector)
+                    );
                     $magentoWebDriver->debug('Click Edit button to return to normal flow');
                     $remoteWebDriver->findElement($editAddressSelector)->click();
                     
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::numberOfWindowsToBe(2)
+                    );
                     $magentoWebDriver->switchToNextTab();
                     $addressIdSelector = WebDriverBy::cssSelector($addressId);
-                    $remoteWebDriver->wait(30, 100)->until(WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    $remoteWebDriver->wait(30, 100)->until(
+                        WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector)
+                    );
                 }
             } catch (\Exception $ex) {
 
