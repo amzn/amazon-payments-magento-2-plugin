@@ -23,7 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class AuthTokens
 {
-    const INTEGRATION_USER_NAME = 'Amazon Single Page Checkout';
+    const INTEGRATION_USER_NAME = 'Amazon Buy Now';
 
     const STATUS_CONFIG_PATH = 'payment/amazon_pay/spc_tokens_sync_status';
 
@@ -114,7 +114,7 @@ class AuthTokens
      * @var UniqueId
      */
     protected $uniqueIdHelper;
-    
+
     /**
      * @param IntegrationFactory $integrationFactory
      * @param Integration $integrationResourceModel

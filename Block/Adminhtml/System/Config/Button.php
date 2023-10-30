@@ -46,7 +46,7 @@ class Button extends Field
         $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData([
                 'id' => 'sync_tokens',
-                'label' => __('Generate & Sync Tokens'),
+                'label' => __('Manually Generate & Sync Tokens'),
                 'on_click' => sprintf("location.href = '%s';", $this->getCustomUrl()),
             ]);
 
