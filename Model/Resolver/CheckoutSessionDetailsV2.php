@@ -28,7 +28,7 @@ class CheckoutSessionDetailsV2 extends CheckoutSessionDetails implements Resolve
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $amazonSessionId = $args['amazonSessionId'] ?? false;
-        $queryTypes = $args['queryTypes'] ?? false;
+        $queryTypes = ['shipping','billing','payment'];
 
         if (!$amazonSessionId) {
             throw new GraphQlInputException(__('Required parameter "amazonSessionId" is missing'));
@@ -41,6 +41,15 @@ class CheckoutSessionDetailsV2 extends CheckoutSessionDetails implements Resolve
         $response = [];
         foreach ($queryTypes as $queryType) {
             $response[$queryType] = $this->getQueryTypesData($amazonSessionId, $queryType) ?:  [];
+
+            switch($queryType) {
+                case 'shipping':
+                case 'billing':
+                    $response[$queryType] = $response[$queryType][0];
+                    break;
+                default:
+                    //nothing
+            }
         }
 
         return [

@@ -3,9 +3,10 @@ type Query {
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionConfig")
 
     checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
-    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails") @deprecated
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails")
+    @deprecated(reason: "Use checkoutSessionDetailsV2 for a more conventional GraphQL response format")
 
-    checkoutSessionDetailsV2(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutputV2
+    checkoutSessionDetailsV2(amazonSessionId: String!): CheckoutSessionDetailsOutputV2
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetailsV2")
 
     checkoutSessionSignIn(buyerToken: String!): CheckoutSessionSignInOutput
@@ -36,9 +37,9 @@ type CheckoutSessionDetailsOutputV2 {
 }
 
 type CheckoutSessionDetailsResponseOutput {
-    shipping: [CheckoutSessionDetailsShippingOutput]
-    billing: [CheckoutSessionDetailsShippingOutput]
-    payment: [String]
+    shipping: CheckoutSessionDetailsShippingOutput
+    billing: CheckoutSessionDetailsShippingOutput
+    payment: String
 }
 
 type CheckoutSessionDetailsShippingOutput {
@@ -54,11 +55,6 @@ type CheckoutSessionDetailsShippingOutput {
     region_id: String
     region_code: String
     email: String
-}
-
-type AddressOutput {
-    line1: String
-    line2: String
 }
 
 type CheckoutSessionConfigOutput {
