@@ -52,8 +52,6 @@ class CheckoutSessionDetailsV2 extends CheckoutSessionDetails implements Resolve
             }
         }
 
-        return [
-            'response' => $response
-        ];
+        return $response;
     }
 }

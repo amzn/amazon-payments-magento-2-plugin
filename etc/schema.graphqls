@@ -33,10 +33,6 @@ type CheckoutSessionDetailsOutput {
 }
 
 type CheckoutSessionDetailsOutputV2 {
-    response: CheckoutSessionDetailsResponseOutput
-}
-
-type CheckoutSessionDetailsResponseOutput {
     shipping: CheckoutSessionDetailsShippingOutput
     billing: CheckoutSessionDetailsShippingOutput
     payment: String
