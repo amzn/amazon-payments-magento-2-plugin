@@ -520,4 +520,7 @@
         <plugin name="amazon_pay_token_delete" type="Amazon\Pay\Plugin\PaymentTokenRepository" />
     </type>
 
+    <type name="Magento\Customer\Model\Address\AbstractAddress">
+        <plugin name="amazon_pay_customer_name_by_country" type="Amazon\Pay\Plugin\CustomerNameByCountry" />
+    </type>
 </config>
