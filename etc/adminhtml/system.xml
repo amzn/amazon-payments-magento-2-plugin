@@ -216,11 +216,11 @@
                             <comment><![CDATA[This feature is still in beta stage. For instructions on how to activate it, contact your account manager or <a target="_blank" href="https://sellercentral.amazon.com/cu/contact-us">Amazon Pay merchant support</a>.]]></comment>
                         </field>
                         <field id="spc_api_domain" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Buy Now Endpoint Domain Override</label>
+                            <label>Buy Now Endpoint URL</label>
                             <config_path>payment/amazon_payment_v2/spc_api_domain</config_path>
                             <frontend_model>Amazon\Pay\Block\Adminhtml\System\Config\Form\SpcApiDomain</frontend_model>
                             <backend_model>Amazon\Pay\Model\Config\Form\SpcApiDomainBackend</backend_model>
-                            <comment><![CDATA[This domain override will be used when syncing tokens with Amazon Pay. The field defaults to the admin domain. If your admin panel or API endpoint domain differs from this, please enter it here in the format &quot;https://&lt;override-domain&gt;/&quot;, including the slash at the end.]]></comment>
+                            <comment><![CDATA[This URL is used to synchronize tokens with Amazon Pay. Your admin panel's URL is set by default. If your admin panel or API endpoint URL differs from this, enter the corresponding URL—including the slash at the end—in the following format:<br>https://www.example.com/]]></comment>
                         </field>
                         <field id="spc_tokens_sync" translate="label" type="button" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Buy Now Integration User Tokens</label>
