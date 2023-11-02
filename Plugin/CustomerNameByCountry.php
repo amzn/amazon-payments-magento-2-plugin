@@ -6,6 +6,7 @@ use Magento\Customer\Model\Address\AddressModelInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\Resolver;
+use Psr\Log\LoggerInterface;
 
 class CustomerNameByCountry
 {
@@ -27,6 +28,11 @@ class CustomerNameByCountry
     protected $store;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Plugin constructor
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -36,11 +42,13 @@ class CustomerNameByCountry
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Config $eavConfig,
-        Resolver $store
+        Resolver $store,
+        LoggerInterface $logger
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->eavConfig = $eavConfig;
         $this->store = $store;
+        $this->logger = $logger;
     }
 
     /**
@@ -55,23 +63,29 @@ class CustomerNameByCountry
      */
     public function afterGetName($subject, $result)
     {
-        $locale = $this->store->getLocale();
-        if ($locale != self::JAPANESE_JAPAN_LOCALE) {
+        try {
+            $locale = $this->store->getLocale();
+            if ($locale != self::JAPANESE_JAPAN_LOCALE) {
+                return $result;
+            }
+            $name = '';
+            if ($this->eavConfig->getAttribute('customer_address', 'prefix')->getIsVisible() && $subject->getPrefix()) {
+                $name .= $subject->getPrefix() . ' ';
+            }
+            $name .= $subject->getLastname();
+            $name .= ' ' . $subject->getFirstname();
+            $middleName = $this->eavConfig->getAttribute('customer_address', 'middlename');
+            if ($middleName->getIsVisible() && $subject->getMiddlename()) {
+                $name .= ' ' . $subject->getMiddlename();
+            }
+            if ($this->eavConfig->getAttribute('customer_address', 'suffix')->getIsVisible() && $subject->getSuffix()) {
+                $name .= ' ' . $subject->getSuffix();
+            }
+            return $name;
+        } catch (\Exception $e) {
+            // use unchanged result
+            $this->logger->error('amazon_pay_customer_name_by_country failed: ' . $e->getMessage());
             return $result;
         }
-        $name = '';
-        if ($this->eavConfig->getAttribute('customer_address', 'prefix')->getIsVisible() && $subject->getPrefix()) {
-            $name .= $subject->getPrefix() . ' ';
-        }
-        $name .= $subject->getLastname();
-        $name .=  ' ' . $subject->getFirstname();
-        $middleName = $this->eavConfig->getAttribute('customer_address', 'middlename');
-        if ($middleName->getIsVisible() && $subject->getMiddlename()) {
-            $name .= ' ' . $subject->getMiddlename();
-        }
-        if ($this->eavConfig->getAttribute('customer_address', 'suffix')->getIsVisible() && $subject->getSuffix()) {
-            $name .= ' ' . $subject->getSuffix();
-        }
-        return $name;
     }
 }
