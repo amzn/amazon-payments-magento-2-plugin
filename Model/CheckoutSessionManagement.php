@@ -43,7 +43,7 @@ use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
-    const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
+    protected const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -715,11 +715,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * Return result array with failure flag and message
      *
-     * @param $message
-     * @param $logEntryDetails
+     * @param string $message
+     * @param string $logEntryDetails
      * @return array
      */
-    protected function handleCompleteCheckoutSessionError($message, $logEntryDetails = '') {
+    protected function handleCompleteCheckoutSessionError($message, $logEntryDetails = '')
+    {
         $this->logger->error($message . ' ' . $logEntryDetails);
         return [
             'success' => false,
@@ -732,7 +733,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function completeCheckoutSession($amazonSessionId, $cartId = null)
     {
-        if(!$amazonSessionId) {
+        if (!$amazonSessionId) {
             return $this->handleCompleteCheckoutSessionError(
                 self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE,
                 'Missing AmazonSessionId.'
@@ -740,7 +741,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         $orderResult = $this->placeOrCollectOrder($amazonSessionId, $cartId);
-        if(!$orderResult['success']) {
+        if (!$orderResult['success']) {
             return $orderResult;
         }
 
@@ -759,13 +760,13 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $result['increment_id'] = $order->getIncrementId();
             // Order is canceled on failure
             $amazonCheckoutResult = $this->completeAmazonCheckoutSession($amazonSessionId, $order, $quote);
-            if(!$amazonCheckoutResult['success']) {
+            if (!$amazonCheckoutResult['success']) {
                 return $amazonCheckoutResult;
             }
 
             // Order is canceled on failure
             $paymentResult = $this->handlePayment($amazonSessionId, $amazonCheckoutResult, $order, $quote);
-            if(!$paymentResult['success']) {
+            if (!$paymentResult['success']) {
                 return $paymentResult;
             }
 
@@ -785,8 +786,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param $amazonSessionId
-     * @param $quoteId
+     * Collect quote, check amazon checkout session, place order
+     *
+     * @param string $amazonSessionId
+     * @param string $quoteId
      * @return array|false[]|true[]
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -795,7 +798,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     {
         if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
             $errorMsg = "Unable to complete Amazon Pay checkout. Quote not found.";
-            if($quoteId) {
+            if ($quoteId) {
                 $errorMsg .= ' quoteId: ' . $quoteId . '.';
             }
             $this->logger->error($errorMsg);
@@ -804,7 +807,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
-        if(!$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
+        if (!$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
             $this->logger->error("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
                 'success' => false,
@@ -859,8 +862,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $this->logger->error($errorMsg . ': ' . $e->getMessage());
         }
 
-        if(!$orderId){
-            $this->logger->error("Unable to complete Amazon Pay checkout. Unable to place order with quote id: " . $quote->getId());
+        if (!$orderId) {
+            $errorMsg = "Unable to complete Amazon Pay checkout. Unable to place order with quote id: ";
+            $this->logger->error($errorMsg . $quote->getId());
             return [
                 'success' => false,
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
@@ -1100,10 +1104,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * orderId included in successful placement or collection
+     * OrderId included in successful placement or collection
      *
-     * @param $amazonSessionId
-     * @param $cartId
+     * @param string $amazonSessionId
+     * @param string $cartId
      * @return array
      */
     private function placeOrCollectOrder($amazonSessionId, $cartId)
@@ -1143,7 +1147,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             }
         }
 
-        if(!$result['order_id']) {
+        if (!$result['order_id']) {
             return $this->handleCompleteCheckoutSessionError(
                 self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE,
                 'Order Id not found.'
@@ -1156,12 +1160,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * Complete checkout session on amazon side
      *
-     * @param $amazonSessionId
+     * @param string $amazonSessionId
      * @param OrderInterface $order
-     * @param $quote
+     * @param CartInterface $quote
      * @return array
      */
-    private function completeAmazonCheckoutSession($amazonSessionId, OrderInterface $order, $quote)
+    private function completeAmazonCheckoutSession($amazonSessionId, $order, $quote)
     {
         $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
             $order->getStoreId(),
@@ -1203,13 +1207,15 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param $amazonSessionId
+     * Validate checkout success and handle based on state
+     *
+     * @param string $amazonSessionId
      * @param array $amazonCheckoutResult
      * @param OrderInterface $order
-     * @param $quote
+     * @param CartInterface $quote
      * @return array
      */
-    private function handlePayment($amazonSessionId, array $amazonCheckoutResult, OrderInterface $order, $quote)
+    private function handlePayment($amazonSessionId, $amazonCheckoutResult, $order, $quote)
     {
         try {
             // $amazonCheckoutResult holds success flag and actual result from api call
@@ -1299,7 +1305,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
-     * @param $amazonSessionId
+     * Cleanup after an error
+     *
+     * @param string $amazonSessionId
      * @param OrderInterface $order
      * @param \Exception $e
      * @return void
@@ -1320,5 +1328,4 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             );
         }
     }
-
 }

@@ -22,7 +22,7 @@ use Magento\Framework\App\PageCache\Version;
 
 class CompleteSession extends \Magento\Framework\App\Action\Action
 {
-    const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
+    protected const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
     /**
      * @var \Amazon\Pay\CustomerData\CheckoutSession
      */
