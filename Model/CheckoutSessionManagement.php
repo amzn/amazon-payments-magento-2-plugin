@@ -679,6 +679,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      *
      * @param OrderInterface $order
      * @param CartInterface $quote
+     * @param string $reasonMessage
      * @return void
      */
     private function cancelOrder($order, $quote, $reasonMessage = '')
@@ -702,7 +703,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $history->delete();
         }
 
-        if(!$reasonMessage) {
+        if (!$reasonMessage) {
             $reasonMessage = __('Something went wrong. Choose another payment method for checkout and try again.');
         }
 
@@ -1191,7 +1192,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             // Something went wrong, but the order has already been placed, so cancelling it
             $this->cancelOrder($order, $quote, $cancelledMessage);
 
-
             if (isset($session['chargePermissionId'])) {
                 $this->amazonAdapter->closeChargePermission(
                     $order->getStoreId(),
@@ -1201,8 +1201,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 );
             }
 
-
-            if(!$cancelledMessage) {
+            if (!$cancelledMessage) {
                 $cancelledMessage = 'Something went wrong. Choose another payment method for checkout and try again.';
             }
 
