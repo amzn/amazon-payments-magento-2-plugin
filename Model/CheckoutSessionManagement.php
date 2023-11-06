@@ -681,7 +681,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param CartInterface $quote
      * @return void
      */
-    private function cancelOrder($order, $quote)
+    private function cancelOrder($order, $quote, $reasonMessage = '')
     {
         // set order as cancelled
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
@@ -701,9 +701,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         foreach ($order->getStatusHistories() as $history) {
             $history->delete();
         }
-        $order->addStatusHistoryComment(
-            __('Something went wrong. Choose another payment method for checkout and try again.')
-        );
+
+        if(!$reasonMessage) {
+            $reasonMessage = __('Something went wrong. Choose another payment method for checkout and try again.');
+        }
+
+        $order->addStatusHistoryComment($reasonMessage);
 
         $order->save();
 
@@ -1177,13 +1180,17 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
 
         if (!preg_match('/^2\d\d$/', $completeCheckoutStatus)) {
-            // Something went wrong, but the order has already been placed, so cancelling it
-            $this->cancelOrder($order, $quote);
 
             $session = $this->amazonAdapter->getCheckoutSession(
                 $order->getStoreId(),
                 $amazonSessionId
             );
+
+            $cancelledMessage = $this->getCanceledMessage($session);
+
+            // Something went wrong, but the order has already been placed, so cancelling it
+            $this->cancelOrder($order, $quote, $cancelledMessage);
+
 
             if (isset($session['chargePermissionId'])) {
                 $this->amazonAdapter->closeChargePermission(
@@ -1194,9 +1201,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 );
             }
 
+
+            if(!$cancelledMessage) {
+                $cancelledMessage = 'Something went wrong. Choose another payment method for checkout and try again.';
+            }
+
             return $this->handleCompleteCheckoutSessionError(
-                'Something went wrong. Choose another payment method for checkout and try again.',
-                'Order cancelled due to Amazon checkout session failure'
+                $cancelledMessage,
+                'Order cancelled due to Amazon checkout session failure: ' . $amazonCompleteCheckoutResult['message']
             );
         }
 
