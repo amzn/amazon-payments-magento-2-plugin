@@ -172,26 +172,9 @@ define([
                                 if (!additionalValidators.validate()) {
                                     return false;
                                 }
-                                //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
                                 if (self.options.isIosc()) {
-                                    storage.post(
-                                        'checkout/onepage/update',
-                                        "{}",
-                                        false
-                                    ).done(
-                                        function (response) {
-                                            if (!response.error) {
-                                                self._initCheckout();
-                                            } else {
-                                                errorProcessor.process(response);
-                                            }
-                                        }
-                                    ).fail(
-                                        function (response) {
-                                            errorProcessor.process(response);
-                                        }
-                                    );
-                                }else{
+                                    self._initOnePageCheckout();
+                                } else {
                                     self._initCheckout();
                                 }
                             });
@@ -202,7 +185,7 @@ define([
 
                         if (self.buttonType === 'PayNow' && self._isPayOnly()) {
                             customerData.get('checkout-data').subscribe(function (checkoutData) {
-                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;    
+                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;
 
                                 const shadow = $('.amazon-checkout-button > div')[0].shadowRoot;
                                 $(shadow).find('.amazonpay-button-view1').css('opacity', opacity);
@@ -211,6 +194,27 @@ define([
                     });
                 }, this);
             }
+        },
+
+        _initOnePageCheckout: function () {
+            //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
+            storage.post(
+                'checkout/onepage/update',
+                "{}",
+                false
+            ).done(
+                function (response) {
+                    if (!response.error) {
+                        self._initCheckout();
+                    } else {
+                        errorProcessor.process(response);
+                    }
+                }
+            ).fail(
+                function (response) {
+                    errorProcessor.process(response);
+                }
+            );
         },
 
         _initCheckout: function () {
