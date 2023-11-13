@@ -157,7 +157,7 @@ define([
 
                     this._loadButtonConfig(function (buttonConfig) {
                         // remove session config to decouple button, allowing onclick adjustment
-                        if(self._isAmazonPaySelectedAsPaymentMethod() || self.options.placement === 'Product') {
+                        if(self._isAmazonPayShownAsPaymentMethod() || self.options.placement === 'Product') {
                             delete buttonConfig.createCheckoutSessionConfig;
                         }
 
@@ -168,8 +168,7 @@ define([
                             return;
                         }
 
-                        // If onClick is available on the amazonPayButton, then checkout is decoupled from render, indicating this is an APB button
-                        if (self._isAmazonPaySelectedAsPaymentMethod()) {
+                        if (self._isAmazonPayShownAsPaymentMethod()) {
                             self.amazonPayButton.onClick(function() {
                                 if (!additionalValidators.validate()) {
                                     return false;
@@ -200,7 +199,8 @@ define([
             }
         },
 
-        _isAmazonPaySelectedAsPaymentMethod: function () {
+        // PayNow indicating this is an APB button
+        _isAmazonPayShownAsPaymentMethod: function () {
             return (this.buttonType === 'PayNow');
         },
 
