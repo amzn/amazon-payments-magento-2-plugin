@@ -55,6 +55,8 @@
                 <sign_in_result_url>amazon_pay/login/authorize/</sign_in_result_url>
                 <can_use_internal>0</can_use_internal>
                 <spc_tokens_sync_status_no>No tokens have been synced yet.</spc_tokens_sync_status_no>
+                <spc_tokens_sync_status_success>Tokens synced successfully on</spc_tokens_sync_status_success>
+                <spc_tokens_sync_status_failed>Tokens failed to sync on</spc_tokens_sync_status_failed>
                 <can_authorize_vault>1</can_authorize_vault>
                 <can_capture_vault>1</can_capture_vault>
             </amazon_payment_v2>

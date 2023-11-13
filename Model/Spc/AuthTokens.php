@@ -304,7 +304,7 @@ class AuthTokens
 
                 $responseCode = $response['status'] ?? '404';
                 if (!preg_match('/^2\d\d$/', $responseCode)) {
-                    $this->saveStatus(__('Tokens failed to sync'), $store->getId());
+                    $this->saveStatus('failed', $store->getId());
 
                     $errorResponses[] = $response['message'];
 
@@ -313,7 +313,7 @@ class AuthTokens
 
                 $this->saveLastSync($store->getId());
 
-                $this->saveStatus(__('Tokens synced successfully'), $store->getId());
+                $this->saveStatus('success', $store->getId());
             }
         }
 
