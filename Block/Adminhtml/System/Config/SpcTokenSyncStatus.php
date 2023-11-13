@@ -55,17 +55,21 @@ class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
     public function getConfigForAllStores()
     {
         $storeValues = [];
-        $noSyncMessage = $this->_scopeConfig->getValue('payment/amazon_payment_v2/spc_tokens_sync_status_no');
+        $noSyncMessage = __($this->_scopeConfig->getValue('payment/amazon_payment_v2/spc_tokens_sync_status_no'));
+        $successSyncMessage = __($this->_scopeConfig->getValue('payment/amazon_payment_v2/spc_tokens_sync_status_success'));
+        $failedSyncMessage = __($this->_scopeConfig->getValue('payment/amazon_payment_v2/spc_tokens_sync_status_failed'));
 
         foreach ($this->storeRepository->getList() as $store) {
             if ($store->getId() == 0) {
                 continue;
             }
 
-            $value = $this->_scopeConfig->getValue(
-                'payment/amazon_pay/spc_tokens_sync_status',
-                'store',
-                $store->getId()) ?? $noSyncMessage;
+            $syncTime = $this->_scopeConfig->getValue('payment/amazon_pay/spc_tokens_last_sync', 'store', $store->getId());
+            $syncStatus = $this->_scopeConfig->getValue('payment/amazon_pay/spc_tokens_sync_status', 'store', $store->getId());
+
+            $value = $syncTime
+                ? (strpos($syncStatus, 'failed') !== false ? $failedSyncMessage : $successSyncMessage) .' '. $syncTime
+                : $noSyncMessage;
 
             $storeValues[] = [
                 'store_name' => $store->getName(),
