@@ -116,8 +116,8 @@ class Payment extends \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Pay
     public function isLastVersion() :bool
     {
         return version_compare(
-            $this->getLocalModuleVersion(),
             $this->getRemoteModuleVersion(),
+            $this->getLocalModuleVersion(),
             '<='
         );
     }
