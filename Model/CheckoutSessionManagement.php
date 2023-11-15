@@ -726,10 +726,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     protected function handleCompleteCheckoutSessionError($message, $logEntryDetails = '')
     {
         $this->logger->error($message . ' ' . $logEntryDetails);
-        return [
+        $result = [
             'success' => false,
             'message' => $this->getTranslationString($message),
         ];
+        return $result;
     }
 
     /**
@@ -782,6 +783,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             // cancel order
             if (isset($order)) {
                 $this->cancelOrder($order, $quote);
+                $this->magentoCheckoutSession->restoreQuote();
             }
 
             throw $e;
@@ -871,7 +873,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $this->logger->error($errorMsg . $quote->getId());
             return [
                 'success' => false,
-                'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
+                'message' => $this->getTranslationString(self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE),
             ];
         }
 
@@ -1150,11 +1152,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 );
             }
         }
-
-        if (!$result['order_id']) {
+        if (!$result['success']) {
+            $reason = $result['message'] ?? '';
             return $this->handleCompleteCheckoutSessionError(
-                self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE,
-                'Order Id not found.'
+                $reason,
+                $reason
             );
         }
 
@@ -1191,6 +1193,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
             // Something went wrong, but the order has already been placed, so cancelling it
             $this->cancelOrder($order, $quote, $cancelledMessage);
+            $this->magentoCheckoutSession->restoreQuote();
 
             if (isset($session['chargePermissionId'])) {
                 $this->amazonAdapter->closeChargePermission(
@@ -1304,6 +1307,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $this->closeChargePermission($amazonSessionId, $order, $e);
 
             $this->cancelOrder($order, $quote);
+            $this->magentoCheckoutSession->restoreQuote();
 
             $logEntryDetails = 'amazonSessionId: ' . $amazonSessionId
                 . ' quoteId: ' . $quote->getId()
