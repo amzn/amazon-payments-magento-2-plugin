@@ -19,4 +19,9 @@
     <type name="Magento\Backend\Block\Widget\Form\Element\Dependence">
         <plugin name="amazon_pay_backend_field_dependence" type="Amazon\Pay\Plugin\BackendFieldDependence" sortOrder="1" />
     </type>
+    <type name="Amazon\Pay\Block\Adminhtml\System\Config\Fieldset\Payment">
+        <arguments>
+            <argument name="authSession" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>
