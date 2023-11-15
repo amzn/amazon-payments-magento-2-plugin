@@ -113,12 +113,12 @@ class Payment extends \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Pay
     /**
      * @return bool
      */
-    public function isLastVersion() :bool
+    public function hasUpdates() :bool
     {
         return version_compare(
-            $this->getRemoteModuleVersion(),
             $this->getLocalModuleVersion(),
-            '<='
+            $this->getRemoteModuleVersion(),
+            '<'
         );
     }
 
@@ -145,7 +145,7 @@ class Payment extends \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Pay
     {
         $html = '<div class="config-heading" >';
 
-        if (!$this->isLastVersion()) {
+        if ($this->hasUpdates()) {
             $html .= $this->renderUpdateNotification();
         }
 
