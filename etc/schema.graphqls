@@ -4,6 +4,10 @@ type Query {
 
     checkoutSessionDetails(amazonSessionId: String!, queryTypes: [String!]): CheckoutSessionDetailsOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetails")
+    @deprecated(reason: "Use checkoutSessionDetailsV2 for a more conventional GraphQL response format")
+
+    checkoutSessionDetailsV2(amazonSessionId: String!): CheckoutSessionDetailsOutputV2
+    @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionDetailsV2")
 
     checkoutSessionSignIn(buyerToken: String!): CheckoutSessionSignInOutput
     @resolver(class:"Amazon\\Pay\\Model\\Resolver\\CheckoutSessionSignIn")
@@ -26,6 +30,27 @@ type Mutation {
 
 type CheckoutSessionDetailsOutput {
     response: String!
+}
+
+type CheckoutSessionDetailsOutputV2 {
+    shipping: CheckoutSessionDetailsShippingOutput
+    billing: CheckoutSessionDetailsShippingOutput
+    payment: String
+}
+
+type CheckoutSessionDetailsShippingOutput {
+    city: String
+    firstname: String
+    lastname: String
+    country_id: String
+    street: [String]
+    postcode: String
+    company: String
+    telephone: String
+    region: String
+    region_id: String
+    region_code: String
+    email: String
 }
 
 type CheckoutSessionConfigOutput {

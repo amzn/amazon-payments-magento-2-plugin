@@ -42,6 +42,7 @@ class CheckoutSessionDetails implements ResolverInterface
      * @return array
      * @throws GraphQlInputException
      */
+
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $amazonSessionId = $args['amazonSessionId'] ?? false;
@@ -72,7 +73,7 @@ class CheckoutSessionDetails implements ResolverInterface
      * @param mixed $queryType
      * @return mixed
      */
-    private function getQueryTypesData($amazonSessionId, $queryType)
+    protected function getQueryTypesData($amazonSessionId, $queryType)
     {
         $result = false;
         if (in_array($queryType, self::QUERY_TYPES, true)) {
