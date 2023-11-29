@@ -8,35 +8,48 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class EndpointTestSetup extends WebapiAbstract
 {
-    const SERVICE_INFO = [
+    public const SERVICE_INFO = [
         'rest' => [
             'resourcePath' => '',
             'httpMethod' => 'POST'
         ]
     ];
 
-    const TEST_PRODUCT_SKU = 'product_dynamic_122';
+    public const TEST_PRODUCT_SKU = 'product_dynamic_122';
 
-    const NON_EXISTENT_CART_ID = 10000000;
+    public const NON_EXISTENT_CART_ID = 10000000;
 
+    /**
+     * @var string
+     */
     protected $checkoutSessionId;
 
+    /**
+     * @var int
+     */
     protected $createdCartId;
 
+    /**
+     * @var string
+     */
     protected $createdCartMaskedId;
 
+    /**
+     * @var int
+     */
     protected $createdCartItemId;
 
     protected function setUp(): void
     {
         $puppeteerQuoteMaskId = file(
-            BP .'/vendor/amzn/amazon-pay-magento-2-module/Test/Api/environments/quote_mask_id');
+            BP .'/vendor/amzn/amazon-pay-magento-2-module/Test/Api/environments/quote_mask_id'
+        );
         $puppeteerCheckoutSessionId = file(
-            BP .'/vendor/amzn/amazon-pay-magento-2-module/Test/Api/environments/checkout_session_id');
+            BP .'/vendor/amzn/amazon-pay-magento-2-module/Test/Api/environments/checkout_session_id'
+        );
 
         $this->createdCartMaskedId = trim($puppeteerQuoteMaskId[0]);
         $this->checkoutSessionId = trim($puppeteerCheckoutSessionId[0]);
-
 
         $this->clearInventoryReservations();
         $this->upStockOnProduct();

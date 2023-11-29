@@ -20,8 +20,5 @@
         <job name="amazon_pay_process_async" instance="Amazon\Pay\Cron\ProcessAsync" method="execute">
             <schedule>*/30 * * * *</schedule>
         </job>
-        <job name="amazon_pay_spc_tokens" instance="Amazon\Pay\Cron\SpcCheckAndSyncTokens" method="execute">
-            <schedule>*/5 * * * *</schedule>
-        </job>
     </group>
 </config>

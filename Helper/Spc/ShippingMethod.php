@@ -7,12 +7,14 @@ use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Amazon\Pay\Logger\Logger;
+use Magento\Quote\Model\Quote;
 use Magento\Shipping\Model\CarrierFactoryInterface;
 
 class ShippingMethod
 {
-    const APPLIED = 'applied';
-    const NOT_APPLIED = 'not_applied';
+    public const APPLIED = 'applied';
+
+    public const NOT_APPLIED = 'not_applied';
 
     /**
      * @var ShippingMethodManagementInterface
@@ -44,7 +46,6 @@ class ShippingMethod
      */
     protected $logger;
 
-
     /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param ShippingInformationInterface $shippingInformation
@@ -60,8 +61,7 @@ class ShippingMethod
         CartRepositoryInterface $cartRepository,
         CarrierFactoryInterface $carrierFactory,
         Logger $logger
-    )
-    {
+    ) {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->shippingInformation = $shippingInformation;
         $this->shippingInformationManagement = $shippingInformationManagement;
@@ -71,8 +71,10 @@ class ShippingMethod
     }
 
     /**
-     * @param $quote
-     * @param $code
+     * Set shipping method on quote
+     *
+     * @param Quote $quote
+     * @param string|bool $code
      * @return string|void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -106,20 +108,22 @@ class ShippingMethod
 
                     $refreshedQuote = $this->cartRepository->get($quote->getId());
 
-                    if ($refreshedQuote->getShippingAddress()->getShippingMethod() == $shippingMethodCode)  {
+                    if ($refreshedQuote->getShippingAddress()->getShippingMethod() == $shippingMethodCode) {
                         return self::APPLIED;
                     }
                 } catch (\Exception $e) {
-                    $this->logger->info('SPC - Failed to apply shipping method '. $shippingMethodCode .' - cartId: '. $quote->getId());
+                    $this->logger->info(
+                        'SPC - Failed to apply shipping method '. $shippingMethodCode .
+                            ' - cartId: '. $quote->getId()
+                    );
                 }
             }
 
             $this->setNewMethod($quote);
 
             return self::NOT_APPLIED;
-        }
-        // Select the cheapest option
-        else if ($quote->getShippingAddress()->validate()) {
+        } elseif ($quote->getShippingAddress()->validate()) {
+            // Select the cheapest option
             $this->setNewMethod($quote);
         }
     }
@@ -127,13 +131,16 @@ class ShippingMethod
     /**
      * Sets a shipping method on the quote, either by sort order or cheapest
      *
-     * @param $quote
+     * @param Quote $quote
      * @return void
      */
     protected function setNewMethod($quote)
     {
         /** @var \Magento\Quote\Api\Data\ShippingMethodInterface[] $shippingMethods */
-        $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
+        $shippingMethods = $this->shippingMethodManagement->estimateByExtendedAddress(
+            $quote->getId(),
+            $quote->getShippingAddress()
+        );
         $selectedMethod = [
             'carrier' => '',
             'code' => '',
@@ -154,8 +161,7 @@ class ShippingMethod
 
                     break;
                 }
-            }
-            else {
+            } else {
                 $useSortOrder = false;
             }
 

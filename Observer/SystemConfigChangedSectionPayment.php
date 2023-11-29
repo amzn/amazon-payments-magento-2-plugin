@@ -27,8 +27,7 @@ class SystemConfigChangedSectionPayment implements ObserverInterface
     public function __construct(
         MutableScopeConfig $mutableScopeConfig,
         AuthTokens $authTokens
-    )
-    {
+    ) {
         $this->mutableScopeConfig = $mutableScopeConfig;
         $this->authTokens = $authTokens;
     }
@@ -50,8 +49,11 @@ class SystemConfigChangedSectionPayment implements ObserverInterface
         // Check that Amazon changes are included
         if (in_array('payment/amazon_payment_v2/private_key', $changedPaths)) {
             // Check if SPC is enabled or being enabled
-            if ($this->mutableScopeConfig->isSetFlag('payment/amazon_payment_v2/spc_enabled', ScopeInterface::SCOPE_STORE, $store ?: 0)
-            ) {
+            if ($this->mutableScopeConfig->isSetFlag(
+                'payment/amazon_payment_v2/spc_enabled',
+                ScopeInterface::SCOPE_STORE,
+                $store ?: 0
+            )) {
                 $this->authTokens->createOrRenewAndSendTokens();
             }
         }

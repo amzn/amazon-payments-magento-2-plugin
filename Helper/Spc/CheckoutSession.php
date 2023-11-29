@@ -6,8 +6,10 @@ use Amazon\Pay\Api\CheckoutSessionManagementInterface;
 use Amazon\Pay\Logger\Logger;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Amazon\Pay\Model\CheckoutSessionManagement;
+use Amazon\Pay\Model\Spc\Response\CartDetails;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Quote\Model\Quote;
 
 class CheckoutSession
 {
@@ -28,16 +30,17 @@ class CheckoutSession
     public function __construct(
         CheckoutSessionManagementInterface $checkoutSessionManagement,
         Logger $logger
-    )
-    {
+    ) {
         $this->checkoutSessionManagement = $checkoutSessionManagement;
         $this->logger = $logger;
     }
 
     /**
-     * @param $quote
-     * @param $cartDetails
-     * @param $checkoutSessionId
+     * Confirm checkout session
+     *
+     * @param Quote $quote
+     * @param CartDetails $cartDetails
+     * @param string $checkoutSessionId
      * @return array|mixed
      * @throws WebapiException
      */
@@ -50,22 +53,30 @@ class CheckoutSession
         $amazonSessionStatus = $amazonSession['status'] ?? '404';
         if (!preg_match('/^2\d\d$/', $amazonSessionStatus)) {
             $this->logger->error(
-                'SPC ShippingMethod - Session Error: '. $amazonSession['reasonCode'] .'. CartId: '. $quote->getId() .' - ', $cartDetails
+                'SPC ShippingMethod - Session Error: '. $amazonSession['reasonCode'] .
+                    '. CartId: '. $quote->getId() .' - ',
+                $cartDetails
             );
 
             throw new WebapiException(
-                new Phrase($amazonSession['message']), $amazonSession['reasonCode'], 400
+                new Phrase($amazonSession['message']),
+                $amazonSession['reasonCode'],
+                400
             );
         }
 
         // check if still open
         if ($amazonSession['statusDetails']['state'] !== 'Open') {
             $this->logger->error(
-                'SPC ShippingMethod: '. $amazonSession['statusDetails']['reasonCode'] .'. CartId: '. $quote->getId() .' - ', $cartDetails
+                'SPC ShippingMethod: '. $amazonSession['statusDetails']['reasonCode'] .
+                    '. CartId: '. $quote->getId() .' - ',
+                $cartDetails
             );
 
             throw new WebapiException(
-                new Phrase($amazonSession['statusDetails']['reasonDescription']), $amazonSession['statusDetails']['reasonCode'], 400
+                new Phrase($amazonSession['statusDetails']['reasonDescription']),
+                $amazonSession['statusDetails']['reasonCode'],
+                400
             );
         }
 
@@ -73,7 +84,9 @@ class CheckoutSession
     }
 
     /**
-     * @param $checkoutSessionId
+     * Get shipping address
+     *
+     * @param string $checkoutSessionId
      * @return mixed
      */
     public function getShippingAddress($checkoutSessionId)
@@ -82,7 +95,9 @@ class CheckoutSession
     }
 
     /**
-     * @param $checkoutSessionId
+     * Get billing address
+     *
+     * @param string $checkoutSessionId
      * @return mixed
      */
     public function getBillingAddress($checkoutSessionId)

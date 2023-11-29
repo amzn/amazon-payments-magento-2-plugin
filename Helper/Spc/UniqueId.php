@@ -7,7 +7,7 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 
 class UniqueId
 {
-    const UNIQUE_ID_CONFIG_PATH = 'payment/amazon_pay/unique_id';
+    public const UNIQUE_ID_CONFIG_PATH = 'payment/amazon_pay/unique_id';
 
     /**
      * @var ScopeConfigInterface
@@ -26,13 +26,14 @@ class UniqueId
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         WriterInterface $configWriter
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->configWriter = $configWriter;
     }
 
     /**
+     * Get unique id
+     *
      * @return mixed|string
      */
     public function getUniqueId()
@@ -47,6 +48,8 @@ class UniqueId
     }
 
     /**
+     * Create and save unique id
+     *
      * @return string
      */
     protected function createAndSaveUniqueId()

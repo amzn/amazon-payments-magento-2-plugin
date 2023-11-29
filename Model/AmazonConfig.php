@@ -1020,6 +1020,13 @@ class AmazonConfig
         );
     }
 
+    /**
+     * Is SPC enabled
+     *
+     * @param string $scope
+     * @param string|null $scopeCode
+     * @return bool
+     */
     public function isSpcEnabled($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
     {
         return $this->scopeConfig->isSetFlag(

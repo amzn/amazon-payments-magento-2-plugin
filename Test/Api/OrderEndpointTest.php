@@ -4,7 +4,7 @@ namespace Amazon\Pay\Test\Api;
 
 class OrderEndpointTest extends EndpointTestSetup
 {
-    const PATH = '/V1/amazon-spc/v1/cart/{cartId}/order';
+    public const PATH = '/V1/amazon-spc/v1/cart/{cartId}/order';
 
     protected function tearDown(): void
     {

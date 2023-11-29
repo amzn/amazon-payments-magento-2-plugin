@@ -24,14 +24,12 @@ class SpcApiDomain extends \Magento\Config\Block\System\Config\Form\Field
         StoreManagerInterface $storeManager,
         ProductMetadataInterface $productMetadata,
         array $data = []
-    )
-    {
-        // Special case for lower than Magento 2.4 version
+    ) {
         if ($productMetadata->getVersion() < '2.4') {
+            // Special case for lower than Magento 2.4 version
             parent::__construct($context, $data);
-        }
-        // Magento 2.4.0+
-        else {
+        } else {
+            // Magento 2.4.0+
             parent::__construct($context, $data, null);
         }
 
@@ -39,6 +37,8 @@ class SpcApiDomain extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Get element html
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException

@@ -1,10 +1,14 @@
 <?php
+// phpcs:ignoreFile
+// This file throws an error because it is not using db_schema
+
 /**
  * Magento console installer options for Web API functional tests. Are used in functional tests bootstrap.
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 return [
     'language'                     => 'en_US',
     'timezone'                     => 'America/Los_Angeles',

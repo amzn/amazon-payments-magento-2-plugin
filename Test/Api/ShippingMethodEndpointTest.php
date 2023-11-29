@@ -4,15 +4,20 @@ namespace Amazon\Pay\Test\Api;
 
 class ShippingMethodEndpointTest extends EndpointTestSetup
 {
-    const PATH = '/V1/amazon-spc/v1/cart/{cartId}/shipping-method';
-    const SERVICE_INFO = [
+    public const PATH = '/V1/amazon-spc/v1/cart/{cartId}/shipping-method';
+    public const SERVICE_INFO = [
         'rest' => [
             'resourcePath' => '',
             'httpMethod' => 'POST'
         ]
     ];
-    const REQUEST_DATA = ['couponCode' => 'CouponCode7'];
+    public const REQUEST_DATA = ['couponCode' => 'CouponCode7'];
 
+    /**
+     * Test card id not found
+     *
+     * @return void
+     */
     public function testCartIdNotFound()
     {
         $cartId = self::NON_EXISTENT_CART_ID;
@@ -25,6 +30,11 @@ class ShippingMethodEndpointTest extends EndpointTestSetup
         $this->_webApiCall($serviceInfo);
     }
 
+    /**
+     * Test checkout session id not valid
+     *
+     * @return void
+     */
     public function testCheckoutSessionIdNotValid()
     {
         $this->createCart();
@@ -45,6 +55,11 @@ class ShippingMethodEndpointTest extends EndpointTestSetup
         $this->_webApiCall($serviceInfo, $requestData);
     }
 
+    /**
+     * Test setting shipping method
+     *
+     * @return void
+     */
     public function testSettingShippingMethod()
     {
         $this->createCart();
@@ -68,9 +83,17 @@ class ShippingMethodEndpointTest extends EndpointTestSetup
 
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertStringContainsString('"shipping_method_code":"flatrate_flatrate"},"shipping_estimate":[],"is_default":true', json_encode($response));
+        $this->assertStringContainsString(
+            '"shipping_method_code":"flatrate_flatrate"},"shipping_estimate":[],"is_default":true',
+            json_encode($response)
+        );
     }
 
+    /**
+     * Test update shipping method
+     *
+     * @return void
+     */
     public function testUpdateShippingMethod()
     {
         $this->createCart();
@@ -94,7 +117,13 @@ class ShippingMethodEndpointTest extends EndpointTestSetup
 
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertStringContainsString('"shipping_method_code":"flatrate_flatrate"},"shipping_estimate":[],"is_default":false', json_encode($response));
-        $this->assertStringContainsString('"shipping_method_code":"freeshipping_freeshipping"},"shipping_estimate":[],"is_default":true', json_encode($response));
+        $this->assertStringContainsString(
+            '"shipping_method_code":"flatrate_flatrate"},"shipping_estimate":[],"is_default":false',
+            json_encode($response)
+        );
+        $this->assertStringContainsString(
+            '"shipping_method_code":"freeshipping_freeshipping"},"shipping_estimate":[],"is_default":true',
+            json_encode($response)
+        );
     }
 }

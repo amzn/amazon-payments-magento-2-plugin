@@ -4,15 +4,16 @@ namespace Amazon\Pay\Test\Api;
 
 class CouponEndpointTest extends EndpointTestSetup
 {
-    const PATH = '/V1/amazon-spc/v1/cart/{cartId}/coupon';
-    const SERVICE_INFO = [
+    public const PATH = '/V1/amazon-spc/v1/cart/{cartId}/coupon';
+
+    public const SERVICE_INFO = [
         'rest' => [
             'resourcePath' => '',
             'httpMethod' => 'POST'
         ]
     ];
 
-    const COUPONS = [['coupon_code' => 'CouponCode0']];
+    public const COUPONS = [['coupon_code' => 'CouponCode0']];
 
     public function testCartIdNotFound()
     {
@@ -46,7 +47,6 @@ class CouponEndpointTest extends EndpointTestSetup
         $this->_webApiCall($serviceInfo, $requestData);
     }
 
-
     public function testCouponCodeDoesNotExist()
     {
         $this->createCart();
@@ -63,7 +63,6 @@ class CouponEndpointTest extends EndpointTestSetup
                 'checkout_session_id' => $this->checkoutSessionId
             ]
         ];
-
 
         $this->expectExceptionMessage('CouponNotApplicable');
         $this->expectExceptionCode(400);

@@ -9,23 +9,33 @@ use Magento\Framework\App\ProductMetadataInterface;
 
 class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
 {
+    /**
+     * @var string
+     */
     protected $_template = 'Amazon_Pay::system/config/sync-status.phtml';
 
+    /**
+     * @var StoreRepositoryInterface
+     */
     protected $storeRepository;
 
+    /**
+     * @param Context $context
+     * @param StoreRepositoryInterface $storeRepository
+     * @param ProductMetadataInterface $productMetadata
+     * @param array $data
+     */
     public function __construct(
         Context $context,
         StoreRepositoryInterface $storeRepository,
         ProductMetadataInterface $productMetadata,
         array $data = []
-    )
-    {
-        // Special case for lower than Magento 2.4 version
+    ) {
         if ($productMetadata->getVersion() < '2.4') {
+            // Special case for lower than Magento 2.4 version
             parent::__construct($context, $data);
-        }
-        // Magento 2.4.0+
-        else {
+        } else {
+            // Magento 2.4.0+
             parent::__construct($context, $data, null);
         }
 
@@ -33,6 +43,8 @@ class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Render
+     *
      * @param AbstractElement $element
      * @return mixed
      */
@@ -44,6 +56,8 @@ class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Get element html
+     *
      * @param AbstractElement $element
      * @return mixed
      */
@@ -52,6 +66,11 @@ class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
         return $this->_toHtml();
     }
 
+    /**
+     * Get config for all stores
+     *
+     * @return array
+     */
     public function getConfigForAllStores()
     {
         $storeValues = [];
@@ -65,7 +84,8 @@ class SpcTokenSyncStatus extends \Magento\Config\Block\System\Config\Form\Field
             $value = $this->_scopeConfig->getValue(
                 'payment/amazon_pay/spc_tokens_sync_status',
                 'store',
-                $store->getId()) ?? $noSyncMessage;
+                $store->getId()
+            ) ?? $noSyncMessage;
 
             $storeValues[] = [
                 'store_name' => $store->getName(),
