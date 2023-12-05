@@ -44,8 +44,7 @@ class Coupon implements CouponInterface
         CartRepositoryInterface $cartRepository,
         Cart $cartHelper,
         CheckoutSession $checkoutSessionHelper
-    )
-    {
+    ) {
         $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->cartHelper = $cartHelper;
@@ -68,7 +67,9 @@ class Coupon implements CouponInterface
             $this->cartHelper->logError('SPC Coupon: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"),
+                "InvalidCartId",
+                404
             );
         }
 
@@ -107,26 +108,33 @@ class Coupon implements CouponInterface
                         }
 
                         $this->cartHelper->logError(
-                            'SPC Coupon: CouponNotApplicable - The coupon '. $couponCode .' could not be applied to the cart. CartId: ' . $cartId . ' - ', $cartDetails
+                            'SPC Coupon: CouponNotApplicable - The coupon '. $couponCode .
+                            ' could not be applied to the cart. CartId: ' . $cartId . ' - ',
+                            $cartDetails
                         );
 
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase("The coupon code '". $couponCode ."' does not apply"), "CouponNotApplicable", 400
+                            new Phrase("The coupon code '". $couponCode ."' does not apply"),
+                            "CouponNotApplicable",
+                            400
                         );
                     }
-                }
-                else {
-                    if (!isset($cartDetails['coupons'][0]['coupon_code']) || $cartDetails['coupons'][0]['coupon_code'] === null) {
+                } else {
+                    if (!isset($cartDetails['coupons'][0]['coupon_code'])
+                        || $cartDetails['coupons'][0]['coupon_code'] === null) {
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase("Coupon code is missing"), "CouponNotApplicable", 400
+                            new Phrase("Coupon code is missing"),
+                            "CouponNotApplicable",
+                            400
                         );
                     }
                 }
             }
-        }
-        else {
+        } else {
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart details are missing on the request body"), "InvalidRequest", 400
+                new Phrase("Cart details are missing on the request body"),
+                "InvalidRequest",
+                400
             );
         }
 

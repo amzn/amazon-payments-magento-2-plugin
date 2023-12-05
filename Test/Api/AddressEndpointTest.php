@@ -4,7 +4,7 @@ namespace Amazon\Pay\Test\Api;
 
 class AddressEndpointTest extends EndpointTestSetup
 {
-    const PATH = '/V1/amazon-spc/v1/cart/{cartId}/address';
+    public const PATH = '/V1/amazon-spc/v1/cart/{cartId}/address';
 
     public function testCartIdNotFound()
     {

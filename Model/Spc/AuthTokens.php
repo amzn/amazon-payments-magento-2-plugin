@@ -7,6 +7,7 @@ use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\MutableScopeConfig;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Integration\Model\AuthorizationService;
 use Magento\Integration\Model\Integration as IntegrationModel;
@@ -16,6 +17,7 @@ use Magento\Integration\Model\ResourceModel\Integration;
 use Magento\Integration\Model\ResourceModel\Integration\Collection as IntegrationCollection;
 use Magento\Integration\Model\IntegrationFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token as TokenResourceModel;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
@@ -23,15 +25,15 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class AuthTokens
 {
-    const INTEGRATION_USER_NAME = 'Amazon Buy Now';
+    public const INTEGRATION_USER_NAME = 'Amazon Buy Now';
 
-    const STATUS_CONFIG_PATH = 'payment/amazon_pay/spc_tokens_sync_status';
+    public const STATUS_CONFIG_PATH = 'payment/amazon_pay/spc_tokens_sync_status';
 
-    const LAST_SYNC_CONFIG_PATH = 'payment/amazon_pay/spc_tokens_last_sync';
+    public const LAST_SYNC_CONFIG_PATH = 'payment/amazon_pay/spc_tokens_last_sync';
 
-    const AUTH_VERSION = 'OAuth1A';
+    public const AUTH_VERSION = 'OAuth1A';
 
-    const ALLOWED_RESOURCES = [
+    public const ALLOWED_RESOURCES = [
         'Amazon_Pay::spc',
     ];
 
@@ -150,8 +152,7 @@ class AuthTokens
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         UniqueId $uniqueIdHelper
-    )
-    {
+    ) {
         $this->integrationFactory = $integrationFactory;
         $this->integrationResourceModel = $integrationResourceModel;
         $this->integrationCollection = $integrationCollection;
@@ -171,6 +172,8 @@ class AuthTokens
     }
 
     /**
+     * Create or renew token
+     *
      * @return IntegrationModel
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -193,8 +196,8 @@ class AuthTokens
             }
         }
 
-        // Create integration user
         if (!$userExists) {
+            // Create integration user
             $integration = $this->integrationFactory->create();
             $integration->setData([
                 'name' => $integrationName,
@@ -214,9 +217,8 @@ class AuthTokens
             $token->createVerifierToken($consumer->getId());
             $token->setType('access');
             $this->integrationTokenResourceModel->save($token);
-        }
-        // Renew tokens for existing integration user
-        else {
+        } else {
+            // Renew tokens for existing integration user
             $this->oauthService->createAccessToken($integration->getConsumerId(), true);
             $integration->setStatus(IntegrationModel::STATUS_ACTIVE);
             $this->integrationResourceModel->save($integration);
@@ -226,6 +228,8 @@ class AuthTokens
     }
 
     /**
+     * Send tokens
+     *
      * @param IntegrationModel $integration
      * @param \Magento\Store\Api\Data\StoreInterface $store
      * @return array
@@ -236,10 +240,11 @@ class AuthTokens
     {
         $consumer = $this->oauthService->loadConsumer($integration->getConsumerId());
         $accessTokens = $this->oauthService->getAccessToken($consumer->getId());
-        parse_str($accessTokens, $accessTokens);
-        $domain = $this->mutableScopeConfig->getValue('payment/amazon_payment_v2/spc_api_domain',
+        $domain = $this->mutableScopeConfig->getValue(
+            'payment/amazon_payment_v2/spc_api_domain',
             ScopeInterface::SCOPE_STORE,
-            $store->getId()) ?: $this->storeManager->getStore(0)->getBaseUrl();
+            $store->getId()
+        ) ?: $this->storeManager->getStore(0)->getBaseUrl();
 
         // Get unique id for the merchantStoreReferenceId
         $uniqueId = $this->getUniqueId();
@@ -258,11 +263,11 @@ class AuthTokens
                     ],
                     [
                         'type' => 'ACCESS_TOKEN',
-                        'value' => $accessTokens['oauth_token']
+                        'value' => $accessTokens->getToken()
                     ],
                     [
                         'type' => 'ACCESS_TOKEN_SECRET',
-                        'value' => $accessTokens['oauth_token_secret']
+                        'value' => $accessTokens->getSecret()
                     ],
                 ],
                 'authTimestamp' => str_replace('+00:00', 'Z', date('c', time())),
@@ -279,7 +284,10 @@ class AuthTokens
     }
 
     /**
+     * Create or renew and send tokens
+     *
      * @return array
+     * @throws \ErrorException
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Oauth\Exception
@@ -318,7 +326,7 @@ class AuthTokens
         }
 
         if (!empty($errorResponses)) {
-            throw new \Exception($errorResponses[0]);
+            throw new \ErrorException($errorResponses[0]);
         }
 
         return $response;
@@ -327,10 +335,10 @@ class AuthTokens
     /**
      * Check if APay is enabled and its credentials set, as well as SPC enabled for the store
      *
-     * @param $store
+     * @param StoreInterface $store
      * @return bool
      */
-    protected function spcActiveForStore($store)
+    protected function spcActiveForStore(StoreInterface $store)
     {
         return $this->scopeConfig
             ->isSetFlag('payment/amazon_payment_v2/spc_enabled', ScopeInterface::SCOPE_STORE, $store->getId())
@@ -346,6 +354,8 @@ class AuthTokens
     }
 
     /**
+     * Get unique id
+     *
      * @return mixed|string
      */
     protected function getUniqueId()
@@ -354,11 +364,13 @@ class AuthTokens
     }
 
     /**
-     * @param $message
-     * @param $storeId
+     * Save status
+     *
+     * @param Phrase $message
+     * @param int|string $storeId
      * @return void
      */
-    protected function saveStatus($message, $storeId)
+    protected function saveStatus(Phrase $message, $storeId)
     {
         $this->configWriter->save(
             AuthTokens::STATUS_CONFIG_PATH,
@@ -371,7 +383,9 @@ class AuthTokens
     }
 
     /**
-     * @param $storeId
+     * Save last sync
+     *
+     * @param int|string $storeId
      * @return void
      */
     protected function saveLastSync($storeId)

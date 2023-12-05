@@ -35,8 +35,7 @@ class SyncTokens extends \Magento\Backend\App\Action
         AuthTokens $authTokens,
         ManagerInterface $messageManager,
         ResultFactory $resultFactory
-    )
-    {
+    ) {
         parent::__construct($context);
 
         $this->authTokens = $authTokens;
@@ -45,6 +44,8 @@ class SyncTokens extends \Magento\Backend\App\Action
     }
 
     /**
+     * Execute
+     *
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
@@ -65,13 +66,5 @@ class SyncTokens extends \Magento\Backend\App\Action
         $redirect->setRefererUrl();
 
         return $redirect;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }

@@ -3,14 +3,19 @@
 namespace Amazon\Pay\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
-use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Backend\Block\Widget\Button as WidgetButton;
 
 class Button extends Field
 {
+    /**
+     * @var string
+     */
     protected $_template = 'Amazon_Pay::system/config/button.phtml';
 
     /**
+     * Render
+     *
      * @param AbstractElement $element
      * @return mixed
      */
@@ -22,6 +27,8 @@ class Button extends Field
     }
 
     /**
+     * Get element html
+     *
      * @param AbstractElement $element
      * @return mixed
      */
@@ -31,6 +38,8 @@ class Button extends Field
     }
 
     /**
+     * Get custom url
+     *
      * @return mixed
      */
     public function getCustomUrl()
@@ -39,11 +48,14 @@ class Button extends Field
     }
 
     /**
+     * Get button html
+     *
      * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
+        $button = $this->getLayout()->createBlock(WidgetButton::class)
             ->setData([
                 'id' => 'sync_tokens',
                 'label' => __('Manually Generate & Sync Tokens'),

@@ -22,9 +22,11 @@ use Amazon\Pay\Logger\Logger;
 use Amazon\Pay\Model\AmazonConfig;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\Quote\Model\Quote;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection as SalesRuleCollection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Bundle\Model\Product\Type as BundleProduct;
@@ -32,9 +34,9 @@ use Magento\Tax\Model\Config as TaxConfig;
 
 class Cart
 {
-    const STATUS_AVAILABLE = 'AVAILABLE';
-    const STATUS_OUT_OF_STOCK = 'OUT_OF_STOCK';
-    const STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS = 'NOT_AVAILABLE_FOR_SHIPPING_ADDRESS';
+    public const STATUS_AVAILABLE = 'AVAILABLE';
+    public const STATUS_OUT_OF_STOCK = 'OUT_OF_STOCK';
+    public const STATUS_NOT_AVAILABLE_FOR_SHIPPING_ADDRESS = 'NOT_AVAILABLE_FOR_SHIPPING_ADDRESS';
 
     /**
      * @var ShippingMethodManagementInterface
@@ -111,7 +113,6 @@ class Cart
      */
     protected $logger;
 
-
     /**
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param CartRepositoryInterface $cartRepository
@@ -145,8 +146,7 @@ class Cart
         AmazonConfig $amazonConfig,
         DataObjectProcessor $dataObjectProcessor,
         Logger $logger
-    )
-    {
+    ) {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->cartRepository = $cartRepository;
         $this->scopeConfig = $scopeConfig;
@@ -165,8 +165,10 @@ class Cart
     }
 
     /**
-     * @param $quoteId
-     * @param $checkoutSessionId
+     * Create response
+     *
+     * @param int|string $quoteId
+     * @param int|string $checkoutSessionId
      * @return ResponseInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
@@ -197,7 +199,10 @@ class Cart
         }
 
         // Calculate total base amount
-        $totalBaseAmount = $quote->getGrandTotal() - $quote->getShippingAddress()->getTaxAmount() - $quote->getShippingAddress()->getShippingAmount() + $totalDiscountAmount;
+        $totalBaseAmount = $quote->getGrandTotal()
+            - $quote->getShippingAddress()->getTaxAmount()
+            - $quote->getShippingAddress()->getShippingAmount()
+            + $totalDiscountAmount;
 
         // Create response object
         /** @var $cartDetails CartDetailsInterface */
@@ -231,16 +236,18 @@ class Cart
             $this->logger->info(json_encode(
                 $this->dataObjectProcessor->buildOutputDataArray(
                     $cartDetails,
-                    \Amazon\Pay\Api\Spc\Response\CartDetailsInterface::class)
+                    \Amazon\Pay\Api\Spc\Response\CartDetailsInterface::class
                 )
-            );
+            ));
         }
 
         return $response->setCartDetails($cartDetails);
     }
 
     /**
-     * @param $quote
+     * Get cart language
+     *
+     * @param Quote $quote
      * @return mixed
      */
     protected function getCartLanguage($quote)
@@ -253,8 +260,10 @@ class Cart
     }
 
     /**
-     * @param $quote
-     * @param $currencyCode
+     * Get line items and total base amount
+     *
+     * @param Quote $quote
+     * @param string $currencyCode
      * @return array
      */
     protected function getLineItemsAndTotalBaseAmount($quote, $currencyCode)
@@ -323,8 +332,7 @@ class Cart
 
             if ($this->isDiscountWithTax($quote->getStoreId())) {
                 $discountedAmount = $item->getRowTotal() * (1 - $item->getDiscountPercent()/100);
-            }
-            else {
+            } else {
                 $discountedAmount = $item->getRowTotal() - $item->getDiscountAmount();
             }
 
@@ -355,9 +363,11 @@ class Cart
     }
 
     /**
-     * @param $quote
-     * @param $currencyCode
-     * @param $lineItems
+     * Get delivery options
+     *
+     * @param Quote $quote
+     * @param string $currencyCode
+     * @param LineItemInterface $lineItems
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
@@ -369,9 +379,12 @@ class Cart
         if ($quote->getShippingAddress()->validate()) {
             /** @var \Magento\Quote\Api\Data\ShippingMethodInterface[] $magentoShippingMethods */
             $magentoShippingMethods =
-                $this->shippingMethodManagement->estimateByExtendedAddress($quote->getId(), $quote->getShippingAddress());
+                $this->shippingMethodManagement->estimateByExtendedAddress(
+                    $quote->getId(),
+                    $quote->getShippingAddress()
+                );
 
-            $magentoShippingMethods = array_filter($magentoShippingMethods, function($m) {
+            $magentoShippingMethods = array_filter($magentoShippingMethods, function ($m) {
                 /** @var \Magento\Quote\Api\Data\ShippingMethodInterface $m */
                 return $m->getAvailable();
             });
@@ -386,8 +399,7 @@ class Cart
                 // Get shipping method name
                 if (!$magentoMethod->getCarrierTitle()) {
                     $name = $magentoMethod->getMethodTitle();
-                }
-                else {
+                } else {
                     $name = $magentoMethod->getCarrierTitle() . ' - ' . $magentoMethod->getMethodTitle();
                 }
 
@@ -396,22 +408,25 @@ class Cart
                 $shippingMethod->setShippingMethodName($name)
                     ->setShippingMethodCode($code);
 
-                $discountedPrice = $magentoMethod->getAmount() - $quote->getShippingAddress()->getShippingDiscountAmount();
+                $discountedPrice = $magentoMethod->getAmount()
+                    - $quote->getShippingAddress()->getShippingDiscountAmount();
                 $deliveryOption->setId($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())
                     ->setPrice($this->getAmountObject($magentoMethod->getAmount(), $currencyCode))
                     ->setDiscountedPrice(
-                        $this->getAmountObject($discountedPrice > 0 ? $discountedPrice : 0, $currencyCode)
+                        $this->getAmountObject(
+                            $discountedPrice > 0 ? $discountedPrice : 0,
+                            $currencyCode
+                        )
                     )
                     ->setShippingMethod($shippingMethod)
                     ->setShippingEstimate([]);
 
-                if ($quote->getShippingAddress()->getShippingMethod() == ($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())) {
+                if ($quote->getShippingAddress()->getShippingMethod()
+                    == ($magentoMethod->getCarrierCode() .'_'. $magentoMethod->getMethodCode())) {
                     $deliveryOption->setIsDefault(true);
-                }
-                else {
+                } else {
                     $deliveryOption->setIsDefault(false);
                 }
-
 
                 $deliveryOptions[] = $deliveryOption;
             }
@@ -429,7 +444,9 @@ class Cart
     }
 
     /**
-     * @param $quote
+     * Get coupons
+     *
+     * @param Quote $quote
      * @return array
      */
     protected function getCoupons($quote)
@@ -454,8 +471,10 @@ class Cart
     }
 
     /**
-     * @param $amount
-     * @param $currencyCode
+     * Get amount object
+     *
+     * @param float $amount
+     * @param string $currencyCode
      * @return AmountInterface
      */
     protected function getAmountObject($amount, $currencyCode)
@@ -467,7 +486,9 @@ class Cart
     }
 
     /**
-     * @param $storeId
+     * Is discount with tax
+     *
+     * @param int $storeId
      * @return bool
      */
     protected function isDiscountWithTax($storeId)
@@ -480,8 +501,10 @@ class Cart
     }
 
     /**
-     * @param $message
-     * @param $context
+     * Log error
+     *
+     * @param Phrase|string $message
+     * @param string $context
      * @return void
      */
     public function logError($message, $context)

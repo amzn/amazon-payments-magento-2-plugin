@@ -51,8 +51,7 @@ class ShippingMethod implements ShippingMethodInterface
         Cart $cartHelper,
         ShippingMethodHelper $shippingMethodHelper,
         CheckoutSession $checkoutSessionHelper
-    )
-    {
+    ) {
         $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->cartHelper = $cartHelper;
@@ -73,10 +72,15 @@ class ShippingMethod implements ShippingMethodInterface
             // Set currency on the http context
             $this->store->setCurrentCurrencyCode($quote->getQuoteCurrencyCode());
         } catch (NoSuchEntityException $e) {
-            $this->cartHelper->logError('SPC ShippingMethod: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
+            $this->cartHelper->logError(
+                'SPC ShippingMethod: InvalidCartId. CartId: '. $cartId .' - ',
+                $cartDetails
+            );
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"),
+                "InvalidCartId",
+                404
             );
         }
 
@@ -89,25 +93,29 @@ class ShippingMethod implements ShippingMethodInterface
 
             if (empty($methodCode)) {
                 throw new \Magento\Framework\Webapi\Exception(
-                    new Phrase("Shipping Method id missing"), "InvalidShippingMethod", 400
+                    new Phrase("Shipping Method id missing"),
+                    "InvalidShippingMethod",
+                    400
                 );
-            }
-            else {
+            } else {
                 if ($this->checkoutSessionHelper->confirmCheckoutSession($quote, $cartDetails, $checkoutSessionId)) {
                     // Set the shipping method
                     $appliedMethod = $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $methodCode);
 
                     if ($appliedMethod == ShippingMethodHelper::NOT_APPLIED) {
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase("Shipping method id '". $methodCode ."' was not able to apply to the cart"), "InvalidShippingMethod", 400
+                            new Phrase("Shipping method id '". $methodCode ."' was not able to apply to the cart"),
+                            "InvalidShippingMethod",
+                            400
                         );
                     }
                 }
             }
-        }
-        else {
+        } else {
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart details are missing on the request body"), "InvalidRequest", 400
+                new Phrase("Cart details are missing on the request body"),
+                "InvalidRequest",
+                400
             );
         }
 

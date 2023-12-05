@@ -5,6 +5,8 @@ namespace Amazon\Pay\Model\Config\Form;
 class SpcApiDomainBackend extends \Magento\Framework\App\Config\Value
 {
     /**
+     * Before save
+     *
      * @return $this|SpcApiDomainBackend
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -13,7 +15,9 @@ class SpcApiDomainBackend extends \Magento\Framework\App\Config\Value
         $value = $this->getValue();
 
         if (!empty($value) && !preg_match("/^https:\/\/.*\/$/", $value)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The SPC domain does not match the format &quot;https://&lt;override-domain&gt;/&quot;'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The Buy Now domain does not match the format &quot;https://&lt;override-domain&gt;/&quot;')
+            );
         }
 
         return $this;

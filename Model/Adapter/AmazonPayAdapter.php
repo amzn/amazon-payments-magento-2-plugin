@@ -618,7 +618,8 @@ class AmazonPayAdapter
 
         if ($this->scopeConfig->isSetFlag(self::SPC_ENABLED_CONFIG, 'store', $quote->getStoreId())) {
             // Add checkoutResultReturnUrl
-            $payload['webCheckoutDetails']['checkoutResultReturnUrl'] = $this->amazonConfig->getCheckoutResultReturnUrl();
+            $payload['webCheckoutDetails']['checkoutResultReturnUrl'] =
+                $this->amazonConfig->getCheckoutResultReturnUrl();
 
             // Always use Authorize for now, so that async transactions are handled properly
             $paymentIntent = self::PAYMENT_INTENT_AUTHORIZE;
@@ -626,7 +627,8 @@ class AmazonPayAdapter
             // Get unique id for the merchantStoreReferenceId
             $uniqueId = $this->uniqueIdHelper->getUniqueId();
 
-            $payload['chargePermissionType'] = 'OneTime'; // probably needs to be dynamic if buying a subscription (feature not released)
+            // chargePermissionType probably needs to be dynamic if buying a subscription (feature not released)
+            $payload['chargePermissionType'] = 'OneTime';
             $payload['platformId'] = $this->amazonConfig->getPlatformId();
             $payload['merchantMetadata'] = [
                 'merchantReferenceId' => $quote->getReservedOrderId(),
@@ -841,9 +843,11 @@ class AmazonPayAdapter
     }
 
     /**
+     * SPC sync tokens
+     *
      * @param int $storeId
      * @param string $payload
-     * @param $headers
+     * @param array|null $headers
      * @return array
      */
     public function spcSyncTokens(int $storeId, string $payload, $headers = null)

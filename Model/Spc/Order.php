@@ -51,8 +51,7 @@ class Order implements OrderInterface
         Cart $cartHelper,
         OrderRepositoryInterface $orderRepository,
         CheckoutSession $checkoutSessionHelper
-    )
-    {
+    ) {
         $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->cartHelper = $cartHelper;
@@ -76,7 +75,9 @@ class Order implements OrderInterface
             $this->cartHelper->logError('SPC Order: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"),
+                "InvalidCartId",
+                404
             );
         }
 
@@ -93,43 +94,57 @@ class Order implements OrderInterface
                 foreach ($quote->getAllVisibleItems() as $item) {
                     if (!$item->getProduct()->getExtensionAttributes()->getStockItem()->getIsInStock()) {
                         $this->cartHelper->logError(
-                            'SPC Order: InvalidCartStatus - Product ' . $item->getProduct()->getId() . ' not in stock. CartId: ' . $cartId . ' - ', $cartDetails
+                            'SPC Order: InvalidCartStatus - Product ' .
+                            $item->getProduct()->getId() .
+                            ' not in stock. CartId: ' . $cartId . ' - ',
+                            $cartDetails
                         );
 
                         throw new \Magento\Framework\Webapi\Exception(
-                            new Phrase("Item ". $item->getId() ." for product ". $item->getProduct()->getId() ." is out of stock"), "InvalidCartStatus", 422
+                            new Phrase("Item ". $item->getId() ." for product ".
+                                $item->getProduct()->getId() ." is out of stock"),
+                            "InvalidCartStatus",
+                            422
                         );
                     }
                 }
 
                 // Check that both addresses are set
-                if (is_array($quote->getShippingAddress()->validate()) || is_array($quote->getBillingAddress()->validate())) {
+                if (is_array($quote->getShippingAddress()->validate())
+                    || is_array($quote->getBillingAddress()->validate())) {
                     $this->cartHelper->logError(
-                        'SPC Order: InvalidCartStatus - Missing addresses. CartId: ' . $cartId . ' - ', $cartDetails
+                        'SPC Order: InvalidCartStatus - Missing addresses. CartId: '. $cartId . ' - ',
+                        $cartDetails
                     );
 
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase("Shipping and/or Billing Address is invalid"), "InvalidCartStatus", 422
+                        new Phrase("Shipping and/or Billing Address is invalid"),
+                        "InvalidCartStatus",
+                        422
                     );
                 }
 
                 // Check that the shipping method has been set
                 if (empty($quote->getShippingAddress()->getShippingMethod())) {
                     $this->cartHelper->logError(
-                        'SPC Order: InvalidCartStatus - No shipping method selected. CartId: ' . $cartId . ' - ', $cartDetails
+                        'SPC Order: InvalidCartStatus - No shipping method selected. CartId: '. $cartId . ' - ',
+                        $cartDetails
                     );
 
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase("No Shipping Method set on cart"), "InvalidCartStatus", 422
+                        new Phrase("No Shipping Method set on cart"),
+                        "InvalidCartStatus",
+                        422
                     );
                 }
 
                 return $this->cartHelper->createResponse($quote->getId(), $checkoutSessionId);
             }
-        }
-        else {
+        } else {
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart details are missing on the request body"), "InvalidRequest", 400
+                new Phrase("Cart details are missing on the request body"),
+                "InvalidRequest",
+                400
             );
         }
     }

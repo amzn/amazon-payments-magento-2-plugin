@@ -59,8 +59,7 @@ class Address implements SpcAddressInterface
         CheckoutSession $checkoutSessionHelper,
         Cart $cartHelper,
         ShippingMethod $shippingMethodHelper
-    )
-    {
+    ) {
         $this->store = $store;
         $this->cartRepository = $cartRepository;
         $this->address = $address;
@@ -85,7 +84,9 @@ class Address implements SpcAddressInterface
             $this->cartHelper->logError('SPC Address: InvalidCartId. CartId: '. $cartId .' - ', $cartDetails);
 
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart Id ". $cartId ." not found or inactive"), "InvalidCartId", 404
+                new Phrase("Cart Id ". $cartId ." not found or inactive"),
+                "InvalidCartId",
+                404
             );
         }
 
@@ -101,11 +102,14 @@ class Address implements SpcAddressInterface
                     $quote->setShippingAddress($shippingAddress);
                 } else {
                     $this->cartHelper->logError(
-                        'SPC Address: InvalidRequest - No shipping address. CartId: ' . $cartId . ' - ', $cartDetails
+                        'SPC Address: InvalidRequest - No shipping address. CartId: ' . $cartId . ' - ',
+                        $cartDetails
                     );
 
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase("The Shipping Address is missing from the checkoutSession"), "InvalidRequest", 400
+                        new Phrase("The Shipping Address is missing from the checkoutSession"),
+                        "InvalidRequest",
+                        400
                     );
                 }
                 // Get and set billing address
@@ -115,11 +119,14 @@ class Address implements SpcAddressInterface
                     $quote->setBillingAddress($billingAddress);
                 } else {
                     $this->cartHelper->logError(
-                        'SPC Address: InvalidRequest - No billing address. CartId: ' . $cartId . ' - ', $cartDetails
+                        'SPC Address: InvalidRequest - No billing address. CartId: ' . $cartId . ' - ',
+                        $cartDetails
                     );
 
                     throw new \Magento\Framework\Webapi\Exception(
-                        new Phrase("The Billing Address is missing from the checkoutSession"), "InvalidRequest", 400
+                        new Phrase("The Billing Address is missing from the checkoutSession"),
+                        "InvalidRequest",
+                        400
                     );
                 }
 
@@ -131,10 +138,11 @@ class Address implements SpcAddressInterface
                 // set shipping method on the quote
                 $this->shippingMethodHelper->setShippingMethodOnQuote($quote, $shippingMethod);
             }
-        }
-        else {
+        } else {
             throw new \Magento\Framework\Webapi\Exception(
-                new Phrase("Cart details are missing on the request body"), "InvalidRequest", 400
+                new Phrase("Cart details are missing on the request body"),
+                "InvalidRequest",
+                400
             );
         }
 
