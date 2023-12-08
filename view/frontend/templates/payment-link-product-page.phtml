@@ -23,10 +23,6 @@
 <div class="amazon-checkout-now" style="display: none;"><?= $block->escapeHtml(__('Checkout now')) ?></div>
 <div class="amazon-button-container amazon-button-product-page" style="display: none;">
     <div class="amazon-button-column amazon-product-button">
-      <a href="javascript:;"
-           class="amazon-addtoCart"
-           id="amazon-addtoCart-<?= /* @noEscape */ $block->getJsId() ?>"
-           data-mage-init='{"amazonPayProductAdd": {}}'>
         <div id="PayWithAmazon-Product"
              class="amazon-checkout-button"
              data-mage-init='<?= /* @noEscape */ json_encode([
@@ -37,7 +33,6 @@
                  ]
              ]) ?>'>
         </div>
-      </a>
     </div>
     <div class="amazon-button-column amazon-button-column-tooltip">
         <div class="field-tooltip toggle">
