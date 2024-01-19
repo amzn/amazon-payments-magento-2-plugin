@@ -122,7 +122,7 @@ class PerformKeyUpgrade implements DataPatchInterface
             ]) {
 
             // Prevent overwriting already valid config
-            if($this->v2PathAlreadyExists(
+            if ($this->v2PathAlreadyExists(
                 self::PATH_TRANSLATION_MAP[$path],
                 $scopeType,
                 $scopeId
@@ -188,7 +188,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -230,7 +230,7 @@ class PerformKeyUpgrade implements DataPatchInterface
         if ($existingPaths === null) {
             $existingPaths = $this->getSavedV2Configs();
         }
-        foreach($existingPaths as $config) {
+        foreach ($existingPaths as $config) {
             if ($path == $config['path']
                 && $scopeType == $config['scope']
                 && $scopeId == $config['scope_id']
