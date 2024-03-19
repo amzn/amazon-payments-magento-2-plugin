@@ -2,9 +2,12 @@
 
 namespace Amazon\Pay\Model\Resolver;
 
+
+
+use Amazon\Pay\Model\CheckoutSessionManagement;
+use Amazon\Pay\Model\Resolver\CheckoutSessionDetails;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
@@ -12,16 +15,16 @@ class CheckoutSessionDetailsV2 extends CheckoutSessionDetails implements Resolve
 {
 
     /**
-     * Get CheckoutSessionDetails
+     * CheckoutSessionDetails constructor
      *
-     * @param Field $field
-     * @param ContextInterface $context
-     * @param ResolveInfo $info
-     * @param array|null $value
-     * @param array|null $args
-     * @return array
-     * @throws GraphQlInputException
+     * @param CheckoutSessionManagement $checkoutSessionManagement
      */
+    public function __construct(
+        CheckoutSessionManagement $checkoutSessionManagement
+    ) {
+        parent::__construct($checkoutSessionManagement);
+    }
+
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $amazonSessionId = $args['amazonSessionId'] ?? false;
@@ -39,7 +42,7 @@ class CheckoutSessionDetailsV2 extends CheckoutSessionDetails implements Resolve
         foreach ($queryTypes as $queryType) {
             $response[$queryType] = $this->getQueryTypesData($amazonSessionId, $queryType) ?:  [];
 
-            switch ($queryType) {
+            switch($queryType) {
                 case 'shipping':
                 case 'billing':
                     $response[$queryType] = $response[$queryType][0];
