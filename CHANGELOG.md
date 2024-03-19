@@ -8,6 +8,7 @@ transactions with no associated order IDs in Seller Central
 * Improved behavior of PDP button (ensure product is added to cart before initiating Amazon checkout)
 * Fixed unresponsive PDP button on Safari mobile
 * Fixed non-centered PDP button on mobile view
+* Fixed incorrect type casting when decrypting Auto Key Exchange payloads
 * Fixed updateCheckoutSession call in headless environments when the session helper returns
 a new/empty quote (thanks, @bheindl!)
 * Changed response format of checkout session details GraphQL query to adhere to best practices
