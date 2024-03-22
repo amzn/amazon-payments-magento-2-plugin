@@ -67,9 +67,7 @@ class Cancel implements HttpGetActionInterface
      */
     public function execute()
     {
-        // get redirect param
         $redirectParam = $this->request->getParam('redirect');
-        // instantiate redirect factory
         $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         // redirect to cart if no redirect param provided
@@ -79,9 +77,6 @@ class Cancel implements HttpGetActionInterface
 
         // check if there is an order still in the session, then and cancel it
         if ($order = $this->magentoCheckoutSession->getLastRealOrder()) {
-            // check order has data
-            // check order is not canceled
-            // check that the order was paid with amazon pay
             if (!empty($order->getData())
                 && $order->getState() !== Order::STATE_CANCELED
                 && $order->getPayment()
@@ -89,21 +84,16 @@ class Cancel implements HttpGetActionInterface
             ) {
                 $quote = $this->magentoCheckoutSession->getQuote();
 
-                // check if quote is not active
                 if (!$quote->getIsActive()) {
-                    // cancel order
                     $this->checkoutSessionManagement->cancelOrder($order, $quote);
 
-                    // restore quote
                     $this->magentoCheckoutSession->restoreQuote();
 
-                    // add error message
                     $this->messageManager->addErrorMessage(__('This transaction was cancelled. Please try again.'));
                 }
             }
         }
-
-        // redirect to the provided url
+        
         $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $result->setUrl(base64_decode($redirectParam));
