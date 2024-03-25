@@ -4,7 +4,7 @@
         <element name="v1MiniCart" type="button" selector="#minicart-amazon-pay-button .amazonpay-button-inner-image"/>
         <element name="v1Checkout" type="button" selector="#PayWithAmazon_amazon-pay-button .amazonpay-button-inner-image"/>
         <element name="v1Payment" type="button" selector="#PayWithAmazon .amazonpay-button-inner-image"/>
-        <element name="product" type="button" selector="#amazon-addtoCart-amazon-pay-button-product"/>
+        <element name="product" type="button" selector="#PayWithAmazon-Product"/>
         <element name="miniCart" type="button" selector="#PayWithAmazon-Cart div"/>
         <element name="cart" type="button" selector="#PayWithAmazon-Cart div"/>
         <element name="checkout" type="button" selector=".amazon-button-container #PayWithAmazon_amazon-pay-button div"/>

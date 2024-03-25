@@ -298,16 +298,19 @@
         pointer-events: none;
     }
 
-
-    .amazon-product-button .amazon-checkout-button:active {
-        pointer-events: none;
-    }
 }
 
 @media all and (max-width: @screen__m) {
     .amazon-minicart-container {
         .amazon-button-container {
             width: auto;
+        }
+    }
+
+    .amazon-button-container {
+        &.amazon-button-product-page {
+            justify-content: center;
+            margin-bottom: 2em;
         }
     }
 }

@@ -125,5 +125,7 @@ class AmazonChargePermissionCommand extends Command
             $verified = $referenceID == $orderId;
             $output->writeln(var_export($verified));
         }
+        
+        return Command::SUCCESS;
     }
 }
