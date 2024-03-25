@@ -716,13 +716,13 @@ class AmazonPayAdapter
 
         if (empty($checkoutCancelUrl)) {
             $cancelUrl = $this->getDefaultCancelUrl();
-        }
-        else {
+        } else {
             $cancelUrl = $this->url->getUrl($checkoutCancelUrl);
         }
 
         return $this->url->getUrl(
-            'amazon_pay/checkout/cancel', ['redirect' => base64_encode($cancelUrl)]
+            'amazon_pay/checkout/cancel',
+            ['redirect' => base64_encode($cancelUrl)]
         );
     }
 

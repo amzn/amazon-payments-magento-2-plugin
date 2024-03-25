@@ -51,8 +51,7 @@ class Cancel implements HttpGetActionInterface
         Session $magentoCheckoutSession,
         CheckoutSessionManagement $checkoutSessionManagement,
         ManagerInterface $messageManager
-    )
-    {
+    ) {
         $this->request = $request;
         $this->resultFactory = $resultFactory;
         $this->magentoCheckoutSession = $magentoCheckoutSession;
@@ -61,6 +60,8 @@ class Cancel implements HttpGetActionInterface
     }
 
     /**
+     * Handle cancelling Amazon Pay orders when necessary
+     *
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -80,7 +81,10 @@ class Cancel implements HttpGetActionInterface
             if (!empty($order->getData())
                 && $order->getState() !== Order::STATE_CANCELED
                 && $order->getPayment()
-                && ($order->getPayment()->getMethod() === Config::CODE || $order->getPayment()->getMethod() === Config::VAULT_CODE)
+                && (
+                    $order->getPayment()->getMethod() === Config::CODE ||
+                    $order->getPayment()->getMethod() === Config::VAULT_CODE
+                    )
             ) {
                 $quote = $this->magentoCheckoutSession->getQuote();
 
@@ -96,6 +100,6 @@ class Cancel implements HttpGetActionInterface
         
         $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        return $result->setUrl(base64_decode($redirectParam));
+        return $result->setUrl(base64_decode($redirectParam)); // phpcs:ignore Magento2.Functions.DiscouragedFunction
     }
 }
