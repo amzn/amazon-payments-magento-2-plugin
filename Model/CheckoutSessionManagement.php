@@ -682,7 +682,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param string $reasonMessage
      * @return void
      */
-    private function cancelOrder($order, $quote, $reasonMessage = '')
+    public function cancelOrder($order, $quote, $reasonMessage = '')
     {
         // set order as cancelled
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
