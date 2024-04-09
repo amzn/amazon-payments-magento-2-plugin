@@ -23,10 +23,6 @@ use Magento\Framework\App\PageCache\Version;
 class CompleteSession extends \Magento\Framework\App\Action\Action
 {
     protected const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
-    /**
-     * @var \Amazon\Pay\CustomerData\CheckoutSession
-     */
-    private $amazonCheckoutSession;
 
     /**
      * @var \Amazon\Pay\Model\CheckoutSessionManagement
@@ -59,43 +55,32 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     private $cookieMetadataFactory;
 
     /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $magentoCheckoutSession;
-
-    /**
      * CompleteSession constructor
      *
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession
      * @param \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Checkout\Model\Session $session
      * @param ExceptionLogger|null $exceptionLogger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession,
         \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Checkout\Model\Session $session,
         ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
-        $this->amazonCheckoutSession = $amazonCheckoutSession;
         $this->amazonCheckoutSessionManagement = $checkoutSessionManagement;
         $this->amazonConfig = $amazonConfig;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->storeManager = $storeManager;
-        $this->magentoCheckoutSession = $session;
     }
 
     /**

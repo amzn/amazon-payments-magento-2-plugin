@@ -42,7 +42,6 @@ class CheckoutSessionDetails implements ResolverInterface
      * @return array
      * @throws GraphQlInputException
      */
-
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $amazonSessionId = $args['amazonSessionId'] ?? false;
