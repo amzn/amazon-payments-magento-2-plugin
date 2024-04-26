@@ -24,6 +24,7 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Ui/js/model/messageList',
+    'Amazon_Pay/js/amazon-add-to-cart',
 ], function (
         ko,
         $,
@@ -35,7 +36,8 @@ define([
         additionalValidators,
         storage,
         errorProcessor,
-        globalMessageList
+        globalMessageList,
+        amazonAddToCart
     ) {
     'use strict';
 
@@ -145,7 +147,7 @@ define([
 
         /**
          * Draw button
-         **/
+         */
         _draw: function () {
             var self = this;
 
@@ -158,58 +160,38 @@ define([
                         $buttonRoot.html('<img src="' + require.toUrl('images/loader-1.gif') + '" alt="" width="24" />');
                         $buttonContainer.empty().append($buttonRoot);
 
-                        self._loadButtonConfig(function (buttonConfig) {
-                            self.buttonConfig = buttonConfig;
+                    this._loadButtonConfig(function (buttonConfig) {
+                        // remove session config to decouple button, allowing onclick adjustment
+                        if(self._isAmazonPayShownAsPaymentMethod() || self.options.placement === 'Product') {
+                            delete buttonConfig.createCheckoutSessionConfig;
+                        }
 
                             // do not use session config for decoupled button
                             if (self.buttonType === 'PayNow') {
                                 delete buttonConfig.createCheckoutSessionConfig;
                             }
 
-                            try {
-                                self.amazonPayButton = amazon.Pay.renderButton('#' + $buttonRoot.empty().removeUniqueId().uniqueId().attr('id'), buttonConfig);
-                            } catch (e) {
-                                console.log('Amazon Pay button render error: ' + e);
-                                reject();
-                            }
-
-                            // If onClick is available on the amazonPayButton, then checkout is decoupled from render, indicating this is an APB button
-                            if (self.amazonPayButton.onClick) {
-                                self.amazonPayButton.onClick(function () {
-                                    if (!additionalValidators.validate()) {
-                                        return false;
-                                    }
-                                    //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
-                                    if (self.options.isIosc()) {
-                                        storage.post(
-                                            'checkout/onepage/update',
-                                            "{}",
-                                            false
-                                        ).done(
-                                            function (response) {
-                                                if (!response.error) {
-                                                    self._initCheckout();
-                                                } else {
-                                                    errorProcessor.process(response);
-                                                }
-                                            }
-                                        ).fail(
-                                            function (response) {
-                                                errorProcessor.process(response);
-                                            }
-                                        );
-                                    } else {
-                                        self._initCheckout();
-                                    }
+                        if (self._isAmazonPayShownAsPaymentMethod()) {
+                            self.amazonPayButton.onClick(function() {
+                                if (!additionalValidators.validate()) {
+                                    return false;
+                                }
+                                self._initCheckout();
+                            });
+                        } else if (self.options.placement === 'Product') {
+                            self.amazonPayButton.onClick(function() {
+                                amazonAddToCart.execute().then(function() {
+                                    self._initCheckout();
                                 });
-                            }
+                            });
+                        }
 
                             $('.amazon-button-container .field-tooltip').fadeIn();
                             self.drawing = false;
 
-                            if (self.buttonType === 'PayNow' && self._isPayOnly()) {
-                                customerData.get('checkout-data').subscribe(function (checkoutData) {
-                                    const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;
+                        if (self.buttonType === 'PayNow' && self._isPayOnly()) {
+                            customerData.get('checkout-data').subscribe(function (checkoutData) {
+                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;
 
                                     const shadow = $('.amazon-checkout-button > div')[0].shadowRoot;
                                     $(shadow).find('.amazonpay-button-view1').css('opacity', opacity);
@@ -234,7 +216,41 @@ define([
             });
         },
 
+        // PayNow indicating this is an APB button
+        _isAmazonPayShownAsPaymentMethod: function () {
+            return (this.buttonType === 'PayNow');
+        },
+
         _initCheckout: function () {
+            if( this.options.isIosc()) {
+                this._initOneStepCheckout();
+            } else {
+                this._initAmazonCheckout();
+            }
+        },
+
+        _initOneStepCheckout: function () {
+            //This is for compatibility with Iosc. We need to update the customer's Magento session before getting the final config and payload
+            storage.post(
+                'checkout/onepage/update',
+                "{}",
+                false
+            ).done(
+                function (response) {
+                    if (!response.error) {
+                        self._initAmazonCheckout();
+                    } else {
+                        errorProcessor.process(response);
+                    }
+                }
+            ).fail(
+                function (response) {
+                    errorProcessor.process(response);
+                }
+            );
+        },
+
+        _initAmazonCheckout: function () {
             var self = this;
 
             if (self.buttonType === 'PayNow' && self._isPayOnly()) {
