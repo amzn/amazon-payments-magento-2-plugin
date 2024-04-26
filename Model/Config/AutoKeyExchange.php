@@ -349,9 +349,9 @@ class AutoKeyExchange
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
     {
         try {
-            $payload = json_decode($payloadJson);
+            $payload = (object) json_decode($payloadJson);
 
-            $publicKeyId = urldecode($payload['publicKeyId'] ?? '');
+            $publicKeyId = urldecode($payload->publicKeyId ?? '');
             $decryptedKey = null;
 
             $success = openssl_private_decrypt(

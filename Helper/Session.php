@@ -256,7 +256,7 @@ class Session
             // we only really want to utilize masked ids here unless retrieved elsewhere
             if (empty($cartId) || is_numeric($cartId)) {
                 $quote = $this->getQuote();
-                if (!$quote) {
+                if (!$quote || !$quote->getId()) {
                     // here we'll check the user context for any available cart data before moving on
                     $userContextCartId = $this->getCartIdViaUserContext();
                     if ($userContextCartId !== null) {
