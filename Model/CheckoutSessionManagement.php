@@ -678,7 +678,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * Cancel order
      *
      * @param OrderInterface $order
-     * @param CartInterface $quote
+     * @param CartInterface|null $quote
      * @param string $reasonMessage
      * @return void
      */
@@ -711,7 +711,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         $order->save();
 
-        if ($this->subscriptionManager->hasSubscription($quote)) {
+        if ($quote instanceof CartInterface && $this->subscriptionManager->hasSubscription($quote)) {
             $this->subscriptionManager->cancel($order);
         }
     }
@@ -754,6 +754,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             'success' => false
         ];
 
+        $quote = null;
+        $order = null;
+
         try {
             $orderId = $orderResult['order_id'];
             $order = $this->orderRepository->get($orderId);
@@ -778,10 +781,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $result['success'] = true;
 
         } catch (\Exception $e) {
-            $this->closeChargePermission($amazonSessionId, $order, $e);
+            if ($order instanceof OrderInterface) {
+                $this->closeChargePermission($amazonSessionId, $order, $e);
 
-            // cancel order
-            if (isset($order)) {
+                // cancel order
                 $this->cancelOrder($order, $quote);
                 $this->magentoCheckoutSession->restoreQuote();
             }
