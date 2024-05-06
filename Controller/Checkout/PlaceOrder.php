@@ -90,6 +90,9 @@ class PlaceOrder implements HttpPostActionInterface
             if (!$result['success']) {
                 $this->messageManager->addErrorMessage($result['message']);
             }
+
+            // for orders placed before payment authorization (Express checkout)
+            $this->amazonCheckoutSessionManagement->setOrderPendingPaymentReview($result['order_id'] ?? null);
         } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
             $this->messageManager->addErrorMessage($e->getMessage());

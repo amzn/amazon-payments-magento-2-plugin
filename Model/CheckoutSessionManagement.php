@@ -1344,4 +1344,25 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             );
         }
     }
+
+    /**
+     * Set order status to payment review
+     *
+     * @param $orderId
+     * @return void
+     */
+    public function setOrderPendingPaymentReview($orderId)
+    {
+        try {
+            if(!$orderId) {
+                throw new \Exception('orderId missing');
+            }
+            $order = $this->orderRepository->get($orderId);
+            // Update status to Pending Payment Review to support order placement before auth
+            $payment = $order->getPayment();
+            $this->setPending($payment);
+        } catch (\Exception $e) {
+            $this->logger->error('Unable to set payment review order status. ' . $e->getMessage());
+        }
+    }
 }
