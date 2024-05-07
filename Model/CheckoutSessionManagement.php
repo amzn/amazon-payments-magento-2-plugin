@@ -1273,17 +1273,17 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     $this->asyncManagement->queuePendingAuthorization($chargeId);
                     break;
                 case 'Authorized':
+                    $this->setProcessing($payment);
                     if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
-                        $this->setProcessing($payment);
                         $this->addCaptureComment($payment, $amazonCharge['chargePermissionId']);
                     }
                     break;
                 case 'Captured':
                     $payment->setIsTransactionClosed(true);
                     $transaction->setIsClosed(true);
+                    $this->setProcessing($payment);
 
                     if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
-                        $this->setProcessing($payment);
                         // capture and invoice on the Magento side
                         $this->asyncCharge->capture($order, $chargeId, $quote->getGrandTotal());
                     }
