@@ -39,13 +39,21 @@ class Transaction
     private $dateTime;
 
     /**
+     * @var int
+     */
+    private $limit;
+
+    /**
      * @param TransactionRepositoryInterface $transactionRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param DateTime $dateTime
+     * @param $limit
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        DateTime $dateTime
+        DateTime $dateTime,
+        $limit = 100
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -59,19 +67,25 @@ class Transaction
      */
     public function getIncompleteTransactions()
     {
-        // todo determine if time window is adequate solution
         // Get current timestamp and timestamp from 24 hours ago
         $twentyFourHoursAgo = $this->dateTime->gmtDate(null, '-24 hours');
+        $fiveMinutesAgo = $this->dateTime->gmtDate(null, '-5 minutes');
 
         // Prepare criteria for the search
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('is_closed', 0)
             ->addFilter('txn_type', 'authorization')
             ->addFilter('created_at', $twentyFourHoursAgo, 'gteq')
+            ->addFilter('created_at', $fiveMinutesAgo, 'lteq')
+            ->setPageSize($this->limit)
             ->create();
+
 
         // Fetch transactions
         $transactionList = $this->transactionRepository->getList($searchCriteria)->getItems();
+
+        // todo test if necessary to filter out records queued for async processing
+//        $transactionList = $this->filterAsyncOrders($transactionList);
 
         // Filter transactions by order status 'payment_review' and not charge id
         $filteredTransactions = [];
@@ -103,4 +117,11 @@ class Transaction
         $prefix = substr($txnId, 0, 3);
         return $prefix === 'S01' || $prefix === 'P01';
     }
+
+//    private function filterAsyncOrders(array $transactionList)
+//    {
+//
+//
+//        return $filteredTransactions;
+//    }
 }

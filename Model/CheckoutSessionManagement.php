@@ -682,8 +682,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param string $reasonMessage
      * @return void
      */
-    public function cancelOrder($order, $quote, $reasonMessage = '')
+    public function cancelOrder($order, $quote = null, $reasonMessage = '')
     {
+        if(!$quote) {
+            $quote = $this->getQuote($order);
+        }
+
         // set order as cancelled
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
             \Magento\Sales\Model\Order::STATE_CANCELED
@@ -736,7 +740,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * @inheritDoc
      */
-    public function completeCheckoutSession($amazonSessionId, $cartId = null)
+    public function completeCheckoutSession($amazonSessionId, $cartId = null, $orderId = null)
     {
         if (!$amazonSessionId) {
             return $this->handleCompleteCheckoutSessionError(
@@ -745,9 +749,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             );
         }
 
-        $orderResult = $this->placeOrCollectOrder($amazonSessionId, $cartId);
-        if (!$orderResult['success']) {
-            return $orderResult;
+        if(!$orderId) {
+            $orderResult = $this->placeOrCollectOrder($amazonSessionId, $cartId);
+            if (!$orderResult['success']) {
+                return $orderResult;
+            }
+            $orderId = $orderResult['orderId'];
         }
 
         $result = [
@@ -755,10 +762,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         ];
 
         try {
-            $orderId = $orderResult['order_id'];
             $order = $this->orderRepository->get($orderId);
-            $quoteId = $order->getQuoteId();
-            $quote = $this->cartRepository->get($quoteId);
+            $quote = $this->getQuote($order);
 
             // @TODO: associate token with payment?
             $result['order_id'] = $orderId;
@@ -1343,5 +1348,17 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 true
             );
         }
+    }
+
+    /**
+     * Get order by quote
+     *
+     * @param $order
+     * @return CartInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getQuote($order) {
+        $quoteId = $order->getQuoteId();
+        return $this->cartRepository->get($quoteId);
     }
 }

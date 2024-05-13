@@ -21,7 +21,7 @@
             <schedule>*/30 * * * *</schedule>
         </job>
         <job name="amazon_pay_cleanup_sessions" instance="Amazon\Pay\Cron\CleanupIncompleteSessions" method="execute">
-            <schedule>* * * * *</schedule>
+            <schedule>*/15 * * * *</schedule>
         </job>
     </group>
 </config>
