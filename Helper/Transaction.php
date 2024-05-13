@@ -44,20 +44,29 @@ class Transaction
     private $limit;
 
     /**
+     * @var TransactionRepositoryInterface
+     */
+    private $transactionRepositoryInterface;
+
+    /**
      * @param TransactionRepositoryInterface $transactionRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DateTime $dateTime
+     * @param TransactionRepositoryInterface $transactionRepositoryInterface
      * @param $limit
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DateTime $dateTime,
+        TransactionRepositoryInterface $transactionRepositoryInterface,
         $limit = 100
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->transactionRepositoryInterface = $transactionRepositoryInterface;
         $this->dateTime = $dateTime;
+        $this->limit = $limit;
     }
 
     /**
@@ -97,7 +106,8 @@ class Transaction
             if ($order && $order->getState() == Order::STATE_PAYMENT_REVIEW) {
                 $filteredTransactions[] = [
                     'checkout_session_id' => $transaction->getTxnId(),
-                    'order' => $order
+                    'order' => $order,
+                    'transaction' => $transaction
                 ];
             }
         }
@@ -116,6 +126,16 @@ class Transaction
         // todo verify this is an adequate check
         $prefix = substr($txnId, 0, 3);
         return $prefix === 'S01' || $prefix === 'P01';
+    }
+
+    /**
+     * @param $transaction
+     * @return void
+     */
+    public function closeTransaction($transaction)
+    {
+        $transaction->setIsClosed(true);
+        $this->transactionRepository->save($transaction);
     }
 
 //    private function filterAsyncOrders(array $transactionList)

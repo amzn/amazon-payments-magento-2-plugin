@@ -73,12 +73,12 @@ class CleanupIncompleteSessions
     public function execute()
     {
         // Get transactions
-        $transactions = $this->transactionHelper->getIncompleteTransactions();
+        $transactionDataList = $this->transactionHelper->getIncompleteTransactions();
 
         // Process each transaction
-        foreach ($transactions as $transaction) {
-            $checkoutSessionId = $transaction['checkout_session_id'];
-            $order = $transaction['order'];
+        foreach ($transactionDataList as $transactionData) {
+            $checkoutSessionId = $transactionData['checkout_session_id'];
+            $order = $transactionData['order'];
             $this->logger->info('Cleaning up checkout session id: '. $checkoutSessionId);
 
             // check current state of Amazon checkout session
@@ -88,8 +88,8 @@ class CleanupIncompleteSessions
             // Order placed, but payment not authorized, redirect to payment gateway failed, needs canceled.
 
             if ($amazonSession['statusDetails']['state'] == 'Canceled') {
-                // todo test
                 $this->checkoutSessionManagement->cancelOrder($order);
+                $this->transactionHelper->closeTransaction($transactionData['transaction']);
             } elseif ($amazonSession['statusDetails']['state'] == 'Open') {
                 // Something prevented redirect back to magento after authorization in payment gateway
                 $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $order->getId());
@@ -102,4 +102,5 @@ class CleanupIncompleteSessions
 
         $this->logger->info('Cleanup Incomplete Sessions cron job executed successfully.');
     }
+
 }
