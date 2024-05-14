@@ -754,7 +754,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             if (!$orderResult['success']) {
                 return $orderResult;
             }
-            $orderId = $orderResult['orderId'];
+            $orderId = $orderResult['order_id'] ?? null;
+            if(!$orderId) {
+                throw new \Exception('Missing order_id');
+            }
         }
 
         $result = [

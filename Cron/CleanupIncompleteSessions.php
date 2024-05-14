@@ -84,18 +84,21 @@ class CleanupIncompleteSessions
             // check current state of Amazon checkout session
             $amazonSession = $this->amazonPayAdapter->getCheckoutSession($order->getStoreId(), $checkoutSessionId);
 
-            // todo: states that potentially still need handled
-            // Order placed, but payment not authorized, redirect to payment gateway failed, needs canceled.
-
             if ($amazonSession['statusDetails']['state'] == 'Canceled') {
                 $this->checkoutSessionManagement->cancelOrder($order);
                 $this->transactionHelper->closeTransaction($transactionData['transaction']);
             } elseif ($amazonSession['statusDetails']['state'] == 'Open') {
-                // Something prevented redirect back to magento after authorization in payment gateway
-                $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $order->getId());
-            } elseif ($amazonSession['statusDetails']['state'] == 'Closed') {
-                // is completed, replace checkoutsessionId with txn id
-                // todo implement and test
+                if ($amazonSession['chargePermissionId'] == null) {
+                    // something failed after place order, but before authorization in payment gateway
+                    // todo verify transaction cleanup candidates won't include those post decline in the process of choosing a new payment method on Amazon page
+                    $this->checkoutSessionManagement->cancelOrder($order);
+                    $this->transactionHelper->closeTransaction($transactionData['transaction']);
+                } else {
+                    // Something prevented redirect back to Magento after authorization in payment gateway
+                    $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $order->getId());
+                }
+            } elseif ($amazonSession['statusDetails']['state'] == 'Completed') {
+                // No need to handle, only a customization could cause failure here.
             }
 
         }

@@ -77,13 +77,16 @@ class Transaction
     public function getIncompleteTransactions()
     {
         // Get current timestamp and timestamp from 24 hours ago
+        // todo this needs adjusted, an arbitrary window of time is inadequate
         $twentyFourHoursAgo = $this->dateTime->gmtDate(null, '-24 hours');
         $fiveMinutesAgo = $this->dateTime->gmtDate(null, '-5 minutes');
 
         // Prepare criteria for the search
+        // captures for charge when order is placed payment action
+        // authorizations for charge when shipped payment action
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('is_closed', 0)
-            ->addFilter('txn_type', 'authorization')
+            ->addFilter('txn_type', ['capture', 'authorization'], 'in')
             ->addFilter('created_at', $twentyFourHoursAgo, 'gteq')
             ->addFilter('created_at', $fiveMinutesAgo, 'lteq')
             ->setPageSize($this->limit)
