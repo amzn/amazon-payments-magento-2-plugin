@@ -1348,14 +1348,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * Set order status to payment review
      *
-     * @param $orderId
+     * @param mixed $orderId
      * @return void
      */
-    public function setOrderPendingPaymentReview($orderId)
+    public function setOrderPendingPaymentReview(mixed $orderId)
     {
         try {
-            if(!$orderId) {
-                throw new \Exception('orderId missing');
+            if (!$orderId) {
+                throw new \InvalidArgumentException('orderId missing');
             }
             $order = $this->orderRepository->get($orderId);
             // Update status to Pending Payment Review to support order placement before auth
