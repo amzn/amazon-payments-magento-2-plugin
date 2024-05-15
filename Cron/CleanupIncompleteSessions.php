@@ -23,9 +23,9 @@ use Psr\Log\LoggerInterface;
 
 class CleanupIncompleteSessions
 {
-    const SESSION_STATUS_STATE_CANCELED = 'Canceled';
-    const SESSION_STATUS_STATE_OPEN = 'Open';
-    const SESSION_STATUS_STATE_CLOSED = 'Closed';
+    public const SESSION_STATUS_STATE_CANCELED = 'Canceled';
+    public const SESSION_STATUS_STATE_OPEN = 'Open';
+    public const SESSION_STATUS_STATE_COMPLETED = 'Completed';
 
     /**
      * @var TransactionHelper
@@ -79,25 +79,27 @@ class CleanupIncompleteSessions
         foreach ($transactionDataList as $transactionData) {
             $checkoutSessionId = $transactionData['checkout_session_id'];
             $order = $transactionData['order'];
+            $orderId = $order->getId();
             $this->logger->info('Cleaning up checkout session id: '. $checkoutSessionId);
 
             // check current state of Amazon checkout session
             $amazonSession = $this->amazonPayAdapter->getCheckoutSession($order->getStoreId(), $checkoutSessionId);
 
-            if ($amazonSession['statusDetails']['state'] == 'Canceled') {
+            if ($amazonSession['statusDetails']['state'] == self::SESSION_STATUS_STATE_CANCELED) {
                 $this->checkoutSessionManagement->cancelOrder($order);
                 $this->transactionHelper->closeTransaction($transactionData['transaction']);
-            } elseif ($amazonSession['statusDetails']['state'] == 'Open') {
+            } elseif ($amazonSession['statusDetails']['state'] == self::SESSION_STATUS_STATE_OPEN) {
                 if ($amazonSession['chargePermissionId'] == null) {
                     // something failed after place order, but before authorization in payment gateway
-                    // todo verify transaction cleanup candidates won't include those post decline in the process of choosing a new payment method on Amazon page
+                    // todo verify transaction cleanup candidates won't include those post
+                    //    decline in the process of choosing a new payment method on Amazon page
                     $this->checkoutSessionManagement->cancelOrder($order);
                     $this->transactionHelper->closeTransaction($transactionData['transaction']);
                 } else {
                     // Something prevented redirect back to Magento after authorization in payment gateway
-                    $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $order->getId());
+                    $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $orderId);
                 }
-            } elseif ($amazonSession['statusDetails']['state'] == 'Completed') {
+            } elseif ($amazonSession['statusDetails']['state'] == self::SESSION_STATUS_STATE_COMPLETED) {
                 // No need to handle, only a customization could cause failure here.
             }
 
@@ -105,5 +107,4 @@ class CleanupIncompleteSessions
 
         $this->logger->info('Cleanup Incomplete Sessions cron job executed successfully.');
     }
-
 }

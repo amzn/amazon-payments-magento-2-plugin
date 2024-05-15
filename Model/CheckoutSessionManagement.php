@@ -24,6 +24,7 @@ use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Amazon\Pay\Helper\Customer as CustomerHelper;
 use Amazon\Pay\Model\Customer\CompositeMatcher as Matcher;
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Model\Exception\OrderFailureException;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -684,7 +685,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function cancelOrder($order, $quote = null, $reasonMessage = '')
     {
-        if(!$quote) {
+        if (!$quote) {
             $quote = $this->getQuote($order);
         }
 
@@ -749,14 +750,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             );
         }
 
-        if(!$orderId) {
+        if (!$orderId) {
             $orderResult = $this->placeOrCollectOrder($amazonSessionId, $cartId);
             if (!$orderResult['success']) {
                 return $orderResult;
             }
             $orderId = $orderResult['order_id'] ?? null;
-            if(!$orderId) {
-                throw new \Exception('Missing order_id');
+            if (!$orderId) {
+                throw new OrderFailureException('Missing order_id');
             }
         }
 
@@ -1356,11 +1357,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * Get order by quote
      *
-     * @param $order
+     * @param OrderInterface $order
      * @return CartInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getQuote($order) {
+    private function getQuote(OrderInterface $order)
+    {
         $quoteId = $order->getQuoteId();
         return $this->cartRepository->get($quoteId);
     }

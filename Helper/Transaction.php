@@ -16,6 +16,7 @@
 
 namespace Amazon\Pay\Helper;
 
+use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Model\Order;
@@ -53,14 +54,14 @@ class Transaction
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DateTime $dateTime
      * @param TransactionRepositoryInterface $transactionRepositoryInterface
-     * @param $limit
+     * @param int $limit
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DateTime $dateTime,
         TransactionRepositoryInterface $transactionRepositoryInterface,
-        $limit = 100
+        int $limit = 100
     ) {
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -92,7 +93,6 @@ class Transaction
             ->setPageSize($this->limit)
             ->create();
 
-
         // Fetch transactions
         $transactionList = $this->transactionRepository->getList($searchCriteria)->getItems();
 
@@ -102,7 +102,7 @@ class Transaction
         // Filter transactions by order status 'payment_review' and not charge id
         $filteredTransactions = [];
         foreach ($transactionList as $transaction) {
-            if($this->isChargeId($transaction->getTxnId())) {
+            if ($this->isChargeId($transaction->getTxnId())) {
                 continue;
             }
             $order = $transaction->getOrder();
@@ -132,10 +132,12 @@ class Transaction
     }
 
     /**
-     * @param $transaction
+     * Close transaction and save
+     *
+     * @param TransactionInterface $transaction
      * @return void
      */
-    public function closeTransaction($transaction)
+    public function closeTransaction(TransactionInterface $transaction)
     {
         $transaction->setIsClosed(true);
         $this->transactionRepository->save($transaction);
