@@ -24,6 +24,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class Transaction
 {
+    protected const REGEX_PATTERN_UUID = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i';
     /**
      * @var TransactionRepositoryInterface
      */
@@ -119,16 +120,14 @@ class Transaction
     }
 
     /**
-     * Check if the first 3 characters of txn_id start with either S01 or P01
+     * Check if the txnId is not a UUID (an Amazon checkout session id)
      *
      * @param string $txnId
      * @return bool
      */
     protected function isChargeId($txnId)
     {
-        // todo verify this is an adequate check
-        $prefix = substr($txnId, 0, 3);
-        return $prefix === 'S01' || $prefix === 'P01';
+        return !preg_match(self::REGEX_PATTERN_UUID, $txnId);
     }
 
     /**
