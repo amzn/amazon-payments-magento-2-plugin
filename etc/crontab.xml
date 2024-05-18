@@ -20,7 +20,7 @@
         <job name="amazon_pay_process_async" instance="Amazon\Pay\Cron\ProcessAsync" method="execute">
             <schedule>*/30 * * * *</schedule>
         </job>
-        <job name="amazon_pay_cleanup_sessions" instance="Amazon\Pay\Cron\CleanupIncompleteSessions" method="execute">
+        <job name="amazon_pay_cleanup_sessions" instance="Amazon\Pay\Cron\CleanUpIncompleteSessions" method="execute">
             <schedule>*/5 * * * *</schedule>
         </job>
     </group>

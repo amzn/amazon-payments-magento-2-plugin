@@ -25,7 +25,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use Amazon\Pay\Model\AsyncManagement\Charge as AsyncCharge;
 
-class CleanupIncompleteSessions
+class CleanUpIncompleteSessions
 {
     public const SESSION_STATUS_STATE_CANCELED = 'Canceled';
     public const SESSION_STATUS_STATE_OPEN = 'Open';
