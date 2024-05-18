@@ -16,59 +16,40 @@
 
 namespace Amazon\Pay\Helper;
 
+use Amazon\Pay\Gateway\Config\Config;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Model\Order;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class Transaction
 {
-    protected const REGEX_PATTERN_UUID = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i';
-    /**
-     * @var TransactionRepositoryInterface
-     */
-    protected $transactionRepository;
 
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
+    protected const REGEX_PATTERN_UUID = '.{8}-.{4}-.{4}-.{4}-.{12}';
 
-    /**
-     * @var DateTime
-     */
-    private $dateTime;
+    protected const MIN_ORDER_AGE_MINUTES = 3;
 
     /**
      * @var int
      */
     private $limit;
 
-    /**
-     * @var TransactionRepositoryInterface
-     */
-    private $transactionRepositoryInterface;
+    private ResourceConnection $resourceConnection;
+    private TransactionRepositoryInterface $transactionRepository;
 
     /**
+     * @param ResourceConnection $resourceConnection
      * @param TransactionRepositoryInterface $transactionRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DateTime $dateTime
-     * @param TransactionRepositoryInterface $transactionRepositoryInterface
      * @param int $limit
      */
     public function __construct(
+        ResourceConnection $resourceConnection,
         TransactionRepositoryInterface $transactionRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        DateTime $dateTime,
-        TransactionRepositoryInterface $transactionRepositoryInterface,
         int $limit = 100
     ) {
-        $this->transactionRepository = $transactionRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->transactionRepositoryInterface = $transactionRepositoryInterface;
-        $this->dateTime = $dateTime;
         $this->limit = $limit;
+        $this->resourceConnection = $resourceConnection;
+        $this->transactionRepository = $transactionRepository;
     }
 
     /**
@@ -76,76 +57,92 @@ class Transaction
      *
      * @return array
      */
-    public function getIncompleteTransactions()
+    public function getIncomplete()
     {
-        // Get current timestamp and timestamp from 24 hours ago
-        // todo this needs adjusted, an arbitrary window of time is inadequate
-        $twentyFourHoursAgo = $this->dateTime->gmtDate(null, '-24 hours');
-        $fiveMinutesAgo = $this->dateTime->gmtDate(null, '-5 minutes');
+        // Do not process recent orders, synchronous ones need time to be
+        // resolved in payment gateway on auth decline
+        // todo confirm timeout length in gateway
+        $maxOrderPlacedTime = $this->getMaxOrderPlacedTime();
 
-        // Prepare criteria for the search
-        // captures for charge when order is placed payment action
-        // authorizations for charge when shipped payment action
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('is_closed', 0)
-            ->addFilter('txn_type', ['capture', 'authorization'], 'in')
-            ->addFilter('created_at', $twentyFourHoursAgo, 'gteq')
-            ->addFilter('created_at', $fiveMinutesAgo, 'lteq')
-            ->setPageSize($this->limit)
-            ->create();
+        $connection = $this->resourceConnection->getConnection();
 
-        // Fetch transactions
-        $transactionList = $this->transactionRepository->getList($searchCriteria)->getItems();
+        // tables used to determine stalled order status
+        $salesOrderTable = $connection->getTableName('sales_order');
+        $salesOrderPaymentTable = $connection->getTableName('sales_order_payment');
+        $salesPaymentTransaction = $connection->getTableName('sales_payment_transaction');
+        $amazonPayAsyncTable = $connection->getTableName('amazon_payv2_async');
 
-        // todo test if necessary to filter out records queued for async processing
-//        $transactionList = $this->filterAsyncOrders($transactionList);
+        // specifying(limiting) columns is unnecessary, but helpful for debugging
+        // pending actions:
+        // captures for "charge when order is placed" payment action
+        // authorizations for "charge when shipped" payment action
+        $tableFields = [
+            'sales_order' => ['order_id' => 'entity_id', 'store_id', 'increment_id', 'created_at', 'state'],
+            'sales_order_payment' => ['method'],
+            'sales_payment_transaction' => ['transaction_id', 'checkout_session_id' => 'txn_id', 'is_closed'],
+            'amazon_payv2_async' => ['pending_action', 'is_pending']
+        ];
 
-        // Filter transactions by order status 'payment_review' and not charge id
-        $filteredTransactions = [];
-        foreach ($transactionList as $transaction) {
-            if ($this->isChargeId($transaction->getTxnId())) {
-                continue;
-            }
-            $order = $transaction->getOrder();
-            if ($order && $order->getState() == Order::STATE_PAYMENT_REVIEW) {
-                $filteredTransactions[] = [
-                    'checkout_session_id' => $transaction->getTxnId(),
-                    'order' => $order,
-                    'transaction' => $transaction
-                ];
-            }
-        }
+        $select = $connection->select()
+            ->from(['so' => $salesOrderTable], $tableFields['sales_order'])
+            ->joinLeft(
+                ['sop' => $salesOrderPaymentTable],
+                'so.entity_id = sop.parent_id',
+                $tableFields['sales_order_payment']
+            )
+            ->joinLeft(
+                ['spt' => $salesPaymentTransaction],
+                'sop.entity_id = spt.payment_id',
+                $tableFields['sales_payment_transaction']
+            )
+            ->joinLeft(
+                ['apa' => $amazonPayAsyncTable],
+                'spt.txn_id = apa.pending_id',
+                $tableFields['amazon_payv2_async']
+            )
+            // No async record pending
+            ->where('apa.pending_action IS NULL')
+            // Order awaiting payment
+            ->where("so.status = ?", Order::STATE_PAYMENT_REVIEW)
+            // A transaction is not complete
+            ->where('spt.is_closed <> ?', 1)
+            // Delay processing new orders
+            ->where('so.created_at <= ?', $maxOrderPlacedTime)
+            // Amazon Pay orders only
+            ->where('sop.method = ?', Config::CODE)
+            // Only transactions that have not yet been swapped out with charge id
+            // (checkoutSessionIds only)
+            ->where('spt.txn_id REGEXP ?', self::REGEX_PATTERN_UUID)
+            // Meter to reduce load
+            ->limit($this->limit);
 
-        return $filteredTransactions;
-    }
-
-    /**
-     * Check if the txnId is not a UUID (an Amazon checkout session id)
-     *
-     * @param string $txnId
-     * @return bool
-     */
-    protected function isChargeId($txnId)
-    {
-        return !preg_match(self::REGEX_PATTERN_UUID, $txnId);
+        // Return stalled orders
+        return $connection->fetchAll($select);
     }
 
     /**
      * Close transaction and save
      *
-     * @param TransactionInterface $transaction
+     * @param mixed $transactionId
      * @return void
      */
-    public function closeTransaction(TransactionInterface $transaction)
+    public function closeTransaction(mixed $transactionId)
     {
+
+        $transaction = $this->transactionRepository->get($transactionId);
         $transaction->setIsClosed(true);
         $this->transactionRepository->save($transaction);
     }
 
-//    private function filterAsyncOrders(array $transactionList)
-//    {
-//
-//
-//        return $filteredTransactions;
-//    }
+    /**
+     * Use db time to reduce likelihood of server/db time mismatch,
+     * this assumes that created_at default schema values are used
+     *
+     * @return string
+     */
+    private function getMaxOrderPlacedTime()
+    {
+        $query = 'SELECT NOW() - INTERVAL ' . self::MIN_ORDER_AGE_MINUTES . ' MINUTE';
+        return $this->resourceConnection->getConnection()->fetchOne($query);
+    }
 }
