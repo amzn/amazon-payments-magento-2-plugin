@@ -34,7 +34,14 @@ class Transaction
      */
     private $limit;
 
+    /**
+     * @var ResourceConnection
+     */
     private ResourceConnection $resourceConnection;
+
+    /**
+     * @var TransactionRepositoryInterface
+     */
     private TransactionRepositoryInterface $transactionRepository;
 
     /**
@@ -135,13 +142,13 @@ class Transaction
     }
 
     /**
-     * Use db time to reduce likelihood of server/db time mismatch,
-     * this assumes that created_at default schema values are used
+     * Use db time to reduce likelihood of server/db time mismatch
      *
      * @return string
      */
     private function getMaxOrderPlacedTime()
     {
+        // phpcs:ignore Magento2.SQL.RawQuery
         $query = 'SELECT NOW() - INTERVAL ' . self::MIN_ORDER_AGE_MINUTES . ' MINUTE';
         return $this->resourceConnection->getConnection()->fetchOne($query);
     }

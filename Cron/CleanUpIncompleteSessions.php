@@ -67,6 +67,7 @@ class CleanUpIncompleteSessions
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param CheckoutSessionManagement $checkoutSessionManagement
      * @param OrderRepositoryInterface $orderRepository
+     * @param AsyncCharge $asyncCharge
      */
     public function __construct(
         TransactionHelper $transactionHelper,
@@ -136,11 +137,6 @@ class CleanUpIncompleteSessions
                     break;
                 case self::SESSION_STATUS_STATE_COMPLETED:
                     $chargeId = $amazonSession['chargeId'];
-                    // not sure why, but 2-3 local orders fell into this category, one of which was charged
-                    // They may have been artifacts of intense manipulation while trying to reproduce, so possibly can ignore
-                    // May need to process with retrofitted processStateChange
-                    // or set chargeId and chargePermissionId, then make the call (also may need to create an async record)
-                    // $this->asyncCharge->processStateChange($chargeId);
                     break;
             }
         } catch (\Exception $e) {
