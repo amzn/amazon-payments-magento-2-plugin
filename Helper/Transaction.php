@@ -27,7 +27,8 @@ class Transaction
 
     protected const REGEX_PATTERN_UUID = '.{8}-.{4}-.{4}-.{4}-.{12}';
 
-    protected const MIN_ORDER_AGE_MINUTES = 3;
+    // Length of time in minutes we wait before cleaning up the transaction
+    protected const MIN_ORDER_AGE_MINUTES = 30;
 
     /**
      * @var int
