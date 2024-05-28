@@ -126,7 +126,7 @@ class CleanUpIncompleteSessions
                 case self::SESSION_STATUS_STATE_CANCELED:
                     $logMessage = 'Amazon Session Canceled, cancelling order and closing transaction: ';
                     $logMessage .= $checkoutSessionId;
-                    $this->logger->info('Amazon Session Canceled, cancelling order and closing transaction');
+                    $this->logger->info($logMessage);
                     $this->cancelOrder($orderId);
                     $this->transactionHelper->closeTransaction($transactionData['transaction_id']);
                     break;
