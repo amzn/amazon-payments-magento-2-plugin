@@ -109,7 +109,7 @@ class CleanUpIncompleteSessions
      * @param array $transactionData
      * @return void
      */
-    private function processTransaction(array $transactionData)
+    protected function processTransaction(array $transactionData)
     {
         $checkoutSessionId = $transactionData['checkout_session_id'];
         $orderId = $transactionData['order_id'];
@@ -124,19 +124,30 @@ class CleanUpIncompleteSessions
 
             switch ($amazonSession['statusDetails']['state']) {
                 case self::SESSION_STATUS_STATE_CANCELED:
+                    $logMessage = 'Amazon Session Canceled, cancelling order and closing transaction: ';
+                    $logMessage .= $checkoutSessionId;
+                    $this->logger->info('Amazon Session Canceled, cancelling order and closing transaction');
                     $this->cancelOrder($orderId);
                     $this->transactionHelper->closeTransaction($transactionData['transaction_id']);
                     break;
                 case self::SESSION_STATUS_STATE_OPEN:
                     if ($amazonSession['chargePermissionId'] == null) {
+                        $logMessage = 'No ChargePermissionId, cancelling order and closing transaction: ';
+                        $logMessage .= $checkoutSessionId;
+                        $this->logger->info($logMessage);
                         $this->cancelOrder($orderId);
                         $this->transactionHelper->closeTransaction($transactionData['transaction_id']);
                     } else {
+                        $logMessage = 'Valid ChargePermissionId, completing checkout session: ';
+                        $logMessage .= $checkoutSessionId;
+                        $this->logger->info($logMessage);
                         $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $orderId);
                     }
                     break;
                 case self::SESSION_STATUS_STATE_COMPLETED:
-                    $chargeId = $amazonSession['chargeId'];
+                    $logMessage = 'Amazon Session Completed: ';
+                    $logMessage .= $checkoutSessionId;
+                    $this->logger->info($logMessage);
                     break;
             }
         } catch (\Exception $e) {
@@ -151,7 +162,7 @@ class CleanUpIncompleteSessions
      * @param int $orderId
      * @return void
      */
-    private function cancelOrder($orderId)
+    protected function cancelOrder($orderId)
     {
         $order = $this->loadOrder($orderId);
 
@@ -168,7 +179,7 @@ class CleanUpIncompleteSessions
      * @param int $orderId
      * @return OrderInterface
      */
-    private function loadOrder($orderId)
+    protected function loadOrder($orderId)
     {
         try {
             return $this->orderRepository->get($orderId);

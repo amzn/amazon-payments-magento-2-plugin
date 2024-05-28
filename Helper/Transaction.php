@@ -136,7 +136,6 @@ class Transaction
      */
     public function closeTransaction(mixed $transactionId)
     {
-
         $transaction = $this->transactionRepository->get($transactionId);
         $transaction->setIsClosed(true);
         $this->transactionRepository->save($transaction);
