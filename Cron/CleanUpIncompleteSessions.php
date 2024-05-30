@@ -31,6 +31,8 @@ class CleanUpIncompleteSessions
     public const SESSION_STATUS_STATE_OPEN = 'Open';
     public const SESSION_STATUS_STATE_COMPLETED = 'Completed';
 
+    protected const LOG_PREFIX = 'AmazonCleanUpIncompleteSesssions: ';
+
     /**
      * @var TransactionHelper
      */
@@ -100,7 +102,10 @@ class CleanUpIncompleteSessions
             $this->processTransaction($transactionData);
         }
 
-        $this->logger->info('Cleanup Incomplete Sessions cron job executed successfully.');
+        $this->logger->info(
+            self::LOG_PREFIX .
+            'Cleanup Incomplete Sessions cron job executed successfully.'
+        );
     }
 
     /**
@@ -113,9 +118,8 @@ class CleanUpIncompleteSessions
     {
         $checkoutSessionId = $transactionData['checkout_session_id'];
         $orderId = $transactionData['order_id'];
-        $storeId = $transactionData['store_id'];
 
-        $this->logger->info('Cleaning up checkout session id: ' . $checkoutSessionId);
+        $this->logger->info(self::LOG_PREFIX . 'Cleaning up checkout session id: ' . $checkoutSessionId);
 
         try {
 
@@ -124,35 +128,27 @@ class CleanUpIncompleteSessions
 
             switch ($amazonSession['statusDetails']['state']) {
                 case self::SESSION_STATUS_STATE_CANCELED:
-                    $logMessage = 'Amazon Session Canceled, cancelling order and closing transaction: ';
+                    $logMessage = 'Checkout session Canceled, cancelling order and closing transaction: ';
                     $logMessage .= $checkoutSessionId;
-                    $this->logger->info($logMessage);
+                    $this->logger->info(self::LOG_PREFIX . $logMessage);
                     $this->cancelOrder($orderId);
                     $this->transactionHelper->closeTransaction($transactionData['transaction_id']);
                     break;
                 case self::SESSION_STATUS_STATE_OPEN:
-                    if ($amazonSession['chargePermissionId'] == null) {
-                        $logMessage = 'No ChargePermissionId, cancelling order and closing transaction: ';
-                        $logMessage .= $checkoutSessionId;
-                        $this->logger->info($logMessage);
-                        $this->cancelOrder($orderId);
-                        $this->transactionHelper->closeTransaction($transactionData['transaction_id']);
-                    } else {
-                        $logMessage = 'Valid ChargePermissionId, completing checkout session: ';
-                        $logMessage .= $checkoutSessionId;
-                        $this->logger->info($logMessage);
-                        $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $orderId);
-                    }
+                    $logMessage = 'Checkout session Open, completing: ';
+                    $logMessage .= $checkoutSessionId;
+                    $this->logger->info(self::LOG_PREFIX . $logMessage);
+                    $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $orderId);
                     break;
                 case self::SESSION_STATUS_STATE_COMPLETED:
-                    $logMessage = 'Amazon Session Completed: ';
+                    $logMessage = 'Checkout session Completed, nothing more needed: ';
                     $logMessage .= $checkoutSessionId;
-                    $this->logger->info($logMessage);
+                    $this->logger->info(self::LOG_PREFIX . $logMessage);
                     break;
             }
         } catch (\Exception $e) {
             $errorMessage = 'Unable to process checkoutSessionId: ' . $checkoutSessionId;
-            $this->logger->error($errorMessage . '. ' . $e->getMessage());
+            $this->logger->error(self::LOG_PREFIX . $errorMessage . '. ' . $e->getMessage());
         }
     }
 
@@ -169,7 +165,7 @@ class CleanUpIncompleteSessions
         if ($order) {
             $this->checkoutSessionManagement->cancelOrder($order);
         } else {
-            $this->logger->error('Order not found for ID: ' . $orderId);
+            $this->logger->error(self::LOG_PREFIX . 'Order not found for ID: ' . $orderId);
         }
     }
 
@@ -184,7 +180,7 @@ class CleanUpIncompleteSessions
         try {
             return $this->orderRepository->get($orderId);
         } catch (\Exception $e) {
-            $this->logger->error('Error loading order: ' . $e->getMessage());
+            $this->logger->error(self::LOG_PREFIX . 'Error loading order: ' . $e->getMessage());
             return null;
         }
     }
