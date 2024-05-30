@@ -1,5 +1,8 @@
 # Change Log
 
+## 5.17.1
+* Fixed issue where orders could be processing but not capture payment
+
 ## 5.17.0
 * Changed sequence of placing Magento order/processing Amazon payment to reduce likelihood of
 transactions with no associated order IDs in Seller Central
