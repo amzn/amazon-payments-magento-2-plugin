@@ -101,11 +101,6 @@ class CleanUpIncompleteSessions
         foreach ($incompleteTransactionList as $transactionData) {
             $this->processTransaction($transactionData);
         }
-
-        $this->logger->info(
-            self::LOG_PREFIX .
-            'Cleanup Incomplete Sessions cron job executed successfully.'
-        );
     }
 
     /**
@@ -125,8 +120,8 @@ class CleanUpIncompleteSessions
 
             // Check current state of Amazon checkout session
             $amazonSession = $this->amazonPayAdapter->getCheckoutSession(null, $checkoutSessionId);
-
-            switch ($amazonSession['statusDetails']['state']) {
+            $state = $amazonSession['statusDetails']['state'] ?? false;
+            switch ($state) {
                 case self::SESSION_STATUS_STATE_CANCELED:
                     $logMessage = 'Checkout session Canceled, cancelling order and closing transaction: ';
                     $logMessage .= $checkoutSessionId;

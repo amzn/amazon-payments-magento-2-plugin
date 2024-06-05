@@ -25,8 +25,6 @@ use Magento\Sales\Model\Order;
 class Transaction
 {
 
-    protected const REGEX_PATTERN_UUID = '.{8}-.{4}-.{4}-.{4}-.{12}';
-
     // Length of time in minutes we wait before cleaning up the transaction
     protected const MIN_ORDER_AGE_MINUTES = 30;
 
@@ -118,9 +116,6 @@ class Transaction
             ->where('so.created_at <= ?', $maxOrderPlacedTime)
             // Amazon Pay orders only
             ->where('sop.method = ?', Config::CODE)
-            // Only transactions that have not yet been swapped out with charge id
-            // (checkoutSessionIds only)
-            ->where('spt.txn_id REGEXP ?', self::REGEX_PATTERN_UUID)
             // Meter to reduce load
             ->limit($this->limit);
 

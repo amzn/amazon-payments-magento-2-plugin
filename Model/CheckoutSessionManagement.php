@@ -787,10 +787,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $result['success'] = true;
 
         } catch (\Exception $e) {
-            $this->closeChargePermission($amazonSessionId, $order, $e);
-
-            // cancel order
             if (isset($order)) {
+                $this->closeChargePermission($amazonSessionId, $order, $e);
                 $this->cancelOrder($order, $quote);
                 $this->magentoCheckoutSession->restoreQuote();
             }
