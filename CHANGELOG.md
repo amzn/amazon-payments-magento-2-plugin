@@ -1,7 +1,11 @@
 # Change Log
 
 ## 5.17.1
+* Changed php allowed versions to include 8.3
 * Fixed issue where orders could be processing but not capture payment
+* Fixed issue with amazon-product-add.js 404 not found (thanks @tim-breitenstein-it!)
+* Fixed issue where a variable could be undefined (thanks @dimitriBouteiile!)
+* Fixed issue where incorrect message "can't create invoice" could be displayed
 
 ## 5.17.0
 * Changed sequence of placing Magento order/processing Amazon payment to reduce likelihood of
