@@ -1255,6 +1255,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     $order->getGrandTotal(),
                     $order->getOrderCurrencyCode()
                 );
+                $this->setProcessing($payment);
                 // capture and invoice on the Magento side
                 if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC) {
                     $this->asyncCharge->capture($order, $chargeId, $order->getGrandTotal());
