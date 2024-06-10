@@ -20,7 +20,7 @@
     $frontName = $block->getRequest()->getFrontName();
     $pathInfo = $block->getRequest()->getPathInfo();
     ?>
-<script>
+<script nonce=<?= $block->getNonce() ?>>
 
     require (['uiRegistry'], function(registry) {
         registry.set('amazonPay', <?= /* @noEscape */ $block->getJsonConfig() ?>)

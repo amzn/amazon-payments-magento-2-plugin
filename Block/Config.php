@@ -40,23 +40,31 @@ class Config extends \Magento\Framework\View\Element\Template
     private $subscriptionManager;
 
     /**
+     * @var \Magento\Csp\Helper\CspNonceProvider
+     */
+    private $nonceProvider;
+
+    /**
      * Config constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
+     * @param \Magento\Csp\Helper\CspNonceProvider $nonceProvider
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
-        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
+        \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
+        \Magento\Csp\Helper\CspNonceProvider $nonceProvider
     ) {
         parent::__construct($context);
         $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
         $this->subscriptionManager = $subscriptionManager;
+        $this->nonceProvider = $nonceProvider;
     }
 
     /**
@@ -113,5 +121,14 @@ class Config extends \Magento\Framework\View\Element\Template
     public function isLwaEnabled()
     {
         return $this->amazonConfig->isLwaEnabled();
+    }
+
+    /**
+     * Generate nonce for AP config
+     *
+     * @return string
+     */
+    public function getNonce() {
+        return $this->nonceProvider->generateNonce();
     }
 }
