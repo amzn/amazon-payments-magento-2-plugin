@@ -19,18 +19,22 @@
     <?php
     $frontName = $block->getRequest()->getFrontName();
     $pathInfo = $block->getRequest()->getPathInfo();
-    ?>
-<script nonce=<?= $block->getNonce() ?>>
+    $config = $block->getJsonConfig();
 
+    $script = <<<script
     require (['uiRegistry'], function(registry) {
-        registry.set('amazonPay', <?= /* @noEscape */ $block->getJsonConfig() ?>)
+        registry.set('amazonPay', $config);
     });
+    script;
+    ?>
 
     <?php if ($frontName != 'checkout' || (strpos($pathInfo, 'checkout/cart') !== false)): ?>
-    require (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
-        amazonStorage.clearAmazonCheckout();
-    });
+        <?php
+        $script .= PHP_EOL . "require (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
+            amazonStorage.clearAmazonCheckout();
+        });";
+        ?>
     <?php endif; ?>
 
-</script>
+    <?= /* noEscape */ $block->getCspUtil()->renderTag('script', [], $script) ?>
 <?php endif ?>

@@ -40,9 +40,9 @@ class Config extends \Magento\Framework\View\Element\Template
     private $subscriptionManager;
 
     /**
-     * @var \Magento\Csp\Helper\CspNonceProvider
+     * @var \Magento\Csp\Helper\InlineUtil
      */
-    private $nonceProvider;
+    private $cspInlineUtil;
 
     /**
      * Config constructor
@@ -51,20 +51,20 @@ class Config extends \Magento\Framework\View\Element\Template
      * @param \Amazon\Pay\Helper\Data $amazonHelper
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager
-     * @param \Magento\Csp\Helper\CspNonceProvider $nonceProvider
+     * @param \Magento\Csp\Helper\InlineUtil $cspInlineUtil
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Amazon\Pay\Helper\Data $amazonHelper,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
-        \Magento\Csp\Helper\CspNonceProvider $nonceProvider
+        \Magento\Csp\Helper\InlineUtil $cspInlineUtil
     ) {
         parent::__construct($context);
         $this->amazonHelper = $amazonHelper;
         $this->amazonConfig = $amazonConfig;
         $this->subscriptionManager = $subscriptionManager;
-        $this->nonceProvider = $nonceProvider;
+        $this->cspInlineUtil = $cspInlineUtil;
     }
 
     /**
@@ -124,11 +124,11 @@ class Config extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Generate nonce for AP config
+     * Provide inline util to block class
      *
-     * @return string
+     * @return \Magento\Csp\Helper\InlineUtil
      */
-    public function getNonce() {
-        return $this->nonceProvider->generateNonce();
+    public function getCspUtil() {
+        return $this->cspInlineUtil;
     }
 }
