@@ -636,14 +636,15 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * Set order as processing
      *
      * @param Payment $payment
+     * @param bool $payInvoice
      * @return void
      */
-    protected function setProcessing($payment)
+    protected function setProcessing($payment, $payInvoice = true)
     {
         $order = $payment->getOrder();
         $payment->setIsTransactionPending(false);
         $invoiceCollection = $order->getInvoiceCollection();
-        if (!empty($invoiceCollection->getItems())) {
+        if (!empty($invoiceCollection->getItems()) && $payInvoice) {
             $invoiceCollection->getFirstItem()->pay();
         }
         $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
@@ -1255,7 +1256,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     $order->getGrandTotal(),
                     $order->getOrderCurrencyCode()
                 );
-                $this->setProcessing($payment);
+                $this->setProcessing($payment, false);
                 // capture and invoice on the Magento side
                 if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC) {
                     $this->asyncCharge->capture($order, $chargeId, $order->getGrandTotal());
@@ -1289,7 +1290,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 case 'Captured':
                     $payment->setIsTransactionClosed(true);
                     $transaction->setIsClosed(true);
-                    $this->setProcessing($payment);
+                    $this->setProcessing($payment, false);
 
                     if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
                         // capture and invoice on the Magento side
