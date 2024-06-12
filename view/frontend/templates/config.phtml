@@ -23,7 +23,7 @@
 
     $script = <<<script
     require (['uiRegistry'], function(registry) {
-        registry.set('amazonPay', $config);
+        registry.set('amazonPay', {$config});
     });
     script;
     ?>
@@ -36,5 +36,5 @@
         ?>
     <?php endif; ?>
 
-    <?= /* noEscape */ $block->getCspUtil()->renderTag('script', [], $script) ?>
+    <?= /* noEscape */ $csp->renderTag('script', [], $script) ?>
 <?php endif ?>
