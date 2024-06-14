@@ -14,7 +14,13 @@
  * permissions and limitations under the License.
  */
 ?>
-<?php /* @var $block \Amazon\Pay\Block\Config */ ?>
+<?php
+/**
+ * @var \Amazon\Pay\Block\Config $block
+ * @var Magento\Csp\Api\InlineUtilInterface $csp
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+**/
+?>
 <?php if ($block->isEnabled()): ?>
     <?php
     $frontName = $block->getRequest()->getFrontName();
@@ -30,11 +36,15 @@
 
     <?php if ($frontName != 'checkout' || (strpos($pathInfo, 'checkout/cart') !== false)): ?>
         <?php
-        $script .= PHP_EOL . "require (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
+        $script .= "\nrequire (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
             amazonStorage.clearAmazonCheckout();
-        });";
+        });\n";
         ?>
     <?php endif; ?>
 
-    <?= /* noEscape */ $csp->renderTag('script', [], $script) ?>
+    <?php if (isset($this->csp)): ?>
+        <?= /* @noEscape */ $csp->renderTag('script', [], $script) ?>
+    <?php else: ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $script, false) ?>
+    <?php endif; ?>
 <?php endif ?>
