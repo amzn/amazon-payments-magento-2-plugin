@@ -36,9 +36,11 @@
 
     <?php if ($frontName != 'checkout' || (strpos($pathInfo, 'checkout/cart') !== false)): ?>
         <?php
-        $script .= "require (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
+        $script .= <<<script
+        require (['Amazon_Pay/js/model/storage'], function(amazonStorage) {
             amazonStorage.clearAmazonCheckout();
-        });";
+        });
+        script;
         ?>
     <?php endif; ?>
 
