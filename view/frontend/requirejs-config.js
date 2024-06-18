@@ -50,7 +50,6 @@ var config = {
     },
     map: {
         '*': {
-            amazonPayProductAdd: 'Amazon_Pay/js/amazon-product-add',
             amazonPayButton: 'Amazon_Pay/js/amazon-button',
             amazonPayConfig: 'Amazon_Pay/js/model/amazonPayConfig',
             amazonPayLoginButton: 'Amazon_Pay/js/amazon-login-button',

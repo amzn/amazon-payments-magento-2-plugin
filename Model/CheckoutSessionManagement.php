@@ -24,6 +24,7 @@ use Amazon\Pay\Model\Config\Source\PaymentAction;
 use Amazon\Pay\Helper\Customer as CustomerHelper;
 use Amazon\Pay\Model\Customer\CompositeMatcher as Matcher;
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
+use Amazon\Pay\Model\Exception\OrderFailureException;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -635,14 +636,15 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * Set order as processing
      *
      * @param Payment $payment
+     * @param bool $payInvoice
      * @return void
      */
-    protected function setProcessing($payment)
+    protected function setProcessing($payment, $payInvoice = true)
     {
         $order = $payment->getOrder();
         $payment->setIsTransactionPending(false);
         $invoiceCollection = $order->getInvoiceCollection();
-        if (!empty($invoiceCollection->getItems())) {
+        if (!empty($invoiceCollection->getItems()) && $payInvoice) {
             $invoiceCollection->getFirstItem()->pay();
         }
         $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
@@ -682,8 +684,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param string $reasonMessage
      * @return void
      */
-    public function cancelOrder($order, $quote, $reasonMessage = '')
+    public function cancelOrder($order, $quote = null, $reasonMessage = '')
     {
+        if (!$quote) {
+            $quote = $this->getQuote($order);
+        }
+
         // set order as cancelled
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
             \Magento\Sales\Model\Order::STATE_CANCELED
@@ -736,7 +742,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * @inheritDoc
      */
-    public function completeCheckoutSession($amazonSessionId, $cartId = null)
+    public function completeCheckoutSession($amazonSessionId, $cartId = null, $orderId = null)
     {
         if (!$amazonSessionId) {
             return $this->handleCompleteCheckoutSessionError(
@@ -745,9 +751,15 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             );
         }
 
-        $orderResult = $this->placeOrCollectOrder($amazonSessionId, $cartId);
-        if (!$orderResult['success']) {
-            return $orderResult;
+        if (!$orderId) {
+            $orderResult = $this->placeOrCollectOrder($amazonSessionId, $cartId);
+            if (!$orderResult['success']) {
+                return $orderResult;
+            }
+            $orderId = $orderResult['order_id'] ?? null;
+            if (!$orderId) {
+                throw new OrderFailureException('Missing order_id');
+            }
         }
 
         $result = [
@@ -755,10 +767,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         ];
 
         try {
-            $orderId = $orderResult['order_id'];
             $order = $this->orderRepository->get($orderId);
-            $quoteId = $order->getQuoteId();
-            $quote = $this->cartRepository->get($quoteId);
+            $quote = $this->getQuote($order);
 
             // @TODO: associate token with payment?
             $result['order_id'] = $orderId;
@@ -778,10 +788,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $result['success'] = true;
 
         } catch (\Exception $e) {
-            $this->closeChargePermission($amazonSessionId, $order, $e);
-
-            // cancel order
             if (isset($order)) {
+                $this->closeChargePermission($amazonSessionId, $order, $e);
                 $this->cancelOrder($order, $quote);
                 $this->magentoCheckoutSession->restoreQuote();
             }
@@ -1248,6 +1256,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     $order->getGrandTotal(),
                     $order->getOrderCurrencyCode()
                 );
+                $this->setProcessing($payment, false);
                 // capture and invoice on the Magento side
                 if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC) {
                     $this->asyncCharge->capture($order, $chargeId, $order->getGrandTotal());
@@ -1273,17 +1282,17 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                     $this->asyncManagement->queuePendingAuthorization($chargeId);
                     break;
                 case 'Authorized':
+                    $this->setProcessing($payment);
                     if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
-                        $this->setProcessing($payment);
                         $this->addCaptureComment($payment, $amazonCharge['chargePermissionId']);
                     }
                     break;
                 case 'Captured':
                     $payment->setIsTransactionClosed(true);
                     $transaction->setIsClosed(true);
+                    $this->setProcessing($payment, false);
 
                     if ($this->amazonConfig->getAuthorizationMode() == AuthorizationMode::SYNC_THEN_ASYNC) {
-                        $this->setProcessing($payment);
                         // capture and invoice on the Magento side
                         $this->asyncCharge->capture($order, $chargeId, $quote->getGrandTotal());
                     }
@@ -1343,5 +1352,39 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 true
             );
         }
+    }
+
+    /**
+     * Set order status to payment review
+     *
+     * @param mixed $orderId
+     * @return void
+     */
+    public function setOrderPendingPaymentReview(mixed $orderId)
+    {
+        try {
+            if (!$orderId) {
+                throw new \InvalidArgumentException('orderId missing');
+            }
+            $order = $this->orderRepository->get($orderId);
+            // Update status to Pending Payment Review to support order placement before auth
+            $payment = $order->getPayment();
+            $this->setPending($payment);
+        } catch (\Exception $e) {
+            $this->logger->error('Unable to set payment review order status. ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get order by quote
+     *
+     * @param OrderInterface $order
+     * @return CartInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getQuote(OrderInterface $order)
+    {
+        $quoteId = $order->getQuoteId();
+        return $this->cartRepository->get($quoteId);
     }
 }
