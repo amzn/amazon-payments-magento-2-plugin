@@ -1146,9 +1146,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 if ($transaction) {
                     $result = [
                         'success' => true,
-                        'order_id' => null
+                        'order_id' => $transaction->getOrderId()
                     ];
-                    $result['order_id'] = $this->magentoCheckoutSession->getLastOrderId();
                 } else {
                     $result = $this->placeOrder($amazonSessionId);
                 }
