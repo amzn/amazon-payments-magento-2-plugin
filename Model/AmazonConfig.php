@@ -1034,4 +1034,20 @@ class AmazonConfig
             $scopeCode
         );
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoFontColor(): mixed
+    {
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2_vault/promo_message_font_color');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromoFontSize(): mixed
+    {
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2_vault/promo_message_font_size');
+    }
 }

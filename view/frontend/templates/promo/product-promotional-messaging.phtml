@@ -1,0 +1,29 @@
+<?php
+
+use Amazon\Pay\Block\Promo\PromoMessaging;
+use Magento\Framework\Escaper;
+
+/**
+ * @var PromoMessaging $block
+ * @var Escaper $escaper
+ */
+?>
+
+<div id="promotional-message"></div>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "amazonPayPromoMessaging": {
+            "amountValue": "<?= $escaper->escapeHtml($block->getProductPrice()) ?>",
+            "currencyCode": "<?= $escaper->escapeHtml($block->getCurrencyCode()) ?>",
+            "environment": "<?= $escaper->escapeHtml($block->getEnvironment()) ?>",
+            "fontColor": "<?= $escaper->escapeHtml($block->getPromoFontColor()) ?>",
+            "fontSize": "<?= $escaper->escapeHtml($block->getPromoFontSize()) ?>",
+            "languageCode": "<?= $escaper->escapeHtml($block->getLanguageCode()) ?>",
+            "merchantId": "<?= $escaper->escapeHtml($block->getMerchantId()) ?>",
+            "placement": "Product"
+        }
+    }
+}
+</script>
