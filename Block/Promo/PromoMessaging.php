@@ -84,7 +84,7 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
      */
     public function getPromoFontColor(): mixed
     {
-        return $this->scopeConfig->getValue('payment/amazon_payment_v2_vault/promo_message_font_color');
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2/promo_message_color');
     }
 
     /**
@@ -92,6 +92,6 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
      */
     public function getPromoFontSize(): mixed
     {
-        return $this->scopeConfig->getValue('payment/amazon_payment_v2_vault/promo_message_font_size');
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2/promo_message_font_size');
     }
 }
