@@ -12,6 +12,11 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
 {
 
     /**
+     * Simple Product Type id
+     */
+    private const SIMPLE_TYPE_ID = 'simple';
+
+    /**
      * @param AmazonConfig $amazonConfig
      * @param Template\Context $context
      * @param Registry $registry
@@ -29,6 +34,8 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * AP Merchant Id getter
+     *
      * @return string
      */
     public function getMerchantId(): string
@@ -37,6 +44,8 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * AP Currency Code getter
+     *
      * @return string
      */
     public function getCurrencyCode(): string
@@ -45,6 +54,8 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * AP Language Code getter
+     *
      * @return string
      */
     public function getLanguageCode(): string
@@ -53,6 +64,8 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Determines current environment based on if sandbox is enabled or not
+     *
      * @return string
      */
     public function getEnvironment(): string
@@ -61,11 +74,14 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Grabs current product's price for promo vars
+     *
      * @return float|null
      */
     public function getProductPrice(): ?float
     {
         $product = $this->getProduct();
+
         return $product ? $product->getPrice() : null;
     }
 
@@ -80,6 +96,8 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * AP Promo Font Color getter
+     *
      * @return mixed
      */
     public function getPromoFontColor(): mixed
@@ -88,6 +106,8 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * AP Promo Font Color getter
+     *
      * @return mixed
      */
     public function getPromoFontSize(): mixed
