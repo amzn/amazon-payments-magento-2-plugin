@@ -7,24 +7,29 @@ use Magento\Framework\Escaper;
  * @var PromoMessaging $block
  * @var Escaper $escaper
  */
+
+$isSimpleProduct = $block->checkIsSimpleProduct();
 ?>
 
-<div class="ap-promotional-message"></div>
+<?php if ($isSimpleProduct): ?>
 
-<script type="text/x-magento-init">
-{
-    "*": {
-        "amazonPayPromoMessaging": {
-            "amountValue": "<?= $escaper->escapeHtml($block->getProductPrice()) ?>",
-            "currencyCode": "<?= $escaper->escapeHtml($block->getCurrencyCode()) ?>",
-            "environment": "<?= $escaper->escapeHtml($block->getEnvironment()) ?>",
-            "fontColor": "<?= $escaper->escapeHtml($block->getPromoFontColor()) ?>",
-            "fontSize": "<?= $escaper->escapeHtml($block->getPromoFontSize()) ?>",
-            "languageCode": "<?= $escaper->escapeHtml($block->getLanguageCode()) ?>",
-            "merchantId": "<?= $escaper->escapeHtml($block->getMerchantId()) ?>",
-            "placement": "Product",
-            "productType": "<?= $escaper->escapeHtml($block->getPaymentProductType()) ?>"
+    <div class="ap-promotional-message"></div>
+
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "amazonPayPromoMessaging": {
+                "amountValue": "<?= $escaper->escapeHtml($block->getProductPrice()) ?>",
+                "currencyCode": "<?= $escaper->escapeHtml($block->getCurrencyCode()) ?>",
+                "environment": "<?= $escaper->escapeHtml($block->getEnvironment()) ?>",
+                "fontColor": "<?= $escaper->escapeHtml($block->getPromoFontColor()) ?>",
+                "fontSize": "<?= $escaper->escapeHtml($block->getPromoFontSize()) ?>",
+                "languageCode": "<?= $escaper->escapeHtml($block->getLanguageCode()) ?>",
+                "merchantId": "<?= $escaper->escapeHtml($block->getMerchantId()) ?>",
+                "placement": "Product",
+                "productType": "<?= $escaper->escapeHtml($block->getPaymentProductType()) ?>"
+            }
         }
     }
-}
-</script>
+    </script>
+<?php endif; ?>

@@ -74,18 +74,6 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Grabs current product's price for promo vars
-     *
-     * @return float|null
-     */
-    public function getProductPrice(): ?float
-    {
-        $product = $this->getProduct();
-
-        return $product ? $product->getPrice() : null;
-    }
-
-    /**
      * Get product from registry
      *
      * @return Product
@@ -93,6 +81,30 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     private function getProduct(): Product
     {
         return $this->registry->registry('product');
+    }
+
+    /**
+     * Grabs current product's price for promo vars
+     *
+     * @return float|null
+     */
+    public function getProductPrice(): ?float
+    {
+        $product = $this->getProduct();
+        return $product ? $product->getPrice() : null;
+    }
+
+    /**
+     * Checks if simple product or not.
+     * Promo banner requires a price value,
+     * and configurable parent products do not have one
+     *
+     * @return bool
+     */
+    public function checkIsSimpleProduct(): bool
+    {
+        $product = $this->getProduct();
+        return $product->getTypeId() === self::SIMPLE_TYPE_ID;
     }
 
     /**
