@@ -12,11 +12,11 @@ define([
 
             amazonCheckout.withAmazonCheckout(function (amazon, args) {
 
-                amazon.Pay.renderPromotionalMessage('#promotional-message', {
+                amazon.Pay.renderPromotionalMessage('.ap-promotional-message', {
                     environment: config.environment,
                     merchantId: config.merchantId,
                     checkoutLanguage: config.languageCode,
-                    productType: 'PayAndShip',
+                    productType: config.productType,
                     amount: {
                         value: config.amountValue,
                         currencyCode: config.currencyCode

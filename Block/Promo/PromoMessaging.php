@@ -96,6 +96,16 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * AP Payment Product Type
+     *
+     * @return mixed
+     */
+    public function getPaymentProductType(): mixed
+    {
+        return $this->scopeConfig->getValue('payment/amazon_payment_v2/promo_message_product_type');
+    }
+
+    /**
      * AP Promo Font Color getter
      *
      * @return mixed

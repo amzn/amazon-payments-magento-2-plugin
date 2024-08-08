@@ -9,7 +9,7 @@ use Magento\Framework\Escaper;
  */
 ?>
 
-<div id="promotional-message"></div>
+<div class="ap-promotional-message"></div>
 
 <script type="text/x-magento-init">
 {
@@ -22,7 +22,8 @@ use Magento\Framework\Escaper;
             "fontSize": "<?= $escaper->escapeHtml($block->getPromoFontSize()) ?>",
             "languageCode": "<?= $escaper->escapeHtml($block->getLanguageCode()) ?>",
             "merchantId": "<?= $escaper->escapeHtml($block->getMerchantId()) ?>",
-            "placement": "Product"
+            "placement": "Product",
+            "productType": "<?= $escaper->escapeHtml($block->getPaymentProductType()) ?>"
         }
     }
 }
