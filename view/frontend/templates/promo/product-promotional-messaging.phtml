@@ -9,17 +9,22 @@ use Magento\Framework\Escaper;
  */
 
 $isEligibleProduct = $block->checkIsEligibleProduct();
+
+// The Amazon scripts will fail if there is more than a single class present for the selector
+$promoBannerClassConfig = explode(' ', $block->getPromoBannerClass());
+$promoBannerClass = $promoBannerClassConfig[0];
 ?>
 
 <?php if ($isEligibleProduct): ?>
 
-    <div class="ap-promotional-message"></div>
+    <div class="<?= $escaper->escapeHtmlAttr($promoBannerClass); ?>"></div>
 
     <script type="text/x-magento-init">
     {
         "*": {
             "amazonPayPromoMessaging": {
                 "amountValue": "<?= $escaper->escapeHtml($block->getProductPrice()) ?>",
+                "bannerClass": "<?= $escaper->escapeHtml($promoBannerClass) ?>",
                 "currencyCode": "<?= $escaper->escapeHtml($block->getCurrencyCode()) ?>",
                 "environment": "<?= $escaper->escapeHtml($block->getEnvironment()) ?>",
                 "fontColor": "<?= $escaper->escapeHtml($block->getPromoFontColor()) ?>",

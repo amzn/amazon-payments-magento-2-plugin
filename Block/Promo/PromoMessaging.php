@@ -126,6 +126,16 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * AP Promo Banner class getter
+     *
+     * @return mixed
+     */
+    public function getPromoBannerClass(): mixed
+    {
+        return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_banner_class');
+    }
+
+    /**
      * AP Promo Font Color getter
      *
      * @return mixed

@@ -4,15 +4,14 @@ define([
 ], function ($, amazonCheckout) {
     'use strict';
 
-
-
     return function (config) {
 
         $(document).ready(function () {
 
             amazonCheckout.withAmazonCheckout(function (amazon) {
 
-                amazon.Pay.renderPromotionalMessage('.ap-promotional-message', {
+                const selector = ('.' + config.bannerClass);
+                amazon.Pay.renderPromotionalMessage(selector, {
                     environment: config.environment,
                     merchantId: config.merchantId,
                     checkoutLanguage: config.languageCode,
