@@ -12,25 +12,35 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
 {
 
     /**
-     * Simple Product Type id
+     * Product Type Ids that have variable prices
      */
-    private const SIMPLE_TYPE_ID = 'simple';
+    protected const IGNORED_TYPE_IDS = ['bundle', 'configurable', 'grouped'];
+
+    /**
+     * @var AmazonConfig
+     */
+    protected $amazonConfig;
+
+    /**
+     * @var Registry
+     */
+    protected $registry;
 
     /**
      * @param AmazonConfig $amazonConfig
      * @param Template\Context $context
      * @param Registry $registry
-     * @param ScopeConfigInterface $scopeConfig
      * @param array $data
      */
     public function __construct(
-        private AmazonConfig $amazonConfig,
+        AmazonConfig $amazonConfig,
         Template\Context $context,
-        private Registry $registry,
-        private ScopeConfigInterface $scopeConfig,
+        Registry $registry,
         array $data = []
     ) {
         parent::__construct($context, $data);
+        $this->amazonConfig = $amazonConfig;
+        $this->registry = $registry;
     }
 
     /**
@@ -95,16 +105,14 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Checks if simple product or not.
-     * Promo banner requires a price value,
-     * and configurable parent products do not have one
+     * Checks if product is of a type that does not contain static price values
      *
      * @return bool
      */
-    public function checkIsSimpleProduct(): bool
+    public function checkIsEligibleProduct(): bool
     {
         $product = $this->getProduct();
-        return $product->getTypeId() === self::SIMPLE_TYPE_ID;
+        return !in_array($product->getTypeId(), self::IGNORED_TYPE_IDS, true);
     }
 
     /**
@@ -114,7 +122,7 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
      */
     public function getPaymentProductType(): mixed
     {
-        return $this->scopeConfig->getValue('payment/amazon_payment_v2/promo_message_product_type');
+        return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_product_type');
     }
 
     /**
@@ -124,7 +132,7 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
      */
     public function getPromoFontColor(): mixed
     {
-        return $this->scopeConfig->getValue('payment/amazon_payment_v2/promo_message_color');
+        return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_color');
     }
 
     /**
@@ -134,6 +142,6 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
      */
     public function getPromoFontSize(): mixed
     {
-        return $this->scopeConfig->getValue('payment/amazon_payment_v2/promo_message_font_size');
+        return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_font_size');
     }
 }

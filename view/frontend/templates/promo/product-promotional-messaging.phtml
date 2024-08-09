@@ -8,10 +8,10 @@ use Magento\Framework\Escaper;
  * @var Escaper $escaper
  */
 
-$isSimpleProduct = $block->checkIsSimpleProduct();
+$isEligibleProduct = $block->checkIsEligibleProduct();
 ?>
 
-<?php if ($isSimpleProduct): ?>
+<?php if ($isEligibleProduct): ?>
 
     <div class="ap-promotional-message"></div>
 

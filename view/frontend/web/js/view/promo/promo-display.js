@@ -10,7 +10,7 @@ define([
 
         $(document).ready(function () {
 
-            amazonCheckout.withAmazonCheckout(function (amazon, args) {
+            amazonCheckout.withAmazonCheckout(function (amazon) {
 
                 amazon.Pay.renderPromotionalMessage('.ap-promotional-message', {
                     environment: config.environment,
@@ -28,8 +28,6 @@ define([
                     }
                 });
             });
-
-
         });
     };
 });

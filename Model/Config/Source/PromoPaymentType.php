@@ -20,10 +20,6 @@ class PromoPaymentType implements \Magento\Framework\Data\OptionSourceInterface
             [
                 'label' => __('Pay Only'),
                 'value' => 'PayOnly',
-            ],
-            [
-                'label' => __('Sign In'),
-                'value' => 'SignIn',
             ]
         ];
     }

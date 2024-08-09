@@ -194,7 +194,7 @@
                             <label>Promo Message Payment Product Type</label>
                             <config_path>payment/amazon_payment_v2/promo_message_product_type</config_path>
                             <source_model>Amazon\Pay\Model\Config\Source\PromoPaymentType</source_model>
-                            <comment><![CDATA[Note: Product type for payment. ]]></comment>
+                            <comment><![CDATA[Note: Product type for payment. Pay Only not compatible with promo banner functionality.]]></comment>
                         </field>
                         <field id="promo_message_color" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Promo Message Color</label>
