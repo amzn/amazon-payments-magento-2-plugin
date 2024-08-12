@@ -19,6 +19,8 @@
     <body>
         <referenceContainer name="product.info.social">
             <block class="Amazon\Pay\Block\ProductPagePaymentLink" name="amazon.pay.button.product" before="-" template="Amazon_Pay::payment-link-product-page.phtml" ifconfig="payment/amazon_payment_v2/active" />
+
+            <block class="Amazon\Pay\Block\Promo\PromoMessaging" name="amazon.pay.promo.product" before="-" template="Amazon_Pay::promo/product-promotional-messaging.phtml" ifconfig="payment/amazon_payment_v2/promo_message_enabled" />
         </referenceContainer>
     </body>
 </page>

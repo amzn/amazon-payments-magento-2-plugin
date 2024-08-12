@@ -13,16 +13,24 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
+use Amazon\Pay\Block\Login;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Login $block
+ * @var Escaper $escaper
+ */
+
 ?>
-<?php /** @var \Amazon\Pay\Block\Login $block */?>
 <div class="block block-amazon-login">
     <div class="block-title">
         <strong id="block-amazon-login-heading" role="heading" aria-level="2">
-            <?= $block->escapeHtml(__('Amazon Sign-in')) ?>
+            <?= $escaper->escapeHtml(__('Amazon Sign-in')) ?>
         </strong>
     </div>
     <div class="block-content" aria-labelledby="block-amazon-login-heading">
-        <p><?= $block->escapeHtml(__('With Amazon Pay and Amazon Sign-in, you can easily sign-in and use the ' .
+        <p><?= $escaper->escapeHtml(__('With Amazon Pay and Amazon Sign-in, you can easily sign-in and use the ' .
             'shipping and payment information stored in your Amazon account to place an order on this shop.')) ?>
         </p>
         <div class="actions-toolbar">
@@ -43,7 +51,7 @@
                                   aria-expanded="false">
                             </span>
                             <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
-                            <?= $block->escapeHtml(__('Securely login into our website using your ' .
+                            <?= $escaper->escapeHtml(__('Securely login into our website using your ' .
                                 'existing Amazon details.')); ?>
                             </div>
                         </div>
