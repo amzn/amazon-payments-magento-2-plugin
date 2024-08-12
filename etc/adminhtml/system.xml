@@ -196,11 +196,6 @@
                             <source_model>Amazon\Pay\Model\Config\Source\PromoPaymentType</source_model>
                             <comment><![CDATA[Note: Product type for payment. Pay Only not compatible with promo banner functionality.]]></comment>
                         </field>
-                        <field id="promo_message_banner_class" translate="label comment" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Promo Message Banner Class</label>
-                            <config_path>payment/amazon_payment_v2/promo_message_banner_class</config_path>
-                            <comment><![CDATA[Note: Single class plaintext value used for the banner container. Any whitespace seperated values will be stripped and excluded.]]></comment>
-                        </field>
                         <field id="promo_message_color" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Promo Message Color</label>
                             <config_path>payment/amazon_payment_v2/promo_message_color</config_path>
