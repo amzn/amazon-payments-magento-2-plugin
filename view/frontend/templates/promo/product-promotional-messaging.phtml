@@ -24,7 +24,7 @@ $promoBannerClass = 'ap-promotional-message';
         "*": {
             "amazonPayPromoMessaging": {
                 "amountValue": "<?= $escaper->escapeHtml($block->getProductPrice()) ?>",
-                "bannerClass": "<?= $escaper->escapeHtml($promoBannerClass) ?>",
+                "bannerSelector": "<?= $escaper->escapeHtml('.' . $promoBannerClass) ?>",
                 "currencyCode": "<?= $escaper->escapeHtml($block->getCurrencyCode()) ?>",
                 "environment": "<?= $escaper->escapeHtml($block->getEnvironment()) ?>",
                 "fontColor": "<?= $escaper->escapeHtml($block->getPromoFontColor()) ?>",

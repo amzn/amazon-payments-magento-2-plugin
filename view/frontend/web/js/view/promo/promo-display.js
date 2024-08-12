@@ -10,8 +10,7 @@ define([
 
             amazonCheckout.withAmazonCheckout(function (amazon) {
 
-                const selector = ('.' + config.bannerClass);
-                amazon.Pay.renderPromotionalMessage(selector, {
+                amazon.Pay.renderPromotionalMessage(config.bannerSelector, {
                     environment: config.environment,
                     merchantId: config.merchantId,
                     checkoutLanguage: config.languageCode,
