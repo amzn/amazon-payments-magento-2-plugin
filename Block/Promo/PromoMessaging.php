@@ -44,6 +44,16 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Checks if promo messaging is enabled
+     *
+     * @return mixed
+     */
+    public function isPromoMessageEnabled()
+    {
+        return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_enabled');
+    }
+
+    /**
      * AP Merchant Id getter
      *
      * @return string
