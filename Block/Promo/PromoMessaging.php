@@ -46,9 +46,9 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     /**
      * Checks if promo messaging is enabled
      *
-     * @return mixed
+     * @return int
      */
-    public function isPromoMessageEnabled()
+    public function isPromoMessageEnabled(): int
     {
         return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_enabled');
     }
@@ -56,9 +56,9 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     /**
      * AP Merchant Id getter
      *
-     * @return string
+     * @return string|null
      */
-    public function getMerchantId(): string
+    public function getMerchantId(): ?string
     {
         return $this->amazonConfig->getMerchantId();
     }
@@ -128,9 +128,9 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     /**
      * AP Payment Product Type
      *
-     * @return mixed
+     * @return string|null
      */
-    public function getPaymentProductType(): mixed
+    public function getPaymentProductType(): ?string
     {
         return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_product_type');
     }
@@ -138,9 +138,9 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     /**
      * AP Promo Font Color getter
      *
-     * @return mixed
+     * @return string|null
      */
-    public function getPromoFontColor(): mixed
+    public function getPromoFontColor(): ?string
     {
         return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_color');
     }
@@ -148,9 +148,9 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     /**
      * AP Promo Font Color getter
      *
-     * @return mixed
+     * @return string|null
      */
-    public function getPromoFontSize(): mixed
+    public function getPromoFontSize(): ?string
     {
         return $this->_scopeConfig->getValue('payment/amazon_payment_v2/promo_message_font_size');
     }
