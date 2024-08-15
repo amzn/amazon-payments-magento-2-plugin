@@ -12,9 +12,9 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
 {
 
     /**
-     * Product Type Ids that have variable prices
+     * These product types are not supported for promo messaging
      */
-    protected const IGNORED_TYPE_IDS = ['bundle', 'configurable', 'grouped'];
+    protected const EXCLUDED_PRODUCT_TYPES = ['giftcard', 'grouped', 'virtual'];
 
     /**
      * @var AmazonConfig
@@ -122,7 +122,7 @@ class PromoMessaging extends \Magento\Framework\View\Element\Template
     public function checkIsEligibleProduct(): bool
     {
         $product = $this->getProduct();
-        return !in_array($product->getTypeId(), self::IGNORED_TYPE_IDS, true);
+        return !in_array($product->getTypeId(), self::EXCLUDED_PRODUCT_TYPES, true);
     }
 
     /**
