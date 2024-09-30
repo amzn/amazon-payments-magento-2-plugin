@@ -13,28 +13,35 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
+use Magento\Framework\Escaper;
+
+/**
+ * @var Escaper $escaper
+ */
+
 ?>
 <div class="amazon-validate-container">
     <div class="block block-amazon-validate">
         <div class="block-title">
             <strong id="block-amazon-login-heading" role="heading" aria-level="2">
-                <?= $block->escapeHtml(__('Welcome back!')) ?>
+                <?= $escaper->escapeHtml(__('Welcome back!')) ?>
             </strong>
         </div>
         <div class="block-content" aria-labelledby="block-amazon-login-heading">
-            <p><?= $block->escapeHtml(__('A shop account for this email address already exists. Please enter your ' .
+            <p><?= $escaper->escapeHtml(__('A shop account for this email address already exists. Please enter your ' .
                 'shop accounts password to log in without leaving the shop.')) ?>
             </p>
             <form class="form password validate"
-                  action="<?= $block->escapeUrl($block->getUrl('*/*/validatepost')) ?>"
+                  action="<?= $escaper->escapeUrl($block->getUrl('*/*/validatepost')) ?>"
                   method="post"
                   id="form-validate"
                   data-mage-init='{"validation":{}}'>
 
-                <fieldset class="fieldset" data-hasrequired="<?= $block->escapeHtml(__('* Required Fields')) ?>">
+                <fieldset class="fieldset" data-hasrequired="<?= $escaper->escapeHtml(__('* Required Fields')) ?>">
                     <div class="field email required">
                         <label for="password" class="label">
-                            <span><?= $block->escapeHtml(__('Password')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Password')) ?></span>
                         </label>
                         <div class="control">
                             <input type="password"
@@ -49,19 +56,23 @@
                     <div class="actions-toolbar">
                         <div class="primary">
                             <button type="submit" class="action submit primary">
-                                <span><?= $block->escapeHtml(__('Ok')) ?></span>
+                                <span><?= $escaper->escapeHtml(__('Ok')) ?></span>
                             </button>
                         </div>
                         <?php if ($block->isGuestCheckoutEnabled()): ?>
                         <div class="secondary continue-as-guest">
-                            <a class="action secondary" href="<?= $block->escapeUrl($block->getContinueAsGuestUrl())?>">
-                                <span><?= $block->escapeHtml(__('Continue as Guest')) ?></span>
+                            <a class="action secondary"
+                               href="<?= $escaper->escapeUrl($block->getContinueAsGuestUrl())?>"
+                            >
+                                <span><?= $escaper->escapeHtml(__('Continue as Guest')) ?></span>
                             </a>
                         </div>
                         <?php endif; ?>
                         <div class="secondary forgot-password">
-                            <a class="action secondary" href="<?= $block->escapeUrl($block->getForgotPasswordUrl()) ?>">
-                                <span><?= $block->escapeHtml(__('Forgot Your Password?')) ?></span>
+                            <a class="action secondary"
+                               href="<?= $escaper->escapeUrl($block->getForgotPasswordUrl()) ?>"
+                            >
+                                <span><?= $escaper->escapeHtml(__('Forgot Your Password?')) ?></span>
                             </a>
                         </div>
                         <div class="secondary amazon-logout">

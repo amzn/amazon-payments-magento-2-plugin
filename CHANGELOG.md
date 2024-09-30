@@ -1,5 +1,8 @@
 # Change Log
 
+## 5.18.0
+* Added product page promo banner functionality and configuration
+
 ## 5.17.1
 * Changed php allowed versions to include 8.3
 * Fixed issue where orders could be processing but not capture payment

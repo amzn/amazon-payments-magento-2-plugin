@@ -184,6 +184,28 @@
                                 <field id="amazonloggin">1</field>
                             </depends>
                         </field>
+                        <field id="promo_message_enabled" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Enable Product Page Promo Messaging</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/amazon_payment_v2/promo_message_enabled</config_path>
+                            <comment><![CDATA[Note: Promo messaging for buy now, pay later on the pdp.]]></comment>
+                        </field>
+                        <field id="promo_message_product_type" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Promo Message Payment Product Type</label>
+                            <config_path>payment/amazon_payment_v2/promo_message_product_type</config_path>
+                            <source_model>Amazon\Pay\Model\Config\Source\PromoPaymentType</source_model>
+                            <comment><![CDATA[Note: Product type for payment. Pay Only not compatible with promo banner functionality.]]></comment>
+                        </field>
+                        <field id="promo_message_color" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Promo Message Color</label>
+                            <config_path>payment/amazon_payment_v2/promo_message_color</config_path>
+                            <source_model>Amazon\Pay\Model\Config\Source\ButtonColor</source_model>
+                        </field>
+                        <field id="promo_message_font_size" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Promo Message Font Size</label>
+                            <config_path>payment/amazon_payment_v2/promo_message_font_size</config_path>
+                            <source_model>Amazon\Pay\Model\Config\Source\PromoFontSize</source_model>
+                        </field>
                     </group>
                     <group id="sales_options" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sales Options</label>
