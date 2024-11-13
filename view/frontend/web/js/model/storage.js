@@ -80,6 +80,13 @@ define([
          */
         getRegion: function() {
             return amazonPayConfig.getValue('region');
+        },
+
+        /**
+         * Return label for subscription option defined in ParadoxLabs config
+         */
+        getSubscriptionLabel: function () {
+            return amazonPayConfig.getValue('subscription_label');
         }
     };
 });

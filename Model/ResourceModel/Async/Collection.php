@@ -22,6 +22,11 @@ use Amazon\Pay\Model\ResourceModel\Async as AsyncResourceModel;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    /**
+     * Collection constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init(AsyncModel::class, AsyncResourceModel::class);

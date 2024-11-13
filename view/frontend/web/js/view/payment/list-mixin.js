@@ -26,7 +26,9 @@ define([
          * @private
          */
         _shouldRemovePaymentMethod: function (method) {
-            return amazonStorage.isAmazonCheckout() && method !== amazonConfig.getCode() && method !== 'free';
+            return amazonStorage.isAmazonCheckout()
+                && !method.includes(amazonConfig.getCode())
+                && method !== 'free';
         },
 
         /**

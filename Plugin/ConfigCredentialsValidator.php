@@ -23,20 +23,22 @@ use Magento\Store\Model\ScopeInterface;
 
 class ConfigCredentialsValidator
 {
-    const XML_PATH_ACTIVE = 'groups/amazon_pay/groups/credentials/fields/active_v2/value';
-    const XML_PATH_ACTIVE_INHERIT = 'groups/amazon_pay/groups/credentials/fields/active_v2/inherit';
-    const XML_PATH_PRIVATE_KEY_PEM = 'groups/amazon_pay/groups/credentials/fields/private_key_pem/value';
-    const XML_PATH_PRIVATE_KEY_TEXT = 'groups/amazon_pay/groups/credentials/fields/private_key_text/value';
-    const XML_PATH_PRIVATE_KEY_SELECTED = 'groups/amazon_pay/groups/credentials/fields/private_key_selected/value';
-    const XML_PATH_PRIVATE_KEY_SELECTOR = 'groups/amazon_pay/groups/credentials/fields/private_key_selector/value';
-    const XML_PATH_PUBLIC_KEY_ID = 'groups/amazon_pay/groups/credentials/fields/public_key_id/value';
-    const XML_PATH_STORE_ID = 'groups/amazon_pay/groups/credentials/fields/store_id/value';
-    const XML_PATH_PAYMENT_REGION = 'groups/amazon_pay/groups/credentials/fields/payment_region/value';
-    const XML_PATH_SANDBOX = 'groups/amazon_pay/groups/credentials/fields/sandbox/value';
+    public const CONFIG_PREFIX = 'groups/amazon_pay/groups/credentials/fields/';
 
-    const STORE_VIEW_SCOPE_CODE = 'stores';
-    const WEBSITE_SCOPE_CODE = 'websites';
-    const DEFAULT_SCOPE_CODE = 'default';
+    public const XML_PATH_ACTIVE = self::CONFIG_PREFIX . 'active_v2/value';
+    public const XML_PATH_ACTIVE_INHERIT = self::CONFIG_PREFIX . 'active_v2/inherit';
+    public const XML_PATH_PRIVATE_KEY_PEM = self::CONFIG_PREFIX . 'private_key_pem/value';
+    public const XML_PATH_PRIVATE_KEY_TEXT = self::CONFIG_PREFIX . 'private_key_text/value';
+    public const XML_PATH_PRIVATE_KEY_SELECTED = self::CONFIG_PREFIX . 'private_key_selected/value';
+    public const XML_PATH_PRIVATE_KEY_SELECTOR = self::CONFIG_PREFIX . 'private_key_selector/value';
+    public const XML_PATH_PUBLIC_KEY_ID = self::CONFIG_PREFIX . 'public_key_id/value';
+    public const XML_PATH_STORE_ID = self::CONFIG_PREFIX . 'store_id/value';
+    public const XML_PATH_PAYMENT_REGION = self::CONFIG_PREFIX . 'payment_region/value';
+    public const XML_PATH_SANDBOX = self::CONFIG_PREFIX . 'sandbox/value';
+
+    public const STORE_VIEW_SCOPE_CODE = 'stores';
+    public const WEBSITE_SCOPE_CODE = 'websites';
+    public const DEFAULT_SCOPE_CODE = 'default';
 
     /**
      * @var \Amazon\Pay\Model\AmazonConfig
@@ -56,10 +58,23 @@ class ConfigCredentialsValidator
     /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $storeManager;
 
+    /** @var array */
     protected $scopeTree;
+
+    /** @var string */
     protected $parentScope;
+
+    /** @var string|int */
     protected $parentScopeCode;
 
+    /**
+     * ConfigCredentialsValidator constructor
+     *
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     */
     public function __construct(
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
@@ -75,6 +90,8 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * Validate Amazon config if on payment section and module is active
+     *
      * @param Config $subject
      * @return boolean
      */
@@ -95,6 +112,8 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * True if module was switched to 'Enabled' from 'Disabled'
+     *
      * @param Config $subject
      * @return boolean
      */
@@ -110,6 +129,8 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * True if store/client ID was changed
+     *
      * @param Config $subject
      * @return boolean
      */
@@ -149,7 +170,9 @@ class ConfigCredentialsValidator
     }
 
     /**
-     * @param $storeId
+     * Get parent scope code
+     *
+     * @param int|string $storeId
      * @return int|string
      */
     protected function findParentScopeCode($storeId)
@@ -164,7 +187,9 @@ class ConfigCredentialsValidator
     }
 
     /**
-     * @param $scope
+     * Get parent scope
+     *
+     * @param string $scope
      * @return string
      */
     private function getParentScope($scope)
@@ -181,7 +206,9 @@ class ConfigCredentialsValidator
     }
 
     /**
-     * @param $storeId int Numeric store id
+     * Get parent scope code
+     *
+     * @param int|string $storeId
      * @return int|string
      */
     private function getParentScopeCode($storeId)
@@ -194,6 +221,8 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * Return all updated config values
+     *
      * @param Config $subject
      * @return array
      */
@@ -237,8 +266,11 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * True if config gets value from website/default
+     *
      * @param Config $subject
      * @param string $path
+     * @return bool
      */
     private function isInherited($subject, $path)
     {
@@ -246,7 +278,10 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * Get private key as string
+     *
      * @param Config $subject
+     * @return string
      */
     private function readPrivateKey($subject)
     {
@@ -311,6 +346,8 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * Determine if config is valid by issuing a dummy call to Amazon Pay API
+     *
      * @param Config $subject
      * @param array $config
      * @return $this
@@ -358,6 +395,8 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * Convenience function to deactivate module and remove field inheritance if validation fails
+     *
      * @param Config $subject
      * @param string $path
      * @param mixed $value
@@ -381,6 +420,8 @@ class ConfigCredentialsValidator
     }
 
     /**
+     * Validate updated module config, deactivate module for scope if invalid
+     *
      * @param Config $subject
      * @return null
      */

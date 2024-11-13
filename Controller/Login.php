@@ -16,7 +16,6 @@
 namespace Amazon\Pay\Controller;
 
 use Amazon\Pay\Api\CheckoutSessionManagementInterface;
-use Amazon\Pay\Client\ClientFactoryInterface;
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Amazon\Pay\Domain\AmazonCustomerFactory;
 use Amazon\Pay\Model\AmazonConfig;
@@ -27,6 +26,7 @@ use Amazon\Pay\Helper\Customer as CustomerHelper;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
 use Amazon\Pay\Domain\ValidationCredentials;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
@@ -125,6 +125,7 @@ abstract class Login extends Action
 
     /**
      * Login constructor.
+     *
      * @param Context $context
      * @param AmazonCustomerFactory $amazonCustomerFactory
      * @param \Amazon\Pay\Model\Adapter\AmazonPayAdapter $amazonAdapter
@@ -183,6 +184,8 @@ abstract class Login extends Action
     }
 
     /**
+     * Return true if Amazon returned buyerToken and no errors occurred
+     *
      * @return bool
      */
     protected function isValidToken()
@@ -191,7 +194,9 @@ abstract class Login extends Action
     }
 
     /**
-     * @return string
+     * Redirect buyer to Magento customer login URL
+     *
+     * @return ResponseInterface
      */
     protected function getRedirectLogin()
     {
@@ -199,18 +204,37 @@ abstract class Login extends Action
     }
 
     /**
-     * @return string
+     * Redirect buyer to Magento customer account page
+     *
+     * @return ResultRedirect|ResultForward
      */
     protected function getRedirectAccount()
     {
         return $this->accountRedirect->getRedirect();
     }
 
+    /**
+     * Get Amazon customer info from Magento table based on returned buyer info from Amazon
+     *
+     * @param mixed $buyerInfo
+     * @return mixed
+     */
     protected function getAmazonCustomer($buyerInfo)
     {
         return $this->customerHelper->getAmazonCustomer($buyerInfo);
     }
 
+    /**
+     * Handle Amazon Customer data after buyer logs in to Magento store
+     *
+     * Attempts to match Amazon customer data to Magento customer data. If the customer did not
+     * previously exist, an account is created for them. If a match is found, but IDs are different,
+     * the buyer is prompted for their Magento store password in order to link the Magento account
+     * to the Amazon account.
+     *
+     * @param AmazonCustomerInterface $amazonCustomer
+     * @return mixed
+     */
     protected function processAmazonCustomer(AmazonCustomerInterface $amazonCustomer)
     {
         $customerData = $this->matcher->match($amazonCustomer);
@@ -230,6 +254,12 @@ abstract class Login extends Action
         return $customerData;
     }
 
+    /**
+     * Create a new Magento store account based on Amazon customer data
+     *
+     * @param AmazonCustomerInterface $amazonCustomer
+     * @return mixed
+     */
     protected function createCustomer(AmazonCustomerInterface $amazonCustomer)
     {
         return $this->customerHelper->createCustomer($amazonCustomer);

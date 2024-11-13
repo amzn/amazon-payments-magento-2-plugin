@@ -22,7 +22,7 @@ use Magento\Framework\Api\AbstractSimpleObject;
 class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCustomerInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getEmail()
     {
@@ -30,7 +30,7 @@ class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCust
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getId()
     {
@@ -38,7 +38,7 @@ class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCust
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFirstName()
     {
@@ -46,7 +46,7 @@ class AmazonCustomer extends \Magento\Framework\DataObject implements AmazonCust
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getLastName()
     {

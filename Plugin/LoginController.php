@@ -32,6 +32,12 @@ class LoginController
      */
     private $url;
 
+    /**
+     * LoginController constructor
+     *
+     * @param Session $session
+     * @param Url $url
+     */
     public function __construct(Session $session, Url $url)
     {
         $this->session = $session;
@@ -39,6 +45,11 @@ class LoginController
     }
 
     /**
+     * Set redirect URL in customer session
+     *
+     * @param Login $login
+     * @param ResultInterface $result
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(Login $login, ResultInterface $result)

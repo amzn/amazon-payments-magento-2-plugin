@@ -20,8 +20,8 @@ namespace Amazon\Pay\Api\Data;
  */
 interface AmazonNameInterface
 {
-    const FIRST_NAME = 'first_name';
-    const LAST_NAME  = 'last_name';
+    public const FIRST_NAME = 'first_name';
+    public const LAST_NAME  = 'last_name';
 
     /**
      * Get first name

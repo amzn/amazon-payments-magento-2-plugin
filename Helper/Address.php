@@ -58,6 +58,16 @@ class Address
      */
     private $productMetadata;
 
+    /**
+     * Address constructor
+     *
+     * @param AddressInterfaceFactory $addressFactory
+     * @param RegionFactory $regionFactory
+     * @param RegionInterfaceFactory $regionDataFactory
+     * @param ScopeConfigInterface $config
+     * @param EavConfig $eavConfig
+     * @param ProductMetadataInterface $productMetadata
+     */
     public function __construct(
         AddressInterfaceFactory $addressFactory,
         RegionFactory $regionFactory,
@@ -78,7 +88,6 @@ class Address
      * Convert Amazon Address to Magento Address
      *
      * @param AmazonAddressInterface $amazonAddress
-     *
      * @return AddressInterface
      */
     public function convertToMagentoEntity(AmazonAddressInterface $amazonAddress)
@@ -129,11 +138,24 @@ class Address
         return $address;
     }
 
+    /**
+     * Get country code from Amazon address
+     *
+     * @param AmazonAddressInterface $amazonAddress
+     * @return string
+     */
     protected function getCountryId(AmazonAddressInterface $amazonAddress)
     {
         return strtoupper($amazonAddress->getCountryCode());
     }
 
+    /**
+     * Get region information from Amazon address
+     *
+     * @param AmazonAddressInterface $amazonAddress
+     * @param string $countryId
+     * @return \Magento\Customer\Api\Data\RegionInterface $regionData
+     */
     protected function getRegionData(AmazonAddressInterface $amazonAddress, $countryId)
     {
         $region     = $this->regionFactory->create();
@@ -161,7 +183,6 @@ class Address
      * Convert Magento address to array for json encode
      *
      * @param AddressInterface $address
-     *
      * @return array
      */
     public function convertToArray(AddressInterface $address)

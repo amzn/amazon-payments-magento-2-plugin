@@ -24,13 +24,15 @@ use Magento\Framework\App\ResourceConnection;
 
 class MigrateLegacyTransactions implements DataPatchInterface
 {
-    const AUTH_TABLE_NAME = 'amazon_pending_authorization';
-    const ACTION_AUTH   = 'authorization';
-    const CAPTURE_TABLE_NAME = 'amazon_pending_capture';
-    const REFUND_TABLE_NAME = 'amazon_pending_refund';
-    const ACTION_REFUND = 'refund';
+    public const AUTH_TABLE_NAME = 'amazon_pending_authorization';
+    public const ACTION_AUTH   = 'authorization';
+    public const CAPTURE_TABLE_NAME = 'amazon_pending_capture';
+    public const REFUND_TABLE_NAME = 'amazon_pending_refund';
+    public const ACTION_REFUND = 'refund';
 
-    /** @var ModuleDataSetupInterface */
+    /**
+     * @var ModuleDataSetupInterface
+     */
     private $moduleDataSetup;
 
     /**
@@ -44,6 +46,8 @@ class MigrateLegacyTransactions implements DataPatchInterface
     private $asyncFactory;
 
     /**
+     * MigrateLegacyTransactions constructor
+     *
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param ResourceConnection $resourceConnection
      * @param AsyncInterfaceFactory $asyncFactory
@@ -59,7 +63,7 @@ class MigrateLegacyTransactions implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -88,7 +92,7 @@ class MigrateLegacyTransactions implements DataPatchInterface
         $this->moduleDataSetup->getConnection()->endSetup();
     }
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -96,7 +100,7 @@ class MigrateLegacyTransactions implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -104,7 +108,7 @@ class MigrateLegacyTransactions implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {

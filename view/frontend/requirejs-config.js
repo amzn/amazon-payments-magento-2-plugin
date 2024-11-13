@@ -18,6 +18,9 @@ var config = {
             'Magento_Checkout/js/view/payment/list': {
                 'Amazon_Pay/js/view/payment/list-mixin': true
             },
+            'Magento_Checkout/js/view/payment/default': {
+                'Amazon_Pay/js/view/payment/vault-mixin': true
+            },
             'Magento_Tax/js/view/checkout/summary/grand-total': {
                 'Amazon_Pay/js/view/checkout/summary/grand-total-mixin': true,
                 'Amazon_Payment/js/view/checkout/summary/grand-total-mixin': false
@@ -39,17 +42,20 @@ var config = {
             },
             'Magento_Checkout/js/view/shipping': {
                 'Amazon_Pay/js/view/shipping': true
+            },
+            'ParadoxLabs_Subscriptions/js/edit': {
+                'Amazon_Pay/js/view/subscriptions/edit': true
             }
         }
     },
     map: {
         '*': {
-            amazonPayProductAdd: 'Amazon_Pay/js/amazon-product-add',
             amazonPayButton: 'Amazon_Pay/js/amazon-button',
             amazonPayConfig: 'Amazon_Pay/js/model/amazonPayConfig',
             amazonPayLoginButton: 'Amazon_Pay/js/amazon-login-button',
             amazonPayLogout: 'Amazon_Pay/js/amazon-logout',
-            amazonPayLogoutButton: 'Amazon_Pay/js/amazon-logout-button'
+            amazonPayLogoutButton: 'Amazon_Pay/js/amazon-logout-button',
+            amazonPayPromoMessaging: 'Amazon_Pay/js/view/promo/promo-display'
         }
     },
     paths: {

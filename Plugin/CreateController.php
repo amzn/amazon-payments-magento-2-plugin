@@ -32,6 +32,12 @@ class CreateController
      */
     private $url;
 
+    /**
+     * Create constructor
+     *
+     * @param Session $session
+     * @param Url $url
+     */
     public function __construct(Session $session, Url $url)
     {
         $this->session = $session;
@@ -39,6 +45,11 @@ class CreateController
     }
 
     /**
+     * Set redirect URL in customer session
+     *
+     * @param Create $create
+     * @param ResultInterface $result
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(Create $create, ResultInterface $result)

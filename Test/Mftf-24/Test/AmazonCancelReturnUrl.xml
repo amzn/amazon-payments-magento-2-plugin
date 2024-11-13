@@ -91,6 +91,6 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- Assert being back in the product page -->
-        <seeInCurrentUrl url="{{CheckoutPage.url}}" stepKey="assertProductUrl"/>
+        <seeInCurrentUrl url="$$createSimpleProduct.custom_attributes[url_key]$$" stepKey="assertProductUrl"/>
     </test>
 </tests>

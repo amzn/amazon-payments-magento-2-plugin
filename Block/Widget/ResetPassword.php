@@ -29,10 +29,19 @@ use Amazon\Pay\Api\CustomerLinkRepositoryInterface;
 class ResetPassword extends Template
 {
 
+    /**
+     * @var Url
+     */
     private $urlModel;
 
+    /**
+     * @var Session
+     */
     private $session;
 
+    /**
+     * @var CustomerLinkRepositoryInterface
+     */
     private $customerLink;
 
     /**
@@ -40,6 +49,16 @@ class ResetPassword extends Template
      */
     private $amazonConfig;
 
+    /**
+     * ResetPassword constructor
+     *
+     * @param Context $context
+     * @param Url $urlModel
+     * @param Session $session
+     * @param CustomerLinkRepositoryInterface $customerLink
+     * @param AmazonConfig $amazonConfig
+     * @param array $data
+     */
     public function __construct(
         Context $context,
         Url $urlModel,
@@ -55,6 +74,9 @@ class ResetPassword extends Template
         $this->amazonConfig = $amazonConfig;
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
@@ -64,6 +86,11 @@ class ResetPassword extends Template
         return $this;
     }
 
+    /**
+     * Get customer logout URL
+     *
+     * @return string
+     */
     public function getLink()
     {
         $url = $this->urlModel->getLogoutUrl();
@@ -72,7 +99,7 @@ class ResetPassword extends Template
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     protected function _toHtml()
     {

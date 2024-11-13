@@ -27,10 +27,13 @@ use Magento\Backend\Model\UrlInterface;
 class AutoKeyExchange
 {
 
-    const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payment/autokeyexchange/privatekey';
-    const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payment/autokeyexchange/publickey';
-    const CONFIG_XML_PATH_AUTH_TOKEN  = 'payment/amazon_payment/autokeyexchange/auth_token';
+    public const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payment/autokeyexchange/privatekey';
+    public const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payment/autokeyexchange/publickey';
+    public const CONFIG_XML_PATH_AUTH_TOKEN  = 'payment/amazon_payment/autokeyexchange/auth_token';
 
+    /**
+     * @var array
+     */
     private $_spIds = [
         'USD' => 'AUGT0HMCLQVX1',
         'GBP' => 'A1BJXVS5F6XP',
@@ -38,6 +41,9 @@ class AutoKeyExchange
         'JPY' => 'A1MCJZEB1HY93J',
     ];
 
+    /**
+     * @var array
+     */
     private $_mapCurrencyRegion = [
         'EUR' => 'de',
         'USD' => 'us',
@@ -46,12 +52,12 @@ class AutoKeyExchange
     ];
 
     /**
-     * @var
+     * @var int
      */
     private $_storeId;
 
     /**
-     * @var
+     * @var int
      */
     private $_websiteId;
 
@@ -141,7 +147,9 @@ class AutoKeyExchange
     private $mathRandom;
 
     /**
-     * @param AmazonHelper $coreHelper
+     * AutoKeyExchange constructor
+     *
+     * @param AmazonHelper $amazonHelper
      * @param AmazonConfig $amazonConfig
      * @param KeyHelper $keyHelper
      * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
@@ -200,7 +208,9 @@ class AutoKeyExchange
     }
 
     /**
-     * Return domain
+     * Get AKE domain based on display currency
+     *
+     * @return string
      */
     private function getEndpointDomain()
     {
@@ -211,6 +221,8 @@ class AutoKeyExchange
 
     /**
      * Return register popup endpoint URL
+     *
+     * @return string
      */
     public function getEndpointRegister()
     {
@@ -219,6 +231,8 @@ class AutoKeyExchange
 
     /**
      * Return pubkey endpoint URL
+     *
+     * @return string
      */
     public function getEndpointPubkey()
     {
@@ -227,6 +241,8 @@ class AutoKeyExchange
 
     /**
      * Return listener origins
+     *
+     * @return array
      */
     public function getListenerOrigins()
     {
@@ -240,6 +256,8 @@ class AutoKeyExchange
 
     /**
      * Generate and save RSA keys
+     *
+     * @return mixed
      */
     protected function generateKeys()
     {
@@ -270,6 +288,8 @@ class AutoKeyExchange
 
     /**
      * Delete key-pair from config
+     *
+     * @return void
      */
     public function destroyKeys()
     {
@@ -309,6 +329,8 @@ class AutoKeyExchange
 
     /**
      * Return RSA private key
+     *
+     * @return string
      */
     public function getPrivateKey()
     {
@@ -318,15 +340,18 @@ class AutoKeyExchange
     /**
      * Verify and decrypt JSON payload
      *
-     * @param                                        string $payloadJson
+     * @param string $payloadJson
+     * @param bool $autoEnable
+     * @param bool $autoSave
+     * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
     {
         try {
-            $payload = json_decode($payloadJson);
+            $payload = (object) json_decode($payloadJson);
 
-            $publicKeyId = urldecode($payload['publicKeyId'] ?? '');
+            $publicKeyId = urldecode($payload->publicKeyId ?? '');
             $decryptedKey = null;
 
             $success = openssl_private_decrypt(
@@ -366,7 +391,7 @@ class AutoKeyExchange
     /**
      * Save values to Magento config
      *
-     * @param $config
+     * @param mixed $config
      * @param bool $autoEnable
      * @return bool
      */
@@ -424,6 +449,8 @@ class AutoKeyExchange
 
     /**
      * Auto-enable payment method
+     *
+     * @return void
      */
     public function autoEnable()
     {
@@ -436,6 +463,8 @@ class AutoKeyExchange
 
     /**
      * Return listener URL
+     *
+     * @return string
      */
     public function getReturnUrl()
     {
@@ -454,6 +483,8 @@ class AutoKeyExchange
 
     /**
      * Return array of form POST params for Auto Key Exchange sign up
+     *
+     * @return array
      */
     public function getFormParams()
     {
@@ -505,6 +536,9 @@ class AutoKeyExchange
 
     /**
      * Return config value based on scope and scope ID
+     *
+     * @param string $path
+     * @return mixed
      */
     public function getConfig($path)
     {
@@ -513,6 +547,8 @@ class AutoKeyExchange
 
     /**
      * Return payment region based on currency
+     *
+     * @return string
      */
     public function getRegion()
     {
@@ -534,6 +570,8 @@ class AutoKeyExchange
 
     /**
      * Return a valid store currency, otherwise return null
+     *
+     * @return string|null
      */
     public function getCurrency()
     {
@@ -554,6 +592,8 @@ class AutoKeyExchange
 
     /**
      * Return merchant country
+     *
+     * @return string
      */
     public function getCountry()
     {
@@ -564,7 +604,7 @@ class AutoKeyExchange
     /**
      * Validate provided auth token against the one stored in the database
      *
-     * @param $authToken
+     * @param string $authToken
      * @return bool
      */
     public function validateAuthToken($authToken)
@@ -574,6 +614,8 @@ class AutoKeyExchange
 
     /**
      * Return array of config for JSON Amazon Auto Key Exchange variables.
+     *
+     * @return array
      */
     public function getJsonAmazonAKEConfig()
     {

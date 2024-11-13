@@ -21,6 +21,7 @@ use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Framework\Event\ManagerInterface;
 
 class Charge extends AbstractOperation
@@ -72,6 +73,7 @@ class Charge extends AbstractOperation
 
     /**
      * Charge constructor.
+     *
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
@@ -112,9 +114,11 @@ class Charge extends AbstractOperation
     }
 
     /**
+     * Get invoice from order and charge ID
+     *
      * @param string $chargeId
      * @param OrderInterface $order
-     * @return \Magento\Sales\Model\Order\Invoice
+     * @return \Magento\Sales\Model\Order\Invoice|null
      */
     protected function loadInvoice($chargeId, OrderInterface $order)
     {
@@ -129,6 +133,9 @@ class Charge extends AbstractOperation
 
     /**
      * Process charge state change
+     *
+     * @param mixed $chargeId
+     * @return bool
      */
     public function processStateChange($chargeId)
     {
@@ -197,7 +204,8 @@ class Charge extends AbstractOperation
      *
      * @param \Magento\Sales\Model\Order $order
      * @param string $chargeId
-     * @param string $reason
+     * @param string $detail
+     * @return void
      */
     public function decline($order, $chargeId, $detail)
     {
@@ -246,6 +254,8 @@ class Charge extends AbstractOperation
      * Cancel charge
      *
      * @param \Magento\Sales\Model\Order $order
+     * @param mixed $detail
+     * @return void
      */
     public function cancel($order, $detail)
     {
@@ -259,8 +269,10 @@ class Charge extends AbstractOperation
 
     /**
      * Authorize pending charge (AuthorizationInitiated)
+     *
      * @param \Magento\Sales\Model\Order $order
-     * @param $chargeId
+     * @param string $chargeId
+     * @return void
      */
     public function authorize($order, $chargeId)
     {
@@ -294,16 +306,30 @@ class Charge extends AbstractOperation
      * @param \Magento\Sales\Model\Order|\Magento\Sales\Api\Data\OrderInterface $order
      * @param string $chargeId
      * @param float $chargeAmount
+     * @return void
      */
     public function capture($order, $chargeId, $chargeAmount)
     {
+        // Try to load invoice based on charge ID or from the order
         $invoice = $this->loadInvoice($chargeId, $order);
+
+        // Create invoice if we didn't find one for the chargeId but can invoice
         if (!$invoice && $order->canInvoice()) {
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
         }
 
-        if ($invoice && ($invoice->canCapture() || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW)) {
+        // Finally, load from the order if all else fails
+        if (!$invoice) {
+            $invoice = $order->getInvoiceCollection()->getFirstItem();
+        }
+
+        if ($invoice
+            && (
+                $invoice->canCapture()
+                || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW
+                || $invoice->getState() == Invoice::STATE_OPEN
+            )) {
             $order = $invoice->getOrder();
             $this->setProcessing($order);
             $payment = $order->getPayment();
@@ -340,7 +366,6 @@ class Charge extends AbstractOperation
             $this->asyncLogger->error($errorMessage);
             $order->addStatusHistoryComment($errorMessage);
             $order->save();
-
         }
     }
 }

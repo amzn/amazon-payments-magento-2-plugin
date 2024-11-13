@@ -16,7 +16,8 @@ define(
         'Amazon_Pay/js/model/storage',
         'Amazon_Pay/js/action/checkout-session-address-load',
         'Amazon_Pay/js/action/checkout-session-payment-descriptor-load',
-        'Amazon_Pay/js/action/place-order'
+        'Amazon_Pay/js/action/place-order',
+        'Magento_Vault/js/view/payment/vault-enabler'
     ],
     function (
         ko,
@@ -35,7 +36,8 @@ define(
         amazonStorage,
         checkoutSessionAddressLoad,
         checkoutSessionPaymentDescriptorLoad,
-        placeOrderAction
+        placeOrderAction,
+        VaultEnabler
     ) {
         'use strict';
 
@@ -48,7 +50,8 @@ define(
                 isIosc: ko.observable($('button.iosc-place-order-button').length > 0),
                 paymentDescriptor: ko.observable(''),
                 logo: amazonConfig.getValue('acceptance_mark'),
-                template: 'Amazon_Pay/payment/amazon-payment-method'
+                template: 'Amazon_Pay/payment/amazon-payment-method',
+                vaultInitialized: false
             },
 
             initialize: function () {

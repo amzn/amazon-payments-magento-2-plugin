@@ -18,6 +18,7 @@
 namespace Amazon\Pay\Setup\Patch\Data;
 
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -25,7 +26,7 @@ use Amazon\Pay\Api\KeyUpgradeInterface;
 
 class PerformKeyUpgrade implements DataPatchInterface
 {
-    const PATH_TRANSLATION_MAP = [
+    public const PATH_TRANSLATION_MAP = [
         'payment/amazon_payment/active' => 'payment/amazon_payment_v2/active',
         'payment/amazon_payment/merchant_id' => 'payment/amazon_payment_v2/merchant_id',
         'payment/amazon_payment/client_id' => 'payment/amazon_payment_v2/store_id',
@@ -56,25 +57,33 @@ class PerformKeyUpgrade implements DataPatchInterface
     private $moduleDataSetup;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param KeyUpgradeInterface $keyUpgrade
      * @param ConfigInterface $config
      * @param EncryptorInterface $encryptor
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         KeyUpgradeInterface $keyUpgrade,
         ConfigInterface $config,
         EncryptorInterface $encryptor,
-        ModuleDataSetupInterface $moduleDataSetup
+        ModuleDataSetupInterface $moduleDataSetup,
+        ResourceConnection $resourceConnection
     ) {
         $this->keyUpgrade = $keyUpgrade;
         $this->config = $config;
         $this->encryptor = $encryptor;
         $this->moduleDataSetup = $moduleDataSetup;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -84,19 +93,23 @@ class PerformKeyUpgrade implements DataPatchInterface
                 'scope_id' => $scopeId,
                 'value' => $accessKey
             ]) {
-            $publicKeyId = $this->keyUpgrade->getPublicKeyId(
-                $scopeType,
-                $scopeId,
-                $accessKey
-            );
 
-            if (!empty($publicKeyId)) {
-                $this->keyUpgrade->updateKeysInConfig(
-                    $publicKeyId,
+            if ($accessKey) {
+                $publicKeyId = $this->keyUpgrade->getPublicKeyId(
                     $scopeType,
-                    $scopeId
+                    $scopeId,
+                    $accessKey
                 );
+
+                if (!empty($publicKeyId)) {
+                    $this->keyUpgrade->updateKeysInConfig(
+                        $publicKeyId,
+                        $scopeType,
+                        $scopeId
+                    );
+                }
             }
+
         }
 
         // Upgrade all other configs
@@ -107,6 +120,16 @@ class PerformKeyUpgrade implements DataPatchInterface
                 'path' => $path,
                 'value' => $value
             ]) {
+
+            // Prevent overwriting already valid config
+            if ($this->v2PathAlreadyExists(
+                self::PATH_TRANSLATION_MAP[$path],
+                $scopeType,
+                $scopeId
+            )) {
+                continue;
+            }
+
             $this->config->saveConfig(
                 self::PATH_TRANSLATION_MAP[$path],
                 $value,
@@ -125,7 +148,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     {
         $conn = $this->moduleDataSetup->getConnection();
         $select = $conn->select()
-            ->from('core_config_data', ['scope_id', 'scope', 'value'])
+            ->from($this->resourceConnection->getTableName('core_config_data'), ['scope_id', 'scope', 'value'])
             ->where('path = ?', 'payment/amazon_payment/access_key')
             ->order('scope_id');
 
@@ -133,8 +156,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * Return all explicitly saved Amazon Pay CV1 config values that need to have
-     * their paths updated
+     * Return all explicitly saved Amazon Pay CV1 config values that need to have their paths updated
      *
      * @return array
      */
@@ -142,7 +164,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     {
         $conn = $this->moduleDataSetup->getConnection();
         $select = $conn->select()
-            ->from('core_config_data', ['scope_id', 'scope', 'path', 'value'])
+            ->from($this->resourceConnection->getTableName('core_config_data'), ['scope_id', 'scope', 'path', 'value'])
             ->where('path in (?)', array_keys(self::PATH_TRANSLATION_MAP))
             ->order('scope_id');
 
@@ -150,7 +172,23 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Return all Amazon Pay CV2 config values that already exist in core_config
+     *
+     * @return array
+     */
+    private function getSavedV2Configs()
+    {
+        $conn = $this->moduleDataSetup->getConnection();
+        $select = $conn->select()
+            ->from('core_config_data', ['scope_id', 'scope', 'path', 'value'])
+            ->where('path in (?)', array_values(self::PATH_TRANSLATION_MAP))
+            ->order('scope_id');
+
+        return $conn->fetchAll($select);
+    }
+
+    /**
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -158,7 +196,7 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -166,10 +204,40 @@ class PerformKeyUpgrade implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get version
+     *
+     * @return string
      */
     public static function getVersion()
     {
         return '5.0.0';
+    }
+
+    /**
+     * Check if passed config already exists
+     *
+     * @param string $path
+     * @param string $scopeType
+     * @param int $scopeId
+     * @return bool
+     */
+    private function v2PathAlreadyExists(
+        string $path,
+        string $scopeType,
+        int $scopeId
+    ) {
+        static $existingPaths = null;
+        if ($existingPaths === null) {
+            $existingPaths = $this->getSavedV2Configs();
+        }
+        foreach ($existingPaths as $config) {
+            if ($path == $config['path']
+                && $scopeType == $config['scope']
+                && $scopeId == $config['scope_id']
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }

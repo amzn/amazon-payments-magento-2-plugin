@@ -40,6 +40,7 @@ class RefundHandler implements HandlerInterface
 
     /**
      * SettlementHandler constructor.
+     *
      * @param SubjectReader $subjectReader
      * @param AsyncManagement $asyncManagement
      * @param ManagerInterface $messageManager
@@ -55,6 +56,8 @@ class RefundHandler implements HandlerInterface
     }
 
     /**
+     * Handle payment refund
+     *
      * @param array $handlingSubject
      * @param array $response
      */
