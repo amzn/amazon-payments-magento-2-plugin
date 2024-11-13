@@ -21,6 +21,11 @@ class AcceptanceMark implements \Magento\Framework\Data\OptionSourceInterface
 {
 
     /**
+     * @var array
+     */
+    private $logos;
+
+    /**
      * @param array[] $logos
      */
     public function __construct($logos = [])
