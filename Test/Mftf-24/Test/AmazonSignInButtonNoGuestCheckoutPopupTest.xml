@@ -32,6 +32,6 @@
         <!--Go to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
         <!-- Verify Sign in with Amazon button is displayed -->
-        <seeElement selector="{{AmazonLoginSection.login}}" stepKey="seeSignInWithAmazonButtonLogin"/>
+        <seeElement selector="{{AmazonLoginSection.loginPopup}}" stepKey="seeSignInWithAmazonButtonLogin"/>
     </test>
 </tests>

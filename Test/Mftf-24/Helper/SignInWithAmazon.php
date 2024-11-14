@@ -12,7 +12,7 @@ class SignInWithAmazon extends Helper
     {
         /** @var \Magento\FunctionalTestingFramework\Module\MagentoWebDriver $webDriver */
         $webDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
-        $waitTime = 15000;
+        $waitTime = 5;
 
         try {
             $webDriver->waitForJS("

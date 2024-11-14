@@ -13,20 +13,19 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-?>
-<?php
+
+use Amazon\Pay\Block\ProductPagePaymentLink;
+use Magento\Framework\Escaper;
+
 /**
- * @var \Amazon\Pay\Block\ProductPagePaymentLink $block
+ * @var ProductPagePaymentLink $block
+ * @var Escaper $escaper
  */
 ?>
 
-<div class="amazon-checkout-now" style="display: none;"><?= $block->escapeHtml(__('Checkout now')) ?></div>
+<div class="amazon-checkout-now" style="display: none;"><?= $escaper->escapeHtml(__('Checkout now')) ?></div>
 <div class="amazon-button-container amazon-button-product-page" style="display: none;">
     <div class="amazon-button-column amazon-product-button">
-      <a href="javascript:;"
-           class="amazon-addtoCart"
-           id="amazon-addtoCart-<?= /* @noEscape */ $block->getJsId() ?>"
-           data-mage-init='{"amazonPayProductAdd": {}}'>
         <div id="PayWithAmazon-Product"
              class="amazon-checkout-button"
              data-mage-init='<?= /* @noEscape */ json_encode([
@@ -37,7 +36,6 @@
                  ]
              ]) ?>'>
         </div>
-      </a>
     </div>
     <div class="amazon-button-column amazon-button-column-tooltip">
         <div class="field-tooltip toggle">
@@ -48,7 +46,7 @@
           aria-expanded="false">
     </span>
             <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
-                <?= $block->escapeHtml(__('Are you an Amazon customer? ' .
+                <?= $escaper->escapeHtml(__('Are you an Amazon customer? ' .
                     'Pay now with address and payment details stored in your Amazon account.')); ?>
             </div>
         </div>

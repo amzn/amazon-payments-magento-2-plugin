@@ -21,6 +21,7 @@ use Magento\Sales\Api\Data\TransactionInterface as Transaction;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Framework\Event\ManagerInterface;
 
 class Charge extends AbstractOperation
@@ -309,13 +310,26 @@ class Charge extends AbstractOperation
      */
     public function capture($order, $chargeId, $chargeAmount)
     {
+        // Try to load invoice based on charge ID or from the order
         $invoice = $this->loadInvoice($chargeId, $order);
+
+        // Create invoice if we didn't find one for the chargeId but can invoice
         if (!$invoice && $order->canInvoice()) {
             $invoice = $this->invoiceService->prepareInvoice($order);
             $invoice->register();
         }
 
-        if ($invoice && ($invoice->canCapture() || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW)) {
+        // Finally, load from the order if all else fails
+        if (!$invoice) {
+            $invoice = $order->getInvoiceCollection()->getFirstItem();
+        }
+
+        if ($invoice
+            && (
+                $invoice->canCapture()
+                || $invoice->getOrder()->getStatus() == Order::STATE_PAYMENT_REVIEW
+                || $invoice->getState() == Invoice::STATE_OPEN
+            )) {
             $order = $invoice->getOrder();
             $this->setProcessing($order);
             $payment = $order->getPayment();

@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<!--
 /**
  * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -14,14 +12,23 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
-    <group id="default">
-        <job name="amazon_pay_process_async" instance="Amazon\Pay\Cron\ProcessAsync" method="execute">
-            <schedule>*/30 * * * *</schedule>
-        </job>
-        <job name="amazon_pay_cleanup_sessions" instance="Amazon\Pay\Cron\CleanUpIncompleteSessions" method="execute">
-            <schedule>*/5 * * * *</schedule>
-        </job>
-    </group>
-</config>
+
+define([
+    'jquery','mage/url'
+], function ($, urlBuilder) {
+    'use strict';
+
+    return {
+        place: function(amazonCheckoutSessionId) {
+            let url = 'amazon_pay/checkout/placeOrder';
+            let data = {
+                'amazonCheckoutSessionId': amazonCheckoutSessionId
+            };
+            return $.ajax({
+                url: urlBuilder.build(url),
+                type: 'POST',
+                data: data
+            });
+        }
+    };
+});

@@ -12,6 +12,8 @@
         <fillField selector="{{AmazonFillShipmentFormSection.telephone}}" userInput="{{AmazonShippingFormData.telephone}}" stepKey="SetCustomerPhoneNumber"/>
         <click selector="{{AmazonFillShipmentFormSection.region}}" stepKey="clickToSetState"/>
         <click selector="{{AmazonFillShipmentFormSection.state}}" stepKey="clickToChooseState"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementClickable selector="{{AmazonFillShipmentFormSection.next}}" time="5" stepKey="seeNext"/>
         <click selector="{{AmazonFillShipmentFormSection.next}}" stepKey="clickToSaveShippingInfo"/>
         <waitForPageLoad time="5" stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
         <seeInCurrentUrl url="payment" stepKey="reviewAndPaymentIsShown"/>

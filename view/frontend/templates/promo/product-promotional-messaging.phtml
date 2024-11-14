@@ -1,0 +1,41 @@
+<?php
+
+use Amazon\Pay\Block\Promo\PromoMessaging;
+use Magento\Framework\Escaper;
+
+/**
+ * @var PromoMessaging $block
+ * @var Escaper $escaper
+ */
+
+$isEligibleProduct = $block->checkIsEligibleProduct();
+$isPromoMessageEnabled = $block->isPromoMessageEnabled();
+
+// The Amazon scripts will fail if there is more than a single class present for the selector
+// Can override template if desired, left out of config to prevent erroneous value setting on a whim
+$promoBannerClass = 'ap-promotional-message';
+?>
+
+<?php if ($isPromoMessageEnabled && $isEligibleProduct): ?>
+
+    <div class="<?= $escaper->escapeHtmlAttr($promoBannerClass); ?>"></div>
+
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "amazonPayPromoMessaging": {
+                "amountValue": "<?= $escaper->escapeHtml($block->getProductPrice()) ?>",
+                "bannerSelector": "<?= $escaper->escapeHtml('.' . $promoBannerClass) ?>",
+                "currencyCode": "<?= $escaper->escapeHtml($block->getCurrencyCode()) ?>",
+                "environment": "<?= $escaper->escapeHtml($block->getEnvironment()) ?>",
+                "fontColor": "<?= $escaper->escapeHtml($block->getPromoFontColor()) ?>",
+                "fontSize": "<?= $escaper->escapeHtml($block->getPromoFontSize()) ?>",
+                "languageCode": "<?= $escaper->escapeHtml($block->getLanguageCode()) ?>",
+                "merchantId": "<?= $escaper->escapeHtml($block->getMerchantId()) ?>",
+                "placement": "Product",
+                "productType": "<?= $escaper->escapeHtml($block->getPaymentProductType()) ?>"
+            }
+        }
+    }
+    </script>
+<?php endif; ?>
