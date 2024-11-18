@@ -25,6 +25,8 @@ class AmazonNameDecoratorJp implements AmazonNameInterface
     private $amazonName;
 
     /**
+     * AmazonNameDecoratorJp constructor
+     *
      * @param AmazonNameInterface $amazonName
      */
     public function __construct(AmazonNameInterface $amazonName)
@@ -51,8 +53,7 @@ class AmazonNameDecoratorJp implements AmazonNameInterface
     /**
      * Convert to UTF-8 Kana
      *
-     * @param $string
-     *
+     * @param string $string
      * @return string
      */
     private function convertKana($string)

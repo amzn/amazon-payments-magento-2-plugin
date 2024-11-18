@@ -26,6 +26,11 @@ class SessionMatcher implements MatcherInterface
      */
     private $session;
 
+    /**
+     * SessionMatcher constructor
+     *
+     * @param Session $session
+     */
     public function __construct(
         Session $session
     ) {
@@ -33,7 +38,7 @@ class SessionMatcher implements MatcherInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function match(AmazonCustomerInterface $amazonCustomer)
     {

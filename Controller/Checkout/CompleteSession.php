@@ -22,10 +22,7 @@ use Magento\Framework\App\PageCache\Version;
 
 class CompleteSession extends \Magento\Framework\App\Action\Action
 {
-    /**
-     * @var \Amazon\Pay\CustomerData\CheckoutSession
-     */
-    private $amazonCheckoutSession;
+    protected const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
 
     /**
      * @var \Amazon\Pay\Model\CheckoutSessionManagement
@@ -58,9 +55,9 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
     private $cookieMetadataFactory;
 
     /**
-     * CompleteCheckout constructor.
+     * CompleteSession constructor
+     *
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession
      * @param \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
@@ -70,7 +67,6 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Amazon\Pay\CustomerData\CheckoutSession $amazonCheckoutSession,
         \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -79,7 +75,6 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
         ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
-        $this->amazonCheckoutSession = $amazonCheckoutSession;
         $this->amazonCheckoutSessionManagement = $checkoutSessionManagement;
         $this->amazonConfig = $amazonConfig;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);
@@ -88,8 +83,8 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
         $this->storeManager = $storeManager;
     }
 
-    /*
-     * @inheritdoc
+    /**
+     * @inheritDoc
      */
     public function execute()
     {
@@ -114,7 +109,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
             ]);
         } catch (\Exception $e) {
             $this->exceptionLogger->logException($e);
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addErrorMessage(self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE);
         }
 
         return $this->_redirect('checkout/cart', [

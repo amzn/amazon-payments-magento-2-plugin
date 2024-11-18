@@ -18,6 +18,7 @@
 namespace Amazon\Pay\Model\Config;
 
 use Amazon\Pay\Helper\Data as AmazonHelper;
+use Amazon\Pay\Helper\Key as KeyHelper;
 use Amazon\Pay\Model\AmazonConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\Type\Config as CacheTypeConfig;
@@ -26,10 +27,13 @@ use Magento\Backend\Model\UrlInterface;
 class AutoKeyExchange
 {
 
-    const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payment/autokeyexchange/privatekey';
-    const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payment/autokeyexchange/publickey';
-    const CONFIG_XML_PATH_AUTH_TOKEN  = 'payment/amazon_payment/autokeyexchange/auth_token';
+    public const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payment/autokeyexchange/privatekey';
+    public const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payment/autokeyexchange/publickey';
+    public const CONFIG_XML_PATH_AUTH_TOKEN  = 'payment/amazon_payment/autokeyexchange/auth_token';
 
+    /**
+     * @var array
+     */
     private $_spIds = [
         'USD' => 'AUGT0HMCLQVX1',
         'GBP' => 'A1BJXVS5F6XP',
@@ -37,6 +41,9 @@ class AutoKeyExchange
         'JPY' => 'A1MCJZEB1HY93J',
     ];
 
+    /**
+     * @var array
+     */
     private $_mapCurrencyRegion = [
         'EUR' => 'de',
         'USD' => 'us',
@@ -45,12 +52,12 @@ class AutoKeyExchange
     ];
 
     /**
-     * @var
+     * @var int
      */
     private $_storeId;
 
     /**
-     * @var
+     * @var int
      */
     private $_websiteId;
 
@@ -73,6 +80,11 @@ class AutoKeyExchange
      * @var AmazonConfig
      */
     private $amazonConfig;
+
+    /**
+     * @var KeyHelper
+     */
+    private $keyHelper;
 
     /**
      * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
@@ -115,11 +127,6 @@ class AutoKeyExchange
     private $state;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    private $request;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
@@ -140,8 +147,11 @@ class AutoKeyExchange
     private $mathRandom;
 
     /**
-     * @param AmazonHelper $coreHelper
+     * AutoKeyExchange constructor
+     *
+     * @param AmazonHelper $amazonHelper
      * @param AmazonConfig $amazonConfig
+     * @param KeyHelper $keyHelper
      * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ProductMetadataInterface $productMeta
@@ -149,7 +159,6 @@ class AutoKeyExchange
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\ResourceConnection $connection
      * @param \Magento\Framework\App\Cache\Manager $cacheManager
-     * @param \Magento\Framework\App\Request\Http $request
      * @param State $state
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param UrlInterface $backendUrl
@@ -161,6 +170,7 @@ class AutoKeyExchange
     public function __construct(
         AmazonHelper $amazonHelper,
         AmazonConfig $amazonConfig,
+        KeyHelper $keyHelper,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ProductMetadataInterface $productMeta,
@@ -168,7 +178,6 @@ class AutoKeyExchange
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\ResourceConnection $connection,
         \Magento\Framework\App\Cache\Manager $cacheManager,
-        \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\State $state,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\UrlInterface $backendUrl,
@@ -177,6 +186,7 @@ class AutoKeyExchange
     ) {
         $this->amazonHelper  = $amazonHelper;
         $this->amazonConfig  = $amazonConfig;
+        $this->keyHelper     = $keyHelper;
         $this->config        = $config;
         $this->scopeConfig   = $scopeConfig;
         $this->productMeta   = $productMeta;
@@ -185,50 +195,22 @@ class AutoKeyExchange
         $this->cacheManager  = $cacheManager;
         $this->connection    = $connection;
         $this->state         = $state;
-        $this->request       = $request;
-        $this->storeManager  = $storeManager;
         $this->mathRandom    = $mathRandom;
         $this->logger        = $logger;
 
+        $this->storeManager = $storeManager;
         $this->messageManager = $messageManager;
 
-        // Find store ID and scope
-        $this->_websiteId = $request->getParam('website', 0);
-        $this->_storeId   = $request->getParam('store', 0);
-        $this->_scope     = $request->getParam('scope');
-
-        // Website scope
-        if ($this->_websiteId) {
-            $this->_scope = !$this->_scope ? 'websites' : $this->_scope;
-        } else {
-            $this->_websiteId = $storeManager->getWebsite()->getId();
-        }
-
-        // Store scope
-        if ($this->_storeId) {
-            $this->_websiteId = $this->storeManager->getStore($this->_storeId)->getWebsite()->getId();
-            $this->_scope = !$this->_scope ? 'stores' : $this->_scope;
-        } else {
-            $this->_storeId = $storeManager->getWebsite($this->_websiteId)->getDefaultStore()->getId();
-        }
-
-        // Set scope ID
-        switch ($this->_scope) {
-            case 'websites':
-                $this->_scopeId = $this->_websiteId;
-                break;
-            case 'stores':
-                $this->_scopeId = $this->_storeId;
-                break;
-            default:
-                $this->_scope = 'default';
-                $this->_scopeId = 0;
-                break;
-        }
+        $this->_storeId = $keyHelper->getStoreId();
+        $this->_websiteId = $keyHelper->getWebsiteId();
+        $this->_scope = $keyHelper->getScope();
+        $this->_scopeId = $keyHelper->getScopeId();
     }
 
     /**
-     * Return domain
+     * Get AKE domain based on display currency
+     *
+     * @return string
      */
     private function getEndpointDomain()
     {
@@ -239,6 +221,8 @@ class AutoKeyExchange
 
     /**
      * Return register popup endpoint URL
+     *
+     * @return string
      */
     public function getEndpointRegister()
     {
@@ -247,6 +231,8 @@ class AutoKeyExchange
 
     /**
      * Return pubkey endpoint URL
+     *
+     * @return string
      */
     public function getEndpointPubkey()
     {
@@ -255,6 +241,8 @@ class AutoKeyExchange
 
     /**
      * Return listener origins
+     *
+     * @return array
      */
     public function getListenerOrigins()
     {
@@ -268,21 +256,12 @@ class AutoKeyExchange
 
     /**
      * Generate and save RSA keys
+     *
+     * @return mixed
      */
-    public function generateKeys()
+    protected function generateKeys()
     {
-        // Magento 2.4.4 switches to phpseclib3, use that if it exists
-        if (class_exists(\phpseclib3\Crypt\RSA::class, true)) {
-            $keypair = \phpseclib3\Crypt\RSA::createKey(2048);
-            $keys = [
-                "publickey" => $keypair->getPublicKey()->__toString(),
-                "privatekey" => $keypair->__toString()
-            ];
-        } else {
-            $rsa = new \phpseclib\Crypt\RSA();
-            $keys = $rsa->createKey(2048);
-        }
-
+        $keys = $this->keyHelper->generateKeys();
         $encrypt = $this->encryptor->encrypt($keys['privatekey']);
 
         $this->config
@@ -309,6 +288,8 @@ class AutoKeyExchange
 
     /**
      * Delete key-pair from config
+     *
+     * @return void
      */
     public function destroyKeys()
     {
@@ -348,6 +329,8 @@ class AutoKeyExchange
 
     /**
      * Return RSA private key
+     *
+     * @return string
      */
     public function getPrivateKey()
     {
@@ -357,7 +340,10 @@ class AutoKeyExchange
     /**
      * Verify and decrypt JSON payload
      *
-     * @param                                        string $payloadJson
+     * @param string $payloadJson
+     * @param bool $autoEnable
+     * @param bool $autoSave
+     * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function decryptPayload($payloadJson, $autoEnable = true, $autoSave = true)
@@ -365,7 +351,7 @@ class AutoKeyExchange
         try {
             $payload = (object) json_decode($payloadJson);
 
-            $publicKeyId = urldecode($payload->publicKeyId);
+            $publicKeyId = urldecode($payload->publicKeyId ?? '');
             $decryptedKey = null;
 
             $success = openssl_private_decrypt(
@@ -405,7 +391,7 @@ class AutoKeyExchange
     /**
      * Save values to Magento config
      *
-     * @param $config
+     * @param mixed $config
      * @param bool $autoEnable
      * @return bool
      */
@@ -463,6 +449,8 @@ class AutoKeyExchange
 
     /**
      * Auto-enable payment method
+     *
+     * @return void
      */
     public function autoEnable()
     {
@@ -475,6 +463,8 @@ class AutoKeyExchange
 
     /**
      * Return listener URL
+     *
+     * @return string
      */
     public function getReturnUrl()
     {
@@ -493,6 +483,8 @@ class AutoKeyExchange
 
     /**
      * Return array of form POST params for Auto Key Exchange sign up
+     *
+     * @return array
      */
     public function getFormParams()
     {
@@ -544,6 +536,9 @@ class AutoKeyExchange
 
     /**
      * Return config value based on scope and scope ID
+     *
+     * @param string $path
+     * @return mixed
      */
     public function getConfig($path)
     {
@@ -552,6 +547,8 @@ class AutoKeyExchange
 
     /**
      * Return payment region based on currency
+     *
+     * @return string
      */
     public function getRegion()
     {
@@ -573,6 +570,8 @@ class AutoKeyExchange
 
     /**
      * Return a valid store currency, otherwise return null
+     *
+     * @return string|null
      */
     public function getCurrency()
     {
@@ -593,6 +592,8 @@ class AutoKeyExchange
 
     /**
      * Return merchant country
+     *
+     * @return string
      */
     public function getCountry()
     {
@@ -603,7 +604,7 @@ class AutoKeyExchange
     /**
      * Validate provided auth token against the one stored in the database
      *
-     * @param $authToken
+     * @param string $authToken
      * @return bool
      */
     public function validateAuthToken($authToken)
@@ -613,6 +614,8 @@ class AutoKeyExchange
 
     /**
      * Return array of config for JSON Amazon Auto Key Exchange variables.
+     *
+     * @return array
      */
     public function getJsonAmazonAKEConfig()
     {

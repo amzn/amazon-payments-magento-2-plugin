@@ -28,6 +28,13 @@ define(
             },
 
             /**
+             * @returns {string}
+             */
+            getVaultCode: function () {
+                return this.getValue('vault_code');
+            },
+
+            /**
              * Get config value
              */
             getValue: function (key, defaultValue) {

@@ -37,6 +37,12 @@ abstract class AbstractClient implements ClientInterface
      */
     protected $adapter;
 
+    /**
+     * AbstractClient constructor
+     *
+     * @param Logger $logger
+     * @param AmazonPayAdapter $adapter
+     */
     public function __construct(
         Logger $logger,
         AmazonPayAdapter $adapter

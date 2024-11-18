@@ -6,11 +6,14 @@
             <argument name="openerName" type="string"/>
         </arguments>
 
+        <wait time="2" stepKey="waitForCheckoutIfNecessary"/>
         <!-- Load address list in DOM -->
         <helper class="\Amazon\Pay\Test\Mftf\Helper\LoadAddresses" method="loadAddresses" stepKey="loadAddresses">
             <argument name="changeAddressSelector">{{AmazonPageSection.changeAddressButton}}</argument>
             <argument name="addressBackButtonSelector">{{AmazonPageSection.addressBackButton}}</argument>
             <argument name="defaultAddressSelector">{{AmazonPageSection.addressId}}</argument>
+            <argument name="openerName">{{openerName}}</argument>
+            <argument name="editShippingButton">{{AmazonCheckoutSection.editShippingButton}}</argument>
         </helper>
 
         <!--Get shipping address information-->
@@ -26,12 +29,15 @@
 
         <!-- choose card -->
         <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangePaymentMethod"/>
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\UseAddressOrPaymentMethod" method="clickUseAddressOrPaymentMethod" stepKey="clickUseAddressOrPaymentMethod">
-            <argument name="addressOrPaymentMethodRadioButtonSelector">{{AmazonPageSection.paymentMethodRadioButton(cc)}}</argument>
-            <argument name="useAddressOrPaymentMethodSelector">{{AmazonPageSection.usePaymentButton}}</argument>
-        </helper>
+        <wait time="1" stepKey="allowCardsToPopulate"/>
+        <click selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="clickPaymentRadioButton"/>
+        <wait time="1" stepKey="allowSelectButtonToPopulate"/>
+        <scrollTo selector="{{AmazonPageSection.usePaymentButton}}" stepKey="scrollToelectButton"/>
+        <wait time="1" stepKey="allowScrollToHappen"/>
+        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickSelectButton"/>
 
         <!--Go back to checkout-->
+        <wait time="1" stepKey="allowContinueButtonToPopulate"/>
         <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonCheckoutButton"/>
         <wait time="1" stepKey="allowContinueButtonToActivate"/>
         <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="clickAmazonCheckoutButton"/>

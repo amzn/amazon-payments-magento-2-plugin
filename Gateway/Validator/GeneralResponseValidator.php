@@ -33,6 +33,12 @@ class GeneralResponseValidator extends AbstractValidator
      */
     protected $validStates = [];
 
+    /**
+     * GeneralResponseValidator constructor
+     *
+     * @param \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory
+     * @param array $validStates
+     */
     public function __construct(
         \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory,
         array $validStates = []

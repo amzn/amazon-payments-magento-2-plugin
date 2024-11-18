@@ -21,30 +21,42 @@ namespace Amazon\Pay\Api;
 interface CheckoutSessionManagementInterface
 {
     /**
+     * Retrieve config values for button rendering
+     *
      * @param string|null $cartId
      * @return mixed
      */
     public function getConfig($cartId = null);
 
     /**
+     * Get shipping address associated with Amazon checkout session
+     *
      * @param mixed $amazonSessionId
      * @return mixed
      */
     public function getShippingAddress($amazonSessionId);
 
     /**
+     * Get billing address associated with Amazon checkout session
+     *
      * @param mixed $amazonSessionId
      * @return mixed
      */
     public function getBillingAddress($amazonSessionId);
 
     /**
+     * Get short description of selected payment method for Amazon checkout session
+     *
      * @param mixed $amazonSessionId
      * @return string
      */
     public function getPaymentDescriptor($amazonSessionId);
 
     /**
+     * Set payment/charge information on Amazon checkout session so it can be completed.
+     *
+     * On success, returns an Amazon-hosted URL to redirect the buyer to for payment processing.
+     *
      * @param mixed $amazonSessionId
      * @param mixed|null $cartId
      * @return string
@@ -52,6 +64,8 @@ interface CheckoutSessionManagementInterface
     public function updateCheckoutSession($amazonSessionId, $cartId = null);
 
     /**
+     * Complete the Amazon checkout session and place the order in Magento
+     *
      * @param mixed $amazonSessionId
      * @param mixed|null $cartId
      * @return mixed
@@ -59,12 +73,18 @@ interface CheckoutSessionManagementInterface
     public function completeCheckoutSession($amazonSessionId, $cartId = null);
 
     /**
+     * Login to the Magento store using Amazon account information
+     *
+     * Creates a Magento store account if one does not exist.
+     *
      * @param mixed $buyerToken
      * @return mixed
      */
     public function signIn($buyerToken);
 
     /**
+     * Links entries in the amazon_customer table to Magento customer records
+     *
      * @param mixed $buyerToken
      * @param string $password
      * @return mixed

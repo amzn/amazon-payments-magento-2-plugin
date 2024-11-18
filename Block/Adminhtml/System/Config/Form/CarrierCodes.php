@@ -36,6 +36,9 @@ class CarrierCodes extends AbstractFieldArray
      */
     private $amazonCarrierRenderer;
 
+    /**
+     * @inheritDoc
+     */
     protected function _prepareToRender()
     {
         $this->addColumn('carrier', [
@@ -79,6 +82,8 @@ class CarrierCodes extends AbstractFieldArray
     }
 
     /**
+     * Get block to render carrier list
+     *
      * @return CarrierRenderer
      * @throws LocalizedException
      */
@@ -95,6 +100,8 @@ class CarrierCodes extends AbstractFieldArray
     }
 
     /**
+     * Get block to render carrier list for Amazon
+     *
      * @return AmazonCarrierRenderer
      * @throws LocalizedException
      */

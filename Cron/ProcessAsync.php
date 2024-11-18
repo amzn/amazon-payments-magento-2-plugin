@@ -37,6 +37,7 @@ class ProcessAsync
 
     /**
      * ProcessAsync constructor.
+     *
      * @param \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
      * @param \Amazon\Pay\Model\AsyncUpdater $asyncUpdater
      * @param int $limit
@@ -57,6 +58,9 @@ class ProcessAsync
         $this->limit = $limit;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute()
     {
         $collection = $this->asyncCollectionFactory

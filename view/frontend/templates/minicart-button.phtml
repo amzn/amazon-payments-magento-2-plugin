@@ -14,20 +14,25 @@
  * permissions and limitations under the License.
  */
 
+use Amazon\Pay\Block\Minicart\Button;
+use Magento\Framework\Escaper;
+
 /**
- * @var \Amazon\Pay\Block\Minicart\Button $block
+ * @var Button $block
+ * @var Escaper $escaper
  */
+
 ?>
 
 <div id="minicart-amazon-pay-button" class="amazon-button-container" style="display: none;">
     <div class="amazon-divider">
-        <span><?= $block->escapeHtml(__('or')) ?></span>
+        <span><?= $escaper->escapeHtml(__('or')) ?></span>
     </div>
 
     <div class="amazon-button-column">
         <div id="PayWithAmazon-Cart"
              class="amazon-checkout-button"
-             data-loaded-at="<?= $block->escapeHtml(time()) // added for force re-rendering ?>"
+             data-loaded-at="<?= $escaper->escapeHtml(time()) // added for force re-rendering ?>"
              data-mage-init='{"Amazon_Pay/js/amazon-button": {"hideIfUnavailable": ".amazon-button-container"}}'>
         </div>
     </div>
@@ -41,7 +46,7 @@
                       aria-expanded="false">
                 </span>
                 <div class="field-tooltip-content" data-target="dropdown" aria-hidden="true">
-                    <?= $block->escapeHtml(__('Are you an Amazon customer? ' .
+                    <?= $escaper->escapeHtml(__('Are you an Amazon customer? ' .
                         'Pay now with address and payment details stored in your Amazon account.')); ?>
                 </div>
             </div>

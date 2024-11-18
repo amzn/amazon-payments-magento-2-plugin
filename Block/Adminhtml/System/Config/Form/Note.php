@@ -27,6 +27,13 @@ class Note extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected $amazonConfig;
 
+    /**
+     * Note constructor
+     *
+     * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param array $data
+     */
     public function __construct(
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
         \Magento\Backend\Block\Template\Context $context,
@@ -37,6 +44,8 @@ class Note extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Render scope label
+     *
      * @param AbstractElement $element
      * @return string
      */
@@ -46,6 +55,8 @@ class Note extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Render note
+     *
      * @param AbstractElement $element
      * @return string
      */

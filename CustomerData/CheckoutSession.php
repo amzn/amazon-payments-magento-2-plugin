@@ -32,6 +32,7 @@ class CheckoutSession
 
     /**
      * CheckoutSession constructor.
+     *
      * @param \Magento\Checkout\Model\Session $session
      * @param \Amazon\Pay\Model\CheckoutSessionManagement $checkoutSessionManagement
      */
@@ -44,6 +45,8 @@ class CheckoutSession
     }
 
     /**
+     * Get button config values
+     *
      * @return array
      */
     public function getConfig()

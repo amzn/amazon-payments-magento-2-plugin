@@ -16,6 +16,8 @@
         <!--Go to Amazon Pay from the mini cart and login-->
         <click selector="{{AmazonButtonSection.miniCart}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
-        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLoginActionGroup"/>
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin">
+            <argument name="buttonSelector" value="{{AmazonButtonSection.miniCart}}"/>
+        </actionGroup>
     </test>
 </tests>

@@ -19,6 +19,8 @@ class CheckoutSessionSignIn implements ResolverInterface
     private $checkoutSessionManagement;
 
     /**
+     * CheckoutSessionSignIn constructor
+     *
      * @param CheckoutSessionManagement $checkoutSessionManagement
      */
     public function __construct(
@@ -28,8 +30,10 @@ class CheckoutSessionSignIn implements ResolverInterface
     }
 
     /**
+     * Sign customer in through CheckoutSessionManagement if arguments were provided
+     *
      * @param Field $field
-     * @param $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args

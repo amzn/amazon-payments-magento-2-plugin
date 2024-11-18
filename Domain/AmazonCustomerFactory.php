@@ -57,6 +57,8 @@ class AmazonCustomerFactory
     }
 
     /**
+     * Create Amazon customer object from buyerInfo returned by Amazon
+     *
      * @param array $data
      * @return AmazonCustomer
      */

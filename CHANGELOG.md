@@ -1,5 +1,54 @@
 # Change Log
 
+## 5.18.0
+* Added product page promo banner functionality and configuration
+
+## 5.17.1
+* Changed php allowed versions to include 8.3
+* Fixed issue where orders could be processing but not capture payment
+* Fixed issue with amazon-product-add.js 404 not found (thanks @tim-breitenstein-it!)
+* Fixed issue where a variable could be undefined (thanks @dimitriBouteiile!)
+* Fixed issue where incorrect message "can't create invoice" could be displayed
+
+## 5.17.0
+* Changed sequence of placing Magento order/processing Amazon payment to reduce likelihood of
+transactions with no associated order IDs in Seller Central
+* Fixed KeyUpgrade patch error when the database tables are prefixed
+* Fixed overwriting of existent CV2 configs on KeyUpgrade
+* Improved behavior of PDP button (ensure product is added to cart before initiating Amazon checkout)
+* Fixed unresponsive PDP button on Safari mobile
+* Fixed non-centered PDP button on mobile view
+* Fixed incorrect type casting when decrypting Auto Key Exchange payloads
+* Fixed updateCheckoutSession call in headless environments when the session helper returns
+a new/empty quote (thanks, @bheindl!)
+* Changed response format of checkout session details GraphQL query to adhere to best practices
+(thanks, @dimitriBouteille!)
+* Added Amazon Pay payment region to storeConfig GraphQL query (thanks again, @dimitriBouteiile!)
+
+## 5.16.1
+* Remove platform/module version information from button payloads
+* Fixed admin display bug regarding upgrading legacy keys when a CV2 public key ID already exists
+* Fixed invoice comment noise with Automatic Authorization Mode
+
+## 5.16.0
+* Added support for subscriptions, requires the ParadoxLabs Adaptive Subscription module
+* Added platformid for APB payload
+* Fixed phpcs warnings for php 8
+* Fixed issue with installing the module when there is no existing CV1 config
+* Fixed issue when an Allowed Country was somehow saved with an empty string
+
+## 5.15.0
+* Added Key Upgrade feature (automatically upgrade CV1 keys to CV2 if updating from legacy module)
+* Fixed backward compatibility with Zend availability
+* Fixed render issue with multiple Amazon Sign In buttons on the same page
+
+## 5.14.3
+* Fixed PHP 7 compatibility
+
+## 5.14.2
+* Removed usage of Zend libraries and updated requirements for PHP 8.2/Magento 2.4.6 compatibility
+* Fixed issue where coupon usage is not properly decremented when placing order fails
+
 ## 5.14.1
 * Changed how buttons are rendered for compatibility with estimated order amount feature
 * Removed estimated order amount from PDP button

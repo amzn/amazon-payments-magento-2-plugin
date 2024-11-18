@@ -26,6 +26,8 @@ class ProcessAuthHash extends \Magento\Framework\App\Action\Action
     private $pageFactory;
 
     /**
+     * ProcessAuthHash constructor
+     *
      * @param Context     $context
      * @param PageFactory $pageFactory
      */
@@ -35,6 +37,9 @@ class ProcessAuthHash extends \Magento\Framework\App\Action\Action
         $this->pageFactory = $pageFactory;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute()
     {
         return $this->pageFactory->create();

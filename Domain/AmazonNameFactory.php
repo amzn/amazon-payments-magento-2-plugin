@@ -38,6 +38,8 @@ class AmazonNameFactory
     }
 
     /**
+     * AmazonNameFactory constructor
+     *
      * @param array $data
      * @return AmazonName
      * @throws LocalizedException

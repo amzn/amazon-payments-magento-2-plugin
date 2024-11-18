@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/sectionObjectSchema.xsd">
     <section name="AmazonLoginSection">
-        <element name="login" type="button" selector="#AmazonPayButton.login-with-amazon div"/>
+        <element name="login" type="button" selector=".block-amazon-login #AmazonPayButton.login-with-amazon div"/>
+        <element name="loginPopup" type="button" selector=".block-authentication #AmazonPayButton.login-with-amazon div"/>
         <element name="consentButton" type="button" selector="#consent-form input[type=submit]"/>
+        <element name="continueButton" type="button" selector=".continue-as-consent-button" />
         <element name="linkAccountPassword" type="text" selector=".amazon-validate-container #password"/>
         <element name="linkAccountButton" type="button" selector=".amazon-validate-container button[type=submit]"/>
     </section>

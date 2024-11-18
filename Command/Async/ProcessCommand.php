@@ -29,6 +29,7 @@ class ProcessCommand extends Command
      * ProcessCommand constructor.
      *
      * These dependencies are proxied, update di.xml if changed
+     *
      * @param \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory
      * @param \Amazon\Pay\Model\AsyncUpdater $asyncUpdater
      * @param \Magento\Framework\App\State $state
@@ -46,12 +47,22 @@ class ProcessCommand extends Command
         parent::__construct($name);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function configure()
     {
         $this->setName('amazon:payment:async:process');
         parent::configure();
     }
 
+    /**
+     * Execute asynchronous processing of pending orders
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
@@ -62,5 +73,7 @@ class ProcessCommand extends Command
             /** @var \Amazon\Pay\Model\Async $item */
             $this->asyncUpdater->processPending($item);
         }
+
+        return Command::SUCCESS;
     }
 }
