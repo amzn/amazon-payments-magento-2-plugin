@@ -704,11 +704,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         // decrement coupon usages if applicable
         $this->updateCouponUsages->execute($order, false);
 
-        // delete order comments and add new one
-        foreach ($order->getStatusHistories() as $history) {
-            $history->delete();
-        }
-
         if (!$reasonMessage) {
             $reasonMessage = __('Something went wrong. Choose another payment method for checkout and try again.');
         }
@@ -790,7 +785,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         } catch (\Exception $e) {
             if (isset($order)) {
                 $this->closeChargePermission($amazonSessionId, $order, $e);
-                $this->cancelOrder($order, $quote);
+                $session = $this->getAmazonSession($amazonSessionId);
+                $cancelledMessage = $this->getCanceledMessage($session);
+                $this->cancelOrder($order, $quote, $cancelledMessage);
                 $this->magentoCheckoutSession->restoreQuote();
             }
 
@@ -1315,7 +1312,13 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         } catch (\Exception $e) {
             $this->closeChargePermission($amazonSessionId, $order, $e);
 
-            $this->cancelOrder($order, $quote);
+            $session = $this->amazonAdapter->getCheckoutSession(
+                $order->getStoreId(),
+                $amazonSessionId
+            );
+
+            $cancelledMessage = $this->getCanceledMessage($session);
+            $this->cancelOrder($order, $quote, $cancelledMessage);
             $this->magentoCheckoutSession->restoreQuote();
 
             $logEntryDetails = 'amazonSessionId: ' . $amazonSessionId
