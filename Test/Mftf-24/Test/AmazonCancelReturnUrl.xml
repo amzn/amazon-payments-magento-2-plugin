@@ -12,7 +12,7 @@
 
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
-            <createData entity="SampleAmazonPaymentConfigLwa" stepKey="SampleAmazonPaymentConfigLwa"/>
+            <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfig"/>
             <magentoCLI command="config:set {{AmazonButtonProductConfig.path}} 1" stepKey="displayAmazonButtonProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
@@ -20,29 +20,9 @@
 
         <after>
             <createData entity="SampleAmazonPaymentConfig" stepKey="SampleAmazonPaymentConfigData"/>
-            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
-                <argument name="email" value="{{AmazonAccount.email}}"/>
-            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
-
-        <!-- Click Sign-in button from sign-in page -->
-        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
-        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
-
-        <!--Save opener window name since popup auto-closes-->
-        <executeJS function="return window.name;" stepKey="openerName"/>
-
-        <helper class="\Amazon\Pay\Test\Mftf\Helper\SignInWithAmazon" method="clickSignInWithAmazon" stepKey="signInWithAmazon">
-            <argument name="siwaLocator">{{AmazonLoginSection.login}}</argument>
-        </helper>
-        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
-
-        <!-- Login to Amazon -->
-        <actionGroup ref="AmazonBeginLoginOnlyActionGroup" stepKey="amazonBeginLoginOnlyActionGroup"/>
-        <waitForPageLoad stepKey="waitForSigninPageLoad"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="assertLoginUrl"/>
 
         <!--Go to product page-->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStoreFront">
@@ -51,11 +31,14 @@
         <!--Verify only Amazon Button is present-->
         <seeElement selector="{{AmazonButtonSection.product}}" stepKey="seeEnabledAmazonButton"/>
 
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
         <!-- Click Amazon Pay button on product page and login -->
         <click selector="{{AmazonButtonSection.product}}" stepKey="clickAmazonButton"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen2" />
         <wait time="3" stepKey="allowButtonToActivate"/>
-        
+
         <!-- Sign in or 'Continue As' Amazon buyer -->
         <helper class="\Amazon\Pay\Test\Mftf\Helper\SignInOrContinue" method="signInOrContinue" stepKey="signInIfNecessary">
             <argument name="emailField">{{AmazonPageSection.emailField}}</argument>
@@ -83,12 +66,14 @@
         <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
         <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen3" />
         <waitForElement selector="{{AmazonPageSection.cancelButton}}" stepKey="waitForCancelCheckout"/>
+        <scrollTo selector="{{AmazonPageSection.cancelButton}}" stepKey="scrollToCancelCheckout"/>
+        <wait time="1" stepKey="waitForCancelCheckout2"/>
 
         <!-- Click cancel button on Amazon hosted page -->
         <click selector="{{AmazonPageSection.cancelButton}}" stepKey="cancelCheckout"/>
         <!-- Switch back to main window -->
         <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener2" />
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <wait time="5" stepKey="waitForRedirect"/>
 
         <!-- Assert being back in the product page -->
         <seeInCurrentUrl url="$$createSimpleProduct.custom_attributes[url_key]$$" stepKey="assertProductUrl"/>

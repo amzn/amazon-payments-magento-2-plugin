@@ -25,7 +25,7 @@
         <waitForElement selector="{{AmazonPageSection.emailField}}" time="30" stepKey="apWaitForLogin"/>
         <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="apEnterEmail"/>
         <fillField selector="{{AmazonPageSection.passwordField}}" userInput="{{AmazonAccount.password}}" stepKey="apEnterPassword"/>
-        
+
         <helper class="\Amazon\Pay\Test\Mftf\Helper\HandlePopupSecondScreen" method="handleClickOnly" stepKey="handlePopupSecondScreen">
             <argument name="signInButton">{{AmazonPageSection.signInButton}}</argument>
         </helper>
@@ -62,6 +62,8 @@
         <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangePaymentMethod"/>
         <wait time="1" stepKey="allowCardsToPopulate"/>
         <waitForElement selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="waitForPaymentRadioButton"/>
+        <scrollTo selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="scrollToPaymentRadioButton"/>
+        <wait time="1" stepKey="waitForPaymentRadioButton2"/>
         <click selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="clickPaymentRadioButton"/>
         <wait time="1" stepKey="allowSelectButtonToPopulate"/>
         <waitForElement selector="{{AmazonPageSection.usePaymentButton}}" stepKey="waitForSelectButton"/>

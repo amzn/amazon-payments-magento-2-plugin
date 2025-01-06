@@ -128,6 +128,7 @@ class AmazonChargePermissionCommand extends Command
             }
         }
         
-        return Command::SUCCESS;
+        $code = defined('Command::SUCCESS') ? Command::SUCCESS : 0;
+        return $code;
     }
 }
