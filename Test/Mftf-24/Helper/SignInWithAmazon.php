@@ -17,7 +17,7 @@ class SignInWithAmazon extends Helper
         try {
             $webDriver->waitForJS("
                 try {
-                    return !!document.querySelector('${siwaLocator}')
+                    return !!document.querySelector('{$siwaLocator}')
                         .shadowRoot
                         .querySelector('div > div.amazonpay-button-view1.amazonpay-button-view1-gold');
                 } catch (err) {
