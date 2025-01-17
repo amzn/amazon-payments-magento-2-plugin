@@ -17,12 +17,11 @@
 namespace Amazon\Pay\Cron;
 
 use Amazon\Pay\Helper\Transaction as TransactionHelper;
+use Amazon\Pay\Logger\Logger;
 use Amazon\Pay\Model\Adapter\AmazonPayAdapter;
-use Amazon\Pay\Model\AsyncManagement\Charge;
 use Amazon\Pay\Model\CheckoutSessionManagement;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Psr\Log\LoggerInterface;
 use Amazon\Pay\Model\AsyncManagement\Charge as AsyncCharge;
 
 class CleanUpIncompleteSessions
@@ -39,7 +38,7 @@ class CleanUpIncompleteSessions
     protected $transactionHelper;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     protected $logger;
 
@@ -65,7 +64,7 @@ class CleanUpIncompleteSessions
 
     /**
      * @param TransactionHelper $transactionHelper
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      * @param AmazonPayAdapter $amazonPayAdapter
      * @param CheckoutSessionManagement $checkoutSessionManagement
      * @param OrderRepositoryInterface $orderRepository
@@ -73,7 +72,7 @@ class CleanUpIncompleteSessions
      */
     public function __construct(
         TransactionHelper $transactionHelper,
-        LoggerInterface $logger,
+        Logger $logger,
         AmazonPayAdapter $amazonPayAdapter,
         CheckoutSessionManagement $checkoutSessionManagement,
         OrderRepositoryInterface $orderRepository,
@@ -114,7 +113,7 @@ class CleanUpIncompleteSessions
         $checkoutSessionId = $transactionData['checkout_session_id'];
         $orderId = $transactionData['order_id'];
 
-        $this->logger->info(self::LOG_PREFIX . 'Cleaning up checkout session id: ' . $checkoutSessionId);
+        $this->logger->debug(self::LOG_PREFIX . 'Cleaning up checkout session id: ' . $checkoutSessionId);
 
         try {
 
@@ -125,20 +124,20 @@ class CleanUpIncompleteSessions
                 case self::SESSION_STATUS_STATE_CANCELED:
                     $logMessage = 'Checkout session Canceled, cancelling order and closing transaction: ';
                     $logMessage .= $checkoutSessionId;
-                    $this->logger->info(self::LOG_PREFIX . $logMessage);
+                    $this->logger->debug(self::LOG_PREFIX . $logMessage);
                     $this->cancelOrder($orderId);
                     $this->transactionHelper->closeTransaction($transactionData['transaction_id']);
                     break;
                 case self::SESSION_STATUS_STATE_OPEN:
                     $logMessage = 'Checkout session Open, completing: ';
                     $logMessage .= $checkoutSessionId;
-                    $this->logger->info(self::LOG_PREFIX . $logMessage);
+                    $this->logger->debug(self::LOG_PREFIX . $logMessage);
                     $this->checkoutSessionManagement->completeCheckoutSession($checkoutSessionId, null, $orderId);
                     break;
                 case self::SESSION_STATUS_STATE_COMPLETED:
                     $logMessage = 'Checkout session Completed, nothing more needed: ';
                     $logMessage .= $checkoutSessionId;
-                    $this->logger->info(self::LOG_PREFIX . $logMessage);
+                    $this->logger->debug(self::LOG_PREFIX . $logMessage);
                     break;
             }
         } catch (\Exception $e) {
