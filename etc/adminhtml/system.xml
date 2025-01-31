@@ -184,6 +184,11 @@
                                 <field id="amazonloggin">1</field>
                             </depends>
                         </field>
+                        <field id="acceptance_mark" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Payment Method Logo</label>
+                            <config_path>payment/amazon_payment_v2/acceptance_mark</config_path>
+                            <source_model>Amazon\Pay\Model\Config\Source\AcceptanceMark</source_model>
+                        </field>
                         <field id="promo_message_enabled" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Enable Product Page Promo Messaging</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

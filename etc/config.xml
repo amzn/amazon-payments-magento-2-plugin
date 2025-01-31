@@ -35,6 +35,7 @@
                 <is_gateway>1</is_gateway>
                 <title>Amazon Pay</title>
                 <sort_order>1</sort_order>
+                <acceptance_mark>Amazon_Pay/images/logo/amazonpay-secondary-logo-rgb_clr.svg</acceptance_mark>
                 <model>AmazonPayFacade</model>
                 <payment_action>authorize</payment_action>
                 <can_authorize>1</can_authorize>

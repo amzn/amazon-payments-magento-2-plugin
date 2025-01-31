@@ -75,7 +75,8 @@ class Config extends \Magento\Framework\View\Element\Template
             'is_lwa_enabled'            => $this->isLwaEnabled(),
             'is_guest_checkout_enabled' => $this->amazonConfig->isGuestCheckoutEnabled(),
             'has_restricted_products'   => $this->amazonHelper->hasRestrictedProducts(),
-            'is_multicurrency_enabled'  => $this->amazonConfig->multiCurrencyEnabled()
+            'is_multicurrency_enabled'  => $this->amazonConfig->multiCurrencyEnabled(),
+            'acceptance_mark'           => $this->amazonConfig->getAcceptanceMark()
         ];
 
         if ($subscriptionLabel = $this->subscriptionManager->getSubscriptionLabel()) {

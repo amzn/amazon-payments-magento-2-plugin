@@ -1020,6 +1020,22 @@ class AmazonConfig
     }
 
     /**
+     * get configured payment method logo / acceptance mark
+     *
+     * @param $scope
+     * @param $scopeCode
+     * @return string
+     */
+    public function getAcceptanceMark($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/amazon_payment_v2/acceptance_mark',
+            $scope,
+            $scopeCode
+        );
+    }
+
+    /**
      * Check if vault is enabled for scope
      *
      * @param string $scope
