@@ -694,6 +694,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
             \Magento\Sales\Model\Order::STATE_CANCELED
         );
+        // cancel associated items to account for inventory reservations
+        foreach ($order->getAllItems() as $item) {
+            $item->cancel();
+        }
         $order->getPayment()->setIsTransactionClosed(true);
 
         // cancel invoices
