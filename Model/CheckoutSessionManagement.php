@@ -821,6 +821,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
+
         if (!$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
             $this->logger->error("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
@@ -846,10 +847,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             ];
         }
 
-        if ($amazonSession['productType'] == 'PayOnly') {
-            if (empty($quote->getCustomerEmail())) {
-                $quote->setCustomerEmail($amazonSession['buyer']['email']);
-            }
+        if (empty($quote->getCustomerEmail())) {
+            $quote->setCustomerEmail($amazonSession['buyer']['email']);
         }
 
         // get payment to load it in the session, so that a salesrule that relies on payment method conditions
