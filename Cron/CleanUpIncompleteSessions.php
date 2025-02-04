@@ -116,7 +116,6 @@ class CleanUpIncompleteSessions
         $this->logger->debug(self::LOG_PREFIX . 'Cleaning up checkout session id: ' . $checkoutSessionId);
 
         try {
-
             // Check current state of Amazon checkout session
             $amazonSession = $this->amazonPayAdapter->getCheckoutSession($transactionData['store_id'], $checkoutSessionId);
             $state = $amazonSession['statusDetails']['state'] ?? false;
@@ -124,8 +123,9 @@ class CleanUpIncompleteSessions
                 case self::SESSION_STATUS_STATE_CANCELED:
                     $logMessage = 'Checkout session Canceled, cancelling order and closing transaction: ';
                     $logMessage .= $checkoutSessionId;
-                    $this->logger->debug(self::LOG_PREFIX . $logMessage);
-                    $this->cancelOrder($orderId);
+                    $this->logger->info(self::LOG_PREFIX . $logMessage);
+                    $cancelledMessage = $this->checkoutSessionManagement->getCanceledMessage($amazonSession);
+                    $this->cancelOrder($orderId, $cancelledMessage);
                     $this->transactionHelper->closeTransaction($transactionData['transaction_id']);
                     break;
                 case self::SESSION_STATUS_STATE_OPEN:
@@ -152,12 +152,12 @@ class CleanUpIncompleteSessions
      * @param int $orderId
      * @return void
      */
-    protected function cancelOrder($orderId)
+    protected function cancelOrder($orderId, $reasonMessage = '')
     {
         $order = $this->loadOrder($orderId);
 
         if ($order) {
-            $this->checkoutSessionManagement->cancelOrder($order);
+            $this->checkoutSessionManagement->cancelOrder($order, null, $reasonMessage);
         } else {
             $this->logger->error(self::LOG_PREFIX . 'Order not found for ID: ' . $orderId);
         }
