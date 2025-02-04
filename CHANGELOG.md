@@ -1,5 +1,17 @@
 # Change Log
 
+## 5.18.1
+* Add new logos/acceptance marks at checkout
+* Improved clarity of order comments on cancelled orders
+* Fixed issue where order confirmation emails could be sent before payment processed successfully
+* Fixed issue with some inventory reservations not being adjusted after a cancelled order
+* Fixed issue where credit memos occasionally fail to process due to a missing parent transaction ID
+* Fixed APB issue where billing address information may fail to be set on virtual quotes
+* Fixed APB issue with family name/first name being passed incorrectly in JP region
+* Fixed dynamic property declaration in subscription classes (thanks, @navarr!)
+* Fixed failures and corrected logging in CleanUpIncompleteSessions cron job (thanks, @mohit-sharma-rp!)
+* Fixed various code smells
+
 ## 5.18.0
 * Added product page promo banner functionality and configuration
 
