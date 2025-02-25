@@ -18,22 +18,31 @@ define([
     'Magento_Customer/js/customer-data'
 ], function ($, customerData) {
     'use strict';
-    let deferredAddToCart = $.Deferred();
-    let addedViaAmazon = false;
-
-    //subscribe to add to cart event
-    let cart = customerData.get('cart');
-    cart.subscribe(function () {
-        if(addedViaAmazon && deferredAddToCart.state() === 'pending') {
-            deferredAddToCart.resolve();
-        }
-    });
 
     return {
-        execute: function () {
-            $('#product_addtocart_form').submit();
-            addedViaAmazon = true;
-            return deferredAddToCart;
+        deferredAddToCart: $.Deferred(),
+        addedViaAmazon: false,
+        amznWidget: null,
+
+        register: function(amznWidget) {
+            this.amznWidget = amznWidget;
+            var self = this;
+
+            customerData.get('cart').subscribe(function () {
+                if(self.addedViaAmazon && self.deferredAddToCart.state() === 'pending') {
+                    self.deferredAddToCart.resolve();
+                }
+            });
+
+            amznWidget.amazonPayButton.onClick(function () {
+                var form = $('#product_addtocart_form');
+                form.submit();
+                self.addedViaAmazon = true;
+            });
+
+            this.deferredAddToCart.then(function () {
+                self.amznWidget._initCheckout();
+            });
         }
     };
 });
