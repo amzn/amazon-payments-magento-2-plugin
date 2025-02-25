@@ -176,11 +176,7 @@ define([
                                 self._initCheckout();
                             });
                         } else if (self.options.placement === 'Product') {
-                            self.amazonPayButton.onClick(function() {
-                                amazonAddToCart.execute().then(function() {
-                                    self._initCheckout();
-                                });
-                            });
+                            amazonAddToCart.register(self);
                         }
 
                         $('.amazon-button-container .field-tooltip').fadeIn();
