@@ -71,6 +71,8 @@ class Cancel implements HttpGetActionInterface
         $redirectParam = $this->request->getParam('redirect');
         $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
+        $this->messageManager->addErrorMessage(__('This transaction was cancelled. Please try again.'));
+
         // redirect to cart if no redirect param provided
         if (empty($redirectParam)) {
             return $result->setPath('checkout/cart');
@@ -92,8 +94,6 @@ class Cancel implements HttpGetActionInterface
                     $this->checkoutSessionManagement->cancelOrder($order, $quote);
 
                     $this->magentoCheckoutSession->restoreQuote();
-
-                    $this->messageManager->addErrorMessage(__('This transaction was cancelled. Please try again.'));
                 }
             }
         }
