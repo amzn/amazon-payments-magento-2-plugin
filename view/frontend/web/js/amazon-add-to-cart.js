@@ -20,7 +20,7 @@ define([
     'use strict';
 
     return {
-        deferredAddToCart: $.Deferred(),
+        deferredAddToCart: null,
         addedViaAmazon: false,
         amznWidget: null,
 
@@ -31,6 +31,7 @@ define([
             customerData.get('cart').subscribe(function () {
                 if(self.addedViaAmazon && self.deferredAddToCart.state() === 'pending') {
                     self.deferredAddToCart.resolve();
+                    self.initDeferred();
                 }
             });
 
@@ -40,8 +41,13 @@ define([
                 self.addedViaAmazon = true;
             });
 
-            this.deferredAddToCart.then(function () {
-                self.amznWidget._initCheckout();
+            self.initDeferred();
+        },
+
+        initDeferred: function() {
+            var self = this;
+            this.deferredAddToCart = $.Deferred(function () {
+                this.then(() => { self.amznWidget._initCheckout(); });
             });
         }
     };
