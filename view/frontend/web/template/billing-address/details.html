@@ -2,17 +2,17 @@
     <p data-bind="i18n: 'Billing address associated with this payment method:'"></p>
     <p class="billing-address-details">
         <text args="currentBillingAddress().prefix"></text> <text args="currentBillingAddress().firstname"></text> <text args="currentBillingAddress().middlename"></text>
-        <text args="currentBillingAddress().lastname"></text> <text args="currentBillingAddress().suffix"></text><br/>
-        <text args="_.values(currentBillingAddress().street).join(', ')"></text><br/>
-        <text args="currentBillingAddress().city "></text>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"></text><br/>
-        <text args="getCountryName(currentBillingAddress().countryId)"></text><br/>
+        <text args="currentBillingAddress().lastname"></text> <text args="currentBillingAddress().suffix"></text><br>
+        <text args="_.values(currentBillingAddress().street).join(', ')"></text><br>
+        <text args="currentBillingAddress().city "></text>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"></text><br>
+        <text args="getCountryName(currentBillingAddress().countryId)"></text><br>
         <!-- ko if: currentBillingAddress().telephone -->
-            <a attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
+            <a attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br>
         <!-- /ko -->
 
         <each args="data: currentBillingAddress().customAttributes, as: 'element'">
             <text args="$parent.getCustomAttributeLabel(element)"></text>
-            <br/>
+            <br>
         </each>
     </p>
 

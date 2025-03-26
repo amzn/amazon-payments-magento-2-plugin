@@ -119,11 +119,11 @@ define([
          * @private
          */
          _isPayOnly: function (isCheckoutSessionPayOnly) {
-            var result = isCheckoutSessionPayOnly;
-            if (result && this.options.payOnly !== null) {
-                result = this.options.payOnly;
+            if (this.options.payOnly === null) {
+                this.options.payOnly = isCheckoutSessionPayOnly;
             }
-            return result;
+
+            return this.options.payOnly;
         },
 
         /**
@@ -170,28 +170,23 @@ define([
 
                         if (self._isAmazonPayShownAsPaymentMethod()) {
                             self.amazonPayButton.onClick(function() {
-                                if (!additionalValidators.validate()) {
+                                if (!additionalValidators.validate() || self.options.disabled) {
                                     return false;
                                 }
                                 self._initCheckout();
                             });
                         } else if (self.options.placement === 'Product') {
-                            self.amazonPayButton.onClick(function() {
-                                amazonAddToCart.execute().then(function() {
-                                    self._initCheckout();
-                                });
-                            });
+                            amazonAddToCart.register(self);
                         }
 
                         $('.amazon-button-container .field-tooltip').fadeIn();
                         self.drawing = false;
 
-                        if (self.buttonType === 'PayNow' && self._isPayOnly()) {
-                            customerData.get('checkout-data').subscribe(function (checkoutData) {
-                                const opacity = checkoutData.selectedBillingAddress ? 1 : 0.5;
-
-                                const shadow = $('.amazon-checkout-button > div')[0].shadowRoot;
-                                $(shadow).find('.amazonpay-button-view1').css('opacity', opacity);
+                        if (self.buttonType === 'PayNow' && self.options.payOnly) {
+                            var checkoutData = customerData.get('checkout-data');
+                            self._toggleApbAvailability(checkoutData);
+                            checkoutData.subscribe(function (data) {
+                                self._toggleApbAvailability(data);
                             });
                         }
                     });
@@ -238,8 +233,6 @@ define([
 
             if (self.buttonType === 'PayNow' && self._isPayOnly()) {
                 if (!customerData.get('checkout-data')().selectedBillingAddress) {
-                    return;
-                } else {
                     var setBillingAddressAction = require('Magento_Checkout/js/action/set-billing-address');
                     setBillingAddressAction(globalMessageList);
                 }
@@ -290,6 +283,26 @@ define([
                     }
                 });
             });
+        },
+
+        _toggleApbAvailability: function (checkoutData) {
+            var billingAddress = checkoutData.selectedBillingAddress;
+            var quote = require('Magento_Checkout/js/model/quote');
+
+            var apb = document.querySelectorAll('#PayWithAmazonButton')[0]
+                .querySelector('div')
+                .shadowRoot
+                .querySelector('div');
+
+            if (!billingAddress && !quote.billingAddress()) {
+                apb.classList.remove('amazonpay-button-enabled');
+                apb.classList.add('amazonpay-button-disabled');
+                this.options.disabled = true;
+            } else {
+                apb.classList.remove('amazonpay-button-disabled');
+                apb.classList.add('amazonpay-button-enabled');
+                this.options.disabled = false;
+            }
         },
 
         _shouldUseEstimatedAmount: function () {

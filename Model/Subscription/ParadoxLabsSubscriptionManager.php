@@ -31,6 +31,26 @@ class ParadoxLabsSubscriptionManager implements SubscriptionManagerInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var \ParadoxLabs\Subscriptions\Model\Service\QuoteManager
+     */
+    public $quoteManager;
+
+    /**
+     * @var \ParadoxLabs\Subscriptions\Model\Service\ItemManager
+     */
+    public $itemManager;
+
+    /**
+     * @var \ParadoxLabs\Subscriptions\Model\SubscriptionRepository
+     */
+    public $subscriptionRepository;
+
+    /**
+     * @var \ParadoxLabs\Subscriptions\Model\Config
+     */
+    public $subscriptionConfig;
+
+    /**
      * ParadoxLabsSubscriptionManager constructor
      *
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder

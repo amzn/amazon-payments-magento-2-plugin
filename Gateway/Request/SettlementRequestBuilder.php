@@ -105,6 +105,27 @@ class SettlementRequestBuilder implements BuilderInterface
     }
 
     /**
+     * Get charge ID from payment transaction information
+     *
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     * @return string
+     */
+    protected function getChargeId($payment) {
+        $chargeId = '';
+
+        if ($parentTransactionId = $payment->getParentTransactionId()) {
+            $chargeId = rtrim($parentTransactionId, '-capture');
+            return $chargeId;
+        }
+
+        if (preg_match('/[A-Z]..-[0-9]*-[0-9]*-C[0-9]*/', $payment->getLastTransId(), $matches)) {
+            $chargeId = array_shift($matches);
+        }
+
+        return $chargeId;
+    }
+
+    /**
      * @inheritdoc
      */
     public function build(array $buildSubject)
@@ -128,7 +149,7 @@ class SettlementRequestBuilder implements BuilderInterface
 
         $data = [
             'store_id' => $storeId,
-            'charge_id' => rtrim($paymentDO->getPayment()->getParentTransactionId(), '-capture'),
+            'charge_id' => $this->getChargeId($payment),
             'amount' => $total,
             'currency_code' => $currencyCode,
         ];

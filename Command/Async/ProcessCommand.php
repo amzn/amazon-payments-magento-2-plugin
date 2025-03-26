@@ -74,6 +74,7 @@ class ProcessCommand extends Command
             $this->asyncUpdater->processPending($item);
         }
 
-        return Command::SUCCESS;
+        $code = defined('Command::SUCCESS') ? Command::SUCCESS : 0;
+        return $code;
     }
 }

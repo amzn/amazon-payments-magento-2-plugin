@@ -18,7 +18,6 @@ namespace Amazon\Pay\Helper;
 
 use Amazon\Pay\Gateway\Config\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
 
@@ -27,6 +26,9 @@ class Transaction
 
     // Length of time in minutes we wait before cleaning up the transaction
     protected const MIN_ORDER_AGE_MINUTES = 30;
+
+    // Avoid deprecation warnings with prepared statement
+    protected const MAX_SQL_PARAM_LENGTH = 5;
 
     /**
      * @var int
@@ -143,8 +145,15 @@ class Transaction
      */
     private function getMaxOrderPlacedTime()
     {
-        // phpcs:ignore Magento2.SQL.RawQuery
-        $query = 'SELECT NOW() - INTERVAL ' . self::MIN_ORDER_AGE_MINUTES . ' MINUTE';
-        return $this->resourceConnection->getConnection()->fetchOne($query);
+        $query = $this->resourceConnection->getConnection()
+            ->select()
+            ->getAdapter()
+            ->prepare("SELECT NOW() - INTERVAL :minutes MINUTE");
+
+        $minutes = self::MIN_ORDER_AGE_MINUTES;
+        $query->bindParam(':minutes', $minutes, \PDO::PARAM_INT, self::MAX_SQL_PARAM_LENGTH);
+        $query->execute();
+
+        return $query->fetchColumn(0);
     }
 }

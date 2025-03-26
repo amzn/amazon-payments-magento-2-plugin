@@ -694,6 +694,10 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED)->setStatus(
             \Magento\Sales\Model\Order::STATE_CANCELED
         );
+        // cancel associated items to account for inventory reservations
+        foreach ($order->getAllItems() as $item) {
+            $item->cancel();
+        }
         $order->getPayment()->setIsTransactionClosed(true);
 
         // cancel invoices
@@ -703,11 +707,6 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
 
         // decrement coupon usages if applicable
         $this->updateCouponUsages->execute($order, false);
-
-        // delete order comments and add new one
-        foreach ($order->getStatusHistories() as $history) {
-            $history->delete();
-        }
 
         if (!$reasonMessage) {
             $reasonMessage = __('Something went wrong. Choose another payment method for checkout and try again.');
@@ -790,7 +789,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         } catch (\Exception $e) {
             if (isset($order)) {
                 $this->closeChargePermission($amazonSessionId, $order, $e);
-                $this->cancelOrder($order, $quote);
+                $session = $this->getAmazonSession($amazonSessionId);
+                $cancelledMessage = $this->getCanceledMessage($session);
+                $this->cancelOrder($order, $quote, $cancelledMessage);
                 $this->magentoCheckoutSession->restoreQuote();
             }
 
@@ -821,6 +822,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
                 'message' => $this->getTranslationString('Unable to complete Amazon Pay checkout'),
             ];
         }
+
         if (!$this->canCheckoutWithAmazon($quote) || !$this->canSubmitQuote($quote)) {
             $this->logger->error("Unable to complete Amazon Pay checkout. Can't submit quote id: " . $quote->getId());
             return [
@@ -846,10 +848,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             ];
         }
 
-        if ($amazonSession['productType'] == 'PayOnly') {
-            if (empty($quote->getCustomerEmail())) {
-                $quote->setCustomerEmail($amazonSession['buyer']['email']);
-            }
+        if (empty($quote->getCustomerEmail())) {
+            $quote->setCustomerEmail($amazonSession['buyer']['email']);
         }
 
         // get payment to load it in the session, so that a salesrule that relies on payment method conditions
@@ -1315,7 +1315,13 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         } catch (\Exception $e) {
             $this->closeChargePermission($amazonSessionId, $order, $e);
 
-            $this->cancelOrder($order, $quote);
+            $session = $this->amazonAdapter->getCheckoutSession(
+                $order->getStoreId(),
+                $amazonSessionId
+            );
+
+            $cancelledMessage = $this->getCanceledMessage($session);
+            $this->cancelOrder($order, $quote, $cancelledMessage);
             $this->magentoCheckoutSession->restoreQuote();
 
             $logEntryDetails = 'amazonSessionId: ' . $amazonSessionId

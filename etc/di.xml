@@ -502,6 +502,9 @@
     <type name="Magento\Sales\Model\Order">
         <plugin name="amazon_payv2_legacy_order" type="Amazon\Pay\Plugin\LegacyPaymentHandler" />
     </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="amazon_pay_send_email" type="Amazon\Pay\Plugin\SendEmail" />
+    </type>
 
     <!-- Paradox Labs plugins -->
     <type name="ParadoxLabs\Subscriptions\Model\SubscriptionRepository">
@@ -520,4 +523,7 @@
         <plugin name="amazon_pay_token_delete" type="Amazon\Pay\Plugin\PaymentTokenRepository" />
     </type>
 
+    <type name="Magento\Customer\Model\Address\AbstractAddress">
+        <plugin name="amazon_pay_customer_name_by_country" type="Amazon\Pay\Plugin\CustomerNameByCountry" />
+    </type>
 </config>
