@@ -61,10 +61,10 @@ class SendEmail
             if ($this->scopeConfig->getValue('sales_email/order/enabled')) {
                 $subject->setCanSendNewEmailFlag(false);
 
-                if ($subject->getState() == Order::STATE_PROCESSING
-                    && !empty($subject->getStatusHistories())
-                    && !$subject->getEmailSent())
-                {
+                if ($subject->getState() == Order::STATE_PROCESSING &&
+                    !empty($subject->getStatusHistories()) &&
+                    !$subject->getEmailSent()
+                    ) {
                     $subject->setCanSendNewEmailFlag(true);
                     $this->orderSender->send($subject);
                 }
