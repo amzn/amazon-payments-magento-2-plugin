@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Amazon_Pay::menu" title="Amazon Pay" module="Amazon_Pay" sortOrder="500" resource="Amazon_Pay::Pay"/>
+        <add id="Amazon_Pay::configuration" title="Configuration" module="Amazon_Pay" sortOrder="10" action="adminhtml/system_config/edit/section/payment/amazon_pay" resource="Amazon_Pay::Pay" parent="Amazon_Pay::menu"/>
+        <add id="Amazon_Pay::stores_general" title="Amazon Pay" module="Amazon_Pay" sortOrder="100" resource="Amazon_Pay::Pay" parent="Magento_Backend::stores"/>
+        <add id="Amazon_Pay::stores_configuration" title="Configuration" module="Amazon_Pay" sortOrder="10" action="adminhtml/system_config/edit/section/payment/amazon_pay" resource="Amazon_Pay::Pay" parent="Amazon_Pay::stores_general"/>
+    </menu>
+</config>
