@@ -216,4 +216,18 @@ class Address
 
         return $data;
     }
+
+    public function validateShippingIsSame($amazonAddress, $magentoAddress)
+    {
+        if (
+            $amazonAddress['city'] != $magentoAddress->getCity() ||
+            $amazonAddress['postcode'] != $magentoAddress->getPostCode() ||
+            $amazonAddress['street'][0] != $magentoAddress->getStreet()[0]
+            // @TODO: check [1]? or others...
+        ){
+            return false;
+        }
+
+        return true;
+    }
 }

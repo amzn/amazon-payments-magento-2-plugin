@@ -45,6 +45,7 @@ use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
     protected const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
+    protected const ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE = 'Shipping address mismatch.';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -811,6 +812,28 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function placeOrder($amazonSessionId, $quoteId = null)
     {
+
+        // verify the shipping address has not been modified in Magento, it must match
+        // the one selected in the Amazon checkout session
+        $amazonAddress = $this->getShippingAddress($amazonSessionId)[0];
+        $magentoAddress = $this->session->getQuoteFromIdOrSession($quoteId)->getShippingAddress();
+        if (!$this->addressHelper->validateShippingIsSame($amazonAddress, $magentoAddress)) {
+            return $this->handleCompleteCheckoutSessionError(
+                self::ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE,
+                '' // @TODO: include the amazon and cart shipping address details?
+            );
+        }
+
+        return $this->handleCompleteCheckoutSessionError(
+            "bailing for testing purposes"
+        );
+
+
+
+
+
+
+
         if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
             $errorMsg = "Unable to complete Amazon Pay checkout. Quote not found.";
             if ($quoteId) {
