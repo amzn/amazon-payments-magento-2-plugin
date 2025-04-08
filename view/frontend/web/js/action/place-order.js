@@ -103,6 +103,7 @@ define(
             function handleResponseError(response) {
                 fullScreenLoader.stopLoader(true);
                 console.log(response);
+                response.responseText = JSON.stringify(response.responseText);
                 errorProcessor.process(response);
             }
         };

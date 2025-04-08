@@ -732,9 +732,14 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     protected function handleCompleteCheckoutSessionError($message, $logEntryDetails = '')
     {
         $this->logger->error($message . ' ' . $logEntryDetails);
+        if ($message == $this::ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE) {
+            $message = $this::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE;
+        }
         $result = [
             'success' => false,
-            'message' => $this->getTranslationString($message),
+            'responseText' => [
+                'message' => $this->getTranslationString($message)
+            ]
         ];
         return $result;
     }
@@ -820,19 +825,9 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         if (!$this->addressHelper->validateShippingIsSame($amazonAddress, $magentoAddress)) {
             return $this->handleCompleteCheckoutSessionError(
                 self::ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE,
-                '' // @TODO: include the amazon and cart shipping address details?
+                $this->getAddressMismatchDetails($amazonAddress, $magentoAddress)
             );
         }
-
-        return $this->handleCompleteCheckoutSessionError(
-            "bailing for testing purposes"
-        );
-
-
-
-
-
-
 
         if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
             $errorMsg = "Unable to complete Amazon Pay checkout. Quote not found.";
@@ -931,6 +926,30 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         return $amazonSession['statusDetails']['reasonDescription'];
+    }
+
+    /**
+     * Get log-friendly details of disagreeing checkout session addresses
+     *
+     * @param mixed $amazonAddress
+     * @param \Magento\Quote\Model\Quote\Address $magentoAddress
+     * @return string
+     */
+    protected function getAddressMismatchDetails($amazonAddress, $magentoAddress) {
+        return 'Address from Amazon account: ' . json_encode($amazonAddress) . '; Address entered in Magento: ' .
+            json_encode([
+                'city' => $magentoAddress->getCity(),
+                'firstname' => $magentoAddress->getFirstName(),
+                'lastname' => $magentoAddress->getLastname(),
+                'country_id' => $magentoAddress->getCountryId(),
+                'street' => $magentoAddress->getStreet(),
+                'postcode' => $magentoAddress->getPostcode(),
+                'telephone' => $magentoAddress->getTelephone(),
+                'region' => $magentoAddress->getRegion(),
+                'region_id' => $magentoAddress->getRegionId(),
+                'region_code' => $magentoAddress->getRegionCode(),
+                'email' => $magentoAddress->getEmail()
+            ]);
     }
 
     /**
