@@ -737,6 +737,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
         $result = [
             'success' => false,
+            'message' => $this->getTranslationString($message),
             'responseText' => [
                 'message' => $this->getTranslationString($message)
             ]
