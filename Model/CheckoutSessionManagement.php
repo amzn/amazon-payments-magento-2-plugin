@@ -737,10 +737,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
         $result = [
             'success' => false,
-            'message' => $this->getTranslationString($message),
-            'responseText' => [
-                'message' => $this->getTranslationString($message)
-            ]
+            'message' => $this->getTranslationString($message)
         ];
         return $result;
     }
@@ -900,7 +897,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $this->logger->error($errorMsg . $quote->getId());
             return [
                 'success' => false,
-                'message' => $this->getTranslationString(self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE),
+                'message' => $this->getTranslationString(self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE)
             ];
         }
 
