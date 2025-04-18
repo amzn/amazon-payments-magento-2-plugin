@@ -526,7 +526,4 @@
     <type name="Magento\Customer\Model\Address\AbstractAddress">
         <plugin name="amazon_pay_customer_name_by_country" type="Amazon\Pay\Plugin\CustomerNameByCountry" />
     </type>
-    <type name="Magento\Checkout\Model\ShippingInformationManagement">
-        <plugin name="amazon_pay_region_alignment" type="Amazon\Pay\Plugin\ConfirmShippingRegion" />
-    </type>
 </config>
