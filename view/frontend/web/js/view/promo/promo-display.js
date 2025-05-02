@@ -10,12 +10,13 @@ define([
         $(document).ready(function () {
 
             amazonCheckout.withAmazonCheckout(function (amazon) {
-                if (config.amountValue > 0) {
-                    renderPromotionalMessage(amazon);
-                } else {
-                    // if value (price) is not set on load we will need to watch for price updates
+                // For configurable products that initially pass a price of zero
+                if (config.amountValue <= 0) {
+                    config.amountValue = 1;
                     priceSubscribe(amazon);
                 }
+
+                renderPromotionalMessage(amazon);
             });
 
             function priceSubscribe(amazon) {
