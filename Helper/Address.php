@@ -216,4 +216,30 @@ class Address
 
         return $data;
     }
+
+    /**
+     * Ensure shipping address associated with checkout session is one coming from Amazon
+     *
+     * @param mixed $amazonAddress
+     * @param \Magento\Quote\Model\Quote\Address $magentoAddress
+     */
+    public function validateShippingIsSame($amazonAddress, $magentoAddress)
+    {
+        return $this->fuzzyCompare($amazonAddress['firstname'], $magentoAddress->getFirstname()) &&
+            $this->fuzzyCompare($amazonAddress['lastname'], $magentoAddress->getLastname()) &&
+            $this->fuzzyCompare($amazonAddress['city'], $magentoAddress->getCity()) &&
+            $this->fuzzyCompare($amazonAddress['postcode'], $magentoAddress->getPostcode()) &&
+            $this->fuzzyCompare($amazonAddress['street'][0], $magentoAddress->getStreet()[0]);
+    }
+
+    /**
+     * Compare two strings after stripping punctuation and lowercasing
+     *
+     * @param string $a
+     * @param string $b
+     * @return bool
+     */
+    protected function fuzzyCompare($a, $b) {
+        return strtolower(preg_replace("#[[:punct:]]#", "", $a)) == strtolower(preg_replace("#[[:punct:]]#", "", $b));
+    }
 }
