@@ -197,7 +197,8 @@ class AmazonPayAdapter
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
-                'merchantStoreName' => $this->amazonConfig->getStoreName()
+                'merchantStoreName' => $this->amazonConfig->getStoreName(),
+                'merchantReferenceId' => $quote->getReservedOrderId()
             ],
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
