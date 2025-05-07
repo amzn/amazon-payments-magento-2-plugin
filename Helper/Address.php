@@ -239,7 +239,8 @@ class Address
      * @param string $b
      * @return bool
      */
-    protected function fuzzyCompare($a, $b) {
+    protected function fuzzyCompare($a, $b)
+    {
         return strtolower(preg_replace("#[[:punct:]]#", "", $a)) == strtolower(preg_replace("#[[:punct:]]#", "", $b));
     }
 }
