@@ -204,7 +204,11 @@ class AmazonPayAdapter
         ];
 
         $headers = $this->getPlatformHeaders();
-        $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload, $headers);
+        $response = $this->clientFactory->create($storeId)->updateCheckoutSession(
+            $checkoutSessionId,
+            $payload,
+            $headers
+        );
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -362,7 +366,11 @@ class AmazonPayAdapter
         }
 
         $headers = $this->getPlatformHeaders();
-        $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload, $headers);
+        $response = $this->clientFactory->create($storeId)->updateChargePermission(
+            $chargePermissionId,
+            $payload,
+            $headers
+        );
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -403,7 +411,11 @@ class AmazonPayAdapter
         ];
 
         $headers = $this->getPlatformHeaders();
-        $response = $this->clientFactory->create($storeId)->closeChargePermission($chargePermissionId, $payload, $headers);
+        $response = $this->clientFactory->create($storeId)->closeChargePermission(
+            $chargePermissionId,
+            $payload,
+            $headers
+        );
 
         return $this->processResponse($response, __FUNCTION__);
     }

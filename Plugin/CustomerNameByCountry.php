@@ -38,6 +38,7 @@ class CustomerNameByCountry
      * @param ScopeConfigInterface $scopeConfig
      * @param Config $eavConfig
      * @param Resolver $store
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,

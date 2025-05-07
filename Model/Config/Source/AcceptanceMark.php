@@ -41,7 +41,7 @@ class AcceptanceMark implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray()
     {
         $result = [];
-        foreach($this->logos as $logo){
+        foreach ($this->logos as $logo) {
             $result[] = [
                 'label' => __($logo['label']),
                 'value' => $logo['value']

@@ -933,7 +933,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param \Magento\Quote\Model\Quote\Address $magentoAddress
      * @return string
      */
-    protected function getAddressMismatchDetails($amazonAddress, $magentoAddress) {
+    protected function getAddressMismatchDetails($amazonAddress, $magentoAddress)
+    {
         return 'Address from Amazon account: ' . json_encode($amazonAddress) . '; Address entered in Magento: ' .
             json_encode([
                 'city' => $magentoAddress->getCity(),
