@@ -131,7 +131,7 @@ class Transaction
      * @param mixed $transactionId
      * @return void
      */
-    public function closeTransaction(mixed $transactionId)
+    public function closeTransaction($transactionId)
     {
         $transaction = $this->transactionRepository->get($transactionId);
         $transaction->setIsClosed(true);

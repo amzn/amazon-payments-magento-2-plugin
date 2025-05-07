@@ -1405,7 +1405,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param mixed $orderId
      * @return void
      */
-    public function setOrderPendingPaymentReview(mixed $orderId)
+    public function setOrderPendingPaymentReview($orderId)
     {
         try {
             if (!$orderId) {
