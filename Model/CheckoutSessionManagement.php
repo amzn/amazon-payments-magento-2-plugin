@@ -817,14 +817,16 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     {
 
         // verify the shipping address has not been modified in Magento, it must match
-        // the one selected in the Amazon checkout session
-        $amazonAddress = $this->getShippingAddress($amazonSessionId)[0];
-        $magentoAddress = $this->session->getQuoteFromIdOrSession($quoteId)->getShippingAddress();
-        if (!$this->addressHelper->validateShippingIsSame($amazonAddress, $magentoAddress)) {
-            return $this->handleCompleteCheckoutSessionError(
-                self::ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE,
-                $this->getAddressMismatchDetails($amazonAddress, $magentoAddress)
-            );
+        // the one selected in the Amazon checkout session (express checkout only)
+        if ($amznShippingAddress = $this->getShippingAddress($amazonSessionId)) {
+            $amazonAddress = $amznShippingAddress[0];
+            $magentoAddress = $this->session->getQuoteFromIdOrSession($quoteId)->getShippingAddress();
+            if (!$this->addressHelper->validateShippingIsSame($amazonAddress, $magentoAddress)) {
+                return $this->handleCompleteCheckoutSessionError(
+                    self::ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE,
+                    $this->getAddressMismatchDetails($amazonAddress, $magentoAddress)
+                );
+            }
         }
 
         if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
