@@ -1,5 +1,13 @@
 # Change Log
 
+## 5.18.2
+* Added security enhancements around Express Checkout
+* Changed when Magento order ID is sent to Amazon to improve traceability
+* Changed how promo banner is rendered for configurable/bundle products
+* Clarified usage of "Reset configuration" button in admin for new merchants
+* Fixed bug in email plugin if no payment is set
+* Restored PHP 7 compatibility
+
 ## 5.18.1
 * Add new logos/acceptance marks at checkout
 * Improved clarity of order comments on cancelled orders
