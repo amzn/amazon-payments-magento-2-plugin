@@ -117,7 +117,10 @@ class CleanUpIncompleteSessions
 
         try {
             // Check current state of Amazon checkout session
-            $amazonSession = $this->amazonPayAdapter->getCheckoutSession($transactionData['store_id'], $checkoutSessionId);
+            $amazonSession = $this->amazonPayAdapter->getCheckoutSession(
+                $transactionData['store_id'],
+                $checkoutSessionId
+            );
             $state = $amazonSession['statusDetails']['state'] ?? false;
             switch ($state) {
                 case self::SESSION_STATUS_STATE_CANCELED:
@@ -150,6 +153,7 @@ class CleanUpIncompleteSessions
      * Cancel the order
      *
      * @param int $orderId
+     * @param string $reasonMessage
      * @return void
      */
     protected function cancelOrder($orderId, $reasonMessage = '')

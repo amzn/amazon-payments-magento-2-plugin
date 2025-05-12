@@ -9,5 +9,6 @@
         <element name="v1Method" type="input" selector="#amazonlogin"/>
         <element name="method" type="input" selector="#amazon_payment_v2"/>
         <element name="returnToStandardCheckout" type="text" selector="#checkout-step-shipping .revert-checkout"/>
+        <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout"/>
     </section>
 </sections>

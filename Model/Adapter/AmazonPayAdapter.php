@@ -197,13 +197,18 @@ class AmazonPayAdapter
                 'chargeAmount' => $this->createPrice($quote->getGrandTotal(), $quote->getQuoteCurrencyCode()),
             ],
             'merchantMetadata' => [
-                'merchantStoreName' => $this->amazonConfig->getStoreName()
+                'merchantStoreName' => $this->amazonConfig->getStoreName(),
+                'merchantReferenceId' => $quote->getReservedOrderId()
             ],
             'platformId' => $this->amazonConfig->getPlatformId(),
         ];
 
         $headers = $this->getPlatformHeaders();
-        $response = $this->clientFactory->create($storeId)->updateCheckoutSession($checkoutSessionId, $payload, $headers);
+        $response = $this->clientFactory->create($storeId)->updateCheckoutSession(
+            $checkoutSessionId,
+            $payload,
+            $headers
+        );
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -361,7 +366,11 @@ class AmazonPayAdapter
         }
 
         $headers = $this->getPlatformHeaders();
-        $response = $this->clientFactory->create($storeId)->updateChargePermission($chargePermissionId, $payload, $headers);
+        $response = $this->clientFactory->create($storeId)->updateChargePermission(
+            $chargePermissionId,
+            $payload,
+            $headers
+        );
 
         return $this->processResponse($response, __FUNCTION__);
     }
@@ -402,7 +411,11 @@ class AmazonPayAdapter
         ];
 
         $headers = $this->getPlatformHeaders();
-        $response = $this->clientFactory->create($storeId)->closeChargePermission($chargePermissionId, $payload, $headers);
+        $response = $this->clientFactory->create($storeId)->closeChargePermission(
+            $chargePermissionId,
+            $payload,
+            $headers
+        );
 
         return $this->processResponse($response, __FUNCTION__);
     }

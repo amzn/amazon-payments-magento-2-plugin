@@ -110,7 +110,8 @@ class SettlementRequestBuilder implements BuilderInterface
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @return string
      */
-    protected function getChargeId($payment) {
+    protected function getChargeId($payment)
+    {
         $chargeId = '';
 
         if ($parentTransactionId = $payment->getParentTransactionId()) {

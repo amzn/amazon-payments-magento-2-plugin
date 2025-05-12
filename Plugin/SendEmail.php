@@ -56,14 +56,15 @@ class SendEmail
      */
     public function afterSetState(Order $subject, Order $result, string $state)
     {
-        if ($subject->getPayment()->getMethod() == Config::CODE) {
+        if ($subject->getPayment() &&
+            $subject->getPayment()->getMethod() == Config::CODE) {
             if ($this->scopeConfig->getValue('sales_email/order/enabled')) {
                 $subject->setCanSendNewEmailFlag(false);
 
-                if ($subject->getState() == Order::STATE_PROCESSING
-                    && !empty($subject->getStatusHistories())
-                    && !$subject->getEmailSent())
-                {
+                if ($subject->getState() == Order::STATE_PROCESSING &&
+                    !empty($subject->getStatusHistories()) &&
+                    !$subject->getEmailSent()
+                    ) {
                     $subject->setCanSendNewEmailFlag(true);
                     $this->orderSender->send($subject);
                 }

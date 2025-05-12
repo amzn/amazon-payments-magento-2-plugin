@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutShippingAddressMismatch" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Address"/>
+            <title value="Amazon Shipping Address Mismatch"/>
+            <description value="Order submission should fail if the quote's shipping address doesn't match the address supplied by Amazon during Express Checkout."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_address"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup"/>
+        <!--Proceed to payment page-->
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="moveToPayment"/>
+
+        <!--Open new tab and switch to it-->
+        <openNewTab stepKey="openNewTab"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart2"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Change and submit fraudulent shipping address-->
+        <actionGroup ref="AmazonShipmentFormActionGroup" stepKey="submitFraudulentShippingAddress" />
+        <!--Move back to initial tab and place order-->
+        <switchToNextTab stepKey="moveToExpressCheckoutTab"/>
+        <click selector="{{AmazonCheckoutSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForOrderSubmissionToFail"/>
+        <see userInput="{{AmazonErrorMessageData.generic}}" stepKey="seeErrorMessage"/>
+    </test>
+</tests>

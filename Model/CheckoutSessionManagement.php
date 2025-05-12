@@ -45,6 +45,7 @@ use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
     protected const GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE = 'Unable to complete Amazon Pay checkout.';
+    protected const ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE = 'Shipping address mismatch.';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -731,9 +732,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     protected function handleCompleteCheckoutSessionError($message, $logEntryDetails = '')
     {
         $this->logger->error($message . ' ' . $logEntryDetails);
+        if ($message == $this::ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE) {
+            $message = $this::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE;
+        }
         $result = [
             'success' => false,
-            'message' => $this->getTranslationString($message),
+            'message' => $this->getTranslationString($message)
         ];
         return $result;
     }
@@ -811,6 +815,20 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     public function placeOrder($amazonSessionId, $quoteId = null)
     {
+
+        // verify the shipping address has not been modified in Magento, it must match
+        // the one selected in the Amazon checkout session (express checkout only)
+        if ($amznShippingAddress = $this->getShippingAddress($amazonSessionId)) {
+            $amazonAddress = $amznShippingAddress[0];
+            $magentoAddress = $this->session->getQuoteFromIdOrSession($quoteId)->getShippingAddress();
+            if (!$this->addressHelper->validateShippingIsSame($amazonAddress, $magentoAddress)) {
+                return $this->handleCompleteCheckoutSessionError(
+                    self::ADDRESS_CHANGED_CHECKOUT_ERROR_MESSAGE,
+                    $this->getAddressMismatchDetails($amazonAddress, $magentoAddress)
+                );
+            }
+        }
+
         if (!$quote = $this->session->getQuoteFromIdOrSession($quoteId)) {
             $errorMsg = "Unable to complete Amazon Pay checkout. Quote not found.";
             if ($quoteId) {
@@ -881,7 +899,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $this->logger->error($errorMsg . $quote->getId());
             return [
                 'success' => false,
-                'message' => $this->getTranslationString(self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE),
+                'message' => $this->getTranslationString(self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE)
             ];
         }
 
@@ -908,6 +926,31 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         return $amazonSession['statusDetails']['reasonDescription'];
+    }
+
+    /**
+     * Get log-friendly details of disagreeing checkout session addresses
+     *
+     * @param mixed $amazonAddress
+     * @param \Magento\Quote\Model\Quote\Address $magentoAddress
+     * @return string
+     */
+    protected function getAddressMismatchDetails($amazonAddress, $magentoAddress)
+    {
+        return 'Address from Amazon account: ' . json_encode($amazonAddress) . '; Address entered in Magento: ' .
+            json_encode([
+                'city' => $magentoAddress->getCity(),
+                'firstname' => $magentoAddress->getFirstName(),
+                'lastname' => $magentoAddress->getLastname(),
+                'country_id' => $magentoAddress->getCountryId(),
+                'street' => $magentoAddress->getStreet(),
+                'postcode' => $magentoAddress->getPostcode(),
+                'telephone' => $magentoAddress->getTelephone(),
+                'region' => $magentoAddress->getRegion(),
+                'region_id' => $magentoAddress->getRegionId(),
+                'region_code' => $magentoAddress->getRegionCode(),
+                'email' => $magentoAddress->getEmail()
+            ]);
     }
 
     /**
@@ -1365,7 +1408,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param mixed $orderId
      * @return void
      */
-    public function setOrderPendingPaymentReview(mixed $orderId)
+    public function setOrderPendingPaymentReview($orderId)
     {
         try {
             if (!$orderId) {

@@ -25,8 +25,6 @@ use Magento\Framework\Escaper;
 $currency = $block->getCurrency();
 ?>
 
-<br/>
-
 <?php if ($block->canUpgrade()): ?>
     <div data-mage-init='{"Amazon_Pay/js/keyupgrade": <?= $escaper->escapeHtml($block->getKeyUpgradeConfig()) ?>}'
             id="amazon_keyupgrade">
@@ -69,6 +67,15 @@ $currency = $block->getCurrency();
             <div></div>
         <?php else: ?>
             <div id="autokeyexchange-hint">
+                <div id="keypair-hint">
+                    <p class="message message-info">
+                        <?= $escaper->escapeHtml(
+                            __("If you are trying to automatically register/configure your account and it is not " .
+                            "working, try clicking the Reset configuration button to reset the internal " .
+                            "public/private key, and then retry the transfer process.")
+                        ); ?>
+                    </p>
+                </div>
                 <?= $escaper->escapeHtml(
                     __(
                         "You'll be connecting/registering a %1 account based on your display currency of your store " .

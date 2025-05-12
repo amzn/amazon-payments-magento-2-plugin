@@ -1020,10 +1020,10 @@ class AmazonConfig
     }
 
     /**
-     * get configured payment method logo / acceptance mark
+     * Get configured payment method logo / acceptance mark
      *
-     * @param $scope
-     * @param $scopeCode
+     * @param string $scope
+     * @param int|string $scopeCode
      * @return string
      */
     public function getAcceptanceMark($scope = ScopeInterface::SCOPE_STORE, $scopeCode = null)

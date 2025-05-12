@@ -194,7 +194,7 @@ class SubscriptionHelper
      * @param mixed $value
      * @return Filter
      */
-    private function buildFilter(string $field, mixed $value)
+    private function buildFilter(string $field, $value)
     {
         return $this->filterBuilder
             ->setField($field)
