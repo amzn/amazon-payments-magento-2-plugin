@@ -53,7 +53,7 @@ class Listener extends \Magento\Framework\App\Action\Action implements CsrfAware
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory,
         \Amazon\Pay\Model\Config\AutoKeyExchange $autokeyexchange,
-        ExceptionLogger $exceptionLogger = null
+        ?ExceptionLogger $exceptionLogger = null
     ) {
         $this->autokeyexchange = $autokeyexchange;
         $this->jsonResultFactory = $jsonResultFactory;

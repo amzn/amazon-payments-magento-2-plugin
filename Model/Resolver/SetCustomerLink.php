@@ -39,7 +39,7 @@ class SetCustomerLink implements ResolverInterface
      * @return array[]|Value|mixed
      * @throws GraphQlInputException
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $buyerToken = $args['buyerToken'] ?? false;
         $password = $args['password'] ?? false;

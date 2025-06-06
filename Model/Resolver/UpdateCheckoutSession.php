@@ -40,7 +40,7 @@ class UpdateCheckoutSession implements ResolverInterface
      * @return array|false[]|int
      * @throws GraphQlInputException
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $cartId = $args['cartId'] ?? false;
         $checkoutSessionId = $args['amazonSessionId'] ?? false;

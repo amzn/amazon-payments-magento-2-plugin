@@ -64,7 +64,7 @@ class PlaceOrder implements HttpPostActionInterface
         JsonFactory               $jsonFactory,
         ManagerInterface          $messageManager,
         RequestInterface          $request,
-        ExceptionLogger           $exceptionLogger = null
+        ?ExceptionLogger           $exceptionLogger = null
     ) {
         $this->amazonCheckoutSessionManagement = $checkoutSessionManagement;
         $this->exceptionLogger = $exceptionLogger ?: ObjectManager::getInstance()->get(ExceptionLogger::class);

@@ -87,7 +87,7 @@ class RecurringChargePermissionUpdate
         PaymentInformationManagement $subject,
         $cartId,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if ($paymentMethod->getMethod() === 'amazon_payment_v2_vault') {
             $quote = $this->cartRepository->getActive($cartId);

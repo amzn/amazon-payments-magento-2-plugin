@@ -72,7 +72,7 @@ class CompleteSession extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        ExceptionLogger $exceptionLogger = null
+        ?ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
         $this->amazonCheckoutSessionManagement = $checkoutSessionManagement;
