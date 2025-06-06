@@ -38,7 +38,7 @@ class CheckoutSessionConfig implements ResolverInterface
      * @param array|null $args
      * @return array|Value|mixed
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $cartId = $args['cartId'] ?? null;
         $omitPayloads = $args['omitPayloads'] ?? false;

@@ -77,7 +77,7 @@ class CaptureStrategyCommand implements CommandInterface
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        ExceptionLogger $exceptionLogger = null
+       ?ExceptionLogger $exceptionLogger = null
     ) {
         $this->commandPool = $commandPool;
         $this->transactionRepository = $transactionRepository;

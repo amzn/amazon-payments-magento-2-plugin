@@ -39,7 +39,7 @@ class ProcessCommand extends Command
         \Amazon\Pay\Model\ResourceModel\Async\CollectionFactory $asyncCollectionFactory,
         \Amazon\Pay\Model\AsyncUpdater $asyncUpdater,
         \Magento\Framework\App\State $state,
-        string $name = null
+        ?string $name = null
     ) {
         $this->asyncCollectionFactory = $asyncCollectionFactory;
         $this->asyncUpdater = $asyncUpdater;

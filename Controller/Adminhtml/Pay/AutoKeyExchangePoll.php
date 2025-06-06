@@ -61,7 +61,7 @@ class AutoKeyExchangePoll extends System
         AutoKeyExchange $autoKeyExchange,
         ScopeConfigInterface $scopeConfig,
         JsonFactory $jsonResultFactory,
-        ExceptionLogger $exceptionLogger = null
+        ?ExceptionLogger $exceptionLogger = null
     ) {
         parent::__construct($context);
         $this->autoKeyExchange = $autoKeyExchange;
