@@ -101,4 +101,9 @@ type UpdateCheckoutSessionOutput {
 
 type StoreConfig {
     amazon_payment_region: String @doc(description: "Payment Region for js import")
+    amazon_payment_minicart_button_is_visible: Boolean @doc(description: "True if button is configured to display in minicart")
+    amazon_payment_pwa_pp_button_is_visible: Boolean @doc(description: "True if button is configured to display on PDP")
+    amazon_payment_is_enabled: Boolean
+    @doc(description: "True if AP is enabled and available for customer/store")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\StoreConfig\\IsEnabled")
 }
