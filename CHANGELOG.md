@@ -1,9 +1,5 @@
 # Change Log
 
-## 5.18.3
-* Magento 2.4.8 compatibility
-* PHP 8.4 compatibility
-
 ## 5.18.2
 * Added security enhancements around Express Checkout
 * Changed when Magento order ID is sent to Amazon to improve traceability
