@@ -37,7 +37,7 @@ class ModelMethodAdapter
     public function afterGetConfigPaymentAction(\Magento\Payment\Model\Method\Adapter $subject, $result)
     {
         if ($subject->getCode() == Config::CODE) {
-            if ($this->scopeConfig->getValue('payment/amazon_payment/authorization_mode') == AuthorizationMode::SYNC) {
+            if ($this->scopeConfig->getValue('payment/amazon_payment/authorization_mode') == AuthorizationMode::SYNC_THEN_ASYNC) {
                 $result = PaymentAction::AUTHORIZE;
             }
         }
