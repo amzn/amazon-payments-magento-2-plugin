@@ -483,6 +483,51 @@ class AmazonPayAdapter
     }
 
     /**
+     * Finalize the Amazon checkout session
+     *
+     * @param int|string $storeId
+     * @param mixed $sessionId
+     * @param float|null $amount
+     * @param string $currencyCode
+     * @param array|null $shippingAddress
+     * @param array|null $billingAddress
+     */
+    public function finalizeCheckoutSession(
+        $storeId, 
+        $sessionId, 
+        $amount, 
+        $currencyCode, 
+        $shippingAddress = null, 
+        $billingAddress = null
+    ) {
+        $payload = [
+            'chargeAmount' => $this->createPrice($amount, $currencyCode),
+            'canHandlePendingAuthorization' => $this->amazonConfig->canHandlePendingAuthorization(),
+            'paymentIntent' => $this->amazonConfig->getPaymentAction() === PaymentAction::AUTHORIZE 
+                ? self::PAYMENT_INTENT_AUTHORIZE 
+                : self::PAYMENT_INTENT_AUTHORIZE_WITH_CAPTURE,
+        ];
+
+        if ($shippingAddress) {
+            $payload['shippingAddress'] = $shippingAddress;
+        }
+
+        if ($billingAddress) {
+            $payload['billingAddress'] = $billingAddress;
+        }
+
+        $headers = $this->getPlatformHeaders();
+
+        $rawResponse = $this->clientFactory->create($storeId)->finalizeCheckoutSession(
+            $sessionId,
+            json_encode($payload),
+            $headers
+        );
+        
+        return $this->processResponse($rawResponse, __FUNCTION__);
+    }
+
+    /**
      * Get Amazon buyer information based on bbuyer token
      *
      * @param string $token

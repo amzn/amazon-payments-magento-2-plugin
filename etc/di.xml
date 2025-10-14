@@ -529,4 +529,8 @@
     <type name="Magento\Customer\Model\Address\AbstractAddress">
         <plugin name="amazon_pay_customer_name_by_country" type="Amazon\Pay\Plugin\CustomerNameByCountry" />
     </type>
+
+    <type name="Magento\Quote\Api\CartManagementInterface">
+        <plugin name="CompleteCheckoutSession" type="Amazon\Pay\Plugin\CompleteCheckoutSession"/>
+    </type>
 </config>

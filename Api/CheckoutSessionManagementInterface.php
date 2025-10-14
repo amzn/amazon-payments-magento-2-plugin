@@ -68,9 +68,16 @@ interface CheckoutSessionManagementInterface
      *
      * @param mixed $amazonSessionId
      * @param mixed|null $cartId
+     * @param mixed|null $orderId
+     * @param bool $isBuyNowFlow
      * @return mixed
      */
-    public function completeCheckoutSession($amazonSessionId, $cartId = null);
+    public function completeCheckoutSession(
+        $amazonSessionId, 
+        $cartId = null, 
+        $orderId = null, 
+        $isBuyNowFlow = false
+    );
 
     /**
      * Login to the Magento store using Amazon account information

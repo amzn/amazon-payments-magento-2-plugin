@@ -745,8 +745,12 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     /**
      * @inheritDoc
      */
-    public function completeCheckoutSession($amazonSessionId, $cartId = null, $orderId = null)
-    {
+    public function completeCheckoutSession(
+        $amazonSessionId, 
+        $cartId = null, 
+        $orderId = null,
+        $isBuyNowFlow = false
+    ) {
         if (!$amazonSessionId) {
             return $this->handleCompleteCheckoutSessionError(
                 self::GENERIC_COMPLETE_CHECKOUT_ERROR_MESSAGE,
@@ -777,7 +781,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $result['order_id'] = $orderId;
             $result['increment_id'] = $order->getIncrementId();
             // Order is canceled on failure
-            $amazonCheckoutResult = $this->completeAmazonCheckoutSession($amazonSessionId, $order, $quote);
+            $amazonCheckoutResult = $this->completeAmazonCheckoutSession($amazonSessionId, $order, $quote, $isBuyNowFlow);
             if (!$amazonCheckoutResult['success']) {
                 return $amazonCheckoutResult;
             }
@@ -1234,16 +1238,30 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param string $amazonSessionId
      * @param OrderInterface $order
      * @param CartInterface $quote
+     * @param bool $isBuyNowFlow
      * @return array
      */
-    private function completeAmazonCheckoutSession($amazonSessionId, $order, $quote)
+    private function completeAmazonCheckoutSession($amazonSessionId, $order, $quote, $isBuyNowFlow = false)
     {
-        $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
-            $order->getStoreId(),
-            $amazonSessionId,
-            $order->getGrandTotal(),
-            $order->getOrderCurrencyCode()
-        );
+        if ($isBuyNowFlow) {
+            $amazonCheckoutSession = $this->amazonAdapter->getCheckoutSession($order->getStoreId(), $amazonSessionId);
+
+            $amazonCompleteCheckoutResult = $this->amazonAdapter->finalizeCheckoutSession(
+                $order->getStoreId(),
+                $amazonSessionId,
+                $order->getGrandTotal(),
+                $order->getOrderCurrencyCode(),
+                $amazonCheckoutSession['shippingAddress'] ?? null,
+                $amazonCheckoutSession['billingAddress'] ?? null
+            );
+        } else {
+            $amazonCompleteCheckoutResult = $this->amazonAdapter->completeCheckoutSession(
+                $order->getStoreId(),
+                $amazonSessionId,
+                $order->getGrandTotal(),
+                $order->getOrderCurrencyCode()
+            );
+        }
 
         $completeCheckoutStatus = $amazonCompleteCheckoutResult['status'] ?? '404';
 
