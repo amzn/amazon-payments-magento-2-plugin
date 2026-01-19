@@ -754,6 +754,10 @@ class AmazonPayAdapter
         if (empty($checkoutCancelUrl)) {
             $cancelUrl = $this->getDefaultCancelUrl();
         } else {
+            // If full URL, use as-is
+            if (preg_match('#^https?://#i', $checkoutCancelUrl)) {
+                return $checkoutCancelUrl;
+            }
             $cancelUrl = $this->url->getUrl($checkoutCancelUrl);
         }
 
