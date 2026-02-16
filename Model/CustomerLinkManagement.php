@@ -23,6 +23,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Math\Random;
 
 class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementInterface
 {
@@ -52,6 +53,11 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     private $accountManagement;
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * CustomerLinkManagement constructor
      *
      * @param CustomerLinkRepositoryInterface $customerLinkRepository
@@ -59,6 +65,7 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
      * @param CustomerInterface               $customerInterface
      * @param CustomerInterfaceFactory        $customerDataFactory
      * @param AccountManagementInterface      $accountManagement
+     * @param Random                          $random
      */
     public function __construct(
         CustomerLinkRepositoryInterface $customerLinkRepository,
@@ -66,12 +73,14 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
         CustomerInterface $customerInterface,
         CustomerInterfaceFactory $customerDataFactory,
         AccountManagementInterface $accountManagement,
+        Random $random
     ) {
         $this->customerLinkRepository   = $customerLinkRepository;
         $this->customerLinkFactory = $customerLinkFactory;
         $this->customerInterface   = $customerInterface;
         $this->customerDataFactory = $customerDataFactory;
         $this->accountManagement   = $accountManagement;
+        $this->random              = $random;
     }
 
     /**
@@ -143,37 +152,24 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
         $lower   = 'abcdefghijklmnopqrstuvwxyz';
         $upper   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $digits  = '0123456789';
-        // Common specials; avoid whitespace and quotes to reduce edge-case issues
         $special = '!@#$%^&*()-_=+[]{};:,.?~';
 
-        // Ensure at least one from each class
-        $chars = [
-            $this->randChar($lower),
-            $this->randChar($upper),
-            $this->randChar($digits),
-            $this->randChar($special),
-        ];
+        $sets = [$lower, $upper, $digits, $special];
 
-        $all = $lower . $upper . $digits . $special;
-
-        // Fill the rest
-        for ($i = count($chars); $i < $length; $i++) {
-            $chars[] = $this->randChar($all);
+        $password = '';
+        foreach ($sets as $set) {
+            $password .= $this->random->getRandomString(1, $set);
         }
 
-        // Shuffle to avoid predictable positions
+        $all = implode('', $sets);
+        $remaining = max(0, $length - strlen($password));
+        if ($remaining > 0) {
+            $password .= $this->random->getRandomString($remaining, $all);
+        }
+
+        $chars = str_split($password);
         shuffle($chars);
 
         return implode('', $chars);
-    }
-
-    /**
-     * @param string $pool
-     * @return string
-     */
-    private function randChar($pool)
-    {
-        $max = strlen($pool) - 1;
-        return $pool[random_int(0, $max)];
     }
 }
