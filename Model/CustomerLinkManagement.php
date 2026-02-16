@@ -23,7 +23,6 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Math\Random;
 
 class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementInterface
 {
@@ -53,11 +52,6 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
     private $accountManagement;
 
     /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * CustomerLinkManagement constructor
      *
      * @param CustomerLinkRepositoryInterface $customerLinkRepository
@@ -65,7 +59,6 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
      * @param CustomerInterface               $customerInterface
      * @param CustomerInterfaceFactory        $customerDataFactory
      * @param AccountManagementInterface      $accountManagement
-     * @param Random                          $random
      */
     public function __construct(
         CustomerLinkRepositoryInterface $customerLinkRepository,
@@ -73,14 +66,12 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
         CustomerInterface $customerInterface,
         CustomerInterfaceFactory $customerDataFactory,
         AccountManagementInterface $accountManagement,
-        Random $random
     ) {
         $this->customerLinkRepository   = $customerLinkRepository;
         $this->customerLinkFactory = $customerLinkFactory;
         $this->customerInterface   = $customerInterface;
         $this->customerDataFactory = $customerDataFactory;
         $this->accountManagement   = $accountManagement;
-        $this->random              = $random;
     }
 
     /**
@@ -102,7 +93,7 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
         $customerData->setFirstname($sanitizedNames['first_name']);
         $customerData->setLastname($sanitizedNames['last_name']);
         $customerData->setEmail($amazonCustomer->getEmail());
-        $password = $this->random->getRandomString(64);
+        $password = $this->generatePassword();
 
         $customer = $this->accountManagement->createAccount($customerData, $password);
 
@@ -138,5 +129,51 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
             'first_name' => trim(preg_replace($pattern, '', htmlspecialchars_decode($customer->getFirstname()))),
             'last_name'  => trim(preg_replace($pattern, '', htmlspecialchars_decode($customer->getLastname())))
         ];
+    }
+
+    /**
+     * Generate a password that satisfies Magento's 4 character-class strength check:
+     * lower, upper, digits, special.
+     *
+     * @param int $length
+     * @return string
+     */
+    private function generatePassword($length = 64)
+    {
+        $lower   = 'abcdefghijklmnopqrstuvwxyz';
+        $upper   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $digits  = '0123456789';
+        // Common specials; avoid whitespace and quotes to reduce edge-case issues
+        $special = '!@#$%^&*()-_=+[]{};:,.?~';
+
+        // Ensure at least one from each class
+        $chars = [
+            $this->randChar($lower),
+            $this->randChar($upper),
+            $this->randChar($digits),
+            $this->randChar($special),
+        ];
+
+        $all = $lower . $upper . $digits . $special;
+
+        // Fill the rest
+        for ($i = count($chars); $i < $length; $i++) {
+            $chars[] = $this->randChar($all);
+        }
+
+        // Shuffle to avoid predictable positions
+        shuffle($chars);
+
+        return implode('', $chars);
+    }
+
+    /**
+     * @param string $pool
+     * @return string
+     */
+    private function randChar($pool)
+    {
+        $max = strlen($pool) - 1;
+        return $pool[random_int(0, $max)];
     }
 }
