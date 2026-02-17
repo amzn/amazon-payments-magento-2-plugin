@@ -27,6 +27,8 @@ use Magento\Framework\Math\Random;
 
 class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementInterface
 {
+    private const CHARS_SPECIAL = '!@#$%^&*()-_=+[]{};:,.?~';
+
     /**
      * @var CustomerLinkRepositoryInterface
      */
@@ -149,12 +151,12 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
      */
     private function generatePassword($length = 64)
     {
-        $lower   = 'abcdefghijklmnopqrstuvwxyz';
-        $upper   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $digits  = '0123456789';
-        $special = '!@#$%^&*()-_=+[]{};:,.?~';
-
-        $sets = [$lower, $upper, $digits, $special];
+        $sets = [
+            Random::CHARS_LOWERS,
+            Random::CHARS_UPPERS,
+            Random::CHARS_DIGITS,
+            self::CHARS_SPECIAL
+        ];
 
         $password = '';
         foreach ($sets as $set) {
