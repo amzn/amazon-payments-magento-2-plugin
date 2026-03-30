@@ -27,6 +27,8 @@ use Magento\Framework\Math\Random;
 
 class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementInterface
 {
+    private const CHARS_SPECIAL = '!@#$%^&*()-_=+[]{};:,.?~';
+
     /**
      * @var CustomerLinkRepositoryInterface
      */
@@ -102,7 +104,7 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
         $customerData->setFirstname($sanitizedNames['first_name']);
         $customerData->setLastname($sanitizedNames['last_name']);
         $customerData->setEmail($amazonCustomer->getEmail());
-        $password = $this->random->getRandomString(64);
+        $password = $this->generatePassword();
 
         $customer = $this->accountManagement->createAccount($customerData, $password);
 
@@ -138,5 +140,38 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
             'first_name' => trim(preg_replace($pattern, '', htmlspecialchars_decode($customer->getFirstname()))),
             'last_name'  => trim(preg_replace($pattern, '', htmlspecialchars_decode($customer->getLastname())))
         ];
+    }
+
+    /**
+     * Generate a password that satisfies Magento's 4 character-class strength check:
+     * lower, upper, digits, special.
+     *
+     * @param int $length
+     * @return string
+     */
+    private function generatePassword($length = 64)
+    {
+        $sets = [
+            Random::CHARS_LOWERS,
+            Random::CHARS_UPPERS,
+            Random::CHARS_DIGITS,
+            self::CHARS_SPECIAL
+        ];
+
+        $password = '';
+        foreach ($sets as $set) {
+            $password .= $this->random->getRandomString(1, $set);
+        }
+
+        $all = implode('', $sets);
+        $remaining = max(0, $length - strlen($password));
+        if ($remaining > 0) {
+            $password .= $this->random->getRandomString($remaining, $all);
+        }
+
+        $chars = str_split($password);
+        shuffle($chars);
+
+        return implode('', $chars);
     }
 }
