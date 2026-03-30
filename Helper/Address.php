@@ -241,6 +241,12 @@ class Address
      */
     protected function fuzzyCompare($a, $b)
     {
-        return strtolower(preg_replace("#[[:punct:]]#", "", $a)) == strtolower(preg_replace("#[[:punct:]]#", "", $b));
+        $a = ($a === null) ? '' : (string)$a;
+        $b = ($b === null) ? '' : (string)$b;
+
+        $a = strtolower(preg_replace("#[[:punct:]]#", "", $a));
+        $b = strtolower(preg_replace("#[[:punct:]]#", "", $b));
+
+        return $a === $b;
     }
 }
