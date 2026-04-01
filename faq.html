@@ -42,6 +42,7 @@
                 <li class="toctree-l2"><a class="reference internal" href="#display-issues">The Amazon Pay buttons are not displaying correctly</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#checkout-redirect">The Amazon Pay button is not redirecting to my checkout page</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#orders-not-created-in-magento">Why are there some transactions in Seller Central with no associated order in Magento?</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="#orders-canceled-in-magento">Why do we consistently see some canceled Magento orders paid with Amazon Pay?</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#transaction-ids-changed">Amazon Pay transaction IDs used to contain an 'A'; why do they now show a 'C'?</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="#cookies">Does the Amazon Pay module create any cookies?</a></li>
               </ul>
@@ -110,11 +111,15 @@
                   <div class="section" id="orders-not-created-in-magento">
                     <h2>Why are there some transactions in Seller Central with no associated order in Magento?<a class="headerlink" 
                       href="#orders-not-created-in-magento" title="Permalink to this headline">¶</a></h2>
+                      <div class="admonition caution">
+                        <p class="first admonition-title">Info</p>
+                        <p class="last">This only applies to versions of the module &lt; 5.17.0.</p>
+                      </div>
                       <p>There are distinct processes happening between Magento and Amazon Pay when a customer places an order. Occasionally, 
                         something exceptional may happen in the Magento system when attempting to create an order that will prevent it from 
                         being placed, whether it's some type of unusual customer behavior or general server error. This type of failure 
                         is unrelated to Amazon's processing, and in this case, Amazon will process the authorization as usual. However, the 
-                        authorization will be automatically canceled in Seller Central after 24 hours of inactivity. This shouldn't be of 
+                        authorization will be automatically canceled in Seller Central after 7 days of inactivity. This shouldn't be of
                         major concern if there is no further action taken on the transaction. The customer should be able to try the order 
                         again, either with Amazon Pay or another payment method. If you see a transaction in Seller Central that lists
                          <em>(Not Provided)</em> as the Seller Order ID, this is a good indication the customer was unable to successfully 
@@ -126,6 +131,23 @@
                         <span class="doc">Configuration</span></a> section for more details on payment options. You may also want to ensure 
                         that any other third-party plugins/extensions you may have installed are not prohibiting Amazon Pay as a payment 
                         method, or otherwise modifying quote data during the order placement process.</p>
+                  </div>
+                  <div class="section" id="orders-canceled-in-magento">
+                    <h2>Why do we consistently see some canceled Magento orders paid with Amazon Pay?<a class="headerlink"
+                      href="#orders-canceled-in-magento" title="Permalink to this headline">¶</a></h2>
+                      <div class="admonition caution">
+                        <p class="first admonition-title">Info</p>
+                        <p class="last">This only applies to versions of the module &geq; 5.17.0.</p>
+                      </div>
+                      <p>As of version 5.17.0, the Amazon Pay module has reversed the order of transaction processing in the Amazon Pay system
+                        and the order submission in Magento. Previously, the transaction was processed through Amazon (authorization/capture initiated)
+                        before placing the Magento order, but in the case there was a network failure or general problem preventing the order from
+                        being placed successfully, this could lead to “dangling” transactions in Seller Central with no associated Magento orders. These
+                        were difficult or impossible for the module to cancel or otherwise flag, leading to merchant confusion. Now, the module places
+                        the Magento order first, and can easily cancel the order if something goes wrong with the Amazon transaction. This logic reversal
+                        may lead to an increase in benign canceled orders in Magento, but should drastically reduce the frequency of orphaned transactions
+                        in Seller Central.
+                      </p>
                   </div>
                   <div class="section" id="transaction-ids-changed">
                     <h2>Amazon Pay transaction IDs used to contain an 'A'; why do they now show a 'C'?<a class="headerlink" 
