@@ -92,9 +92,9 @@ class AmazonChargePermissionCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
 
@@ -105,7 +105,7 @@ class AmazonChargePermissionCommand extends Command
             $orderResults = $this->orderRepository->getList($searchCriteria)->getItems();
             if (empty($orderResults)) {
                 $output->writeln('<info>No order found for order number ' . $orderId . '</info>');
-                return;
+                return defined('Command::SUCCESS') ? Command::SUCCESS : 0;
             }
             
             $order = reset($orderResults);
