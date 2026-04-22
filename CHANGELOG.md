@@ -1,5 +1,12 @@
 # Change Log
 
+## 5.18.4
+* Fixed null values passed to preg_replace causing deprecation warnings on PHP 8.1+
+* Fixed checkout cancel URL to return the full URL when a domain is configured
+* Fixed PHP error when buyer element is missing from Amazon response
+* Fixed reset password email template failing to render the reset link
+* Fixed password generation to include 4 character classes required by Magento password strength validation
+
 ## 5.18.3
 * Added compatibility with Magento 2.4.8/PHP 8.4
 * Fixed cron job error caused by function visibility
