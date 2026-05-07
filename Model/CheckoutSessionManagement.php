@@ -868,7 +868,21 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         }
 
         if (empty($quote->getCustomerEmail())) {
-            $quote->setCustomerEmail($amazonSession['buyer']['email']);
+            $email = null;
+            if (isset($amazonSession['buyer']) && is_array($amazonSession['buyer'])) {
+                $email = $amazonSession['buyer']['email'] ?? null;
+            }
+            if (!$email) {
+                $email = $quote->getBillingAddress() ? $quote->getBillingAddress()->getEmail() : null;
+            }
+            if (!$email) {
+                $email = $quote->getShippingAddress() ? $quote->getShippingAddress()->getEmail() : null;
+            }
+            if ($email) {
+                $quote->setCustomerEmail($email);
+            } else {
+                $this->logger->warning('Amazon Pay: buyer email missing; quote has no customer email.', ['amazonSessionId' => $amazonSessionId]);
+            }
         }
 
         // get payment to load it in the session, so that a salesrule that relies on payment method conditions
