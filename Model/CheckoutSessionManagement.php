@@ -773,6 +773,18 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $order = $this->orderRepository->get($orderId);
             $quote = $this->getQuote($order);
 
+            // Idempotency guard - prevent processing an order if it has already been processed;
+            // charge_permission_id is persisted only after a successful handlePayment;
+            // its presence means this completeSession call is a duplicate.
+            if ($order->getPayment()
+                && $order->getPayment()->getAdditionalInformation('charge_permission_id')) {
+                return [
+                    'success' => true,
+                    'order_id' => $order->getId(),
+                    'increment_id' => $order->getIncrementId(),
+                ];
+            }
+
             // @TODO: associate token with payment?
             $result['order_id'] = $orderId;
             $result['increment_id'] = $order->getIncrementId();
