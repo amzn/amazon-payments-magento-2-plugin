@@ -1,5 +1,10 @@
 # Change Log
 
+## 5.18.5
+* Added compatibility with PHP 8.5
+* Fixed JavaScript error "$elem.uniqueId is not a function" on checkout
+* Fixed compatibility with newer Symfony versions
+
 ## 5.18.4
 * Fixed null values passed to preg_replace causing deprecation warnings on PHP 8.1+
 * Fixed checkout cancel URL to return the full URL when a domain is configured
