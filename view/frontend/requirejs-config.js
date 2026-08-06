@@ -13,6 +13,9 @@
  * permissions and limitations under the License.
  */
 var config = {
+    deps: [
+        'Amazon_Pay/js/jquery-unique-id-polyfill'
+    ],
     config: {
         mixins: {
             'Magento_Checkout/js/view/payment/list': {
