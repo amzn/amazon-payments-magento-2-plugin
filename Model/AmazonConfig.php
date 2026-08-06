@@ -298,7 +298,7 @@ class AmazonConfig
             'jp' => 'JPY'
         ];
 
-        return array_key_exists($paymentRegion, $currencyCodeMap) ? $currencyCodeMap[$paymentRegion] : '';
+        return $currencyCodeMap[(string) $paymentRegion] ?? '';
     }
 
     /**
