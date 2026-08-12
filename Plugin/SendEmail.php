@@ -65,6 +65,16 @@ class SendEmail
                     !empty($subject->getStatusHistories()) &&
                     !$subject->getEmailSent()
                     ) {
+                    foreach ($subject->getAllItems() as $item) {
+                        if ($item->getQtyCanceled() > 0) {
+                            return $result;
+                        }
+                    }
+                    if ($subject->hasInvoices() &&
+                        !((float)$subject->getTotalPaid() > 0) &&
+                        !((float)$subject->getTotalInvoiced() > 0)) {
+                        return $result;
+                    }
                     $subject->setCanSendNewEmailFlag(true);
                     $this->orderSender->send($subject);
                 }
