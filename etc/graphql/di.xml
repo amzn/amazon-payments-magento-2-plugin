@@ -21,6 +21,8 @@
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
                 <item name="amazon_payment_region" xsi:type="string">payment/amazon_payment/payment_region</item>
+                <item name="amazon_payment_minicart_button_is_visible" xsi:type="string">payment/amazon_payment/minicart_button_is_visible</item>
+                <item name="amazon_payment_pwa_pp_button_is_visible" xsi:type="string">payment/amazon_payment/pwa_pp_button_is_visible</item>
             </argument>
         </arguments>
     </type>
