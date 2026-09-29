@@ -482,6 +482,11 @@
             <argument name="matcher" xsi:type="object">Amazon\Pay\Model\Customer\CompositeMatcher</argument>
         </arguments>
     </type>
+    <type name="Amazon\Pay\Model\SignInState">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Amazon\Pay\Helper\Session">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>

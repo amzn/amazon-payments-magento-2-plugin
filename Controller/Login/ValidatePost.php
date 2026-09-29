@@ -19,12 +19,16 @@ use Amazon\Pay\Api\CustomerLinkManagementInterface;
 use Amazon\Pay\Domain\ValidationCredentials;
 use Amazon\Pay\Helper\Session;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Encryption\Encryptor;
 
-class ValidatePost extends Action
+class ValidatePost extends Action implements HttpPostActionInterface
 {
     /**
      * @var Session
@@ -52,14 +56,26 @@ class ValidatePost extends Action
     private $customerLinkManagement;
 
     /**
+     * @var FormKeyValidator
+     */
+    private $formKeyValidator;
+
+    /**
+     * @var AuthenticationInterface
+     */
+    private $authentication;
+
+    /**
      * ValidatePost constructor.
      *
-     * @param Context                  $context
-     * @param Session                  $session
-     * @param AccountRedirect          $accountRedirect
-     * @param CustomerRegistry         $customerRegistry
-     * @param Encryptor                $encryptor
-     * @param customerLinkManagement   $customerLinkManagement
+     * @param Context                      $context
+     * @param Session                      $session
+     * @param AccountRedirect              $accountRedirect
+     * @param CustomerRegistry             $customerRegistry
+     * @param Encryptor                    $encryptor
+     * @param customerLinkManagement       $customerLinkManagement
+     * @param FormKeyValidator|null        $formKeyValidator
+     * @param AuthenticationInterface|null $authentication
      */
     public function __construct(
         Context $context,
@@ -67,7 +83,9 @@ class ValidatePost extends Action
         AccountRedirect $accountRedirect,
         CustomerRegistry $customerRegistry,
         Encryptor $encryptor,
-        CustomerLinkManagementInterface $customerLinkManagement
+        CustomerLinkManagementInterface $customerLinkManagement,
+        ?FormKeyValidator $formKeyValidator = null,
+        ?AuthenticationInterface $authentication = null
     ) {
         parent::__construct($context);
 
@@ -76,6 +94,10 @@ class ValidatePost extends Action
         $this->customerRegistry       = $customerRegistry;
         $this->encryptor              = $encryptor;
         $this->customerLinkManagement = $customerLinkManagement;
+        $this->formKeyValidator       = $formKeyValidator
+            ?: ObjectManager::getInstance()->get(FormKeyValidator::class);
+        $this->authentication         = $authentication
+            ?: ObjectManager::getInstance()->get(AuthenticationInterface::class);
     }
 
     /**
@@ -83,20 +105,40 @@ class ValidatePost extends Action
      */
     public function execute()
     {
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            $this->messageManager->addErrorMessage(
+                __('Your session has expired, please reload the page and try again.')
+            );
+            return $this->_redirect($this->_url->getRouteUrl('*/*/validate'));
+        }
+
         $credentials = $this->session->getValidationCredentials();
 
         if (null !== $credentials && $credentials instanceof ValidationCredentials) {
-            $password = $this->getRequest()->getParam('password');
-            $customerSecure = $this->customerRegistry->retrieveSecureData($credentials->getCustomerId());
+            $customerId = $credentials->getCustomerId();
+
+            // Check the password of the account being linked, honouring Magento's lockout rules
+            if ($this->authentication->isLocked($customerId)) {
+                $this->messageManager->addErrorMessage(__(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                ));
+                return $this->_redirect($this->_url->getRouteUrl('*/*/validate'));
+            }
+
+            $password = (string)$this->getRequest()->getParam('password');
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
             $hash = $customerSecure->getPasswordHash() ?? '';
 
-            if ($this->encryptor->validateHash($password, $hash)) {
-                $this->customerLinkManagement->updateLink($credentials->getCustomerId(), $credentials->getAmazonId());
-                $this->session->loginById($credentials->getCustomerId());
-            } else {
+            if (!$this->encryptor->validateHash($password, $hash)) {
+                $this->authentication->processAuthenticationFailure($customerId);
                 $this->messageManager->addErrorMessage(__('The password supplied was incorrect'));
                 return $this->_redirect($this->_url->getRouteUrl('*/*/validate'));
             }
+
+            $this->session->clearValidationCredentials();
+            $this->customerLinkManagement->updateLink($customerId, $credentials->getAmazonId());
+            $this->session->loginById($customerId);
         }
 
         return $this->accountRedirect->getRedirect();

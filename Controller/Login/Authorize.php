@@ -16,6 +16,7 @@
 namespace Amazon\Pay\Controller\Login;
 
 use Amazon\Pay\Domain\ValidationCredentials;
+use Amazon\Pay\Model\SignInState;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\NotFoundException;
 
@@ -31,6 +32,13 @@ class Authorize extends \Amazon\Pay\Controller\Login
         }
 
         if (!$this->isValidToken()) {
+            return $this->getRedirectLogin();
+        }
+
+        // The return URL is a plain GET, so make sure this browser is the one that started the sign-in
+        if (!$this->signInState->validate($this->getRequest()->getParam(SignInState::PARAM_NAME))) {
+            $this->logger->error('Amazon Sign-in return rejected: missing or invalid sign-in state');
+            $this->messageManager->addErrorMessage(__('Your Amazon sign-in session has expired. Please try again.'));
             return $this->getRedirectLogin();
         }
 

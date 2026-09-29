@@ -77,6 +77,11 @@ class AmazonPayAdapter
     private $subscriptionManager;
 
     /**
+     * @var \Amazon\Pay\Model\SignInState
+     */
+    private $signInState;
+
+    /**
      * AmazonPayAdapter constructor.
      *
      * @param \Amazon\Pay\Client\ClientFactoryInterface $clientFactory
@@ -89,6 +94,7 @@ class AmazonPayAdapter
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
+     * @param \Amazon\Pay\Model\SignInState|null $signInState
      */
     public function __construct(
         \Amazon\Pay\Client\ClientFactoryInterface $clientFactory,
@@ -100,7 +106,8 @@ class AmazonPayAdapter
         \Amazon\Pay\Model\Subscription\SubscriptionManager $subscriptionManager,
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\Response\RedirectInterface $redirect
+        \Magento\Framework\App\Response\RedirectInterface $redirect,
+        ?\Amazon\Pay\Model\SignInState $signInState = null
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
@@ -112,6 +119,8 @@ class AmazonPayAdapter
         $this->logger = $logger;
         $this->url = $url;
         $this->redirect = $redirect;
+        $this->signInState = $signInState
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Amazon\Pay\Model\SignInState::class);
     }
 
     /**
@@ -587,7 +596,9 @@ class AmazonPayAdapter
     }
 
     /**
-     * Generate login static signature for amazon.Pay.renderButton used by checkout.js
+     * Generate login signature for amazon.Pay.renderButton used by checkout.js
+     *
+     * The payload is per session, since signInReturnUrl carries the session's anti-CSRF sign-in state.
      *
      * @return string
      */
@@ -827,6 +838,9 @@ class AmazonPayAdapter
     protected function getSignInUrl()
     {
         $signInUrl = $this->amazonConfig->getSignInResultUrlPath();
-        return $this->url->getUrl($signInUrl);
+        return $this->url->getUrl(
+            $signInUrl,
+            ['_query' => [\Amazon\Pay\Model\SignInState::PARAM_NAME => $this->signInState->get()]]
+        );
     }
 }

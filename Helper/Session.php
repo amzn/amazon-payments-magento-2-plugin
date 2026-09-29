@@ -159,6 +159,16 @@ class Session
     }
 
     /**
+     * Remove validation credentials from session
+     *
+     * @return void
+     */
+    public function clearValidationCredentials()
+    {
+        $this->session->unsAmazonValidationCredentials();
+    }
+
+    /**
      * Check if Magento account is logged in
      *
      * @return bool

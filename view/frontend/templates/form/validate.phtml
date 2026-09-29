@@ -37,6 +37,7 @@ use Magento\Framework\Escaper;
                   method="post"
                   id="form-validate"
                   data-mage-init='{"validation":{}}'>
+                <?= $block->getBlockHtml('formkey') ?>
 
                 <fieldset class="fieldset" data-hasrequired="<?= $escaper->escapeHtml(__('* Required Fields')) ?>">
                     <div class="field email required">

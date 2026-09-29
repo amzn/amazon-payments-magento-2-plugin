@@ -30,6 +30,7 @@ define([
             },
 
             _loadButtonConfig: function (config, callback) {
+                // Always reload: the sign-in payload carries a single-use, per-session anti-CSRF state
                 checkoutSessionConfigLoad(function (checkoutSessionConfig) {
                     callback({
                         merchantId: checkoutSessionConfig['merchant_id'],
@@ -46,7 +47,7 @@ define([
                             publicKeyId: checkoutSessionConfig['public_key_id']
                         }
                     });
-                }.bind(this), false);
+                }.bind(this), true);
             },
 
             /**
