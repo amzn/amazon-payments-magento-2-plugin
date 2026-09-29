@@ -81,7 +81,11 @@ abstract class Login extends Action
     protected $matcher;
 
     /**
+     * Kept so existing subclasses don't break; it will be removed in the next release.
+     *
      * @var CustomerLinkManagementInterface
+     * @deprecated No longer used: linking only happens after password confirmation in ValidatePost
+     * @see \Amazon\Pay\Controller\Login\ValidatePost::execute()
      */
     protected $customerLinkManagement;
 
@@ -141,7 +145,7 @@ abstract class Login extends Action
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      * @param AccountRedirect $accountRedirect
      * @param MatcherInterface $matcher
-     * @param CustomerLinkManagementInterface $customerLinkManagement
+     * @param CustomerLinkManagementInterface $customerLinkManagement Deprecated, unused; removed in the next release
      * @param CustomerSession $customerSession
      * @param Session $session
      * @param LoggerInterface $logger
