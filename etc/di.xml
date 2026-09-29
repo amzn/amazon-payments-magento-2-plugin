@@ -447,10 +447,11 @@
     <preference for="Amazon\Pay\Api\Data\CustomerLinkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <type name="Amazon\Pay\Model\Customer\MatcherInterface">
         <arguments>
+            <!-- An existing link or the Amazon email decides the account; the session is only a fallback -->
             <argument name="matchers" xsi:type="array">
-                <item name="sessionmatcher" xsi:type="object">Amazon\Pay\Model\Customer\SessionMatcher</item>
                 <item name="idmatcher" xsi:type="object">Amazon\Pay\Model\Customer\IdMatcher</item>
                 <item name="emailmatcher" xsi:type="object">Amazon\Pay\Model\Customer\EmailMatcher</item>
+                <item name="sessionmatcher" xsi:type="object">Amazon\Pay\Model\Customer\SessionMatcher</item>
             </argument>
         </arguments>
     </type>
