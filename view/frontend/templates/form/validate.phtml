@@ -38,6 +38,10 @@ use Magento\Framework\Escaper;
                   id="form-validate"
                   data-mage-init='{"validation":{}}'>
                 <?= $block->getBlockHtml('formkey') ?>
+                <?php if ($checkoutSessionId = $block->getCheckoutSessionId()): ?>
+                <input type="hidden" name="amazonCheckoutSessionId"
+                       value="<?= $escaper->escapeHtmlAttr($checkoutSessionId) ?>">
+                <?php endif; ?>
 
                 <fieldset class="fieldset" data-hasrequired="<?= $escaper->escapeHtml(__('* Required Fields')) ?>">
                     <div class="field email required">
