@@ -33,6 +33,12 @@ class Checkout extends \Amazon\Pay\Controller\Login
             return $this->_redirect('checkout/cart');
         }
 
+        // Anyone can send a shopper to this return URL with their own checkout session, so it never matches
+        // or links the account of a logged-in customer: they just continue to the checkout review
+        if ($this->amazonConfig->isLwaEnabled() && $this->customerSession->isLoggedIn()) {
+            return $this->redirectToCheckoutReview($checkoutSessionId);
+        }
+
         try {
             $checkoutSession = $this->amazonAdapter->getCheckoutSession(
                 $this->storeManager->getStore()->getId(),
@@ -65,7 +71,7 @@ class Checkout extends \Amazon\Pay\Controller\Login
                                 ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]
                             )
                         );
-                    } elseif (!$this->customerSession->isLoggedIn()) {
+                    } else {
                         $this->session->login($processed);
                     }
                 } else {
@@ -84,6 +90,17 @@ class Checkout extends \Amazon\Pay\Controller\Login
             $this->_eventManager->dispatch('amazon_login_authorize_error', ['exception' => $e]);
         }
 
+        return $this->redirectToCheckoutReview($checkoutSessionId);
+    }
+
+    /**
+     * Redirect to the checkout review for the Amazon checkout session
+     *
+     * @param string $checkoutSessionId
+     * @return \Magento\Framework\App\ResponseInterface
+     */
+    private function redirectToCheckoutReview($checkoutSessionId)
+    {
         $checkoutUrl = $this->amazonConfig->getCheckoutReviewUrlPath();
         return $this->_redirect($checkoutUrl, ['_query' => ['amazonCheckoutSessionId' => $checkoutSessionId]]);
     }
