@@ -58,7 +58,7 @@ class Authorize extends \Amazon\Pay\Controller\Login
                     $this->session->login($processed);
                 }
             } else {
-                $this->logger->error('Amazon buyerId is empty. Token: ' . $token);
+                $this->logger->error('Amazon buyerId is empty');
             }
         } catch (ValidatorException $e) {
             $this->logger->error($e);

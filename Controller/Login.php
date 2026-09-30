@@ -210,11 +210,13 @@ abstract class Login extends Action
     /**
      * Redirect buyer to Magento customer login URL
      *
+     * Without a referer back to this page, which would carry the buyer token into the login URL.
+     *
      * @return ResponseInterface
      */
     protected function getRedirectLogin()
     {
-        return $this->_redirect($this->customerUrl->getLoginUrl());
+        return $this->_redirect(Url::ROUTE_ACCOUNT_LOGIN);
     }
 
     /**

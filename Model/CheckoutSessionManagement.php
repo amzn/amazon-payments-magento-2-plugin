@@ -1145,7 +1145,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     protected function getBuyerIdError($buyerToken)
     {
-        $this->logger->error('Amazon buyerId is empty. Token: ' . $buyerToken);
+        $this->logger->error('Amazon buyerId is empty');
         return [
             'success' => false,
             'message' => __('Amazon buyerId is empty')
