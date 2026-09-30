@@ -85,6 +85,8 @@ interface CheckoutSessionManagementInterface
     /**
      * Links entries in the amazon_customer table to Magento customer records
      *
+     * The password is checked like a store login, including the account lockout after failed attempts.
+     *
      * @param mixed $buyerToken
      * @param string $password
      * @return mixed
