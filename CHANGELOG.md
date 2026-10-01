@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.18.6
+* Improved account linking for Amazon Sign-in
+* Improved handling of the return from Amazon checkout for signed-in customers
+
 ## 5.18.5
 * Added compatibility with PHP 8.5
 * Fixed JavaScript error "$elem.uniqueId is not a function" on checkout
