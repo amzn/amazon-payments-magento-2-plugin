@@ -46,6 +46,18 @@ class Validate extends Template
     }
 
     /**
+     * Get the Amazon checkout session ID to carry through the password confirmation, if any
+     *
+     * @return string
+     */
+    public function getCheckoutSessionId()
+    {
+        $checkoutSessionId = (string)$this->getRequest()->getParam('amazonCheckoutSessionId');
+
+        return preg_match('/^[A-Za-z0-9-]{1,100}$/', $checkoutSessionId) ? $checkoutSessionId : '';
+    }
+
+    /**
      * Return true if guest checkout is allowed
      *
      * @return bool

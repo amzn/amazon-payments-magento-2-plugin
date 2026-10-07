@@ -19,6 +19,12 @@ use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Amazon\Pay\Model\Customer\MatcherInterface;
 use Magento\Customer\Model\Session;
 
+/**
+ * Matches the logged-in customer
+ *
+ * A match from this matcher doesn't prove the shopper owns the Amazon identity, so callers must never
+ * link a new Amazon ID to it without confirming the customer's password (see ValidationCredentials).
+ */
 class SessionMatcher implements MatcherInterface
 {
     /**
