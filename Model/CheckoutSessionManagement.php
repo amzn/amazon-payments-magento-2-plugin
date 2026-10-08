@@ -41,6 +41,11 @@ use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Authorization\Model\UserContextInterface as UserContext;
 use Magento\Framework\Phrase\Renderer\Translate as Translate;
 use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\EmailNotConfirmedException;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\State\UserLockedException;
 
 class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManagementInterface
 {
@@ -78,12 +83,16 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $customerRepository;
 
     /**
-     * @var CustomerRegistry
+     * @var \Magento\Customer\Model\CustomerRegistry
+     * @deprecated No longer used: passwords are checked with AccountManagementInterface::authenticate()
+     * @see setCustomerLink()
      */
     private $customerRegistry;
 
     /**
-     * @var Encryptor
+     * @var \Magento\Framework\Encryption\Encryptor
+     * @deprecated No longer used: passwords are checked with AccountManagementInterface::authenticate()
+     * @see setCustomerLink()
      */
     private $encryptor;
 
@@ -236,6 +245,11 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     private $updateCouponUsages;
 
     /**
+     * @var AccountManagementInterface
+     */
+    private $accountManagement;
+
+    /**
      * CheckoutSessionManagement constructor.
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -273,6 +287,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      * @param Session $session
      * @param Translate $translationRenderer
      * @param UpdateCouponUsages $updateCouponUsages
+     * @param AccountManagementInterface|null $accountManagement
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -309,7 +324,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         \Amazon\Pay\Logger\Logger $logger,
         Session $session,
         Translate $translationRenderer,
-        UpdateCouponUsages $updateCouponUsages
+        UpdateCouponUsages $updateCouponUsages,
+        ?AccountManagementInterface $accountManagement = null
     ) {
         $this->storeManager = $storeManager;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -346,6 +362,8 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
         $this->session = $session;
         $this->translationRenderer = $translationRenderer;
         $this->updateCouponUsages = $updateCouponUsages;
+        $this->accountManagement = $accountManagement
+            ?: ObjectManager::getInstance()->get(AccountManagementInterface::class);
     }
 
     /**
@@ -1127,7 +1145,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
      */
     protected function getBuyerIdError($buyerToken)
     {
-        $this->logger->error('Amazon buyerId is empty. Token: ' . $buyerToken);
+        $this->logger->error('Amazon buyerId is empty');
         return [
             'success' => false,
             'message' => __('Amazon buyerId is empty')
@@ -1151,6 +1169,20 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
     }
 
     /**
+     * Get the response for a customer link that was refused
+     *
+     * @param \Magento\Framework\Phrase|string $message
+     * @return array
+     */
+    private function getCustomerLinkError($message)
+    {
+        return [
+            'success' => false,
+            'message' => $message
+        ];
+    }
+
+    /**
      * Link an amazon_customer to a Magento customer
      *
      * @param mixed $buyerToken
@@ -1164,21 +1196,22 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             $amazonCustomer = $this->getAmazonCustomer($buyerInfo);
 
             if ($amazonCustomer) {
-                $magentoCustomer = $this->customerRepository->get($amazonCustomer->getEmail());
-                $customerSecure = $this->customerRegistry->retrieveSecureData($magentoCustomer->getId());
-                $hash = $customerSecure->getPasswordHash() ?? '';
-
-                if ($this->encryptor->validateHash($password, $hash)) {
-                    $this->customerHelper->updateCustomerLink($magentoCustomer->getId(), $amazonCustomer->getId());
-                    return $this->signIn($buyerToken);
-                } else {
-                    return [
-                        [
-                            'success' => false,
-                            'message' => __('The password supplied was incorrect')
-                        ]
-                    ];
+                try {
+                    // Same check as a store login: honours lockout and email confirmation, and counts failures
+                    $magentoCustomer = $this->accountManagement->authenticate($amazonCustomer->getEmail(), $password);
+                } catch (UserLockedException $e) {
+                    return [$this->getCustomerLinkError(__(
+                        'The account sign-in was incorrect or your account is disabled temporarily. '
+                        . 'Please wait and try again later.'
+                    ))];
+                } catch (EmailNotConfirmedException $e) {
+                    return [$this->getCustomerLinkError($e->getMessage())];
+                } catch (InvalidEmailOrPasswordException $e) {
+                    return [$this->getCustomerLinkError(__('The password supplied was incorrect'))];
                 }
+
+                $this->customerHelper->updateCustomerLink($magentoCustomer->getId(), $amazonCustomer->getId());
+                return $this->signIn($buyerToken);
             } else {
                 $result = $this->getBuyerIdError($buyerToken);
             }

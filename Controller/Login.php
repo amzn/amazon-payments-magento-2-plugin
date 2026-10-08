@@ -19,6 +19,7 @@ use Amazon\Pay\Api\CheckoutSessionManagementInterface;
 use Amazon\Pay\Api\Data\AmazonCustomerInterface;
 use Amazon\Pay\Domain\AmazonCustomerFactory;
 use Amazon\Pay\Model\AmazonConfig;
+use Amazon\Pay\Model\SignInState;
 use Amazon\Pay\Model\Validator\AccessTokenRequestValidator;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Amazon\Pay\Helper\Session;
@@ -31,6 +32,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManager;
 use Psr\Log\LoggerInterface;
 use Amazon\Pay\Model\Customer\MatcherInterface;
@@ -79,7 +81,11 @@ abstract class Login extends Action
     protected $matcher;
 
     /**
+     * Kept so existing subclasses don't break; it will be removed in the next release.
+     *
      * @var CustomerLinkManagementInterface
+     * @deprecated No longer used: linking only happens after password confirmation in ValidatePost
+     * @see \Amazon\Pay\Controller\Login\ValidatePost::execute()
      */
     protected $customerLinkManagement;
 
@@ -124,6 +130,11 @@ abstract class Login extends Action
     protected $customerHelper;
 
     /**
+     * @var SignInState
+     */
+    protected $signInState;
+
+    /**
      * Login constructor.
      *
      * @param Context $context
@@ -134,7 +145,7 @@ abstract class Login extends Action
      * @param AccessTokenRequestValidator $accessTokenRequestValidator
      * @param AccountRedirect $accountRedirect
      * @param MatcherInterface $matcher
-     * @param CustomerLinkManagementInterface $customerLinkManagement
+     * @param CustomerLinkManagementInterface $customerLinkManagement Deprecated, unused; removed in the next release
      * @param CustomerSession $customerSession
      * @param Session $session
      * @param LoggerInterface $logger
@@ -143,6 +154,7 @@ abstract class Login extends Action
      * @param AccountManagementInterface $accountManagement
      * @param CheckoutSessionManagementInterface $checkoutSessionManagement
      * @param customerHelper $customerHelper
+     * @param SignInState|null $signInState
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -162,7 +174,8 @@ abstract class Login extends Action
         UrlInterface $url,
         AccountManagementInterface $accountManagement,
         CheckoutSessionManagementInterface $checkoutSessionManagement,
-        CustomerHelper $customerHelper
+        CustomerHelper $customerHelper,
+        ?SignInState $signInState = null
     ) {
         $this->amazonCustomerFactory       = $amazonCustomerFactory;
         $this->amazonAdapter               = $amazonAdapter;
@@ -180,6 +193,7 @@ abstract class Login extends Action
         $this->accountManagement           = $accountManagement;
         $this->checkoutSessionManagement   = $checkoutSessionManagement;
         $this->customerHelper              = $customerHelper;
+        $this->signInState                 = $signInState ?: ObjectManager::getInstance()->get(SignInState::class);
         parent::__construct($context);
     }
 
@@ -196,11 +210,13 @@ abstract class Login extends Action
     /**
      * Redirect buyer to Magento customer login URL
      *
+     * Without a referer back to this page, which would carry the buyer token into the login URL.
+     *
      * @return ResponseInterface
      */
     protected function getRedirectLogin()
     {
-        return $this->_redirect($this->customerUrl->getLoginUrl());
+        return $this->_redirect(Url::ROUTE_ACCOUNT_LOGIN);
     }
 
     /**
@@ -230,7 +246,8 @@ abstract class Login extends Action
      * Attempts to match Amazon customer data to Magento customer data. If the customer did not
      * previously exist, an account is created for them. If a match is found, but IDs are different,
      * the buyer is prompted for their Magento store password in order to link the Magento account
-     * to the Amazon account.
+     * to the Amazon account. This applies to a logged-in session too: an Amazon ID is never linked
+     * to an existing account without the password of that account.
      *
      * @param AmazonCustomerInterface $amazonCustomer
      * @return mixed
@@ -244,11 +261,7 @@ abstract class Login extends Action
         }
 
         if ($amazonCustomer->getId() != $customerData->getExtensionAttributes()->getAmazonId()) {
-            if (! $this->session->isLoggedIn()) {
-                return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());
-            }
-
-            $this->customerLinkManagement->updateLink($customerData->getId(), $amazonCustomer->getId());
+            return new ValidationCredentials($customerData->getId(), $amazonCustomer->getId());
         }
 
         return $customerData;

@@ -81,11 +81,29 @@ class OrderCustomerManagement
             $isAmazonPayment   = $paymentMethodName === Config::CODE;
             $amazonCustomer    = $this->loginSessionHelper->getAmazonCustomer();
 
-            if ($isAmazonPayment && $amazonCustomer) {
+            // The Amazon customer in session isn't proof of ownership on its own, so only link it
+            // to the new account when that account uses the same (Amazon-verified) email address
+            if ($isAmazonPayment && $amazonCustomer && $this->isSameEmail($amazonCustomer, $result)) {
                 $this->customerLinkManagement->updateLink($result->getId(), $amazonCustomer->getId());
+                $this->loginSessionHelper->clearAmazonCustomer();
             }
         }
 
         return $result;
+    }
+
+    /**
+     * True if the Amazon customer and the Magento customer have the same email address
+     *
+     * @param \Amazon\Pay\Api\Data\AmazonCustomerInterface $amazonCustomer
+     * @param CustomerInterface $customer
+     * @return bool
+     */
+    private function isSameEmail($amazonCustomer, $customer)
+    {
+        $amazonEmail = (string)$amazonCustomer->getEmail();
+
+        return $amazonEmail !== ''
+            && strcasecmp($amazonEmail, (string)$customer->getEmail()) === 0;
     }
 }

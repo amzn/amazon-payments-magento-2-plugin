@@ -6,4 +6,5 @@
         <section name="checkout-data"/>
         <section name="last-ordered-items"/>
     </action>
+    <action name="amazon_pay/login/validatepost"/>
 </config>
