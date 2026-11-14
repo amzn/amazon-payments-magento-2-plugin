@@ -147,7 +147,12 @@ abstract class AbstractOperation
     protected function closeLastTransaction($order)
     {
         $transactionId = $order->getPayment()->getLastTransId();
+        if (!$transactionId) {
+            return;
+        }
         $transaction = $this->getTransaction($transactionId);
-        $transaction->setIsClosed(true)->save();
+        if ($transaction) {
+            $transaction->setIsClosed(true)->save();
+        }
     }
 }
