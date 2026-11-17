@@ -118,6 +118,7 @@ class AmazonChargePermissionCommand extends Command
                 $output->writeLn('<error>Error retrieving charge permission from Amazon.</error>');
             }
 
+            $referenceID = null;
             if (isset($resp['merchantMetadata']['merchantReferenceId'])) {
                 $referenceID = $resp['merchantMetadata']['merchantReferenceId'];
             }

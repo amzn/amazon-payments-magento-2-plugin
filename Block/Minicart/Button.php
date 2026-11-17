@@ -45,7 +45,7 @@ class Button extends Template implements ShortcutInterface
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
 
@@ -133,9 +133,7 @@ class Button extends Template implements ShortcutInterface
      */
     public function getImageUrl()
     {
-        return $this->config->getExpressCheckoutInContextImageUrl(
-            $this->localeResolver->getLocale()
-        );
+        return $this->amazonConfig->getAmazonIcon()['url'];
     }
 
     /**

@@ -15,7 +15,6 @@
  */
 namespace Amazon\Pay\Plugin;
 
-use ParadoxLabs\Subscriptions\Helper\Vault;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Amazon\Pay\Gateway\Config\Config;
 use Amazon\Pay\Helper\SubscriptionHelper;
@@ -38,13 +37,13 @@ class VaultHelper
     /**
      * Get token payment descriptor when payment method is used
      *
-     * @param Vault $vault
+     * @param object $vault
      * @param callable $proceed
      * @param PaymentTokenInterface $card
      * @return string
      */
     public function aroundGetCardLabel(
-        Vault $vault,
+        $vault,
         callable $proceed,
         PaymentTokenInterface $card
     ) {

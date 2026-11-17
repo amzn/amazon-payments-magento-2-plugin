@@ -15,7 +15,6 @@
  */
 namespace Amazon\Pay\Plugin;
 
-use ParadoxLabs\Subscriptions\Model\Service\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
@@ -50,13 +49,13 @@ class PaymentTokenService
     /**
      * Filter card tokens
      *
-     * @param Payment $paymentService
+     * @param object $paymentService
      * @param PaymentTokenInterface[] $cards
      * @param CartInterface $quote
      * @return PaymentTokenInterface[]
      */
     public function afterGetActiveCustomerCardsForQuote(
-        Payment $paymentService,
+        $paymentService,
         $cards,
         CartInterface $quote
     ) {
@@ -94,14 +93,14 @@ class PaymentTokenService
     /**
      * Update charge permission where needed
      *
-     * @param Payment $paymentService
+     * @param object $paymentService
      * @param Quote $quote
      * @param PaymentTokenInterface $card
      * @param array $paymentData
      * @return mixed
      */
     public function beforeUpdatePayment(
-        Payment $paymentService,
+        $paymentService,
         Quote $quote,
         PaymentTokenInterface $card,
         array $paymentData
@@ -149,7 +148,7 @@ class PaymentTokenService
     /**
      * Delete the previous token if this was the last subscription it was used for
      *
-     * @param Payment $paymentService
+     * @param object $paymentService
      * @param mixed $result
      * @param Quote $quote
      * @param PaymentTokenInterface $card
@@ -157,7 +156,7 @@ class PaymentTokenService
      * @return void
      */
     public function afterUpdatePayment(
-        Payment $paymentService,
+        $paymentService,
         $result,
         Quote $quote,
         PaymentTokenInterface $card,

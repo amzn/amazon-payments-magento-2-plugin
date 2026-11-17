@@ -49,6 +49,11 @@ class AsyncUpdater
     private $logger;
 
     /**
+     * @var ResourceModel\Async
+     */
+    private $asyncResource;
+
+    /**
      * AsyncUpdater constructor
      *
      * @param \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory
@@ -57,6 +62,7 @@ class AsyncUpdater
      * @param \Magento\Framework\Notification\NotifierInterface $adminNotifier
      * @param \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger
      * @param \Psr\Log\LoggerInterface $logger
+     * @param ResourceModel\Async $asyncResource
      */
     public function __construct(
         \Amazon\Pay\Model\AsyncManagement\ChargeFactory $chargeFactory,
@@ -64,7 +70,8 @@ class AsyncUpdater
         \Amazon\Pay\Api\Data\AsyncInterfaceFactory $asyncFactory,
         \Magento\Framework\Notification\NotifierInterface $adminNotifier,
         \Amazon\Pay\Logger\AsyncIpnLogger $asyncLogger,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        ResourceModel\Async $asyncResource
     ) {
         $this->chargeFactory = $chargeFactory;
         $this->refundFactory = $refundFactory;
@@ -72,6 +79,7 @@ class AsyncUpdater
         $this->adminNotifier = $adminNotifier;
         $this->asyncLogger = $asyncLogger;
         $this->logger = $logger;
+        $this->asyncResource = $asyncResource;
     }
 
     /**
@@ -83,7 +91,7 @@ class AsyncUpdater
     public function processPending($async)
     {
         try {
-            $async->getResource()->beginTransaction();
+            $this->asyncResource->beginTransaction();
             $async->setLockOnLoad(true);
             $asyncComplete = false;
 
@@ -100,11 +108,11 @@ class AsyncUpdater
                 $this->completePending($async);
             }
 
-            $async->getResource()->commit();
+            $this->asyncResource->commit();
         } catch (\Exception $e) {
             $this->logger->error($e);
             $this->asyncLogger->error($e);
-            $async->getResource()->rollBack();
+            $this->asyncResource->rollBack();
         }
     }
 
@@ -116,6 +124,7 @@ class AsyncUpdater
      */
     protected function completePending($async)
     {
-        $async->setIsPending(false)->save();
+        $async->setIsPending(false);
+        $this->asyncResource->save($async);
     }
 }

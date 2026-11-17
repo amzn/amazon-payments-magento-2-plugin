@@ -137,6 +137,7 @@ class PerformKeyUpgrade implements DataPatchInterface
                 $scopeId
             );
         }
+        return $this;
     }
 
     /**

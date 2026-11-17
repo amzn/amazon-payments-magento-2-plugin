@@ -69,7 +69,7 @@ class PaymentTokenRepository
         callable $proceed,
         PaymentTokenInterface $paymentToken
     ) {
-        if (!($this->subscriptionManager instanceof AmazonSubscriptionManager)) {
+        if (!($this->subscriptionManager instanceof AmazonSubscriptionManager) && class_exists(Status::class)) {
             if ($paymentToken->getPaymentMethodCode() === Config::CODE) {
                 // Cancel associated AP subscriptions
                 $subscriptionsPaidWithToken = $this->helper->getSubscriptionsPaidWithToken($paymentToken);

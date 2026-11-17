@@ -19,6 +19,6 @@ namespace Amazon\Pay\Logger;
 /**
  * Enables implementation of custom log file.
  */
-class AlexaLogger extends \Monolog\Logger
+class AlexaLogger extends \Magento\Framework\Logger\Monolog
 {
 }

@@ -27,13 +27,23 @@ class LegacyPaymentHandler
     private $transactionRepository;
 
     /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction
+     */
+    private $transactionResource;
+
+    /**
      * LegacyPaymentHandler constructor
      *
      * @param TransactionRepository $transactionRepository
+     * @param \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction $transactionResource
      */
-    public function __construct(TransactionRepository $transactionRepository)
+    public function __construct(
+        TransactionRepository $transactionRepository,
+        \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction $transactionResource
+    )
     {
         $this->transactionRepository = $transactionRepository;
+        $this->transactionResource = $transactionResource;
     }
 
     /**
@@ -61,9 +71,11 @@ class LegacyPaymentHandler
                     $authTransaction->getOrderId()
                 )) {
                     // update legacy captures, where the first capture got assigned the charge ID
-                    $legacyTransaction->setTxnId($newTxnId . '-legacy')->save();
+                    $legacyTransaction->setTxnId($newTxnId . '-legacy');
+                    $this->transactionResource->save($legacyTransaction);
                 }
-                $authTransaction->setTxnId($newTxnId)->save();
+                $authTransaction->setTxnId($newTxnId);
+                $this->transactionResource->save($authTransaction);
             }
         }
 

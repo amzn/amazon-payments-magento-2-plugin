@@ -51,6 +51,11 @@ class Refund extends AbstractOperation
     private $urlBuilder;
 
     /**
+     * @var \Magento\Sales\Model\ResourceModel\Order
+     */
+    private $orderResource;
+
+    /**
      * Refund constructor.
      *
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -62,6 +67,7 @@ class Refund extends AbstractOperation
      * @param \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
      * @param \Magento\Backend\Model\UrlInterface $urlBuilder
+     * @param \Magento\Sales\Model\ResourceModel\Order $orderResource
      */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -72,7 +78,8 @@ class Refund extends AbstractOperation
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Notification\NotifierInterface $notifier,
-        \Magento\Backend\Model\UrlInterface $urlBuilder
+        \Magento\Backend\Model\UrlInterface $urlBuilder,
+        \Magento\Sales\Model\ResourceModel\Order $orderResource
     ) {
         parent::__construct($orderRepository, $transactionRepository, $searchCriteriaBuilder);
         $this->amazonAdapter = $amazonAdapter;
@@ -81,6 +88,7 @@ class Refund extends AbstractOperation
         $this->transactionBuilder = $transactionBuilder;
         $this->notifier = $notifier;
         $this->urlBuilder = $urlBuilder;
+        $this->orderResource = $orderResource;
     }
 
     /**
@@ -99,7 +107,7 @@ class Refund extends AbstractOperation
             if (isset($refund['statusDetails']) && $refund['statusDetails']['state'] == 'Declined') {
 
                 $order->addStatusHistoryComment($refund['statusDetails']['reasonDescription']);
-                $order->save();
+                $this->orderResource->save($order);
 
                 $this->notifier->addNotice(
                     __('Refund declined'),

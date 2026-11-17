@@ -62,6 +62,11 @@ class Charge extends AbstractOperation
     private $urlBuilder;
 
     /**
+     * @var \Magento\Sales\Model\ResourceModel\Order
+     */
+    private $orderResource;
+
+    /**
      * @var \Amazon\Pay\Model\AmazonConfig
      */
     private $amazonConfig;
@@ -86,6 +91,7 @@ class Charge extends AbstractOperation
      * @param \Magento\Backend\Model\UrlInterface $urlBuilder
      * @param \Amazon\Pay\Model\AmazonConfig $amazonConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Sales\Model\ResourceModel\Order $orderResource
      */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -99,7 +105,8 @@ class Charge extends AbstractOperation
         \Magento\Framework\Notification\NotifierInterface $notifier,
         \Magento\Backend\Model\UrlInterface $urlBuilder,
         \Amazon\Pay\Model\AmazonConfig $amazonConfig,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Sales\Model\ResourceModel\Order $orderResource
     ) {
         parent::__construct($orderRepository, $transactionRepository, $searchCriteriaBuilder);
         $this->amazonAdapter = $amazonAdapter;
@@ -109,6 +116,7 @@ class Charge extends AbstractOperation
         $this->transactionBuilder = $transactionBuilder;
         $this->notifier = $notifier;
         $this->urlBuilder = $urlBuilder;
+        $this->orderResource = $orderResource;
         $this->amazonConfig = $amazonConfig;
         $this->eventManager = $eventManager;
     }
@@ -237,7 +245,7 @@ class Charge extends AbstractOperation
                 ->setFailSafe(true)
                 ->build(Transaction::TYPE_AUTH);
             $payment->addTransactionCommentsToOrder($transaction, __('Capture declined') . '.');
-            $order->save();
+            $this->orderResource->save($order);
 
             $this->notifier->addNotice(
                 __('Charge declined'),
@@ -262,7 +270,7 @@ class Charge extends AbstractOperation
         if (!$order->isCanceled()) {
             $order->addStatusHistoryComment($detail['reasonCode'] . ' - ' . $detail['reasonDescription']);
             $order->cancel();
-            $order->save();
+            $this->orderResource->save($order);
             $this->asyncLogger->info('Canceled Order #' . $order->getIncrementId());
         }
     }
@@ -295,7 +303,7 @@ class Charge extends AbstractOperation
             $payment->setIsTransactionClosed(false);
             $payment->setParentTransactionId($chargeId);
 
-            $order->save();
+            $this->orderResource->save($order);
             $this->asyncLogger->info('Set Processing for Order #' . $order->getIncrementId());
         }
     }
@@ -352,7 +360,7 @@ class Charge extends AbstractOperation
             $payment->setDataUsingMethod('base_amount_paid_online', $chargeAmount);
             $payment->addTransactionCommentsToOrder($transaction, $message);
             $transaction->setIsClosed(true);
-            $order->save();
+            $this->orderResource->save($order);
             $this->asyncLogger->info('Captured Order #' . $order->getIncrementId());
         } else {
             if (!$invoice) {
@@ -365,7 +373,7 @@ class Charge extends AbstractOperation
 
             $this->asyncLogger->error($errorMessage);
             $order->addStatusHistoryComment($errorMessage);
-            $order->save();
+            $this->orderResource->save($order);
         }
     }
 }

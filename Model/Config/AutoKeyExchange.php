@@ -470,7 +470,7 @@ class AutoKeyExchange
     {
         $baseUrl = $this->storeManager->getStore($this->_storeId)->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
         $baseUrl = str_replace('http:', 'https:', $baseUrl);
-        $authToken = $this->getConfig(self::CONFIG_XML_PATH_AUTH_TOKEN, 'default', 0);
+        $authToken = $this->getConfig(self::CONFIG_XML_PATH_AUTH_TOKEN);
         if (empty($authToken)) {
             $authToken = $this->generateAuthToken();
         }
@@ -609,7 +609,7 @@ class AutoKeyExchange
      */
     public function validateAuthToken($authToken)
     {
-        return $this->getConfig(self::CONFIG_XML_PATH_AUTH_TOKEN, 'default', 0) == $authToken;
+        return $this->getConfig(self::CONFIG_XML_PATH_AUTH_TOKEN) == $authToken;
     }
 
     /**
