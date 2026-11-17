@@ -4,13 +4,17 @@ namespace Amazon\Pay\Model\Resolver;
 
 use Amazon\Pay\Logger\ExceptionLogger;
 use Amazon\Pay\Model\CheckoutSessionManagement;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -28,9 +32,14 @@ class AmazonCompleteCheckoutSession implements ResolverInterface
     private $checkoutSessionManagementModel;
 
     /**
-     * @var GetCartForUser
+     * @var MaskedQuoteIdToQuoteIdInterface
      */
-    private $getCartForUser;
+    private $maskedQuoteIdToQuoteId;
+
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
 
     /**
      * @var OrderRepositoryInterface
@@ -56,7 +65,8 @@ class AmazonCompleteCheckoutSession implements ResolverInterface
      * AmazonCompleteCheckoutSession constructor
      *
      * @param CheckoutSessionManagement $checkoutSessionManagementModel
-     * @param GetCartForUser $getCartForUser
+     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
+     * @param CartRepositoryInterface $cartRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param StoreManagerInterface $storeManager
      * @param ObjectManagerInterface $objectManager
@@ -64,14 +74,16 @@ class AmazonCompleteCheckoutSession implements ResolverInterface
      */
     public function __construct(
         CheckoutSessionManagement $checkoutSessionManagementModel,
-        GetCartForUser $getCartForUser,
+        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
+        CartRepositoryInterface $cartRepository,
         OrderRepositoryInterface $orderRepository,
         StoreManagerInterface $storeManager,
         ObjectManagerInterface $objectManager,
         ExceptionLogger $exceptionLogger
     ) {
         $this->checkoutSessionManagementModel = $checkoutSessionManagementModel;
-        $this->getCartForUser = $getCartForUser;
+        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
+        $this->cartRepository = $cartRepository;
         $this->orderRepository = $orderRepository;
         $this->storeManager = $storeManager;
         $this->objectManager = $objectManager;
@@ -88,6 +100,8 @@ class AmazonCompleteCheckoutSession implements ResolverInterface
      * @param array|null $args
      * @return array
      * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
+     * @throws GraphQlAuthorizationException
      */
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
@@ -102,10 +116,7 @@ class AmazonCompleteCheckoutSession implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "amazon_session_id" is missing'));
         }
 
-        // Same cart ownership and state checks as the native placeOrder mutation
-        $customerId = (int)$context->getUserId();
-        $storeId = (int)$this->storeManager->getStore()->getId();
-        $this->getCartForUser->execute($cartId, $customerId, $storeId);
+        $this->validateCartForUser($cartId, (int)$context->getUserId());
 
         try {
             $result = $this->checkoutSessionManagementModel->completeCheckoutSession($amazonSessionId, $cartId);
@@ -129,6 +140,50 @@ class AmazonCompleteCheckoutSession implements ResolverInterface
             'orderV2' => $this->formatOrder($order),
             'errors' => [],
         ];
+    }
+
+    /**
+     * Same cart ownership and state checks as the native placeOrder mutation (Magento_QuoteGraphQl GetCartForUser),
+     * reimplemented to avoid a hard dependency on Magento_QuoteGraphQl
+     *
+     * Copy of the core logic from \Magento\QuoteGraphQl\Model\Cart\GetCartForUser::execute(), which may diverge
+     * from future core versions. This method should be removed in the future in favor of the core GetCartForUser
+     * once a dependency on Magento_QuoteGraphQl is acceptable for this module.
+     *
+     * @param string $cartId
+     * @param int $customerId
+     * @return void
+     * @throws GraphQlNoSuchEntityException
+     * @throws GraphQlAuthorizationException
+     */
+    protected function validateCartForUser(string $cartId, int $customerId)
+    {
+        try {
+            $cart = $this->cartRepository->get($this->maskedQuoteIdToQuoteId->execute($cartId));
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(
+                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $cartId])
+            );
+        }
+
+        if (!$cart->getIsActive()) {
+            throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
+        }
+
+        if ((int)$cart->getStoreId() !== (int)$this->storeManager->getStore()->getId()) {
+            throw new GraphQlNoSuchEntityException(
+                __('Wrong store code specified for cart "%masked_cart_id"', ['masked_cart_id' => $cartId])
+            );
+        }
+
+        if ((int)$cart->getCustomerId() !== $customerId) {
+            throw new GraphQlAuthorizationException(
+                __(
+                    'The current user cannot perform operations on cart "%masked_cart_id"',
+                    ['masked_cart_id' => $cartId]
+                )
+            );
+        }
     }
 
     /**

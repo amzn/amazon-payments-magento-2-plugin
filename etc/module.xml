@@ -19,8 +19,6 @@
     <module name="Amazon_Pay" >
         <sequence>
             <module name="Magento_Vault"/>
-            <module name="Magento_QuoteGraphQl"/>
-            <module name="Magento_StoreGraphQl"/>
         </sequence>
     </module>
 </config>
