@@ -21,6 +21,11 @@ type Mutation {
     completeCheckoutSession(cartId: String!, amazonSessionId: String!): CompleteCheckoutSessionOutput
     @doc(description: "Complete Checkout Session")
     @resolver(class: "Amazon\\Pay\\Model\\Resolver\\CompleteCheckoutSession")
+    @deprecated(reason: "Use amazonCompleteCheckoutSession, which returns a standard PlaceOrderOutput")
+
+    amazonCompleteCheckoutSession(input: AmazonCompleteCheckoutSessionInput!): PlaceOrderOutput
+    @doc(description: "Complete the Amazon Pay checkout session and place the order")
+    @resolver(class: "Amazon\\Pay\\Model\\Resolver\\AmazonCompleteCheckoutSession")
 
     updateCheckoutSession(cartId: String!, amazonSessionId: String!): UpdateCheckoutSessionOutput
     @doc(description: "Update Checkout Session")
@@ -93,6 +98,11 @@ type CompleteCheckoutSessionOutput {
     increment_id: String
     message: String
     success: Boolean
+}
+
+input AmazonCompleteCheckoutSessionInput {
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
+    amazon_session_id: String! @doc(description: "The Amazon Pay checkout session ID.")
 }
 
 type UpdateCheckoutSessionOutput {
