@@ -152,7 +152,7 @@ class SubscriptionHelper
      */
     public function getSubscriptionsPaidWithToken(PaymentToken $token)
     {
-        if (!($this->subscriptionManager instanceof AmazonSubscriptionManager)) {
+        if (!($this->subscriptionManager instanceof AmazonSubscriptionManager) && class_exists(Status::class)) {
             $publicHash = $token->getPublicHash();
             $customerId = $token->getCustomerId();
 

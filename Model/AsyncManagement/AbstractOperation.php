@@ -34,7 +34,7 @@ abstract class AbstractOperation
     /**
      * @var \Magento\Sales\Api\OrderRepositoryInterface
      */
-    private $orderRepository;
+    protected $orderRepository;
 
     /**
      * AbstractOperation constructor.
@@ -128,7 +128,7 @@ abstract class AbstractOperation
      * Load order by transaction ID (chargeId)
      *
      * @param mixed $transactionId
-     * @return \Magento\Sales\Model\Order $order
+     * @return \Magento\Sales\Model\Order|null
      */
     protected function loadOrder($transactionId)
     {
@@ -136,6 +136,7 @@ abstract class AbstractOperation
         if ($transaction) {
             return $this->orderRepository->get($transaction->getOrderId());
         }
+        return null;
     }
 
     /**

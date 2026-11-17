@@ -67,23 +67,11 @@ class ResetPassword extends Template
         AmazonConfig $amazonConfig,
         array $data = []
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context, array_replace(['template' => 'widget/resetpassword.phtml'], $data));
         $this->urlModel = $urlModel;
         $this->session = $session;
         $this->customerLink = $customerLink;
         $this->amazonConfig = $amazonConfig;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _prepareLayout()
-    {
-        parent::_prepareLayout();
-        if (!$this->getTemplate()) {
-            $this->setTemplate('widget/resetpassword.phtml');
-        }
-        return $this;
     }
 
     /**

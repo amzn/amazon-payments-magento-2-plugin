@@ -173,7 +173,7 @@ class ConfigCredentialsValidator
      * Get parent scope code
      *
      * @param int|string $storeId
-     * @return int|string
+     * @return int|string|null
      */
     protected function findParentScopeCode($storeId)
     {
@@ -184,6 +184,7 @@ class ConfigCredentialsValidator
                 }
             }
         }
+        return null;
     }
 
     /**
@@ -209,7 +210,7 @@ class ConfigCredentialsValidator
      * Get parent scope code
      *
      * @param int|string $storeId
-     * @return int|string
+     * @return int|string|null
      */
     private function getParentScopeCode($storeId)
     {

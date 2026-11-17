@@ -190,7 +190,8 @@ class AmazonPayAdapter
 
         if (!$quote->getReservedOrderId()) {
             try {
-                $quote->reserveOrderId()->save();
+                $quote->reserveOrderId();
+                $this->quoteRepository->save($quote);
             } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage());
             }
@@ -439,6 +440,7 @@ class AmazonPayAdapter
      */
     public function authorize($data, $captureNow = true)
     {
+        $response = null;
         $quote = $this->quoteRepository->get($data['quote_id']);
         if (!empty($data['charge_permission_id'])) {
             $getChargePermissionResponse = $this->getChargePermission(
@@ -731,7 +733,8 @@ class AmazonPayAdapter
 
         if (!$quote->getReservedOrderId()) {
             try {
-                $quote->reserveOrderId()->save();
+                $quote->reserveOrderId();
+                $this->quoteRepository->save($quote);
             } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage());
             }
@@ -816,6 +819,8 @@ class AmazonPayAdapter
      */
     public function getRecurringMetadata($quote)
     {
+        $frequencyUnit = null;
+        $frequencyCount = null;
         foreach ($quote->getAllItems() as $item) {
             if ($this->subscriptionManager->isSubscription($item)) {
                 $frequencyUnit = $this->subscriptionManager->getFrequencyUnit($item);

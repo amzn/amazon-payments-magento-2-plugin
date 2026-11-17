@@ -55,21 +55,9 @@ class DeveloperLogs extends \Magento\Config\Block\System\Config\Form\Field
         DirectoryList $directoryList,
         $data = []
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context, array_replace(['template' => 'system/config/logs.phtml'], $data));
         $this->directoryList = $directoryList;
         $this->urlBuilder = $urlBuilder;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _prepareLayout()
-    {
-        parent::_prepareLayout();
-        if (!$this->getTemplate()) {
-            $this->setTemplate('system/config/logs.phtml');
-        }
-        return $this;
     }
 
     /**

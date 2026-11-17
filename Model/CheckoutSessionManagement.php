@@ -787,6 +787,7 @@ class CheckoutSessionManagement implements \Amazon\Pay\Api\CheckoutSessionManage
             'success' => false
         ];
 
+        $quote = null;
         try {
             $order = $this->orderRepository->get($orderId);
             $quote = $this->getQuote($order);

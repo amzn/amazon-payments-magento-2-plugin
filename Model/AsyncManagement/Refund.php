@@ -99,7 +99,7 @@ class Refund extends AbstractOperation
             if (isset($refund['statusDetails']) && $refund['statusDetails']['state'] == 'Declined') {
 
                 $order->addStatusHistoryComment($refund['statusDetails']['reasonDescription']);
-                $order->save();
+                $this->orderRepository->save($order);
 
                 $this->notifier->addNotice(
                     __('Refund declined'),

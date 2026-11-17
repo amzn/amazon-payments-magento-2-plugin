@@ -61,9 +61,11 @@ class LegacyPaymentHandler
                     $authTransaction->getOrderId()
                 )) {
                     // update legacy captures, where the first capture got assigned the charge ID
-                    $legacyTransaction->setTxnId($newTxnId . '-legacy')->save();
+                    $legacyTransaction->setTxnId($newTxnId . '-legacy');
+                    $this->transactionRepository->save($legacyTransaction);
                 }
-                $authTransaction->setTxnId($newTxnId)->save();
+                $authTransaction->setTxnId($newTxnId);
+                $this->transactionRepository->save($authTransaction);
             }
         }
 

@@ -116,10 +116,9 @@ class CustomerLinkManagement implements \Amazon\Pay\Api\CustomerLinkManagementIn
      */
     public function updateLink($customerId, $amazonId)
     {
-        $customerLink = $this->customerLinkFactory->create();
+        $customerLink = $this->customerLinkRepository->get($customerId);
 
         $customerLink
-            ->load($customerId, 'customer_id')
             ->setAmazonId($amazonId)
             ->setCustomerId($customerId);
 

@@ -110,9 +110,11 @@ class KeyManagement
                 "publickey" => $keypair->getPublicKey()->__toString(),
                 "privatekey" => $keypair->__toString()
             ];
-        } else {
+        } elseif (class_exists(\phpseclib\Crypt\RSA::class)) {
             $rsa = new \phpseclib\Crypt\RSA();
             $keys = $rsa->createKey(2048);
+        } else {
+            throw new \RuntimeException('No supported phpseclib RSA implementation is available.');
         }
 
         return $keys;

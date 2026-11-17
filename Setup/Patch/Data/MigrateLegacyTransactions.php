@@ -90,6 +90,7 @@ class MigrateLegacyTransactions implements DataPatchInterface
         }
 
         $this->moduleDataSetup->getConnection()->endSetup();
+        return $this;
     }
     /**
      * @inheritdoc

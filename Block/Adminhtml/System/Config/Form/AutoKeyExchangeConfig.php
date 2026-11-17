@@ -31,8 +31,11 @@ class AutoKeyExchangeConfig extends \Magento\Config\Block\System\Config\Form\Fie
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $html = $this->_layout
-            ->createBlock(\Amazon\Pay\Block\Adminhtml\System\Config\AutoKeyExchangeAdmin::class)
-            ->setTemplate('Amazon_Pay::system/config/autokeyexchange_admin.phtml')
+            ->createBlock(
+                \Amazon\Pay\Block\Adminhtml\System\Config\AutoKeyExchangeAdmin::class,
+                '',
+                ['data' => ['template' => 'Amazon_Pay::system/config/autokeyexchange_admin.phtml']]
+            )
             ->setCacheable(false)
             ->toHtml();
 

@@ -72,7 +72,9 @@ class SubscriptionRepository
     public function afterSave($SubscriptionRepository, $subscription)
     {
         $status = $subscription->getStatus();
-        if ($status === Status::STATUS_CANCELED || $status === Status::STATUS_PAYMENT_FAILED) {
+        if (class_exists(Status::class)
+            && ($status === Status::STATUS_CANCELED || $status === Status::STATUS_PAYMENT_FAILED)
+        ) {
             $quoteId = $subscription->getQuoteId();
             $quote = $this->quoteRepository->get($quoteId);
             $payment = $quote->getPayment();

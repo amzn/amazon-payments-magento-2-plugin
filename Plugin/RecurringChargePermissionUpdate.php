@@ -52,6 +52,11 @@ class RecurringChargePermissionUpdate
     private $subscriptionHelper;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Plugin constructor
      *
      * @param PaymentTokenManagementInterface $paymentTokenManagement
@@ -59,19 +64,22 @@ class RecurringChargePermissionUpdate
      * @param AmazonPayAdapter $amazonAdapter
      * @param SubscriptionManager $subscriptionManager
      * @param SubscriptionHelper $subscriptionHelper
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         PaymentTokenManagementInterface $paymentTokenManagement,
         CartRepositoryInterface $cartRepository,
         AmazonPayAdapter $amazonAdapter,
         SubscriptionManager $subscriptionManager,
-        SubscriptionHelper $subscriptionHelper
+        SubscriptionHelper $subscriptionHelper,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
         $this->cartRepository = $cartRepository;
         $this->amazonAdapter = $amazonAdapter;
         $this->subscriptionManager = $subscriptionManager;
         $this->subscriptionHelper = $subscriptionHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -109,7 +117,8 @@ class RecurringChargePermissionUpdate
                 if ($this->subscriptionHelper->hasShorterFrequency($newFrequency, $oldFrequency)) {
                     if (!$quote->getReservedOrderId()) {
                         try {
-                            $quote->reserveOrderId()->save();
+                            $quote->reserveOrderId();
+                            $this->cartRepository->save($quote);
                         } catch (\Exception $e) {
                             $this->logger->debug($e->getMessage());
                         }

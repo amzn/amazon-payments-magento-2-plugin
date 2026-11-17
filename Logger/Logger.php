@@ -18,6 +18,6 @@ namespace Amazon\Pay\Logger;
 /**
  * Enables implementation of custom log file.
  */
-class Logger extends \Monolog\Logger
+class Logger extends \Magento\Framework\Logger\Monolog
 {
 }

@@ -237,7 +237,7 @@ class Charge extends AbstractOperation
                 ->setFailSafe(true)
                 ->build(Transaction::TYPE_AUTH);
             $payment->addTransactionCommentsToOrder($transaction, __('Capture declined') . '.');
-            $order->save();
+            $this->orderRepository->save($order);
 
             $this->notifier->addNotice(
                 __('Charge declined'),
@@ -262,7 +262,7 @@ class Charge extends AbstractOperation
         if (!$order->isCanceled()) {
             $order->addStatusHistoryComment($detail['reasonCode'] . ' - ' . $detail['reasonDescription']);
             $order->cancel();
-            $order->save();
+            $this->orderRepository->save($order);
             $this->asyncLogger->info('Canceled Order #' . $order->getIncrementId());
         }
     }
@@ -295,7 +295,7 @@ class Charge extends AbstractOperation
             $payment->setIsTransactionClosed(false);
             $payment->setParentTransactionId($chargeId);
 
-            $order->save();
+            $this->orderRepository->save($order);
             $this->asyncLogger->info('Set Processing for Order #' . $order->getIncrementId());
         }
     }
@@ -352,7 +352,7 @@ class Charge extends AbstractOperation
             $payment->setDataUsingMethod('base_amount_paid_online', $chargeAmount);
             $payment->addTransactionCommentsToOrder($transaction, $message);
             $transaction->setIsClosed(true);
-            $order->save();
+            $this->orderRepository->save($order);
             $this->asyncLogger->info('Captured Order #' . $order->getIncrementId());
         } else {
             if (!$invoice) {
@@ -365,7 +365,7 @@ class Charge extends AbstractOperation
 
             $this->asyncLogger->error($errorMessage);
             $order->addStatusHistoryComment($errorMessage);
-            $order->save();
+            $this->orderRepository->save($order);
         }
     }
 }
