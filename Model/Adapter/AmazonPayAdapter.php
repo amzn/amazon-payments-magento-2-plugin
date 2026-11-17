@@ -47,6 +47,11 @@ class AmazonPayAdapter
     private $quoteRepository;
 
     /**
+     * @var \Magento\Quote\Model\ResourceModel\Quote
+     */
+    private $quoteResource;
+
+    /**
      * @var \Amazon\Pay\Helper\Data
      */
     private $amazonHelper;
@@ -94,6 +99,7 @@ class AmazonPayAdapter
      * @param \Amazon\Pay\Logger\Logger $logger
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
+     * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
      * @param \Amazon\Pay\Model\SignInState|null $signInState
      */
     public function __construct(
@@ -107,12 +113,14 @@ class AmazonPayAdapter
         \Amazon\Pay\Logger\Logger $logger,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Response\RedirectInterface $redirect,
+        \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
         ?\Amazon\Pay\Model\SignInState $signInState = null
     ) {
         $this->clientFactory = $clientFactory;
         $this->amazonConfig = $amazonConfig;
         $this->storeManager = $storeManager;
         $this->quoteRepository = $quoteRepository;
+        $this->quoteResource = $quoteResource;
         $this->amazonHelper = $amazonHelper;
         $this->productMetadata = $productMetadata;
         $this->subscriptionManager = $subscriptionManager;
@@ -191,7 +199,7 @@ class AmazonPayAdapter
         if (!$quote->getReservedOrderId()) {
             try {
                 $quote->reserveOrderId();
-                $this->quoteRepository->save($quote);
+                $this->quoteResource->save($quote);
             } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage());
             }
@@ -734,7 +742,7 @@ class AmazonPayAdapter
         if (!$quote->getReservedOrderId()) {
             try {
                 $quote->reserveOrderId();
-                $this->quoteRepository->save($quote);
+                $this->quoteResource->save($quote);
             } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage());
             }

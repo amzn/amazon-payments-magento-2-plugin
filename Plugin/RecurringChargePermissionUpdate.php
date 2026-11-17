@@ -37,6 +37,11 @@ class RecurringChargePermissionUpdate
     private $cartRepository;
 
     /**
+     * @var \Magento\Quote\Model\ResourceModel\Quote
+     */
+    private $quoteResource;
+
+    /**
      * @var AmazonPayAdapter
      */
     private $amazonAdapter;
@@ -65,6 +70,7 @@ class RecurringChargePermissionUpdate
      * @param SubscriptionManager $subscriptionManager
      * @param SubscriptionHelper $subscriptionHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
      */
     public function __construct(
         PaymentTokenManagementInterface $paymentTokenManagement,
@@ -72,10 +78,12 @@ class RecurringChargePermissionUpdate
         AmazonPayAdapter $amazonAdapter,
         SubscriptionManager $subscriptionManager,
         SubscriptionHelper $subscriptionHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Quote\Model\ResourceModel\Quote $quoteResource
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
         $this->cartRepository = $cartRepository;
+        $this->quoteResource = $quoteResource;
         $this->amazonAdapter = $amazonAdapter;
         $this->subscriptionManager = $subscriptionManager;
         $this->subscriptionHelper = $subscriptionHelper;
@@ -118,7 +126,7 @@ class RecurringChargePermissionUpdate
                     if (!$quote->getReservedOrderId()) {
                         try {
                             $quote->reserveOrderId();
-                            $this->cartRepository->save($quote);
+                            $this->quoteResource->save($quote);
                         } catch (\Exception $e) {
                             $this->logger->debug($e->getMessage());
                         }
