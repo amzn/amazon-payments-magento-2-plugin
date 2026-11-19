@@ -22,26 +22,53 @@
 ], function ($, _, remoteStorage, url, customerData) {
     'use strict';
 
-    var callbacks = []; 
+    var callbacks = [];
     var localStorage = null;
+
+    /**
+     * Time in milliseconds a cached button configuration is reused across page views.
+     *
+     * Everything served from the cache is store level data (merchant id, public key id, currency,
+     * button color, language, sandbox flag, product type). Signed payloads are not affected:
+     * starting checkout always reloads the configuration with forceReload = true, see
+     * amazon-button.js::_initCheckout(), so amazon.Pay.createCheckoutSession() is never called
+     * with a payload taken from this cache.
+     */
+    var configCacheLifetime = 10 * 60 * 1000;
+
     var getLocalStorage = function () {
         if (localStorage === null) {
             localStorage = $.initNamespaceStorage('amzn-checkout-session-config').localStorage;
         }
         return localStorage;
-    };  
+    };
+
+    /**
+     * Check whether the cached configuration is too old to be reused
+     *
+     * Entries stored without a timestamp, i.e. by an earlier version of this module, are expired.
+     *
+     * @returns {Boolean}
+     */
+    var isCacheExpired = function () {
+        var cachedAt = getLocalStorage().get('config_time');
+
+        return !cachedAt || (new Date().getTime() - cachedAt) > configCacheLifetime;
+    };
+
     return function (callback, forceReload = false) {
         var cartId = customerData.get('cart')()['data_id'] || window.checkout.storeId;
         var config = getLocalStorage().get('config') || false;
         if (forceReload
             || cartId !== getLocalStorage().get('cart_id')
             || typeof config.checkout_payload === 'undefined'
-            || !config.checkout_payload.includes(document.URL.slice(0, -1))) {
+            || isCacheExpired()) {
             callbacks.push(callback);
             if (callbacks.length == 1) {
                 remoteStorage.get(url.build('amazon_pay/checkout/config')).done(function (config) {
                     getLocalStorage().set('cart_id', cartId);
                     getLocalStorage().set('config', config);
+                    getLocalStorage().set('config_time', new Date().getTime());
                     do {
                         callbacks.shift()(config);
                     } while (callbacks.length);
